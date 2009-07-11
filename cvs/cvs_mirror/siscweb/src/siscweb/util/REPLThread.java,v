@@ -1,0 +1,719 @@
+head	1.5;
+access;
+symbols
+	rel-0-6-dev:1.5.0.4
+	rel-0-5-fix:1.5.0.2
+	rel-0-5:1.5
+	rel-0-5-dev-safe-frames:1.4.4.1.0.2
+	Root_rel-0-5-dev-safe-frames:1.4.4.1
+	rel-0-4-fix-0:1.4
+	rel-0-5-dev:1.4.0.4
+	rel-0-4-fix:1.4.0.2
+	rel-0-3-fix-3:1.3.2.2
+	rel-0-3-fix-2:1.3.2.1
+	rel-0-4-dev-sisc-1-11:1.3.4.1
+	rel-0-3-fix-1:1.3
+	rel-0-4-dev:1.3.0.4
+	rel-0-3-fix:1.3.0.2
+	rel-0-3:1.3
+	rel-0-3-dev-1:1.2.8.1
+	rel-0-2-fix-2:1.2.6.1
+	rel-0-2-fix-1:1.2
+	rel-0-2-fix:1.2.0.6
+	rel-0-3-dev:1.2.0.8
+	rel-0-2:1.2
+	rel-0-1-fix-1:1.2
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	start:1.1.1.1
+	rel-0-1-dev:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.5
+date	2007.04.12.03.51.19;	author acolomba;	state Exp;
+branches
+	1.5.2.1
+	1.5.4.1;
+next	1.4;
+
+1.4
+date	2006.09.03.01.42.22;	author acolomba;	state Exp;
+branches
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.52;	author acolomba;	state Exp;
+branches
+	1.2.6.1
+	1.2.8.1;
+next	1.1;
+
+1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches;
+next	1.1.1.2;
+
+1.1.1.2
+date	2005.03.19.15.05.35;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.6.1
+date	2005.07.31.20.04.03;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.8.1
+date	2005.07.28.04.05.15;	author acolomba;	state Exp;
+branches;
+next	1.2.8.2;
+
+1.2.8.2
+date	2005.10.24.03.35.51;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2006.02.25.17.12.01;	author acolomba;	state Exp;
+branches;
+next	1.3.2.2;
+
+1.3.2.2
+date	2006.04.15.15.55.23;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2006.01.22.04.00.36;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2;
+
+1.3.4.2
+date	2006.02.17.03.34.07;	author acolomba;	state Exp;
+branches;
+next	1.3.4.3;
+
+1.3.4.3
+date	2006.02.22.04.13.09;	author acolomba;	state Exp;
+branches;
+next	1.3.4.4;
+
+1.3.4.4
+date	2006.06.25.21.04.25;	author acolomba;	state Exp;
+branches;
+next	1.3.4.5;
+
+1.3.4.5
+date	2006.07.08.02.31.54;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2007.01.08.03.47.11;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.5.2.1
+date	2007.09.09.01.59.54;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.5.4.1
+date	2007.10.13.18.49.32;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.5
+log
+@merged from rel-0-5-dev
+@
+text
+@/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005-2006
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ * Dan Muresan
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+package siscweb.util;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+
+import sisc.REPL;
+import sisc.interpreter.AppContext;
+
+public class REPLThread extends Thread
+{
+    private String host;
+    private int port;
+    private AppContext appCtx;
+
+    protected ServerSocket socket;
+
+    public REPLThread(final String host, final int port, final AppContext appCtx)
+    {
+        this.host = host;
+        this.port = port;
+        this.appCtx = appCtx;
+    }
+
+    public void run()
+    {
+        try {
+            final InetAddress addr = InetAddress.getByName(this.host);
+
+            this.socket =  new ServerSocket(port, 50, addr);
+
+            if(Logger.logger.isLoggable(Level.INFO)) {
+                Logger.logger.info("Starting REPL on " + host + ":" + port);
+            }
+
+            REPL.listen(appCtx, this.socket);
+        }
+        catch(final UnknownHostException e) {
+            throw new RuntimeException(
+                "REPL could not resolve " +
+                this.host, e);
+        }
+        catch(final IOException e){ /* alles gut? */ }
+    }
+
+    public void terminate()
+    {
+        if(Logger.logger.isLoggable(Level.INFO)) {
+            Logger.logger.info("Stopping REPL on " + host + ":" + port);
+        }
+
+        try {
+            this.interrupt();
+        }
+        finally {
+            try {
+                if(this.socket != null) {
+                    this.socket.close();
+                    this.socket = null;
+                }
+            }
+            catch(final IOException e) {
+                if(Logger.logger.isLoggable(Level.WARNING)) {
+                    Logger.logger.warning("REPL could not close socket at " +
+                            this.host + ":" + this.port);
+                }
+            }
+        }
+    }
+}
+@
+
+
+1.5.4.1
+log
+@merged from rel-0-5-fix
+@
+text
+@a57 1
+        super();
+d81 1
+a81 1
+        catch(final IOException e){ /* this is expected */ }
+@
+
+
+1.5.2.1
+log
+@minor syntactical cleanup
+@
+text
+@a57 1
+        super();
+d81 1
+a81 1
+        catch(final IOException e){ /* this is expected */ }
+@
+
+
+1.4
+log
+@merged from rel-0-4-dev
+@
+text
+@d17 1
+a17 1
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005
+d21 1
+d46 1
+a46 1
+import sisc.interpreter.Context;
+d52 1
+d56 1
+a56 1
+    public REPLThread(final String host, final int port)
+d60 1
+d74 1
+a74 1
+            REPL.listen(Context.getDefaultAppContext(), this.socket);
+@
+
+
+1.4.4.1
+log
+@sisc appcontext is now local to the servlet context instead of
+the static scope
+@
+text
+@d17 1
+a17 1
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005-2006
+a20 1
+ * Dan Muresan
+d45 1
+a45 1
+import sisc.interpreter.AppContext;
+a50 1
+    private AppContext appCtx;
+d54 1
+a54 1
+    public REPLThread(final String host, final int port, final AppContext appCtx)
+a57 1
+        this.appCtx = appCtx;
+d71 1
+a71 1
+            REPL.listen(appCtx, this.socket);
+@
+
+
+1.3
+log
+@merged from rel-0-3-dev
+@
+text
+@d42 1
+d45 1
+a48 1
+    private String applicationName;
+d54 1
+a54 1
+    public REPLThread(final String applicationName, final String host, final int port)
+a55 1
+        this.applicationName = applicationName;
+d67 5
+a71 1
+            REPL.listen(this.applicationName, this.socket);
+d75 1
+a75 1
+                this.applicationName + " : REPL could not resolve " +
+d83 4
+d92 4
+a95 2
+                this.socket.close();
+                this.socket = null;
+d98 4
+a101 4
+                throw new RuntimeException(
+                        this.applicationName +
+                        " : REPL could not close socket at " +
+                        this.host + ":" + this.port, e);
+a104 33
+
+
+    // hic sunt leones
+
+    public String getApplicationName()
+    {
+        return applicationName;
+    }
+
+    public void setApplicationName(String applicationName)
+    {
+        this.applicationName = applicationName;
+    }
+
+    public String getHost()
+    {
+        return host;
+    }
+
+    public void setHost(String host)
+    {
+        this.host = host;
+    }
+
+    public int getPort()
+    {
+        return port;
+    }
+
+    public void setPort(int port)
+    {
+        this.port = port;
+    }
+@
+
+
+1.3.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@d84 2
+a85 4
+                if(this.socket != null) {
+                    this.socket.close();
+                    this.socket = null;
+                }
+@
+
+
+1.3.2.2
+log
+@merged from rel-0-4-dev
+@
+text
+@a43 1
+import sisc.interpreter.Context;
+d47 1
+d53 1
+a53 1
+    public REPLThread(final String host, final int port)
+d55 1
+a62 1
+
+d67 1
+a67 1
+            REPL.listen(Context.getDefaultAppContext(), this.socket);
+d71 1
+a71 1
+                "REPL could not resolve " +
+d91 2
+a92 1
+                        "REPL could not close socket at " +
+d97 33
+@
+
+
+1.3.4.1
+log
+@now checks that the socket was initialized before closing it
+@
+text
+@d84 2
+a85 4
+                if(this.socket != null) {
+                    this.socket.close();
+                    this.socket = null;
+                }
+@
+
+
+1.3.4.2
+log
+@fitted to new sisc.REPL listen() signature
+@
+text
+@a43 1
+import sisc.interpreter.Context;
+a62 1
+
+d67 1
+a67 1
+            REPL.listen(Context.lookup(this.applicationName), this.socket);
+@
+
+
+1.3.4.3
+log
+@adapted to SISC 1.12 Context/Interpreter API; some cleanup
+@
+text
+@d48 1
+d54 1
+a54 1
+    public REPLThread(final String host, final int port)
+d56 1
+d69 1
+a69 1
+            REPL.listen(Context.getDefaultAppContext(), this.socket);
+d73 1
+a73 1
+                "REPL could not resolve " +
+d93 2
+a94 1
+                        "REPL could not close socket at " +
+d99 33
+@
+
+
+1.3.4.4
+log
+@added logging
+@
+text
+@a41 1
+import java.util.logging.Level;
+d62 1
+a66 4
+            if(Loggers.configuration.isLoggable(Level.INFO)) {
+                Loggers.configuration.info("Starting REPL on " + host + ":" + port);
+            }
+
+a78 4
+        if(Loggers.configuration.isLoggable(Level.INFO)) {
+            Loggers.configuration.info("Stopping REPL on " + host + ":" + port);
+        }
+
+d90 3
+a92 4
+                if(Loggers.configuration.isLoggable(Level.WARNING)) {
+                    Loggers.configuration.warning("REPL could not close socket at " +
+                            this.host + ":" + this.port);
+                }
+@
+
+
+1.3.4.5
+log
+@modified in accordance to Loggers -> Logger changes
+@
+text
+@d67 2
+a68 2
+            if(Logger.logger.isLoggable(Level.INFO)) {
+                Logger.logger.info("Starting REPL on " + host + ":" + port);
+d83 2
+a84 2
+        if(Logger.logger.isLoggable(Level.INFO)) {
+            Logger.logger.info("Stopping REPL on " + host + ":" + port);
+d98 2
+a99 2
+                if(Logger.logger.isLoggable(Level.WARNING)) {
+                    Logger.logger.warning("REPL could not close socket at " +
+@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@d47 3
+a49 3
+    protected String applicationName;
+    protected String host;
+    protected int port;
+d53 1
+a53 1
+    public REPLThread(String applicationName, String host, int port)
+d63 1
+a63 1
+            InetAddress addr = InetAddress.getByName(this.host);
+d69 1
+a69 1
+        catch(UnknownHostException e) {
+d74 1
+a74 1
+        catch(IOException e){ /* alles gut? */ }
+d80 1
+a80 1
+            interrupt();
+d87 1
+a87 1
+            catch(IOException e) {
+d95 33
+@
+
+
+1.2.6.1
+log
+@merged from rel-0-3-dev
+@
+text
+@d53 1
+a53 1
+    public REPLThread(final String applicationName, final String host, final int port)
+d69 1
+a69 1
+        catch(final UnknownHostException e) {
+d74 1
+a74 1
+        catch(final IOException e){ /* alles gut? */ }
+d80 1
+a80 1
+            Thread.currentThread().interrupt();
+d87 1
+a87 1
+            catch(final IOException e) {
+@
+
+
+1.2.8.1
+log
+@minor fixes
+@
+text
+@d53 1
+a53 1
+    public REPLThread(final String applicationName, final String host, final int port)
+d69 1
+a69 1
+        catch(final UnknownHostException e) {
+d74 1
+a74 1
+        catch(final IOException e){ /* alles gut? */ }
+d80 1
+a80 1
+            Thread.currentThread().interrupt();
+d87 1
+a87 1
+            catch(final IOException e) {
+@
+
+
+1.2.8.2
+log
+@added accessors; modified termination code
+@
+text
+@d47 3
+a49 3
+    private String applicationName;
+    private String host;
+    private int port;
+d63 1
+a63 1
+            final InetAddress addr = InetAddress.getByName(this.host);
+d80 1
+a80 1
+            this.interrupt();
+a94 33
+
+
+    // hic sunt leones
+
+    public String getApplicationName()
+    {
+        return applicationName;
+    }
+
+    public void setApplicationName(String applicationName)
+    {
+        this.applicationName = applicationName;
+    }
+
+    public String getHost()
+    {
+        return host;
+    }
+
+    public void setHost(String host)
+    {
+        this.host = host;
+    }
+
+    public int getPort()
+    {
+        return port;
+    }
+
+    public void setPort(int port)
+    {
+        this.port = port;
+    }
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d45 1
+a45 1
+public class REPLThread implements Runnable
+d77 1
+a77 1
+    public void stop()
+d80 1
+a80 1
+            Thread.currentThread().interrupt();
+@
+
+
+1.1.1.1
+log
+@initial import
+@
+text
+@@
+
+
+1.1.1.2
+log
+@fixed thread interruption
+@
+text
+@d45 1
+a45 1
+public class REPLThread extends Thread
+d77 1
+a77 1
+    public void terminate()
+d80 1
+a80 1
+            interrupt();
+@
+

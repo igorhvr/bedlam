@@ -1,0 +1,1 @@
+rsync -avz rsync://siscweb.cvs.sourceforge.net/cvsroot/siscweb/* .

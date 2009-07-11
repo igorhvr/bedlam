@@ -1,0 +1,381 @@
+head	1.3;
+access;
+symbols
+	rel-0-3-fix-3:1.2.2.2
+	rel-0-3-fix-2:1.2.2.1
+	rel-0-4-dev-sisc-1-11:1.2.4.1
+	rel-0-3-fix-1:1.2
+	rel-0-4-dev:1.2.0.4
+	rel-0-3-fix:1.2.0.2
+	rel-0-3:1.2
+	rel-0-3-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2006.09.03.01.42.22;	author acolomba;	state dead;
+branches;
+next	1.2;
+
+1.2
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.11.19.16.14.22;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.11.19.16.14.22;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2006.02.25.17.12.00;	author acolomba;	state Exp;
+branches;
+next	1.2.2.2;
+
+1.2.2.2
+date	2006.04.15.15.55.23;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2006.01.14.02.03.17;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2006.02.22.04.12.40;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2006.06.17.13.04.18;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@merged from rel-0-4-dev
+@
+text
+@/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+package siscweb.web;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+
+import siscweb.util.REPLThread;
+
+public class REPLInitializer implements ServletContextListener
+{
+    private String contextName;
+    private REPLThread repl;
+
+    public void contextInitialized(ServletContextEvent contextEvent)
+    {
+        ServletContext context = contextEvent.getServletContext();
+
+        // instantiates and registers sisc context;
+        // throws an exception in case of error
+        try {
+            this.contextName = context.getServletContextName();
+
+            final String host = context.getInitParameter("repl-host");
+            final String port = context.getInitParameter("repl-port");
+
+            if(host != null && port != null) {
+                System.out.println(this.contextName + " : starting REPL on " + host + ":" + port);
+
+                this.repl = new REPLThread(contextName, host, Integer.parseInt(port));
+
+                this.repl.start();
+            }
+        }
+        catch(final NumberFormatException e) {
+            System.err.println(
+                this.contextName + " : invalid repl port specified (WARNING)");
+        }
+        catch(Throwable e) {
+            e.printStackTrace(System.err);
+        }
+    }
+
+
+    public void contextDestroyed(ServletContextEvent contextEvent)
+    {
+        if(this.repl != null) {
+            System.out.println(this.contextName + " : stopping REPL on " + repl.getHost() + ":" + repl.getPort());
+
+            this.repl.terminate();
+        }
+    }
+}
+@
+
+
+1.2
+log
+@merged from rel-0-3-dev
+@
+text
+@@
+
+
+1.2.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@d58 2
+a59 2
+            final String host = context.getInitParameter("siscweb.repl-host");
+            final String port = context.getInitParameter("siscweb.repl-port");
+@
+
+
+1.2.2.2
+log
+@merged from rel-0-4-dev
+@
+text
+@d46 1
+a47 1
+    private String host, port;
+d51 1
+a51 2
+        final ServletContext context = contextEvent.getServletContext();
+        final String contextName = context.getServletContextName();
+d56 1
+a56 2
+            this.host = context.getInitParameter("siscweb.repl-host");
+            this.port = context.getInitParameter("siscweb.repl-port");
+d58 2
+a59 2
+            if(this.host != null && port != null) {
+                System.out.println(contextName + " : starting REPL on " + host + ":" + port);
+d61 4
+a64 1
+                this.repl = new REPLThread(this.host, Integer.parseInt(this.port));
+d71 1
+a71 1
+                contextName + " : invalid repl port specified (WARNING)");
+a80 3
+        final ServletContext context = contextEvent.getServletContext();
+        final String contextName = context.getServletContextName();
+
+d82 1
+a82 1
+            System.out.println(contextName + " : stopping REPL on " + this.host  + ":" + this.port + ".");
+@
+
+
+1.2.4.1
+log
+@prepended "siscweb." to repl-[host|port]
+@
+text
+@d58 2
+a59 2
+            final String host = context.getInitParameter("siscweb.repl-host");
+            final String port = context.getInitParameter("siscweb.repl-port");
+@
+
+
+1.2.4.2
+log
+@adapted to SISC 1.12 Context/Interpreter API
+@
+text
+@d46 1
+a47 1
+    private String host, port;
+d51 1
+a51 2
+        final ServletContext context = contextEvent.getServletContext();
+        final String contextName = context.getServletContextName();
+d56 1
+a56 2
+            this.host = context.getInitParameter("siscweb.repl-host");
+            this.port = context.getInitParameter("siscweb.repl-port");
+d58 2
+a59 2
+            if(this.host != null && port != null) {
+                System.out.println(contextName + " : starting REPL on " + host + ":" + port);
+d61 4
+a64 1
+                this.repl = new REPLThread(this.host, Integer.parseInt(this.port));
+d71 1
+a71 1
+                contextName + " : invalid repl port specified (WARNING)");
+a80 3
+        final ServletContext context = contextEvent.getServletContext();
+        final String contextName = context.getServletContextName();
+
+d82 1
+a82 1
+            System.out.println(contextName + " : stopping REPL on " + this.host  + ":" + this.port + ".");
+@
+
+
+1.2.4.3
+log
+@refactored: moved code from ContinuationStoreInitializer and
+REPLInitializer into SISInitializer so only one listener entry is
+needed in web.ml
+@
+text
+@@
+
+
+1.1
+log
+@file REPLInitializer.java was initially added on branch rel-0-3-dev.
+@
+text
+@d1 87
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 87
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+package siscweb.web;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+
+import siscweb.util.REPLThread;
+
+public class REPLInitializer implements ServletContextListener
+{
+    private String contextName;
+    private REPLThread repl;
+
+    public void contextInitialized(ServletContextEvent contextEvent)
+    {
+        ServletContext context = contextEvent.getServletContext();
+
+        // instantiates and registers sisc context;
+        // throws an exception in case of error
+        try {
+            this.contextName = context.getServletContextName();
+
+            final String host = context.getInitParameter("repl-host");
+            final String port = context.getInitParameter("repl-port");
+
+            if(host != null && port != null) {
+                System.out.println(this.contextName + " : starting REPL on " + host + ":" + port);
+
+                this.repl = new REPLThread(contextName, host, Integer.parseInt(port));
+
+                this.repl.start();
+            }
+        }
+        catch(final NumberFormatException e) {
+            System.err.println(
+                this.contextName + " : invalid repl port specified (WARNING)");
+        }
+        catch(Throwable e) {
+            e.printStackTrace(System.err);
+        }
+    }
+
+
+    public void contextDestroyed(ServletContextEvent contextEvent)
+    {
+        if(this.repl != null) {
+            System.out.println(this.contextName + " : stopping REPL on " + repl.getHost() + ":" + repl.getPort());
+
+            this.repl.terminate();
+        }
+    }
+}
+@
+

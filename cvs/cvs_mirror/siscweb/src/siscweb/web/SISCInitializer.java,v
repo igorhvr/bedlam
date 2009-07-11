@@ -1,0 +1,2068 @@
+head	1.4;
+access;
+symbols
+	rel-0-6-dev:1.4.0.4
+	rel-0-5-fix:1.4.0.2
+	rel-0-5:1.4
+	rel-0-5-dev-safe-frames:1.3.4.4.0.2
+	Root_rel-0-5-dev-safe-frames:1.3.4.4
+	rel-0-4-fix-0:1.3
+	rel-0-5-dev:1.3.0.4
+	rel-0-4-fix:1.3.0.2
+	rel-0-3-fix-3:1.2.2.2
+	rel-0-3-fix-2:1.2.2.1
+	rel-0-4-dev-sisc-1-11:1.2.4.3
+	rel-0-3-fix-1:1.2
+	rel-0-4-dev:1.2.0.4
+	rel-0-3-fix:1.2.0.2
+	rel-0-3:1.2
+	rel-0-3-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2007.04.12.03.51.20;	author acolomba;	state Exp;
+branches
+	1.4.2.1
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2006.09.03.01.42.22;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.10.24.03.25.56;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.10.24.03.25.56;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.11.19.16.15.26;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2005.11.23.02.35.24;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2006.02.25.17.12.00;	author acolomba;	state Exp;
+branches;
+next	1.2.2.2;
+
+1.2.2.2
+date	2006.04.15.15.55.23;	author acolomba;	state Exp;
+branches;
+next	1.2.2.3;
+
+1.2.2.3
+date	2006.08.12.02.02.07;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2006.01.12.02.16.36;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2006.01.14.02.05.52;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2006.01.22.04.03.47;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2006.02.22.04.12.40;	author acolomba;	state Exp;
+branches;
+next	1.2.4.5;
+
+1.2.4.5
+date	2006.03.10.02.36.56;	author acolomba;	state Exp;
+branches;
+next	1.2.4.6;
+
+1.2.4.6
+date	2006.03.28.23.21.17;	author acolomba;	state Exp;
+branches;
+next	1.2.4.7;
+
+1.2.4.7
+date	2006.06.17.13.04.18;	author acolomba;	state Exp;
+branches;
+next	1.2.4.8;
+
+1.2.4.8
+date	2006.06.25.21.00.23;	author acolomba;	state Exp;
+branches;
+next	1.2.4.9;
+
+1.2.4.9
+date	2006.07.08.02.33.13;	author acolomba;	state Exp;
+branches;
+next	1.2.4.10;
+
+1.2.4.10
+date	2006.07.08.21.41.09;	author acolomba;	state Exp;
+branches;
+next	1.2.4.11;
+
+1.2.4.11
+date	2006.07.29.14.48.18;	author acolomba;	state Exp;
+branches;
+next	1.2.4.12;
+
+1.2.4.12
+date	2006.08.02.02.47.25;	author acolomba;	state Exp;
+branches;
+next	1.2.4.13;
+
+1.2.4.13
+date	2006.08.12.01.09.22;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2006.09.20.02.31.24;	author acolomba;	state Exp;
+branches;
+next	1.3.2.2;
+
+1.3.2.2
+date	2007.01.07.04.08.45;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2006.09.19.02.31.46;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2;
+
+1.3.4.2
+date	2007.01.05.14.00.14;	author acolomba;	state Exp;
+branches;
+next	1.3.4.3;
+
+1.3.4.3
+date	2007.01.08.01.28.38;	author acolomba;	state Exp;
+branches;
+next	1.3.4.4;
+
+1.3.4.4
+date	2007.01.08.03.47.11;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.2.1
+date	2007.09.09.01.59.54;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2007.10.13.18.49.32;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@merged from rel-0-5-dev
+@
+text
+@/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005-2006
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ * Dan Muresan
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+package siscweb.web;
+
+import java.net.MalformedURLException;
+import java.util.logging.Level;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+
+import sisc.interpreter.AppContext;
+import sisc.interpreter.SchemeException;
+import siscweb.contcentric.AppContextLocator;
+import siscweb.contcentric.ContinuationStore;
+import siscweb.contcentric.ContinuationStoreLocator;
+import siscweb.contcentric.ContinuationStoreThread;
+import siscweb.util.Environment;
+import siscweb.util.Logger;
+import siscweb.util.MiscUtil;
+import siscweb.util.REPLThread;
+
+
+public class SISCInitializer implements ServletContextListener
+{
+    public void contextInitialized(final ServletContextEvent contextEvent)
+    {
+        final ServletContext servletContext = contextEvent.getServletContext();
+        final String contextName = servletContext.getServletContextName();
+
+        // initializes the logging system
+        siscweb.util.Logger.initialize();
+
+        // start the REPL; we don't fail if for some reason it doesn't run
+        if(Environment.isREPL()) {
+            try {
+                startREPL(servletContext);
+            }
+            catch(final Exception e) {
+                if(Logger.logger.isLoggable(Level.WARNING)) {
+                    Logger.logger.warning(e.getMessage());
+                }
+            }
+        }
+
+        // eval on-init-sexp; we don't fail in case of errors,
+        // as they can be fixed in the REPL
+        try {
+            if(Logger.logger.isLoggable(Level.INFO)) {
+                Logger.logger.info("Evaluating siscweb.on-init-sexp for context : " + contextName);
+            }
+
+            final String sexp = servletContext.getInitParameter("siscweb.on-init-sexp");
+            final AppContext appContext = AppContextLocator.lookup(servletContext);
+
+            MiscUtil.eval(sexp, servletContext.getResource("/"), appContext, contextName);
+        }
+        catch(final MalformedURLException mue) {
+            if(Logger.logger.isLoggable(Level.SEVERE)) {
+                Logger.logger.severe(mue.getMessage());
+            }
+        }
+        catch(SchemeException se) {
+            if(Logger.logger.isLoggable(Level.WARNING)) {
+                Logger.logger.warning(se.getMessage());
+            }
+        }
+
+        // starts the continuation store thread
+        startContinuationStoreThread(servletContext);
+    }
+
+    public void contextDestroyed(final ServletContextEvent contextEvent)
+    {
+        final ServletContext servletContext = contextEvent.getServletContext();
+        final String contextName = servletContext.getServletContextName();
+
+        // eval on-destroy-sexp
+        try {
+            if(Logger.logger.isLoggable(Level.INFO)) {
+                Logger.logger.info("Evaluating siscweb.on-destroy-sexp for context : " + contextName);
+            }
+
+            final String sexp = servletContext.getInitParameter("siscweb.on-destroy-sexp");
+            final AppContext appContext = AppContextLocator.lookup(servletContext);
+
+            MiscUtil.eval(sexp, servletContext.getResource("/"), appContext, servletContext.getServletContextName());
+        }
+        catch(final MalformedURLException mue) {
+            if(Logger.logger.isLoggable(Level.SEVERE)) {
+                Logger.logger.severe(mue.getMessage());
+            }
+        }
+        catch(SchemeException se) {
+            if(Logger.logger.isLoggable(Level.WARNING)) {
+                Logger.logger.warning(se.getMessage());
+            }
+        }
+
+        this.stopContinuationStoreThread();
+        this.stopREPL();
+    }
+
+    private REPLThread replThread = null;
+
+    public void startREPL(final ServletContext servletContext)
+    {
+        final String host = Environment.getREPLHost();
+        final int port = Environment.getREPLPort();
+
+        if(host != null && port != 0) {
+            final AppContext appContext = AppContextLocator.lookup(servletContext);
+
+            this.replThread = new REPLThread(host, port, appContext);
+            this.replThread.setDaemon(true);
+            this.replThread.start();
+        }
+    }
+
+    public void stopREPL()
+    {
+        if(this.replThread != null) {
+            this.replThread.terminate();
+        }
+    }
+
+
+
+    private ContinuationStoreThread continuationCleanupThread = null;
+
+    public void startContinuationStoreThread(ServletContext context)
+    {
+        final ContinuationStore continuationStore = ContinuationStoreLocator.lookup(context);
+
+        this.continuationCleanupThread = new ContinuationStoreThread(continuationStore);
+        this.continuationCleanupThread.setDaemon(true);
+        this.continuationCleanupThread.start();
+    }
+
+    public void stopContinuationStoreThread()
+    {
+        if(this.continuationCleanupThread != null) {
+            this.continuationCleanupThread.terminate();
+        }
+    }
+}
+@
+
+
+1.4.4.1
+log
+@merged from rel-0-5-fix
+@
+text
+@d110 1
+a113 2
+            final String contextName = servletContext.getServletContextName();
+
+d165 1
+a165 1
+    public void startContinuationStoreThread(final ServletContext context)
+@
+
+
+1.4.2.1
+log
+@minor syntactical cleanup
+@
+text
+@d110 1
+a113 2
+            final String contextName = servletContext.getServletContextName();
+
+d165 1
+a165 1
+    public void startContinuationStoreThread(final ServletContext context)
+@
+
+
+1.3
+log
+@merged from rel-0-4-dev
+@
+text
+@d17 1
+a17 1
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005
+d21 1
+d39 1
+a39 3
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+a45 1
+import sisc.data.Symbol;
+a46 3
+import sisc.interpreter.Context;
+import sisc.interpreter.Interpreter;
+import sisc.interpreter.SchemeCaller;
+d48 3
+a50 1
+import siscweb.contcentric.ContinuationStoreSingletonDecorator;
+d62 2
+a63 2
+        final ServletContext context = contextEvent.getServletContext();
+        final String contextName = context.getServletContextName();
+a67 3
+        // initialize SISC context
+        initializeSISC(context);
+
+d71 1
+a71 1
+                startREPL();
+d73 1
+a73 1
+            catch(final Throwable t) {
+d75 1
+a75 1
+                    Logger.logger.warning(t.getMessage());
+d87 2
+a88 1
+            final String sexp = context.getInitParameter("siscweb.on-init-sexp");
+d90 6
+a95 1
+            MiscUtil.eval(sexp, context.getRealPath("/"), contextName);
+a102 3
+        // initializes continuation store
+        ContinuationStoreSingletonDecorator.initialize( Environment.getContinuationStoreClassName());
+
+d104 1
+a104 1
+        startContinuationStoreThread();
+d109 2
+a110 2
+        final ServletContext context = contextEvent.getServletContext();
+        final String contextName = context.getServletContextName();
+d118 2
+a119 1
+            final String sexp = context.getInitParameter("siscweb.on-destroy-sexp");
+d121 6
+a126 1
+            MiscUtil.eval(sexp, context.getRealPath("/"), context.getServletContextName());
+a137 69
+
+    private void initializeSISC(final ServletContext servletContext)
+    {
+        final String contextName = servletContext.getServletContextName();
+
+        try {
+            final Properties siscProperties = new Properties();
+
+            // tries to load sisc properties from WEB-INF/sisc.properties
+            InputStream is = null;
+            try {
+                is = servletContext.getResourceAsStream("/WEB-INF/sisc.properties");
+
+                if(is != null) {
+                    siscProperties.load(is);
+                    if(Logger.logger.isLoggable(Level.INFO)) {
+                        Logger.logger.info("Loading WEB-INF/sisc.properties : " + contextName);
+                    }
+                }
+            }
+            catch(IOException ioe) {
+                if(Logger.logger.isLoggable(Level.WARNING)) {
+                    Logger.logger.warning("Error reading WEB-INF/sisc.properties : " + contextName);
+                }
+            }
+            finally {
+                is.close();
+            }
+
+            // instantiates and registers sisc context;
+            final AppContext ctx = new AppContext(siscProperties);
+            Context.setDefaultAppContext(ctx);
+
+            if(Logger.logger.isLoggable(Level.INFO)) {
+                Logger.logger.info("Initializing SISC interpreter in context : " + contextName);
+            }
+
+            ctx.addDefaultHeap();
+
+            Context.execute(new SchemeCaller() {
+                public Object execute(Interpreter r)
+                    throws SchemeException
+                {
+                    r.define(Symbol.get ("*SISCWEB.SERVLET-CONTEXT*"),
+                            new sisc.modules.s2j.JavaObject(servletContext),
+                            sisc.util.Util.TOPLEVEL);
+
+                    return null;
+                    }
+               });
+        }
+        catch(final IOException ioe) {
+            if(Logger.logger.isLoggable(Level.SEVERE)) {
+                Logger.logger.severe("Error loading SISC heap in context : " + contextName);
+            }
+
+            throw new RuntimeException(ioe);
+        }
+        catch(final SchemeException se) {
+            if(Logger.logger.isLoggable(Level.SEVERE)) {
+                Logger.logger.severe("Error providing ServletContext to SISC runtime in context : " + contextName);
+            }
+
+            throw new RuntimeException(se);
+        }
+    }
+
+
+
+d140 1
+a140 1
+    public void startREPL()
+d146 3
+a148 1
+            this.replThread = new REPLThread(host, port);
+d156 3
+a158 1
+        this.replThread.terminate();
+d165 1
+a165 1
+    public void startContinuationStoreThread()
+d167 3
+a169 1
+        this.continuationCleanupThread = new ContinuationStoreThread();
+d176 3
+a178 1
+        this.continuationCleanupThread.terminate();
+@
+
+
+1.3.2.1
+log
+@merged from rel-0-5-dev
+@
+text
+@a39 1
+import java.net.MalformedURLException;
+d95 1
+a95 6
+            MiscUtil.eval(sexp, context.getResource("/"), contextName);
+        }
+        catch(final MalformedURLException mue) {
+            if(Logger.logger.isLoggable(Level.SEVERE)) {
+                Logger.logger.severe(mue.getMessage());
+            }
+d123 1
+a123 6
+            MiscUtil.eval(sexp, context.getResource("/"), context.getServletContextName());
+        }
+        catch(final MalformedURLException mue) {
+            if(Logger.logger.isLoggable(Level.SEVERE)) {
+                Logger.logger.severe(mue.getMessage());
+            }
+d161 1
+a161 3
+                if(is != null) {
+                    is.close();
+                }
+d220 1
+a220 3
+        if(this.replThread != null) {
+            this.replThread.terminate();
+        }
+d236 1
+a236 3
+        if(this.continuationCleanupThread != null) {
+            this.continuationCleanupThread.terminate();
+        }
+@
+
+
+1.3.2.2
+log
+@catches Exception, not Throwable
+@
+text
+@d80 1
+a80 1
+            catch(final Exception e) {
+d82 1
+a82 1
+                    Logger.logger.warning(e.getMessage());
+@
+
+
+1.3.4.1
+log
+@MiscUtil.eval() now uses current-url instead of current-directory,
+thus fixing issues when running as a non-exploded WAR
+@
+text
+@a39 1
+import java.net.MalformedURLException;
+d95 1
+a95 6
+            MiscUtil.eval(sexp, context.getResource("/"), contextName);
+        }
+        catch(final MalformedURLException mue) {
+            if(Logger.logger.isLoggable(Level.SEVERE)) {
+                Logger.logger.severe(mue.getMessage());
+            }
+d123 1
+a123 6
+            MiscUtil.eval(sexp, context.getResource("/"), context.getServletContextName());
+        }
+        catch(final MalformedURLException mue) {
+            if(Logger.logger.isLoggable(Level.SEVERE)) {
+                Logger.logger.severe(mue.getMessage());
+            }
+d161 1
+a161 3
+                if(is != null) {
+                    is.close();
+                }
+d220 1
+a220 3
+        if(this.replThread != null) {
+            this.replThread.terminate();
+        }
+d236 1
+a236 3
+        if(this.continuationCleanupThread != null) {
+            this.continuationCleanupThread.terminate();
+        }
+@
+
+
+1.3.4.2
+log
+@changed throwable -> exception
+@
+text
+@d80 1
+a80 1
+            catch(final Exception e) {
+d82 1
+a82 1
+                    Logger.logger.warning(e.getMessage());
+d110 1
+a110 1
+        ContinuationStoreSingletonDecorator.initialize(context, Environment.getContinuationStoreClassName());
+@
+
+
+1.3.4.3
+log
+@continuationstore is now local to the servlet context, not the
+static scope (i.e. zapped the singleton)
+@
+text
+@d54 1
+a54 2
+import siscweb.contcentric.ContinuationStore;
+import siscweb.contcentric.ContinuationStoreLocator;
+d109 3
+d113 1
+a113 1
+        startContinuationStoreThread(context);
+d242 1
+a242 1
+    public void startContinuationStoreThread(ServletContext context)
+d244 1
+a244 3
+        final ContinuationStore continuationStore = ContinuationStoreLocator.getInstance(context);
+
+        this.continuationCleanupThread = new ContinuationStoreThread(continuationStore);
+@
+
+
+1.3.4.4
+log
+@sisc appcontext is now local to the servlet context instead of
+the static scope
+@
+text
+@d17 1
+a17 1
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005-2006
+a20 1
+ * Dan Muresan
+d38 2
+d41 1
+d48 1
+d50 3
+a53 1
+import siscweb.contcentric.AppContextLocator;
+d67 2
+a68 2
+        final ServletContext servletContext = contextEvent.getServletContext();
+        final String contextName = servletContext.getServletContextName();
+d73 3
+d79 1
+a79 1
+                startREPL(servletContext);
+d95 1
+a95 2
+            final String sexp = servletContext.getInitParameter("siscweb.on-init-sexp");
+            final AppContext appContext = AppContextLocator.lookup(servletContext);
+d97 1
+a97 1
+            MiscUtil.eval(sexp, servletContext.getResource("/"), appContext, contextName);
+d111 1
+a111 1
+        startContinuationStoreThread(servletContext);
+d116 2
+a117 2
+        final ServletContext servletContext = contextEvent.getServletContext();
+        final String contextName = servletContext.getServletContextName();
+d125 1
+a125 2
+            final String sexp = servletContext.getInitParameter("siscweb.on-destroy-sexp");
+            final AppContext appContext = AppContextLocator.lookup(servletContext);
+d127 1
+a127 1
+            MiscUtil.eval(sexp, servletContext.getResource("/"), appContext, servletContext.getServletContextName());
+d144 71
+d217 1
+a217 1
+    public void startREPL(final ServletContext servletContext)
+d223 1
+a223 3
+            final AppContext appContext = AppContextLocator.lookup(servletContext);
+
+            this.replThread = new REPLThread(host, port, appContext);
+d242 1
+a242 1
+        final ContinuationStore continuationStore = ContinuationStoreLocator.lookup(context);
+@
+
+
+1.2
+log
+@merged from rel-0-3-dev
+@
+text
+@d39 3
+d47 2
+d51 1
+d53 4
+d58 2
+d63 1
+a63 1
+    public void contextInitialized(ServletContextEvent contextEvent)
+d68 20
+a87 2
+        // instantiates and registers sisc context;
+        // throws an exception in case of error
+d89 7
+a95 1
+            MiscUtil.initializeContext(contextName);
+d97 4
+a100 5
+        catch(IOException e)
+        {
+            System.err.println(
+                    contextName + " : could not initialize SISCweb context.");
+            throw new RuntimeException(e);
+d103 2
+a104 4
+        // executes the code in the on-init-sexp param,
+        // if provided; throws an exception in case of error
+        try {
+            final Interpreter r = Context.enter(contextName);
+d106 3
+a108 1
+            final String onInitSExp = context.getInitParameter("on-init-sexp");
+d110 4
+a113 2
+            if(onInitSExp != null) {
+                MiscUtil.changeDirectory(r, context.getRealPath("/"));
+d115 4
+a118 1
+                r.eval(onInitSExp);
+d120 4
+d125 4
+a128 10
+        catch(final IOException e) {
+            System.err.println(contextName + " : unable to retrieve on-init-sexp (WARNING)");
+        }
+        catch(final SchemeException e) {
+            throw new RuntimeException(
+                contextName + " : error evaluating on-init-sexp for servlet ",
+                sisc.modules.s2j.Util.javaException(e));
+        }
+        finally {
+            Context.exit();
+d130 3
+d136 1
+a136 1
+    public void contextDestroyed(ServletContextEvent contextEvent)
+d138 1
+a138 2
+        final ServletContext context = contextEvent.getServletContext();
+        final String contextName = context.getServletContextName();
+d141 22
+a162 2
+            // executes the code in the on-destroy-sexp param;
+            final Interpreter r = Context.enter(contextName);
+d164 7
+a170 1
+            final String onDestroySexp = context.getInitParameter("on-destroy-sexp");
+d172 1
+a172 2
+            if(onDestroySexp != null) {
+                MiscUtil.changeDirectory(r, context.getRealPath("/"));
+d174 15
+a188 1
+                r.eval(onDestroySexp);
+d190 2
+d193 6
+a198 3
+        catch(final IOException e) {
+            throw new RuntimeException(
+                    contextName + " : error evaluating on-destroy-sexp", e);
+d200 15
+a214 8
+        catch(final SchemeException e) {
+            throw new RuntimeException(
+                    contextName + " : error evaluating on-destroy-sexp",
+                    sisc.modules.s2j.Util.javaException(e));
+        }
+        finally {
+            Context.exit();
+            Context.unregister(contextName);
+d216 21
+@
+
+
+1.2.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@a43 3
+import sisc.data.Procedure;
+import sisc.data.Symbol;
+import sisc.data.Value;
+a46 1
+import sisc.util.Util;
+d51 1
+a51 1
+    public void contextInitialized(final ServletContextEvent contextEvent)
+d63 3
+a65 1
+            throw new RuntimeException(contextName + " : could not initialize SISCweb context.", e);
+d68 2
+a69 2
+
+        // executes the code in the on-init-sexp param if provided
+d73 4
+a76 5
+            // sets the servlet-context global variable while we're
+            // at it
+            r.define(Symbol.get ("*SISCWEB.SERVLET-CONTEXT*"),
+                     new sisc.modules.s2j.JavaObject(context),
+                     sisc.util.Util.TOPLEVEL);
+d78 10
+a87 2
+            // eval on-init-sexp
+            evalInitParameter(context, r, "on-init-sexp");
+d94 2
+a95 1
+    public void contextDestroyed(final ServletContextEvent contextEvent)
+d101 1
+d104 1
+a104 21
+            // eval on-destroy-sexp
+            evalInitParameter(context, r, "on-destroy-sexp");
+        }
+        finally {
+            Context.exit();
+            Context.unregister(contextName);
+        }
+    }
+
+    private void evalInitParameter(final ServletContext context, final Interpreter r, final String name)
+        throws RuntimeException
+    {
+        final String contextName = context.getServletContextName();
+
+        try {
+            String sexp = context.getInitParameter("siscweb." + name);
+
+            // tries unqualified lookup for backwards compatibility
+            if(sexp == null) {
+                sexp = context.getInitParameter(name);
+            }
+d106 2
+d109 1
+a109 17
+            if(sexp != null) {
+                try {
+                    MiscUtil.changeDirectory(r, context.getRealPath("/"));
+
+                    r.eval(sexp);
+                }
+                catch(SchemeException e) {
+                    System.err.println(
+                            contextName + " : error evaluating " + name + " parameter. Scheme stack trace follows:");
+
+                    Procedure printError = (Procedure) r.lookup(Symbol.get("print-error"), Util.TOPLEVEL);
+                    r.eval(printError, new Value[] {e.m, e.e});
+
+                    throw new RuntimeException(
+                            contextName + " : error evaluating parameter " + name + ".",
+                            sisc.modules.s2j.Util.javaException(e));
+                }
+d114 1
+a114 1
+                    contextName + " : error evaluating context parameter " + name + ".", e);
+d116 1
+a116 1
+        catch(SchemeException e) {
+d118 1
+a118 1
+                    contextName + " : error printing scheme stack trace during evaluation of context parameter " + name + ".",
+d121 4
+@
+
+
+1.2.2.2
+log
+@merged from rel-0-4-dev
+@
+text
+@a37 1
+import java.io.FileNotFoundException;
+a38 1
+import java.io.InputStream;
+a43 1
+import sisc.REPL;
+a44 1
+import sisc.data.SchemeString;
+a46 1
+import sisc.interpreter.AppContext;
+a48 1
+import sisc.interpreter.SchemeCaller;
+a49 1
+import sisc.ser.MemoryRandomAccessInputStream;
+d51 1
+d63 6
+a68 2
+            final AppContext ctx = new AppContext();
+            Context.setDefaultAppContext(ctx);
+a69 1
+            ctx.addDefaultHeap();
+d71 3
+a73 1
+            final Interpreter r = Context.enter(ctx);
+d82 1
+a82 1
+            evalInitParameter(context, "on-init-sexp");
+d84 2
+a85 2
+        catch(final IOException e) {
+            throw new RuntimeException(contextName + ": I/O error while loading SISC heap. (Perhaps you forgot to include sisc-heap.jar?)", e);
+d92 1
+d94 10
+a103 2
+        // eval on-destroy-sexp
+        evalInitParameter(context, "on-destroy-sexp");
+d106 1
+a106 1
+    private void evalInitParameter(final ServletContext context, final String name)
+d111 2
+a112 1
+        String tsexp = context.getInitParameter("siscweb." + name);
+d114 4
+a117 3
+        if(tsexp == null) {
+            tsexp = context.getInitParameter(name);
+        }
+a118 1
+        final String sexp = tsexp;
+a119 1
+        try {
+d121 16
+a136 18
+                Context.execute(new SchemeCaller() {
+                        public Object execute(Interpreter r)
+                            throws SchemeException
+                        {
+                            try {
+                                final Procedure currentDirectory =
+                                    (Procedure) r.lookup(Symbol.get("current-directory"),
+                                                         Util.TOPLEVEL);
+
+                                r.eval(currentDirectory, new Value[] { new SchemeString(context.getRealPath("/")) });
+
+                                return r.eval(sexp);
+                            }
+                            catch(final IOException e) {
+                                throw new RuntimeException(
+                                    contextName + " : error reading context parameter " + name + ".", e);
+                            }
+                        } });
+d139 6
+a144 20
+        catch(final SchemeException e) {
+            System.err.println(
+                contextName + " : error evaluating " + name + " parameter. Scheme stack trace follows:");
+
+            try {
+                Context.execute(new SchemeCaller() {
+                        public Object execute(Interpreter r)
+                            throws SchemeException
+                        {
+                            final Procedure printError = (Procedure) r.lookup(Symbol.get("print-error"), Util.TOPLEVEL);
+
+                            return r.eval(printError, new Value[] {e.m, e.e});
+                        } });
+
+                        throw new RuntimeException(
+                                contextName + " : error evaluating parameter " + name + ".",
+                                sisc.modules.s2j.Util.javaException(e));
+            }
+            catch(SchemeException f) {
+                throw new RuntimeException(
+d146 1
+a146 2
+                    sisc.modules.s2j.Util.javaException(f));
+            }
+@
+
+
+1.2.2.3
+log
+@backported feature from rel-0-4-dev, where the SISC AppContext is
+initialized with properties read from WEB-INF/sisc.properties
+@
+text
+@a40 1
+import java.util.Properties;
+d69 1
+a69 19
+            final Properties siscProperties = new Properties();
+
+            // tries to load sisc properties from WEB-INF/sisc.properties
+            InputStream is = null;
+            try {
+                is = context.getResourceAsStream("/WEB-INF/sisc.properties");
+
+                if(is != null) {
+                    siscProperties.load(is);
+                }
+            }
+            catch(IOException ioe) {
+                System.err.println("Error reading WEB-INF/sisc.properties : " + contextName);
+            }
+            finally {
+                is.close();
+            }
+
+            final AppContext ctx = new AppContext(siscProperties);
+@
+
+
+1.2.4.1
+log
+@now sets (again) *SERVLET-CONTEXT* (temporary)
+@
+text
+@a43 1
+import sisc.data.Symbol;
+a67 1
+
+a72 7
+            // sets the servlet-context global variable while we're
+            // at it
+            r.define(Symbol.get ("*SERVLET-CONTEXT*"),
+                     new sisc.modules.s2j.JavaObject(context),
+                     sisc.util.Util.TOPLEVEL);
+
+
+@
+
+
+1.2.4.2
+log
+@prepended "siscweb." to *SERVLET-CONTEXT* and on-[init|destroy]-sexp;
+errors in on-destroy-sexps now cause just a warning, as for
+on-init-sexp
+@
+text
+@d77 1
+a77 1
+            r.define(Symbol.get ("*SISCWEB.SERVLET-CONTEXT*"),
+d82 1
+a82 1
+            final String onInitSExp = context.getInitParameter("siscweb.on-init-sexp");
+d91 1
+a91 1
+            System.err.println(contextName + " : unable to retrieve siscweb.on-init-sexp (WARNING)");
+d113 1
+a113 1
+            final String onDestroySexp = context.getInitParameter("siscweb.on-destroy-sexp");
+d122 2
+a123 1
+            System.err.println(contextName + " : unable to retrieve siscweb.on-destroy-sexp (WARNING)");
+@
+
+
+1.2.4.3
+log
+@prints scheme stacktrace if code in init/destroy params produces
+errors
+@
+text
+@a43 1
+import sisc.data.Procedure;
+a44 1
+import sisc.data.Value;
+a47 1
+import sisc.util.Util;
+d52 1
+a52 1
+    public void contextInitialized(final ServletContextEvent contextEvent)
+d64 3
+a66 1
+            throw new RuntimeException(contextName + " : could not initialize SISCweb context.", e);
+d70 2
+a71 1
+        // executes the code in the on-init-sexp param if provided
+a80 7
+            // eval on-init-sexp
+            evalInitParameter(context, r, "on-init-sexp");
+        }
+        finally {
+            Context.exit();
+        }
+    }
+d82 1
+a82 4
+    public void contextDestroyed(final ServletContextEvent contextEvent)
+    {
+        final ServletContext context = contextEvent.getServletContext();
+        final String contextName = context.getServletContextName();
+d84 2
+a85 2
+        try {
+            final Interpreter r = Context.enter(contextName);
+d87 10
+a96 2
+            // eval on-destroy-sexp
+            evalInitParameter(context, r, "on-destroy-sexp");
+a99 1
+            Context.unregister(contextName);
+d103 2
+a104 2
+    private void evalInitParameter(final ServletContext context, final Interpreter r, final String name)
+        throws RuntimeException
+d106 1
+d110 2
+a111 1
+            String sexp = context.getInitParameter("siscweb." + name);
+d113 1
+a113 4
+            // tries unqualified lookup for backwards compatibility
+            if(sexp == null) {
+                sexp = context.getInitParameter(name);
+            }
+d115 2
+d118 1
+a118 17
+            if(sexp != null) {
+                try {
+                    MiscUtil.changeDirectory(r, context.getRealPath("/"));
+
+                    r.eval(sexp);
+                }
+                catch(SchemeException e) {
+                    System.err.println(
+                            contextName + " : error evaluating " + name + " parameter. Scheme stack trace follows:");
+
+                    Procedure printError = (Procedure) r.lookup(Symbol.get("print-error"), Util.TOPLEVEL);
+                    r.eval(printError, new Value[] {e.m, e.e});
+
+                    throw new RuntimeException(
+                            contextName + " : error evaluating parameter " + name + ".",
+                            sisc.modules.s2j.Util.javaException(e));
+                }
+d122 1
+a122 2
+            throw new RuntimeException(
+                    contextName + " : error evaluating context parameter " + name + ".", e);
+d124 1
+a124 1
+        catch(SchemeException e) {
+d126 1
+a126 1
+                    contextName + " : error printing scheme stack trace during evaluation of context parameter " + name + ".",
+d129 4
+@
+
+
+1.2.4.4
+log
+@adapted to SISC 1.12 Context/Interpreter API
+@
+text
+@a37 1
+import java.io.FileNotFoundException;
+a38 1
+import java.io.InputStream;
+a43 1
+import sisc.REPL;
+a44 1
+import sisc.data.SchemeString;
+a46 1
+import sisc.interpreter.AppContext;
+a48 1
+import sisc.interpreter.SchemeCaller;
+a49 1
+import sisc.ser.MemoryRandomAccessInputStream;
+d51 1
+d63 6
+a68 3
+            final AppContext ctx = new AppContext();
+            Context.setDefaultAppContext(ctx);
+            final Interpreter r = Context.enter(ctx);
+a69 1
+            final InputStream heapInputStream = sisc.boot.HeapAnchor.class.getResourceAsStream("sisc.shp");
+d71 3
+a73 5
+            if(heapInputStream == null) {
+                throw new FileNotFoundException("SISC heap not found. (Perhaps you forgot to include sisc-heap.jar?)");
+            }
+
+            REPL.loadHeap(r, new MemoryRandomAccessInputStream(heapInputStream));
+d82 1
+a82 1
+            evalInitParameter(context, "on-init-sexp");
+d84 2
+a85 5
+        catch(final ClassNotFoundException e) {
+            throw new RuntimeException(contextName + ": SISC heap not found. (You probably forgot to include sisc-heap.jar.)", e);
+        }
+        catch(final IOException e) {
+            throw new RuntimeException(contextName + ": I/O error while loading SISC heap.", e);
+d92 1
+d94 10
+a103 2
+        // eval on-destroy-sexp
+        evalInitParameter(context, "on-destroy-sexp");
+d106 1
+a106 1
+    private void evalInitParameter(final ServletContext context, final String name)
+d111 2
+a112 1
+        String tsexp = context.getInitParameter("siscweb." + name);
+d114 4
+a117 3
+        if(tsexp == null) {
+            tsexp = context.getInitParameter(name);
+        }
+a118 1
+        final String sexp = tsexp;
+a119 1
+        try {
+d121 16
+a136 18
+                Context.execute(new SchemeCaller() {
+                        public Object execute(Interpreter r)
+                            throws SchemeException
+                        {
+                            try {
+                                final Procedure currentDirectory =
+                                    (Procedure) r.lookup(Symbol.get("current-directory"),
+                                                         Util.TOPLEVEL);
+
+                                r.eval(currentDirectory, new Value[] { new SchemeString(context.getRealPath("/")) });
+
+                                return r.eval(sexp);
+                            }
+                            catch(final IOException e) {
+                                throw new RuntimeException(
+                                    contextName + " : error reading context parameter " + name + ".", e);
+                            }
+                        } });
+d139 6
+a144 20
+        catch(final SchemeException e) {
+            System.err.println(
+                contextName + " : error evaluating " + name + " parameter. Scheme stack trace follows:");
+
+            try {
+                Context.execute(new SchemeCaller() {
+                        public Object execute(Interpreter r)
+                            throws SchemeException
+                        {
+                                final Procedure printError = (Procedure) r.lookup(Symbol.get("print-error"), Util.TOPLEVEL);
+
+                                return r.eval(printError, new Value[] {e.m, e.e});
+                        } });
+
+                        throw new RuntimeException(
+                                contextName + " : error evaluating parameter " + name + ".",
+                                sisc.modules.s2j.Util.javaException(e));
+            }
+            catch(SchemeException f) {
+                throw new RuntimeException(
+d146 1
+a146 2
+                    sisc.modules.s2j.Util.javaException(f));
+            }
+@
+
+
+1.2.4.5
+log
+@now uses SISC 1.13 default heapload
+@
+text
+@d71 3
+d75 3
+a77 1
+            ctx.addDefaultHeap();
+d79 1
+a79 1
+            final Interpreter r = Context.enter(ctx);
+d90 3
+d94 1
+a94 1
+            throw new RuntimeException(contextName + ": I/O error while loading SISC heap. (Perhaps you forgot to include sisc-heap.jar?)", e);
+@
+
+
+1.2.4.6
+log
+@minor formatting fix
+@
+text
+@d142 1
+a142 1
+                            final Procedure printError = (Procedure) r.lookup(Symbol.get("print-error"), Util.TOPLEVEL);
+d144 1
+a144 1
+                            return r.eval(printError, new Value[] {e.m, e.e});
+@
+
+
+1.2.4.7
+log
+@refactored: moved code from ContinuationStoreInitializer and
+REPLInitializer into SISInitializer so only one listener entry is
+needed in web.ml
+@
+text
+@d38 1
+d40 1
+d46 1
+d56 1
+a57 3
+import siscweb.contcentric.ContinuationStoreThread;
+import siscweb.util.Environment;
+import siscweb.util.REPLThread;
+a60 2
+    private String contextName;
+
+d64 1
+a64 4
+        this.contextName = context.getServletContextName();
+
+        // initialize SISC context
+        initializeSISC();
+a65 22
+        // eval on-init-sexp
+        evalInitParameter(context, "on-init-sexp");
+
+        startContinuationStoreThread();
+
+        // start the REPL
+        if(Environment.isREPL()) {
+            startREPL();
+        }
+    }
+
+    public void contextDestroyed(final ServletContextEvent contextEvent)
+    {
+        final ServletContext context = contextEvent.getServletContext();
+
+        // eval on-destroy-sexp
+        evalInitParameter(context, "on-destroy-sexp");
+    }
+
+
+    private void initializeSISC()
+    {
+d75 9
+d86 1
+a86 4
+            throw new RuntimeException(this.contextName + ": I/O error while loading SISC heap. (Perhaps you forgot to include sisc-heap.jar?)", e);
+        }
+        finally {
+            Context.exit();
+d90 7
+a157 31
+
+    public void startREPL()
+    {
+        try {
+            final String host = Environment.getREPLHost();
+            final int port = Environment.getREPLPort();
+
+            if(host != null && port != 0) {
+                System.out.println(contextName +
+                                   " : starting REPL on " + host + ":" + port);
+
+                Thread repl = new REPLThread(host, port);
+                repl.setDaemon(true);
+                repl.start();
+            }
+        }
+        catch(final NumberFormatException e) {
+            System.err.println(
+                contextName + " : invalid REPL port specified (WARNING)");
+        }
+        catch(Throwable e) {
+            e.printStackTrace(System.err);
+        }
+    }
+
+    public void startContinuationStoreThread()
+    {
+        Thread cst = new ContinuationStoreThread();
+        cst.setDaemon(true);
+        cst.start();
+    }
+@
+
+
+1.2.4.8
+log
+@now tracks and stops continuation cleanup threads between context reloads; moved evalInitParameter core code to MiscUtil;  added logging
+@
+text
+@a38 1
+import java.util.logging.Level;
+d44 4
+d50 2
+d53 1
+a55 2
+import siscweb.util.Loggers;
+import siscweb.util.MiscUtil;
+a57 1
+
+d70 6
+a75 1
+        // start the REPL; we don't fail if for some reason it doesn't run
+d77 1
+a77 20
+            try {
+                startREPL();
+            }
+            catch(Throwable t) {
+                if(Loggers.configuration.isLoggable(Level.WARNING)) {
+                    Loggers.configuration.throwing("SiscwebInitializer", "contextInitialized", t);
+                }
+            }
+        }
+
+        // eval on-init-sexp; we don't fail in case of errors,
+        // as they can be fixed in the REPL
+        try {
+            final String sexp = context.getInitParameter("siscweb.on-init-sexp");
+            MiscUtil.eval(sexp, context.getRealPath("/"), context.getServletContextName());
+        }
+        catch(SchemeException se) {
+            if(Loggers.configuration.isLoggable(Level.SEVERE)) {
+                Loggers.configuration.severe("Error evaluating parameter siscweb.on-init-sexp.");
+            }
+a78 2
+
+        startContinuationStoreThread();
+d86 1
+a86 12
+        try {
+            final String sexp = context.getInitParameter("siscweb.on-destroy-sexp");
+            MiscUtil.eval(sexp, context.getRealPath("/"), context.getServletContextName());
+        }
+        catch(SchemeException se) {
+            if(Loggers.configuration.isLoggable(Level.SEVERE)) {
+                Loggers.configuration.severe("Error evaluating parameter siscweb.on-destroy-sexp.");
+            }
+        }
+
+        this.stopContinuationStoreThread();
+        this.stopREPL();
+d99 5
+d105 2
+a106 7
+        catch(final IOException ioe) {
+            if(Loggers.configuration.isLoggable(Level.SEVERE)) {
+                Loggers.configuration.severe(this.contextName + ": I/O error while loading SISC heap. (Perhaps you forgot to include sisc-heap.jar?)");
+                Loggers.configuration.throwing(this.getClass().getName(), "initializeSISC", ioe);
+            }
+
+            throw new RuntimeException(ioe);
+d111 6
+d118 3
+d122 1
+a122 1
+    private REPLThread replThread = null;
+d124 25
+a148 4
+    public void startREPL()
+    {
+        final String host = Environment.getREPLHost();
+        final int port = Environment.getREPLPort();
+d150 19
+a168 4
+        if(host != null && port != 0) {
+            this.replThread = new REPLThread(host, port);
+            this.replThread.setDaemon(true);
+            this.replThread.start();
+d172 1
+a172 1
+    public void stopREPL()
+d174 20
+a193 1
+        this.replThread.terminate();
+a195 3
+
+    private ContinuationStoreThread continuationCleanupThread = null;
+
+d198 3
+a200 8
+        this.continuationCleanupThread = new ContinuationStoreThread();
+        this.continuationCleanupThread.setDaemon(true);
+        this.continuationCleanupThread.start();
+    }
+
+    public void stopContinuationStoreThread()
+    {
+        this.continuationCleanupThread.terminate();
+@
+
+
+1.2.4.9
+log
+@modified in accordance to Loggers -> Logger changes
+@
+text
+@d50 1
+a50 1
+import siscweb.util.Logger;
+d73 2
+a74 2
+                if(Logger.logger.isLoggable(Level.WARNING)) {
+                    Logger.logger.throwing("SiscwebInitializer", "contextInitialized", t);
+d86 2
+a87 2
+            if(Logger.logger.isLoggable(Level.SEVERE)) {
+                Logger.logger.severe("Error evaluating parameter siscweb.on-init-sexp.");
+d104 2
+a105 2
+            if(Logger.logger.isLoggable(Level.SEVERE)) {
+                Logger.logger.severe("Error evaluating parameter siscweb.on-destroy-sexp.");
+d125 3
+a127 3
+            if(Logger.logger.isLoggable(Level.SEVERE)) {
+                Logger.logger.severe(this.contextName + ": I/O error while loading SISC heap. (Perhaps you forgot to include sisc-heap.jar?)");
+                Logger.logger.throwing(this.getClass().getName(), "initializeSISC", ioe);
+@
+
+
+1.2.4.10
+log
+@improved logging
+@
+text
+@d69 1
+d71 6
+a81 4
+            if(Logger.logger.isLoggable(Level.INFO)) {
+                Logger.logger.info("Evaluating siscweb.on-init-sexp for context : " + this.contextName);
+            }
+
+a82 1
+
+d87 1
+a87 1
+                Logger.logger.severe(se.getMessage());
+a99 4
+            if(Logger.logger.isLoggable(Level.INFO)) {
+                Logger.logger.info("Evaluating siscweb.on-destroy-sexp for context : " + this.contextName);
+            }
+
+a100 1
+
+d105 1
+a105 1
+                Logger.logger.severe(se.getMessage());
+a121 4
+            if(Logger.logger.isLoggable(Level.INFO)) {
+                Logger.logger.info("Initializing SISC interpreter in context : " + this.contextName);
+            }
+
+d126 1
+d136 1
+d141 2
+a142 3
+        try {
+            final String host = Environment.getREPLHost();
+            final int port = Environment.getREPLPort();
+d144 4
+a147 10
+            if(host != null && port != 0) {
+                this.replThread = new REPLThread(host, port);
+                this.replThread.setDaemon(true);
+                this.replThread.start();
+            }
+        }
+        catch(final Throwable t) {
+            if(Logger.logger.isLoggable(Level.SEVERE)) {
+                Logger.logger.severe(t.getMessage());
+            }
+a156 1
+
+@
+
+
+1.2.4.11
+log
+@initializes the continuation store; sets the global scheme
+*SISCWEB.SERVLET-CONTEXT* variable (was causing siscweb/context to
+fail); moved try-catch code from startREPL() to its caller; minor
+fixes to logging et al.
+@
+text
+@a44 1
+import sisc.data.Symbol;
+a46 2
+import sisc.interpreter.Interpreter;
+import sisc.interpreter.SchemeCaller;
+a47 1
+import siscweb.contcentric.ContinuationStoreSingletonDecorator;
+d57 2
+d62 1
+a62 1
+        final String contextName = context.getServletContextName();
+d65 1
+a65 1
+        initializeSISC(context);
+a68 1
+            try {
+a69 6
+            }
+            catch(final Throwable t) {
+                if(Logger.logger.isLoggable(Level.WARNING)) {
+                    Logger.logger.warning(t.getMessage());
+                }
+            }
+d76 1
+a76 1
+                Logger.logger.info("Evaluating siscweb.on-init-sexp for context : " + contextName);
+d81 1
+a81 1
+            MiscUtil.eval(sexp, context.getRealPath("/"), contextName);
+d84 2
+a85 2
+            if(Logger.logger.isLoggable(Level.WARNING)) {
+                Logger.logger.warning(se.getMessage());
+a88 4
+        // initializes continuation store
+        ContinuationStoreSingletonDecorator.initialize( Environment.getContinuationStoreClassName());
+
+        // starts the continuation store thread
+a94 1
+        final String contextName = context.getServletContextName();
+d99 1
+a99 1
+                Logger.logger.info("Evaluating siscweb.on-destroy-sexp for context : " + contextName);
+d107 2
+a108 2
+            if(Logger.logger.isLoggable(Level.WARNING)) {
+                Logger.logger.warning(se.getMessage());
+d117 1
+a117 1
+    private void initializeSISC(final ServletContext servletContext)
+d119 2
+a120 2
+        final String contextName = servletContext.getServletContextName();
+
+a121 1
+            // instantiates and registers sisc context;
+d126 1
+a126 1
+                Logger.logger.info("Initializing SISC interpreter in context : " + contextName);
+a129 12
+
+            Context.execute(new SchemeCaller() {
+                public Object execute(Interpreter r)
+                    throws SchemeException
+                {
+                    r.define(Symbol.get ("*SISCWEB.SERVLET-CONTEXT*"),
+                            new sisc.modules.s2j.JavaObject(servletContext),
+                            sisc.util.Util.TOPLEVEL);
+
+                    return null;
+                    }
+               });
+d133 1
+a133 1
+                Logger.logger.severe("Error loading SISC heap in context : " + contextName);
+a137 7
+        catch(final SchemeException se) {
+            if(Logger.logger.isLoggable(Level.SEVERE)) {
+                Logger.logger.severe("Error providing ServletContext to SISC runtime in context : " + contextName);
+            }
+
+            throw new RuntimeException(se);
+        }
+d146 3
+a148 2
+        final String host = Environment.getREPLHost();
+        final int port = Environment.getREPLPort();
+d150 10
+a159 4
+        if(host != null && port != 0) {
+            this.replThread = new REPLThread(host, port);
+            this.replThread.setDaemon(true);
+            this.replThread.start();
+@
+
+
+1.2.4.12
+log
+@explicitely initializes logger
+@
+text
+@a65 3
+        // initializes the logging system
+        siscweb.util.Logger.initialize();
+
+@
+
+
+1.2.4.13
+log
+@initializes SISC AppContext with properties loaded from
+WEB-INF/sisc.properties
+@
+text
+@a38 2
+import java.io.InputStream;
+import java.util.Properties;
+a138 23
+            final Properties siscProperties = new Properties();
+
+            // tries to load sisc properties from WEB-INF/sisc.properties
+            InputStream is = null;
+            try {
+                is = servletContext.getResourceAsStream("/WEB-INF/sisc.properties");
+
+                if(is != null) {
+                    siscProperties.load(is);
+                    if(Logger.logger.isLoggable(Level.INFO)) {
+                        Logger.logger.info("Loading WEB-INF/sisc.properties : " + contextName);
+                    }
+                }
+            }
+            catch(IOException ioe) {
+                if(Logger.logger.isLoggable(Level.WARNING)) {
+                    Logger.logger.warning("Error reading WEB-INF/sisc.properties : " + contextName);
+                }
+            }
+            finally {
+                is.close();
+            }
+
+d140 1
+a140 1
+            final AppContext ctx = new AppContext(siscProperties);
+@
+
+
+1.1
+log
+@file SISCInitializer.java was initially added on branch rel-0-3-dev.
+@
+text
+@d1 126
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 175
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+package siscweb.web;
+
+import java.io.IOException;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+
+import sisc.data.Symbol;
+import sisc.interpreter.Context;
+import sisc.interpreter.Interpreter;
+import sisc.interpreter.SchemeException;
+import sisc.util.Util;
+import siscweb.util.MiscUtil;
+import siscweb.util.REPLThread;
+
+public class SISCInitializer implements ServletContextListener
+{
+    private String contextName;
+    private REPLThread repl;
+
+    public void contextInitialized(ServletContextEvent contextEvent)
+    {
+        ServletContext context = contextEvent.getServletContext();
+
+        // instantiates and registers sisc context;
+        // throws an exception in case of error
+        try {
+            this.contextName = MiscUtil.qualifyName(
+                    context.getServletContextName(),
+                    context.getInitParameter("context-name"));
+
+            MiscUtil.initializeContext(this.contextName);
+
+
+            // defines a global variable to hold the servlet context
+            final Interpreter r = Context.enter(this.contextName);
+
+            r.define(Symbol.get("*SERVLET-CONTEXT*"),
+                     sisc.modules.s2j.Util.makeJObj(
+                         context, ServletContext.class),
+                     Util.TOPLEVEL);
+        }
+        catch(IOException e)
+        {
+            System.err.println(
+                    this.contextName + " : could not initialize SISCweb context.");
+            throw new RuntimeException(e);
+        }
+        finally {
+            Context.exit();
+        }
+
+
+        // optionally starts the repl;
+        // continues in case of error
+        try {
+            final String host = context.getInitParameter("repl-host");
+            final String port = context.getInitParameter("repl-port");
+
+            if(host != null && port != null) {
+                System.out.println(this.contextName + " : starting REPL on " + host + ":" + port);
+
+                this.repl = new REPLThread(contextName, host, Integer.parseInt(port));
+
+                this.repl.start();
+            }
+        }
+        catch(final NumberFormatException e) {
+            System.err.println(
+                this.contextName + " : invalid repl port specified (WARNING)");
+        }
+        catch(Throwable e) {
+            e.printStackTrace(System.err);
+        }
+
+        // executes the code in the on-init-sexp param,
+        // if provided; throws an exception in case of error
+        try {
+            final Interpreter r = Context.enter(this.contextName);
+
+            final String onInitSExp = context.getInitParameter("on-init-sexp");
+
+            if(onInitSExp != null) {
+                MiscUtil.changeDirectory(r, context.getRealPath("/"));
+
+                r.eval(onInitSExp);
+            }
+        }
+        catch(final IOException e) {
+            System.err.println(this.contextName + " : unable to retrieve on-init-sexp (WARNING)");
+        }
+        catch(final SchemeException e) {
+            throw new RuntimeException(
+                this.contextName + " : error evaluating on-init-sexp for servlet ",
+                sisc.modules.s2j.Util.javaException(e));
+        }
+        finally {
+            Context.exit();
+        }
+    }
+
+
+    public void contextDestroyed(ServletContextEvent contextEvent)
+    {
+        try {
+            if(this.repl != null) {
+                System.out.println(this.contextName + " : stopping REPL on " + repl.getHost() + ":" + repl.getPort());
+
+                this.repl.terminate();
+            }
+
+            // executes the code in the on-destroy-sexp param;
+            ServletContext context = contextEvent.getServletContext();
+
+            final Interpreter r = Context.enter(this.contextName);
+
+            String onDestroySexp = context.getInitParameter("on-destroy-sexp");
+
+            if(onDestroySexp != null) {
+                MiscUtil.changeDirectory(r, context.getRealPath("/"));
+
+                r.eval(onDestroySexp);
+            }
+        }
+        catch(final IOException e) {
+            throw new RuntimeException(
+                    this.contextName + " : error evaluating on-destroy-sexp", e);
+        }
+        catch(final SchemeException e) {
+            throw new RuntimeException(
+                    this.contextName + " : error evaluating on-destroy-sexp",
+                    sisc.modules.s2j.Util.javaException(e));
+        }
+        finally {
+            Context.exit();
+            Context.unregister(this.contextName);
+        }
+    }
+}
+@
+
+
+1.1.2.2
+log
+@removed REPL init code; SISC context name is now based just on
+ServletContext name
+@
+text
+@d50 1
+d55 1
+d64 3
+a66 1
+            this.contextName = context.getServletContextName();
+d90 22
+d142 6
+@
+
+
+1.1.2.3
+log
+@sprinkled final declarations, and other minor changes
+@
+text
+@d44 1
+d48 1
+d53 2
+d57 1
+a57 2
+        final ServletContext context = contextEvent.getServletContext();
+        final String contextName = context.getServletContextName();
+d62 12
+a73 1
+            MiscUtil.initializeContext(contextName);
+d78 1
+a78 1
+                    contextName + " : could not initialize SISCweb context.");
+d81 4
+d89 1
+a89 1
+            final Interpreter r = Context.enter(contextName);
+d100 1
+a100 1
+            System.err.println(contextName + " : unable to retrieve on-init-sexp (WARNING)");
+d104 1
+a104 1
+                contextName + " : error evaluating on-init-sexp for servlet ",
+a114 3
+        final ServletContext context = contextEvent.getServletContext();
+        final String contextName = context.getServletContextName();
+
+d117 3
+a119 1
+            final Interpreter r = Context.enter(contextName);
+d121 1
+a121 1
+            final String onDestroySexp = context.getInitParameter("on-destroy-sexp");
+d131 1
+a131 1
+                    contextName + " : error evaluating on-destroy-sexp", e);
+d135 1
+a135 1
+                    contextName + " : error evaluating on-destroy-sexp",
+d140 1
+a140 1
+            Context.unregister(contextName);
+@
+
+

@@ -1,0 +1,656 @@
+head	1.4;
+access;
+symbols
+	rel-0-6-dev:1.4.0.4
+	rel-0-5-fix:1.4.0.2
+	rel-0-5:1.4
+	rel-0-5-dev-safe-frames:1.3.4.3.0.2
+	Root_rel-0-5-dev-safe-frames:1.3.4.3
+	rel-0-4-fix-0:1.3
+	rel-0-5-dev:1.3.0.4
+	rel-0-4-fix:1.3.0.2
+	rel-0-3-fix-3:1.2.2.1
+	rel-0-3-fix-2:1.2.2.1
+	rel-0-4-dev-sisc-1-11:1.2.4.2
+	rel-0-3-fix-1:1.2
+	rel-0-4-dev:1.2.0.4
+	rel-0-3-fix:1.2.0.2
+	rel-0-3:1.2
+	rel-0-3-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2007.04.12.03.51.18;	author acolomba;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2006.09.03.01.42.22;	author acolomba;	state Exp;
+branches
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.10.24.03.48.19;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.10.24.03.48.19;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.11.23.02.37.35;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2006.02.25.17.12.02;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.11.30.03.44.43;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2006.01.14.02.01.06;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2006.06.17.13.05.54;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2006.07.28.03.34.16;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2007.01.08.01.41.49;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2;
+
+1.3.4.2
+date	2007.01.08.03.45.41;	author acolomba;	state Exp;
+branches;
+next	1.3.4.3;
+
+1.3.4.3
+date	2007.03.10.14.34.34;	author acolomba;	state Exp;
+branches
+	1.3.4.3.2.1;
+next	1.3.4.4;
+
+1.3.4.4
+date	2007.04.01.23.55.26;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.3.2.1
+date	2007.04.01.20.35.11;	author acolomba;	state Exp;
+branches;
+next	1.3.4.3.2.2;
+
+1.3.4.3.2.2
+date	2007.04.01.22.54.07;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@merged from rel-0-5-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'siscweb/context)
+(require-library 'siscweb/frame)
+(require-library 'util/misc)
+
+(module siscweb/k-store
+  (ks/clear! ks/get ks/put! ks/get-frame)
+
+  (import s2j)
+
+  (import siscweb/context)
+  (import siscweb/frame)
+  (import util/misc)
+
+  (define-java-classes
+    (<continuation-store-locator> |siscweb.contcentric.ContinuationStoreLocator|))
+
+  (define-generic-java-methods
+    clear fetch get-frame get-servlet-context lookup store)
+
+  (define get-k-store
+    (let ((k-store #f))
+      (lambda (session)
+        (when (not k-store)
+          (set! k-store (lookup (java-null <continuation-store-locator>)
+                                (get-servlet-context session))))
+        k-store)))
+
+
+  ;; stores the given continuation and
+  ;; returns a k-url made of the current
+  ;; request url with the k-id added/substituted
+  (define (ks/put! session k-hash g-hash k ttl current-k-hash)
+    (store (get-k-store session) session (->jstring g-hash) (->jstring k-hash) (java-wrap k) (->jlong ttl) (current-frame)))
+
+  ;; fetches the continuation identified by k-hash from the repository
+  ;; in the session
+  (define (ks/get session k-hash)
+    (and k-hash
+         (let ((k-wrap (fetch (get-k-store session) session (->jstring k-hash))))
+           (if (java-null? k-wrap)
+               #f
+               (java-unwrap k-wrap)))))
+
+
+  ;; clears the continuation table
+  (define (ks/clear! session)
+    (clear (get-k-store session) session))
+
+  (define (ks/get-frame session k-hash)
+    (get-frame (get-k-store session) session (->jstring k-hash)))
+
+  )
+@
+
+
+1.3
+log
+@merged from rel-0-4-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+d33 1
+d37 1
+a37 1
+  (ks/clear! ks/get ks/put!)
+d42 1
+d46 1
+a46 1
+    (<continuation-store-singleton-decorator> |siscweb.contcentric.ContinuationStoreSingletonDecorator|))
+d49 1
+a49 1
+    clear fetch get-instance store)
+d53 1
+a53 1
+      (lambda ()
+d55 2
+a56 1
+          (set! k-store (get-instance (java-null <continuation-store-singleton-decorator>))))
+d64 1
+a64 1
+    (store (get-k-store) session (->jstring g-hash) (->jstring k-hash) (java-wrap k) (->jlong ttl)))
+d69 5
+a73 6
+    (if (and k-hash (not (equal? "" k-hash)))
+        (let ((k-wrap (fetch (get-k-store) session (->jstring k-hash))))
+          (if (java-null? k-wrap)
+              #f
+              (java-unwrap k-wrap)))
+        #f))
+d78 5
+a82 1
+    (clear (get-k-store) session))
+@
+
+
+1.3.4.1
+log
+@continuationstore is now local to the servlet context, not the
+static scope (i.e. zapped the singleton)
+@
+text
+@d44 1
+a44 1
+    (<continuation-store-locator> |siscweb.contcentric.ContinuationStoreLocator|))
+d47 1
+a47 1
+    clear fetch get-instance get-servlet-context store)
+d51 1
+a51 1
+      (lambda (session)
+d53 1
+a53 2
+          (set! k-store (get-instance (java-null <continuation-store-locator>)
+                                      (get-servlet-context session))))
+d61 1
+a61 1
+    (store (get-k-store session) session (->jstring g-hash) (->jstring k-hash) (java-wrap k) (->jlong ttl)))
+d67 1
+a67 1
+        (let ((k-wrap (fetch (get-k-store session) session (->jstring k-hash))))
+d76 1
+a76 1
+    (clear (get-k-store session) session))
+@
+
+
+1.3.4.2
+log
+@renamed getInstance -> lookup
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+d47 1
+a47 1
+    clear fetch get-servlet-context lookup store)
+d53 2
+a54 2
+          (set! k-store (lookup (java-null <continuation-store-locator>)
+                                (get-servlet-context session))))
+@
+
+
+1.3.4.3
+log
+@k-hash is now prefixed with "k-hash=" in urls; extract-k-hash now returns #f if no k-hash is present in the url
+@
+text
+@d67 6
+a72 5
+    (and k-hash
+         (let ((k-wrap (fetch (get-k-store session) session (->jstring k-hash))))
+           (if (java-null? k-wrap)
+               #f
+               (java-unwrap k-wrap)))))
+@
+
+
+1.3.4.4
+log
+@merged from rel-0-5-dev-safe-frames
+@
+text
+@a32 1
+(require-library 'siscweb/frame)
+d36 1
+a36 1
+  (ks/clear! ks/get ks/put! ks/get-frame)
+a40 1
+  (import siscweb/frame)
+d47 1
+a47 1
+    clear fetch get-frame get-servlet-context lookup store)
+d62 1
+a62 1
+    (store (get-k-store session) session (->jstring g-hash) (->jstring k-hash) (java-wrap k) (->jlong ttl) (current-frame)))
+a76 4
+
+  (define (ks/get-frame session k-hash)
+    (get-frame (get-k-store session) session (->jstring k-hash)))
+
+@
+
+
+1.3.4.3.2.1
+log
+@de-hacked ContinuationGroup
+@
+text
+@a32 1
+(require-library 'siscweb/frame)
+a40 1
+  (import siscweb/frame)
+d62 1
+a62 1
+    (store (get-k-store session) session (->jstring g-hash) (->jstring k-hash) (java-wrap k) (->jlong ttl) (current-frame)))
+@
+
+
+1.3.4.3.2.2
+log
+@moved frame management from java to scheme code
+@
+text
+@d37 1
+a37 1
+  (ks/clear! ks/get ks/put! ks/get-frame)
+d49 1
+a49 1
+    clear fetch get-frame get-servlet-context lookup store)
+a78 4
+
+  (define (ks/get-frame session k-hash)
+    (get-frame (get-k-store session) session (->jstring k-hash)))
+
+@
+
+
+1.2
+log
+@merged from rel-0-3-dev
+@
+text
+@d32 1
+d40 1
+d44 1
+a44 1
+   (<continuation-store-singleton-decorator> |siscweb.contcentric.ContinuationStoreSingletonDecorator|))
+d49 6
+a55 2
+  (define (get-k-store)
+    (get-instance (java-null <continuation-store-singleton-decorator>)))
+d60 2
+a61 2
+  (define (ks/put! session-id k-hash g-hash k ttl current-k-hash)
+    (store (get-k-store) (->jstring session-id) (->jstring g-hash) (->jstring k-hash) (java-wrap k) (->jlong ttl)))
+d65 1
+a65 1
+  (define (ks/get session-id k-hash)
+d67 1
+a67 1
+        (let ((k-wrap (fetch (get-k-store) (->jstring session-id) (->jstring k-hash))))
+d75 2
+a76 2
+  (define (ks/clear! session-id)
+    (clear (get-k-store) (->jstring session-id)))
+@
+
+
+1.2.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@a31 1
+(require-library 'siscweb/context)
+a38 1
+  (import siscweb/context)
+d41 3
+d45 1
+a45 1
+    clear fetch store)
+d49 1
+a49 1
+    (context/get-java-attribute '|*SISCWEB.CONTINUATION-STORE*|))
+d54 2
+a55 2
+  (define (ks/put! session k-hash g-hash k ttl current-k-hash)
+    (store (get-k-store) session (->jstring g-hash) (->jstring k-hash) (java-wrap k) (->jlong ttl)))
+d59 1
+a59 1
+  (define (ks/get session k-hash)
+d61 1
+a61 1
+        (let ((k-wrap (fetch (get-k-store) session (->jstring k-hash))))
+d69 2
+a70 2
+  (define (ks/clear! session)
+    (clear (get-k-store) session))
+@
+
+
+1.2.4.1
+log
+@the continuation store now uses the session object instead of just the
+sessionId (simpler and more reliable)
+@
+text
+@d54 2
+a55 2
+  (define (ks/put! session k-hash g-hash k ttl current-k-hash)
+    (store (get-k-store) session (->jstring g-hash) (->jstring k-hash) (java-wrap k) (->jlong ttl)))
+d59 1
+a59 1
+  (define (ks/get session k-hash)
+d61 1
+a61 1
+        (let ((k-wrap (fetch (get-k-store) session (->jstring k-hash))))
+d69 2
+a70 2
+  (define (ks/clear! session)
+    (clear (get-k-store) session))
+@
+
+
+1.2.4.2
+log
+@now picks up continuationstore instance from servletcontext rather
+than singleton
+@
+text
+@a31 1
+(require-library 'siscweb/context)
+a38 1
+  (import siscweb/context)
+d41 3
+d45 1
+a45 1
+    clear fetch store)
+d49 1
+a49 1
+    (context/get-java-attribute '|*SISCWEB.CONTINUATION-STORE*|))
+@
+
+
+1.2.4.3
+log
+@looks up the ContinuationStore as a singleton, but memoizes the result
+(probably not needed)
+@
+text
+@a42 3
+  (define-java-classes
+    (<continuation-store-singleton> |siscweb.contcentric.ContinuationStore$Singleton|))
+
+d44 1
+a44 1
+    clear fetch get-instance store)
+a45 6
+  (define get-k-store
+    (let ((k-store #f))
+      (lambda ()
+        (when (not k-store)
+          (set! k-store (get-instance (java-null <continuation-store-singleton>))))
+        k-store)))
+d47 2
+@
+
+
+1.2.4.4
+log
+@now uses singletondecorator instead of plain singleton
+@
+text
+@d44 1
+a44 1
+    (<continuation-store-singleton-decorator> |siscweb.contcentric.ContinuationStoreSingletonDecorator|))
+d53 1
+a53 1
+          (set! k-store (get-instance (java-null <continuation-store-singleton-decorator>))))
+@
+
+
+1.1
+log
+@file k-store.scm was initially added on branch rel-0-3-dev.
+@
+text
+@d1 71
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 86
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'util/misc)
+
+(module siscweb/k-store
+  (ks/clear! ks/get ks/put!
+   ks/setup ks/teardown
+   ks/open ks/close
+   ks/purge-expired!)
+
+  (import s2j)
+
+  (import util/misc)
+
+  (define-generic-java-methods
+    clear fetch purge-expired store)
+
+  (define k-store #f)
+
+  (define (ks/open ks)
+    (set! k-store ks))
+
+  (define (ks/close)
+    (set! k-store #f))
+
+  (define (ks/setup)
+    #t)
+
+  (define (ks/teardown)
+    #t)
+
+
+  ;; stores the given continuation and
+  ;; returns a k-url made of the current
+  ;; request url with the k-id added/substituted
+  (define (ks/put! session-id k-hash g-hash k ttl current-k-hash)
+    (store k-store (->jstring session-id) (->jstring g-hash) (->jstring k-hash) (java-wrap k) (->jlong ttl)))
+
+  ;; fetches the continuation identified by k-hash from the repository
+  ;; in the session
+  (define (ks/get session-id k-hash)
+    (if (and k-hash (not (equal? "" k-hash)))
+        (let ((k-wrap (fetch k-store (->jstring session-id) (->jstring k-hash))))
+          (if (java-null? k-wrap)
+              #f
+              (java-unwrap k-wrap)))
+        #f))
+
+
+  ;; clears the continuation table
+  (define (ks/clear! session-id)
+    (clear k-store (->jstring session-id)))
+
+
+  (define (ks/purge-expired!)
+    (purge-expired k-store))
+  )
+@
+
+
+1.1.2.2
+log
+@now accesses continuation store via singleton; removed init functions
+@
+text
+@d35 4
+a38 1
+  (ks/clear! ks/get ks/put!)
+d44 10
+a53 2
+  (define-java-classes
+   (<continuation-store-singleton-decorator> |siscweb.contcentric.ContinuationStoreSingletonDecorator|))
+d55 2
+a56 2
+  (define-generic-java-methods
+    clear fetch get-instance store)
+d58 2
+a60 2
+  (define (get-k-store)
+    (get-instance (java-null <continuation-store-singleton-decorator>)))
+d66 1
+a66 1
+    (store (get-k-store) (->jstring session-id) (->jstring g-hash) (->jstring k-hash) (java-wrap k) (->jlong ttl)))
+d72 1
+a72 1
+        (let ((k-wrap (fetch (get-k-store) (->jstring session-id) (->jstring k-hash))))
+d81 5
+a85 1
+    (clear (get-k-store) (->jstring session-id)))
+@
+
+

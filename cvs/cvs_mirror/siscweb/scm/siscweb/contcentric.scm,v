@@ -1,0 +1,1896 @@
+head	1.6;
+access;
+symbols
+	rel-0-6-dev:1.6.0.4
+	rel-0-5-fix:1.6.0.2
+	rel-0-5:1.6
+	rel-0-5-dev-safe-frames:1.5.4.4.0.2
+	Root_rel-0-5-dev-safe-frames:1.5.4.4
+	rel-0-4-fix-0:1.5
+	rel-0-5-dev:1.5.0.4
+	rel-0-4-fix:1.5.0.2
+	rel-0-3-fix-3:1.4.2.2
+	rel-0-3-fix-2:1.4.2.1
+	rel-0-4-dev-sisc-1-11:1.4.4.4
+	rel-0-3-fix-1:1.4
+	rel-0-4-dev:1.4.0.4
+	rel-0-3-fix:1.4.0.2
+	rel-0-3:1.4
+	rel-0-3-dev-1:1.3.4.3
+	rel-0-2-fix-2:1.3.2.1
+	rel-0-2-fix-1:1.3
+	rel-0-2-fix:1.3.0.2
+	rel-0-3-dev:1.3.0.4
+	rel-0-2:1.3
+	rel-0-1-fix-1:1.2.2.1
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	start:1.1.1.1
+	rel-0-1-dev:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2007.04.12.03.51.18;	author acolomba;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2006.09.03.01.42.23;	author acolomba;	state Exp;
+branches
+	1.5.4.1;
+next	1.4;
+
+1.4
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.4.2.1
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2005.06.19.03.03.51;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.52;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches;
+next	1.1.1.2;
+
+1.1.1.2
+date	2005.02.17.01.08.27;	author acolomba;	state Exp;
+branches;
+next	1.1.1.3;
+
+1.1.1.3
+date	2005.03.02.03.22.26;	author acolomba;	state Exp;
+branches;
+next	1.1.1.4;
+
+1.1.1.4
+date	2005.03.06.23.02.51;	author acolomba;	state Exp;
+branches;
+next	1.1.1.5;
+
+1.1.1.5
+date	2005.03.13.00.54.34;	author acolomba;	state Exp;
+branches;
+next	1.1.1.6;
+
+1.1.1.6
+date	2005.03.14.03.09.20;	author acolomba;	state Exp;
+branches;
+next	1.1.1.7;
+
+1.1.1.7
+date	2005.03.26.00.33.00;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2005.04.03.23.02.19;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.04.07.02.09.40;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.04.17.23.35.24;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2005.04.21.00.44.13;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2005.04.23.00.37.58;	author acolomba;	state Exp;
+branches;
+next	1.2.4.5;
+
+1.2.4.5
+date	2005.04.23.15.32.10;	author acolomba;	state Exp;
+branches;
+next	1.2.4.6;
+
+1.2.4.6
+date	2005.04.23.15.52.50;	author acolomba;	state Exp;
+branches;
+next	1.2.4.7;
+
+1.2.4.7
+date	2005.04.24.01.20.05;	author acolomba;	state Exp;
+branches;
+next	1.2.4.8;
+
+1.2.4.8
+date	2005.05.14.23.11.05;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2005.07.31.20.04.03;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2005.07.19.02.28.10;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2;
+
+1.3.4.2
+date	2005.07.19.03.03.05;	author acolomba;	state Exp;
+branches;
+next	1.3.4.3;
+
+1.3.4.3
+date	2005.08.28.14.33.42;	author acolomba;	state Exp;
+branches;
+next	1.3.4.4;
+
+1.3.4.4
+date	2005.10.24.03.50.38;	author acolomba;	state Exp;
+branches;
+next	1.3.4.5;
+
+1.3.4.5
+date	2005.11.23.02.36.37;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.2.1
+date	2006.02.25.17.12.02;	author acolomba;	state Exp;
+branches;
+next	1.4.2.2;
+
+1.4.2.2
+date	2006.04.15.15.55.23;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2005.11.30.03.44.43;	author acolomba;	state Exp;
+branches;
+next	1.4.4.2;
+
+1.4.4.2
+date	2005.12.06.00.43.05;	author acolomba;	state Exp;
+branches;
+next	1.4.4.3;
+
+1.4.4.3
+date	2006.01.13.02.47.25;	author acolomba;	state Exp;
+branches;
+next	1.4.4.4;
+
+1.4.4.4
+date	2006.01.14.01.59.34;	author acolomba;	state Exp;
+branches;
+next	1.4.4.5;
+
+1.4.4.5
+date	2006.02.22.04.08.39;	author acolomba;	state Exp;
+branches;
+next	1.4.4.6;
+
+1.4.4.6
+date	2006.04.13.00.33.46;	author acolomba;	state Exp;
+branches;
+next	1.4.4.7;
+
+1.4.4.7
+date	2006.08.29.03.35.17;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.5.4.1
+date	2007.03.10.19.05.48;	author acolomba;	state Exp;
+branches;
+next	1.5.4.2;
+
+1.5.4.2
+date	2007.03.11.03.24.56;	author acolomba;	state Exp;
+branches;
+next	1.5.4.3;
+
+1.5.4.3
+date	2007.03.18.23.41.20;	author acolomba;	state Exp;
+branches;
+next	1.5.4.4;
+
+1.5.4.4
+date	2007.03.18.23.59.54;	author acolomba;	state Exp;
+branches
+	1.5.4.4.2.1;
+next	1.5.4.5;
+
+1.5.4.5
+date	2007.04.01.23.55.26;	author acolomba;	state Exp;
+branches;
+next	1.5.4.6;
+
+1.5.4.6
+date	2007.04.04.20.57.45;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.5.4.4.2.1
+date	2007.03.25.03.40.23;	author acolomba;	state Exp;
+branches;
+next	1.5.4.4.2.2;
+
+1.5.4.4.2.2
+date	2007.03.25.04.46.04;	author acolomba;	state Exp;
+branches;
+next	1.5.4.4.2.3;
+
+1.5.4.4.2.3
+date	2007.04.01.22.54.07;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@merged from rel-0-5-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2007
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+(require-library 'sisc/libs/srfi/srfi-39) ; parameter objects
+
+(require-library 'siscweb/k-hash)
+(require-library 'siscweb/k-store)
+(require-library 'siscweb/request)
+(require-library 'siscweb/response)
+(require-library 'siscweb/session)
+(require-library 'util/misc)
+(require-library 'util/regexp)
+
+(module siscweb/contcentric
+  (send/back send/finish send/forward send/suspend
+   current-suspend-k current-k-hash
+   adjust-timeout!
+   clear/k! fetch/k store/k!
+   get-request-frame)
+
+  (import srfi-16)
+  (import srfi-39)
+
+  (import siscweb/k-hash)
+  (import siscweb/k-store)
+  (import siscweb/request)
+  (import siscweb/response)
+  (import siscweb/session)
+  (import util/misc)
+  (import util/regexp)
+
+  ;; sends a response and stops; unlike send/finish, the continuation
+  ;; table is not touched
+  (define send/back
+    (case-lambda
+      ((header-alst send-proc)
+       (response/add-headers! header-alst)
+       (send/back send-proc))
+      ((send-proc)
+       (send-proc)
+       ((current-suspend-k) #f))))
+
+  ;; sends a response and stops; all continuations prior to this one
+  ;; are cleared
+  (define send/finish
+    (case-lambda
+      ((header-alst send-proc)
+       (response/add-headers! header-alst)
+       (send/finish send-proc))
+      ((send-proc)
+       (clear/k!)
+       (send-proc)
+       ((current-suspend-k) #f))))
+
+
+  ;; sends a response and suspends, but clears the continuation table
+  ;; first
+  (define send/forward
+    (case-lambda
+      ((header-alst send-proc)
+       (response/add-headers! header-alst)
+       (send/forward send-proc))
+      ((send-proc)
+       (clear/k!)
+       (send/suspend send-proc))))
+
+  ;; sends a response and suspends
+  (define send/suspend
+    (case-lambda
+      ((header-alst send-proc)
+       (response/add-headers! header-alst)
+       (send/suspend send-proc))
+      ((send-proc)
+       (let/cc resume-k
+         (let ((k-url (store/k! resume-k)))
+           (send-proc k-url resume-k)
+           ((current-suspend-k) #f))))))
+
+
+  (define (fetch/k k-hash)
+    (ks/get (request/get-session) k-hash))
+
+  (define (store/k! k)
+    (define jsid-re (make-regexp "(\\A.*)(;jsessionid=\\p{Alnum}+)(.*\\z)"))
+
+    (define (encode-url url)
+      (response/encode-url (remove-jsessionid url)))
+
+    ;; tomcat will happily add a second jsessionid element
+    ;; so we must remove the first if present
+    (define (remove-jsessionid url)
+      (if (regexp-match? jsid-re url)
+          (regexp-replace jsid-re url "$1$3")
+          url))
+
+    (when (not (current-g-hash))
+      (current-g-hash (make-random-hash)))
+    (let ((k-hash (make-random-hash)))
+      (ks/put! (request/get-session) k-hash (current-g-hash)
+               k (current-k-ttl) (current-k-hash))
+      (encode-url (make-k-url (request/get-uri) k-hash))))
+
+
+  (define (clear/k!)
+    (ks/clear! (request/get-session)))
+
+  (define (get-request-frame)
+    (ks/get-frame (current-session) (current-k-hash)))
+
+
+  (define (current-k-hash)
+    (extract-k-hash (request/get-uri)))
+
+  (define (adjust-timeout! ttl) ; seconds
+    (current-k-ttl ttl))
+
+
+  (define current-suspend-k (make-parameter #f))
+  (define current-g-hash (make-parameter #f))
+  (define current-k-ttl (make-parameter -1))
+  )
+@
+
+
+1.5
+log
+@merged from rel-0-4-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+d38 3
+d46 2
+a47 1
+   clear/k! fetch/k store/k!)
+d56 3
+a58 1
+
+d102 4
+a105 5
+       (call/cc
+        (lambda (resume-k)
+          (let ((k-url (store/k! resume-k)))
+            (send-proc k-url resume-k)
+            ((current-suspend-k) #f)))))))
+d112 12
+d129 2
+a130 1
+      (response/encode-url (make-k-url (request/get-uri) k-hash))))
+d135 3
+@
+
+
+1.5.4.1
+log
+@url encoding now works with uris containing jsessionid (cookieless)
+@
+text
+@a37 1
+(require-library 'util/regexp)
+d52 1
+a52 1
+  (import util/regexp)
+d96 5
+a100 5
+         (call/cc
+          (lambda (resume-k)
+            (let ((k-url (store/k! resume-k)))
+              (send-proc k-url resume-k)
+              ((current-suspend-k) #f)))))))
+a106 8
+    (define (encode-url url)
+      (response/encode-url (remove-jsessionid url)))
+
+    (define (remove-jsessionid url)
+      (if (regexp-match? jsid-re url)
+          (regexp-replace jsid-re url "$1$3")
+          url))
+
+d112 1
+a112 2
+      (encode-url (make-k-url (request/get-uri) k-hash))))
+
+a127 2
+
+  (define jsid-re (make-regexp "(\\A.*)(;jsessionid=\\p{XDigit}*)(.*\\z)"))
+@
+
+
+1.5.4.2
+log
+@minor reorg
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2007
+a107 2
+    (define jsid-re (make-regexp "(\\A.*)(;jsessionid=\\p{XDigit}*)(.*\\z)"))
+
+a110 2
+    ;; tomcat will happily add a second jsessionid element
+    ;; so we must remove the first if present
+d138 2
+@
+
+
+1.5.4.3
+log
+@added webcell support
+@
+text
+@a37 2
+(require-library 'siscweb/webcells)
+(require-library 'util/misc)
+a52 2
+  (import siscweb/webcells-frame-2)
+  (import util/misc)
+d97 5
+a101 5
+       (with-frame-after
+        (let/cc resume-k
+          (let ((k-url (store/k! resume-k)))
+            (send-proc k-url resume-k)
+            ((current-suspend-k) #f)))))))
+@
+
+
+1.5.4.4
+log
+@turned webcells into a single module; added comments from
+original version
+@
+text
+@d55 1
+a55 1
+  (import siscweb/webcells)
+@
+
+
+1.5.4.5
+log
+@merged from rel-0-5-dev-safe-frames
+@
+text
+@d38 1
+a38 1
+(require-library 'siscweb/session)
+d46 1
+a46 2
+   clear/k! fetch/k store/k!
+   get-request-frame)
+d55 1
+a55 1
+  (import siscweb/session)
+d101 5
+a105 4
+       (let/cc resume-k
+         (let ((k-url (store/k! resume-k)))
+           (send-proc k-url resume-k)
+           ((current-suspend-k) #f))))))
+a134 3
+  (define (get-request-frame)
+    (ks/get-frame (current-session) (current-k-hash)))
+
+@
+
+
+1.5.4.6
+log
+@changed sessionid regexp to include all alphanums
+@
+text
+@d112 1
+a112 1
+    (define jsid-re (make-regexp "(\\A.*)(;jsessionid=\\p{Alnum}+)(.*\\z)"))
+@
+
+
+1.5.4.4.2.1
+log
+@commented out (siscweb/webcells) frame creation
+@
+text
+@d55 1
+a55 1
+;  (import siscweb/webcells)
+d101 1
+a101 1
+;       (with-frame-after
+d105 1
+a105 1
+            ((current-suspend-k) #f))))));)
+@
+
+
+1.5.4.4.2.2
+log
+@removed references to webcells
+@
+text
+@d38 1
+d55 1
+d101 5
+a105 4
+       (let/cc resume-k
+         (let ((k-url (store/k! resume-k)))
+           (send-proc k-url resume-k)
+           ((current-suspend-k) #f))))))
+@
+
+
+1.5.4.4.2.3
+log
+@moved frame management from java to scheme code
+@
+text
+@a37 1
+(require-library 'siscweb/session)
+d45 1
+a45 2
+   clear/k! fetch/k store/k!
+   get-request-frame)
+a53 1
+  (import siscweb/session)
+a131 3
+  (define (get-request-frame)
+    (ks/get-frame (current-session) (current-k-hash)))
+
+@
+
+
+1.4
+log
+@merged from rel-0-3-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+d31 3
+d36 2
+d40 3
+a42 2
+  (current-request current-response current-suspend-k
+   current-session current-session-id current-k-hash adjust-timeout!
+d45 2
+a46 1
+  (import s2j)
+d50 3
+d54 47
+a100 5
+  (define-generic-java-methods
+    (jencode-url |encodeURL|)
+    (get-id |getId|)
+    get-session
+    (get-request-uri |getRequestURI|))
+d104 1
+a104 1
+    (ks/get (current-session-id) k-hash))
+a106 6
+    (define (make-k-url request k-hash)
+      (append-url-hash (->string (get-request-uri request))
+                       k-hash))
+    (define (encode-url url)
+      (->string (jencode-url (current-response) (->jstring url))))
+
+d110 3
+a112 2
+      (ks/put! (current-session-id) k-hash (current-g-hash) k (current-k-ttl) (current-k-hash))
+      (encode-url (make-k-url (current-request) k-hash))))
+d115 1
+a115 1
+    (ks/clear! (current-session-id)))
+a117 6
+  (define (current-session)
+    (get-session (current-request)))
+
+  (define (current-session-id)
+    (->string (get-id (current-session))))
+
+d119 1
+a119 2
+    (extract-k-hash (->string (get-request-uri
+                               (current-request)))))
+a124 3
+  ;; the current request, response, k-suspend and timeout
+  (define current-request (make-parameter #f))
+  (define current-response (make-parameter #f))
+d127 1
+a127 2
+  (define current-k-ttl (make-parameter 1200))
+
+@
+
+
+1.4.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@a30 2
+(require-library 'sisc/libs/srfi/srfi-39) ; parameter objects
+
+d36 1
+a36 1
+   current-k-hash adjust-timeout!
+a40 2
+  (import srfi-39)
+
+d52 1
+a52 1
+    (ks/get (get-current-session) k-hash))
+d64 1
+a64 1
+      (ks/put! (get-current-session) k-hash (current-g-hash) k (current-k-ttl) (current-k-hash))
+d68 1
+a68 1
+    (ks/clear! (get-current-session)))
+d71 1
+a71 1
+  (define (get-current-session)
+d74 3
+@
+
+
+1.4.2.2
+log
+@merged from rel-0-4-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+a30 1
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+a34 2
+(require-library 'siscweb/request)
+(require-library 'siscweb/response)
+d37 2
+a38 3
+  (send/back send/finish send/forward send/suspend
+   current-suspend-k current-k-hash
+   adjust-timeout!
+d41 2
+a42 1
+  (import srfi-16)
+a46 3
+  (import siscweb/request)
+  (import siscweb/response)
+
+d48 5
+a52 47
+  ;; sends a response and stops; unlike send/finish, the continuation
+  ;; table is not touched
+  (define send/back
+    (case-lambda
+      ((header-alst send-proc)
+       (response/add-headers! header-alst)
+       (send/back send-proc))
+      ((send-proc)
+       (send-proc)
+       ((current-suspend-k) #f))))
+
+  ;; sends a response and stops; all continuations prior to this one
+  ;; are cleared
+  (define send/finish
+    (case-lambda
+      ((header-alst send-proc)
+       (response/add-headers! header-alst)
+       (send/finish send-proc))
+      ((send-proc)
+       (clear/k!)
+       (send-proc)
+       ((current-suspend-k) #f))))
+
+
+  ;; sends a response and suspends, but clears the continuation table
+  ;; first
+  (define send/forward
+    (case-lambda
+      ((header-alst send-proc)
+       (response/add-headers! header-alst)
+       (send/forward send-proc))
+      ((send-proc)
+       (clear/k!)
+       (send/suspend send-proc))))
+
+  ;; sends a response and suspends
+  (define send/suspend
+    (case-lambda
+      ((header-alst send-proc)
+       (response/add-headers! header-alst)
+       (send/suspend send-proc))
+      ((send-proc)
+       (call/cc
+        (lambda (resume-k)
+          (let ((k-url (store/k! resume-k)))
+            (send-proc k-url resume-k)
+            ((current-suspend-k) #f)))))))
+d56 1
+a56 1
+    (ks/get (request/get-session) k-hash))
+d59 6
+d68 2
+a69 3
+      (ks/put! (request/get-session) k-hash (current-g-hash)
+               k (current-k-ttl) (current-k-hash))
+      (response/encode-url (make-k-url (request/get-uri) k-hash))))
+d72 1
+a72 1
+    (ks/clear! (request/get-session)))
+d75 3
+d79 2
+a80 1
+    (extract-k-hash (request/get-uri)))
+d86 3
+d92 1
+@
+
+
+1.4.4.1
+log
+@the continuation store now uses the session object instead of just the
+sessionId (simpler and more reliable)
+@
+text
+@d36 1
+a36 1
+   current-session current-k-hash adjust-timeout!
+d52 1
+a52 1
+    (ks/get (current-session) k-hash))
+d64 1
+a64 1
+      (ks/put! (current-session) k-hash (current-g-hash) k (current-k-ttl) (current-k-hash))
+d68 1
+a68 1
+    (ks/clear! (current-session)))
+d74 3
+@
+
+
+1.4.4.2
+log
+@explicitely imports srfi-39
+@
+text
+@a30 2
+(require-library 'sisc/libs/srfi/srfi-39) ; parameter objects
+
+a40 2
+  (import srfi-39)
+
+@
+
+
+1.4.4.3
+log
+@does not export current-session anymore
+@
+text
+@d38 1
+a38 1
+   current-k-hash adjust-timeout!
+@
+
+
+1.4.4.4
+log
+@renamed (inner) function current-session to get-current-session
+@
+text
+@d56 1
+a56 1
+    (ks/get (get-current-session) k-hash))
+d68 1
+a68 1
+      (ks/put! (get-current-session) k-hash (current-g-hash) k (current-k-ttl) (current-k-hash))
+d72 1
+a72 1
+    (ks/clear! (get-current-session)))
+d75 1
+a75 1
+  (define (get-current-session)
+@
+
+
+1.4.4.5
+log
+@request/response are not passed to sisclet, and are instead looked up
+through contcentric from SISCAdapterServlet threadlocal variables
+@
+text
+@a50 2
+    get-request
+    get-response
+a53 2
+  (define-java-classes
+    (<sisc-adapter-servlet> |siscweb.web.SISCAdapterServlet|))
+a84 5
+  (define (current-request)
+    (get-request (java-null <sisc-adapter-servlet>)))
+
+  (define (current-response)
+    (get-response (java-null <sisc-adapter-servlet>)))
+d87 2
+@
+
+
+1.4.4.6
+log
+@refactoring: request/response are now just wrappers, with send/*
+functions now in contcentric; moved many s2j calls to
+request/response/session objects
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+a30 1
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+a34 2
+(require-library 'siscweb/request)
+(require-library 'siscweb/response)
+d37 2
+a38 3
+  (send/back send/finish send/forward send/suspend
+   current-suspend-k current-k-hash
+   adjust-timeout!
+d41 2
+a42 1
+  (import srfi-16)
+a46 3
+  (import siscweb/request)
+  (import siscweb/response)
+
+d48 7
+a54 47
+  ;; sends a response and stops; unlike send/finish, the continuation
+  ;; table is not touched
+  (define send/back
+    (case-lambda
+      ((header-alst send-proc)
+       (response/add-headers! header-alst)
+       (send/back send-proc))
+      ((send-proc)
+       (send-proc)
+       ((current-suspend-k) #f))))
+
+  ;; sends a response and stops; all continuations prior to this one
+  ;; are cleared
+  (define send/finish
+    (case-lambda
+      ((header-alst send-proc)
+       (response/add-headers! header-alst)
+       (send/finish send-proc))
+      ((send-proc)
+       (clear/k!)
+       (send-proc)
+       ((current-suspend-k) #f))))
+
+
+  ;; sends a response and suspends, but clears the continuation table
+  ;; first
+  (define send/forward
+    (case-lambda
+      ((header-alst send-proc)
+       (response/add-headers! header-alst)
+       (send/forward send-proc))
+      ((send-proc)
+       (clear/k!)
+       (send/suspend send-proc))))
+
+  ;; sends a response and suspends
+  (define send/suspend
+    (case-lambda
+      ((header-alst send-proc)
+       (response/add-headers! header-alst)
+       (send/suspend send-proc))
+      ((send-proc)
+       (call/cc
+        (lambda (resume-k)
+          (let ((k-url (store/k! resume-k)))
+            (send-proc k-url resume-k)
+            ((current-suspend-k) #f)))))))
+d56 2
+d60 1
+a60 1
+    (ks/get (request/get-session) k-hash))
+d63 6
+d72 2
+a73 3
+      (ks/put! (request/get-session) k-hash (current-g-hash)
+               k (current-k-ttl) (current-k-hash))
+      (response/encode-url (make-k-url (request/get-uri) k-hash))))
+d76 1
+a76 1
+    (ks/clear! (request/get-session)))
+d79 3
+d83 2
+a84 1
+    (extract-k-hash (request/get-uri)))
+d89 5
+d95 1
+d99 1
+@
+
+
+1.4.4.7
+log
+@default k-ttl is now -1 (will rely on continuation stores to provide)
+@
+text
+@d127 1
+a127 1
+  (define current-k-ttl (make-parameter -1))
+@
+
+
+1.3
+log
+@merged from rel-0-2-dev
+@
+text
+@d32 1
+d37 1
+a37 2
+   start-ks-manager stop-ks-manager ks-manager-thread
+   open-ks close-ks clear/k! fetch/k store/k!)
+a39 1
+  (import threading)
+d45 1
+a50 28
+  (define (start-ks-manager sleep-interval)
+    (set! ks-manager-thread
+          (thread/spawn
+           (lambda ()
+             ks-manager-mutex
+             (let loop ()
+               (mutex/synchronize
+                ks-manager-mutex
+                (lambda ()
+                  (let ((n (ks/purge-expired!)))
+                    (display "#")
+                    (display n)
+                    (when (not (mutex/unlock! ks-manager-mutex
+                                              ks-manager-condvar
+                                              (* 1000 sleep-interval)))
+                      (loop))))))))))
+
+  (define (stop-ks-manager)
+    (when (eq? 'running (thread/state ks-manager-thread))
+      (mutex/synchronize ks-manager-mutex
+        (lambda ()
+          (condvar/notify ks-manager-condvar)))))
+
+
+  (define open-ks ks/open)
+  (define close-ks ks/close)
+
+
+d55 8
+d64 2
+a65 2
+      (ks/put! (current-session-id) k-hash k (current-k-ttl) (current-k-hash))
+      k-hash))
+a84 4
+  (define ks-manager-thread #f)
+  (define ks-manager-mutex (mutex/new))
+  (define ks-manager-condvar (condvar/new))
+
+d89 1
+a92 2
+
+
+@
+
+
+1.3.2.1
+log
+@merged from rel-0-3-dev
+@
+text
+@a45 1
+    (jencode-url |encodeURL|)
+d61 2
+a82 6
+    (define (make-k-url request k-hash)
+      (append-url-hash (->string (get-request-uri request))
+                       k-hash))
+    (define (encode-url url)
+      (->string (jencode-url (current-response) (->jstring url))))
+
+d85 1
+a85 1
+      (encode-url (make-k-url (current-request) k-hash))))
+d116 2
+@
+
+
+1.3.4.1
+log
+@added make-dispatcher, make-k-url - this may be temporary
+@
+text
+@d37 1
+a37 2
+   open-ks close-ks clear/k! fetch/k store/k!
+   make-k-url make-dispatcher)
+a45 1
+    (jencode-url |encodeURL|)
+a90 10
+  (define (make-k-url request k-hash)
+    (append-url-hash (->string (get-request-uri request))
+                     k-hash))
+
+  (define (encode-url url)
+    (->string (jencode-url (current-response) (->jstring url))))
+
+  (define (make-dispatcher proc)
+    (encode-url (make-k-url (current-request) (store/k! proc))))
+
+@
+
+
+1.3.4.2
+log
+@store/k! now returns a k-url instead of a k-hash; removed make-k-url,
+make-dispatcher; removed display of number of conts purged
+@
+text
+@d37 2
+a38 1
+   open-ks close-ks clear/k! fetch/k store/k!)
+d63 2
+a84 6
+    (define (make-k-url request k-hash)
+      (append-url-hash (->string (get-request-uri request))
+                       k-hash))
+    (define (encode-url url)
+      (->string (jencode-url (current-response) (->jstring url))))
+
+d87 1
+a87 1
+      (encode-url (make-k-url (current-request) k-hash))))
+d93 10
+d128 2
+@
+
+
+1.3.4.3
+log
+@now sends a group hash to ks/put! so that continuations/closures can
+be saved as belongint to the same group -- one group per request
+@
+text
+@a87 2
+    (when (not (current-g-hash))
+      (current-g-hash (make-random-hash)))
+d89 1
+a89 1
+      (ks/put! (current-session-id) k-hash (current-g-hash) k (current-k-ttl) (current-k-hash))
+a117 1
+  (define current-g-hash (make-parameter #f))
+@
+
+
+1.3.4.4
+log
+@now can use require-library on k-store, since there is going to be
+only one
+@
+text
+@a31 1
+(require-library 'siscweb/k-store)
+@
+
+
+1.3.4.5
+log
+@removed continuation manager startup and other init
+@
+text
+@d37 2
+a38 1
+   clear/k! fetch/k store/k!)
+d41 1
+d53 26
+d113 4
+@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@a31 1
+(require-library 'siscweb/util)
+d34 4
+a37 3
+  (fetch/k store/k! clear/k!
+  current-request current-response current-suspend-k
+  adjust-timeout!)
+d40 1
+a40 2
+  (import oo)
+  (import type-system)
+d43 1
+a43 3
+  (import siscweb/util)
+
+  (define-java-classes (<continuation-table> |siscweb.contcentric.ContinuationTable|))
+d46 1
+a46 1
+    (get-request-uri |getRequestURI|)
+d48 2
+a49 1
+    store-continuation fetch-continuation purge-expired clear get-instance)
+d51 22
+a73 10
+  ;; fetches the continuation identified by k-id
+  ;; from the repository in the session
+  (define (fetch/k k-id)
+    (if k-id
+        (let ((k-wrap (fetch-continuation (get-continuation-table)
+                                          (->jstring k-id))))
+          (if (java-null? k-wrap)
+              #f
+              (java-unwrap k-wrap)))
+        #f))
+d75 2
+a77 3
+  ;; fetches the continuation-table
+  (define (get-continuation-table)
+    (get-instance (java-null <continuation-table>) (get-session (current-request))))
+d79 2
+a81 3
+  ;; stores the given continuation and
+  ;; returns a k-url made of the current
+  ;; request url with the k-id added/substituted
+d83 3
+a85 6
+    (let ((k-id (get-random-hash)))
+      (store-continuation (get-continuation-table)
+                          (->jstring k-id)
+                          (java-wrap k)
+                          (->jlong (current-timeout)))
+      (make-k-url (remove-k-hash (->string (get-request-uri (current-request)))) k-id)))
+d87 2
+d91 2
+d94 2
+a95 3
+  ;; clears the continuation table
+  (define (clear/k!)
+    (clear (get-continuation-table)))
+d97 3
+d102 1
+a102 1
+    (current-timeout ttl))
+d104 6
+a109 1
+  ;; the current request, response and k-suspend
+d113 1
+a113 1
+  (define current-timeout (make-parameter 300))
+d116 2
+@
+
+
+1.2.4.1
+log
+@merged from rel-0-1-fix-1
+@
+text
+@a48 1
+    (encode-url |encodeURL|)
+d80 1
+a80 1
+      (make-k-url (->string (encode-url (current-response) (->jstring (remove-k-hash (->string (get-request-uri (current-request))))))) k-id)))
+@
+
+
+1.2.4.2
+log
+@now a wrapper for k-session and future continuation managers (work in
+progress)
+@
+text
+@d31 2
+a32 2
+
+(require-library 'siscweb/k-session)
+d35 3
+a37 4
+  (current-request current-response current-suspend-k current-k-ttl
+   current-session current-session-id adjust-timeout!
+   ;; imported from k-session
+   clear/k! fetch/k store/k! start-k-manager)
+d39 3
+d43 2
+a44 2
+  (import s2j)
+  (import siscweb/k-session)
+d46 1
+d50 1
+a50 1
+    (get-id |getId|)
+a53 2
+  (define (current-session)
+    (get-session (current-request)))
+d55 35
+a89 2
+  (define (current-session-id)
+    (->string (get-id (current-session))))
+d92 1
+a92 1
+    (current-k-ttl ttl))
+d98 1
+a98 1
+  (define current-k-ttl (make-parameter 1200))
+a100 2
+
+
+@
+
+
+1.2.4.3
+log
+@added start/stop-k-manager
+@
+text
+@d32 1
+a32 1
+(require-library 'siscweb/k-hsqldb)
+d37 3
+a39 2
+   start-k-manager stop-k-manager
+   clear/k! fetch/k store/k!)
+d42 1
+a42 23
+  (import threading)
+
+  (import siscweb/k-hsqldb)
+
+
+  (define (start-k-manager interval)
+    (let ((sleep-interval (* 1000 interval)))
+      (thread/spawn
+       (lambda ()
+         (let loop ()
+           (mutex/lock! k-manager-mutex)
+           (let ((n (purge-expired)))
+             (display "purged : ")
+             (display n)
+             (newline))
+           (when (not (mutex/unlock! k-manager-mutex k-manager-condvar sleep-interval))
+             (loop)))))))
+
+  (define (stop-k-manager)
+    (mutex/synchronize k-manager-mutex
+      (lambda ()
+        (condvar/notify k-manager-condvar))))
+
+d46 1
+d48 2
+a49 1
+    get-session)
+d60 1
+a60 6
+
+  (define k-manager-thread #f)
+  (define k-manager-mutex (mutex/new))
+  (define k-manager-condvar (condvar/new))
+
+  ;; the current request, response, k-suspend and timeout
+@
+
+
+1.2.4.4
+log
+@adapted to interface of ks-* modules; fixed k-manager-thread mutex use
+@
+text
+@d32 1
+a32 1
+(require-library 'siscweb/ks-hsqldb)
+d37 2
+a38 2
+   start-k-manager stop-k-manager k-manager-thread
+   ks/open ks/close clear/k! fetch/k store/k!)
+d43 1
+a43 1
+  (import siscweb/ks-hsqldb)
+d46 12
+a57 16
+  (define (start-k-manager sleep-interval)
+    (set! k-manager-thread
+          (thread/spawn
+           (lambda ()
+             k-manager-mutex
+             (let loop ()
+               (mutex/synchronize
+                k-manager-mutex
+                (lambda ()
+                  (let ((n (ks/purge-expired!)))
+                    (display "#")
+                    (display n)
+                    (when (not (mutex/unlock! k-manager-mutex
+                                              k-manager-condvar
+                                              (* 1000 sleep-interval)))
+                      (loop))))))))))
+d60 3
+a62 4
+    (when (eq? 'running (thread/state k-manager-thread))
+      (mutex/synchronize k-manager-mutex
+        (lambda ()
+          (condvar/notify k-manager-condvar)))))
+@
+
+
+1.2.4.5
+log
+@now wraps and simplifies ks/[get|put!|clear!] calls; minor interface
+changes
+@
+text
+@a31 1
+(require-library 'siscweb/k-hash)
+d38 1
+a38 1
+   open-ks close-ks clear/k! fetch/k store/k!)
+a42 1
+  (import siscweb/k-hash)
+a69 15
+  (define open-ks ks/open)
+  (define close-ks ks/close)
+
+
+  (define (fetch/k k-hash)
+    (ks/get (current-session-id) k-hash))
+
+  (define (store/k! k)
+    (let ((k-hash (make-random-hash)))
+      (ks/put! (current-session-id) k-hash k (current-k-ttl))
+      k-hash))
+
+  (define (clear/k!)
+    (ks/clear! (current-session-id)))
+
+@
+
+
+1.2.4.6
+log
+@removed current-k-ttl export (not needed anymore); added
+current-k-hash function
+@
+text
+@d36 2
+a37 2
+  (current-request current-response current-suspend-k
+   current-session current-session-id current-k-hash adjust-timeout!
+a46 4
+  (define-generic-java-methods
+    (get-id |getId|)
+    get-session
+    (get-request-uri |getRequestURI|))
+d88 4
+a97 4
+  (define (current-k-hash)
+    (extract-k-hash (->string (get-request-uri
+                               (current-request)))))
+
+@
+
+
+1.2.4.7
+log
+@now records the continuation parent
+@
+text
+@d85 1
+a85 1
+      (ks/put! (current-session-id) k-hash k (current-k-ttl) (current-k-hash))
+@
+
+
+1.2.4.8
+log
+@now is not bound to a specific ks-* module; also minor renames
+@
+text
+@d31 1
+d33 1
+d38 1
+a38 1
+   start-ks-manager stop-ks-manager ks-manager-thread
+d45 1
+a45 1
+  (import siscweb/k-store)
+d52 2
+a53 3
+
+  (define (start-ks-manager sleep-interval)
+    (set! ks-manager-thread
+d56 1
+a56 1
+             ks-manager-mutex
+d59 1
+a59 1
+                ks-manager-mutex
+d64 2
+a65 2
+                    (when (not (mutex/unlock! ks-manager-mutex
+                                              ks-manager-condvar
+d69 3
+a71 3
+  (define (stop-ks-manager)
+    (when (eq? 'running (thread/state ks-manager-thread))
+      (mutex/synchronize ks-manager-mutex
+d73 1
+a73 1
+          (condvar/notify ks-manager-condvar)))))
+d106 3
+a108 3
+  (define ks-manager-thread #f)
+  (define ks-manager-mutex (mutex/new))
+  (define ks-manager-condvar (condvar/new))
+@
+
+
+1.2.2.1
+log
+@now encodes the URL with the jsessionid (so it can run cookieless)
+@
+text
+@a48 1
+    (encode-url |encodeURL|)
+d80 1
+a80 1
+      (make-k-url (->string (encode-url (current-response) (->jstring (remove-k-hash (->string (get-request-uri (current-request))))))) k-id)))
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d1 30
+a31 2
+(require-library 'siscweb/k-manager)
+(require-library 'siscweb/publish)
+d35 3
+a37 4
+  (resumable-request? resume-request
+   exists-published-proc? get-published-proc
+   send/suspend send/finish
+   current-request current-response current-suspend-k)
+d41 1
+a43 2
+  (import siscweb/k-manager)
+  (import siscweb/publish)
+d46 54
+a99 1
+  (include "contcentric-inc.scm"))
+@
+
+
+1.1.1.1
+log
+@initial import
+@
+text
+@@
+
+
+1.1.1.2
+log
+@did away with the -inc business; i think it was a bad idea
+@
+text
+@a0 30
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+d20 1
+a20 97
+
+  (define-generic-java-methods
+    get-attribute get-path-info (get-request-uri |getRequestURI|)
+    get-session remove-attribute set-attribute)
+
+  ;; returns true if the current requests points
+  ;; to a resumable continuation
+  (define (resumable-request?)
+    (if (fetch/resume-k) #t #f))
+
+  ;; resumes the continuation associated to
+  ;; this request
+  (define (resume-request)
+    (let ((resume-k (fetch/resume-k)))
+      (resume-k (current-request))))
+
+  ;; fetches the resume continuation associated
+  ;; to this request
+  (define (fetch/resume-k)
+    (fetch/cc (extract-k-hash
+               (->string (get-request-uri (current-request))))))
+
+  ;; fetches the continuation identified by k-id
+  ;; from the repository in the session
+  (define (fetch/cc k-id)
+    (if k-id
+        (fetch/k (get-k-manager) k-id)
+        #f))
+
+  ;; fetches the k-manager in the session; it instantiates it
+  ;; if one is not already there
+  (define (get-k-manager)
+    (let* ((session (get-session (current-request)))
+           (k-manager-wrap (get-attribute session (->jstring "k-manager"))))
+      (cond ((java-null? k-manager-wrap)
+             (let ((k-manager (make <k-manager>)))
+               (set-attribute session (->jstring "k-manager") (java-wrap k-manager))
+               k-manager))
+            (else
+             (java-unwrap k-manager-wrap)))))
+
+  ;; returns true if a published procedure exists
+  ;; corresponding to the given request
+  (define (exists-published-proc?)
+    (let ((path (remove-k-hash
+                 (->string (get-path-info (current-request))))))
+      (published? path)))
+
+  ;; fetches the procedure published at the given request
+  (define (get-published-proc)
+    (let ((path (remove-k-hash
+                 (->string (get-path-info (current-request))))))
+      (get-published path)))
+
+  ;; sends a response and suspends
+  ;; send-proc takes a response object and
+  ;; whichever content is generated by
+  ;; calling (page-proc k-url resume-k)
+  ;; (see html::send-html/suspend for an example
+  (define (send/suspend send-proc page-proc)
+    (let/cc resume-k
+            (let ((k-url (store/cc! resume-k)))
+              (send-proc (current-response) (page-proc k-url resume-k))
+              ((current-suspend-k) #f))))
+
+
+  ;; stores the given continuation and
+  ;; returns a k-url made of the current
+  ;; request url with the k-id added/substituted
+  (define (store/cc! k)
+    (let* ((k-mgr (get-k-manager))
+           (k-id (store/k! k-mgr k)))
+      (make-k-url (remove-k-hash (->string (get-request-uri (current-request)))) k-id)))
+
+
+  ;; sends a response and stops
+  ;; all continuations prior to this one are cleared
+  ;; send-proc is a procedure that takes
+  ;; a response object and the page argument
+  ;; (see html::send-html/finish for an example)
+  (define (send/finish send-proc page)
+  (clear/cc!)
+  (send-proc (current-response) page))
+
+
+  ;; clears the continuation table
+  (define (clear/cc!)
+    (let ((k-mgr (get-k-manager)))
+      (clear-all/k k-mgr)))
+
+
+  ;; the current request, response and k-suspend
+  (define current-request (make-parameter #f))
+  (define current-response (make-parameter #f))
+  (define current-suspend-k (make-parameter #f))
+
+  )
+@
+
+
+1.1.1.3
+log
+@added send/forward send/back adjust-timeout
+@
+text
+@d39 2
+a40 3
+   send/suspend send/finish send/forward send/back
+   current-request current-response current-suspend-k
+   adjust-timeout!)
+d121 1
+a121 1
+           (k-id (store/k! k-mgr k (current-timeout))))
+d131 2
+a132 13
+    (clear/ct!)
+    (send-proc (current-response) page))
+
+
+  ;; sends a response and suspends, but clears
+  ;; the continuation table first
+  ;; send-proc takes a response object and
+  ;; whichever content is generated by
+  ;; calling (page-proc k-url resume-k)
+  ;; (see html::send-html/forward for an example
+  (define (send/forward send-proc page-proc)
+    (clear/ct!)
+    (send/suspend send-proc page-proc))
+d136 1
+a136 1
+  (define (clear/ct!)
+a140 13
+  ;; sends a response and stops; unlike send/finish,
+  ;; the continuation table is not touched
+  ;; send-proc is a procedure that takes
+  ;; a response object and the page argument
+  ;; (see html::send-html/finish for an example)
+  (define (send/back send-proc page)
+    (send-proc (current-response) page))
+
+
+
+  (define (adjust-timeout! ttl) ; seconds
+    (current-timeout ttl))
+
+a144 1
+  (define current-timeout (make-parameter 300))
+@
+
+
+1.1.1.4
+log
+@fixed call to clear-all/k!
+@
+text
+@d150 1
+a150 1
+      (clear-all/k! k-mgr)))
+@
+
+
+1.1.1.5
+log
+@now checks that the k-manager in session is the right type
+@
+text
+@a44 1
+  (import type-system)
+d80 2
+a81 2
+  ;; fetches the k-manager from the session instanting one
+  ;; if not already there
+d85 1
+a85 2
+      (cond ((or (java-null? k-manager-wrap)
+                 (not (instance-of? (java-unwrap k-manager-wrap) <k-manager>)))
+d93 1
+a93 1
+  ;; corresponding to the current request
+d99 1
+a99 2
+  ;; fetches the published procedure corresponding
+  ;; to the current request
+d109 1
+a109 1
+  ;; (see html::send-html/suspend for an example)
+@
+
+
+1.1.1.6
+log
+@now uses ContinuationTable instead of k-manager
+@
+text
+@d32 1
+d48 1
+a51 1
+  (define-java-classes (<continuation-table> |siscweb.contcentric.ContinuationTable|))
+d55 1
+a55 2
+    get-session remove-attribute set-attribute
+    store-continuation fetch-continuation purge-expired clear get-instance)
+d78 1
+a78 5
+        (let ((k-wrap (fetch-continuation (get-continuation-table)
+                                          (->jstring k-id))))
+          (if (java-null? k-wrap)
+              #f
+              (java-unwrap k-wrap)))
+d81 1
+a81 1
+  ;; fetches the continuation-table from the session instanting one
+d83 10
+a92 3
+  (define (get-continuation-table)
+    (get-instance (java-null <continuation-table>) (get-session (current-request))))
+
+d124 2
+a125 5
+    (let ((k-id (get-random-hash)))
+      (store-continuation (get-continuation-table)
+                          (->jstring k-id)
+                          (java-wrap k)
+                          (->jlong (current-timeout)))
+d152 2
+a153 2
+    (clear (get-continuation-table)))
+
+@
+
+
+1.1.1.7
+log
+@spread functions from contcentric.scm onto sisclet.scm and response.scm
+@
+text
+@d32 1
+d36 5
+a40 3
+  (fetch/k store/k! clear/k!
+  current-request current-response current-suspend-k
+  adjust-timeout!)
+d47 1
+d53 2
+a54 2
+    (get-request-uri |getRequestURI|)
+    get-session
+d57 16
+d76 1
+a76 1
+  (define (fetch/k k-id)
+d85 2
+a86 2
+
+  ;; fetches the continuation-table
+d91 26
+d120 1
+a120 1
+  (define (store/k! k)
+d129 19
+d151 1
+a151 1
+  (define (clear/k!)
+d153 11
+@
+
+

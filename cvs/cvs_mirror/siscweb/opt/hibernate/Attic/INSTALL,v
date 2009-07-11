@@ -1,0 +1,156 @@
+head	1.3;
+access;
+symbols
+	rel-0-3-fix-3:1.2
+	rel-0-3-fix-2:1.2
+	rel-0-4-dev-sisc-1-11:1.2
+	rel-0-3-fix-1:1.2
+	rel-0-4-dev:1.2.0.4
+	rel-0-3-fix:1.2.0.2
+	rel-0-3:1.2
+	rel-0-3-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2006.09.03.01.42.24;	author acolomba;	state dead;
+branches;
+next	1.2;
+
+1.2
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.11.16.04.00.34;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.11.16.04.00.34;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2006.08.30.23.07.55;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@merged from rel-0-4-dev
+@
+text
+@REQUIREMENTS
+
+The SISCweb Hibernate add-on requires an active internet connection so that
+dependent libraries may be downloaded from the Maven 2 repository.
+
+
+COMPILING
+
+Before compiling, the root project (SISCweb) must have been compiled
+and packed. That can be accomplished by running "ant dist" in the
+project root.
+
+That done, "ant dist" in the opt/hibernate/ folder will compile and
+pack the addon, and will also copy its jar (siscweb-hibernate.jar) and
+all dependent libraries (hibernate.jar, etc.) to the project root in
+the dist/opt/hibernate/ folder.
+
+
+INSTALLING
+
+The Hibernate add-on can typically be used by simply copying the
+libraries in dist/opt/hibernate to a web application's WEB-INF/lib/
+folder.
+
+The SISCweb examples can be made to use the Hibernate add-on simply by:
+
+
+1. modifying the WEB-INF/web.xml and WEB-INF/scm/init.scm files
+as per the directions in there contained, and
+2. building it normally (ant dist-examples) after having followed the
+instructions in the COMPILING section above.
+
+By default the Hibernate add-on uses a memory-based HSQLDB instance. The database can be specified
+in the src/hibernate.cfg.xml file.
+@
+
+
+1.2
+log
+@merged from rel-0-3-dev
+@
+text
+@@
+
+
+1.2.4.1
+log
+@removed hibernate continuation store (adieu mon ami)
+@
+text
+@@
+
+
+1.1
+log
+@file INSTALL was initially added on branch rel-0-3-dev.
+@
+text
+@d1 34
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 34
+REQUIREMENTS
+
+The SISCweb Hibernate add-on requires an active internet connection so that
+dependent libraries may be downloaded from the Maven 2 repository.
+
+
+COMPILING
+
+Before compiling, the root project (SISCweb) must have been compiled
+and packed. That can be accomplished by running "ant dist" in the
+project root.
+
+That done, "ant dist" in the opt/hibernate/ folder will compile and
+pack the addon, and will also copy its jar (siscweb-hibernate.jar) and
+all dependent libraries (hibernate.jar, etc.) to the project root in
+the dist/opt/hibernate/ folder.
+
+
+INSTALLING
+
+The Hibernate add-on can typically be used by simply copying the
+libraries in dist/opt/hibernate to a web application's WEB-INF/lib/
+folder.
+
+The SISCweb examples can be made to use the Hibernate add-on simply by:
+
+
+1. modifying the WEB-INF/web.xml and WEB-INF/scm/init.scm files
+as per the directions in there contained, and
+2. building it normally (ant dist-examples) after having followed the
+instructions in the COMPILING section above.
+
+By default the Hibernate add-on uses a memory-based HSQLDB instance. The database can be specified
+in the src/hibernate.cfg.xml file.
+@
+

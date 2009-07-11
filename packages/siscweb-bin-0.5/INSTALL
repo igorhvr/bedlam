@@ -1,0 +1,59 @@
+REQUIREMENTS
+
+SISCweb requires these software versions:
+
+    - SISC 1.15 or later (1.16 preferred)
+    - Java 1.4.2 or later
+    - J2EE 1.3 or later (Servlet spec. 2.3 or later)
+
+
+COMPILING
+
+In order to compile SISCweb, paths to the SISC home, as well as to the
+servlet API jar need to be specified in the build.properties
+file. NOTE: the SISC home should contain the heap file in a
+sisc-heap.jar file (built with "ant heap-jar").
+
+A build.properties.sample file is provided. Once the paths are set:
+
+  - "ant dist" will build a siscweb.jar; this jar is the SISCweb
+    library per se.
+
+  - "ant opt-hibernate" "ant opt-sql" "ant opt-sxml" will build the
+    optional libraries; external dependencies are automatically
+    downloaded.
+
+  - "ant dist-examples" will build a self-contained siscweb-examples.war
+    ready for deployment; the war will include all the add-ons and their
+    external dependencies.
+
+See also individual INSTALL files in the opt/ folder for instructions
+on how to compile support for additional functionalities. Note that
+the "dist-examples" task will pick up any optional component that was
+"ant dist"ed.
+
+
+INSTALLING
+
+Using SISCweb in web applications is simple matter of including its
+components in the classpath and making some entries in the web.xml
+deployment descriptor. Please see the documentation for more details.
+
+First-time users may want to check out the example WAR file
+(siscweb-examples-[v].war). It can be deployed by simply dropping it
+into the deployment folder of a J2EE appserver, and can also be used
+as the starting point for developing a new application.
+
+
+*** WARNING ***
+
+While the server-side REPL is disabled in the SISCweb examples WAR
+file available from sourceforge.net, if you build it from sources, a
+REPL will be bound to the localhost:5156 socket. This is a security
+vulnerability. You should make sure to disable this feature if you are
+concerned about other people on the same host gaining access to a
+full-fledged REPL.
+
+
+(C) 2005-2006 Alessandro Colomba <acolomba@users.sourceforge.net>
+

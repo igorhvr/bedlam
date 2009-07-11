@@ -1,0 +1,125 @@
+head	1.2;
+access;
+symbols
+	rel-0-6-dev:1.2.0.10
+	rel-0-5-fix:1.2.0.8
+	rel-0-5:1.2
+	rel-0-5-dev-safe-frames:1.2.0.6
+	Root_rel-0-5-dev-safe-frames:1.2
+	rel-0-4-fix-0:1.2
+	rel-0-5-dev:1.2.0.4
+	rel-0-4-fix:1.2.0.2
+	rel-0-3-fix-3:1.1.4.2
+	rel-0-3-fix:1.1.0.4
+	rel-0-4-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2006.09.03.01.42.23;	author acolomba;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.02.28.01.38.58;	author acolomba;	state dead;
+branches
+	1.1.2.1
+	1.1.4.1;
+next	;
+
+1.1.2.1
+date	2006.02.28.01.38.58;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.1.4.1
+date	2006.02.28.01.38.58;	author acolomba;	state dead;
+branches;
+next	1.1.4.2;
+
+1.1.4.2
+date	2006.04.15.15.55.24;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@merged from rel-0-4-dev
+@
+text
+@(define-syntax when
+  (syntax-rules ()
+    ((when condition stuff ...)
+     (if condition
+	 (begin stuff ...)))))
+
+(define-syntax begin0
+  (syntax-rules ()
+    ((begin0 form0 form1 ...)
+     (let ((result form0))
+       (begin form1 ... result)))))
+@
+
+
+1.1
+log
+@file control.scm was initially added on branch rel-0-4-dev.
+@
+text
+@d1 11
+@
+
+
+1.1.4.1
+log
+@file control.scm was added on branch rel-0-3-fix on 2006-04-15 15:55:24 +0000
+@
+text
+@@
+
+
+1.1.4.2
+log
+@merged from rel-0-4-dev
+@
+text
+@a0 11
+(define-syntax when
+  (syntax-rules ()
+    ((when condition stuff ...)
+     (if condition
+	 (begin stuff ...)))))
+
+(define-syntax begin0
+  (syntax-rules ()
+    ((begin0 form0 form1 ...)
+     (let ((result form0))
+       (begin form1 ... result)))))
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 11
+(define-syntax when
+  (syntax-rules ()
+    ((when condition stuff ...)
+     (if condition
+	 (begin stuff ...)))))
+
+(define-syntax begin0
+  (syntax-rules ()
+    ((begin0 form0 form1 ...)
+     (let ((result form0))
+       (begin form1 ... result)))))
+@
+

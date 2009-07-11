@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Chapter 5. Publishing Procedures</title><link href="siscweb-manual.css" rel="stylesheet" type="text/css" /><meta content="DocBook XSL Stylesheets V1.70.1" name="generator" /><link rel="start" href="index.html" title="SISCweb Manual" /><link rel="up" href="index.html" title="SISCweb Manual" /><link rel="prev" href="ch04.html" title="Chapter 4. Managing Program State" /><link rel="next" href="ch06.html" title="Chapter 6. Request Bindings" /></head><body><div class="navheader"><table summary="Navigation header" width="100%"><tr><th align="center" colspan="3">Chapter 5. Publishing Procedures</th></tr><tr><td align="left" width="20%"><a accesskey="p" href="ch04.html">Prev</a> </td><th align="center" width="60%"> </th><td align="right" width="20%"> <a accesskey="n" href="ch06.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="publishing" />Chapter 5. Publishing Procedures</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ch05.html#html">Publishing Procedures</a></span></dt></dl></div><p>
+    Procedures can be published to virtual paths of an application
+    server within the hierarchy of a siscweb application. Publishing
+    can be done both interactively at the server-side REPL during
+    development, and in the web.xml file at deployment time. (See
+    <a href="ch02.html#adapter-servlet" title="The Adapter Servlet">the section called “The Adapter Servlet”</a>.)
+  </p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="html" />Publishing Procedures</h2></div></div></div><p>
+      <span class="emphasis"><em>Requires:</em></span>
+      <span class="bold"><strong>
+        (import <span class="emphasis"><em>siscweb/publish</em></span>)
+      </strong></span>
+      <br />
+      <span class="emphasis"><em>Located in:</em></span>
+      <span class="bold"><strong>
+        siscweb.jar
+      </strong></span>
+    </p><p>
+      This module provides simple procedures to publish procedures to
+      URL patterns. Patterns can be expressed either as wildcards or
+      regular expressions.
+    </p><p>
+      Published procedures accept a single parameter in the form of
+      a request object.
+    </p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3><p>
+        Since the Java HttpServletRequest object is not serializable,
+        it is a good practice to clear any reference to it as soon as
+        possible.
+      </p></div><p>
+      Wildcard patterns can use wildcards and double-wildcards between slashes,
+      such as in "/hello/*" or "/hello/**/world". The first pattern
+      matches requests such as "/hello/there", "/hello/", or even
+      "/hello"; the second pattern matches "/hello/world" as well as
+      "hello/what/a/wonderful/world/".
+    </p><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N10E4A" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">publish/wildcard</span> <span class="methodparam"><span class="parameter">url-wildcard-pattern</span></span> <span class="methodparam"><span class="parameter">(lambda (request) ...)</span></span>) =&gt; <span class="type">undefined</span></code>
+        <br />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">publish/wildcard</span> <span class="methodparam"><span class="parameter">url-wildcard-pattern</span></span> <span class="methodparam"><span class="parameter">symbol</span></span>) =&gt; <span class="type">undefined</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Publishes the given procedure <em class="parameter"><code>proc</code></em>
+            or <em class="parameter"><code>symbol</code></em> at
+            <em class="parameter"><code>url-wildcard-pattern</code></em>. The
+            <em class="parameter"><code>symbol</code></em> will be looked up at run
+            time every time. This is especially useful during
+            development, since it allows one to redefine the procedure
+            associated to <em class="parameter"><code>symbol</code></em> without having
+            to republish.
+          </p><p>
+            When a request is received, the path-info section of the
+            request URL is matched against each published pattern. If
+            a match is found, the corresponding procedure is
+            invoked. The procedure will receive the HTTP request as
+            its only argument.
+          </p></blockquote></div>
+      </p><div class="informalexample"><pre class="programlisting">
+          
+(publish/wildcard
+  "/hello-world/*"
+  (lambda (request)
+    (set! request #f)
+    (send-html/back
+    `(html
+      (head (title "Hello, world!"))
+      (body (p "Hello, world!"))))))
+
+        </pre></div></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N10E9E" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">publish/regexp</span> <span class="methodparam"><span class="parameter">url-regexp-pattern</span></span> <span class="methodparam"><span class="parameter">(lambda (request) ...)</span></span>) =&gt; <span class="type">undefined</span></code>
+        <br />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">publish/regexp</span> <span class="methodparam"><span class="parameter">url-regexp-pattern</span></span> <span class="methodparam"><span class="parameter">symbol</span></span>) =&gt; <span class="type">undefined</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            This function is equivalent to
+            <code class="function">publish/wildcard</code>, save for the fact
+            that it accepts a regular expression as a pattern.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N10EDC" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">publish</span> <span class="methodparam"><span class="parameter">url-wildcard-pattern</span></span> <span class="methodparam"><span class="parameter">(lambda (request) ...)</span></span>) =&gt; <span class="type">undefined</span></code>
+        <br />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">publish</span> <span class="methodparam"><span class="parameter">url-wildcard-pattern</span></span> <span class="methodparam"><span class="parameter">symbol</span></span>) =&gt; <span class="type">undefined</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            This function is equivalent to
+            <code class="function">publish/wildcard</code>, and is present both
+            for backwards compatibility and to offer a convenient
+            shorthand.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N10F1A" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">unpublish</span> <span class="methodparam"><span class="parameter">url-pattern</span></span>) =&gt; <span class="type">undefined</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Removes a previously published procedure at the given
+            pattern. The <em class="parameter"><code>url-pattern</code></em> passed to
+            <code class="function">unpublish</code> must be identical to the
+            one used to publish.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N10F3E" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">get-published</span> <span class="methodparam"><span class="parameter">url-pattern</span></span>) =&gt; <span class="type">procedure/#f</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the procedure published at the given
+            <em class="parameter"><code>url-pattern</code></em> or #f if none is
+            found.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N10F5E" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">get-all-published</span>) =&gt; <span class="type">alist</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns an association list made of
+            (<em class="parameter"><code>pattern</code></em>
+            <em class="parameter"><code>procedure</code></em>
+            <em class="parameter"><code>notation</code></em>) elements or '() if no
+            procedures are published.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N10F80" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">publish-bulk</span> <span class="methodparam"><span class="parameter">((url-pattern [procedure|symbol] notation) ...)</span></span>) =&gt; <span class="type">undefined</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Given an association list of (<em class="parameter"><code>url-pattern</code></em>
+            <em class="parameter"><code>procedure</code></em>
+            <em class="parameter"><code>notation</code></em>), publishes all the
+            given procedures or symbols to the provided patterns.
+          </p><p>
+            Depending on whether <em class="parameter"><code>notation</code></em> is
+            the symbol <code class="literal">'wildcard</code> or
+            <code class="literal">'regexp</code>, the given
+            <em class="parameter"><code>url-pattern</code></em> should be either a
+            wildcard or regular expression pattern.
+          </p></blockquote></div>
+      </p></blockquote></div></div></div><div class="navfooter"><hr /><table summary="Navigation footer" width="100%"><tr><td align="left" width="40%"><a accesskey="p" href="ch04.html">Prev</a> </td><td align="center" width="20%"> </td><td align="right" width="40%"> <a accesskey="n" href="ch06.html">Next</a></td></tr><tr><td valign="top" align="left" width="40%">Chapter 4. Managing Program State </td><td align="center" width="20%"><a accesskey="h" href="index.html">Home</a></td><td valign="top" align="right" width="40%"> Chapter 6. Request Bindings</td></tr></table></div></body></html>

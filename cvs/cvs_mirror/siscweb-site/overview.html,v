@@ -1,0 +1,424 @@
+head	1.8;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.8
+date	2007.04.12.04.27.51;	author acolomba;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2006.09.02.04.12.30;	author acolomba;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2006.05.13.02.17.25;	author acolomba;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2006.02.25.20.21.58;	author acolomba;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2005.12.15.05.15.21;	author acolomba;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2005.10.24.03.57.39;	author acolomba;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2005.08.02.03.16.37;	author acolomba;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2005.07.30.01.50.00;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.8
+log
+@updated for rel-0-5
+@
+text
+@<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"/>
+    <title>SISCweb Overview</title>
+    <link rel="stylesheet" href="style/default.css" type="text/css"/>
+  </head>
+
+  <body>
+    <div class="logo-container">
+      <span class="logo-left">SISC</span><span class="logo-right">web</span>
+      <div class="logo-bottom">Do you call/cc in J2EE?</div>
+    </div>
+
+    <table class="tab-container">
+      <tbody>
+        <tr>
+          <td class="tab-padding">&nbsp;</td>
+          <td class="tab-unselected">
+            <a class="tab-link" href="news.html">news</a>
+          </td>
+          <td class="tab-selected">overview</td>
+          <td class="tab-unselected">
+            <a class="tab-link" href="docs.html">docs</a>
+          </td>
+          <td class="tab-unselected">
+            <a class="tab-link" href="download.html">download</a>
+          </td>
+          <td class="tab-unselected">
+            <a class="tab-link" href="screenshots.html">screenshots</a>
+          </td>
+          <td class="tab-unselected">
+            <a class="tab-link" href="license.html">license</a>
+          </td>
+          <td class="tab-padding">&nbsp;</td>
+        </tr>
+      </tbody>
+    </table>
+
+
+    <h3>Description</h3>
+
+
+    <p>
+      SISCweb is a framework to facilitate writing stateful Scheme web
+      applications in a J2EE environment.
+    </p>
+
+    <p>
+      By using <a
+      href="http://en.wikipedia.org/wiki/Continuations">continuations</a>,
+      SISCweb does away with the page-centric execution model typical
+      of web programming. Every time the program sends a response to
+      the browser, its state is suspended, to be then resumed from
+      that exact point when the browser submits a request.
+    </p>
+    <p>
+      One implication of this approach is that local variables in
+      scope when the response is sent will still be in scope when the
+      subsequent request is received, making much of the
+      session-object data shuffling needless. Another consequence is
+      that, much like in console-based applications, the
+      conversational state between client and server is constantly
+      maintained -- hence the term "stateful."
+    </p>
+
+    <p>
+      SISCweb is implemented in <a
+      href="http://sisc.sourceforge.net">SISC</a>, a Scheme
+      interpreter for the JVM with support for full continuations.
+    </p>
+
+
+    <h3>Features</h3>
+
+    <p>
+      SISCweb is both a compact engine to manage continuations and a
+      collection of small libraries to ease web
+      development. Benefiting from both its implementation language,
+      Scheme, and its environment, J2EE, SISCweb offers:
+    </p>
+
+
+    <ul>
+      <li>
+        An interactive, REPL-based web application development
+        style. Developers can write web applications incrementally
+        without ever needing to restart the J2EE context or the
+        application itself.
+      </li>
+
+      <li>
+        A powerful, yet unobtrusive <a
+        href="http://okmij.org/ftp/Scheme/SXML.html">SXML</a>-based
+        extension to HTML mostly oriented toward flow control. For
+        instance, it is possible to define closures on the fly, and
+        associate them to a link.
+      </li>
+
+      <li>
+        Solid support for using standard J2EE view components such as
+        JSP/Servlets in place of SXML.
+      </li>
+
+      <li>
+        A handy (if incomplete) SQL library easily extended to various
+        database vendors through plug-in Scheme modules.
+      </li>
+
+      <li>
+        Generation of <a href="http://www.graphviz.org">Graphviz</a>
+        graphs through an SXML version of <a
+        href="http://www.martin-loetzsch.de/DOTML/">DOTML</a>.
+      </li>
+    </ul>
+
+
+    <h3>Requirements</h3>
+
+    <p>
+      SISCweb needs these software versions installed:
+    </p>
+
+    <ul>
+      <li>
+        <a href="http://java.sun.com">Java</a> 1.4.2 or later, e.g. <a
+        href="http://java.sun.com/j2se/downloads/index.html">Sun</a>,
+        <a href="http://www.blackdown.org/">Blackdown</a>, <a
+        href="http://www.apple.com/macosx/features/java/">Apple</a>
+      </li>
+      <li>
+        <a href="http://sisc.sourceforge.net/">SISC</a> 1.13.6 and later
+      </li>
+      <li>
+        A J2EE 1.3 application server, e.g. <a
+        href="http://jakarta.apache.org/site/downloads/downloads_tomcat-5.cgi">Tomcat
+        5.x</a>
+      </li>
+    </ul>
+
+
+    <hr style="height: 1px; width: 100%;"
+        class="bottom-separator" noshade="noshade"/>
+
+    <p>
+      <div style="font-style: italic;">
+        (C) 2005-2007 Alessandro Colomba - <a
+        href="mailto:acolomba@@users.sourceforge.net">acolomba@@users.sourceforge.net</a>
+      </div>
+      <div style="font-style: italic;">
+        Last updated: $Date: 2006/09/02 04:12:30 $
+      </div>
+    </p>
+
+    <a href="http://sourceforge.net"><img src="http://sourceforge.net/sflogo.php?group_id=130857&amp;type=1" alt="SourceForge.net Logo" border="0" height="31" width="88"/></a>
+
+    <a href="http://www.spreadfirefox.com/?q=affiliates&amp;id=0&amp;t=68"><img alt="Get Firefox!" title="Get Firefox!" src="http://sfx-images.mozilla.org/affiliates/Buttons/88x31/take.gif" border="0"/></a>
+  </body>
+</html>
+@
+
+
+1.7
+log
+@updated logo; css-ized tab table
+@
+text
+@a106 6
+        Continuations can be stored in the session object, or be
+        persisted to a database via <a
+        href="http://www.hibernate.org">Hibernate</a>.
+      </li>
+
+      <li>
+d148 1
+a148 1
+        (C) 2005-2006 Alessandro Colomba - <a
+d152 1
+a152 1
+        Last updated: $Date: 2006/05/13 02:17:25 $
+@
+
+
+1.6
+log
+@updated
+@
+text
+@d11 3
+a13 3
+    <div class="logo">
+      <img alt="SISCweb logo" title="SISCweb logo"
+           src="images/logo.png"/>
+d16 1
+a16 2
+    <table style="text-align: left; margin-left: auto; margin-right: auto;"
+           class="tab-container" cellpadding="0" cellspacing="0">
+d19 2
+a20 2
+          <td width="5%" class="tab-padding">&nbsp;</td>
+          <td width="15%" class="tab-unselected">
+d23 2
+a24 2
+          <td width="15%" class="tab-selected">overview</td>
+          <td width="15%" class="tab-unselected">
+d27 1
+a27 1
+          <td width="15%" class="tab-unselected">
+d30 1
+a30 1
+          <td width="15%" class="tab-unselected">
+d33 1
+a33 1
+          <td width="15%" class="tab-unselected">
+d36 1
+a36 1
+          <td width="5%" class="tab-padding">&nbsp;</td>
+d158 1
+a158 1
+        Last updated: $Date: 2006/02/25 20:21:58 $
+@
+
+
+1.5
+log
+@updated for SISCweb 0.32
+@
+text
+@d140 1
+a140 1
+        <a href="http://sisc.sourceforge.net/">SISC</a> 1.11 (exactly)
+d159 1
+a159 1
+        Last updated: $Date: 2005/12/15 05:15:21 $
+@
+
+
+1.4
+log
+@minor typo fix
+@
+text
+@d52 6
+a57 5
+      Through the use of continuations, SISCweb does away with the
+      page-centric execution model typical of web programming. Every
+      time the program sends a response to the browser, its state
+      is suspended, to be then resumed from that exact point when the
+      browser submits a request.
+d109 2
+a110 5
+        persisted to a database. <a
+        href="http://www.hsqldb.org">HSQLDB</a>, <a
+        href="http://www.oracle.com">Oracle</a> and <a
+        href="http://www.postgresql.org">PostgreSQL</a> are currently
+        supported.
+d140 1
+a140 1
+        <a href="http://sisc.sourceforge.net/">SISC</a> 1.11 or later
+d155 1
+a155 1
+        (C) 2005 Alessandro Colomba - <a
+d159 1
+a159 1
+        Last updated: $Date: 2005/10/24 03:57:39 $
+@
+
+
+1.3
+log
+@added more explanations
+@
+text
+@d54 1
+a54 1
+      time the program sends a response to the browser, the its state
+d161 1
+a161 1
+        Last updated: $Date: 2005/08/02 03:16:37 $
+@
+
+
+1.2
+log
+@improved tabs et al.; minor corrections
+@
+text
+@d54 12
+a65 3
+      time a response is sent to the browser, the program execution
+      flow is suspended, to be then resumed from that exact point when
+      the browser submits a request.
+d78 4
+a81 2
+      Benefiting from both its implementation language, Scheme, and
+      its environment, J2EE, SISCweb offers:
+a100 1
+
+d107 3
+a109 2
+        Continuations can be persisted to the session, as well as to
+        databases. <a href="http://www.hsqldb.org">HSQLDB</a>, <a
+d114 1
+a119 1
+
+d128 24
+d161 1
+a161 1
+        Last updated: $Date: 2005/07/30 01:50:00 $
+@
+
+
+1.1
+log
+@initial import
+@
+text
+@d11 2
+a12 3
+    <div style="text-align: center;">
+      <img style="width: 270px; height: 76px;"
+           alt="SISCweb logo" title="SISCweb logo"
+d20 2
+a21 2
+          <td class="tab-padding">&nbsp;</td>
+          <td class="tab-unselected">
+d24 2
+a25 2
+          <td class="tab-selected">overview</td>
+          <td class="tab-unselected">
+d28 1
+a28 1
+          <td class="tab-unselected">
+d31 1
+a31 1
+          <td class="tab-unselected">
+d34 1
+a34 1
+          <td class="tab-unselected">
+d37 1
+a37 1
+          <td class="tab-padding">&nbsp;</td>
+d53 1
+a53 1
+      page-centric execution model typical of web applications. Every
+d60 1
+a60 1
+      SISCweb is based on <a
+d87 1
+a87 1
+        have them associated to a link.
+d93 1
+a93 1
+        JSP/Servlets instead of SXML.
+d97 4
+a100 3
+        Continuations can be persisted in the session, as well as to
+        databases. <a href="http://www.hsqldb.org">HSQLDB</a> and <a
+        href="http://www.oracle.com">Oracle</a> are currently
+a102 1
+
+d126 1
+a126 1
+        Last updated: $Date$
+@
+

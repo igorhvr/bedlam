@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Chapter 7. Interaction with SQL Databases</title><link href="siscweb-manual.css" rel="stylesheet" type="text/css" /><meta content="DocBook XSL Stylesheets V1.70.1" name="generator" /><link rel="start" href="index.html" title="SISCweb Manual" /><link rel="up" href="index.html" title="SISCweb Manual" /><link rel="prev" href="ch06.html" title="Chapter 6. Request Bindings" /><link rel="next" href="ch08.html" title="Chapter 8. Lower-level APIs" /></head><body><div class="navheader"><table summary="Navigation header" width="100%"><tr><th align="center" colspan="3">Chapter 7. Interaction with SQL Databases</th></tr><tr><td align="left" width="20%"><a accesskey="p" href="ch06.html">Prev</a> </td><th align="center" width="60%"> </th><td align="right" width="20%"> <a accesskey="n" href="ch08.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="sql" />Chapter 7. Interaction with SQL Databases</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ch07.html#jdbc">JDBC Functions</a></span></dt><dt><span class="section"><a href="ch07.html#queries">Running Queries</a></span></dt><dt><span class="section"><a href="ch07.html#vendors">Database Vendor Support </a></span></dt><dd><dl><dt><span class="section"><a href="ch07.html#hsqldb">HSQLDB</a></span></dt><dt><span class="section"><a href="ch07.html#postgresql">Microsoft SQL Server Support</a></span></dt><dt><span class="section"><a href="ch07.html#oracle">Oracle</a></span></dt><dt><span class="section"><a href="ch07.html#postgresql">PostgreSQL</a></span></dt><dt><span class="section"><a href="ch07.html#otherdb">Adding Support for Other Vendors</a></span></dt></dl></dd></dl></div><p>
+    The SQL library performs automatic conversion between scheme and
+    database types. Since the exact conversion table depends on the
+    vendor, a mechanism is provided to add support for other vendors
+    though vendor-specific modules.
+  </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3>
+    This library is not yet complete, but it covers the most
+    frequently used functionalities. It should be considered useful
+    but immature; in particular, a few names and function signatures
+    are subject to change.
+  </div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="jdbc" />JDBC Functions</h2></div></div></div><p>
+      <span class="emphasis"><em>Requires:</em></span>
+      <span class="bold"><strong>
+        (import <span class="emphasis"><em>sql/jdbc</em></span>)
+      </strong></span>
+      <br />
+      <span class="emphasis"><em>Located in:</em></span>
+      <span class="bold"><strong>
+        siscweb-sql.jar
+      </strong></span>
+    </p><p>
+      This module provides functions to load drivers, obtain
+      connections, and execute procedures within a transactional
+      context.
+    </p><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11174" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">jdbc/load-driver</span> <span class="methodparam"><span class="parameter">name</span></span>) =&gt; <span class="type">#t/#f</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Loads the JDBC driver specified by
+            <em class="parameter"><code>name</code></em>. It is not necessary to use
+            this function when obtaining a connection from a JDBC
+            DataSource, or when using a plug-in, vendor-specific
+            module. Returns a boolean representing the success of the
+            operation.
+          </p></blockquote></div>
+      </p><div class="informalexample"><pre class="programlisting">
+          
+(jdbc/load-driver "org.hsqldb.jdbcDriver")
+          
+        </pre></div></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11198" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">jdbc/get-connection</span> <span class="methodparam"><span class="parameter">datasource</span></span>) =&gt; <span class="type">connection</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Obtains a connection from the specified JDBC
+            <em class="parameter"><code>datasource</code></em>.
+          </p></blockquote></div>
+      </p><div class="informalexample"><pre class="programlisting">
+          
+(import util/jndi)
+(jdbc/get-connection (jndi/lookup "java:/comp/env/jdbc/myDS"))
+          
+        </pre></div></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N111BC" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">jdbc/open-connection</span> <span class="methodparam"><span class="parameter">url</span></span> <span class="methodparam"><span class="parameter">username</span></span> <span class="methodparam"><span class="parameter">password</span></span>) =&gt; <span class="type">connection</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Opens and returns a connection to the database specified
+            by the <em class="parameter"><code>url</code></em> parameter, logging in
+            with the given <em class="parameter"><code>username</code></em> and
+            <em class="parameter"><code>password</code></em>. The
+            <em class="parameter"><code>url</code></em> is in the same
+            <em class="parameter"><code>jdbc:subprotocol:subname</code></em> format as
+            in the Java JDBC API.
+          </p></blockquote></div>
+      </p><div class="informalexample"><pre class="programlisting">
+          
+(jdbc/open-connection "jdbc:hsqldb:file:/tmp/my-db" "sa" "")
+            
+        </pre></div></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N111FC" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">jdbc/close-connection</span> <span class="methodparam"><span class="parameter">connection</span></span>) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Closes the specified <em class="parameter"><code>connection</code></em>.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N1121C" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">jdbc/get-vendor</span> <span class="methodparam"><span class="parameter">connection</span></span>) =&gt; <span class="type">vendor-name</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the vendor name, in lowercase, of the database to
+            which <em class="parameter"><code>connection</code></em> points.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N1123C" />
+        <a class="indexterm" id="N11241" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">jdbc/call-with-connection</span> <span class="methodparam"><span class="parameter">connection</span></span> <span class="methodparam"><span class="parameter">proc</span></span>) =&gt; <span class="type">value</span></code>
+        
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">jdbc/call/conn</span> <span class="methodparam"><span class="parameter">connection</span></span> <span class="methodparam"><span class="parameter">procedure</span></span>) =&gt; <span class="type">value</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Invokes <em class="parameter"><code>procedure</code></em> with the given
+            <em class="parameter"><code>connection</code></em>. When the procedure
+            terminates or fails, the connection is automatically
+            <code class="function">close()</code>ed.  The passed
+            <em class="parameter"><code>procedure</code></em> must accept a
+            <em class="parameter"><code>connection</code></em> as its only
+            argument. The value returned will be that returned by
+            <em class="parameter"><code>procedure</code></em>.
+          </p></blockquote></div>
+
+        <div class="informalexample"><pre class="programlisting">
+            
+(jdbc/call/conn
+  (jdbc/get-connection (jndi/lookup "java:/comp/env/jdbc/myDS"))
+  (lambda (conn)
+    (sql/execute conn "SELECT SYSDATE FROM DUAL")))
+            
+          </pre></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11296" />
+        <a class="indexterm" id="N1129B" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">jdbc/call-with-transaction</span> <span class="methodparam"><span class="parameter">connection</span></span> <span class="methodparam"><span class="parameter">proc</span></span>) =&gt; <span class="type">value</span></code>
+        <br />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">jdbc/call/tran</span> <span class="methodparam"><span class="parameter">connection</span></span> <span class="methodparam"><span class="parameter">procedure</span></span>) =&gt; <span class="type">value</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Invokes <em class="parameter"><code>procedure</code></em> within a
+            transactional context. The transaction is committed if
+            <em class="parameter"><code>procedure</code></em> returns normally, and
+            rolled back in case of failure or invocation of an escape
+            continuation. The passed <em class="parameter"><code>procedure</code></em>
+            must accept <em class="parameter"><code>connection</code></em> as its only
+            argument. The value returned will be that returned by
+            <em class="parameter"><code>procedure</code></em>.
+          </p></blockquote></div>
+
+        <div class="informalexample"><pre class="programlisting">
+            
+(jdbc/call/conn
+  (jdbc/get-connection (jndi/lookup "java:/comp/env/jdbc/myDS"))
+  (lambda (conn)
+    (jdbc/call/tran
+      conn
+      (lambda (conn)
+        (sql/execute-update conn "UPDATE my_table SET my_field = 0")))))
+            
+          </pre></div>
+      </p></blockquote></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="queries" />Running Queries</h2></div></div></div><p>
+      <span class="emphasis"><em>Requires:</em></span>
+      <span class="bold"><strong>
+        (import <span class="emphasis"><em>sql/query</em></span>)
+      </strong></span>
+      <br />
+      <span class="emphasis"><em>Located in:</em></span>
+      <span class="bold"><strong>
+        siscweb-sql.jar
+      </strong></span>
+    </p><p>
+      This module provides functions to execute queries and map
+      through result sets.
+    </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3>
+      JDBC ResultSets are translated to lazy lists (in the sense of
+      <a href="http://srfi.schemers.org/srfi-45/" target="_top">srfi-45</a>)
+      of SISC hashtables. When the last element of the list is fetched
+      (or in case of error during fetching), the underlying JDBC
+      ResultSet and Statement are automatically closed. In case of
+      premature escape from the <code class="function">jdbc/call/conn</code>
+      context, intentional or not, the JDBC ResultSet and Statement
+      are closed only upon garbage collection. This can be a
+      particularly insidious problem when using pooled connections,
+      and will be fixed in the future.
+    </div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11313" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">sql/execute</span> <span class="methodparam"><span class="parameter">connection</span></span> <span class="methodparam"><span class="parameter">sql-query</span></span> <span class="methodparam"><span class="parameter">[value] ...</span></span>) =&gt; <span class="type">number/resultset</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Executes <em class="parameter"><code>sql-query</code></em> through the
+            given <em class="parameter"><code>connection</code></em>.
+          </p><p>
+            A number of optional <em class="parameter"><code>value</code></em>s can be
+            specified; these will be bound in order to the
+            placeholders in the query. Date, time and timestamps from
+            <a href="http://srfi.schemers.org/srfi-19/srfi-19.html" target="_top">srfi-19</a>
+            can be used to bind to SQL DATE, TIME and TIMESTAMP types.
+          </p><p>
+            Returns the number of rows updated in case of an
+            INSERT/UPDATE/DELETE query statement, and a result set in
+            case of a SELECT statement. Result sets are lazy lists in
+            the sense of <a href="http://srfi.schemers.org/srfi-45/srfi-45.html" target="_top">srfi-45</a>. Each
+            element of the list is a hashtable <em class="parameter"><code>(field-name
+            =&gt; value)</code></em>.  Multiple result sets are not
+            supported.
+          </p></blockquote></div>
+      </p><div class="informalexample"><pre class="programlisting">
+          
+(sql/execute conn "SELECT * FROM my_table WHERE id = ?" 12345)
+            
+        </pre></div></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N1135B" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">sql/execute-query</span> <span class="methodparam"><span class="parameter">connection</span></span> <span class="methodparam"><span class="parameter">sql-query</span></span> <span class="methodparam"><span class="parameter">[value] ...</span></span>) =&gt; <span class="type">resultset</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Runs <em class="parameter"><code>sql-query</code></em> and returns a result
+            set.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11387" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">sql/execute-update</span> <span class="methodparam"><span class="parameter">connection</span></span> <span class="methodparam"><span class="parameter">sql-query</span></span> <span class="methodparam"><span class="parameter">[value] ...</span></span>) =&gt; <span class="type">number</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Runs <em class="parameter"><code>sql-query</code></em> and returns the
+            number of updated rows.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N113B3" />
+        <a class="indexterm" id="N113B8" />
+        <span class="emphasis"><em>syntax: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">sql/map-row</span> <span class="methodparam"><span class="parameter">procedure</span></span> <span class="methodparam"><span class="parameter">((variable field-name) ...)</span></span> <span class="methodparam"><span class="parameter">body</span></span>) =&gt; <span class="type">list</span></code>
+        <br />
+        <span class="emphasis"><em>syntax: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">sql/for-each-row</span> <span class="methodparam"><span class="parameter">procedure</span></span> <span class="methodparam"><span class="parameter">((variable field-name) ...)</span></span> <span class="methodparam"><span class="parameter">body</span></span>) =&gt; <span class="type">undefined</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            These two macros facilitate writing code that loops
+            through a resultset. Like their correspectives
+            <code class="function">map</code> and
+            <code class="function">for-each</code>, the former collects results
+            into a list, while the latter is to be used for
+            side-effects.
+          </p><p>
+            For each row in the <em class="parameter"><code>resultset</code></em>, a
+            Scheme <em class="parameter"><code>variable</code></em> is bound to the
+            value of the indicated <em class="parameter"><code>field-name</code></em>
+            in the resultset, where <em class="parameter"><code>field-name</code></em>
+            is either a string or a symbol.
+          </p><p>
+            In the case of <code class="function">sql/map-row</code>, the value
+            returned by the last expression in
+            <em class="parameter"><code>body</code></em> is collected into the returned
+            <em class="parameter"><code>list</code></em>.
+          </p></blockquote></div>
+      </p><div class="informalexample"><pre class="programlisting">
+          
+(sql/for-each-row (sql/execute-query conn "SELECT id, name FROM person")
+    ((id 'id)
+     (name 'name))
+  (display (format "~a:~a\n" id name)))
+          
+        </pre></div></blockquote></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="vendors" />Database Vendor Support </h2></div></div></div><p>
+      <span class="application">SISCweb</span> includes a number of vendor-specific modules that map
+      Scheme data types onto SQL types and provide extra
+      functionalities, usually in the area of BLOB handling.
+    </p><p>
+      Adding support for new vendors is described in <a href="ch07.html#otherdb" title="Adding Support for Other Vendors">the section called “Adding Support for Other Vendors”</a>
+    </p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="hsqldb" />HSQLDB</h3></div></div></div><p>
+        <span class="emphasis"><em>Requires:</em></span>
+        <span class="bold"><strong>
+          (import <span class="emphasis"><em>sql/hsqldb</em></span>)
+        </strong></span>
+        <br />
+        <span class="emphasis"><em>Located in:</em></span>
+        <span class="bold"><strong>
+          siscweb-sql.jar
+        </strong></span>
+      </p><p>
+        Importing this module registers type conversions between
+        HSQLDB and Scheme. Currently only numbers, strings, time types
+        and Java objects are supported.
+      </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="postgresql" />Microsoft SQL Server Support</h3></div></div></div><p>
+        <span class="emphasis"><em>Requires:</em></span>
+        <span class="bold"><strong>
+          (import <span class="emphasis"><em>sql/mssql</em></span>)
+        </strong></span>
+        <br />
+        <span class="emphasis"><em>Located in:</em></span>
+        <span class="bold"><strong>
+          siscweb-sql.jar
+        </strong></span>
+      </p><p>
+        Importing this module registers type conversions between
+        Microsoft SQL Server and Scheme. At this time bits, numbers,
+        strings, and time types are supported.
+      </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="oracle" />Oracle</h3></div></div></div><p>
+        <span class="emphasis"><em>Requires:</em></span>
+        <span class="bold"><strong>
+          (import <span class="emphasis"><em>sql/oracle</em></span>)
+        </strong></span>
+        <br />
+        <span class="emphasis"><em>Located in:</em></span>
+        <span class="bold"><strong>
+          siscweb-sql.jar
+        </strong></span>
+      </p><p>
+        Importing this module registers type conversions between
+        Oracle and Scheme. At this time numbers, strings (but not
+        CLOBs), and time types are supported.  BLOBs are returned as
+        such, but two functions are provided to use them as containers
+        of Java objects.
+      </p><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" id="N1148A" />
+          <span class="emphasis"><em>procedure: </em></span>
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">oracle/read-blob</span> <span class="methodparam"><span class="parameter">blob</span></span>) =&gt; <span class="type">|java.lang.Object|</span></code>
+
+          <div class="blockquote"><blockquote class="blockquote"><p>
+              Deserializes a Java object from
+              <em class="parameter"><code>blob</code></em>.
+            </p></blockquote></div>
+        </p><div class="informalexample"><pre class="programlisting">
+            
+;; returns an alist (id =&gt; object)
+(sql/map-row (sql/execute-query "SELECT id, obj FROM my_table")
+    ((id 'id)
+     (blob 'obj))
+  `(,id . ,(oracle/read-blob blob)))
+            
+          </pre></div></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" id="N114AE" />
+          <span class="emphasis"><em>procedure: </em></span>
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">oracle/write-blob</span> <span class="methodparam"><span class="parameter">blob</span></span> <span class="methodparam"><span class="parameter">java-object</span></span>) =&gt; <span class="type">undefined</span></code>
+
+          <div class="blockquote"><blockquote class="blockquote"><p>
+              Serializes <em class="parameter"><code>java-object</code></em> into
+              <em class="parameter"><code>blob</code></em>. Complex Scheme values can
+              also be serialized by <code class="function">java-wrap</code>ping
+              them. The blob has to be first inserted using the Oracle
+              EMPTY_BLOB() function, and then read back with a SELECT
+              query.
+            </p></blockquote></div>
+        </p><div class="informalexample"><pre class="programlisting">
+            
+(sql/for-each-row (sql/execute-query "SELECT id, obj FROM my_table WHERE id = ?" 12345)
+    ((blob 'obj))
+  (oracle/write-blob blob (java-wrap (lambda (x) (* x x)))))
+            
+          </pre></div></blockquote></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="postgresql" />PostgreSQL</h3></div></div></div><p>
+        <span class="emphasis"><em>Requires:</em></span>
+        <span class="bold"><strong>
+          (import <span class="emphasis"><em>sql/postgresql</em></span>)
+        </strong></span>
+        <br />
+        <span class="emphasis"><em>Located in:</em></span>
+        <span class="bold"><strong>
+          siscweb-sql.jar
+        </strong></span>
+      </p><p>
+        Importing this module registers type conversions between
+        PostgreSQL and Scheme. At this time bits, numbers, strings,
+        time types and vectors are supported.
+      </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="otherdb" />Adding Support for Other Vendors</h3></div></div></div><p>
+        It is possible to add support for other database vendors. The
+        existing modules (such as sql/hsqldb.scm) can be used as base
+        and reference.
+      </p><p>
+        At this stage, supporting a new vendor is simply a matter of
+        defining an association list between SQL types and conversion
+        procedures. Each conversion procedure accepts the object as
+        read by the Java <code class="function">Statement.getObject(n)</code>
+        method, a ResultSetMetaData object, and the column number.
+      </p><p>
+        The function should return a Scheme type. If that is not
+        possible (such as it is the case with BLOBs), the function can
+        return a raw Java type, as long as the module provides other
+        functions to transform the Java type into a Scheme type.
+      </p></div></div></div><div class="navfooter"><hr /><table summary="Navigation footer" width="100%"><tr><td align="left" width="40%"><a accesskey="p" href="ch06.html">Prev</a> </td><td align="center" width="20%"> </td><td align="right" width="40%"> <a accesskey="n" href="ch08.html">Next</a></td></tr><tr><td valign="top" align="left" width="40%">Chapter 6. Request Bindings </td><td align="center" width="20%"><a accesskey="h" href="index.html">Home</a></td><td valign="top" align="right" width="40%"> Chapter 8. Lower-level APIs</td></tr></table></div></body></html>

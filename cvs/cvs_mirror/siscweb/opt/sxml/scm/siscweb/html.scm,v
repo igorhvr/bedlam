@@ -1,0 +1,1438 @@
+head	1.3;
+access;
+symbols
+	rel-0-6-dev:1.3.0.10
+	rel-0-5-fix:1.3.0.8
+	rel-0-5:1.3
+	rel-0-5-dev-safe-frames:1.3.0.6
+	Root_rel-0-5-dev-safe-frames:1.3
+	rel-0-4-fix-0:1.3
+	rel-0-5-dev:1.3.0.4
+	rel-0-4-fix:1.3.0.2
+	rel-0-3-fix-3:1.2.2.2
+	rel-0-3-fix-2:1.2.2.1
+	rel-0-4-dev-sisc-1-11:1.2.4.6
+	rel-0-3-fix-1:1.2
+	rel-0-4-dev:1.2.0.4
+	rel-0-3-fix:1.2.0.2
+	rel-0-3:1.2
+	rel-0-3-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2006.09.03.01.42.23;	author acolomba;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.11.20.18.44.01;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.11.20.18.44.01;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.11.20.20.03.35;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2006.02.25.17.12.03;	author acolomba;	state Exp;
+branches;
+next	1.2.2.2;
+
+1.2.2.2
+date	2006.04.15.15.55.24;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.12.01.01.36.59;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.12.01.03.56.32;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2006.01.15.23.14.57;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2006.01.17.05.03.36;	author acolomba;	state Exp;
+branches;
+next	1.2.4.5;
+
+1.2.4.5
+date	2006.01.31.04.32.22;	author acolomba;	state Exp;
+branches;
+next	1.2.4.6;
+
+1.2.4.6
+date	2006.02.12.23.27.49;	author acolomba;	state Exp;
+branches;
+next	1.2.4.7;
+
+1.2.4.7
+date	2006.02.22.04.26.06;	author acolomba;	state Exp;
+branches;
+next	1.2.4.8;
+
+1.2.4.8
+date	2006.03.28.23.26.39;	author acolomba;	state Exp;
+branches;
+next	1.2.4.9;
+
+1.2.4.9
+date	2006.04.09.17.15.52;	author acolomba;	state Exp;
+branches;
+next	1.2.4.10;
+
+1.2.4.10
+date	2006.04.13.00.33.46;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@merged from rel-0-4-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+
+(require-library 'siscweb/contcentric)
+(require-library 'siscweb/response)
+(require-library 'sxml/ehtml)
+(require-library 'sxml/markup)
+
+(module siscweb/html
+  (send-html/suspend send-html/finish
+   send-html/forward send-html/back)
+
+  (import srfi-16)
+
+  (import siscweb/contcentric)
+  (import siscweb/response)
+  (import sxml/ehtml)
+  (import sxml/markup)
+
+
+  (define (send-html header-alst page)
+    (when (not (assoc "Content-Type" header-alst))
+      (response/set-content-type! "text/html"))
+    (response/add-headers! header-alst)
+    (display (sxml->string page)
+             (response/open-output-port)))
+
+  (define send-html/back
+    (case-lambda
+      ((page)
+       (send-html/back '() page))
+      ((header-alst page)
+       (send/back
+        (lambda ()
+          (send-html
+           header-alst
+           (ehtml->html page (lambda (x) #f))))))))
+
+  (define send-html/finish
+    (case-lambda
+      ((page)
+       (send-html/finish '() page))
+      ((header-alst page)
+       (send/finish
+        (lambda ()
+          (send-html
+           header-alst
+           (ehtml->html page (lambda (x) #f))))))))
+
+  (define send-html/suspend
+    (case-lambda
+      ((page-proc)
+       (send-html/suspend '() page-proc))
+      ((header-alst page-proc)
+       (send/suspend
+        (lambda (k-url resume-k)
+          (send-html
+           header-alst
+           (ehtml->html (page-proc k-url) resume-k)))))))
+
+  (define send-html/forward
+    (case-lambda
+      ((page-proc)
+       (send-html/forward '() page-proc))
+      ((header-alst page-proc)
+       (send/forward
+        (lambda (k-url resume-k)
+          (send-html
+           header-alst
+           (ehtml->html (page-proc k-url) resume-k)))))))
+  )
+@
+
+
+1.2
+log
+@merged from rel-0-3-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+d31 1
+d33 1
+a33 3
+(require-library 'siscweb/bindings)
+(require-library 'siscweb/forward)
+(require-library 'siscweb/graphviz)
+d35 1
+a36 1
+(require-library 'sxml/sxml-match)
+d42 1
+a42 2
+  (import s2j)
+  (import string-io)
+d44 1
+a44 3
+  (import siscweb/bindings)
+  (import siscweb/forward)
+  (import siscweb/graphviz)
+d46 1
+a47 1
+  (import sxml-matcher)
+a48 349
+  (define-generic-java-methods
+    get-context-path
+    get-writer
+    (jencode-url |encodeURL|)
+    set-content-type
+    write)
+
+
+  (define (send-html response page)
+    (set-content-type response (->jstring "text/html"))
+    (write (get-writer response)
+           (->jstring
+            (sxml->string page))))
+
+
+  (define (send-html/suspend page-proc)
+    (send/suspend
+     (lambda (request response k-url resume-k)
+       (send-html response
+                  (ehtml->html
+                   request
+                   response
+                   (page-proc k-url)
+                   resume-k)))))
+
+
+  (define (send-html/finish page)
+    (send/finish
+     (lambda (request response)
+       (send-html response (ehtml->html request response page (lambda (x) #f))))))
+
+
+  (define (send-html/forward page-proc)
+    (send/forward
+     (lambda (request response k-url resume-k)
+       (send-html response
+                  (ehtml->html
+                   request
+                   response
+                   (page-proc k-url)
+                   resume-k)))))
+
+
+  (define (send-html/back page)
+    (send/back
+     (lambda (request response)
+       (send-html response (ehtml->html request response page (lambda (x) #f))))))
+
+
+  (define (ehtml->html request response html resume-k)
+    (define (encode-url url)
+      (->string (jencode-url response (->jstring url))))
+
+    (define (make-graphviz layout id fmt attrs graph)
+      (define (make-graph-dispatcher)
+        (forward/store!
+         (lambda (request)
+           (set! request #f)
+           (send-graphviz/back layout fmt graph))))
+
+      (define (make-image-map)
+        (with/fc
+         (lambda (m e) #f)
+         (lambda ()
+           `(div
+             (*VERBATIM* ,(with-output-to-string
+                            (lambda ()
+                              (graphviz/write layout "cmapx" graph))))
+             (img (@@ (src ,(make-graph-dispatcher))
+                     (border 0)
+                     (type ,(graphviz/get-mime-type fmt))
+                     (usemap ,(string-append "#" id)) . ,attrs))))))
+
+      (define (make-object)
+        `(object (@@ (data ,(make-graph-dispatcher)) (type ,(graphviz/get-mime-type fmt)) . ,attrs)))
+
+      (if (member fmt '("gif" "jpg" "png"))
+          (make-image-map)
+          (make-object)))
+
+    (define (make-context-url url)
+      (encode-url (string-append (->string (get-context-path request))
+                     url)))
+
+    (define (T html)
+      (import sxml-accessors)
+
+      (define (xml-element? elt)
+        (and (pair? elt)
+             (symbol? (car elt))))
+
+      (sxml-match html
+        ;; href-p + bindings
+        ((a (@@ (href-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(a (@@ (href ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((link (@@ (href-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(link (@@ (href ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((form (@@ (action-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(form (@@ (action ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((img (@@ (src-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(img (@@ (src ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((script (@@ (src-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(script (@@ (src ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((object (@@ (data-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(object (@@ (data ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((iframe (@@ (src-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(iframe (@@ (src ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((node (@@ (href-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(node (@@ (href ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((edge (@@ (href-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(edge (@@ (href ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((record (@@ (href-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(record (@@ (href ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+
+        ;; href-c + bindings
+        ((a (@@ (href-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(a (@@ (href ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((link (@@ (href-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(link (@@ (href ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((form (@@ (action-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(form (@@ (action ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((img (@@ (src-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(img (@@ (src ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((script (@@ (src-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(script (@@ (src ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((object (@@ (data-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(object (@@ (data ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((iframe (@@ (src-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(iframe (@@ (src ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((node (@@ (href-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(node (@@ (href ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((edge (@@ (href-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(edge (@@ (href ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((record (@@ (href-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(record (@@ (href ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+
+        ;; bindings to resume-k
+        ((a (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(a (@@ (href ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((link (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(link (@@ (href ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((form (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(form (@@ (action ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((img (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(img (@@ (src ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((script (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(script (@@ (src ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((object (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(object (@@ (data ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((iframe (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(iframe (@@ (src ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((node (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(node (@@ (href ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((edge (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(edge (@@ (href ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((record (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(record (@@ (href ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+
+        ;; href-p
+        ((a (@@ (href-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(a (@@ (href ,(forward/store! proc)) . ,rest)
+             ,x ...))
+        ((link (@@ (href-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(link (@@ (href ,(forward/store! proc)) . ,rest)
+             ,x ...))
+        ((form (@@ (action-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(form (@@ (action ,(forward/store! proc)) . ,rest)
+             ,x ...))
+        ((img (@@ (src-p ,proc) . ,rest))
+         (guard (procedure? proc))
+         `(img (@@ (src ,(forward/store! proc)) . ,rest)))
+        ((script (@@ (src-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(script (@@ (src ,(forward/store! proc)) . ,rest)
+             ,x ...))
+        ((object (@@ (data-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(object (@@ (data ,(forward/store! proc)) . ,rest)
+             ,x ...))
+        ((iframe (@@ (src-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(iframe (@@ (src ,(forward/store! proc)) . ,rest)
+             ,x ...))
+        ((node (@@ (href-p ,proc) . ,rest))
+         (guard (procedure? proc))
+         `(node (@@ (href ,(forward/store! proc)) . ,rest)))
+        ((edge (@@ (href-p ,proc) . ,rest))
+         (guard (procedure? proc))
+         `(edge (@@ (href ,(forward/store! proc)) . ,rest)))
+        ((record (@@ (href-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(record (@@ (href ,(forward/store! proc)) . ,rest)
+             ,x ...))
+
+        ;; href-e
+        ((a (@@ (href-e ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(a (@@ (href ,(encode-url url)) . ,rest) ,x ...))
+        ((link (@@ (href-e ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(link (@@ (href ,(encode-url url)) . ,rest) ,x ...))
+        ((form (@@ (action-e ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(form (@@ (action ,(encode-url url)) . ,rest) ,x ...))
+        ((img (@@ (src-e ,url) . ,rest))
+         (guard (string? url))
+         `(img (@@ (src ,(encode-url url)) . ,rest)))
+        ((script (@@ (src-e ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(script (@@ (src ,(encode-url url)) . ,rest) ,x ...))
+        ((object (@@ (data-e ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(object (@@ (data ,(encode-url url)) . ,rest) ,x ...))
+        ((iframe (@@ (src-e ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(iframe (@@ (src ,(encode-url url)) . ,rest) ,x ...))
+        ((node (@@ (href-e ,url) . ,rest))
+         (guard (string? url))
+         `(node (@@ (href ,(encode-url url)) . ,rest)))
+        ((edge (@@ (href-e ,url) . ,rest))
+         (guard (string? url))
+         `(edge (@@ (href ,(encode-url url)) . ,rest)))
+        ((record (@@ (href-e ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(record (@@ (href ,(encode-url url)) . ,rest) ,x ...))
+
+        ;; href-c
+        ((a (@@ (href-c ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(a (@@ (href ,(make-context-url url)) . ,rest) ,x ...))
+        ((link (@@ (href-c ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(link (@@ (href ,(make-context-url url)) . ,rest) ,x ...))
+        ((form (@@ (action-c ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(form (@@ (action ,(make-context-url url)) . ,rest) ,x ...))
+        ((img (@@ (src-c ,url) . ,rest))
+         (guard (string? url))
+         `(img (@@ (src ,(make-context-url url)) . ,rest)))
+        ((script (@@ (src-c ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(script (@@ (src ,(make-context-url url)) . ,rest) ,x ...))
+        ((object (@@ (data-c ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(object (@@ (data ,(make-context-url url)) . ,rest) ,x ...))
+        ((iframe (@@ (src-c ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(iframe (@@ (src ,(make-context-url url)) . ,rest) ,x ...))
+        ((node (@@ (href-c ,url) . ,rest))
+         (guard (string? url))
+         `(node (@@ (href ,(make-context-url url)) . ,rest)))
+        ((edge (@@ (href-c ,url) . ,rest))
+         (guard (string? url))
+         `(edge (@@ (href ,(make-context-url url)) . ,rest)))
+        ((record (@@ (href-c ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(record (@@ (href ,(make-context-url url)) . ,rest) ,x ...))
+
+        ;; graphviz object
+        ((object (@@ (type "graphviz") (layout ,layout) (format ,fmt) . ,obj-attrs) (graph (@@ (id ,id) . ,attrs) ,[x] ...))
+         (make-graphviz layout id fmt obj-attrs `(graph (@@ (id ,id) . ,attrs) ,x ...)))
+
+        ;; ajax experimentation
+        ((form (@@ (update ,id) (procedure ,proc) . ,rest) ,[x] ...)
+         (guard (and (string? id) (procedure? proc)))
+         `(form (@@ (onsubmit
+                    ,(string-append
+                      "new Ajax.Updater('" id "', "
+                      "'" (forward/store! proc) "', {});"
+                      "return false;"))
+                   . ,rest) ,x ...))
+        ((a (@@ (update ,id) (procedure ,proc) . ,rest) ,[x] ...)
+         (guard (and (string? id) (procedure? proc)))
+         `(form (@@ (onsubmit
+                    ,(string-append
+                      "new Ajax.Updater('" id "', "
+                      "'" (forward/store! proc) "', {});"
+                      "return false;"))
+                   . ,rest) ,x ...))
+
+
+        ;; everything that looks like an element, recur over
+        (,elt (guard (xml-element? elt))
+              `(,(xml-element-tag elt) (@@ ,@@(xml-element-attributes elt))
+                ,@@(map T (xml-element-contents elt))))
+
+        ;; numbers, strings, symbols will be left untouched
+        (,nss (guard (or (string? nss) (symbol? nss) (number? nss))) nss)
+
+        ;; #f is converted to the empty string
+        (,false (guard (not false)) "")
+
+        ;; anything else is pretty-printed
+        (,any (with-output-to-string (lambda () (pretty-print any))))))
+
+    (T html))
+d50 50
+@
+
+
+1.2.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+a30 1
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+d32 3
+a35 1
+(require-library 'sxml/ehtml)
+d37 1
+d43 2
+a44 1
+  (import srfi-16)
+d46 3
+a49 1
+  (import sxml/ehtml)
+d51 1
+d53 341
+d395 2
+a396 53
+  (define (send-html header-alst page)
+    (when (not (assoc "Content-Type" header-alst))
+      (response/set-content-type! "text/html"))
+    (response/add-headers! header-alst)
+    (response/write (sxml->string page)))
+
+  (define send-html/back
+    (case-lambda
+      ((page)
+       (send-html/back '() page))
+      ((header-alst page)
+       (send/back
+        (lambda (request response)
+          (send-html
+           header-alst
+           (ehtml->html request response page
+                        (lambda (x) #f))))))))
+
+  (define send-html/finish
+    (case-lambda
+      ((page)
+       (send-html/finish '() page))
+      ((header-alst page)
+       (send/finish
+        (lambda (request response)
+          (send-html
+           header-alst
+           (ehtml->html request response page
+                        (lambda (x) #f))))))))
+
+  (define send-html/suspend
+    (case-lambda
+      ((page-proc)
+       (send-html/suspend '() page-proc))
+      ((header-alst page-proc)
+       (send/suspend
+        (lambda (request response k-url resume-k)
+          (send-html
+           header-alst
+           (ehtml->html request response (page-proc k-url)
+                        resume-k)))))))
+
+  (define send-html/forward
+    (case-lambda
+      ((page-proc)
+       (send-html/forward '() page-proc))
+      ((header-alst page-proc)
+       (send/forward
+        (lambda (request response k-url resume-k)
+          (send-html
+           header-alst
+           (ehtml->html request response (page-proc k-url)
+                        resume-k)))))))
+d398 4
+@
+
+
+1.2.2.2
+log
+@merged from rel-0-4-dev
+@
+text
+@a32 1
+(require-library 'siscweb/contcentric)
+a42 1
+  (import siscweb/contcentric)
+d52 1
+a52 2
+    (display (sxml->string page)
+             (response/open-output-port)))
+d60 1
+a60 1
+        (lambda ()
+d63 2
+a64 1
+           (ehtml->html page (lambda (x) #f))))))))
+d72 1
+a72 1
+        (lambda ()
+d75 2
+a76 1
+           (ehtml->html page (lambda (x) #f))))))))
+d84 1
+a84 1
+        (lambda (k-url resume-k)
+d87 2
+a88 1
+           (ehtml->html (page-proc k-url) resume-k)))))))
+d96 1
+a96 1
+        (lambda (k-url resume-k)
+d99 4
+a102 1
+           (ehtml->html (page-proc k-url) resume-k)))))))
+@
+
+
+1.2.4.1
+log
+@ajax addition/fix
+@
+text
+@a228 21
+
+        ;; ajax
+        ((form (@@ (update ,id) (href-p ,proc) . ,rest) ,[x] ...)
+         (guard (and (string? id) (procedure? proc)))
+         `(form (@@ (onsubmit
+                    ,(string-append
+                      "new Ajax.Updater('" id "', "
+                      "'" (forward/store! proc) "', {});"
+                      "return false;"))
+                   . ,rest) ,x ...))
+        ((a (@@ (href-p ,proc) (update ,id) . ,rest) ,[x] ...)
+         (guard (and (string? id) (procedure? proc)))
+         `(a (@@ (href "#")
+                (onclick
+                 ,(string-append
+                   "new Ajax.Updater('" id "', "
+                   "'" (forward/store! proc) "', {});"
+                   "return false;"))
+                . ,rest) ,x ...))
+
+
+d368 18
+@
+
+
+1.2.4.2
+log
+@added @@href-p ajax for w/ options
+@
+text
+@a37 1
+(require-library 'util/misc)
+a51 1
+  (import util/misc)
+d230 2
+a231 23
+        ;; href-p + update + options (ajax)
+        ((form (@@ (href-p ,proc) (update ,id) (options ,options). ,rest) ,[x] ...)
+         (guard (and (string? id) (procedure? proc) (list? options)))
+         `(form (@@ (onsubmit
+                    ,(string-append
+                      "new Ajax.Updater('" id "', "
+                      "'" (forward/store! proc) "', "
+                      "{" (alist->lstring options ": " ", ") "});"
+                      "return false;"))
+                   . ,rest) ,x ...))
+        ((a (@@ (href-p ,proc) (update ,id) (options ,options) . ,rest) ,[x] ...)
+         (guard (and (string? id) (procedure? proc) (list? options)))
+         `(a (@@ (href "#")
+                (onclick
+                 ,(string-append
+                   "new Ajax.Updater('" id "', "
+                   "'" (forward/store! proc) "', "
+                   "{" (alist->lstring options ": " ", ") "});"
+                   "return false;"))
+                . ,rest) ,x ...))
+
+        ;; href-p + update (ajax)
+        ((form (@@ (href-p ,proc) (update ,id) . ,rest) ,[x] ...)
+@
+
+
+1.2.4.3
+log
+@moved ehtml transform functionality to separate sxml/ehtml module
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+d31 4
+a35 1
+(require-library 'sxml/ehtml)
+d37 2
+d47 3
+a50 1
+  (import sxml/ehtml)
+d52 2
+d56 1
+d58 1
+d84 1
+a84 2
+       (send-html response (ehtml->html request response page
+                                        (lambda (x) #f))))))
+d104 324
+@
+
+
+1.2.4.4
+log
+@removed extra string-io import
+@
+text
+@d40 1
+@
+
+
+1.2.4.5
+log
+@uses response/* functions instead of s2j methods
+@
+text
+@d39 2
+d45 11
+a55 3
+  (define (send-html page)
+    (response/set-content-type! "text/html")
+    (response/write (sxml->string page)))
+d61 6
+a66 3
+       (send-html
+        (ehtml->html request response (page-proc k-url)
+                     resume-k)))))
+d72 2
+a73 3
+       (send-html
+        (ehtml->html request response page
+                     (lambda (x) #f))))))
+d79 6
+a84 3
+       (send-html
+        (ehtml->html request response (page-proc k-url)
+                     resume-k)))))
+d90 1
+a90 3
+       (send-html
+        (ehtml->html request response page
+                     (lambda (x) #f))))))
+@
+
+
+1.2.4.6
+log
+@send-*/* functions now accept an assoc list of HTTP headers
+@
+text
+@a30 2
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+
+a38 2
+  (import srfi-16)
+
+d43 3
+a46 5
+  (define (send-html header-alst page)
+    (when (not (assoc "Content-Type" header-alst))
+      (response/set-content-type! "text/html"))
+    (response/add-headers! header-alst)
+    (response/write (sxml->string page)))
+d48 31
+a78 47
+  (define send-html/back
+    (case-lambda
+      ((page)
+       (send-html/back '() page))
+      ((header-alst page)
+       (send/back
+        (lambda (request response)
+          (send-html
+           header-alst
+           (ehtml->html request response page
+                        (lambda (x) #f))))))))
+
+  (define send-html/finish
+    (case-lambda
+      ((page)
+       (send-html/finish '() page))
+      ((header-alst page)
+       (send/finish
+        (lambda (request response)
+          (send-html
+           header-alst
+           (ehtml->html request response page
+                        (lambda (x) #f))))))))
+
+  (define send-html/suspend
+    (case-lambda
+      ((page-proc)
+       (send-html/suspend '() page-proc))
+      ((header-alst page-proc)
+       (send/suspend
+        (lambda (request response k-url resume-k)
+          (send-html
+           header-alst
+           (ehtml->html request response (page-proc k-url)
+                        resume-k)))))))
+
+  (define send-html/forward
+    (case-lambda
+      ((page-proc)
+       (send-html/forward '() page-proc))
+      ((header-alst page-proc)
+       (send/forward
+        (lambda (request response k-url resume-k)
+          (send-html
+           header-alst
+           (ehtml->html request response (page-proc k-url)
+                        resume-k)))))))
+@
+
+
+1.2.4.7
+log
+@adapted to response/send, and send functions look up request/response on their own,
+instead of needing them passed as parameters
+@
+text
+@d60 1
+a60 1
+        (lambda ()
+d63 2
+a64 1
+           (ehtml->html page (lambda (x) #f))))))))
+d72 1
+a72 1
+        (lambda ()
+d75 2
+a76 1
+           (ehtml->html page (lambda (x) #f))))))))
+d84 1
+a84 1
+        (lambda (k-url resume-k)
+d87 2
+a88 1
+           (ehtml->html (page-proc k-url) resume-k)))))))
+d96 1
+a96 1
+        (lambda (k-url resume-k)
+d99 2
+a100 1
+           (ehtml->html (page-proc k-url) resume-k)))))))
+@
+
+
+1.2.4.8
+log
+@was still using response/write instead of writing to response port
+@
+text
+@d52 1
+a52 2
+    (display (sxml->string page)
+             (response/get-output-port)))
+@
+
+
+1.2.4.9
+log
+@adapted to response api
+@
+text
+@d53 1
+a53 1
+             (response/open-output-port)))
+@
+
+
+1.2.4.10
+log
+@refactoring: request/response are now just wrappers, with send/*
+functions now in contcentric; moved many s2j calls to
+request/response/session objects
+@
+text
+@a32 1
+(require-library 'siscweb/contcentric)
+a42 1
+  (import siscweb/contcentric)
+d98 2
+@
+
+
+1.1
+log
+@file html.scm was initially added on branch rel-0-3-dev.
+@
+text
+@d1 403
+@
+
+
+1.1.2.1
+log
+@moved from siscweb root to opt/sxml
+@
+text
+@a0 403
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'siscweb/bindings)
+(require-library 'siscweb/forward)
+(require-library 'siscweb/graphviz)
+(require-library 'siscweb/response)
+(require-library 'sxml/markup)
+(require-library 'sxml/sxml-match)
+
+(module siscweb/html
+  (send-html/suspend send-html/finish
+   send-html/forward send-html/back)
+
+  (import s2j)
+  (import string-io)
+
+  (import siscweb/bindings)
+  (import siscweb/forward)
+  (import siscweb/graphviz)
+  (import siscweb/response)
+  (import sxml/markup)
+  (import sxml-matcher)
+
+  (define-generic-java-methods
+    get-context-path
+    get-writer
+    (jencode-url |encodeURL|)
+    set-content-type
+    write)
+
+
+  (define (send-html response page)
+    (set-content-type response (->jstring "text/html"))
+    (write (get-writer response)
+           (->jstring
+            (sxml->string page))))
+
+
+  (define (send-html/suspend page-proc)
+    (send/suspend
+     (lambda (request response k-url resume-k)
+       (send-html response
+                  (ehtml->html
+                   request
+                   response
+                   (page-proc k-url)
+                   resume-k)))))
+
+
+  (define (send-html/finish page)
+    (send/finish
+     (lambda (request response)
+       (send-html response (ehtml->html request response page (lambda (x) #f))))))
+
+
+  (define (send-html/forward page-proc)
+    (send/forward
+     (lambda (request response k-url resume-k)
+       (send-html response
+                  (ehtml->html
+                   request
+                   response
+                   (page-proc k-url)
+                   resume-k)))))
+
+
+  (define (send-html/back page)
+    (send/back
+     (lambda (request response)
+       (send-html response (ehtml->html request response page (lambda (x) #f))))))
+
+
+  (define (ehtml->html request response html resume-k)
+    (define (encode-url url)
+      (->string (jencode-url response (->jstring url))))
+
+    (define (make-graphviz layout id fmt attrs graph)
+      (define (make-graph-dispatcher)
+        (forward/store!
+         (lambda (request)
+           (set! request #f)
+           (send-graphviz/back layout fmt graph))))
+
+      (define (make-image-map)
+        (with/fc
+         (lambda (m e) #f)
+         (lambda ()
+           `(div
+             (verbatim ,(with-output-to-string
+                            (lambda ()
+                              (graphviz/write layout "cmapx" graph))))
+             (img (@@ (src ,(make-graph-dispatcher))
+                     (border 0)
+                     (type ,(graphviz/get-mime-type fmt))
+                     (usemap ,(string-append "#" id)) . ,attrs))))))
+
+      (define (make-object)
+        `(object (@@ (data ,(make-graph-dispatcher)) (type ,(graphviz/get-mime-type fmt)) . ,attrs)))
+
+      (if (member fmt '("gif" "jpg" "png"))
+          (make-image-map)
+          (make-object)))
+
+    (define (make-context-url url)
+      (encode-url (string-append (->string (get-context-path request))
+                     url)))
+
+    (define (T html)
+      (import sxml-accessors)
+
+      (define (xml-element? elt)
+        (and (pair? elt)
+             (symbol? (car elt))))
+
+      (sxml-match html
+        ;; href-p + bindings
+        ((a (@@ (href-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(a (@@ (href ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((link (@@ (href-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(link (@@ (href ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((form (@@ (action-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(form (@@ (action ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((img (@@ (src-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(img (@@ (src ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((script (@@ (src-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(script (@@ (src ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((object (@@ (data-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(object (@@ (data ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((iframe (@@ (src-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(iframe (@@ (src ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((node (@@ (href-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(node (@@ (href ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((edge (@@ (href-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(edge (@@ (href ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((record (@@ (href-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(record (@@ (href ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+
+        ;; href-c + bindings
+        ((a (@@ (href-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(a (@@ (href ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((link (@@ (href-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(link (@@ (href ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((form (@@ (action-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(form (@@ (action ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((img (@@ (src-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(img (@@ (src ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((script (@@ (src-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(script (@@ (src ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((object (@@ (data-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(object (@@ (data ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((iframe (@@ (src-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(iframe (@@ (src ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((node (@@ (href-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(node (@@ (href ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((edge (@@ (href-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(edge (@@ (href ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((record (@@ (href-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(record (@@ (href ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+
+        ;; bindings to resume-k
+        ((a (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(a (@@ (href ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((link (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(link (@@ (href ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((form (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(form (@@ (action ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((img (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(img (@@ (src ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((script (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(script (@@ (src ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((object (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(object (@@ (data ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((iframe (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(iframe (@@ (src ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((node (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(node (@@ (href ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((edge (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(edge (@@ (href ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((record (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(record (@@ (href ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+
+        ;; href-p
+        ((a (@@ (href-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(a (@@ (href ,(forward/store! proc)) . ,rest)
+             ,x ...))
+        ((link (@@ (href-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(link (@@ (href ,(forward/store! proc)) . ,rest)
+             ,x ...))
+        ((form (@@ (action-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(form (@@ (action ,(forward/store! proc)) . ,rest)
+             ,x ...))
+        ((img (@@ (src-p ,proc) . ,rest))
+         (guard (procedure? proc))
+         `(img (@@ (src ,(forward/store! proc)) . ,rest)))
+        ((script (@@ (src-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(script (@@ (src ,(forward/store! proc)) . ,rest)
+             ,x ...))
+        ((object (@@ (data-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(object (@@ (data ,(forward/store! proc)) . ,rest)
+             ,x ...))
+        ((iframe (@@ (src-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(iframe (@@ (src ,(forward/store! proc)) . ,rest)
+             ,x ...))
+        ((node (@@ (href-p ,proc) . ,rest))
+         (guard (procedure? proc))
+         `(node (@@ (href ,(forward/store! proc)) . ,rest)))
+        ((edge (@@ (href-p ,proc) . ,rest))
+         (guard (procedure? proc))
+         `(edge (@@ (href ,(forward/store! proc)) . ,rest)))
+        ((record (@@ (href-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(record (@@ (href ,(forward/store! proc)) . ,rest)
+             ,x ...))
+
+        ;; href-e
+        ((a (@@ (href-e ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(a (@@ (href ,(encode-url url)) . ,rest) ,x ...))
+        ((link (@@ (href-e ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(link (@@ (href ,(encode-url url)) . ,rest) ,x ...))
+        ((form (@@ (action-e ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(form (@@ (action ,(encode-url url)) . ,rest) ,x ...))
+        ((img (@@ (src-e ,url) . ,rest))
+         (guard (string? url))
+         `(img (@@ (src ,(encode-url url)) . ,rest)))
+        ((script (@@ (src-e ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(script (@@ (src ,(encode-url url)) . ,rest) ,x ...))
+        ((object (@@ (data-e ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(object (@@ (data ,(encode-url url)) . ,rest) ,x ...))
+        ((iframe (@@ (src-e ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(iframe (@@ (src ,(encode-url url)) . ,rest) ,x ...))
+        ((node (@@ (href-e ,url) . ,rest))
+         (guard (string? url))
+         `(node (@@ (href ,(encode-url url)) . ,rest)))
+        ((edge (@@ (href-e ,url) . ,rest))
+         (guard (string? url))
+         `(edge (@@ (href ,(encode-url url)) . ,rest)))
+        ((record (@@ (href-e ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(record (@@ (href ,(encode-url url)) . ,rest) ,x ...))
+
+        ;; href-c
+        ((a (@@ (href-c ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(a (@@ (href ,(make-context-url url)) . ,rest) ,x ...))
+        ((link (@@ (href-c ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(link (@@ (href ,(make-context-url url)) . ,rest) ,x ...))
+        ((form (@@ (action-c ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(form (@@ (action ,(make-context-url url)) . ,rest) ,x ...))
+        ((img (@@ (src-c ,url) . ,rest))
+         (guard (string? url))
+         `(img (@@ (src ,(make-context-url url)) . ,rest)))
+        ((script (@@ (src-c ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(script (@@ (src ,(make-context-url url)) . ,rest) ,x ...))
+        ((object (@@ (data-c ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(object (@@ (data ,(make-context-url url)) . ,rest) ,x ...))
+        ((iframe (@@ (src-c ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(iframe (@@ (src ,(make-context-url url)) . ,rest) ,x ...))
+        ((node (@@ (href-c ,url) . ,rest))
+         (guard (string? url))
+         `(node (@@ (href ,(make-context-url url)) . ,rest)))
+        ((edge (@@ (href-c ,url) . ,rest))
+         (guard (string? url))
+         `(edge (@@ (href ,(make-context-url url)) . ,rest)))
+        ((record (@@ (href-c ,url) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(record (@@ (href ,(make-context-url url)) . ,rest) ,x ...))
+
+        ;; graphviz object
+        ((object (@@ (type "graphviz") (layout ,layout) (format ,fmt) . ,obj-attrs) (graph (@@ (id ,id) . ,attrs) ,[x] ...))
+         (make-graphviz layout id fmt obj-attrs `(graph (@@ (id ,id) . ,attrs) ,x ...)))
+
+        ;; ajax experimentation
+        ((form (@@ (update ,id) (procedure ,proc) . ,rest) ,[x] ...)
+         (guard (and (string? id) (procedure? proc)))
+         `(form (@@ (onsubmit
+                    ,(string-append
+                      "new Ajax.Updater('" id "', "
+                      "'" (forward/store! proc) "', {});"
+                      "return false;"))
+                   . ,rest) ,x ...))
+        ((a (@@ (update ,id) (procedure ,proc) . ,rest) ,[x] ...)
+         (guard (and (string? id) (procedure? proc)))
+         `(form (@@ (onsubmit
+                    ,(string-append
+                      "new Ajax.Updater('" id "', "
+                      "'" (forward/store! proc) "', {});"
+                      "return false;"))
+                   . ,rest) ,x ...))
+
+
+        ;; everything that looks like an element, recur over
+        (,elt (guard (xml-element? elt))
+              `(,(xml-element-tag elt) (@@ ,@@(xml-element-attributes elt))
+                ,@@(map T (xml-element-contents elt))))
+
+        ;; numbers, strings, symbols will be left untouched
+        (,nss (guard (or (string? nss) (symbol? nss) (number? nss))) nss)
+
+        ;; #f is converted to the empty string
+        (,false (guard (not false)) "")
+
+        ;; anything else is pretty-printed
+        (,any (with-output-to-string (lambda () (pretty-print any))))))
+
+    (T html))
+
+  )
+@
+
+
+1.1.2.2
+log
+@renamed verbatim element -> *VERBATIM*
+@
+text
+@d118 1
+a118 1
+             (*VERBATIM* ,(with-output-to-string
+@
+
+

@@ -1,0 +1,838 @@
+head	1.1;
+access;
+symbols
+	rel-0-3-dev-1:1.1.2.9
+	rel-0-2-fix-2:1.1.4.2
+	rel-0-2-fix-1:1.1.4.2
+	rel-0-2-fix:1.1.0.4
+	rel-0-3-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2005.07.03.22.09.26;	author acolomba;	state dead;
+branches
+	1.1.2.1
+	1.1.4.1;
+next	;
+
+1.1.2.1
+date	2005.07.03.22.09.26;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.07.04.15.56.03;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2005.07.04.21.58.26;	author acolomba;	state Exp;
+branches;
+next	1.1.2.4;
+
+1.1.2.4
+date	2005.07.05.04.10.16;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5;
+
+1.1.2.5
+date	2005.07.05.04.51.30;	author acolomba;	state Exp;
+branches;
+next	1.1.2.6;
+
+1.1.2.6
+date	2005.07.06.03.14.17;	author acolomba;	state Exp;
+branches;
+next	1.1.2.7;
+
+1.1.2.7
+date	2005.07.09.17.07.54;	author acolomba;	state Exp;
+branches;
+next	1.1.2.8;
+
+1.1.2.8
+date	2005.07.10.02.52.45;	author acolomba;	state Exp;
+branches;
+next	1.1.2.9;
+
+1.1.2.9
+date	2005.07.19.03.06.00;	author acolomba;	state Exp;
+branches;
+next	1.1.2.10;
+
+1.1.2.10
+date	2005.11.20.18.44.01;	author acolomba;	state dead;
+branches;
+next	;
+
+1.1.4.1
+date	2005.07.03.22.09.26;	author acolomba;	state dead;
+branches;
+next	1.1.4.2;
+
+1.1.4.2
+date	2005.07.10.20.04.00;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@file graphviz.scm was initially added on branch rel-0-3-dev.
+@
+text
+@@
+
+
+1.1.4.1
+log
+@file graphviz.scm was added on branch rel-0-2-fix on 2005-07-10 20:04:00 +0000
+@
+text
+@@
+
+
+1.1.4.2
+log
+@merged from rel-0-3-dev
+@
+text
+@a0 198
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'io/servlet-io)
+(require-library 'siscweb/response)
+(require-library 'sxml/dotml)
+(require-library 'util/misc)
+
+
+(module siscweb/graphviz
+  (send-graphviz/back send-graphviz/finish
+   graphviz/put-layout-command! graphviz/get-layout-command
+   graphviz/put-mime-type! graphviz/get-mime-type
+   graphviz/write-dot graphviz/write)
+
+  (import s2j)
+  (import buffers)
+  (import hashtable)
+  (import oo)
+  (import os)
+  (import string-io)
+  (import threading)
+  (import type-system)
+
+  (import srfi-1)
+
+  (import io/servlet-io)
+  (import siscweb/bindings)
+  (import siscweb/contcentric)
+  (import siscweb/k-hash)
+  (import siscweb/response)
+  (import sxml/dotml)
+  (import util/misc)
+
+
+  (define-generic-java-methods
+    get-context-path
+    get-writer
+    (jencode-url |encodeURL|)
+    (get-request-uri |getRequestURI|)
+    set-attribute
+    set-content-type
+    write)
+
+  (define (graphviz/write-dot layout fmt graph . options)
+    (let ((layout-command (graphviz/get-layout-command layout))
+          (exists-format? (graphviz/get-mime-type fmt)))
+      (when (not layout-command)
+        (error (string-append
+                "siscweb/graphviz: Unknown layout : \""
+                layout
+                "\"")))
+      (when (not exists-format?)
+        (error (string-append
+                "siscweb/graphviz: Unknown format : \""
+                fmt
+                "\"")))
+      (run layout-command
+           (cons (string-append "-T" fmt) options)
+           graph
+           (current-output-port))))
+
+
+  (define (run program options input-string out)
+    (define (copy-binary in out)
+      (define (C buf)
+        (define (CB)
+          (let ((cnt (read-block buf 0 1000 in)))
+            (when (not (eof-object? cnt))
+              (write-block buf 0 cnt out)
+              (CB))))
+        (CB))
+      (let ((buf (make-buffer 5000)))
+        (C buf)))
+
+    (define (copy in out)
+      (define (C)
+        (let ((chr (read-char in)))
+          (when (not (eof-object? chr))
+            (write-char chr out)
+            (C))))
+      (C))
+
+    (let* ((ps (spawn-process program options))
+           (ps-in (get-process-stdin ps))
+           (ps-out (get-process-stdout ps))
+           (ps-err (get-process-stderr ps)))
+      ;; 1. feeds input string into process stdin
+      (thread/spawn
+       (lambda ()
+         (dynamic-wind
+             (lambda () #f)
+             (lambda () (display input-string ps-in))
+             (lambda () (close-output-port ps-in)))))
+      ;; 2. copies process stdout to out
+      (if (binary-output-port? out)
+          (copy-binary ps-out out)
+          (copy ps-out out))
+      (flush-output-port out)
+
+      ;; 3. gets return code and error if nonzero (this may be a bit
+      ;; extreme)
+      (let ((rc (wait-for-process ps)))
+         (if (= 0 rc)
+             rc
+             (error
+              (with-output-to-string
+                (lambda ()
+                  (copy ps-err (current-output-port)))))))))
+
+
+  (define (graphviz/write layout fmt dotml)
+    (graphviz/write-dot layout fmt (dotml->dot dotml)))
+
+  (define (graphviz/send response layout fmt dotml)
+    (set-content-type response (->jstring (graphviz/get-mime-type fmt)))
+    (with-output-to-port
+        (open-servlet-output response)
+      (lambda ()
+        (graphviz/write layout fmt dotml))))
+
+  (define (send-graphviz/back layout fmt dotml)
+    (send/back
+     (lambda (request response)
+       (graphviz/send response layout fmt dotml))))
+
+  (define (send-graphviz/finish layout fmt dotml)
+    (send/finish
+     (lambda (request response)
+       (graphviz/send response layout fmt dotml))))
+
+
+  ;; get/set associations between layout and commands
+  (define (graphviz/put-layout-command! layout command)
+    (hashtable/put! layout-table layout command))
+
+  (define (graphviz/get-layout-command layout)
+    (hashtable/get layout-table layout))
+
+  ;; mime map table
+  (define (graphviz/put-mime-type! fmt mime-type)
+    (hashtable/put! mime-type-table fmt mime-type))
+
+  (define (graphviz/get-mime-type fmt)
+    (hashtable/get mime-type-table fmt))
+
+  (define layout-table
+    (alist->hashtable
+     `(("dot" . "dot")
+       ("neato" . "neato")
+       ("twopi" . "twopi")
+       ("circo" . "circo")
+       ("fdp" . "fdp"))
+     equal? #f))
+
+  (define mime-type-table
+    (alist->hashtable
+     '(("cmapx" . "text/html")
+       ("fig" . "application/x-xfig")
+       ("gif" . "image/gif")
+       ("hpgl" . "application/vnd.hp-HPGL")
+       ("jpg" . "image/jpeg")
+       ("mif" . "application/vnd.mif")
+       ("pcl" . "application/vnd.hp-PCL")
+       ("png" . "image/png")
+       ("ps" . "application/postscript")
+       ("svg" . "image/svg+xml"))
+     equal? #f))
+
+  )
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 140
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'io/servlet-io)
+(require-library 'siscweb/response)
+(require-library 'util/misc)
+
+
+(module siscweb/graphviz
+  (send-dot/back write-dot)
+
+  (import s2j)
+  (import buffers)
+  (import hashtable)
+  (import oo)
+  (import os)
+  (import string-io)
+  (import threading)
+  (import type-system)
+
+  (import srfi-1)
+
+  (import io/servlet-io)
+  (import siscweb/bindings)
+  (import siscweb/contcentric)
+  (import siscweb/k-hash)
+  (import siscweb/response)
+  (import util/misc)
+
+
+  (define-generic-java-methods
+    get-context-path
+    get-writer
+    (jencode-url |encodeURL|)
+    (get-request-uri |getRequestURI|)
+    set-attribute
+    set-content-type
+    write)
+
+
+
+  (define (write-dot type graph . dot-options)
+    (define (copy-binary in out)
+      (define (C buf)
+        (define (CB)
+          (let ((cnt (read-block buf 0 1000 in)))
+            (when (not (eof-object? cnt))
+              (write-block buf 0 cnt out)
+              (CB))))
+        (CB))
+      (let ((buf (make-buffer 1000)))
+        (C buf)))
+
+    (define (copy in out)
+      (define (C)
+        (let ((chr (read-char in)))
+          (when (not (eof-object? chr))
+            (write-char chr out)
+            (C))))
+      (C))
+
+    (let* ((dot-ps (spawn-process "dot" (cons (string-append "-T" (symbol->string type)) dot-options)))
+           (dot-ps-in (get-process-stdin dot-ps))
+           (dot-ps-out (get-process-stdout dot-ps))
+           (dot-ps-err (get-process-stderr dot-ps)))
+      ;; 1. feed graph to dot process
+      (thread/spawn
+       (lambda ()
+         (dynamic-wind
+             (lambda () #f)
+             (lambda () (display graph dot-ps-in))
+             (lambda () (close-output-port dot-ps-in)))))
+      ;; 2. copy output from dot process to response out
+      (copy dot-ps-out (current-output-port))
+      (flush-output-port (current-output-port))
+
+      ;; 3. wait for completion
+      (let ((rc (wait-for-process dot-ps)))
+         (if (= 0 rc)
+             rc
+             (error
+              (with-output-to-string
+                (lambda ()
+                  (copy dot-ps-err (current-output-port)))))))))
+
+
+
+  (define (send-dot response type graph)
+    (set-content-type response (->jstring (hashtable/get mime-type-table type)))
+
+    (with-output-to-port
+        (open-servlet-output response)
+      (lambda ()
+        (write-dot type graph))))
+
+  (define (send-dot/back type graph)
+    (send/back
+     (lambda (request response)
+       (send-dot response type graph))))
+
+  (define mime-type-table
+    (alist->hashtable
+     '((png . "image/png")
+       (ps . "application/postscript")
+       (svg . "image/svg+xml")
+       (fig . "application/x-xfig")
+       (mif . "application/vnd.mif")
+       (hpgl . "application/vnd.hp-HPGL")
+       (pcl . "application/vnd.hp-PCL")
+       (jpg . "image/jpeg")
+       (gif . "image/gif"))))
+  )
+@
+
+
+1.1.2.2
+log
+@now uses block io if writing graph to a binary port; added low-level
+graph write and send procedures; added neato support; support for
+altering path of dot/neato programs; some modularization and cleanup
+@
+text
+@d38 1
+a38 2
+  (send-dot/back send-neato/back
+   graphviz/send-back graphviz/write)
+a67 5
+  (define (graphviz/write program-key type graph . options)
+    (run (graphviz/get-program program-key)
+         (cons (string-append "-T" (symbol->string type)) options)
+         graph
+         (current-output-port)))
+d70 1
+a70 1
+  (define (run program options input-string out)
+d79 1
+a79 1
+      (let ((buf (make-buffer 5000)))
+d90 1
+a90 1
+    (let* ((dot-ps (spawn-process program options))
+d99 1
+a99 1
+             (lambda () (display input-string dot-ps-in))
+d102 1
+a102 3
+      (if (binary-output-port? out)
+          (copy-binary dot-ps-out out)
+          (copy dot-ps-out out))
+d116 1
+a116 1
+  (define (graphviz/send response program-key type graph)
+d118 1
+d122 1
+a122 1
+        (graphviz/write program-key type graph))))
+d124 1
+a124 1
+  (define (graphviz/send-back program-key type graph)
+d127 1
+a127 21
+       (graphviz/send response program-key type graph))))
+
+  (define (send-dot/back type graph)
+    (graphviz/send-back 'dot type graph))
+
+  (define (send-neato/back type graph)
+    (graphviz/send-back 'neato type graph))
+
+
+  ;; get/set programs for dot/neato so that one
+  ;; may specify, if needed, absolute paths
+  (define (graphviz/set-program! key program)
+    (hashtable/put! program-table key program))
+
+  (define (graphviz/get-program key)
+    (hashtable/get program-table key))
+
+  (define program-table
+    (alist->hashtable
+     `((dot . "dot")
+       (neato . "neato"))))
+@
+
+
+1.1.2.3
+log
+@added support for dotml notation
+@
+text
+@a33 1
+(require-library 'sxml/dotml)
+d39 1
+a39 1
+   graphviz/send-back graphviz/write graphviz/dotml-write)
+a56 1
+  (import sxml/dotml)
+a122 2
+  (define (graphviz/dotml-write program-key type graph)
+    (graphviz/write program-key type (dotml->dot graph)))
+d129 1
+a129 1
+        (graphviz/dotml-write program-key type graph))))
+@
+
+
+1.1.2.4
+log
+@more naming fixes
+@
+text
+@d40 1
+a40 1
+   graphviz/send-back graphviz/write-dot graphviz/write)
+d71 1
+a71 1
+  (define (graphviz/write-dot program-key type graph . options)
+d98 5
+a102 5
+    (let* ((ps (spawn-process program options))
+           (ps-in (get-process-stdin ps))
+           (ps-out (get-process-stdout ps))
+           (ps-err (get-process-stderr ps)))
+      ;; 1. feeds input string into process stdin
+d107 3
+a109 3
+             (lambda () (display input-string ps-in))
+             (lambda () (close-output-port ps-in)))))
+      ;; 2. copies process stdout to out
+d111 6
+a116 7
+          (copy-binary ps-out out)
+          (copy ps-out out))
+      (flush-output-port out)
+
+      ;; 3. gets return code and error if nonzero (this may be a bit
+      ;; extreme)
+      (let ((rc (wait-for-process ps)))
+d122 1
+a122 1
+                  (copy ps-err (current-output-port)))))))))
+d125 2
+a126 2
+  (define (graphviz/write program-key type dotml)
+    (graphviz/write-dot program-key type (dotml->dot dotml)))
+d128 1
+a128 1
+  (define (graphviz/send response program-key type dotml)
+d133 1
+a133 1
+        (graphviz/write program-key type dotml))))
+d135 1
+a135 1
+  (define (graphviz/send-back program-key type dotml)
+d138 1
+a138 1
+       (graphviz/send response program-key type dotml))))
+d140 2
+a141 2
+  (define (send-dot/back type dotml)
+    (graphviz/send-back 'dot type dotml))
+d143 2
+a144 2
+  (define (send-neato/back type dotml)
+    (graphviz/send-back 'neato type dotml))
+@
+
+
+1.1.2.5
+log
+@added twopi, circo, fdp graph programs; more rename frenzy
+@
+text
+@d39 2
+a40 2
+  (send-dot/back send-neato/back send-twopi/back send-circo/back send-fdp/back
+   graphviz/send-back graphviz/write-dot graphviz/write graphviz/get-mime-type)
+d71 3
+a73 3
+  (define (graphviz/write-dot pgm fmt graph . options)
+    (run (graphviz/get-pgm pgm)
+         (cons (string-append "-T" (symbol->string fmt)) options)
+d126 2
+a127 2
+  (define (graphviz/write pgm fmt dotml)
+    (graphviz/write-dot pgm fmt (dotml->dot dotml)))
+d129 2
+a130 2
+  (define (graphviz/send response pgm fmt dotml)
+    (set-content-type response (->jstring (graphviz/get-mime-type fmt)))
+d134 1
+a134 1
+        (graphviz/write pgm fmt dotml))))
+d136 1
+a136 1
+  (define (graphviz/send-back pgm fmt dotml)
+d139 1
+a139 1
+       (graphviz/send response pgm fmt dotml))))
+d141 2
+a142 2
+  (define (send-dot/back fmt dotml)
+    (graphviz/send-back 'dot fmt dotml))
+d144 2
+a145 11
+  (define (send-neato/back fmt dotml)
+    (graphviz/send-back 'neato fmt dotml))
+
+  (define (send-twopi/back fmt dotml)
+    (graphviz/send-back 'twopi fmt dotml))
+
+  (define (send-circo/back fmt dotml)
+    (graphviz/send-back 'circo fmt dotml))
+
+  (define (send-fdp/back fmt dotml)
+    (graphviz/send-back 'fdp fmt dotml))
+d150 2
+a151 5
+  (define (graphviz/set-pgm! pgm command)
+    (hashtable/put! pgm-table pgm command))
+
+  (define (graphviz/get-pgm pgm)
+    (hashtable/get pgm-table pgm))
+d153 2
+a154 2
+  (define (graphviz/get-mime-type fmt)
+    (hashtable/get mime-type-table fmt))
+d156 1
+a156 1
+  (define pgm-table
+d159 1
+a159 4
+       (neato . "neato")
+       (twopi . "twopi")
+       (circo . "circo")
+       (fdp . "fdp"))))
+@
+
+
+1.1.2.6
+log
+@removed send-*/* functions in favor of the two standard
+send-graphviz/[back|finish], which now accept the layout (dot, neato,
+...) as their first argument; now exports functions to add/modify commands associated to the different layouts as well as mime types associated to each particular format; more rename frenzy
+@
+text
+@d39 2
+a40 4
+  (send-graphviz/back send-graphviz/finish
+   graphviz/put-layout-command! graphviz/get-layout-command
+   graphviz/put-mime-type! graphviz/get-mime-type
+   graphviz/write-dot graphviz/write)
+d71 2
+a72 2
+  (define (graphviz/write-dot layout fmt graph . options)
+    (run (graphviz/get-layout-command layout)
+d126 2
+a127 2
+  (define (graphviz/write layout fmt dotml)
+    (graphviz/write-dot layout fmt (dotml->dot dotml)))
+d129 1
+a129 1
+  (define (graphviz/send response layout fmt dotml)
+d134 1
+a134 1
+        (graphviz/write layout fmt dotml))))
+d136 1
+a136 1
+  (define (send-graphviz/back layout fmt dotml)
+d139 1
+a139 1
+       (graphviz/send response layout fmt dotml))))
+d141 11
+a151 4
+  (define (send-graphviz/finish layout fmt dotml)
+    (send/finish
+     (lambda (request response)
+       (graphviz/send response layout fmt dotml))))
+d153 2
+a155 3
+  ;; get/set associations between layout and commands
+  (define (graphviz/put-layout-command! layout command)
+    (hashtable/put! layout-table layout command))
+d157 4
+a160 2
+  (define (graphviz/get-layout-command layout)
+    (hashtable/get layout-table layout))
+d162 2
+a163 3
+  ;; mime map table
+  (define (graphviz/put-mime-type! fmt mime-type)
+    (hashtable/put! mime-type-table fmt mime-type))
+d168 1
+a168 1
+  (define layout-table
+@
+
+
+1.1.2.7
+log
+@error checking for invalid layout and format parameters; reordered
+mime-type list
+@
+text
+@d74 4
+a77 16
+    (let ((layout-command (graphviz/get-layout-command layout))
+          (exists-format? (graphviz/get-mime-type fmt)))
+      (when (not layout-command)
+        (error (string-append
+                "siscweb/graphviz: Unknown layout : \""
+                (symbol->string layout)
+                "\"")))
+      (when (not exists-format?)
+        (error (string-append
+                "siscweb/graphviz: Unknown format : \""
+                (symbol->string fmt)
+                "\"")))
+      (run layout-command
+           (cons (string-append "-T" (symbol->string fmt)) options)
+           graph
+           (current-output-port))))
+d173 3
+a175 1
+     '((cmapx . "text/html")
+d177 1
+a177 1
+       (gif . "image/gif")
+d179 1
+d181 1
+a181 8
+       (mif . "application/vnd.mif")
+       (pcl . "application/vnd.hp-PCL")
+       (png . "image/png")
+       (ps . "application/postscript")
+       (svg . "image/svg+xml"))))
+
+
+
+@
+
+
+1.1.2.8
+log
+@id attributes are now strings, not symbols
+@
+text
+@d79 1
+a79 1
+                layout
+d84 1
+a84 1
+                fmt
+d87 1
+a87 1
+           (cons (string-append "-T" fmt) options)
+d177 5
+a181 6
+     `(("dot" . "dot")
+       ("neato" . "neato")
+       ("twopi" . "twopi")
+       ("circo" . "circo")
+       ("fdp" . "fdp"))
+     equal? #f))
+d185 12
+a196 11
+     '(("cmapx" . "text/html")
+       ("fig" . "application/x-xfig")
+       ("gif" . "image/gif")
+       ("hpgl" . "application/vnd.hp-HPGL")
+       ("jpg" . "image/jpeg")
+       ("mif" . "application/vnd.mif")
+       ("pcl" . "application/vnd.hp-PCL")
+       ("png" . "image/png")
+       ("ps" . "application/postscript")
+       ("svg" . "image/svg+xml"))
+     equal? #f))
+@
+
+
+1.1.2.9
+log
+@removed unnecessary (import siscweb/k-hash)
+@
+text
+@d58 1
+@
+
+
+1.1.2.10
+log
+@moved from siscweb root to opt/sxml
+@
+text
+@@
+
+

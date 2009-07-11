@@ -1,0 +1,809 @@
+head	1.4;
+access;
+symbols
+	rel-0-6-dev:1.4.0.4
+	rel-0-5-fix:1.4.0.2
+	rel-0-5:1.4
+	rel-0-5-dev-safe-frames:1.3.12.1.0.2
+	Root_rel-0-5-dev-safe-frames:1.3.12.1
+	rel-0-4-fix-0:1.3
+	rel-0-5-dev:1.3.0.12
+	rel-0-4-fix:1.3.0.10
+	rel-0-3-fix-3:1.3
+	rel-0-3-fix-2:1.3
+	rel-0-4-dev-sisc-1-11:1.3
+	rel-0-3-fix-1:1.3
+	rel-0-4-dev:1.3.0.8
+	rel-0-3-fix:1.3.0.6
+	rel-0-3:1.3
+	rel-0-3-dev-1:1.3
+	rel-0-2-fix-2:1.3
+	rel-0-2-fix-1:1.3
+	rel-0-2-fix:1.3.0.2
+	rel-0-3-dev:1.3.0.4
+	rel-0-2:1.3
+	rel-0-1-fix-1:1.2
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	start:1.1.1.1
+	rel-0-1-dev:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2007.04.12.03.51.18;	author acolomba;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2005.06.19.03.03.51;	author acolomba;	state Exp;
+branches
+	1.3.12.1;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.52;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches;
+next	1.1.1.2;
+
+1.1.1.2
+date	2005.02.17.01.08.27;	author acolomba;	state Exp;
+branches;
+next	1.1.1.3;
+
+1.1.1.3
+date	2005.03.12.17.27.26;	author acolomba;	state Exp;
+branches;
+next	1.1.1.4;
+
+1.1.1.4
+date	2005.03.24.03.07.28;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.05.22.20.12.28;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.12.1
+date	2007.03.22.03.01.35;	author acolomba;	state Exp;
+branches;
+next	1.3.12.2;
+
+1.3.12.2
+date	2007.03.30.16.06.22;	author dan-muresan;	state Exp;
+branches;
+next	1.3.12.3;
+
+1.3.12.3
+date	2007.04.02.02.17.06;	author acolomba;	state Exp;
+branches;
+next	1.3.12.4;
+
+1.3.12.4
+date	2007.04.02.03.14.48;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@merged from rel-0-5-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2007
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;     Dan Muresan
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+(require-library 'sisc/libs/srfi/srfi-1) ; list library
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+(require-library 'sisc/libs/srfi/srfi-69) ; basic hash tables
+
+(require-library 'util/misc)
+(require-library 'util/regexp)
+
+
+(module siscweb/publish
+  (published? get-published get-all-published
+   publish publish/regexp publish/wildcard publish-bulk
+   unpublish unpublish-all)
+
+  (import srfi-1)
+  (import srfi-16)
+  (import srfi-69)
+
+  (import util/misc)
+  (import util/regexp)
+
+
+  (define (published? path-info)
+    (and (get-published path-info) #t))
+
+
+  (define (publish/regexp regexp-pattern obj)
+    (publish regexp-pattern obj 'regexp))
+
+  (define (publish/wildcard wildcard-pattern obj)
+    (publish wildcard-pattern obj 'wildcard))
+
+  (define publish
+    (case-lambda
+      ((path-pattern obj)
+       (publish path-pattern obj 'wildcard))
+      ((path-pattern obj notation)
+       (let ((regexp-pattern (case notation
+                               ((wildcard)
+                                (wildcard->regexp path-pattern))
+                               (else
+                                path-pattern))))
+         (hash-table-set! mappings
+                          path-pattern
+                          (list regexp-pattern
+                                obj
+                                notation))))))
+
+  (define (unpublish path-pattern)
+    (hash-table-delete! mappings path-pattern))
+
+  ;; TODO: some memoization of the association between
+  ;;       path-info -> pattern key might be good here;
+  ;;       most path-info requests are going to be the same
+  (define (get-published path-info)
+    (define (find-published)
+      (let/cc escape-k
+        (hash-table-walk
+         mappings
+         (lambda (path-pattern regexp-obj-lst)
+           (when (regexp-match (car regexp-obj-lst) path-info)
+             (escape-k (cadr regexp-obj-lst)))))
+        #f))
+
+    (let ((obj (find-published)))
+      (cond ((procedure? obj) obj)
+            ((symbol? obj) (eval obj))
+            (else #f))))
+
+
+  (define (get-all-published)
+    (hash-table-fold
+     mappings
+     (lambda (path-pattern regexp-obj-lst acc)
+       (cons (cons path-pattern (cdr regexp-obj-lst)) acc))
+     '()))
+
+  (define (publish-bulk alist)
+    (for-each
+     (lambda (entry)
+       (apply publish entry))
+     alist))
+
+  (define (unpublish-all)
+    (set! mappings (make-hash-table string=?)))
+
+  (define (wildcard->regexp wildcard-pattern)
+
+    ;; the transforms to apply; order is important
+    (define transforms
+      (map (lambda (entry)
+             (cons (make-regexp (car entry)) (cdr entry)))
+             ;; 1. /a/* matches /a, /a/, /a/b, /a/b/c, etc.
+           '(("/\\*$" . "(/\\\\p{Graph}*)*")
+             ;; 2. /a/**/b matches /a/b, /a/c/b, /a/c/d/b, etc.
+             ("/\\*\\*/" . "(/[\\\\p{Alnum}-_\\$\\+\\,\\.\\!\\~\\*\\'\\(\\)]+)*/")
+             ;; 3. /a/*/b matches /a/c/b but not /a/b nor /a/c/d/b
+             ("/\\*/" . "(/[\\\\p{Alnum}-_\\$\\+\\,\\.\\!\\~\\*\\'\\(\\)]+){1}/"))))
+
+    (make-regexp
+     (format "^~a$"
+             (fold-right
+              (lambda (transform pattern)
+                (regexp-replace (car transform) pattern (cdr transform)))
+              wildcard-pattern
+              transforms))))
+
+  (define mappings (make-hash-table string=?))
+
+  )
+@
+
+
+1.3
+log
+@merged from rel-0-2-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+d18 1
+d32 4
+d39 1
+d41 7
+a47 5
+  (published? publish unpublish get-published get-all-published publish-bulk unpublish-all)
+
+  (import generic-procedures)
+  (import type-system)
+  (import hashtable)
+d54 1
+a54 1
+    (if (get-published path-info) #t #f))
+a55 1
+  (define-generic publish)
+d57 2
+a58 2
+  (define-method (publish (<string> path-pattern) (<procedure> proc))
+    (generic-publish path-pattern proc))
+d60 2
+a61 2
+  (define-method (publish (<string> path-pattern) (<symbol> sym))
+    (generic-publish path-pattern sym))
+d63 15
+a77 2
+  (define (generic-publish path-pattern obj)
+    (hashtable/put! mappings path-pattern (cons (wildcards->regexp path-pattern) obj)))
+d79 2
+a80 4
+  (define-generic unpublish)
+
+  (define-method (unpublish (<string> path-pattern))
+    (hashtable/remove! mappings path-pattern))
+d88 5
+a92 5
+        (hashtable/for-each
+         (lambda (path-pattern regexp-obj-pair)
+           (when (regexp-match (car regexp-obj-pair) path-info)
+             (escape-k (cdr regexp-obj-pair))))
+         mappings)
+d102 5
+a106 4
+    (hashtable/map
+     (lambda (path-pattern regexp-obj-pair)
+       (list path-pattern (cdr regexp-obj-pair)))
+     mappings))
+d109 4
+a112 3
+    (for-each (lambda (entry)
+               (publish (car entry) (cadr entry)))
+             alist))
+d115 1
+a115 1
+    (hashtable/clear! mappings))
+d117 1
+a117 1
+  (define (wildcards->regexp str)
+d122 3
+a124 3
+             `(,(make-regexp (car entry)) ,(cadr entry)))
+           ;; 1. /a/* matches /a, /a/, /a/b, /a/b/c, etc.
+           '(("/\\*$" "(/\\\\p{Graph}*)*")
+d126 1
+a126 1
+             ("/\\*\\*/" "(/[\\\\p{Alnum}-_\\\\.\\\\!\\\\~\\\\*\\\\'\\\\(\\\\)]+)*/")
+d128 1
+a128 9
+             ("/\\*/" "(/[\\\\p{Alnum}-_\\\\.\\\\!\\\\~\\\\*\\\\'\\\\(\\\\)]+){1}/"))))
+
+    (let loop ((str str)
+               (transforms transforms))
+      (if (null? transforms)
+          (make-regexp (string-append "^" str "$"))
+          (let ((t (car transforms)))
+            (loop (regexp-replace (car t) str (cadr t))
+                  (cdr transforms))))))
+d130 7
+d138 1
+a138 1
+  (define mappings (make-hashtable equal? #t)) ; thread-safe
+@
+
+
+1.3.12.1
+log
+@minor syntax change
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2007
+d46 1
+a46 1
+    (and (get-published path-info) #t))
+@
+
+
+1.3.12.2
+log
+@Added regexp extension to publish.
+@
+text
+@a17 1
+;;;     Dan Muresan
+d37 2
+d40 1
+a40 1
+  
+d44 1
+d46 6
+a51 1
+    (if (get-published path-info) #t #f))
+d53 2
+a54 4
+  (define (publish path-pattern obj . notation)
+    (set! notation (if (null? notation) 'servlet (car notation)))
+    (hashtable/put! mappings path-pattern
+                    (cons (wildcards->regexp path-pattern notation) obj)))
+d56 6
+a61 1
+  (define (unpublish path-pattern)
+d89 4
+a92 3
+  (define (publish-bulk alist . notation)
+    (for-each (lambda (entry) (apply publish `(,@@entry . ,notation)))
+              alist))
+d97 1
+a97 1
+  (define (wildcards->regexp str notation)
+d101 9
+a109 13
+      (case notation
+        ((servlet)
+         (map (lambda (entry)
+                `(,(make-regexp (car entry)) ,(cadr entry)))
+              ;; 1. /a/* matches /a, /a/, /a/b, /a/b/c, etc.
+              '(("/\\*$" "(/\\\\p{Graph}*)*")
+                ;; 2. /a/**/b matches /a/b, /a/c/b, /a/c/d/b, etc.
+                ("/\\*\\*/" "(/[\\\\p{Alnum}-_\\\\.\\\\!\\\\~\\\\*\\\\'\\\\(\\\\)]+)*/")
+                ;; 3. /a/*/b matches /a/c/b but not /a/b nor /a/c/d/b
+                ("/\\*/" "(/[\\\\p{Alnum}-_\\\\.\\\\!\\\\~\\\\*\\\\'\\\\(\\\\)]+){1}/"))))
+        ((regexp) '())
+        ))
+        
+@
+
+
+1.3.12.3
+log
+@uses srfi-16 case-lambda and srfi-69 hashtables
+@
+text
+@a31 3
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+(require-library 'sisc/libs/srfi/srfi-69) ; basic hash tables
+
+d38 2
+a39 3
+  (import srfi-16)
+  (import srfi-69)
+
+a42 1
+
+d44 1
+a44 1
+    (and (get-published path-info) #t))
+d46 4
+a49 7
+  (define publish
+    (case-lambda
+      ((path-pattern obj)
+       (publish path-pattern obj 'wildcard))
+      ((path-pattern obj notation)
+       (hash-table-set! mappings path-pattern
+                        (cons (wildcards->regexp path-pattern notation) obj)))))
+d52 1
+a52 1
+    (hash-table-delete! mappings path-pattern))
+d60 1
+a60 2
+        (hash-table-walk
+         mappings
+d63 2
+a64 1
+             (escape-k (cdr regexp-obj-pair)))))
+d74 4
+a77 5
+    (hash-table-fold
+     mappings
+     (lambda (path-pattern regexp-obj-pair acc)
+       (cons (list path-pattern (cdr regexp-obj-pair)) acc))
+     '()))
+d84 1
+a84 1
+    (set! mappings (make-hash-table string=?)))
+d91 1
+a91 1
+        ((wildcard)
+d102 1
+a102 1
+
+d112 1
+a112 1
+  (define mappings (make-hash-table string=?))
+@
+
+
+1.3.12.4
+log
+@wildcard->regexp now is rfc 1738-compliant; added publish/regexp,
+publish/wildcard; (publish-bulk (get-all-published)) now works again
+@
+text
+@a31 1
+(require-library 'sisc/libs/srfi/srfi-1) ; list library
+a37 1
+
+d39 1
+a39 3
+  (published? get-published get-all-published
+   publish publish/regexp publish/wildcard publish-bulk
+   unpublish unpublish-all)
+a40 1
+  (import srfi-1)
+a50 7
+
+  (define (publish/regexp regexp-pattern obj)
+    (publish regexp-pattern obj 'regexp))
+
+  (define (publish/wildcard wildcard-pattern obj)
+    (publish wildcard-pattern obj 'wildcard))
+
+d56 2
+a57 10
+       (let ((regexp-pattern (case notation
+                               ((wildcard)
+                                (wildcard->regexp path-pattern))
+                               (else
+                                path-pattern))))
+         (hash-table-set! mappings
+                          path-pattern
+                          (list regexp-pattern
+                                obj
+                                notation))))))
+d70 3
+a72 3
+         (lambda (path-pattern regexp-obj-lst)
+           (when (regexp-match (car regexp-obj-lst) path-info)
+             (escape-k (cadr regexp-obj-lst)))))
+d84 2
+a85 2
+     (lambda (path-pattern regexp-obj-lst acc)
+       (cons (cons path-pattern (cdr regexp-obj-lst)) acc))
+d88 3
+a90 5
+  (define (publish-bulk alist)
+    (for-each
+     (lambda (entry)
+       (apply publish entry))
+     alist))
+d95 1
+a95 1
+  (define (wildcard->regexp wildcard-pattern)
+d99 21
+a119 16
+      (map (lambda (entry)
+             (cons (make-regexp (car entry)) (cdr entry)))
+             ;; 1. /a/* matches /a, /a/, /a/b, /a/b/c, etc.
+           '(("/\\*$" . "(/\\\\p{Graph}*)*")
+             ;; 2. /a/**/b matches /a/b, /a/c/b, /a/c/d/b, etc.
+             ("/\\*\\*/" . "(/[\\\\p{Alnum}-_\\$\\+\\,\\.\\!\\~\\*\\'\\(\\)]+)*/")
+             ;; 3. /a/*/b matches /a/c/b but not /a/b nor /a/c/d/b
+             ("/\\*/" . "(/[\\\\p{Alnum}-_\\$\\+\\,\\.\\!\\~\\*\\'\\(\\)]+){1}/"))))
+
+    (make-regexp
+     (format "^~a$"
+             (fold-right
+              (lambda (transform pattern)
+                (regexp-replace (car transform) pattern (cdr transform)))
+              wildcard-pattern
+              transforms))))
+@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@d31 1
+a32 1
+(require-library 'siscweb/util)
+d40 2
+a43 1
+  (import siscweb/util)
+@
+
+
+1.2.4.1
+log
+@now uses renamed util/misc module
+@
+text
+@a30 1
+(require-library 'util/misc)
+d32 1
+a39 2
+
+  (import util/misc)
+d42 1
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d1 33
+d35 1
+a35 1
+  (published? publish unpublish get-published)
+d37 2
+d40 81
+a120 2
+  
+  (include "publish-inc.scm"))@
+
+
+1.1.1.1
+log
+@initial import
+@
+text
+@@
+
+
+1.1.1.2
+log
+@did away with the -inc business; i think it was a bad idea
+@
+text
+@a0 31
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+d5 2
+a6 17
+
+  (define (published? key)
+    (if (get-published key) #t #f))
+
+  (define (publish key function)
+    (hashtable/put! published-content key function))
+
+  (define (unpublish key)
+    (hashtable/remove! published-content key))
+
+  (define (get-published key)
+    (hashtable/get published-content key))
+
+
+  (define published-content (make-hashtable equal? #t)) ; #t = thread-safe
+
+  )@
+
+
+1.1.1.3
+log
+@now uses regexps and wildcards to match request path-info to code
+@
+text
+@a30 1
+(require-library 'util/regexp)
+d33 1
+a33 1
+  (published? publish unpublish get-published get-all-published publish-bulk)
+a34 2
+  (import generic-procedures)
+  (import type-system)
+a35 1
+  (import util/regexp)
+d37 2
+a38 2
+  (define (published? path-info)
+    (if (get-published path-info) #t #f))
+d40 2
+a41 69
+  ;; TODO: since java.util.Pattern (<regexp>) does not implement
+  ;;       the equals() method, using it as hashtable key is not
+  ;;       correct; this issue also makes unpublish ineffective
+  (define-generic publish)
+
+  (define-method (publish (<string> path-pattern) (<procedure> proc))
+    (generic-publish path-pattern proc))
+
+  (define-method (publish (<string> path-pattern) (<symbol> sym))
+    (generic-publish path-pattern sym))
+
+  (define (generic-publish path-pattern obj)
+    (hashtable/put! mappings (wildcards->regexp path-pattern) obj))
+
+  (define-generic unpublish)
+
+  (define-method (unpublish (<regexp> path-regexp))
+    (hashtable/remove! mappings path-regexp))
+
+  (define-method (unpublish (<string> path-regexp))
+    (hashtable/remove! mappings (make-regexp path-regexp)))
+
+  ;; TODO: some memoization of the association between
+  ;;       path-info -> pattern key might be good here;
+  ;;       most path-info requests are going to be the same
+  (define (get-published path-info)
+    (let loop ((url-regexps (hashtable/keys mappings)))
+      (if (null? url-regexps)
+          #f
+          (if (regexp-match (car url-regexps) path-info)
+              (let ((entry (hashtable/get mappings (car url-regexps))))
+                (cond ((procedure? entry) entry)
+                      ((symbol? entry) (eval entry))
+                      (else #f)))
+              (loop (cdr url-regexps))))))
+
+
+  (define (get-all-published)
+    (map (lambda (entry)
+           `(,(regexp->string (car entry))
+             ,(cdr entry)))
+         (hashtable->alist mappings)))
+
+  (define (publish-bulk alist)
+    (for-each (lambda (entry)
+               (publish (car entry) (cadr entry)))
+             alist))
+
+
+  (define (wildcards->regexp str)
+
+    ;; the transforms to apply; order is important
+    (define transforms
+      (map (lambda (entry)
+             `(,(make-regexp (car entry)) ,(cadr entry)))
+           ;; 1. /a/* matches /a, /a/, /a/b, /a/b/c, etc.
+           '(("/\\*$" "(/\\\\p{Graph}*)*")
+             ;; 2. /a/**/b matches /a/b, /a/c/b, /a/c/d/b, etc.
+             ("/\\*\\*/" "(/[\\\\p{Alnum}-_\\\\.\\\\!\\\\~\\\\*\\\\'\\\\(\\\\)]+)*/")
+             ;; 3. /a/*/b matches /a/c/b but not /a/b nor /a/c/d/b
+             ("/\\*/" "(/[\\\\p{Alnum}-_\\\\.\\\\!\\\\~\\\\*\\\\'\\\\(\\\\)]+){1}/"))))
+
+    (let loop ((str str)
+               (transforms transforms))
+      (if (null? transforms)
+          (make-regexp (string-append "^" str "$"))
+          (let ((t (car transforms)))
+            (loop (regexp-replace (car t) str (cadr t))
+                  (cdr transforms))))))
+d43 2
+d46 5
+a50 1
+  (define mappings (make-hashtable equal? #t)) ; #t = thread-safe
+@
+
+
+1.1.1.4
+log
+@fixed inability to republish/unpublish
+@
+text
+@a31 1
+(require-library 'siscweb/util)
+d34 1
+a34 1
+  (published? publish unpublish get-published get-all-published publish-bulk unpublish-all)
+a40 2
+  (import siscweb/util)
+
+d44 3
+d56 1
+a56 1
+    (hashtable/put! mappings path-pattern (cons (wildcards->regexp path-pattern) obj)))
+d60 5
+a64 2
+  (define-method (unpublish (<string> path-pattern))
+    (hashtable/remove! mappings path-pattern))
+d70 9
+a78 13
+    (define (find-published)
+      (let/cc escape-k
+        (hashtable/for-each
+         (lambda (path-pattern regexp-obj-pair)
+           (when (regexp-match (car regexp-obj-pair) path-info)
+             (escape-k (cdr regexp-obj-pair))))
+         mappings)
+        #f))
+
+    (let ((obj (find-published)))
+      (cond ((procedure? obj) obj)
+            ((symbol? obj) (eval obj))
+            (else #f))))
+d82 4
+a85 4
+    (hashtable/map
+     (lambda (path-pattern regexp-obj-pair)
+       (list path-pattern (cdr regexp-obj-pair)))
+     mappings))
+a91 2
+  (define (unpublish-all)
+    (hashtable/clear! mappings))
+d115 1
+a115 1
+  (define mappings (make-hashtable equal? #t)) ; thread-safe
+d117 1
+a117 1
+  )
+@
+
+

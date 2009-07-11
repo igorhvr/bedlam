@@ -1,0 +1,627 @@
+head	1.4;
+access;
+symbols
+	rel-0-6-dev:1.4.0.4
+	rel-0-5-fix:1.4.0.2
+	rel-0-5:1.4
+	rel-0-5-dev-safe-frames:1.3.4.1.0.2
+	Root_rel-0-5-dev-safe-frames:1.3.4.1
+	rel-0-4-fix-0:1.3
+	rel-0-5-dev:1.3.0.4
+	rel-0-4-fix:1.3.0.2
+	rel-0-3-fix-3:1.2.2.1
+	rel-0-3-fix-2:1.2.2.1
+	rel-0-4-dev-sisc-1-11:1.2.4.1
+	rel-0-3-fix-1:1.2
+	rel-0-4-dev:1.2.0.4
+	rel-0-3-fix:1.2.0.2
+	rel-0-3:1.2
+	rel-0-3-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2007.04.12.03.51.19;	author acolomba;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2006.09.03.01.42.22;	author acolomba;	state Exp;
+branches
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.10.24.03.43.50;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.10.24.03.43.50;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.11.23.02.26.20;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2005.11.23.02.29.07;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2006.02.25.17.12.01;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.11.30.03.44.43;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2006.06.17.12.58.05;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2006.07.08.02.30.19;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2006.07.08.21.37.02;	author acolomba;	state Exp;
+branches;
+next	1.2.4.5;
+
+1.2.4.5
+date	2006.07.28.03.04.01;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2007.01.08.01.28.38;	author acolomba;	state Exp;
+branches
+	1.3.4.1.2.1;
+next	1.3.4.2;
+
+1.3.4.2
+date	2007.04.01.23.55.26;	author acolomba;	state Exp;
+branches;
+next	1.3.4.3;
+
+1.3.4.3
+date	2007.04.07.04.30.03;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1.2.1
+date	2007.03.25.03.33.53;	author acolomba;	state Exp;
+branches;
+next	1.3.4.1.2.2;
+
+1.3.4.1.2.2
+date	2007.04.01.20.35.11;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@merged from rel-0-5-dev
+@
+text
+@/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005-2007
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+package siscweb.contcentric;
+
+import java.util.logging.Level;
+
+import javax.servlet.http.HttpSession;
+
+import sisc.data.Procedure;
+import siscweb.util.Logger;
+
+
+public interface ContinuationStore
+{
+    public abstract void store(final HttpSession session,
+                               final String groupId,
+                               final String closureId,
+                               final Procedure procedure,
+                               final long ttl,
+                               final Frame frame);
+
+    public abstract Procedure fetch(final HttpSession session,
+                                    final String continuationId);
+
+    public abstract void clear(final HttpSession session);
+
+    public abstract int purgeExpired();
+
+    public Frame getFrame(final HttpSession session, final String continuationId);
+
+    public class Factory
+    {
+        public static ContinuationStore create(final String className)
+        {
+            try {
+                final Class c = Class.forName(className);
+
+                if(Logger.logger.isLoggable(Level.INFO)) {
+                    Logger.logger.info("Instantiating class \"" + className + "\" for storing continuations.");
+                }
+
+                ContinuationStore continuationStore = (ContinuationStore) c.newInstance();
+
+
+                return continuationStore;
+            }
+            catch(final ClassNotFoundException cnfe)
+            {
+                if(Logger.logger.isLoggable(Level.SEVERE)) {
+                    Logger.logger.severe("Continuation store class \"" + className + "\" could not be located.");
+                }
+
+                throw new RuntimeException(cnfe);
+            }
+            catch(final IllegalAccessException iae)
+            {
+                if(Logger.logger.isLoggable(Level.SEVERE)) {
+                    Logger.logger.severe("Continuation store class \"" + className + "\" or its nullary constructor is not accessible.");
+                }
+
+                throw new RuntimeException(iae);
+            }
+            catch(final InstantiationException ie)
+            {
+                if(Logger.logger.isLoggable(Level.SEVERE)) {
+                    Logger.logger.severe("Continuation store class \"" + className + "\" could not be instantiated.");
+                }
+
+                throw new RuntimeException(ie);
+            }
+        }
+    }
+}
+@
+
+
+1.3
+log
+@merged from rel-0-4-dev
+@
+text
+@d17 1
+a17 1
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005
+d52 2
+a53 1
+                               final long ttl);
+d62 1
+a62 9
+    class Singleton
+    {
+        static ContinuationStore instance;
+
+        public static ContinuationStore getInstance()
+        {
+            return instance;
+        }
+    }
+d66 1
+a66 1
+        public static synchronized ContinuationStore create(String className)
+a70 2
+                Singleton.instance = (ContinuationStore) c.newInstance();
+
+d75 4
+a78 1
+                return Singleton.instance;
+@
+
+
+1.3.4.1
+log
+@continuationstore is now local to the servlet context, not the
+static scope (i.e. zapped the singleton)
+@
+text
+@d61 10
+d73 1
+a73 1
+        public static synchronized ContinuationStore create(final String className)
+d78 2
+d84 1
+a84 4
+                ContinuationStore continuationStore = (ContinuationStore) c.newInstance();
+
+
+                return continuationStore;
+@
+
+
+1.3.4.2
+log
+@merged from rel-0-5-dev-safe-frames
+@
+text
+@d17 1
+a17 1
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005-2007
+d52 1
+a52 2
+                               final long ttl,
+                               final Frame frame);
+a60 2
+    public Frame getFrame(final HttpSession session, final String continuationId);
+
+@
+
+
+1.3.4.3
+log
+@factory need not be synchronized
+@
+text
+@d66 1
+a66 1
+        public static ContinuationStore create(final String className)
+@
+
+
+1.3.4.1.2.1
+log
+@added link to webcell frame
+@
+text
+@a60 2
+    public Frame getFrame(final HttpSession session, final String continuationId);
+
+@
+
+
+1.3.4.1.2.2
+log
+@de-hacked ContinuationGroup
+@
+text
+@d17 1
+a17 1
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005-2007
+d52 1
+a52 2
+                               final long ttl,
+                               final Frame frame);
+@
+
+
+1.2
+log
+@merged from rel-0-3-dev
+@
+text
+@d38 4
+d43 1
+d48 1
+a48 2
+
+    public abstract void store(final String sessionId,
+d54 1
+a54 1
+    public abstract Procedure fetch(final String sessionId,
+d57 1
+a57 1
+    public abstract void clear(final String sessionId);
+d61 9
+d78 31
+a108 1
+                return (ContinuationStore) c.newInstance();
+a109 6
+            catch(ClassNotFoundException e)
+            { throw new RuntimeException(e); }
+            catch(IllegalAccessException e)
+            { throw new RuntimeException(e); }
+            catch(InstantiationException e)
+            { throw new RuntimeException(e); }
+@
+
+
+1.2.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@a37 2
+import javax.servlet.http.HttpSession;
+
+d43 2
+a44 1
+    public abstract void store(final HttpSession session,
+d50 1
+a50 1
+    public abstract Procedure fetch(final HttpSession session,
+d53 1
+a53 1
+    public abstract void clear(final HttpSession session);
+@
+
+
+1.2.4.1
+log
+@the continuation store now uses the session object instead of just the
+sessionId (simpler and more reliable)
+@
+text
+@a37 2
+import javax.servlet.http.HttpSession;
+
+d43 2
+a44 1
+    public abstract void store(final HttpSession session,
+d50 1
+a50 1
+    public abstract Procedure fetch(final HttpSession session,
+d53 1
+a53 1
+    public abstract void clear(final HttpSession session);
+@
+
+
+1.2.4.2
+log
+@added Singleton subclass to allow ContinuationStore to be accessed as
+a singleton
+@
+text
+@a57 8
+    public class Singleton
+    {
+        static ContinuationStore instance;
+
+        public static ContinuationStore getInstance() {
+            return instance;
+        }
+    }
+d66 1
+a66 3
+                Singleton.instance = (ContinuationStore) c.newInstance();
+
+                return Singleton.instance;
+@
+
+
+1.2.4.3
+log
+@renamed Loggers to Logger; aggregated all loggers into one
+@
+text
+@a37 2
+import java.util.logging.Level;
+
+a40 1
+import siscweb.util.Logger;
+a75 4
+                if(Logger.logger.isLoggable(Level.INFO)) {
+                    Logger.logger.info("Created ContinuationStoreInstance of class \"" + className + "\"");
+                }
+
+@
+
+
+1.2.4.4
+log
+@changed logging message
+@
+text
+@d65 1
+a65 2
+        public static ContinuationStore getInstance()
+        {
+d80 1
+a80 1
+                    Logger.logger.info("Using class \"" + className + "\" for storing continuations");
+@
+
+
+1.2.4.5
+log
+@better error reporting in logs
+@
+text
+@d61 1
+a61 1
+    class Singleton
+d81 1
+a81 1
+                    Logger.logger.info("Instantiating class \"" + className + "\" for storing continuations.");
+d86 6
+a91 24
+            catch(final ClassNotFoundException cnfe)
+            {
+                if(Logger.logger.isLoggable(Level.SEVERE)) {
+                    Logger.logger.severe("Continuation store class \"" + className + "\" could not be located.");
+                }
+
+                throw new RuntimeException(cnfe);
+            }
+            catch(final IllegalAccessException iae)
+            {
+                if(Logger.logger.isLoggable(Level.SEVERE)) {
+                    Logger.logger.severe("Continuation store class \"" + className + "\" or its nullary constructor is not accessible.");
+                }
+
+                throw new RuntimeException(iae);
+            }
+            catch(final InstantiationException ie)
+            {
+                if(Logger.logger.isLoggable(Level.SEVERE)) {
+                    Logger.logger.severe("Continuation store class \"" + className + "\" could not be instantiated.");
+                }
+
+                throw new RuntimeException(ie);
+            }
+@
+
+
+1.1
+log
+@file ContinuationStore.java was initially added on branch rel-0-3-dev.
+@
+text
+@d1 75
+@
+
+
+1.1.2.1
+log
+@removed ContinuationManager, extracted interface to ContinuationStore,
+moved code to SessionContinuationStore
+@
+text
+@a0 20
+package siscweb.contcentric;
+
+import sisc.data.Procedure;
+
+public interface ContinuationStore
+{
+
+    public abstract void store(final String sessionId,
+                               final String groupId,
+                               final String closureId,
+                               final Procedure procedure,
+                               final long ttl);
+
+    public abstract Procedure fetch(final String sessionId,
+                                    final String continuationId);
+
+    public abstract void clear(final String sessionId);
+
+    public abstract int purgeExpired();
+}
+@
+
+
+1.1.2.2
+log
+@added factory to interface
+@
+text
+@a19 19
+
+
+    public class Factory
+    {
+        public static synchronized ContinuationStore create(String className)
+        {
+            try {
+                final Class c = Class.forName(className);
+
+                return (ContinuationStore) c.newInstance();
+            }
+            catch(ClassNotFoundException e)
+            { throw new RuntimeException(e); }
+            catch(IllegalAccessException e)
+            { throw new RuntimeException(e); }
+            catch(InstantiationException e)
+            { throw new RuntimeException(e); }
+        }
+    }
+@
+
+
+1.1.2.3
+log
+@added missing comment block
+@
+text
+@a0 35
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+a4 1
+
+@
+
+

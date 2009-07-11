@@ -1,0 +1,75 @@
+head	1.1;
+branch	1.1.1;
+access;
+symbols
+	start:1.1.1.1 rel-0-1-dev:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches;
+next	1.1.1.2;
+
+1.1.1.2
+date	2005.03.20.14.42.46;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@(load (find-resource "sxml/SXML-tree-trans.scm"))
+
+(define doc `(p "& text $"))
+
+(define doc
+  `(html
+    (head (title "page-b"))
+    (body
+     (a (@@ (href "blabla")) "next" )
+     (url-dispatch (@@ (href "yo")) "dispatch"))))
+
+
+(href
+        ((*text* . ,(lambda (tag str)
+                           (if (string? str)
+
+(define identity-ss
+  `((url-dispatch . ,(lambda x `(a ,@@(cdr x))))
+    (*default* . ,(lambda x x))
+    (*text* . ,(lambda (tag str) str))))
+
+
+(pre-post-order doc identity-ss)@
+
+
+1.1.1.1
+log
+@initial import
+@
+text
+@@
+
+
+1.1.1.2
+log
+@removed experimental file
+@
+text
+@@
+

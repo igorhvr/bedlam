@@ -1,0 +1,87 @@
+head	1.2;
+access;
+symbols
+	rel-0-6-dev:1.2.0.4
+	rel-0-5-fix:1.2.0.2
+	rel-0-5:1.2
+	rel-0-5-dev-safe-frames:1.1.2.1.0.2
+	Root_rel-0-5-dev-safe-frames:1.1.2.1
+	rel-0-5-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2007.04.12.03.51.18;	author acolomba;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.09.20.04.28.21;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2006.09.20.04.28.21;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@merged from rel-0-5-dev
+@
+text
+@(require-library 'ssax/ssax)
+
+(module sxpath
+  (SXPATH:sxpath)
+
+  (import ssax)
+
+  (include "sxpath-impl.scm")
+  (require-library 'sxpath/sxpathlib)
+  (require-library 'sxpath/sxpath-ext)
+  (require-library 'sxpath/xpath-parser)
+  (require-library 'sxpath/txpath)
+  (require-library 'sxpath/sxpathlib)
+  (require-library 'sxpath/sxml-tools))
+@
+
+
+1.1
+log
+@file sxpath.scm was initially added on branch rel-0-5-dev.
+@
+text
+@d1 14
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 14
+(require-library 'ssax/ssax)
+
+(module sxpath
+  (SXPATH:sxpath)
+
+  (import ssax)
+
+  (include "sxpath-impl.scm")
+  (require-library 'sxpath/sxpathlib)
+  (require-library 'sxpath/sxpath-ext)
+  (require-library 'sxpath/xpath-parser)
+  (require-library 'sxpath/txpath)
+  (require-library 'sxpath/sxpathlib)
+  (require-library 'sxpath/sxml-tools))
+@
+

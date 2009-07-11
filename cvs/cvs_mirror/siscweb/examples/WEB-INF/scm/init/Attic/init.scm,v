@@ -1,0 +1,147 @@
+head	1.1;
+access;
+symbols
+	rel-0-3-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2005.10.24.03.52.55;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.10.24.03.52.55;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.11.16.03.36.14;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2005.11.19.16.24.05;	author acolomba;	state Exp;
+branches;
+next	1.1.2.4;
+
+1.1.2.4
+date	2005.11.23.02.39.30;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5;
+
+1.1.2.5
+date	2005.11.25.19.55.05;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@file init.scm was initially added on branch rel-0-3-dev.
+@
+text
+@@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 24
+;; continuation storage - pick one
+
+(import s2j)
+
+(require-extension (siscweb contcentric))
+
+(define-java-classes
+ (<continuation-store> |siscweb.contcentric.SessionContinuationStore|))
+;; (<continuation-store> |siscweb.contcentric.HibernateContinuationStore|))
+
+(define-generic-java-methods get-instance)
+
+(open-ks (get-instance (java-null <continuation-store>) *SERVLET-CONTEXT*))
+
+(start-ks-manager 30) ; check for expired continuations every 30 seconds
+
+;; error handling
+(require-extension (siscweb config))
+(require-extension (examples fc-handler))
+
+(set! *fc-hook* fc-handler)
+
+;; install sisclet handler
+(require-extension (siscweb sisclet))
+@
+
+
+1.1.2.2
+log
+@clarified choice b/w session/hibernate
+@
+text
+@d1 2
+d7 4
+d13 1
+a13 12
+
+;; pick one
+
+;; 1. continuations are kept in the session object; uncomment
+;; SessionTracker listener in web.xml
+(open-ks (get-instance (java-null (java-class '|siscweb.contcentric.SessionContinuationStore|))
+                       *SERVLET-CONTEXT*))
+
+;; 2. continuations are stored through hibernate; uncomment hibernate
+;; filters in web.xml
+;(open-ks (get-instance (java-null (java-class '|siscweb.contcentric.HibernateContinuationStore|))))
+
+a16 1
+
+@
+
+
+1.1.2.3
+log
+@minor changes to comments
+@
+text
+@d10 2
+a11 2
+;; 1. continuations are kept in the session object; uncomment the
+;;    SessionTracker listener entries in web.xml
+d15 2
+a16 2
+;; 2. continuations are stored through hibernate; uncomment the
+;;    HibernateFilter entries in web.xml
+@
+
+
+1.1.2.4
+log
+@removed setup/teardown code
+@
+text
+@d1 22
+d29 1
+a29 1
+;; MANDATORY: install sisclet handler
+@
+
+
+1.1.2.5
+log
+@moved init sexprs from separate files back into web.xml
+@
+text
+@@
+
+

@@ -1,0 +1,695 @@
+head	1.4;
+access;
+symbols
+	rel-0-6-dev:1.4.0.4
+	rel-0-5-fix:1.4.0.2
+	rel-0-5:1.4
+	rel-0-5-dev-safe-frames:1.3.4.3.0.2
+	Root_rel-0-5-dev-safe-frames:1.3.4.3
+	rel-0-4-fix-0:1.3
+	rel-0-5-dev:1.3.0.4
+	rel-0-4-fix:1.3.0.2
+	rel-0-3-fix-3:1.2.2.2
+	rel-0-3-fix-2:1.2.2.1
+	rel-0-4-dev-sisc-1-11:1.2.4.2
+	rel-0-3-fix-1:1.2
+	rel-0-4-dev:1.2.0.4
+	rel-0-3-fix:1.2.0.2
+	rel-0-3:1.2
+	rel-0-2-fix:1.1.2.5.0.2
+	rel-0-3-dev-1:1.1.2.2
+	rel-0-3-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2007.04.12.03.51.16;	author acolomba;	state Exp;
+branches
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2006.09.03.01.42.24;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.09.13.23.07.20;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.09.13.23.07.20;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.10.03.02.08.05;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2005.10.24.03.51.45;	author acolomba;	state Exp;
+branches;
+next	1.1.2.4;
+
+1.1.2.4
+date	2005.10.29.15.15.11;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5;
+
+1.1.2.5
+date	2005.10.31.02.53.21;	author acolomba;	state Exp;
+branches
+	1.1.2.5.2.1;
+next	1.1.2.6;
+
+1.1.2.6
+date	2005.11.17.02.52.07;	author acolomba;	state Exp;
+branches;
+next	1.1.2.7;
+
+1.1.2.7
+date	2005.11.20.18.51.07;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.1.2.5.2.1
+date	2005.11.15.03.44.51;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2006.02.25.17.12.04;	author acolomba;	state Exp;
+branches;
+next	1.2.2.2;
+
+1.2.2.2
+date	2006.04.15.15.55.28;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.12.01.03.56.52;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2006.01.14.02.06.25;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2006.03.12.01.32.27;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2006.03.21.01.19.21;	author acolomba;	state Exp;
+branches;
+next	1.2.4.5;
+
+1.2.4.5
+date	2006.03.27.22.48.18;	author acolomba;	state Exp;
+branches;
+next	1.2.4.6;
+
+1.2.4.6
+date	2006.04.13.00.44.45;	author acolomba;	state Exp;
+branches;
+next	1.2.4.7;
+
+1.2.4.7
+date	2006.08.11.03.34.33;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2006.11.30.03.48.11;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2006.09.20.04.26.05;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2;
+
+1.3.4.2
+date	2006.11.30.03.17.05;	author acolomba;	state Exp;
+branches;
+next	1.3.4.3;
+
+1.3.4.3
+date	2007.03.19.03.40.05;	author acolomba;	state Exp;
+branches
+	1.3.4.3.2.1;
+next	1.3.4.4;
+
+1.3.4.4
+date	2007.04.01.23.55.27;	author acolomba;	state Exp;
+branches;
+next	1.3.4.5;
+
+1.3.4.5
+date	2007.04.02.00.10.14;	author acolomba;	state Exp;
+branches;
+next	1.3.4.6;
+
+1.3.4.6
+date	2007.04.11.03.15.06;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.3.2.1
+date	2007.04.01.19.46.17;	author acolomba;	state Exp;
+branches;
+next	1.3.4.3.2.2;
+
+1.3.4.3.2.2
+date	2007.04.01.20.35.11;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2007.09.22.16.00.27;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@merged from rel-0-5-dev
+@
+text
+@(require-library 'sisc/libs/srfi)
+
+(import file-manipulation)
+
+(define dest "../bin/")
+
+(current-directory "../scm")
+
+(for-each
+ (lambda (name)
+   (make-directory! (string-append dest name)))
+ '("io" "lshift" "siscweb" "sxml" "util"))
+
+(for-each
+ (lambda (name)
+   (display (string-append "Compiling " name " ..."))
+   (compile-file (string-append name ".scm")
+                 (string-append dest name ".scc"))
+   (display "done.\n"))
+ '("util/image" "util/jndi" "util/regexp"
+   "util/misc" "util/srfi-71" "util/uid"
+   "lshift/error" "lshift/common" "lshift/s2j-modutils"
+   "siscweb/config"
+   "siscweb/bindings" "siscweb/k-hash"
+   "siscweb/context"
+   "siscweb/frame" "siscweb/webcells"
+   "siscweb/k-store"
+   "siscweb/request" "siscweb/response" "siscweb/session"
+   "siscweb/contcentric"
+   "siscweb/publish"
+   "siscweb/error" "siscweb/forward" "siscweb/redirect" "siscweb/text"
+   "siscweb/image" "siscweb/sisclet"))
+@
+
+
+1.4.4.1
+log
+@added siscweb/file
+@
+text
+@d32 1
+a32 1
+   "siscweb/file" "siscweb/image" "siscweb/sisclet"))
+@
+
+
+1.3
+log
+@merged from rel-0-4-dev
+@
+text
+@d12 1
+a12 1
+ '("io" "siscweb" "sxml" "util"))
+d21 2
+a22 1
+   "util/misc"
+d26 1
+d28 1
+a28 1
+   "siscweb/request" "siscweb/response"
+d31 1
+a31 2
+   "siscweb/session"
+   "siscweb/error" "siscweb/forward"
+@
+
+
+1.3.2.1
+log
+@merged from rel-0-5-dev
+@
+text
+@d12 1
+a12 1
+ '("siscweb" "util"))
+d30 1
+a30 1
+   "siscweb/error" "siscweb/forward" "siscweb/text"
+@
+
+
+1.3.4.1
+log
+@added lshift utilities
+@
+text
+@d12 1
+a12 1
+ '("io" "lshift" "siscweb" "sxml" "util"))
+a21 1
+   "lshift/error" "lshift/common" "lshift/s2j-modutils"
+@
+
+
+1.3.4.2
+log
+@added siscweb/text
+@
+text
+@d31 1
+a31 1
+   "siscweb/error" "siscweb/forward" "siscweb/text"
+@
+
+
+1.3.4.3
+log
+@added srfi-71 and webcells compilation
+@
+text
+@d21 1
+a21 1
+   "util/misc" "util/srfi-71"
+d28 1
+a28 1
+   "siscweb/webcells" "siscweb/contcentric"
+@
+
+
+1.3.4.4
+log
+@merged from rel-0-5-dev-safe-frames
+@
+text
+@d21 1
+a21 1
+   "util/misc" "util/srfi-71" "util/uid"
+a25 1
+   "siscweb/frame" "siscweb/webcells"
+d28 1
+a28 1
+   "siscweb/contcentric"
+@
+
+
+1.3.4.5
+log
+@siscweb/session now precedes siscweb/contcentric
+@
+text
+@d28 1
+a28 1
+   "siscweb/request" "siscweb/response" "siscweb/session"
+d31 1
+@
+
+
+1.3.4.6
+log
+@added siscweb/redirect
+@
+text
+@d31 1
+a31 1
+   "siscweb/error" "siscweb/forward" "siscweb/redirect" "siscweb/text"
+@
+
+
+1.3.4.3.2.1
+log
+@added util/uid, siscweb/frame
+@
+text
+@d21 1
+a21 1
+   "util/misc" "util/srfi-71" "util/uid"
+d28 1
+a28 1
+   "siscweb/frame" "siscweb/webcells" "siscweb/contcentric"
+@
+
+
+1.3.4.3.2.2
+log
+@de-hacked ContinuationGroup
+@
+text
+@a25 1
+   "siscweb/frame" "siscweb/webcells"
+d28 1
+a28 1
+   "siscweb/contcentric"
+@
+
+
+1.2
+log
+@merged from rel-0-3-dev
+@
+text
+@d20 2
+a21 2
+ '("io/servlet-io"
+   "util/image" "util/jndi" "util/regexp" "util/misc"
+d24 1
+d26 1
+d28 3
+a30 2
+   "siscweb/publish" "siscweb/request"
+   "siscweb/response" "siscweb/error" "siscweb/forward"
+@
+
+
+1.2.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@a23 1
+   "siscweb/context"
+a26 1
+   "siscweb/session"
+@
+
+
+1.2.2.2
+log
+@merged from rel-0-4-dev
+@
+text
+@d21 1
+a21 2
+   "util/image" "util/jndi" "util/regexp"
+   "util/misc" "util/s2j-io"
+a25 1
+   "siscweb/request" "siscweb/response"
+d27 1
+a27 1
+   "siscweb/publish"
+d29 1
+a29 1
+   "siscweb/error" "siscweb/forward"
+@
+
+
+1.2.4.1
+log
+@now compiles siscweb/session
+@
+text
+@d26 1
+a26 1
+   "siscweb/publish" "siscweb/request" "siscweb/session"
+@
+
+
+1.2.4.2
+log
+@added siscweb/context
+@
+text
+@a23 1
+   "siscweb/context"
+d26 1
+a26 2
+   "siscweb/publish" "siscweb/request"
+   "siscweb/session"
+@
+
+
+1.2.4.3
+log
+@added misc/s2j-io
+@
+text
+@d21 1
+a21 2
+   "util/image" "util/jndi" "util/regexp"
+   "util/misc" "util/s2j-io"
+@
+
+
+1.2.4.4
+log
+@removed util/s2j-io
+@
+text
+@d21 2
+a22 1
+   "util/image" "util/jndi" "util/regexp" "util/misc"
+@
+
+
+1.2.4.5
+log
+@re-enabled util/s2j-io b/c java-io is not yet released in SISC
+@
+text
+@d21 1
+a21 2
+   "util/image" "util/jndi" "util/regexp"
+   "util/misc" "util/s2j-io"
+@
+
+
+1.2.4.6
+log
+@order of compilation respects refactored modules
+@
+text
+@a26 1
+   "siscweb/request" "siscweb/response"
+d28 1
+a28 1
+   "siscweb/publish"
+d30 1
+a30 1
+   "siscweb/error" "siscweb/forward"
+@
+
+
+1.2.4.7
+log
+@switched from using util/s2j-io to using SISC's java-io library (same code really)
+@
+text
+@d20 3
+a22 2
+ '("util/image" "util/jndi" "util/regexp"
+   "util/misc"
+@
+
+
+1.1
+log
+@file compile.scm was initially added on branch rel-0-3-dev.
+@
+text
+@d1 28
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 35
+(require-library 'sisc/libs/srfi)
+
+(import file-manipulation)
+
+(define dest "../bin/")
+
+(current-directory "../scm")
+
+(for-each
+ (lambda (name)
+   (make-directory! (string-append dest name)))
+ '("io" "siscweb" "sql" "sxml" "util"))
+
+(for-each
+ (lambda (name)
+   (display (string-append "Compiling " name " ..."))
+   (compile-file (string-append name ".scm")
+                 (string-append dest name ".scc"))
+   (display "done.\n"))
+ '("io/servlet-io"
+   "util/image" "util/jndi" "util/regexp" "util/misc"
+   "sql/jdbc" "sql/types" "sql/type-conversion" "sql/result-set" "sql/query"
+   "sql/hsqldb" "sql/oracle" "sql/postgresql"
+   "siscweb/config"
+   "sxml/sxml-match" "sxml/markup" "sxml/dotml" "sxml/sxml-to-html"
+   "sxml/sxml-tree-trans"
+   "sql/types" "sql/type-conversion"
+   "siscweb/bindings" "siscweb/k-hash"
+   "siscweb/ks-hibernate"
+   "siscweb/ks-hsqldb" "siscweb/ks-oracle" "siscweb/ks-postgresql"
+   "siscweb/ks-session"
+   "siscweb/contcentric"
+   "siscweb/publish" "siscweb/request"
+   "siscweb/response" "siscweb/error" "siscweb/forward" "siscweb/graphviz"
+   "siscweb/html" "siscweb/image" "siscweb/sisclet"))
+@
+
+
+1.1.2.2
+log
+@removed hibernate.scm from the list of compile targets, since it's not
+checked in yet
+@
+text
+@d29 1
+@
+
+
+1.1.2.3
+log
+@added k-store and ks-hibernate
+@
+text
+@d30 1
+a30 1
+   "siscweb/ks-session" "siscweb/k-store"
+d34 1
+a34 1
+   "siscweb/html" "siscweb/image" "siscweb/sisclet" "siscweb/ks-hibernate"))
+@
+
+
+1.1.2.4
+log
+@removed ks-hibernate
+@
+text
+@d34 1
+a34 1
+   "siscweb/html" "siscweb/image" "siscweb/sisclet"))
+@
+
+
+1.1.2.5
+log
+@remove k-session.scm
+@
+text
+@d30 1
+a30 1
+   "siscweb/k-store"
+@
+
+
+1.1.2.6
+log
+@removed sql library from list of compile targets
+@
+text
+@d12 1
+a12 1
+ '("io" "siscweb" "sxml" "util"))
+d22 2
+d27 1
+d29 1
+@
+
+
+1.1.2.7
+log
+@removed scm files now in opt/sxml
+@
+text
+@d23 2
+d29 2
+a30 2
+   "siscweb/response" "siscweb/error" "siscweb/forward"
+   "siscweb/image" "siscweb/sisclet"))
+@
+
+
+1.1.2.5.2.1
+log
+@backported from rel-0-3-dev (greenash)
+@
+text
+@d20 15
+a34 37
+'(
+"io/servlet-io"
+"util/regexp"
+"util/jndi"
+"util/misc"
+
+"sxml/sxml-match"
+"sxml/sxml-tree-trans"
+"sxml/markup"
+"sxml/dotml"
+"sxml/sxml-to-html"
+
+"sql/types"
+"sql/type-conversion"
+"sql/result-set"
+"sql/jdbc"
+"sql/postgresql"
+"sql/oracle"
+"sql/hsqldb"
+"sql/query"
+
+"siscweb/config"
+"siscweb/k-hash"
+"siscweb/ks-session"
+"siscweb/ks-hsqldb"
+"siscweb/ks-oracle"
+"siscweb/bindings"
+"siscweb/contcentric"
+"siscweb/publish"
+"siscweb/request"
+"siscweb/response"
+"siscweb/error"
+"siscweb/forward"
+"siscweb/graphviz"
+"siscweb/html"
+"siscweb/sisclet"
+))
+@
+
+

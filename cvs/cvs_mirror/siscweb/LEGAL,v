@@ -1,0 +1,525 @@
+head	1.6;
+access;
+symbols
+	rel-0-6-dev:1.6.0.4
+	rel-0-5-fix:1.6.0.2
+	rel-0-5:1.6
+	rel-0-5-dev-safe-frames:1.5.4.3.0.2
+	Root_rel-0-5-dev-safe-frames:1.5.4.3
+	rel-0-4-fix-0:1.5
+	rel-0-5-dev:1.5.0.4
+	rel-0-4-fix:1.5.0.2
+	rel-0-3-fix-3:1.4.2.1
+	rel-0-3-fix-2:1.4.2.1
+	rel-0-4-dev-sisc-1-11:1.4.4.2
+	rel-0-3-fix-1:1.4
+	rel-0-4-dev:1.4.0.4
+	rel-0-3-fix:1.4.0.2
+	rel-0-3:1.4
+	rel-0-3-dev-1:1.3.2.1
+	rel-0-2-fix-2:1.3.4.1
+	rel-0-2-fix-1:1.3
+	rel-0-2-fix:1.3.0.4
+	rel-0-3-dev:1.3.0.2
+	rel-0-2:1.3
+	rel-0-1-fix-1:1.2
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	rel-0-1-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2007.04.12.03.51.15;	author acolomba;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2006.09.03.01.42.25;	author acolomba;	state Exp;
+branches
+	1.5.4.1;
+next	1.4;
+
+1.4
+date	2005.11.25.20.43.31;	author acolomba;	state Exp;
+branches
+	1.4.2.1
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2005.06.19.04.53.02;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.52;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.02.16.04.36.15;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.02.16.04.36.15;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.03.13.06.14.43;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2005.03.20.03.47.40;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2005.04.09.22.51.05;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.04.09.22.52.17;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.06.10.01.45.10;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2005.07.30.16.08.49;	author acolomba;	state Exp;
+branches;
+next	1.3.2.2;
+
+1.3.2.2
+date	2005.11.15.07.33.49;	author acolomba;	state Exp;
+branches;
+next	1.3.2.3;
+
+1.3.2.3
+date	2005.11.16.03.59.23;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2005.07.31.20.04.05;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2;
+
+1.3.4.2
+date	2005.11.15.07.30.15;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.2.1
+date	2006.02.25.17.12.07;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2006.01.15.22.10.00;	author acolomba;	state Exp;
+branches;
+next	1.4.4.2;
+
+1.4.4.2
+date	2006.01.31.04.14.05;	author acolomba;	state Exp;
+branches;
+next	1.4.4.3;
+
+1.4.4.3
+date	2006.08.31.00.06.24;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.5.4.1
+date	2006.09.24.15.14.22;	author acolomba;	state Exp;
+branches;
+next	1.5.4.2;
+
+1.5.4.2
+date	2006.09.24.15.56.10;	author acolomba;	state Exp;
+branches;
+next	1.5.4.3;
+
+1.5.4.3
+date	2007.03.19.03.40.56;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@merged from rel-0-5-dev
+@
+text
+@The SISCweb distribution includes other works:
+
+SISC, the Second Intepreter of Scheme Code is licensed under the MPL
+or GPL and is here included in executable form. No change was made to
+its source code, which remains available at http://sisc.sf.net/.
+
+The lshift/* scheme modules are covered by the MIT license, and are
+here included in their source form with minor modifications to fit in
+SISCweb. They originate from the Icing framework:
+http://www.lshift.net/blog/2006/07/21/icing-snapshot-20060721
+
+SXML-to-HTML.scm and SXML-tree-trans.scm are in the public domain.
+They are here included in their original form, and can be found at
+http://okmij.org/ftp/Scheme/xml.html.
+
+xxexpr.scm is covered by the LGPL and is included here in its original
+form from the Icing framework.
+
+html.xsl is covered by the MPL and GPL. It is part of the SISC source
+distribution (sisc.sf.net), and is included here in its original form.
+
+sxml-match is released under the MIT license, and is included here
+in its original form.
+
+webit/keyword and webit/xml-core are part of the WebIt! framework, and
+are covered by the MIT license. The versions here included are ports
+to SISC scheme.
+
+siscweb/webcells.scm is a port of PLT's web-cells.ss library included
+in the DrScheme distribution, which is covered by the LGPL.
+
+schelog.scm is "Copyright (c) 1993-2001, Dorai Sitaram. All rights
+reserved. Permission to distribute and use this work for any purpose
+is hereby granted provided this copyright notice is included in the
+copy. This work is provided as is, with no warranty of any kind." The
+included version incorporates changes by Matthias Radestock found in
+the contrib area of the SISC CVS archive, as well as some additional,
+very minor changes.
+@
+
+
+1.5
+log
+@merged from rel-0-4-dev
+@
+text
+@d1 1
+a1 2
+The SISCweb distribution may include other works to make setup easier to
+developers or users.
+d7 5
+d16 3
+d29 3
+@
+
+
+1.5.4.1
+log
+@added lshift license
+@
+text
+@a7 4
+The lshift/* scheme modules are covered by the MIT license, and here
+included in its source form with minor modifications to fit in
+SISCweb.
+
+@
+
+
+1.5.4.2
+log
+@added xxexpr license
+@
+text
+@a15 3
+xxexpr.scm is covered by the LGPL and is included here in its original
+form from the Icing framework.
+
+@
+
+
+1.5.4.3
+log
+@added webcells; revised lshift blurb
+@
+text
+@d1 2
+a2 1
+The SISCweb distribution includes other works:
+d8 3
+a10 4
+The lshift/* scheme modules are covered by the MIT license, and are
+here included in their source form with minor modifications to fit in
+SISCweb. They originate from the Icing framework:
+http://www.lshift.net/blog/2006/07/21/icing-snapshot-20060721
+a28 3
+siscweb/webcells.scm is a port of PLT's web-cells.ss library included
+in the DrScheme distribution, which is covered by the LGPL.
+
+@
+
+
+1.4
+log
+@merged from rel-0-3-dev
+@
+text
+@d18 4
+a28 5
+
+Hibernate, HSQLDB, Geronimo JTA, and the libraries on which they
+depend are obtained through the Maven 2 Ant plugin, and are therefore
+unchanged from their original source. The Maven 2 Ant plugin is itself
+obtained through an HTTP GET from an established mirror.
+@
+
+
+1.4.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@a17 4
+webit/keyword and webit/xml-core are part of the WebIt! framework, and
+are covered by the MIT license. The versions here included are ports
+to SISC scheme.
+
+@
+
+
+1.4.4.1
+log
+@added webit note
+@
+text
+@a17 4
+webit/keyword and webit/xml-core are part of the WebIt! framework,
+and are covered by the LGPL. The versions here included are ports
+to SISC scheme.
+
+@
+
+
+1.4.4.2
+log
+@fixed webit! license from LGPL to MIT
+@
+text
+@d18 2
+a19 2
+webit/keyword and webit/xml-core are part of the WebIt! framework, and
+are covered by the MIT license. The versions here included are ports
+@
+
+
+1.4.4.3
+log
+@removed reference to hibernate
+@
+text
+@d29 5
+@
+
+
+1.3
+log
+@merged from rel-0-2-dev
+@
+text
+@a7 4
+AspectJ 1.2 is licensed under the CPL and is here included in object
+code. No change was made to its source code, which is available from
+http://www.aspectj.org/.
+
+d14 16
+@
+
+
+1.3.4.1
+log
+@merged from rel-0-3-dev
+@
+text
+@d8 4
+@
+
+
+1.3.4.2
+log
+@added note for sxml-match
+@
+text
+@a11 3
+sxml-match is released under the MIT license, and is included here
+in its original form.
+
+@
+
+
+1.3.2.1
+log
+@removed aspectj notice
+@
+text
+@d8 4
+@
+
+
+1.3.2.2
+log
+@added notice for sxml-match and schelog
+@
+text
+@a13 8
+
+sxml-match is released under the MIT license, and is included here
+in its original form.
+
+schelog.scm is Copyright (c) 1993-2001, Dorai Sitaram. All rights
+reserved. Permission to distribute and use this work for any purpose
+is hereby granted provided this copyright notice is included in the
+copy. This work is provided as is, with no warranty of any kind.
+@
+
+
+1.3.2.3
+log
+@added notice for hibernate & co.
+@
+text
+@d18 1
+a18 1
+schelog.scm is "Copyright (c) 1993-2001, Dorai Sitaram. All rights
+d21 1
+a21 9
+copy. This work is provided as is, with no warranty of any kind." The
+included version incorporates changes by Matthias Radestock found in
+the contrib area of the SISC CVS archive, as well as some additional,
+very minor changes.
+
+Hibernate, HSQLDB, Geronimo JTA, and the libraries on which they
+depend are obtained through the Maven 2 Ant plugin, and are therefore
+unchanged from their original source. The Maven 2 Ant plugin is itself
+obtained through an HTTP GET from an established mirror.
+@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@d12 6
+a17 3
+The licensing of SXML-to-HTML.scm and SXML-tree-trans.scm is unclear.
+However they are here included in their original format. They can be
+found at http://okmij.org/ftp/Scheme/xml.html.
+@
+
+
+1.2.4.1
+log
+@merged from rel-0-1-fix
+@
+text
+@d12 3
+a14 3
+SXML-to-HTML.scm and SXML-tree-trans.scm are in the public domain.
+They are here included in their original form, and can be found at
+http://okmij.org/ftp/Scheme/xml.html.
+@
+
+
+1.2.4.2
+log
+@added note for html.xsl
+@
+text
+@a14 3
+
+html.xsl is covered by the MPL and GPL. It is part of the SISC source
+distribution (sisc.sf.net), and is included here in its original form.
+@
+
+
+1.2.2.1
+log
+@updated sxml licensing information.
+@
+text
+@d12 3
+a14 3
+SXML-to-HTML.scm and SXML-tree-trans.scm are in the public domain.
+They are here included in their original form, and can be found at
+http://okmij.org/ftp/Scheme/xml.html.
+@
+
+
+1.1
+log
+@file LEGAL was initially added on branch rel-0-1-dev.
+@
+text
+@d1 14
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 10
+The SISCweb distribution includes other works to make setup easier to
+the user. In detail:
+
+SISC, the Second Intepreter of Scheme Code is licensed under the MPL
+or GPL and is here included in executable form. No change was made to
+its source code, which remains available at http://sisc.sf.net/.
+
+The licensing of SXML-to-HTML.scm and SXML-tree-trans.scm is unclear.
+However they are here included in their original format. They can be
+found at http://okmij.org/ftp/Scheme/xml.html.
+@
+
+
+1.1.2.2
+log
+@minor change
+@
+text
+@d1 2
+a2 2
+The SISCweb distribution may include other works to make setup easier to
+developers or users. 
+@
+
+
+1.1.2.3
+log
+@updated
+@
+text
+@d2 1
+a2 1
+developers or users.
+a6 4
+
+AspectJ 1.2 is licensed under the CPL and is here included in object
+code. No change was made to its source code, which is available from
+http://www.aspectj.org/.
+@
+
+

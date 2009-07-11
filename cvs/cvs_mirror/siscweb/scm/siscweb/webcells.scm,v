@@ -1,0 +1,1003 @@
+head	1.2;
+access;
+symbols
+	rel-0-6-dev:1.2.0.4
+	rel-0-5-fix:1.2.0.2
+	rel-0-5:1.2
+	rel-0-5-dev-safe-frames:1.1.2.5.0.2
+	Root_rel-0-5-dev-safe-frames:1.1.2.5
+	rel-0-5-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2007.04.12.03.51.19;	author acolomba;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2007.03.18.23.40.00;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2007.03.18.23.40.00;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2007.03.18.23.46.34;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2007.03.18.23.59.53;	author acolomba;	state Exp;
+branches;
+next	1.1.2.4;
+
+1.1.2.4
+date	2007.03.19.03.37.31;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5;
+
+1.1.2.5
+date	2007.03.22.02.01.53;	author acolomba;	state Exp;
+branches
+	1.1.2.5.2.1;
+next	1.1.2.6;
+
+1.1.2.6
+date	2007.04.01.23.55.26;	author acolomba;	state Exp;
+branches;
+next	1.1.2.7;
+
+1.1.2.7
+date	2007.04.02.01.43.15;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.1.2.5.2.1
+date	2007.03.25.04.44.48;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5.2.2;
+
+1.1.2.5.2.2
+date	2007.03.31.02.04.58;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5.2.3;
+
+1.1.2.5.2.3
+date	2007.04.01.14.13.41;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5.2.4;
+
+1.1.2.5.2.4
+date	2007.04.01.19.45.14;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@merged from rel-0-5-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2007
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+
+(require-library 'siscweb/frame)
+
+(module siscweb/webcells
+  (make-cell make-cell-parameter
+   cell-ref cell-shadow
+   (webcell/make make-cell)
+   (webcell/make-parameter make-cell-parameter)
+   webcell/ref webcell/set!)
+
+  (import srfi-16)
+
+  (import siscweb/frame)
+
+
+  (define make-cell
+    (case-lambda
+      ((default-value)
+       (make-cell (gensym) default-value))
+      ((name default-value)
+       (cons name default-value))))
+
+  (define-syntax webcell/make
+    (syntax-rules ()
+      ((_ name default-value)
+       (make-cell (quote name) default-value))
+      ((_ default-value)
+       (make-cell default-value))))
+
+  (define (cell-name cell)
+    (car cell))
+
+  (define (cell-default-value cell)
+    (cdr cell))
+
+  (define make-cell-parameter
+    (case-lambda
+     ((default-value)
+      (make-cell-parameter (gensym) default-value))
+     ((name default-value)
+      (let ((cell (make-cell name default-value)))
+        (case-lambda
+         (()
+          (webcell/ref cell))
+         ((value)
+          (cell-set! cell value)))))))
+
+  (define-syntax webcell/make-parameter
+    (syntax-rules ()
+      ((_ name default-value)
+       (make-cell-parameter (quote name) default-value))
+      ((_ default-value)
+       (make-cell-parameter default-value))))
+
+  (define (cell-ref cell)
+    (or (frame/lookup-value (cell-name cell))
+        (cell-default-value cell)))
+
+  (define (webcell/ref cell)
+    (cell-ref cell))
+
+  (define (cell-set! cell value)
+    (let ((name (cell-name cell)))
+      (frame/put-value! name value)))
+
+  (define (cell-shadow cell value)
+    (cell-put! cell value))
+
+  (define (webcell/set! name value)
+    (cell-set! name value))
+  )
+@
+
+
+1.1
+log
+@file webcells.scm was initially added on branch rel-0-5-dev.
+@
+text
+@d1 102
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 230
+;;; Web Cells - Interaction-Safe State for the Web
+;;; Copyright (C) 2006 Jay McCarthy, Shriram Krishnamurthi
+;;;
+;;; This library is free software; you can redistribute it and/or
+;;; modify it under the terms of the GNU Lesser General Public
+;;; License as published by the Free Software Foundation; either
+;;; version 2.1 of the License, or (at your option) any later version.
+;;;
+;;; This library is distributed in the hope that it will be useful,
+;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;;; Lesser General Public License for more details.
+;;;
+;;; You should have received a copy of the GNU Lesser General Public
+;;; License along with this library; if not, write to the Free Software
+;;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+;; Contributions:
+;;
+;; 2007-03-18 Alessandro Colomba: ported to SISC
+
+(require-library 'sisc/libs/srfi/srfi-69) ; basic hash tables
+
+(require-library 'siscweb/k-hash)
+
+(module siscweb/webcells-frame-1
+  (<frame> <frame:empty> <frame:ns>
+   :hash :hash!
+   :annotations :annotations! :boxed-parent :boxed-parent! :namespace :namespace!
+   frame? frame:ns?/raise make-frame/parent search-frames
+   frame-ref frame-set? frame-set!
+   *global-root-id* *frame-stack*
+;   cur-top-box cur-top
+   )
+
+  (import generic-procedures)
+  (import oo)
+  (import type-system)
+
+  (import srfi-69)
+
+  (import siscweb/k-hash)
+
+  (define-class (<frame>))
+
+  (define (frame? f)
+    (instance-of? f <frame>))
+
+  (define-class (<frame:empty> <frame>))
+
+  (define-generics :hash :hash! :annotations :annotations! :boxed-parent :boxed-parent! :namespace :namespace!)
+
+  (define-class (<frame:ns> <frame>)
+    (hash :hash :hash!)
+    (annotations :annotations :annotations!)
+    (boxed-parent :boxed-parent :boxed-parent!)
+    (namespace :namespace :namespace!))
+
+  (define-method (initialize (<frame:ns> f) (<value> annotations) (<value> boxed-parent) (<value> namespace))
+    (:hash! f (make-random-hash))
+    (display (format "Creating frame ~s with parent ~s\n" (:hash f)
+                     (with-failure-continuation (lambda (m e) #f) (lambda () (:hash (unbox boxed-parent))))))
+    (:annotations! f annotations)
+    (:boxed-parent! f boxed-parent)
+    (:namespace! f namespace))
+
+  (define (frame:ns? f)
+    (instance-of? f <frame:ns>))
+
+  (define (frame:ns?/raise f)
+    (if (frame:ns? f)
+        f
+        (error "Reached top of stack")))
+
+  (define (make-frame/parent parent-frame-box)
+    (make <frame:ns> (list) parent-frame-box (make-hash-table eq?))) ; make-namespace 'empty
+
+  (define (search-frames a-frame predicate?)
+    (if (predicate? a-frame)
+        (begin
+          (display (format "Found frame ~s\n" (:hash a-frame)))
+          a-frame)
+        (search-frames (frame:ns?/raise
+                        (unbox (:boxed-parent a-frame)))
+                       predicate?)))
+
+  (define (frame-ref a-frame var)
+    (hash-table-ref (:namespace a-frame) var
+                    (lambda ()
+                      (frame-ref (frame:ns?/raise
+                                  (unbox (:boxed-parent a-frame)))
+                                 var))))
+
+  (define (frame-set? a-frame var)
+    (hash-table-exists? (:namespace a-frame) var))
+
+  (define (frame-set! a-frame var val)
+    (hash-table-set! (:namespace a-frame) var val))
+
+
+  (define *global-root-id* (gensym))
+
+  (define *frame-stack* #f)
+;;   (define cur-top-box #f)
+;;   (define cur-top #!void)
+
+  (set! *frame-stack*
+    (make-parameter
+     (box
+      (let ((f (make-frame/parent (box (make <frame:empty>)))))
+        (:annotations! f (list (cons *global-root-id* #t)))
+        f))))
+
+;;   (set! cur-top-box (*frame-stack*))
+;;   (set! cur-top (unbox cur-top-box))
+
+  )
+
+
+(module siscweb/webcells-frame-2
+  (annotation-present? global-root?
+   make-frame/top push-frame! pop-frame!
+   save-stack/push/return (with-frame-after save-stack/push/return)
+   parameterized-push (with-frame parameterized-push)
+   search-stack)
+
+  (import siscweb/webcells-frame-1)
+
+
+  (define (annotation-present? i a-frame)
+    (not (not (assq i (:annotations a-frame)))))
+
+  (define (global-root? a-frame)
+    (annotation-present? *global-root-id* a-frame))
+
+  (define (make-frame/top)
+    (let* ((cur-top-box (*frame-stack*))
+           (cur-top (unbox cur-top-box)))
+      (make-frame/parent cur-top-box)))
+
+  (define (push-frame!)
+    (*frame-stack* (box (make-frame/top))))
+
+  (define (pop-frame!)
+    (*frame-stack* (:boxed-parent (unbox (*frame-stack*)))))
+
+  (define (save-stack/push/return thunk)
+    (let ((initial-stack (*frame-stack*)))
+    (let ((x (thunk)))
+      (*frame-stack* initial-stack)
+      (push-frame!)
+      x)))
+
+  (define-syntax with-frame-after
+    (syntax-rules ()
+      ((_ body ...)
+       (save-stack/push/return (lambda () body ...)))))
+
+  (define (parameterized-push thunk)
+    (parameterize ((*frame-stack* (box (make-frame/top))))
+      (thunk)))
+
+  (define-syntax with-frame
+    (syntax-rules ()
+      ((_ body ...)
+       (parameterized-push (lambda () body ...)))))
+
+  (define (search-stack predicate?)
+    (search-frames (frame:ns?/raise (unbox (*frame-stack*)))
+                   predicate?))
+  )
+
+
+(module siscweb/webcells-cell
+  (<cell> <cell:local>
+   :id :id!
+   make-web-cell:local web-cell:local-ref web-cell:local-set! web-cell:local-mask)
+
+  (import generic-procedures)
+  (import oo)
+  (import type-system)
+
+  (import siscweb/webcells-frame-1)
+  (import siscweb/webcells-frame-2)
+
+  (define-generics :id :id!)
+
+  (define-class (<cell>)
+    (id :id :id!))
+
+  (define-method (initialize (<cell> c) (<value> id))
+    (:id! c id))
+
+  (define-class (<cell:local> <cell>))
+
+  (define (web-cell:local? cell)
+    (instance-of? cell <cell:local>))
+
+  (define (make-web-cell:local default)
+    (define new-name (gensym))
+    (frame-set! (search-stack global-root?)
+                new-name default)
+    (make <cell:local> new-name))
+
+  (define (web-cell:local-ref lc)
+    (frame-ref (search-stack frame?)
+               (:id lc)))
+
+  (define (web-cell:local-set! lc nv)
+    (frame-set! (search-stack
+                 (lambda (f) (frame-set? f (:id lc))))
+                (:id lc)
+                nv))
+
+  (define (web-cell:local-mask lc nv)
+    (frame-set! (search-stack frame?)
+                (:id lc)
+                nv))
+  )
+
+
+(module siscweb/webcells
+  (make-cell cell-ref cell-shadow)
+
+  (import siscweb/webcells-cell)
+
+  (define make-cell make-web-cell:local)
+  (define cell-ref web-cell:local-ref)
+  (define cell-shadow web-cell:local-mask)
+  )
+@
+
+
+1.1.2.2
+log
+@removed frame ids
+@
+text
+@d24 2
+d28 1
+d32 3
+a34 1
+   *global-root-id* *frame-stack*)
+d42 1
+d51 1
+a51 1
+  (define-generics :annotations :annotations! :boxed-parent :boxed-parent! :namespace :namespace!)
+d54 1
+d60 3
+d80 3
+a82 1
+        a-frame
+d104 2
+d113 4
+@
+
+
+1.1.2.3
+log
+@turned webcells into a single module; added comments from
+original version
+@
+text
+@d24 6
+a29 3
+(module siscweb/webcells
+  (make-cell cell-ref cell-shadow
+   (with-frame-after save-stack/push/return) (with-frame parameterized-push))
+a37 1
+  ;; frames
+a46 1
+  ; frame:ns : (alist * (box frame) * namespace)
+a59 1
+  ; frame:ns?/raise : frame -> frame
+a64 1
+  ; make-frame/parent : (box frame) -> frame:ns
+a67 2
+  ; search-frames : frame:ns (frame:ns -> boolean?) -> frame
+  ; Returns the first frame in the stack that matches the predicate
+a74 2
+  ; frame-ref : frame:ns symbol -> any
+  ; Lookups up the variable in the frame and its parent(s)
+a81 1
+  ; frame-set? : frame:ns symbol -> boolean
+a84 2
+  ; frame-set! : frame:ns symbol any -> void
+  ; Sets the variable in the frame to a value
+a88 1
+  ;; frame stacks
+d91 21
+a111 1
+  ; annotation-present? : symbol frame:ns -> boolean
+a114 1
+  ; global-root? : frame:ns -> boolean
+a117 1
+  ; make-frame/top : -> frame:ns
+a122 2
+  ; push-frame! : -> void
+  ; Pushs a new frame onto the session stack
+a125 2
+  ; pop-frame! : -> void
+  ; Pops the frame from the stack
+a128 2
+  ; save-stack/push/return : (-> 'a) -> 'a
+  ; Pushes a frame after the thunk's execution with the same parent as the call site
+a135 1
+  ; syntax version of above
+a140 1
+  ; parameterized-push : (-> 'a) -> 'a
+a144 1
+  ; syntax version of above
+a149 1
+  ; search-stack : (frame -> boolean) -> frame
+d153 1
+d156 12
+a167 1
+  ; cells
+a180 1
+  ; ext:make-'a 'b -> 'a
+d182 4
+a185 4
+    (let ((new-name (gensym)))
+      (frame-set! (search-stack global-root?)
+                  new-name default)
+      (make <cell:local> new-name)))
+a186 2
+  ; cell:local-ref : cell:local -> any
+  ; returns the value of the local cell
+a190 2
+  ; cell:local-set! : cell:local any -> void
+  ; sets the value of the local cell at the last place it was set, including the default
+a196 2
+  ; cell:local-mask : cell:local any -> void
+  ; masks the local cell to the given value
+d201 7
+a211 9
+
+  ; *frame-stack* : (box frame)
+  (define *frame-stack* #f)
+  (set! *frame-stack*
+    (make-parameter
+     (box
+      (let ((f (make-frame/parent (box (make <frame:empty>)))))
+        (:annotations! f (list (cons *global-root-id* #t)))
+        f))))
+@
+
+
+1.1.2.4
+log
+@serialization assistance, uses non-generative classes and fixed root-id
+@
+text
+@d36 1
+a36 1
+  (define-nongenerative-class (<frame>) siscweb/webcells/frame)
+d41 1
+a41 1
+  (define-nongenerative-class (<frame:empty> <frame>) siscweb/webcells/frame:empty)
+d46 1
+a46 1
+  (define-nongenerative-class (<frame:ns> <frame>) siscweb/webcells/frame:ns
+d98 1
+a98 1
+  (define *global-root-id* (quote |GkYXO2AZDpaW7lnmWpvOWZOHko3|))
+d159 1
+a159 1
+  (define-nongenerative-class (<cell>) siscweb/webcells/cell
+d165 1
+a165 1
+  (define-nongenerative-class (<cell:local> <cell>) siscweb/webcells/cell:local)
+@
+
+
+1.1.2.5
+log
+@replaced PLT webcell port with own env-based rewrite
+@
+text
+@d1 2
+a2 4
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+d4 4
+a7 4
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+d9 4
+a12 1
+;;; The Original Code is SISCweb.
+d14 7
+a20 17
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2007
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+a21 5
+;; this is a re-implementation of PLT's webcells using sisc
+;; environments
+
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+(require-library 'sisc/libs/srfi/srfi-39) ; parameter objects
+a23 2
+(require-library 'siscweb/k-hash)
+
+d25 2
+a26 31
+  (make-cell-parameter
+   make-cell cell-ref cell-shadow
+   (with-frame make-env current-environment)
+   (with-frame-after push-frame!)
+   make-env current-environment push-frame! get-fid)
+
+  (import srfi-16)
+  (import srfi-39)
+
+  (import siscweb/k-hash)
+
+  (define (make-cell-parameter value)
+    (let ((name (string->symbol (make-random-hash))))
+      (cell-set! name value)
+      (case-lambda
+        (() (cell-ref name))
+        ((value) (cell-set! name value)))))
+
+
+  (define (make-cell value)
+    (let ((name (string->symbol (make-random-hash))))
+      (cell-set! name value)
+      name))
+
+  (define (cell-ref name)
+    (display (format "DEBUG: looking up ~s from ~s\n" name (get-fid (unbox (current-environment)))))
+    (getprop name (unbox (current-environment))))
+
+  (define (cell-set! name value)
+    (display (format "DEBUG: setting ~s to ~s in ~s\n" name value (get-fid (unbox (current-environment)))))
+    (putprop name (unbox (current-environment)) value))
+d28 85
+a112 2
+  (define (cell-shadow name value)
+    (cell-set! name value))
+d114 4
+d119 13
+d133 2
+a134 6
+  (define (push-frame!)
+    (let* ((cur-top-box (current-environment))
+           (cur-top (unbox cur-top-box)))
+    (current-environment (box (make-env cur-top)))))
+
+  (define-syntax with-frame
+d137 1
+a137 2
+       (parameterize ((current-environment (box (make-env (unbox (current-environment))))))
+         body ...))))
+d139 7
+a145 1
+  (define-syntax with-frame-after
+d148 1
+a148 18
+       (let ((initial-environment (current-environment)))
+         (let ((value ((lambda () body ...))))
+           (current-environment initial-environment)
+           (push-frame!)
+           value)))))
+
+  (define (make-env parent-environment)
+    (let ((env (make-child-environment parent-environment))
+          (fid (make-random-hash))
+          (parent-fid (get-fid parent-environment)))
+      (putprop 'fid env fid)
+      (display (format "DEBUG: creating new environment ~s with parent ~s\n" fid parent-fid))
+      env))
+
+  (define (get-fid env)
+    (with/fc
+      (lambda (m e) #f)
+      (lambda () (getprop 'fid env))))
+d150 60
+a209 1
+  (define current-environment (make-parameter (box (null-environment 0))))
+@
+
+
+1.1.2.6
+log
+@merged from rel-0-5-dev-safe-frames
+@
+text
+@d31 3
+d35 2
+d38 1
+a38 1
+(require-library 'siscweb/frame)
+d41 5
+a45 5
+  (make-cell make-cell-parameter
+   cell-ref cell-shadow
+   (webcell/make make-cell)
+   (webcell/make-parameter make-cell-parameter)
+   webcell/ref webcell/set!)
+d48 10
+a58 1
+  (import siscweb/frame)
+d60 4
+d65 3
+a67 6
+  (define make-cell
+    (case-lambda
+      ((default-value)
+       (make-cell (gensym) default-value))
+      ((name default-value)
+       (cons name default-value))))
+d69 6
+a74 6
+  (define-syntax webcell/make
+    (syntax-rules ()
+      ((_ name default-value)
+       (make-cell (quote name) default-value))
+      ((_ default-value)
+       (make-cell default-value))))
+a75 2
+  (define (cell-name cell)
+    (car cell))
+a76 2
+  (define (cell-default-value cell)
+    (cdr cell))
+d78 4
+a81 11
+  (define (make-cell-parameter value)
+    (case-lambda
+     ((default-value)
+      (make-cell-parameter (gensym) value))
+     ((name default-value)
+      (let ((cell (make-cell name default-value)))
+        (case-lambda
+         (()
+          (webcell/ref cell))
+         ((value)
+          (cell-set! cell value)))))))
+d83 1
+a83 1
+  (define-syntax webcell/make-parameter
+d85 3
+a87 15
+      ((_ name default-value)
+       (make-cell-parameter (quote name) default-value))
+      ((_ default-value)
+       (make-cell-parameter default-value))))
+
+  (define (cell-ref cell)
+    (or (frame/lookup-value (cell-name cell))
+        (cell-default-value cell)))
+
+  (define (webcell/ref cell)
+    (cell-ref cell))
+
+  (define (cell-put! cell value)
+    (let ((name (cell-name cell)))
+      (frame/put-value! name value)))
+d89 21
+a109 2
+  (define (cell-shadow cell value)
+    (cell-put! cell value))
+d111 1
+a111 2
+  (define (webcell/set! name value)
+    (cell-put! name value))
+@
+
+
+1.1.2.7
+log
+@fixed typos
+@
+text
+@d67 1
+a67 1
+  (define make-cell-parameter
+d70 1
+a70 1
+      (make-cell-parameter (gensym) default-value))
+d93 1
+a93 1
+  (define (cell-set! cell value)
+d101 1
+a101 1
+    (cell-set! name value))
+@
+
+
+1.1.2.5.2.1
+log
+@moved content from siscweb/cells to siscweb/webcells
+@
+text
+@d31 3
+d35 2
+d42 4
+a45 3
+   make-cell cell-ref cell-shadow)
+
+  (import s2j)
+d48 1
+a51 7
+  (define-generic-java-methods
+    (jlookup |lookup|)
+    (jset |set|)
+    (jget-frame |getFrame|))
+
+
+
+d66 2
+a67 4
+    (display (format "DEBUG: looking up ~s from \n" name)); (get-fid (unbox (current-environment)))))
+    (let ((jvalue (jlookup (current-frame) (->jstring name))))
+      (and (not (java-null? jvalue))
+           (java-unwrap jvalue))))
+d70 2
+a71 2
+    (display (format "DEBUG: setting ~s to ~s in \n" name value)); (get-fid (unbox (current-environment)))))
+    (jset (current-frame) (->jstring name) (java-wrap value)))
+d76 36
+a111 2
+  (define (current-frame)
+    (jget-frame (java-null (java-class '|siscweb.web.RequestScope|))))
+@
+
+
+1.1.2.5.2.2
+log
+@cells can be named for continuity across server/context restarts;
+cells can now be defined without references to a given session
+@
+text
+@a34 1
+
+d51 1
+d53 21
+a73 35
+    (case-lambda
+     ((default-value)
+      (make-cell-parameter (make-random-hash) value))
+     ((name default-value)
+      (let ((cell (make-cell name default-value)))
+        (case-lambda
+         (()
+          (cell-ref cell))
+         ((value)
+          (cell-set! cell value)))))))
+
+  (define make-cell
+    (case-lambda
+     ((default-value)
+      (make-cell (make-random-hash) default-value))
+     ((name default-value)
+      (cons name default-value))))
+
+  (define (cell-name cell)
+    (car cell))
+
+  (define (cell-default-value cell)
+    (cdr cell))
+
+  (define (cell-ref cell)
+    (let ((name (cell-name cell)))
+      (let ((jvalue (jlookup (current-frame) (->jstring name))))
+        (cond ((java-null? jvalue)
+               (cell-default-value cell))
+              (else
+               (java-unwrap jvalue))))))
+
+  (define (cell-set! cell value)
+    (let ((name (cell-name cell)))
+      (jset (current-frame) (->jstring name) (java-wrap value))))
+a79 1
+
+@
+
+
+1.1.2.5.2.3
+log
+@revised api; uses gensym for random cell names
+@
+text
+@d33 3
+d37 2
+a38 5
+  (make-cell make-cell-parameter
+   cell-ref cell-shadow
+   (webcell/make make-cell)
+   (webcell/make-parameter make-cell-parameter)
+   webcell/ref webcell/set!)
+d44 2
+a50 19
+  (define make-cell
+    (case-lambda
+      ((default-value)
+       (make-cell (gensym) default-value))
+      ((name default-value)
+       (cons name default-value))))
+
+  (define-syntax webcell/make
+    (syntax-rules ()
+      ((_ name default-value)
+       (make-cell (quote name) default-value))
+      ((_ default-value)
+       (make-cell default-value))))
+
+  (define (cell-name cell)
+    (car cell))
+
+  (define (cell-default-value cell)
+    (cdr cell))
+d55 1
+a55 1
+      (make-cell-parameter (gensym) value))
+d60 1
+a60 1
+          (webcell/ref cell))
+d64 12
+a75 6
+  (define-syntax webcell/make-parameter
+    (syntax-rules ()
+      ((_ name default-value)
+       (make-cell-parameter (quote name) default-value))
+      ((_ default-value)
+       (make-cell-parameter default-value))))
+a84 3
+  (define (webcell/ref cell)
+    (cell-ref cell))
+
+d89 1
+a89 4
+  (define (cell-shadow cell value)
+    (cell-set! cell value))
+
+  (define (webcell/set! name value)
+a91 1
+
+@
+
+
+1.1.2.5.2.4
+log
+@removed s2j dependency; uses siscweb/frame
+@
+text
+@a32 2
+(require-library 'siscweb/frame)
+
+d40 2
+d44 4
+a47 2
+  (import siscweb/frame)
+
+d89 6
+a94 2
+    (or (frame/lookup-value (cell-name cell))
+        (cell-default-value cell)))
+d99 1
+a99 1
+  (define (cell-put! cell value)
+d101 1
+a101 1
+      (frame/put-value! name value)))
+d104 1
+a104 1
+    (cell-put! cell value))
+d107 6
+a112 1
+    (cell-put! name value))
+@
+
+

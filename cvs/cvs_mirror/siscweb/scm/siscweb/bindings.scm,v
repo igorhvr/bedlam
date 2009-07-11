@@ -1,0 +1,1659 @@
+head	1.6;
+access;
+symbols
+	rel-0-6-dev:1.6.0.4
+	rel-0-5-fix:1.6.0.2
+	rel-0-5:1.6
+	rel-0-5-dev-safe-frames:1.5.4.6.0.2
+	Root_rel-0-5-dev-safe-frames:1.5.4.6
+	rel-0-4-fix-0:1.5
+	rel-0-5-dev:1.5.0.4
+	rel-0-4-fix:1.5.0.2
+	rel-0-3-fix-3:1.4.2.1
+	rel-0-3-fix-2:1.4.2.1
+	rel-0-4-dev-sisc-1-11:1.4.4.1
+	rel-0-3-fix-1:1.4
+	rel-0-4-dev:1.4.0.4
+	rel-0-3-fix:1.4.0.2
+	rel-0-3:1.4
+	rel-0-3-dev-1:1.3.4.9
+	rel-0-2-fix-2:1.3.2.2
+	rel-0-2-fix-1:1.3
+	rel-0-2-fix:1.3.0.2
+	rel-0-3-dev:1.3.0.4
+	rel-0-2:1.3
+	rel-0-1-fix-1:1.2
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	start:1.1.1.1
+	rel-0-1-dev:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2007.04.12.03.51.18;	author acolomba;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2006.09.03.01.42.23;	author acolomba;	state Exp;
+branches
+	1.5.4.1;
+next	1.4;
+
+1.4
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.4.2.1
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2005.06.19.03.03.51;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.52;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches;
+next	1.1.1.2;
+
+1.1.1.2
+date	2005.02.17.01.08.27;	author acolomba;	state Exp;
+branches;
+next	1.1.1.3;
+
+1.1.1.3
+date	2005.03.06.18.46.55;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.05.08.17.26.17;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.05.08.18.38.28;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2005.07.26.01.55.28;	author acolomba;	state Exp;
+branches;
+next	1.3.2.2;
+
+1.3.2.2
+date	2005.07.31.20.04.03;	author acolomba;	state Exp;
+branches;
+next	1.3.2.3;
+
+1.3.2.3
+date	2005.10.03.02.00.39;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2005.07.17.20.13.16;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2;
+
+1.3.4.2
+date	2005.07.18.03.35.46;	author acolomba;	state Exp;
+branches;
+next	1.3.4.3;
+
+1.3.4.3
+date	2005.07.18.04.15.44;	author acolomba;	state Exp;
+branches;
+next	1.3.4.4;
+
+1.3.4.4
+date	2005.07.18.04.47.19;	author acolomba;	state Exp;
+branches;
+next	1.3.4.5;
+
+1.3.4.5
+date	2005.07.26.01.34.07;	author acolomba;	state Exp;
+branches;
+next	1.3.4.6;
+
+1.3.4.6
+date	2005.07.26.01.42.41;	author acolomba;	state Exp;
+branches;
+next	1.3.4.7;
+
+1.3.4.7
+date	2005.07.27.02.59.53;	author acolomba;	state Exp;
+branches;
+next	1.3.4.8;
+
+1.3.4.8
+date	2005.08.28.15.47.32;	author acolomba;	state Exp;
+branches;
+next	1.3.4.9;
+
+1.3.4.9
+date	2005.09.28.21.48.51;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.2.1
+date	2006.02.25.17.12.02;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2006.02.14.00.33.59;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.5.4.1
+date	2007.01.22.05.08.05;	author acolomba;	state Exp;
+branches;
+next	1.5.4.2;
+
+1.5.4.2
+date	2007.01.27.15.59.15;	author acolomba;	state Exp;
+branches;
+next	1.5.4.3;
+
+1.5.4.3
+date	2007.01.29.04.26.45;	author acolomba;	state Exp;
+branches;
+next	1.5.4.4;
+
+1.5.4.4
+date	2007.03.01.03.38.24;	author acolomba;	state Exp;
+branches;
+next	1.5.4.5;
+
+1.5.4.5
+date	2007.03.02.05.18.01;	author acolomba;	state Exp;
+branches;
+next	1.5.4.6;
+
+1.5.4.6
+date	2007.03.03.02.52.25;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@merged from rel-0-5-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2007
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+
+(require-library 'util/srfi-71)
+(require-library 'util/misc)
+
+(module siscweb/bindings
+  (get-bindings
+   exists-binding? extract-single-binding extract-bindings
+   alist->bindings bindings->alist
+   hashtable->bindings bindings->hashtable
+   let-bindings
+   bindings/get bindings/exists? bindings/extract bindings/extract-single
+   (bindings/let srfi-let bindings/extract))
+
+  (import s2j)
+  (import hashtable)
+  (import type-system)
+
+  (import srfi-16)
+
+  (import util/srfi-71)
+  (import util/misc)
+
+  (define-java-classes
+    (<binding-list> |siscweb.util.BindingList|)
+    (<jstring> |java.lang.String|)
+    (<jobject> |java.lang.Object|)
+    (<jobject-array> |java.lang.Object[]|)
+    (<map> |java.util.Map|)
+    (<hash-map> |java.util.HashMap|)
+    (<http-servlet-request> |javax.servlet.http.HttpServletRequest|)
+    (<sisc-http-servlet-request> |siscweb.web.SISCHttpServletRequest|))
+
+  (define-generic-java-methods add contains-key get
+    get-binding-map get-parameter get-parameter-map put
+    set-character-encoding size)
+
+
+  (define get-bindings
+    (case-lambda
+      ((char-enc request)
+       (set-character-encoding request (->jstring char-enc))
+       (get-bindings request))
+      ((request)
+       (if (instance-of? request <sisc-http-servlet-request>)
+           (get-binding-map request)
+           (java-new <hash-map> (get-parameter-map request))))))
+
+
+  (define (exists-binding? name bindings)
+    (->boolean (contains-key bindings (->jstring name))))
+
+
+  (define (extract-single-binding name bindings)
+    (let ((binding (extract-binding name bindings)))
+      (cond ((java-null? binding)
+             #f)
+            ((instance-of? binding <jobject-array>)
+             (and (> (java-array-length binding) 0)
+                  (b->s (java-array-ref binding 0))))
+            ((instance-of? binding <binding-list>)
+             (and (> (->number (size binding)) 0)
+                  (b->s (get binding (->jint 0)))))
+            (else
+             (b->s binding)))))
+
+  (define (extract-bindings name bindings)
+    (binding->scheme (extract-binding name bindings)))
+
+
+  (define (alist->bindings alist)
+    (define (list->binding-list lst)
+      (let ((bl (java-new <binding-list>)))
+        (for-each
+         (lambda (x)
+           (add bl (s->b x)))
+         lst)
+        bl))
+
+    (let ((bindings (java-new <hash-map> (->jint (length alist)))))
+      (for-each
+       (lambda (pair)
+         (let ((name (car pair))
+               (value (cdr pair)))
+           (put bindings
+                (->jstring name)
+                (cond ((not value)
+                       (java-null <jobject>))
+                      ((list? value)
+                       (list->binding-list value))
+                      (else
+                       (s->b value))))))
+       alist)
+      bindings))
+
+
+  (define (bindings->alist bindings)
+    (jmap/map
+     (lambda (jkey jvalue)
+       (cons (->string jkey)
+             (binding->scheme jvalue)))
+     bindings))
+
+  (define (hashtable->bindings ht)
+    (alist->bindings (hashtable->alist ht)))
+
+  (define (bindings->hashtable bindings)
+    (alist->hashtable (bindings->alist bindings) equal?))
+
+
+
+  ;; binding getter
+  ;; returns : - an empty list if the binding does not exist
+  ;;           - an Object[], BindingList or Java value
+  ;; in the latter case no conversion is made because it would be
+  ;; wasteful to convert multiple value when the return value is
+  ;; used by extract-single-binding, which only uses one
+  (define (extract-binding name bindings)
+    (get bindings (->jstring name)))
+;;        (error (format "extract-binding: expecting <bindings> object or a-list, found : ~a" (type-of bindings)))))))
+
+
+  ;; converts an Object[], BindingList or Java value
+  ;; to a Scheme value
+  (define (binding->scheme binding)
+    (cond ((java-null? binding)
+           '())
+          ((instance-of? binding <jobject-array>)
+           (jarray/map b->s binding))
+          ((instance-of? binding <binding-list>)
+           (jlist/map b->s binding))
+          (else
+           (b->s binding))))
+
+  ;; converts a single binding value to Scheme
+  (define (b->s value)
+    (typecase value
+      ((<jstring>) (->string value))   ; jstrings are converted
+      ((<jvalue>) (java-unwrap value)) ; wrapped scheme type
+      ((<jobject>) value)))            ; java objects are left alone
+
+  ;; converts a single scheme value to Java
+  (define (s->b value)
+    (typecase value
+      ((<string>) (->jstring value))  ; scheme strings are converted
+      ((<jobject>) value)             ; java objects are left alone
+      ((<value>) (java-wrap value)))) ; scheme values are wrapped
+
+
+
+  ;; a convenience form to assign bindings to variables
+  ;; var is the scheme variable name, name is the binding name
+  (define-syntax let-bindings
+    (syntax-rules (single multiple) ;for future use
+      ((_ ((var name) ...) bindings body ...)
+       (let* ((bnd bindings)
+              (var (extract-single-binding name bnd))
+              ... )
+         body ...))))
+
+
+  ;; NEW API
+
+  (define bindings/get get-bindings)
+
+  (define (bindings/exists? name bindings)
+    (exists-binding name bindings))
+
+  (define (bindings/extract name bindings)
+    (unlist (extract-bindings name bindings)))
+
+  (define (bindings/extract-single name bindings)
+    (extract-single-binding name bindings))
+
+  (define-syntax bindings/let
+    (syntax-rules (single multiple) ;for future use
+      ((_ ((var ... name) ...) bindings body ...)
+       (let ((bnd bindings))
+         (srfi-let ((var ... (bindings/extract name bnd))
+                    ... )
+           body ...)))))
+  )
+@
+
+
+1.5
+log
+@merged from rel-0-4-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+d33 1
+d41 3
+a43 1
+   let-bindings)
+d51 1
+d55 1
+d58 2
+a60 1
+    (<bindings> |java.util.HashMap|)
+d64 3
+a66 3
+  (define-generic-java-methods contains-key get get-attribute
+    get-binding-map get-parameter get-parameter-map key-set put
+    set-attribute set-character-encoding to-array)
+d85 11
+a95 4
+    (let ((binding (get bindings (->jstring name))))
+      (if (java-null? binding)
+        #f
+        (b->s (java-array-ref binding 0)))))
+d98 1
+a98 4
+    (let ((binding (get bindings (->jstring name))))
+      (if (java-null? binding)
+          '()
+          (map b->s (->list binding)))))
+d102 8
+d111 13
+a123 6
+      (for-each (lambda (binding)
+                  (put bindings
+                       (->jstring (car binding))
+                       (->jarray (map s->b (cdr binding))
+                                 <jobject>)))
+                alist)
+d128 5
+a132 6
+    (map (lambda (j-key)
+           (cons
+            (->string j-key)
+            (extract-bindings (->string j-key) bindings)))
+         (->list (to-array (key-set bindings)))))
+
+d141 25
+a165 1
+  ;; little hack
+d171 2
+d175 1
+a175 1
+      ((<string>) (->jstring value))  ; scheme string are converted
+d180 1
+d191 21
+@
+
+
+1.5.4.1
+log
+@added support for bindings in the form ((a . "b") ...)
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2007
+a52 1
+    (<jobject-array> |java.lang.Object[]|)
+d80 3
+a82 6
+      (cond ((java-null? binding)
+             #f)
+            ((instance-of? binding <jobject-array>)
+             (b->s (java-array-ref binding 0)))
+            (else
+             (b->s binding)))))
+d86 3
+a88 6
+      (cond ((java-null? binding)
+             '())
+            ((instance-of? binding <jobject-array>)
+             (jarray/map b->s binding))
+            (else
+             (list (b->s binding))))))
+d93 6
+a98 10
+      (for-each
+       (lambda (binding)
+         (let ((name (car binding))
+               (value (cdr binding)))
+         (put bindings
+              (->jstring (car binding))
+              (if (list? value)
+                  (->jarray (map s->b value) <jobject>)
+                  (s->b value)))))
+       alist)
+d103 6
+a108 8
+    (jmap/map
+     (lambda (jkey jvalue)
+       (let ((name (->string jkey))
+             (value (if (instance-of? jvalue <jobject-array>)
+                        (jarray/map b->s jvalue)
+                        (b->s jvalue))))
+         (cons name value)))
+     bindings))
+d125 1
+a125 1
+      ((<string>) (->jstring value))  ; scheme strings are converted
+@
+
+
+1.5.4.2
+log
+@converts multiple bindings to siscweb.util.BindingList
+instead of Object[], for easier scanning from Java.
+@
+text
+@a50 1
+    (<binding-list> |siscweb.util.BindingList|)
+d59 3
+a61 3
+  (define-generic-java-methods add contains-key get
+    get-binding-map get-parameter get-parameter-map put
+    set-character-encoding)
+a84 2
+            ((instance-of? binding <binding-list>)
+             (b->s (get binding (->jint 0))))
+a93 2
+            ((instance-of? binding <binding-list>)
+             (jlist/map b->s binding))
+a98 8
+    (define (list->binding-list lst)
+      (let ((bl (java-new <binding-list>)))
+        (for-each
+         (lambda (x)
+           (add bl (s->b x)))
+         lst)
+        bl))
+
+d107 1
+a107 1
+                  (list->binding-list value)
+d117 2
+a118 2
+             (value (if (instance-of? jvalue <binding-list>)
+                        (jlist/map b->s jvalue)
+a153 2
+
+
+@
+
+
+1.5.4.3
+log
+@fixed bindings->alist to work with Object[]s
+@
+text
+@d130 3
+a132 6
+             (value (cond ((instance-of? binding <jobject-array>)
+                           (jarray/map b->s binding))
+                          ((instance-of? jvalue <binding-list>)
+                           (jlist/map b->s jvalue))
+                          (else
+                           (b->s jvalue)))))
+@
+
+
+1.5.4.4
+log
+@more robust and accurate alist<->map conversion (isomorphic); added new multi-valued api (keeper?)
+@
+text
+@a32 1
+(require-library 'util/srfi-71)
+d40 1
+a40 3
+   let-bindings
+   bindings/get bindings/extract bindings/extract-single
+   (bindings/let srfi-let bindings/extract))
+a47 1
+  (import util/srfi-71)
+a54 1
+    (<map> |java.util.Map|)
+d56 1
+d77 1
+a77 5
+    (typecase bindings
+      ((<list>)
+       (if (assoc name bindings) #t #f))
+      ((<map>
+        (->boolean (contains-key bindings (->jstring name)))))))
+d81 2
+a82 2
+    (let ((binding (extract-binding name bindings)))
+      (cond ((null? binding)
+d92 9
+a100 1
+    (binding->scheme (extract-binding name bindings)))
+d114 8
+a121 8
+       (lambda (pair)
+         (let ((name (car pair))
+               (value (cdr pair)))
+           (put bindings
+                (->jstring name)
+                (if (list? value)
+                    (list->binding-list value)
+                    (s->b value)))))
+d129 8
+a136 2
+       (cons (->string jkey)
+             (binding->scheme jvalue)))
+d146 1
+a146 36
+
+  ;; binding getter
+  ;; returns : - an empty list if the binding does not exist
+  ;;           - a list of values if bindings is an a-list
+  ;;           - an Object[], BindingList or Java value if
+  ;;             bindings is a <bindings> object
+  ;; in the latter case no conversion is made because it would be
+  ;; wasteful to convert multiple value when the return value is
+  ;; used by extract-single-binding, which only uses one
+  (define (extract-binding name bindings)
+    (typecase bindings
+      ((<list>)
+       (let ((pair (assoc name bindings)))
+         (if pair
+             (cdr pair)
+             '())))
+      ((<map>)
+       (let ((binding (get bindings (->jstring name))))
+         (if (java-null? binding) '() binding)))
+      ((else
+        (error (format "extract-binding: expecting <bindings> object or a-list, found : ~a" (type-of bindings)))))))
+
+
+  ;; converts an Object[], BindingList or Java value
+  ;; to a Scheme value
+  (define (binding->scheme binding)
+    (cond ((java-null? binding)
+           '())
+          ((instance-of? binding <jobject-array>)
+           (jarray/map b->s binding))
+          ((instance-of? binding <binding-list>)
+           (jlist/map b->s binding))
+          (else
+           (b->s binding))))
+
+  ;; converts a single binding value to Scheme
+a151 2
+
+  ;; converts a single scheme value to Java
+a158 1
+
+d169 1
+a170 6
+  ;; NEW API
+
+  (define bindings/get get-bindings)
+
+  (define (bindings/extract name bindings)
+    (unlist (extract-bindings name bindings)))
+a171 11
+  (define (bindings/extract-single name bindings)
+    (extract-single-binding name bindings))
+
+  (define-syntax bindings/let
+    (syntax-rules (single multiple) ;for future use
+      ((_ ((var ... name) ...) bindings body ...)
+       (let ((bnd bindings))
+         (srfi-let ((var ... (bindings/extract name bnd))
+                    ... )
+           body ...)))))
+  )
+@
+
+
+1.5.4.5
+log
+@an #f binding is now considered an empty binding when converting; exists-binding? now only  accepts a <bindings> object; added bindings/exists?
+@
+text
+@d42 1
+a42 1
+   bindings/get bindings/exists? bindings/extract bindings/extract-single
+d81 5
+a85 1
+    (->boolean (contains-key bindings (->jstring name))))
+d119 3
+a121 6
+                (cond ((not value)
+                       (java-null <jobject>))
+                      ((list? value)
+                       (list->binding-list value))
+                      (else
+                       (s->b value))))))
+a205 3
+  (define (bindings/exists? name bindings)
+    (exists-binding name bindings))
+
+@
+
+
+1.5.4.6
+log
+@extract-[single-]binding[s] functions accept a <bindings> object only; fixed couple of bugs in extract-single-binding
+@
+text
+@d66 1
+a66 1
+    set-character-encoding size)
+d86 1
+a86 1
+      (cond ((java-null? binding)
+d89 1
+a89 2
+             (and (> (java-array-length binding) 0)
+                  (b->s (java-array-ref binding 0))))
+d91 1
+a91 2
+             (and (> (->number (size binding)) 0)
+                  (b->s (get binding (->jint 0)))))
+d142 3
+a144 1
+  ;;           - an Object[], BindingList or Java value
+d149 11
+a159 2
+    (get bindings (->jstring name)))
+;;        (error (format "extract-binding: expecting <bindings> object or a-list, found : ~a" (type-of bindings)))))))
+@
+
+
+1.4
+log
+@merged from rel-0-3-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+d31 2
+a43 1
+  (import generic-procedures)
+d46 2
+d58 14
+a71 14
+  (define-generic-java-methods
+    contains-key get get-attribute set-attribute get-binding-map get-parameter get-parameter-map key-set put to-array)
+
+
+  (define-generics
+    get-bindings put-bindings
+    exists-binding? extract-single-binding extract-bindings
+    alist->bindings bindings->alist
+    hashtable->bindings bindings->hashtable)
+
+
+  (define-method (get-bindings (<http-servlet-request> request))
+    (java-new <hash-map> (get-parameter-map request)))
+
+a72 2
+  (define-method (get-bindings (<sisc-http-servlet-request> request))
+    (get-binding-map request))
+d74 1
+a74 3
+
+
+  (define-method (exists-binding? (<string> name) (<bindings> bindings))
+a76 3
+  (define-method (exists-binding? (<symbol> name) (<bindings> bindings))
+    (exists-binding? (symbol->string name) bindings))
+
+d78 1
+a78 1
+  (define-method (extract-single-binding (<string> name) (<bindings> bindings))
+d84 1
+a84 5
+  (define-method (extract-single-binding (<symbol> name) (<bindings> bindings))
+    (extract-single-binding (symbol->string name) bindings))
+
+
+  (define-method (extract-bindings (<string> name) (<bindings> bindings))
+a89 3
+  (define-method (extract-bindings (<symbol> name) (<bindings> bindings))
+    (extract-bindings (symbol->string name) bindings))
+
+d91 1
+a91 1
+  (define-method (alist->bindings (<list> alist))
+d102 1
+a102 1
+  (define-method (bindings->alist (<bindings> bindings))
+d110 1
+a110 1
+  (define-method (hashtable->bindings (<value> ht))
+d113 1
+a113 1
+  (define-method (bindings->hashtable (<bindings> bindings))
+d140 1
+a140 1
+  )@
+
+
+1.4.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+a30 2
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+
+d42 1
+a44 2
+  (import srfi-16)
+
+d55 14
+a68 14
+  (define-generic-java-methods contains-key get get-attribute
+    get-binding-map get-parameter get-parameter-map key-set put
+    set-attribute set-character-encoding to-array)
+
+
+  (define get-bindings
+    (case-lambda
+      ((char-enc request)
+       (set-character-encoding request (->jstring char-enc))
+       (get-bindings request))
+      ((request)
+       (if (instance-of? request <sisc-http-servlet-request>)
+           (get-binding-map request)
+           (java-new <hash-map> (get-parameter-map request))))))
+d70 2
+d73 3
+a75 1
+  (define (exists-binding? name bindings)
+d78 3
+d82 1
+a82 1
+  (define (extract-single-binding name bindings)
+d88 5
+a92 1
+  (define (extract-bindings name bindings)
+d98 3
+d102 1
+a102 1
+  (define (alist->bindings alist)
+d113 1
+a113 1
+  (define (bindings->alist bindings)
+d121 1
+a121 1
+  (define (hashtable->bindings ht)
+d124 1
+a124 1
+  (define (bindings->hashtable bindings)
+d151 1
+a151 1
+  )
+@
+
+
+1.4.4.1
+log
+@get-bindings now accepts an optional charset parameter; removed
+generic procedure definitions
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+a30 2
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+
+d42 1
+a44 2
+  (import srfi-16)
+
+d55 14
+a68 14
+  (define-generic-java-methods contains-key get get-attribute
+    get-binding-map get-parameter get-parameter-map key-set put
+    set-attribute set-character-encoding to-array)
+
+
+  (define get-bindings
+    (case-lambda
+      ((char-enc request)
+       (set-character-encoding request (->jstring char-enc))
+       (get-bindings request))
+      ((request)
+       (if (instance-of? request <sisc-http-servlet-request>)
+           (get-binding-map request)
+           (java-new <hash-map> (get-parameter-map request))))))
+d70 2
+d73 3
+a75 1
+  (define (exists-binding? name bindings)
+d78 3
+d82 1
+a82 1
+  (define (extract-single-binding name bindings)
+d88 5
+a92 1
+  (define (extract-bindings name bindings)
+d98 3
+d102 1
+a102 1
+  (define (alist->bindings alist)
+d113 1
+a113 1
+  (define (bindings->alist bindings)
+d121 1
+a121 1
+  (define (hashtable->bindings ht)
+d124 1
+a124 1
+  (define (bindings->hashtable bindings)
+d151 1
+a151 1
+  )
+@
+
+
+1.3
+log
+@merged from rel-0-2-dev
+@
+text
+@d31 1
+d34 5
+a38 5
+  (<bindings> get-bindings put-bindings
+              exists-binding? extract-single-binding extract-bindings
+              alist->bindings bindings->alist
+              hashtable->bindings bindings->hashtable
+              let-bindings)
+a42 1
+  (import oo)
+d45 2
+d49 1
+d51 3
+a53 2
+    (<http-servlet-request> |javax.servlet.http.HttpServletRequest|))
+
+d56 1
+a56 23
+    contains-key get get-attribute set-attribute get-parameter get-parameter-map key-set put to-array)
+
+
+  (define-generics :parameter-map :parameter-map!)
+
+  (define-class (<bindings>)
+    (parameter-map :parameter-map :parameter-map!))
+
+  (define-method (initialize (<bindings> bindings) (<http-servlet-request> request))
+    (let ((my-bindings (get-attribute request (->jstring "siscweb.bindings"))))
+      (if (java-null? my-bindings)
+          (:parameter-map! bindings (get-parameter-map request))
+          (:parameter-map! bindings my-bindings))))
+
+  (define-method (initialize (<bindings> bindings) (<list> alist))
+    (:parameter-map! bindings (java-new <hash-map> (->jint (length alist))))
+    (for-each (lambda (binding)
+                (put (:parameter-map bindings)
+                     (->jstring (car binding))
+                     (->jarray (map (lambda (str) (->jstring str))
+                                    (cdr binding))
+                               <jstring>)))
+              alist))
+d67 1
+a67 1
+    (make <bindings> request))
+d70 2
+a71 8
+  (define-method (put-bindings (<http-servlet-request> request) (<bindings> bindings))
+    (set-attribute request (->jstring "siscweb.bindings") (:parameter-map bindings)))
+
+  (define-method (put-bindings (<http-servlet-request> request) (<list> alist))
+    (put-bindings request (alist->bindings alist)))
+
+  (define-method (put-bindings (<http-servlet-request> request) (<value> ht))
+    (put-bindings request (:parameter-map (hashtable->bindings))))
+d76 1
+a76 1
+    (->boolean (contains-key (:parameter-map bindings) (->jstring name))))
+d83 1
+a83 1
+    (let ((binding (get (:parameter-map bindings) (->jstring name))))
+d86 1
+a86 1
+        (->string (java-array-ref binding 0)))))
+d93 1
+a93 1
+    (let ((binding (get (:parameter-map bindings) (->jstring name))))
+d96 1
+a96 1
+          (map ->string (->list binding)))))
+d102 9
+a111 2
+  (define-method (alist->bindings (<list> alist))
+    (make <bindings> alist))
+d118 1
+a118 1
+         (->list (to-array (key-set (:parameter-map bindings))))))
+d125 14
+a138 1
+    (alist->hashtable (bindings->alist bindings)))
+@
+
+
+1.3.2.1
+log
+@fixed bindings->hashtable, where the ht key comparison was not being
+set to equal?; now clones the parameter map obtained from the request,
+b/c apparently it gets cleared; these changes are carried over from
+the rel-0-3-dev branch
+@
+text
+@d52 1
+a52 1
+    clone contains-key get get-attribute set-attribute get-parameter get-parameter-map key-set put to-array)
+d63 1
+a63 1
+          (:parameter-map! bindings (clone (get-parameter-map request)))
+d142 1
+a142 1
+    (alist->hashtable (bindings->alist bindings) equal?))
+@
+
+
+1.3.2.2
+log
+@merged from rel-0-3-dev
+@
+text
+@a30 1
+(require-library 'util/misc)
+d33 1
+a33 1
+  (<bindings> get-bindings
+d37 1
+a37 1
+              let-bindings :parameter-map)
+a44 2
+  (import util/misc)
+
+a46 1
+    (<jobject> |java.lang.Object|)
+d48 1
+a48 2
+    (<http-servlet-request> |javax.servlet.http.HttpServletRequest|)
+    (<sisc-http-servlet-request> |siscweb.web.SISCHttpServletRequest|))
+d52 1
+a52 1
+    clone contains-key get get-attribute set-attribute get-binding-map get-parameter get-parameter-map key-set put to-array)
+a59 3
+  (define-method (initialize (<bindings> bindings) (<sisc-http-servlet-request> request))
+    (:parameter-map! bindings (get-binding-map request)))
+
+d61 4
+a64 1
+    (:parameter-map! bindings (clone (get-parameter-map request))))
+d71 3
+a73 2
+                     (->jarray (map s->b (cdr binding))
+                               <jobject>)))
+d88 11
+d110 1
+a110 1
+        (b->s (java-array-ref binding 0)))))
+d120 1
+a120 1
+          (map b->s (->list binding)))))
+a144 13
+  ;; little hack
+  (define (b->s value)
+    (typecase value
+      ((<jstring>) (->string value))   ; jstrings are converted
+      ((<jvalue>) (java-unwrap value)) ; wrapped scheme type
+      ((<jobject>) value)))            ; java objects are left alone
+  (define (s->b value)
+    (typecase value
+      ((<string>) (->jstring value))  ; scheme string are converted
+      ((<jobject>) value)             ; java objects are left alone
+      ((<value>) (java-wrap value)))) ; scheme values are wrapped
+
+
+d155 1
+a155 1
+  )
+@
+
+
+1.3.2.3
+log
+@merged from rel-0-3-dev; <bindings> is now just a java class; this
+does away with SISC issues with serialization of scheme objects; does
+not rely on the parameter map to be clonable, since that is not always
+the case in all appservers
+@
+text
+@d34 5
+a38 5
+  (get-bindings
+   exists-binding? extract-single-binding extract-bindings
+   alist->bindings bindings->alist
+   hashtable->bindings bindings->hashtable
+   let-bindings)
+d43 1
+a51 1
+    (<bindings> |java.util.HashMap|)
+d55 1
+d57 22
+a78 1
+    contains-key get get-attribute set-attribute get-binding-map get-parameter get-parameter-map key-set put to-array)
+d89 1
+a89 5
+    (java-new <hash-map> (get-parameter-map request)))
+
+
+  (define-method (get-bindings (<sisc-http-servlet-request> request))
+    (get-binding-map request))
+d93 1
+a93 1
+    (->boolean (contains-key bindings (->jstring name))))
+d100 1
+a100 1
+    (let ((binding (get bindings (->jstring name))))
+d110 1
+a110 1
+    (let ((binding (get bindings (->jstring name))))
+d119 1
+d121 1
+a121 9
+    (let ((bindings (java-new <hash-map> (->jint (length alist)))))
+      (for-each (lambda (binding)
+                  (put bindings
+                       (->jstring (car binding))
+                       (->jarray (map s->b (cdr binding))
+                                 <jobject>)))
+                alist)
+      bindings))
+
+d128 1
+a128 1
+         (->list (to-array (key-set bindings)))))
+@
+
+
+1.3.4.1
+log
+@can now store arbitrary objects
+@
+text
+@a30 1
+(require-library 'util/misc)
+a44 2
+  (import util/misc)
+
+a46 1
+    (<jobject> |java.lang.Object|)
+d71 3
+a73 2
+                     (->jarray (map java-wrap (cdr binding))
+                               <jobject>)))
+d110 1
+a110 1
+        (b->s (java-array-ref binding 0)))))
+d120 1
+a120 1
+          (map b->s (->list binding)))))
+a144 7
+  ;; little hack
+  (define (b->s value)
+    (typecase value
+      ((<jstring>) (->string value))
+      (else (java-unwrap value))))
+
+
+@
+
+
+1.3.4.2
+log
+@bindings are now internally stored in a more Java-centric manner
+@
+text
+@d75 1
+a75 1
+                     (->jarray (map s->b (cdr binding))
+d151 2
+a152 8
+      ((<jstring>) (->string value))   ; jstrings are converted
+      ((<jvalue>) (java-unwrap value)) ; wrapped scheme type
+      ((<jobject>) value)))            ; java objects are left alone
+  (define (s->b value)
+    (typecase value
+      ((<string>) (->jstring value))  ; scheme string are converted
+      ((<jobject>) value)             ; java objects are left alone
+      ((<value>) (java-wrap value)))) ; scheme values are wrapped
+@
+
+
+1.3.4.3
+log
+@:parameter-map accessor is now exported
+@
+text
+@d38 1
+a38 1
+              let-bindings :parameter-map)
+@
+
+
+1.3.4.4
+log
+@removed put-bindings; bindings are now associated to a request by
+wrapping it in SISCHttpServletRequest
+@
+text
+@d34 1
+a34 1
+  (<bindings> get-bindings
+d52 1
+a52 2
+    (<http-servlet-request> |javax.servlet.http.HttpServletRequest|)
+    (<sisc-http-servlet-request> |siscweb.web.SISCHttpServletRequest|))
+d56 1
+a56 1
+    contains-key get get-attribute set-attribute get-binding-map get-parameter get-parameter-map key-set put to-array)
+a63 4
+  ;; TODO: should merge request parameters and bindings
+  (define-method (initialize (<bindings> bindings) (<sisc-http-servlet-request> request))
+    (:parameter-map! bindings (get-binding-map request)))
+
+d65 4
+a68 1
+    (:parameter-map! bindings (get-parameter-map request)))
+d91 11
+@
+
+
+1.3.4.5
+log
+@fixed bindings->hashtable, where the ht key comparison was not being
+set to equal?
+@
+text
+@d136 1
+a136 1
+    (alist->hashtable (bindings->alist bindings) equal?))
+@
+
+
+1.3.4.6
+log
+@now clones the parameter map obtained from the request, b/c apparently
+it gets cleared
+@
+text
+@d57 1
+a57 1
+    clone contains-key get get-attribute set-attribute get-binding-map get-parameter get-parameter-map key-set put to-array)
+d70 1
+a70 1
+    (:parameter-map! bindings (clone (get-parameter-map request))))
+@
+
+
+1.3.4.7
+log
+@removed TOOD
+@
+text
+@d65 1
+d68 1
+a68 1
+  
+@
+
+
+1.3.4.8
+log
+@<bindings> is now just a java class; this does away with SISC issues
+with serialization of scheme objects
+@
+text
+@d34 5
+a38 5
+  (get-bindings
+   exists-binding? extract-single-binding extract-bindings
+   alist->bindings bindings->alist
+   hashtable->bindings bindings->hashtable
+   let-bindings)
+d43 1
+a51 1
+    (<bindings> |java.util.HashMap|)
+d55 1
+d60 21
+d89 1
+a89 6
+    (clone (get-parameter-map request)))
+
+
+  (define-method (get-bindings (<sisc-http-servlet-request> request))
+    (get-binding-map request))
+
+d93 1
+a93 1
+    (->boolean (contains-key bindings (->jstring name))))
+d100 1
+a100 1
+    (let ((binding (get bindings (->jstring name))))
+d110 1
+a110 1
+    (let ((binding (get bindings (->jstring name))))
+d119 1
+d121 1
+a121 9
+    (let ((bindings (java-new <hash-map> (->jint (length alist)))))
+      (for-each (lambda (binding)
+                  (put bindings
+                       (->jstring (car binding))
+                       (->jarray (map s->b (cdr binding))
+                                 <jobject>)))
+                alist)
+      bindings))
+
+d128 1
+a128 1
+         (->list (to-array (key-set bindings)))))
+@
+
+
+1.3.4.9
+log
+@does not rely on the parameter map to be clonable, since that is not
+always the case in all appservers
+@
+text
+@d56 1
+a56 1
+    contains-key get get-attribute set-attribute get-binding-map get-parameter get-parameter-map key-set put to-array)
+d67 1
+a67 1
+    (java-new <hash-map> (get-parameter-map request)))
+@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@d31 1
+d33 5
+a37 2
+  (<bindings> get-bindings exists-binding? extract-single-binding
+              extract-bindings bindings->alist let-bindings)
+d40 1
+d52 1
+a52 1
+    contains-key get get-attribute get-parameter get-parameter-map key-set put to-array)
+d61 1
+a61 1
+    (let ((my-bindings (get-attribute request (->jstring "bindings"))))
+d64 1
+a64 1
+          (:parameter-map! bindings (:parameter-map (java-unwrap my-bindings))))))
+d77 6
+a82 1
+  (define-generics exists-binding? get-bindings extract-single-binding extract-bindings bindings->alist)
+d88 11
+d126 4
+d132 1
+a132 1
+           (list
+d138 6
+@
+
+
+1.2.4.1
+log
+@added put-bindings
+@
+text
+@d32 1
+a32 1
+  (<bindings> get-bindings put-bindings exists-binding? extract-single-binding
+d47 1
+a47 1
+    contains-key get get-attribute set-attribute get-parameter get-parameter-map key-set put to-array)
+d72 1
+a72 1
+  (define-generics exists-binding? get-bindings put-bindings extract-single-binding extract-bindings bindings->alist)
+a76 8
+  (define-method (put-bindings (<http-servlet-request> request) (<bindings> bindings))
+    (set-attribute request (->jstring "siscweb.bindings") (:parameter-map bindings)))
+
+  (define-method (put-bindings (<http-servlet-request> request) (<list> alist))
+    (put-bindings request (make <bindings> alist)))
+
+  (define-method (put-bindings (<http-servlet-request> request) (<bindings> bindings))
+    (set-attribute request (->jstring "siscweb.bindings") (:parameter-map bindings)))
+@
+
+
+1.2.4.2
+log
+@added conversion functions to/from hashtable and alist; normalized
+treatment of multiple values for key; added put-bindings, symmetric of
+get-bindings
+@
+text
+@a30 1
+
+d32 2
+a33 5
+  (<bindings> get-bindings put-bindings
+              exists-binding? extract-single-binding extract-bindings
+              alist->bindings bindings->alist
+              hashtable->bindings bindings->hashtable
+              let-bindings)
+a35 1
+  (import hashtable)
+d56 1
+a56 1
+    (let ((my-bindings (get-attribute request (->jstring "siscweb.bindings"))))
+d59 1
+a59 1
+          (:parameter-map! bindings my-bindings))))
+d72 1
+a72 6
+  (define-generics
+    get-bindings put-bindings
+    exists-binding? extract-single-binding extract-bindings
+    alist->bindings bindings->alist
+    hashtable->bindings bindings->hashtable)
+
+a76 1
+
+d81 1
+a81 5
+    (put-bindings request (alist->bindings alist)))
+
+  (define-method (put-bindings (<http-servlet-request> request) (<value> ht))
+    (put-bindings request (:parameter-map (hashtable->bindings))))
+
+d83 2
+a112 4
+
+  (define-method (alist->bindings (<list> alist))
+    (make <bindings> alist))
+
+d115 1
+a115 1
+           (cons
+a120 6
+  (define-method (hashtable->bindings (<value> ht))
+    (alist->bindings (hashtable->alist ht)))
+
+  (define-method (bindings->hashtable (<bindings> bindings))
+    (alist->hashtable (bindings->alist bindings)))
+
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d1 30
+d32 2
+a33 2
+  (<bindings> get-bindings extract-single-binding extract-bindings bindings->alist let-bindings
+              :parameter-map)
+d40 85
+a124 1
+  (include "bindings-inc.scm"))@
+
+
+1.1.1.1
+log
+@initial import
+@
+text
+@@
+
+
+1.1.1.2
+log
+@did away with the -inc business; i think it was a bad idea
+@
+text
+@a0 30
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+d10 1
+a10 85
+  (define-java-classes
+    (<jstring> |java.lang.String|)
+    (<hash-map> |java.util.HashMap|)
+    (<http-servlet-request> |javax.servlet.http.HttpServletRequest|))
+
+
+  (define-generic-java-methods
+    contains-key get get-attribute get-parameter get-parameter-map key-set put to-array)
+
+
+  (define-generics :parameter-map :parameter-map!)
+
+  (define-class (<bindings>)
+    (parameter-map :parameter-map :parameter-map!))
+
+  (define-method (initialize (<bindings> bindings) (<http-servlet-request> request))
+    (let ((my-bindings (get-attribute request (->jstring "bindings"))))
+      (if (java-null? my-bindings)
+          (:parameter-map! bindings (get-parameter-map request))
+          (:parameter-map! bindings (:parameter-map (java-unwrap my-bindings))))))
+
+  (define-method (initialize (<bindings> bindings) (<list> alist))
+    (:parameter-map! bindings (java-new <hash-map> (->jint (length alist))))
+    (for-each (lambda (binding)
+                (put (:parameter-map bindings)
+                     (->jstring (car binding))
+                     (->jarray (map (lambda (str) (->jstring str))
+                                    (cdr binding))
+                               <jstring>)))
+              alist))
+
+
+  (define-generics exists-binding? get-bindings extract-single-binding extract-bindings bindings->alist)
+
+  (define-method (get-bindings (<http-servlet-request> request))
+    (make <bindings> request))
+
+
+  (define-method (exists-binding? (<string> name) (<bindings> bindings))
+    (->boolean (contains-key (:parameter-map bindings) (->jstring name))))
+
+  (define-method (exists-binding? (<symbol> name) (<bindings> bindings))
+    (exists-binding? (symbol->string name) bindings))
+
+
+  (define-method (extract-single-binding (<string> name) (<bindings> bindings))
+    (let ((binding (get (:parameter-map bindings) (->jstring name))))
+      (if (java-null? binding)
+        #f
+        (->string (java-array-ref binding 0)))))
+
+  (define-method (extract-single-binding (<symbol> name) (<bindings> bindings))
+    (extract-single-binding (symbol->string name) bindings))
+
+
+  (define-method (extract-bindings (<string> name) (<bindings> bindings))
+    (let ((binding (get (:parameter-map bindings) (->jstring name))))
+      (if (java-null? binding)
+          '()
+          (map ->string (->list binding)))))
+
+  (define-method (extract-bindings (<symbol> name) (<bindings> bindings))
+    (extract-bindings (symbol->string name) bindings))
+
+
+  (define-method (bindings->alist (<bindings> bindings))
+    (map (lambda (j-key)
+           (list
+            (->string j-key)
+            (extract-bindings (->string j-key) bindings)))
+         (->list (to-array (key-set (:parameter-map bindings))))))
+
+
+
+  ;; a convenience form to assign bindings to variables
+  ;; var is the scheme variable name, name is the binding name
+  (define-syntax let-bindings
+    (syntax-rules (single multiple) ;for future use
+      ((_ ((var name) ...) bindings body ...)
+       (let* ((bnd bindings)
+              (var (extract-single-binding name bnd))
+              ... )
+         body ...))))
+
+  )@
+
+
+1.1.1.3
+log
+@fixed list of exports
+@
+text
+@d32 2
+a33 2
+  (<bindings> get-bindings exists-binding? extract-single-binding
+              extract-bindings bindings->alist let-bindings)
+@
+
+

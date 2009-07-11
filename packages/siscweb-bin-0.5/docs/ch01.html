@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Chapter 1. Introduction</title><link href="siscweb-manual.css" rel="stylesheet" type="text/css" /><meta content="DocBook XSL Stylesheets V1.70.1" name="generator" /><link rel="start" href="index.html" title="SISCweb Manual" /><link rel="up" href="index.html" title="SISCweb Manual" /><link rel="prev" href="index.html" title="SISCweb Manual" /><link rel="next" href="ch02.html" title="Chapter 2. Installation" /></head><body><div class="navheader"><table summary="Navigation header" width="100%"><tr><th align="center" colspan="3">Chapter 1. Introduction</th></tr><tr><td align="left" width="20%"><a accesskey="p" href="index.html">Prev</a> </td><th align="center" width="60%"> </th><td align="right" width="20%"> <a accesskey="n" href="ch02.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="introduction" />Chapter 1. Introduction</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ch01.html#features">Features</a></span></dt><dt><span class="section"><a href="ch01.html#license">License</a></span></dt><dt><span class="section"><a href="ch01.html#credits">Credits</a></span></dt><dt><span class="section"><a href="ch01.html#contact">Contact Information</a></span></dt></dl></div><p>
+    <span class="application">SISCweb</span> is a framework to facilitate writing stateful
+    Scheme web applications in J2EE environments.
+  </p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="features" />Features</h2></div></div></div><p>
+      <span class="application">SISCweb</span> sports an interactive, REPL-based web application
+      development style. Developers can write applications
+      interactively, without ever restarting the context, and, insofar as
+      it is desirable, without ever losing application state. (In
+      fact, save for the Java portion, <span class="application">SISCweb</span> itself is developed
+      interactively in its own REPL.)
+    </p><p>
+      Through the use of continuations, <span class="application">SISCweb</span> does away with the
+      page-centric execution model typical of web applications (see
+
+      <sup>[<a href="#ftn.N1003C" id="N1003C">1</a>]</sup>.)
+
+      Every time a response is sent to the browser, the program
+      execution flow is suspended, to be then resumed from that exact
+      point when the browser submits a request. Some consequences of
+      this approach are:
+    </p><div class="itemizedlist"><ul type="disc"><li>
+        Programs are more easily structured around their problem
+        domain rather than their presentation.
+      </li><li>
+        Developers are mostly freed from having to manually manage the
+        lifecycle of objects in the session. The need to to store
+        objects in the session is greatly reduced because when the
+        browser submits a request, and the program's execution flow is
+        resumed, all the language-level variables that were in scope
+        are again available.
+      </li><li>
+        Thanks to <span class="application">SISC</span>'s serializable continuations, accumulated
+        program state is transparent to server restarts.
+      </li><li>
+        Programs can be made resilient to page reloads and browser
+        window cloning with much less effort.
+      </li><li>
+        An extra security layer is added because URLs (which now
+        encode a reference to program state) cannot easily be
+        manipulated, hidden form variables are not needed anymore, and
+        in general the automatic state management in <span class="application">SISCweb</span> should
+        be more difficult to hack than the ad-hoc solutions developers
+        are forced to implement in traditional web frameworks.
+        </li></ul></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3>
+        This document is a work-in-progress. Readers not familiar with
+        other Scheme web frameworks might want to also read through
+        the documentation of more mature implementations:
+
+        <div class="itemizedlist"><ul type="disc"><li>
+            PLT web server:
+            <a href="http://docs.plt-scheme.org/web-server/web-server.html" target="_top">http://docs.plt-scheme.org/web-server/web-server.html</a></li><li>
+            SUrflet server:
+            <a href="http://www.scsh.net/resources/sunet-manual/man-Z-H-8.html#node_chap_6" target="_top">http://www.scsh.net/resources/sunet-manual/man-Z-H-8.html#node_chap_6</a></li></ul></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="license" />License</h2></div></div></div><p>
+      <span class="application">SISCweb</span> is open-source software licensed under the <a href="http://www.mozilla.org/MPL/MPL-1.1.html" target="_top">MPL</a>, the
+      <a href="http://www.gnu.org/copyleft/gpl.html" target="_top">GPL</a>,
+      and the <a href="http://www.gnu.org/copyleft/lgpl.html" target="_top">LGPL</a>.
+    </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="credits" />Credits</h2></div></div></div><p>
+      <span class="application">SISCweb</span> is based on <span class="application">SISC</span> (<a href="http://sisc.sourceforge.net/" target="_top">http://sisc.sourceforge.net/</a>), a Scheme interpreter for
+      the JVM with full continuations, and is heavily influenced by
+      other Lisp web frameworks:
+    </p><div class="itemizedlist"><ul type="disc"><li>
+        The PLT web server collection:
+        <a href="http://download.plt-scheme.org/scheme/docs/html/web-server/" target="_top">http://download.plt-scheme.org/scheme/docs/html/web-server/</a></li><li>
+        SUnet:
+        <a href="http://www.scsh.net/resources/sunet.html" target="_top">http://www.scsh.net/resources/sunet.html</a></li><li>
+        AllegroServe:
+        <a href="http://allegroserve.sourceforge.net" target="_top">http://allegroserve.sourceforge.net</a></li></ul></div><p>
+      A couple of initial design decisions were also lifted from
+      Matthias Radestock's servlet code in the contrib section of the
+      SISC CVS tree.
+    </p><p>
+      Also special thanks to Anton van Straaten, Dominique Boucher,
+      Ben Simon, Dan Muresan, Felix Klock and Tony Garnock-Jones for
+      bug reports, suggestions, and/or work in support of <span class="application">SISCweb</span>.
+    </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="contact" />Contact Information</h2></div></div></div><p>
+      Comments, ideas, and bug reports are welcome at:
+      <code class="email">&lt;<a href="mailto:acolomba@users.sourceforge.net">acolomba@users.sourceforge.net</a>&gt;</code>
+    </p></div><div class="footnotes"><br /><hr align="left" width="100" /><div class="footnote"><p><sup>[<a href="#N1003C" id="ftn.N1003C">1</a>] </sup>
+          Christian Queinnec. "Inverting back the inversion of
+          control or, continuations versus page-centric
+          programming". Technical Report 7, LIP6. May
+          2001. (<a href="http://www-spi.lip6.fr/~queinnec/Papers/www.ps.gz" target="_top">
+          http://www-spi.lip6.fr/~queinnec/Papers/www.ps.gz </a>)
+        </p></div></div></div><div class="navfooter"><hr /><table summary="Navigation footer" width="100%"><tr><td align="left" width="40%"><a accesskey="p" href="index.html">Prev</a> </td><td align="center" width="20%"> </td><td align="right" width="40%"> <a accesskey="n" href="ch02.html">Next</a></td></tr><tr><td valign="top" align="left" width="40%">SISCweb Manual </td><td align="center" width="20%"><a accesskey="h" href="index.html">Home</a></td><td valign="top" align="right" width="40%"> Chapter 2. Installation</td></tr></table></div></body></html>

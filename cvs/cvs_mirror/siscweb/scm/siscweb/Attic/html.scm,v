@@ -1,0 +1,3218 @@
+head	1.4;
+access;
+symbols
+	rel-0-3-dev-1:1.3.4.21
+	rel-0-2-fix-2:1.3.2.2
+	rel-0-2-fix-1:1.3.2.1
+	rel-0-2-fix:1.3.0.2
+	rel-0-3-dev:1.3.0.4
+	rel-0-2:1.3
+	rel-0-1-fix-1:1.2
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	start:1.1.1.1
+	rel-0-1-dev:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2005.11.25.20.46.38;	author acolomba;	state dead;
+branches;
+next	1.3;
+
+1.3
+date	2005.06.19.03.03.51;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.52;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches;
+next	1.1.1.2;
+
+1.1.1.2
+date	2005.02.17.01.08.27;	author acolomba;	state Exp;
+branches;
+next	1.1.1.3;
+
+1.1.1.3
+date	2005.03.02.03.23.33;	author acolomba;	state Exp;
+branches;
+next	1.1.1.4;
+
+1.1.1.4
+date	2005.03.26.00.33.00;	author acolomba;	state Exp;
+branches;
+next	1.1.1.5;
+
+1.1.1.5
+date	2005.03.26.00.41.58;	author acolomba;	state Exp;
+branches;
+next	1.1.1.6;
+
+1.1.1.6
+date	2005.03.26.06.18.05;	author acolomba;	state Exp;
+branches;
+next	1.1.1.7;
+
+1.1.1.7
+date	2005.03.26.06.23.53;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.04.23.00.38.47;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.04.23.15.33.36;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2005.05.04.04.21.41;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2005.05.05.00.32.04;	author acolomba;	state Exp;
+branches;
+next	1.2.4.5;
+
+1.2.4.5
+date	2005.05.07.03.20.21;	author acolomba;	state Exp;
+branches;
+next	1.2.4.6;
+
+1.2.4.6
+date	2005.05.08.18.39.55;	author acolomba;	state Exp;
+branches;
+next	1.2.4.7;
+
+1.2.4.7
+date	2005.05.14.04.17.19;	author acolomba;	state Exp;
+branches;
+next	1.2.4.8;
+
+1.2.4.8
+date	2005.05.14.13.30.33;	author acolomba;	state Exp;
+branches;
+next	1.2.4.9;
+
+1.2.4.9
+date	2005.05.17.00.48.17;	author acolomba;	state Exp;
+branches;
+next	1.2.4.10;
+
+1.2.4.10
+date	2005.05.18.01.45.16;	author acolomba;	state Exp;
+branches;
+next	1.2.4.11;
+
+1.2.4.11
+date	2005.05.22.20.10.21;	author acolomba;	state Exp;
+branches;
+next	1.2.4.12;
+
+1.2.4.12
+date	2005.05.30.05.13.35;	author acolomba;	state Exp;
+branches;
+next	1.2.4.13;
+
+1.2.4.13
+date	2005.05.30.22.08.27;	author acolomba;	state Exp;
+branches;
+next	1.2.4.14;
+
+1.2.4.14
+date	2005.06.10.01.40.26;	author acolomba;	state Exp;
+branches;
+next	1.2.4.15;
+
+1.2.4.15
+date	2005.06.15.01.15.11;	author acolomba;	state Exp;
+branches;
+next	1.2.4.16;
+
+1.2.4.16
+date	2005.06.18.04.25.40;	author acolomba;	state Exp;
+branches;
+next	1.2.4.17;
+
+1.2.4.17
+date	2005.06.18.16.38.59;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2005.07.10.20.02.10;	author acolomba;	state Exp;
+branches;
+next	1.3.2.2;
+
+1.3.2.2
+date	2005.07.31.20.04.03;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2005.06.24.00.47.39;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2;
+
+1.3.4.2
+date	2005.07.04.15.58.40;	author acolomba;	state Exp;
+branches;
+next	1.3.4.3;
+
+1.3.4.3
+date	2005.07.04.22.00.26;	author acolomba;	state Exp;
+branches;
+next	1.3.4.4;
+
+1.3.4.4
+date	2005.07.05.04.11.22;	author acolomba;	state Exp;
+branches;
+next	1.3.4.5;
+
+1.3.4.5
+date	2005.07.05.04.52.44;	author acolomba;	state Exp;
+branches;
+next	1.3.4.6;
+
+1.3.4.6
+date	2005.07.05.05.44.43;	author acolomba;	state Exp;
+branches;
+next	1.3.4.7;
+
+1.3.4.7
+date	2005.07.06.03.33.44;	author acolomba;	state Exp;
+branches;
+next	1.3.4.8;
+
+1.3.4.8
+date	2005.07.06.04.42.30;	author acolomba;	state Exp;
+branches;
+next	1.3.4.9;
+
+1.3.4.9
+date	2005.07.09.17.06.51;	author acolomba;	state Exp;
+branches;
+next	1.3.4.10;
+
+1.3.4.10
+date	2005.07.10.02.57.45;	author acolomba;	state Exp;
+branches;
+next	1.3.4.11;
+
+1.3.4.11
+date	2005.07.13.00.57.53;	author acolomba;	state Exp;
+branches;
+next	1.3.4.12;
+
+1.3.4.12
+date	2005.07.14.02.11.15;	author acolomba;	state Exp;
+branches;
+next	1.3.4.13;
+
+1.3.4.13
+date	2005.07.16.03.13.45;	author acolomba;	state Exp;
+branches;
+next	1.3.4.14;
+
+1.3.4.14
+date	2005.07.18.04.49.55;	author acolomba;	state Exp;
+branches;
+next	1.3.4.15;
+
+1.3.4.15
+date	2005.07.19.01.36.59;	author acolomba;	state Exp;
+branches;
+next	1.3.4.16;
+
+1.3.4.16
+date	2005.07.19.02.30.34;	author acolomba;	state Exp;
+branches;
+next	1.3.4.17;
+
+1.3.4.17
+date	2005.07.19.03.07.19;	author acolomba;	state Exp;
+branches;
+next	1.3.4.18;
+
+1.3.4.18
+date	2005.07.27.03.05.04;	author acolomba;	state Exp;
+branches;
+next	1.3.4.19;
+
+1.3.4.19
+date	2005.07.28.02.56.34;	author acolomba;	state Exp;
+branches;
+next	1.3.4.20;
+
+1.3.4.20
+date	2005.07.28.04.03.26;	author acolomba;	state Exp;
+branches;
+next	1.3.4.21;
+
+1.3.4.21
+date	2005.09.13.23.08.03;	author acolomba;	state Exp;
+branches;
+next	1.3.4.22;
+
+1.3.4.22
+date	2005.11.19.16.18.55;	author acolomba;	state Exp;
+branches;
+next	1.3.4.23;
+
+1.3.4.23
+date	2005.11.20.18.44.01;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@merged from rel-0-3-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'sisc/libs/srfi/srfi-1)
+
+(require-library 'io/servlet-io)
+(require-library 'siscweb/bindings)
+(require-library 'siscweb/contcentric)
+(require-library 'siscweb/k-hash)
+(require-library 'siscweb/response)
+(require-library 'sxml/sxml-match)
+(require-library 'util/misc)
+(require-library 'util/regexp)
+
+(module siscweb/html
+  (send-html/suspend send-html/finish send-html/forward send-html/back sxml->string)
+
+  (import s2j)
+  (import oo)
+  (import string-io)
+  (import type-system)
+
+  (import srfi-1)
+
+  (import io/servlet-io)
+  (import siscweb/bindings)
+  (import siscweb/contcentric)
+  (import siscweb/k-hash)
+  (import siscweb/response)
+  (import util/misc)
+  (import util/regexp)
+  (import sxml-matcher)
+
+
+  (define-generic-java-methods
+    get-context-path
+    get-writer
+    (jencode-url |encodeURL|)
+    (get-request-uri |getRequestURI|)
+    set-attribute
+    set-content-type
+    write)
+
+
+  (define (send-html response page)
+    (set-content-type response (->jstring "text/html"))
+    (write (get-writer response)
+           (->jstring
+            (sxml->string page))))
+
+  ;; TODO: support the whole infoset and move to its own module
+  (define (sxml->string sxml)
+    (define (xml-element? elt)
+      (and (pair? elt)
+           (symbol? (car elt))))
+
+    (define (escape-string str)
+      (fold-right (lambda (regexp replacement text)
+                    (regexp-replace regexp text replacement))
+                  str '("\"" "<" ">" "'" "&") '("&quot;" "&lt;" "&gt;" "&apos;" "&amp;")))
+
+    (define (->html-text value)
+      (typecase value
+        ((<string>) (escape-string value))
+        ((<number>) (number->string value))
+        (else (escape-string
+               (with-output-to-string
+                 (lambda () (pretty-print value)))))))
+
+    (define (attr pair)
+      (if (cadr pair) ; if attr value is #f, skip the attr
+          (string-append
+           " " (symbol->string (car pair)) "=\"" (->html-text (cadr pair)) "\"")
+          ""))
+
+    (import sxml-accessors)
+
+    (sxml-match sxml
+      (,elt (guard (xml-element? elt))
+            (string-append
+             "<"
+             ;; tag name
+             (symbol->string (car elt))
+             ;; attribute list
+             (fold-right string-append "" (map attr
+                                               (xml-element-attributes elt)))
+             ;; tag content, properly terminated
+             (let ((c (xml-element-contents elt)))
+               (if (null? c)
+                   "/>"
+                   (string-append
+                    ">"
+                    (fold-right string-append "" (map sxml->string c))
+                    "</"
+                    (symbol->string (car elt))
+                    ">")))))
+      (,string (guard (string? string)) (escape-string string))
+      (,number (guard (number? number)) (number->string number))
+      (,symbol (guard (symbol? symbol))
+               (string-append "&" (symbol->string symbol) ";"))))
+
+
+  #|;
+  ;; alternative is stdout can be mapped to the http-response out
+  (define (send-html response page)
+    (set-content-type response (->jstring "text/html"))
+    (with-output-to-port (open-servlet-output response)
+      (lambda () (sxml->html page))))
+  |#;
+
+  (define (send-html/suspend page-proc)
+    (send/suspend
+     (lambda (request response k-hash resume-k)
+       (send-html response
+                  (make-dispatched-html
+                   request
+                   response
+                   (page-proc (make-k-url request k-hash))
+                   resume-k)))))
+
+
+  (define (send-html/finish page)
+    (send/finish
+     (lambda (request response)
+       (send-html response (make-dispatched-html request response page (lambda (x) #f))))))
+
+
+  (define (send-html/forward page-proc)
+    (send/forward
+     (lambda (request response k-hash resume-k)
+       (send-html response
+                  (make-dispatched-html
+                   request
+                   response
+                   (page-proc (make-k-url request k-hash))
+                   resume-k)))))
+
+
+  (define (send-html/back page)
+    (send/back
+     (lambda (request response)
+       (send-html response (make-dispatched-html request response page (lambda (x) #f))))))
+
+
+  (define (make-k-url request k-hash)
+    (append-url-hash (->string (get-request-uri request))
+                     k-hash))
+
+
+  (define (make-dispatched-html request response html resume-k)
+    (define (encode-url url)
+      (->string (jencode-url response (->jstring url))))
+
+    (define (make-dispatcher proc)
+      (encode-url (make-k-url request (store/k! proc))))
+
+    (define (make-rebinder bindings-alist)
+      (encode-url
+       (make-k-url
+        request
+        (store/k!
+         (lambda (request)
+           (put-bindings request (alist->bindings bindings-alist))
+           (resume-k request))))))
+
+    (define (make-context-url url)
+      (string-append (->string (get-context-path request))
+                     url))
+
+    (define (T html)
+      (import sxml-accessors)
+
+      (define (xml-element? elt)
+        (and (pair? elt)
+             (symbol? (car elt))))
+
+      (sxml-match html
+        ;; url-bindings
+        ((a (@@ (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (list? bindings-alist))
+         `(a (@@ (href ,(make-rebinder bindings-alist)) . ,rest)
+             ,x ...))
+
+        ;; url dispatch
+        ((a (@@ (dispatch ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(a (@@ (href ,(make-dispatcher proc)) . ,rest)
+             ,x ...))
+
+        ;; href-e encodes the url
+        ((a (@@ (href-e ,url) . ,rest) ,[x] ...)
+         `(a (@@ (href ,(encode-url url)) . ,rest) ,x ...))
+        ;; href-e encodes the url
+        ((link (@@ (href-e ,url) . ,rest) ,[x] ...)
+         `(link (@@ (href ,(encode-url url)) . ,rest) ,x ...))
+        ;; action-e encodes the action url
+        ((form (@@ (action-e ,url) . ,rest) ,[x] ...)
+         `(form (@@ (action ,(encode-url url)) . ,rest) ,x ...))
+
+        ;; href-c makes the href url relative to the context
+        ((a (@@ (href-c ,url) . ,rest) ,[x] ...)
+         `(a (@@ (href ,(make-context-url url)) . ,rest) ,x ...))
+        ;; href-c makes the href url relative to the context
+        ((link (@@ (href-c ,url) . ,rest) ,[x] ...)
+         `(link (@@ (href ,(make-context-url url)) . ,rest) ,x ...))
+        ;; href-c makes the href url relative to the context
+        ((form (@@ (action-c ,url) . ,rest) ,[x] ...)
+         `(form (@@ (action ,(make-context-url url)) . ,rest) ,x ...))
+
+        ;; href-ce makes the href url relative to the context and encodes it
+        ((a (@@ (href-ce ,url) . ,rest) ,[x] ...)
+         `(a (@@ (href ,(encode-url (make-context-url url))) . ,rest) ,x ...))
+        ;; href-ce makes the href url relative to the context and encodes it
+        ((link (@@ (href-ce ,url) . ,rest) ,[x] ...)
+         `(link (@@ (href ,(encode-url (make-context-url url))) . ,rest) ,x ...))
+        ;; action-ce makes the href url relative to the context and encodes it
+        ((form (@@ (action-ce ,url) . ,rest) ,[x] ...)
+         `(form (@@ (href ,(encode-url (make-context-url url))) . ,rest) ,x ...))
+
+        ;; everything that looks like an element, recur over
+        (,elt (guard (xml-element? elt))
+              `(,(xml-element-tag elt) (@@ ,@@(xml-element-attributes elt))
+                ,@@(map T (xml-element-contents elt))))
+
+        ;; numbers, strings, symbols will be left untouched
+        (,nss (guard (or (string? nss) (symbol? nss) (number? nss))) nss)
+
+        ;; #f is converted to the empty string
+        (,false (guard (not false)) "")
+
+        ;; anything else is pretty-printed
+        (,any (with-output-to-string (lambda () (pretty-print any))))))
+
+    (T html))
+
+  )
+@
+
+
+1.3
+log
+@merged from rel-0-2-dev
+@
+text
+@@
+
+
+1.3.2.1
+log
+@merged from rel-0-3-dev and updated for rel-0-2-fix
+@
+text
+@a36 1
+(require-library 'siscweb/graphviz)
+a55 1
+  (import siscweb/graphviz)
+d107 18
+a124 21
+      ((text-as-is ,string) (guard (string? string)) string)
+      (,elt
+       (guard (xml-element? elt))
+       (string-append
+        "<"
+        ;; tag name
+        (symbol->string (car elt))
+        ;; attribute list
+        (fold-right string-append ""
+                    (map attr
+                         (xml-element-attributes elt)))
+        ;; tag content, properly terminated
+        (let ((c (xml-element-contents elt)))
+          (if (null? c)
+              "/>"
+              (string-append
+               ">"
+               (fold-right string-append "" (map sxml->string c))
+               "</"
+               (symbol->string (car elt))
+               ">")))))
+d128 1
+a128 8
+               (string-append "&" (symbol->string symbol) ";"))
+      (#f "")
+      (,else (error (string-append
+                     "siscweb/html: Invalid element : \""
+                     (with-output-to-string
+                       (lambda ()
+                         (display else)))
+                     "\"")))))
+a184 29
+    (define (make-graphviz layout id fmt attrs graph)
+      (define (make-graph-dispatcher)
+        (encode-url
+         (make-k-url
+          request
+          (store/k!
+           (lambda (request)
+             (set! request #f)
+             (send-graphviz/back layout fmt graph))))))
+
+      (define (make-image-map)
+        (with/fc
+         (lambda (m e) #f)
+         (lambda ()
+           `(div
+             (text-as-is ,(with-output-to-string
+                            (lambda ()
+                              (graphviz/write layout "cmapx" graph))))
+             (img (@@ (src ,(make-graph-dispatcher))
+                     (type ,(graphviz/get-mime-type fmt))
+                     (usemap ,(string-append "#" id)) . ,attrs))))))
+
+      (define (make-object)
+        `(object (@@ (data ,(make-graph-dispatcher)) (type ,(graphviz/get-mime-type fmt)) . ,attrs)))
+
+      (if (member fmt '("gif" "jpg" "png"))
+          (make-image-map)
+          (make-object)))
+
+d206 1
+a206 1
+        ;; bindings url
+d212 1
+a212 1
+        ;; dispatch url (DEPRECATED)
+a217 40
+        ;; synonym for (a (@@ (dispatch...
+        ((a (@@ (href-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(a (@@ (href ,(make-dispatcher proc)) . ,rest)
+             ,x ...))
+        ((link (@@ (href-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(link (@@ (href ,(make-dispatcher proc)) . ,rest)
+             ,x ...))
+        ((form (@@ (action-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(form (@@ (action ,(make-dispatcher proc)) . ,rest)
+             ,x ...))
+        ((img (@@ (src-p ,proc) . ,rest))
+         (guard (procedure? proc))
+         `(img (@@ (src ,(make-dispatcher proc)) . ,rest)))
+        ((script (@@ (src-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(script (@@ (src ,(make-dispatcher proc)) . ,rest)
+             ,x ...))
+        ((object (@@ (data-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(object (@@ (data ,(make-dispatcher proc)) . ,rest)
+             ,x ...))
+        ((iframe (@@ (src-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(iframe (@@ (src ,(make-dispatcher proc)) . ,rest)
+             ,x ...))
+        ((node (@@ (href-p ,proc) . ,rest))
+         (guard (procedure? proc))
+         `(node (@@ (href ,(make-dispatcher proc)) . ,rest)))
+        ((edge (@@ (href-p ,proc) . ,rest))
+         (guard (procedure? proc))
+         `(edge (@@ (href ,(make-dispatcher proc)) . ,rest)))
+        ((record (@@ (href-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(record (@@ (href ,(make-dispatcher proc)) . ,rest)
+             ,x ...))
+
+
+a226 21
+        ;; src-e encodes the url
+        ((img (@@ (src-e ,url) . ,rest))
+         `(img (@@ (src ,(encode-url url)) . ,rest)))
+        ;; src-e encodes the url
+        ((script (@@ (src-e ,url) . ,rest) ,[x] ...)
+         `(script (@@ (src ,(encode-url url)) . ,rest) ,x ...))
+        ;; src-e encodes the url
+        ((object (@@ (data-e ,url) . ,rest) ,[x] ...)
+         `(object (@@ (data ,(encode-url url)) . ,rest) ,x ...))
+        ;; src-e encodes the url
+        ((iframe (@@ (src-e ,url) . ,rest) ,[x] ...)
+         `(iframe (@@ (src ,(encode-url url)) . ,rest) ,x ...))
+        ;; href-e encodes the url
+        ((node (@@ (href-e ,url) . ,rest))
+         `(node (@@ (href ,(encode-url url)) . ,rest)))
+        ;; href-e encodes the url
+        ((edge (@@ (href-e ,url) . ,rest))
+         `(edge (@@ (href ,(encode-url url)) . ,rest)))
+        ;; href-e encodes the url
+        ((record (@@ (href-e ,url) . ,rest) ,[x] ...)
+         `(record (@@ (href ,(encode-url url)) . ,rest) ,x ...))
+d234 1
+a234 1
+        ;; action-c makes the action url relative to the context
+a236 21
+        ;; src-c makes the url relative to the context
+        ((img (@@ (src-c ,url) . ,rest))
+         `(img (@@ (src ,(make-context-url url)) . ,rest)))
+        ;; src-c makes the url relative to the context
+        ((script (@@ (src-c ,url) . ,rest) ,[x] ...)
+         `(script (@@ (src ,(make-context-url url)) . ,rest) ,x ...))
+        ;; src-c makes the url relative to the context
+        ((object (@@ (data-c ,url) . ,rest) ,[x] ...)
+         `(object (@@ (data ,(make-context-url url)) . ,rest) ,x ...))
+        ;; src-c makes the url relative to the context
+        ((iframe (@@ (src-c ,url) . ,rest) ,[x] ...)
+         `(iframe (@@ (src ,(make-context-url url)) . ,rest) ,x ...))
+        ;; href-c makes the url relative to the context
+        ((node (@@ (href-c ,url) . ,rest))
+         `(node (@@ (href ,(make-context-url url)) . ,rest)))
+        ;; href-c makes the url relative to the context
+        ((edge (@@ (href-c ,url) . ,rest))
+         `(edge (@@ (href ,(make-context-url url)) . ,rest)))
+        ;; href-c makes the href url relative to the context
+        ((record (@@ (href-c ,url) . ,rest) ,[x] ...)
+         `(record (@@ (href ,(make-context-url url)) . ,rest) ,x ...))
+d246 1
+a246 27
+         `(form (@@ (action ,(encode-url (make-context-url url))) . ,rest) ,x ...))
+        ;; src-ce makes the href url relative to the context and encodes it
+        ((img (@@ (src-ce ,url) . ,rest))
+         `(img (@@ (src ,(encode-url (make-context-url url))) . ,rest)))
+        ;; src-ce makes the href url relative to the context and encodes it
+        ((script (@@ (src-ce ,url) . ,rest) ,[x] ...)
+         `(script (@@ (src ,(encode-url (make-context-url url))) . ,rest) ,x ...))
+        ;; src-ce makes the href url relative to the context and encodes it
+        ((object (@@ (data-ce ,url) . ,rest) ,[x] ...)
+         `(object (@@ (data ,(encode-url (make-context-url url))) . ,rest) ,x ...))
+        ;; src-ce makes the href url relative to the context and encodes it
+        ((iframe (@@ (src-ce ,url) . ,rest) ,[x] ...)
+         `(iframe (@@ (src ,(encode-url (make-context-url url))) . ,rest) ,x ...))
+        ;; href-ce makes the href url relative to the context and encodes it
+        ((node (@@ (href-ce ,url) . ,rest))
+         `(node (@@ (href ,(encode-url (make-context-url url))) . ,rest)))
+        ;; href-ce makes the href url relative to the context and encodes it
+        ((edge (@@ (href-ce ,url) . ,rest))
+         `(edge (@@ (href ,(encode-url (make-context-url url))) . ,rest)))
+        ;; href-ce makes the href url relative to the context and encodes it
+        ((record (@@ (href-ce ,url) . ,rest) ,[x] ...)
+         `(record (@@ (href ,(encode-url (make-context-url url))) . ,rest) ,x ...))
+
+        ;; graphviz object
+        ((object (@@ (type "graphviz") (layout ,layout) (format ,fmt) . ,obj-attrs) (graph (@@ (id ,id) . ,attrs) ,[x] ...))
+         (make-graphviz layout id fmt obj-attrs `(graph (@@ (id ,id) . ,attrs) ,x ...)))
+
+@
+
+
+1.3.2.2
+log
+@merged from rel-0-3-dev
+@
+text
+@d32 3
+d36 1
+a36 1
+(require-library 'siscweb/forward)
+d38 1
+a39 1
+(require-library 'sxml/markup)
+d41 2
+d45 1
+a45 2
+  (send-html/suspend send-html/finish
+   send-html/forward send-html/back)
+d48 1
+d50 3
+d54 1
+d56 1
+a56 1
+  (import siscweb/forward)
+d58 1
+d60 2
+a61 1
+  (import sxml/markup)
+d64 1
+d69 2
+d81 70
+d153 1
+a153 1
+     (lambda (request response k-url resume-k)
+d155 1
+a155 1
+                  (ehtml->html
+d158 1
+a158 1
+                   (page-proc k-url)
+d165 1
+a165 1
+       (send-html response (ehtml->html request response page (lambda (x) #f))))))
+d170 1
+a170 1
+     (lambda (request response k-url resume-k)
+d172 1
+a172 1
+                  (ehtml->html
+d175 1
+a175 1
+                   (page-proc k-url)
+d182 1
+a182 1
+       (send-html response (ehtml->html request response page (lambda (x) #f))))))
+d185 6
+a190 1
+  (define (ehtml->html request response html resume-k)
+d194 3
+d199 7
+a205 4
+        (forward/store!
+         (lambda (request)
+           (set! request #f)
+           (send-graphviz/back layout fmt graph))))
+a215 1
+                     (border 0)
+d226 9
+d236 2
+a237 2
+      (encode-url (string-append (->string (get-context-path request))
+                     url)))
+d247 4
+a250 114
+        ;; href-p + bindings
+        ((a (@@ (href-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(a (@@ (href ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((link (@@ (href-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(link (@@ (href ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((form (@@ (action-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(form (@@ (action ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((img (@@ (src-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(img (@@ (src ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((script (@@ (src-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(script (@@ (src ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((object (@@ (data-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(object (@@ (data ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((iframe (@@ (src-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(iframe (@@ (src ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((node (@@ (href-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(node (@@ (href ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((edge (@@ (href-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(edge (@@ (href ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((record (@@ (href-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(record (@@ (href ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+
+        ;; href-c + bindings
+        ((a (@@ (href-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(a (@@ (href ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((link (@@ (href-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(link (@@ (href ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((form (@@ (action-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(form (@@ (action ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((img (@@ (src-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(img (@@ (src ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((script (@@ (src-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(script (@@ (src ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((object (@@ (data-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(object (@@ (data ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((iframe (@@ (src-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(iframe (@@ (src ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((node (@@ (href-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(node (@@ (href ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((edge (@@ (href-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(edge (@@ (href ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((record (@@ (href-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(record (@@ (href ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+
+        ;; bindings to resume-k
+        ((a (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(a (@@ (href ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((link (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(link (@@ (href ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((form (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(form (@@ (action ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((img (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(img (@@ (src ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((script (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(script (@@ (src ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((object (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(object (@@ (data ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((iframe (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(iframe (@@ (src ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((node (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(node (@@ (href ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((edge (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(edge (@@ (href ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((record (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(record (@@ (href ,(forward/store! resume-k bindings)) . ,rest)
+d256 2
+a257 1
+         (error "siscweb/html : (a (@@ (dispatch ...) ...) ...) has been deprecated in favor of (a (@@ (href-p ...) ...) ...)"))
+d259 1
+a259 1
+        ;; href-p
+d262 1
+a262 1
+         `(a (@@ (href ,(forward/store! proc)) . ,rest)
+d266 1
+a266 1
+         `(link (@@ (href ,(forward/store! proc)) . ,rest)
+d270 1
+a270 1
+         `(form (@@ (action ,(forward/store! proc)) . ,rest)
+d274 1
+a274 1
+         `(img (@@ (src ,(forward/store! proc)) . ,rest)))
+d277 1
+a277 1
+         `(script (@@ (src ,(forward/store! proc)) . ,rest)
+d281 1
+a281 1
+         `(object (@@ (data ,(forward/store! proc)) . ,rest)
+d285 1
+a285 1
+         `(iframe (@@ (src ,(forward/store! proc)) . ,rest)
+d289 1
+a289 1
+         `(node (@@ (href ,(forward/store! proc)) . ,rest)))
+d292 1
+a292 1
+         `(edge (@@ (href ,(forward/store! proc)) . ,rest)))
+d295 1
+a295 1
+         `(record (@@ (href ,(forward/store! proc)) . ,rest)
+d298 2
+a299 1
+        ;; href-e
+a300 1
+         (guard (string? url))
+d302 1
+a303 1
+         (guard (string? url))
+d305 1
+a306 1
+         (guard (string? url))
+d308 1
+a309 1
+         (guard (string? url))
+d311 1
+a312 1
+         (guard (string? url))
+d314 1
+a315 1
+         (guard (string? url))
+d317 1
+a318 1
+         (guard (string? url))
+d320 1
+a321 1
+         (guard (string? url))
+d323 1
+a324 1
+         (guard (string? url))
+d326 1
+a327 1
+         (guard (string? url))
+d330 1
+a330 1
+        ;; href-c
+a331 1
+         (guard (string? url))
+d333 1
+a334 1
+         (guard (string? url))
+d336 1
+a337 1
+         (guard (string? url))
+d339 1
+a340 1
+         (guard (string? url))
+d342 1
+a343 1
+         (guard (string? url))
+d345 1
+a346 1
+         (guard (string? url))
+d348 1
+a349 1
+         (guard (string? url))
+d351 1
+a352 1
+         (guard (string? url))
+d354 1
+a355 1
+         (guard (string? url))
+d357 1
+a358 1
+         (guard (string? url))
+d361 1
+a361 1
+        ;; href-ce ***DEPRECATED***
+d363 1
+a363 1
+         (error "siscweb/html : @@href-ce has been deprecated; you can just use @@href-c"))
+d366 1
+a366 1
+         (error "siscweb/html : @@href-ce has been deprecated; you can just use @@href-c"))
+d369 1
+a369 1
+         (error "siscweb/html : @@action-ce has been deprecated; you can just use @@action-c"))
+d372 1
+a372 1
+         (error "siscweb/html : @@src-ce has been deprecated; you can just use @@src-c"))
+d375 1
+a375 1
+         (error "siscweb/html : @@src-ce has been deprecated; you can just use @@src-c"))
+d378 1
+a378 1
+         (error "siscweb/html : @@data-ce has been deprecated; you can just use @@data-c"))
+d381 1
+a381 1
+         (error "siscweb/html : @@src-ce has been deprecated; you can just use @@src-c"))
+d384 1
+a384 1
+         (error "siscweb/html : @@href-ce has been deprecated; you can just use @@href-c"))
+d387 1
+a387 1
+         (error "siscweb/html : @@href-ce has been deprecated; you can just use @@href-c"))
+d390 1
+a390 1
+         (error "siscweb/html : @@href-ce has been deprecated; you can just use @@href-c"))
+d396 1
+@
+
+
+1.3.4.1
+log
+@added src-[c|e|ce] attributes to object and iframe; added new
+[src|href|action]-p (for procedure) to all relevant tags
+@
+text
+@a217 31
+        ;; synonym for (a (@@ (dispatch...
+        ((a (@@ (href-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(a (@@ (href ,(make-dispatcher proc)) . ,rest)
+             ,x ...))
+        ((link (@@ (href-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(link (@@ (href ,(make-dispatcher proc)) . ,rest)
+             ,x ...))
+        ((form (@@ (action-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(form (@@ (action ,(make-dispatcher proc)) . ,rest)
+             ,x ...))
+        ((img (@@ (src-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(img (@@ (src ,(make-dispatcher proc)) . ,rest)
+             ,x ...))
+        ((script (@@ (src-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(script (@@ (src ,(make-dispatcher proc)) . ,rest)
+             ,x ...))
+        ((object (@@ (src-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(object (@@ (src ,(make-dispatcher proc)) . ,rest)
+             ,x ...))
+        ((iframe (@@ (src-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(iframe (@@ (src ,(make-dispatcher proc)) . ,rest)
+             ,x ...))
+
+
+a226 12
+        ;; src-e encodes the url
+        ((img (@@ (src-e ,url) . ,rest) ,[x] ...)
+         `(img (@@ (src ,(encode-url url)) . ,rest) ,x ...))
+        ;; src-e encodes the url
+        ((script (@@ (src-e ,url) . ,rest) ,[x] ...)
+         `(script (@@ (src ,(encode-url url)) . ,rest) ,x ...))
+        ;; src-e encodes the url
+        ((object (@@ (src-e ,url) . ,rest) ,[x] ...)
+         `(object (@@ (src ,(encode-url url)) . ,rest) ,x ...))
+        ;; src-e encodes the url
+        ((iframe (@@ (src-e ,url) . ,rest) ,[x] ...)
+         `(iframe (@@ (src ,(encode-url url)) . ,rest) ,x ...))
+d234 1
+a234 1
+        ;; action-c makes the action url relative to the context
+a236 12
+        ;; src-c makes the url relative to the context
+        ((img (@@ (src-c ,url) . ,rest) ,[x] ...)
+         `(img (@@ (src ,(make-context-url url)) . ,rest) ,x ...))
+        ;; src-c makes the url relative to the context
+        ((script (@@ (src-c ,url) . ,rest) ,[x] ...)
+         `(script (@@ (src ,(make-context-url url)) . ,rest) ,x ...))
+        ;; src-c makes the url relative to the context
+        ((object (@@ (src-c ,url) . ,rest) ,[x] ...)
+         `(object (@@ (src ,(make-context-url url)) . ,rest) ,x ...))
+        ;; src-c makes the url relative to the context
+        ((iframe (@@ (src-c ,url) . ,rest) ,[x] ...)
+         `(iframe (@@ (src ,(make-context-url url)) . ,rest) ,x ...))
+d246 1
+a246 13
+         `(form (@@ (action ,(encode-url (make-context-url url))) . ,rest) ,x ...))
+        ;; src-ce makes the href url relative to the context and encodes it
+        ((img (@@ (src-ce ,url) . ,rest) ,[x] ...)
+         `(img (@@ (src ,(encode-url (make-context-url url))) . ,rest) ,x ...))
+        ;; src-ce makes the href url relative to the context and encodes it
+        ((script (@@ (src-ce ,url) . ,rest) ,[x] ...)
+         `(script (@@ (src ,(encode-url (make-context-url url))) . ,rest) ,x ...))
+        ;; src-ce makes the href url relative to the context and encodes it
+        ((object (@@ (src-ce ,url) . ,rest) ,[x] ...)
+         `(object (@@ (src ,(encode-url (make-context-url url))) . ,rest) ,x ...))
+        ;; src-ce makes the href url relative to the context and encodes it
+        ((iframe (@@ (src-ce ,url) . ,rest) ,[x] ...)
+         `(iframe (@@ (src ,(encode-url (make-context-url url))) . ,rest) ,x ...))
+@
+
+
+1.3.4.2
+log
+@added basic support for graphviz image maps; cleaned up img element
+rules; fixed object element rules
+@
+text
+@a36 1
+(require-library 'siscweb/graphviz)
+a55 1
+  (import siscweb/graphviz)
+a106 1
+      ((text-as-is ,string) (guard (string? string)) string)
+a184 22
+    ;; not fully implemented
+    (define (make-graphviz program-key type graph)
+      (define (make-graph-dispatcher)
+        (encode-url
+         (make-k-url
+          request
+          (store/k!
+           (lambda (request)
+             (set! request #f)
+             (graphviz/send-back program-key type graph))))))
+
+      (define (make-image-map)
+        (with-output-to-string
+          (lambda ()
+            (graphviz/write program-key 'cmapx graph))))
+
+      (let ((k-hash (make-graph-dispatcher)))
+        `(div
+          (text-as-is ,(make-image-map))
+          (img (@@ (src ,k-hash)
+                  (usemap "#G"))))))
+
+a217 10
+        ;; graphviz proto
+        ((graphviz (@@ (dot ,graph) (type ,type)))
+         (guard (and (string? graph) (symbol? type)))
+         (make-graphviz 'dot type graph))
+
+        ((graphviz (@@ (neato ,graph) (type ,type)))
+         (guard (and (string? graph) (symbol? type)))
+         (make-graphviz 'neato type graph))
+
+
+d231 1
+a231 1
+        ((img (@@ (src-p ,proc) . ,rest))
+d233 2
+a234 1
+         `(img (@@ (src ,(make-dispatcher proc)) . ,rest)))
+d239 1
+a239 1
+        ((object (@@ (data-p ,proc) . ,rest) ,[x] ...)
+d241 1
+a241 1
+         `(object (@@ (data ,(make-dispatcher proc)) . ,rest)
+d259 2
+a260 2
+        ((img (@@ (src-e ,url) . ,rest))
+         `(img (@@ (src ,(encode-url url)) . ,rest)))
+d265 2
+a266 2
+        ((object (@@ (data-e ,url) . ,rest) ,[x] ...)
+         `(object (@@ (data ,(encode-url url)) . ,rest) ,x ...))
+d281 2
+a282 2
+        ((img (@@ (src-c ,url) . ,rest))
+         `(img (@@ (src ,(make-context-url url)) . ,rest)))
+d287 2
+a288 2
+        ((object (@@ (data-c ,url) . ,rest) ,[x] ...)
+         `(object (@@ (data ,(make-context-url url)) . ,rest) ,x ...))
+d303 2
+a304 2
+        ((img (@@ (src-ce ,url) . ,rest))
+         `(img (@@ (src ,(encode-url (make-context-url url))) . ,rest)))
+d309 2
+a310 2
+        ((object (@@ (data-ce ,url) . ,rest) ,[x] ...)
+         `(object (@@ (data ,(encode-url (make-context-url url))) . ,rest) ,x ...))
+d315 1
+a315 1
+       ;; everything that looks like an element, recur over
+@
+
+
+1.3.4.3
+log
+@modified to support graphviz dotml notation; added an experimental
+ajax hook
+@
+text
+@d189 1
+a189 1
+    (define (make-graphviz program-key id type graph)
+d202 1
+a202 1
+            (graphviz/dotml-write program-key 'cmapx graph))))
+d208 1
+a208 2
+                  (usemap ,(string-append "#"
+                                          (symbol->string id))))))))
+d244 7
+a250 4
+        ((graphviz (@@ (id ,id) (program ,program) (type ,type) . ,attrs) . ,x)
+         (guard (and (symbol? id) (symbol? program) (symbol? type)))
+         (make-graphviz program id type
+                        `(graph (@@ (id ,id) . ,attrs) ,@@x)))
+d349 1
+a349 20
+        ;; ajax experimentation
+        ((form (@@ (update ,id) (procedure ,proc) . ,rest) ,[x] ...)
+         (guard (and (string? id) (procedure? proc)))
+         `(form (@@ (onsubmit
+                    ,(string-append
+                      "new Ajax.Updater('" id "', "
+                      "'" (make-dispatcher proc) "', {});"
+                      "return false;"))
+                   . ,rest) ,x ...))
+        ((a (@@ (update ,id) (procedure ,proc) . ,rest) ,[x] ...)
+         (guard (and (string? id) (procedure? proc)))
+         `(form (@@ (onsubmit
+                    ,(string-append
+                      "new Ajax.Updater('" id "', "
+                      "'" (make-dispatcher proc) "', {});"
+                      "return false;"))
+                   . ,rest) ,x ...))
+
+
+        ;; everything that looks like an element, recur over
+@
+
+
+1.3.4.4
+log
+@small fixes for graphviz; some formatting
+@
+text
+@d110 18
+a127 20
+      (,elt
+       (guard (xml-element? elt))
+       (string-append
+        "<"
+        ;; tag name
+        (symbol->string (car elt))
+        ;; attribute list
+        (fold-right string-append ""
+                    (map attr
+                         (xml-element-attributes elt)))
+        ;; tag content, properly terminated
+        (let ((c (xml-element-contents elt)))
+          (if (null? c)
+              "/>"
+              (string-append
+               ">"
+               (fold-right string-append "" (map sxml->string c))
+               "</"
+               (symbol->string (car elt))
+               ">")))))
+d202 1
+a202 1
+            (graphviz/write program-key 'cmapx graph))))
+d207 1
+a207 1
+          (img (@@ (src ,k-hash) (border "0")
+d246 1
+a246 1
+         (guard (and (symbol? id) (memq program '(dot neato)) (symbol? type)))
+@
+
+
+1.3.4.5
+log
+@now generates img tag if fmt is an image type, otherwise generates an
+object tag; more rename frenzy
+@
+text
+@d191 1
+a191 1
+    (define (make-graphviz pgm id fmt graph)
+d199 1
+a199 1
+             (graphviz/send-back pgm fmt graph))))))
+d202 10
+a211 14
+        (let ((k-hash (make-graph-dispatcher)))
+          `(div
+            (text-as-is ,(with-output-to-string
+                           (lambda ()
+                             (graphviz/write pgm 'cmapx graph))))
+            (img (@@ (src ,k-hash) (border "0")
+                    (usemap ,(string-append "#" (symbol->string id))))))))
+
+      (define (make-object)
+        `(object (@@ (data ,(make-graph-dispatcher)) (type ,(graphviz/get-mime-type fmt)))))
+
+      (case fmt
+        ((gif jpg png) (make-image-map))
+        (else (make-object))))
+d247 4
+a250 3
+        ((graphviz (@@ (id ,id) (pgm ,pgm) (fmt ,fmt) . ,attrs) . ,x)
+         (guard (and (symbol? id) (symbol? pgm) (symbol? fmt)))
+         (make-graphviz pgm id fmt `(graph (@@ (id ,id) . ,attrs) ,@@x)))
+@
+
+
+1.3.4.6
+log
+@changed graphviz syntax: it is now (graphviz <id/pgm/fmt, img/object
+attributes> (graph ...)); graph tree is now examined and
+node/edge/record href-[p|c|e|ce] are now processed
+@
+text
+@d190 2
+a191 1
+    (define (make-graphviz pgm id fmt attrs graph)
+d208 1
+a208 1
+                    (usemap ,(string-append "#" (symbol->string id))) . ,attrs)))))
+d211 1
+a211 1
+        `(object (@@ (data ,(make-graph-dispatcher)) (type ,(graphviz/get-mime-type fmt)) . ,attrs)))
+d238 1
+a238 1
+        ;; bindings url
+d244 1
+a244 1
+        ;; dispatch url
+d250 2
+a251 2
+        ;; graphviz
+        ((graphviz (@@ (id ,id) (pgm ,pgm) (fmt ,fmt) . ,obj-attrs) (graph (@@ . ,attrs) ,[x] ...))
+d253 1
+a253 1
+         (make-graphviz pgm id fmt obj-attrs `(graph (@@ (id ,id) . ,attrs) ,x ...)))
+a283 10
+        ((node (@@ (href-p ,proc) . ,rest))
+         (guard (procedure? proc))
+         `(node (@@ (href ,(make-dispatcher proc)) . ,rest)))
+        ((edge (@@ (href-p ,proc) . ,rest))
+         (guard (procedure? proc))
+         `(edge (@@ (href ,(make-dispatcher proc)) . ,rest)))
+        ((record (@@ (href-p ,proc) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(record (@@ (href ,(make-dispatcher proc)) . ,rest)
+             ,x ...))
+a306 9
+        ;; href-e encodes the url
+        ((node (@@ (href-e ,url) . ,rest))
+         `(node (@@ (href ,(encode-url url)) . ,rest)))
+        ;; href-e encodes the url
+        ((edge (@@ (href-e ,url) . ,rest))
+         `(edge (@@ (href ,(encode-url url)) . ,rest)))
+        ;; href-e encodes the url
+        ((record (@@ (href-e ,url) . ,rest) ,[x] ...)
+         `(record (@@ (href ,(encode-url url)) . ,rest) ,x ...))
+a328 9
+        ;; href-c makes the url relative to the context
+        ((node (@@ (href-c ,url) . ,rest))
+         `(node (@@ (href ,(make-context-url url)) . ,rest)))
+        ;; href-c makes the url relative to the context
+        ((edge (@@ (href-c ,url) . ,rest))
+         `(edge (@@ (href ,(make-context-url url)) . ,rest)))
+        ;; href-c makes the href url relative to the context
+        ((record (@@ (href-c ,url) . ,rest) ,[x] ...)
+         `(record (@@ (href ,(make-context-url url)) . ,rest) ,x ...))
+a350 9
+        ;; href-ce makes the href url relative to the context and encodes it
+        ((node (@@ (href-ce ,url) . ,rest))
+         `(node (@@ (href ,(encode-url (make-context-url url))) . ,rest)))
+        ;; href-ce makes the href url relative to the context and encodes it
+        ((edge (@@ (href-ce ,url) . ,rest))
+         `(edge (@@ (href ,(encode-url (make-context-url url))) . ,rest)))
+        ;; href-ce makes the href url relative to the context and encodes it
+        ((record (@@ (href-ce ,url) . ,rest) ,[x] ...)
+         `(record (@@ (href ,(encode-url (make-context-url url))) . ,rest) ,x ...))
+@
+
+
+1.3.4.7
+log
+@replaced graphviz element with (object (type "graphviz") ...) element; a little bit of renaming
+@
+text
+@d190 1
+a190 1
+    (define (make-graphviz layout id fmt attrs graph)
+d198 1
+a198 1
+             (send-graphviz/back layout fmt graph))))))
+d205 1
+a205 1
+                             (graphviz/write layout 'cmapx graph))))
+d243 1
+a243 1
+        ;; dispatch url (DEPRECATED)
+d249 6
+a387 6
+        ;; graphviz object
+        ((object (@@ (id ,id) (type "graphviz") (layout ,layout) (format ,fmt) . ,obj-attrs) (graph (@@ . ,attrs) ,[x] ...))
+         (guard (and (symbol? id) (symbol? layout) (symbol? fmt)))
+         (make-graphviz layout id fmt obj-attrs `(graph (@@ (id ,id) . ,attrs) ,x ...)))
+
+
+@
+
+
+1.3.4.8
+log
+@moved id from object to graphviz element
+@
+text
+@d383 1
+a383 1
+        ((object (@@ (type "graphviz") (layout ,layout) (format ,fmt) . ,obj-attrs) (graph (@@ (id ,id) . ,attrs) ,[x] ...))
+@
+
+
+1.3.4.9
+log
+@malformed html now causes error; #f element is now ignored for
+handyness' sake; graphviz image map now fails silently
+@
+text
+@d133 1
+a133 8
+               (string-append "&" (symbol->string symbol) ";"))
+      (#f "")
+      (,else (error (string-append
+                     "siscweb/html: Invalid element : \""
+                     (with-output-to-string
+                       (lambda ()
+                         (display else)))
+                     "\"")))))
+d201 7
+a207 10
+        (with/fc
+         (lambda (m e) #f)
+         (lambda ()
+           (let ((k-hash (make-graph-dispatcher)))
+             `(div
+               (text-as-is ,(with-output-to-string
+                              (lambda ()
+                                (graphviz/write layout 'cmapx graph))))
+               (img (@@ (src ,k-hash) (border "0")
+                       (usemap ,(string-append "#" (symbol->string id))) . ,attrs)))))))
+d387 1
+@
+
+
+1.3.4.10
+log
+@added error masking to graphviz image map generation b/c it happens in
+the wrong place and cannot be caught by the programmer; added support
+for string ids instead of symbol ids in dotml; some minor fixes
+@
+text
+@d211 7
+a217 7
+           `(div
+             (text-as-is ,(with-output-to-string
+                            (lambda ()
+                              (graphviz/write layout "cmapx" graph))))
+             (img (@@ (src ,(make-graph-dispatcher))
+                     (type ,(graphviz/get-mime-type fmt))
+                     (usemap ,(string-append "#" id)) . ,attrs))))))
+d222 3
+a224 3
+      (if (member fmt '("gif" "jpg" "png"))
+          (make-image-map)
+          (make-object)))
+d394 1
+@
+
+
+1.3.4.11
+log
+@added *COMMENT* element
+@
+text
+@a32 1
+(require-library 'sisc/libs/srfi/srfi-13)
+a52 1
+  (import srfi-13)
+a109 4
+      ((*COMMENT* ,string)
+       (guard (and (string? string)
+                   (not (string-contains string "--"))))
+       (string-append "<!--" string "-->"))
+@
+
+
+1.3.4.12
+log
+@added (border 0) attribute to graphviz image; happy birthday crystal
+@
+text
+@a221 1
+                     (border 0)
+@
+
+
+1.3.4.13
+log
+@moved sxml -> markup into sxml/markup module
+@
+text
+@d32 4
+a40 1
+(require-library 'sxml/markup)
+d42 2
+d46 1
+a46 2
+  (send-html/suspend send-html/finish
+   send-html/forward send-html/back)
+d49 1
+d51 4
+d56 1
+d62 2
+a63 1
+  (import sxml/markup)
+d83 73
+@
+
+
+1.3.4.14
+log
+@the rebinder now rebinds by wrapping the request into
+SISCHttpServletRequest
+@
+text
+@a54 2
+  (define-java-classes
+    (<sisc-http-servlet-request> |siscweb.web.SISCHttpServletRequest|))
+d155 2
+a156 4
+           (resume-k
+            (java-new <sisc-http-servlet-request>
+                      request
+                      (:parameter-map (alist->bindings bindings-alist)))))))))
+@
+
+
+1.3.4.15
+log
+@deprecated @@dispatch; rebinder and graphviz-dispatcher now use
+make-dispatcher in preparation of it being moved to another module
+@
+text
+@d48 1
+a48 1
+  (import siscwe/contcentric)
+d123 7
+a129 4
+        (make-dispatcher
+         (lambda (request)
+           (set! request #f)
+           (send-graphviz/back layout fmt graph))))
+d152 9
+a160 6
+      (make-dispatcher
+       (lambda (request)
+         (resume-k
+          (java-new <sisc-http-servlet-request>
+                    request
+                    (:parameter-map (alist->bindings bindings-alist)))))))
+d183 2
+a184 1
+         (error "siscweb/html : (a (@@ (dispatch ...) ...) ...) has been deprecated in favor of (a (@@ (href-p ...) ...) ...)"))
+@
+
+
+1.3.4.16
+log
+@fat trimming: moved make-k-url, make-dispatcher to siscweb/contcentric
+@
+text
+@d35 1
+d48 1
+a48 1
+  (import siscweb/contcentric)
+d50 1
+d109 5
+d118 3
+@
+
+
+1.3.4.17
+log
+@adapted to new response interface; now uses k/store! instead of
+make-dispatcher
+@
+text
+@d75 1
+a75 1
+     (lambda (request response k-url resume-k)
+d77 1
+a77 1
+                  (ehtml->html
+d80 1
+a80 1
+                   (page-proc k-url)
+d87 1
+a87 1
+       (send-html response (ehtml->html request response page (lambda (x) #f))))))
+d92 1
+a92 1
+     (lambda (request response k-url resume-k)
+d94 1
+a94 1
+                  (ehtml->html
+d97 1
+a97 1
+                   (page-proc k-url)
+d104 1
+a104 1
+       (send-html response (ehtml->html request response page (lambda (x) #f))))))
+d107 1
+a107 1
+  (define (ehtml->html request response html resume-k)
+d113 1
+a113 1
+        (store/k!
+d139 1
+a139 1
+      (store/k!
+d172 1
+a172 1
+         `(a (@@ (href ,(store/k! proc)) . ,rest)
+d176 1
+a176 1
+         `(link (@@ (href ,(store/k! proc)) . ,rest)
+d180 1
+a180 1
+         `(form (@@ (action ,(store/k! proc)) . ,rest)
+d184 1
+a184 1
+         `(img (@@ (src ,(store/k! proc)) . ,rest)))
+d187 1
+a187 1
+         `(script (@@ (src ,(store/k! proc)) . ,rest)
+d191 1
+a191 1
+         `(object (@@ (data ,(store/k! proc)) . ,rest)
+d195 1
+a195 1
+         `(iframe (@@ (src ,(store/k! proc)) . ,rest)
+d199 1
+a199 1
+         `(node (@@ (href ,(store/k! proc)) . ,rest)))
+d202 1
+a202 1
+         `(edge (@@ (href ,(store/k! proc)) . ,rest)))
+d205 1
+a205 1
+         `(record (@@ (href ,(store/k! proc)) . ,rest)
+d312 1
+a312 1
+                      "'" (store/k! proc) "', {});"
+d320 1
+a320 1
+                      "'" (store/k! proc) "', {});"
+@
+
+
+1.3.4.18
+log
+@added @@href-[p|c] + @@bindings; added @@bindings for all supported
+objects; removed redundant comments and added extra guards; deprecated
+@@href-ce b/c all urls generated by siscweb are now encoded
+@
+text
+@d138 1
+a138 1
+    (define (make-rebinder proc bindings-alist)
+d141 1
+a141 1
+         (proc
+a145 5
+    (define (make-forward url bindings-alist)
+      (store/k!
+       (lambda (req)
+         (send-forward/back url bindings-alist))))
+
+d147 2
+a148 2
+      (encode-url (string-append (->string (get-context-path request))
+                     url)))
+d158 1
+a158 85
+        ;; href-p + bindings
+        ((a (@@ (href-p ,proc) (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(a (@@ (href ,(make-rebinder proc bindings-alist)) . ,rest)
+             ,x ...))
+        ((link (@@ (href-p ,proc) (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(link (@@ (href ,(make-rebinder proc bindings-alist)) . ,rest)
+             ,x ...))
+        ((form (@@ (action-p ,proc) (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(form (@@ (action ,(make-rebinder proc bindings-alist)) . ,rest)
+             ,x ...))
+        ((img (@@ (src-p ,proc) (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(img (@@ (src ,(make-rebinder proc bindings-alist)) . ,rest)
+             ,x ...))
+        ((script (@@ (src-p ,proc) (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(script (@@ (src ,(make-rebinder proc bindings-alist)) . ,rest)
+             ,x ...))
+        ((object (@@ (data-p ,proc) (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(object (@@ (data ,(make-rebinder proc bindings-alist)) . ,rest)
+             ,x ...))
+        ((iframe (@@ (src-p ,proc) (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(iframe (@@ (src ,(make-rebinder proc bindings-alist)) . ,rest)
+             ,x ...))
+        ((node (@@ (href-p ,proc) (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(node (@@ (href ,(make-rebinder proc bindings-alist)) . ,rest)
+             ,x ...))
+        ((edge (@@ (href-p ,proc) (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(edge (@@ (href ,(make-rebinder proc bindings-alist)) . ,rest)
+             ,x ...))
+        ((record (@@ (href-p ,proc) (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(record (@@ (href ,(make-rebinder proc bindings-alist)) . ,rest)
+             ,x ...))
+
+        ;; href-c + bindings
+        ((a (@@ (href-c ,url) (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(a (@@ (href ,(make-forward url bindings-alist)) . ,rest)
+             ,x ...))
+        ((link (@@ (href-c ,url) (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(link (@@ (href ,(make-forward url bindings-alist)) . ,rest)
+             ,x ...))
+        ((form (@@ (action-c ,url) (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(form (@@ (action ,(make-forward url bindings-alist)) . ,rest)
+             ,x ...))
+        ((img (@@ (src-c ,url) (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(img (@@ (src ,(make-forward url bindings-alist)) . ,rest)
+             ,x ...))
+        ((script (@@ (src-c ,url) (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(script (@@ (src ,(make-forward url bindings-alist)) . ,rest)
+             ,x ...))
+        ((object (@@ (data-c ,url) (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(object (@@ (data ,(make-forward url bindings-alist)) . ,rest)
+             ,x ...))
+        ((iframe (@@ (src-c ,url) (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(iframe (@@ (src ,(make-forward url bindings-alist)) . ,rest)
+             ,x ...))
+        ((node (@@ (href-c ,url) (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(node (@@ (href ,(make-forward url bindings-alist)) . ,rest)
+             ,x ...))
+        ((edge (@@ (href-c ,url) (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(edge (@@ (href ,(make-forward url bindings-alist)) . ,rest)
+             ,x ...))
+        ((record (@@ (href-c ,url) (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(record (@@ (href ,(make-forward url bindings-alist)) . ,rest)
+             ,x ...))
+
+        ;; bindings to resume-k
+d160 2
+a161 38
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(a (@@ (href ,(make-rebinder resume-k bindings-alist)) . ,rest)
+             ,x ...))
+        ((link (@@ (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(link (@@ (href ,(make-rebinder resume-k bindings-alist)) . ,rest)
+             ,x ...))
+        ((form (@@ (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(form (@@ (action ,(make-rebinder resume-k bindings-alist)) . ,rest)
+             ,x ...))
+        ((img (@@ (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(img (@@ (src ,(make-rebinder resume-k bindings-alist)) . ,rest)
+             ,x ...))
+        ((script (@@ (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(script (@@ (src ,(make-rebinder resume-k bindings-alist)) . ,rest)
+             ,x ...))
+        ((object (@@ (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(object (@@ (data ,(make-rebinder resume-k bindings-alist)) . ,rest)
+             ,x ...))
+        ((iframe (@@ (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(iframe (@@ (src ,(make-rebinder resume-k bindings-alist)) . ,rest)
+             ,x ...))
+        ((node (@@ (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(node (@@ (href ,(make-rebinder resume-k bindings-alist)) . ,rest)
+             ,x ...))
+        ((edge (@@ (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(edge (@@ (href ,(make-rebinder resume-k bindings-alist)) . ,rest)
+             ,x ...))
+        ((record (@@ (bindings ,bindings-alist) . ,rest) ,[x] ...)
+         (guard (and (procedure? proc) (list? bindings-alist)))
+         `(record (@@ (href ,(make-rebinder resume-k bindings-alist)) . ,rest)
+d169 1
+a169 1
+        ;; href-p
+d208 2
+a209 1
+        ;; href-e
+a210 1
+         (guard (string? url))
+d212 1
+a213 1
+         (guard (string? url))
+d215 1
+a216 1
+         (guard (string? url))
+d218 1
+a219 1
+         (guard (string? url))
+d221 1
+a222 1
+         (guard (string? url))
+d224 1
+a225 1
+         (guard (string? url))
+d227 1
+a228 1
+         (guard (string? url))
+d230 1
+a231 1
+         (guard (string? url))
+d233 1
+a234 1
+         (guard (string? url))
+d236 1
+a237 1
+         (guard (string? url))
+d240 1
+a240 1
+        ;; href-c
+a241 1
+         (guard (string? url))
+d243 1
+a244 1
+         (guard (string? url))
+d246 1
+a247 1
+         (guard (string? url))
+d249 1
+a250 1
+         (guard (string? url))
+d252 1
+a253 1
+         (guard (string? url))
+d255 1
+a256 1
+         (guard (string? url))
+d258 1
+a259 1
+         (guard (string? url))
+d261 1
+a262 1
+         (guard (string? url))
+d264 1
+a265 1
+         (guard (string? url))
+d267 1
+a268 1
+         (guard (string? url))
+d271 1
+a271 1
+        ;; href-ce ***DEPRECATED***
+d273 1
+a273 1
+         (error "siscweb/html : @@href-ce has been deprecated; you can just use @@href-c"))
+d276 1
+a276 1
+         (error "siscweb/html : @@href-ce has been deprecated; you can just use @@href-c"))
+d279 1
+a279 1
+         (error "siscweb/html : @@action-ce has been deprecated; you can just use @@action-c"))
+d282 1
+a282 1
+         (error "siscweb/html : @@src-ce has been deprecated; you can just use @@src-c"))
+d285 1
+a285 1
+         (error "siscweb/html : @@src-ce has been deprecated; you can just use @@src-c"))
+d288 1
+a288 1
+         (error "siscweb/html : @@data-ce has been deprecated; you can just use @@data-c"))
+d291 1
+a291 1
+         (error "siscweb/html : @@src-ce has been deprecated; you can just use @@src-c"))
+d294 1
+a294 1
+         (error "siscweb/html : @@href-ce has been deprecated; you can just use @@href-c"))
+d297 1
+a297 1
+         (error "siscweb/html : @@href-ce has been deprecated; you can just use @@href-c"))
+d300 1
+a300 1
+         (error "siscweb/html : @@href-ce has been deprecated; you can just use @@href-c"))
+@
+
+
+1.3.4.19
+log
+@fixed guard conditions for @@bindings and @@href-p+@@bindings
+@
+text
+@d207 1
+a207 1
+         (guard (and (string? url) (list? bindings-alist)))
+d211 1
+a211 1
+         (guard (and (string? url) (list? bindings-alist)))
+d215 1
+a215 1
+         (guard (and (string? url) (list? bindings-alist)))
+d219 1
+a219 1
+         (guard (and (string? url) (list? bindings-alist)))
+d223 1
+a223 1
+         (guard (and (string? url) (list? bindings-alist)))
+d227 1
+a227 1
+         (guard (and (string? url) (list? bindings-alist)))
+d231 1
+a231 1
+         (guard (and (string? url) (list? bindings-alist)))
+d235 1
+a235 1
+         (guard (and (string? url) (list? bindings-alist)))
+d239 1
+a239 1
+         (guard (and (string? url) (list? bindings-alist)))
+d243 1
+a243 1
+         (guard (and (string? url) (list? bindings-alist)))
+d249 1
+a249 1
+         (guard (and (list? bindings-alist)))
+d253 1
+a253 1
+         (guard (and (list? bindings-alist)))
+d257 1
+a257 1
+         (guard (and (list? bindings-alist)))
+d261 1
+a261 1
+         (guard (and (list? bindings-alist)))
+d265 1
+a265 1
+         (guard (and (list? bindings-alist)))
+d269 1
+a269 1
+         (guard (and (list? bindings-alist)))
+d273 1
+a273 1
+         (guard (and (list? bindings-alist)))
+d277 1
+a277 1
+         (guard (and (list? bindings-alist)))
+d281 1
+a281 1
+         (guard (and (list? bindings-alist)))
+d285 1
+a285 1
+         (guard (and (list? bindings-alist)))
+@
+
+
+1.3.4.20
+log
+@modified @@*-[p|c]+@@bindings attributes and others to use
+forward/store!
+@
+text
+@d33 1
+a33 1
+(require-library 'siscweb/forward)
+d47 1
+a47 1
+  (import siscweb/forward)
+d53 3
+d60 2
+d113 1
+a113 1
+        (forward/store!
+d138 13
+d164 39
+a202 39
+        ((a (@@ (href-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(a (@@ (href ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((link (@@ (href-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(link (@@ (href ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((form (@@ (action-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(form (@@ (action ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((img (@@ (src-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(img (@@ (src ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((script (@@ (src-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(script (@@ (src ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((object (@@ (data-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(object (@@ (data ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((iframe (@@ (src-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(iframe (@@ (src ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((node (@@ (href-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(node (@@ (href ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((edge (@@ (href-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(edge (@@ (href ,(forward/store! proc bindings)) . ,rest)
+             ,x ...))
+        ((record (@@ (href-p ,proc) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (procedure? proc))
+         `(record (@@ (href ,(forward/store! proc bindings)) . ,rest)
+d206 39
+a244 39
+        ((a (@@ (href-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(a (@@ (href ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((link (@@ (href-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(link (@@ (href ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((form (@@ (action-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(form (@@ (action ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((img (@@ (src-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(img (@@ (src ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((script (@@ (src-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(script (@@ (src ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((object (@@ (data-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(object (@@ (data ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((iframe (@@ (src-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(iframe (@@ (src ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((node (@@ (href-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(node (@@ (href ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((edge (@@ (href-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(edge (@@ (href ,(forward/store! url bindings)) . ,rest)
+             ,x ...))
+        ((record (@@ (href-c ,url) (bindings ,bindings) . ,rest) ,[x] ...)
+         (guard (string? url))
+         `(record (@@ (href ,(forward/store! url bindings)) . ,rest)
+d248 39
+a286 29
+        ((a (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(a (@@ (href ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((link (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(link (@@ (href ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((form (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(form (@@ (action ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((img (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(img (@@ (src ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((script (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(script (@@ (src ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((object (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(object (@@ (data ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((iframe (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(iframe (@@ (src ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((node (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(node (@@ (href ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((edge (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(edge (@@ (href ,(forward/store! resume-k bindings)) . ,rest)
+             ,x ...))
+        ((record (@@ (bindings ,bindings) . ,rest) ,[x] ...)
+         `(record (@@ (href ,(forward/store! resume-k bindings)) . ,rest)
+d297 1
+a297 1
+         `(a (@@ (href ,(forward/store! proc)) . ,rest)
+d301 1
+a301 1
+         `(link (@@ (href ,(forward/store! proc)) . ,rest)
+d305 1
+a305 1
+         `(form (@@ (action ,(forward/store! proc)) . ,rest)
+d309 1
+a309 1
+         `(img (@@ (src ,(forward/store! proc)) . ,rest)))
+d312 1
+a312 1
+         `(script (@@ (src ,(forward/store! proc)) . ,rest)
+d316 1
+a316 1
+         `(object (@@ (data ,(forward/store! proc)) . ,rest)
+d320 1
+a320 1
+         `(iframe (@@ (src ,(forward/store! proc)) . ,rest)
+d324 1
+a324 1
+         `(node (@@ (href ,(forward/store! proc)) . ,rest)))
+d327 1
+a327 1
+         `(edge (@@ (href ,(forward/store! proc)) . ,rest)))
+d330 1
+a330 1
+         `(record (@@ (href ,(forward/store! proc)) . ,rest)
+d438 1
+a438 1
+                      "'" (forward/store! proc) "', {});"
+d446 1
+a446 1
+                      "'" (forward/store! proc) "', {});"
+@
+
+
+1.3.4.21
+log
+@now uses "verbatim" instead of "text-as-is"
+@
+text
+@d118 1
+a118 1
+             (verbatim ,(with-output-to-string
+@
+
+
+1.3.4.22
+log
+@removed deprecated attributes
+@
+text
+@d261 5
+d369 31
+@
+
+
+1.3.4.23
+log
+@moved from siscweb root to opt/sxml
+@
+text
+@@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@d31 4
+d37 1
+d39 3
+a41 3
+(require-library 'siscweb/util)
+(require-library 'sxml/sxml-tree-trans)
+(require-library 'sxml/sxml-to-html)
+d44 1
+a44 1
+  (send-html/suspend send-html/finish send-html/forward send-html/back)
+d49 1
+d51 3
+d56 1
+d58 13
+a70 1
+  (import siscweb/util)
+a71 1
+  (define-generic-java-methods get-writer set-attribute set-content-type write)
+d77 53
+a129 27
+            (with-output-to-string
+              (lambda ()
+                (sxml->html page))))))
+
+  (define (make-dispatched-html page resume-k)
+    (let/cc dispatch-k
+      (pre-post-order
+       page
+       ;; usage: (url-dispatch proc body ...)
+       `((url-dispatch
+          . ,(lambda (tag proc . body)
+               `(a (@@ (href ,(store/k! proc)))
+                   ,@@body)))
+         (url-bindings
+          . ,(lambda (tag bindings-alist . body)
+               `(a (@@ (href
+                       ,(store/k! (lambda (request)
+                                    (set-attribute
+                                     (current-request)
+                                     (->jstring "bindings")
+                                     (java-wrap
+                                      (make <bindings> bindings-alist)))
+                                    (resume-k (current-request))))))
+                   ,@@body)))
+         ;; identity rules
+         (*default* . ,(lambda x x))
+         (*text* . ,(lambda (tag str) str))))))
+d131 7
+d141 8
+a148 3
+     send-html
+     (lambda (k-url resume-k)
+       (make-dispatched-html (page-proc k-url) resume-k))))
+d151 3
+a153 1
+    (send/finish send-html (make-dispatched-html page (lambda (x) #f))))
+d158 8
+a165 3
+     send-html
+     (lambda (k-url resume-k)
+       (make-dispatched-html (page-proc k-url) resume-k))))
+d168 97
+a264 3
+    (send/back send-html
+               (make-dispatched-html page (lambda (x) #f))))
+)@
+
+
+1.2.4.1
+log
+@modularized and modified call to store/k!
+@
+text
+@a32 1
+(require-library 'siscweb/k-hash)
+a46 1
+  (import siscweb/k-hash)
+a60 15
+    (define (make-dispatcher dispatch-k)
+      (let* ((k-hash (get-random-hash))
+             (k-url (make-k-url k-hash)))
+        (store/k! (current-session-id) k-hash dispatch-k (current-k-ttl))
+        k-url))
+
+    (define (make-rebinder bindings-alst)
+      (make-dispatcher
+       (lambda (request)
+         (set-attribute request
+                        (->jstring "bindings")
+                        (java-wrap
+                         (make <bindings> bindings-alst)))
+         (resume-k request))))
+
+d67 1
+a67 1
+               `(a (@@ (href ,(make-dispatcher proc)))
+d70 9
+a78 2
+          . ,(lambda (tag bindings-alst . body)
+               `(a (@@ (href ,(make-rebinder bindings-alst)))
+@
+
+
+1.2.4.2
+log
+@modified to match contcentric's simplified store/k! call
+@
+text
+@d64 4
+a67 2
+      (let ((k-hash (store/k! dispatch-k)))
+        (make-k-url k-hash)))
+d72 4
+a75 4
+          (set-attribute request
+                         (->jstring "bindings")
+                         (java-wrap
+                          (make <bindings> bindings-alst)))
+@
+
+
+1.2.4.3
+log
+@workaround for serialization errors on url-dispatch and url-bindings;
+serialization still takes too much space though
+@
+text
+@d40 1
+a40 2
+  (send-html/suspend send-html/finish send-html/forward send-html/back
+                     send-html make-dispatched-html)
+d62 29
+a90 1
+
+d97 1
+a97 3
+       (make-dispatched-html
+        (page-proc k-url)
+        resume-k))))
+d112 1
+a112 43
+
+
+  (define (make-dispatched-html html resume-k)
+    (pre-post-order
+     html
+     `((url-dispatch
+        . ,(lambda (tag proc . body)
+             `(a (@@ (href ,(make-dispatcher proc)))
+                 ,@@body)))
+       (url-bindings
+        . ,(lambda (tag bindings-alst . body)
+             `(a (@@ (href ,(make-rebinder bindings-alst resume-k))) ,@@body)))
+       ;; identity rules
+       (*default* . ,(lambda x x))
+       (*text* . ,(lambda (tag str) str)))))
+
+
+  (define (make-dispatcher proc)
+    (import siscweb/contcentric)
+    (import siscweb/response)
+
+    (make-k-url (store/k! proc)))
+
+
+  (define (make-rebinder bindings-alst resume-k)
+    (import siscweb/bindings)
+    (import siscweb/contcentric)
+    (import siscweb/response)
+
+    (make-k-url
+     (store/k!
+      (lambda (request)
+        (import s2j)
+
+        (define-generic-java-method set-attribute)
+
+        (set-attribute
+         request
+         (->jstring "bindings")
+         (java-wrap
+          (make <bindings> bindings-alst)))
+        (resume-k request)))))
+  )
+@
+
+
+1.2.4.4
+log
+@removed imports from inside function defitions -- not needed to ensure
+serializability.
+@
+text
+@d105 3
+d110 1
+d112 4
+d129 1
+a129 1
+    )
+@
+
+
+1.2.4.5
+log
+@adapted send-html/* to new send/* interface in response; reduced
+dependencies on contcentric (hopefully all will be removed soon)
+@
+text
+@d40 2
+a41 1
+  (send-html/suspend send-html/finish send-html/forward send-html/back)
+d53 1
+a53 8
+  (define-generic-java-methods
+    get-writer
+    (encode-url |encodeURL|)
+    (get-request-uri |getRequestURI|)
+    set-attribute
+    set-content-type
+    write)
+
+d64 2
+d68 5
+a72 7
+     (lambda (request response k-hash resume-k)
+       (send-html response
+                  (make-dispatched-html
+                   response
+                   (page-proc (make-k-url response k-hash))
+                   resume-k)))))
+
+d75 1
+a75 3
+    (send/finish
+     (lambda (request response)
+       (send-html response (make-dispatched-html response page (lambda (x) #f))))))
+d80 3
+a82 7
+     (lambda (request response k-hash resume-k)
+       (send-html response
+                  (make-dispatched-html
+                   response
+                   (page-proc (make-k-url response k-hash))
+                   resume-k)))))
+
+d85 2
+a86 11
+    (send/back
+     (lambda (request response)
+       (send-html response (make-dispatched-html response page (lambda (x) #f))))))
+
+
+  (define (make-k-url response k-hash)
+    (->string
+     (encode-url (current-response)
+                 (->jstring (append-url-hash
+                             (->string (get-request-uri (current-request)))
+                             k-hash)))))
+d89 1
+a89 1
+  (define (make-dispatched-html response html resume-k)
+d94 1
+a94 1
+             `(a (@@ (href ,(make-dispatcher response proc)))
+d98 1
+a98 1
+             `(a (@@ (href ,(make-rebinder response bindings-alst resume-k))) ,@@body)))
+d104 2
+a105 2
+  (define (make-dispatcher response proc)
+    (make-k-url response (store/k! proc)))
+d107 1
+a107 1
+  (define (make-rebinder response bindings-alst resume-k)
+a108 1
+     response
+@
+
+
+1.2.4.6
+log
+@now uses put-bindings from bindings module instead of diy; renamed
+alst to alist for consistency
+@
+text
+@d118 2
+a119 2
+        . ,(lambda (tag bindings-alist . body)
+             `(a (@@ (href ,(make-rebinder response bindings-alist resume-k))) ,@@body)))
+d128 1
+a128 1
+  (define (make-rebinder response bindings-alist resume-k)
+d133 9
+a141 1
+        (put-bindings request (alist->bindings bindings-alist))
+@
+
+
+1.2.4.7
+log
+@added send-html method that uses servlet-io; the code however is
+commented b/c servlet-io is inefficent right now
+@
+text
+@a45 1
+  (import io/servlet-io)
+a68 7
+  #|;
+  ;; this is going to be slower until we optimize servlet-io
+  (define (send-html response page)
+    (set-content-type response (->jstring "text/html"))
+    (with-output-to-port (open-servlet-output response)
+      (lambda () (sxml->html page))))
+  |#;
+@
+
+
+1.2.4.8
+log
+@added missing import servlet-io
+@
+text
+@a30 1
+(require-library 'io/servlet-io)
+@
+
+
+1.2.4.9
+log
+@now uses sxml-match to generate dispatchers in the html, a first step
+toward abstracting forms fields, bindings and dispatch
+@
+text
+@a36 1
+(require-library 'sxml/sxml-match)
+a52 2
+  (import sxml-matcher)
+
+d120 12
+a131 17
+    (letrec ((T (lambda (html)
+                  (sxml-match html
+                    ((url-bindings ,bindings-alist ,[x] ...)
+                     (guard (list? bindings-alist))
+                     `(a (@@ (href ,(make-rebinder response
+                                                  bindings-alist
+                                                  resume-k)))
+                        ,x ...))
+                    ((url-dispatch ,proc ,[x] ...)
+                     (guard (procedure? proc))
+                     `(a (@@ (href ,(make-dispatcher response proc)))
+                        ,x ...))
+                    ((@@ . ,attrs) `(@@ . ,attrs))
+                    (,x (guard (list? x)) `(,(car x) ,@@(map T (cdr html))))
+                    (,str (guard (string? str)) str)
+                    (,otherwise #f)))))
+      (T html)))
+@
+
+
+1.2.4.10
+log
+@now all urls in anchors and forms are encodeURLed (for cookie-less
+operations); style improvements
+@
+text
+@d59 1
+a59 1
+    (jencode-url |encodeURL|)
+a86 1
+                   request
+d88 1
+a88 1
+                   (page-proc (make-k-url request k-hash))
+d95 1
+a95 1
+       (send-html response (make-dispatched-html request response page (lambda (x) #f))))))
+a102 1
+                   request
+d104 1
+a104 1
+                   (page-proc (make-k-url request k-hash))
+d111 1
+a111 52
+       (send-html response (make-dispatched-html request response page (lambda (x) #f))))))
+
+
+  (define (make-k-url request k-hash)
+    (append-url-hash (->string (get-request-uri request))
+                     k-hash))
+
+
+  (define (make-dispatched-html request response html resume-k)
+    (define (encode-url url)
+      (->string (jencode-url response (->jstring url))))
+
+    (define (make-dispatcher proc)
+      (encode-url (make-k-url request (store/k! proc))))
+
+    (define (make-rebinder bindings-alist resume-k)
+      (encode-url
+       (make-k-url
+        request
+        (store/k!
+         (lambda (request)
+           (put-bindings request (alist->bindings bindings-alist))
+           (resume-k request))))))
+
+    (define (T html)
+      (sxml-match html
+        ; url-bindings
+        ((url-bindings ,bindings-alist ,[x] ...)
+         (guard (list? bindings-alist))
+         `(a (@@ (href ,(make-rebinder bindings-alist resume-k)))
+             ,x ...))
+        ; url dispatch
+        ((url-dispatch ,proc ,[x] ...)
+         (guard (procedure? proc))
+         `(a (@@ (href ,(make-dispatcher proc)))
+             ,x ...))
+        ; encode urls in anchors
+        ((a (@@ (href ,url) . ,rest) ,[x] ...)
+         `(a (@@ (href ,(encode-url url) . ,rest)) ,x ...))
+        ; encode urls in forms
+        ((form (@@ (href ,url) . ,rest) ,[x] ...)
+         `(form (@@ (href ,(encode-url url) . ,rest)) ,x ...))
+        ; keep attributes as-is
+        ((@@ . ,attrs) `(@@ . ,attrs))
+        ; everything that look like an element, recurse over
+        (,x (guard (list? x)) `(,(car x) ,@@(map T (cdr html))))
+        ; strings will be strings
+        (,str (guard (string? str)) str)
+        ; other stuff we didn't catch becomes #f
+        (,otherwise #f)))
+
+    (T html))
+d114 38
+@
+
+
+1.2.4.11
+log
+@added context-url attribute to <a> and <link>; temporarily disabled
+form encode-url template (problems with sxml-match) and removed (@@ ..)
+match; now uses renamed util/misc module
+@
+text
+@d36 1
+a39 1
+(require-library 'util/misc)
+d53 1
+a53 1
+  (import util/misc)
+a57 1
+    get-context-path
+a136 4
+    (define (make-context-url url)
+      (string-append (->string (get-context-path request))
+                     url))
+
+d139 1
+a139 1
+        ;; url-bindings
+d144 1
+a144 1
+        ;; url dispatch
+d149 1
+a149 1
+        ;; encode urls in anchors
+d151 7
+a157 11
+         `(a (@@ (href ,(encode-url url)) . ,rest) ,x ...))
+        ;; encode urls in forms
+        ;;((form (@@ (action ,url) . ,rest) ,[x] ...)
+        ;; `(form (@@ (action ,(encode-url url)) . ,rest) ,x ...))
+        ;; context urls in anchors
+        ((a (@@ (context-href ,url) . ,rest) ,[x] ...)
+         `(a (@@ (href ,(encode-url (make-context-url url))) . ,rest) ,x ...))
+        ;; context urls in links
+        ((link (@@ (context-href ,url) . ,rest) ,[x] ...)
+         `(link (@@ (href ,(encode-url (make-context-url url))) . ,rest) ,x ...))
+        ;; everything that look like an element, recur over
+d159 1
+a159 1
+        ;; strings will be strings
+d161 1
+a161 1
+        ;; other stuff we didn't catch becomes #f
+@
+
+
+1.2.4.12
+log
+@now uses exclusively sxml-match for transformation and sxml->xml
+serialization; new html extensions for relative (context) urls, urls
+w/ jsession information
+@
+text
+@a30 3
+
+(require-library 'sisc/libs/srfi/srfi-1)
+
+d37 2
+d42 1
+a42 1
+  (send-html/suspend send-html/finish send-html/forward send-html/back sxml->string)
+a47 2
+  (import srfi-1)
+
+d71 3
+a73 43
+            (sxml->string page))))
+
+  ;; TODO: support the whole infoset and move to its own module
+  (define (sxml->string sxml)
+    (define (xml-element? elt)
+      (and (pair? elt)
+           (symbol? (car elt))))
+
+    (define (escape-string str)
+      (fold-right (lambda (regexp replacement text)
+                    (regexp-replace regexp text replacement))
+                  str '("\"" "<" ">") '("&quot;" "&lt;" "&gt;")))
+
+    (define (attr pair)
+      (if (cadr pair) ; if attr value is #f, skip the attr
+          (string-append
+           " " (symbol->string (car pair)) "=\"" (escape-string (cadr pair)) "\"")
+          ""))
+
+    (import sxml-accessors)
+
+    (sxml-match sxml
+      (,elt (guard (xml-element? elt))
+            (string-append
+             "<"
+             ;; tag name
+             (symbol->string (car elt))
+             ;; attribute list
+             (fold-right string-append "" (map attr
+                                               (xml-element-attributes elt)))
+             ;; tag content, properly terminated
+             (let ((c (xml-element-contents elt)))
+               (if (null? c)
+                   "/>"
+                   (string-append
+                    ">"
+                    (fold-right string-append "" (map sxml->string c))
+                    "</"
+                    (symbol->string (car elt))
+                    ">")))))
+      (,string (guard (string? string)) (escape-string string))
+      (,number (guard (number? number)) (number->string number))))
+
+d76 1
+a76 1
+  ;; alternative is stdout can be mapped to the http-response out
+d129 1
+a129 1
+    (define (make-rebinder bindings-alist)
+a142 6
+      (import sxml-accessors)
+
+      (define (xml-element? elt)
+        (and (pair? elt)
+             (symbol? (car elt))))
+
+d145 1
+a145 1
+        ((a (@@ (bindings ,bindings-alist) . ,rest) ,[x] ...)
+d147 1
+a147 1
+         `(a (@@ (href ,(make-rebinder bindings-alist)) . ,rest)
+a148 1
+
+d150 1
+a150 1
+        ((a (@@ (dispatch ,proc) . ,rest) ,[x] ...)
+d152 1
+a152 1
+         `(a (@@ (href ,(make-dispatcher proc)) . ,rest)
+d154 2
+a155 3
+
+        ;; href-e encodes the url
+        ((a (@@ (href-e ,url) . ,rest) ,[x] ...)
+d157 5
+a161 19
+        ;; href-e encodes the url
+        ((link (@@ (href-e ,url) . ,rest) ,[x] ...)
+         `(link (@@ (href ,(encode-url url)) . ,rest) ,x ...))
+        ;; action-e encodes the action url
+        ((form (@@ (action-e ,url) . ,rest) ,[x] ...)
+         `(form (@@ (action ,(encode-url url)) . ,rest) ,x ...))
+
+        ;; href-c makes the href url relative to the context
+        ((a (@@ (href-c ,url) . ,rest) ,[x] ...)
+         `(a (@@ (href ,(make-context-url url)) . ,rest) ,x ...))
+        ;; href-c makes the href url relative to the context
+        ((link (@@ (href-c ,url) . ,rest) ,[x] ...)
+         `(link (@@ (href ,(make-context-url url)) . ,rest) ,x ...))
+        ;; href-c makes the href url relative to the context
+        ((form (@@ (action-c ,url) . ,rest) ,[x] ...)
+         `(form (@@ (action ,(make-context-url url)) . ,rest) ,x ...))
+
+        ;; href-ce makes the href url relative to the context and encodes it
+        ((a (@@ (href-ce ,url) . ,rest) ,[x] ...)
+d163 2
+a164 5
+        ;; href-ce makes the href url relative to the context and encodes it
+        ((link (@@ (href-ce ,url) . ,rest) ,[x] ...)
+         `(link (@@ (href ,(encode-url (make-context-url url))) . ,rest) ,x ...))
+        ;; action-ce makes the href url relative to the context and encodes it
+        ((form (@@ (action-ce ,url) . ,rest) ,[x] ...)
+d166 2
+a167 6
+
+        ;; everything that looks like an element, recur over
+        (,elt (guard (xml-element? elt))
+              `(,(xml-element-tag elt) (@@ ,@@(xml-element-attributes elt))
+                ,@@(map T (xml-element-contents elt))))
+
+d169 3
+a171 1
+        (,string (guard (string? string)) string)
+d173 1
+a173 6
+        ;; numbers will be numbers
+        (,number (guard (string? number)) number)
+
+        ;; symbols become entities
+        (,symbol (guard (symbol? symbol))
+              (string-append "&" (symbol->string symbol) ";"))
+a174 4
+        ;; #f is ignored
+        (,false (guard (not false)) "")))
+
+    (T html))
+d176 1
+a176 1
+  )
+@
+
+
+1.2.4.13
+log
+@had forgotten to import util/regexp
+@
+text
+@a40 1
+(require-library 'util/regexp)
+a56 1
+  (import util/regexp)
+@
+
+
+1.2.4.14
+log
+@fixed typo in sxslt; now escapes amperstands and quotes, for extra
+safety
+@
+text
+@d87 1
+a87 1
+                  str '("\"" "<" ">" "&" "'") '("&quot;" "&lt;" "&gt;" "&amp;" "&apos;")))
+d235 1
+a235 1
+         `(form (@@ (href ,(encode-url (make-context-url url))) . ,rest) ,x ...))
+@
+
+
+1.2.4.15
+log
+@shtml now pretty-prints any object it doesn't explicitely understand
+@
+text
+@a48 1
+  (import type-system)
+a88 8
+    (define (->html-text value)
+      (typecase value
+        ((<string>) (escape-string value))
+        ((<number>) (number->string value))
+        (else (escape-string
+               (with-output-to-string
+                 (lambda () (pretty-print value)))))))
+
+d92 1
+a92 1
+           " " (symbol->string (car pair)) "=\"" (->html-text (cadr pair)) "\"")
+d253 1
+a253 3
+        (,false (guard (not false)) "")
+
+        (,any (with-output-to-string (lambda () (pretty-print any))))))
+@
+
+
+1.2.4.16
+log
+@&apos; was being escaped
+@
+text
+@d88 1
+a88 1
+                  str '("\"" "<" ">" "'" "&") '("&quot;" "&lt;" "&gt;" "&apos;" "&amp;")))
+@
+
+
+1.2.4.17
+log
+@fixed entity handling in sxml
+@
+text
+@d126 1
+a126 3
+      (,number (guard (number? number)) (number->string number))
+      (,symbol (guard (symbol? symbol))
+               (string-append "&" (symbol->string symbol) ";"))))
+d251 2
+a252 2
+        ;; numbers, strings, symbols will be left untouched
+        (,nss (guard (or (string? nss) (symbol? nss) (number? nss))) nss)
+d254 8
+a261 1
+        ;; #f is converted to the empty string
+a263 1
+        ;; anything else is pretty-printed
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d1 30
+d33 1
+d35 2
+d39 1
+a39 1
+  (send-html/suspend send-html/finish)
+d47 1
+d50 1
+a50 3
+  (define-generic-java-methods get-attribute get-context-path get-path-info (get-request-uri |getRequestURI|) (get-request-url |getRequestURL|) get-session get-writer remove-attribute set-attribute set-content-type to-string write)
+
+  (include "html-inc.scm")
+d52 53
+a104 4
+  ;; this is not quite right
+  (load (find-resource "sxml/SXML-tree-trans.scm"))
+  (load (find-resource "sxml/SXML-to-HTML.scm"))
+)
+@
+
+
+1.1.1.1
+log
+@initial import
+@
+text
+@@
+
+
+1.1.1.2
+log
+@did away with the -inc business; i think it was a bad idea
+@
+text
+@a0 30
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+a3 2
+(require-library 'sxml/SXML-tree-trans)
+(require-library 'sxml/SXML-to-HTML)
+d18 1
+a18 46
+  (define (send-html response page)
+    (set-content-type response (->jstring "text/html"))
+    (write (get-writer response)
+           (->jstring
+            (with-output-to-string
+              (lambda ()
+                (sxml->html page))))))
+
+  (define (make-dispatched-html page resume-k)
+    (let/cc dispatch-k
+      (pre-post-order
+       page
+       ;; usage: (url-dispatch proc body ...)
+       `((url-dispatch
+          . ,(lambda (tag proc . body)
+               `(a (@@ (href
+                       ,(let/cc suspend-k
+                          (dispatch-k
+                           (proc (send-html/suspend suspend-k))))))
+                   ,@@body)))
+         (url-bindings
+          . ,(lambda (tag bindings-alist . body)
+               `(a (@@ (href
+                       ,(let/cc suspend-k
+                          (send-html/suspend suspend-k)
+                          (set-attribute
+                           (current-request)
+                           (->jstring "bindings")
+                           (java-wrap
+                            (make <bindings> bindings-alist)))
+                          (resume-k (current-request)))))
+                   ,@@body)))
+         ;; identity rules
+         (*default* . ,(lambda x x))
+         (*text* . ,(lambda (tag str) str))))))
+
+
+  (define (send-html/suspend page-proc)
+    (send/suspend
+     send-html
+     (lambda (k-url resume-k)
+       (make-dispatched-html (page-proc k-url) resume-k))))
+
+  (define (send-html/finish page)
+    (send/finish send-html (make-dispatched-html page (lambda (x) #f))))
+
+d20 4
+a23 1
+  )
+@
+
+
+1.1.1.3
+log
+@added send-html/forward send-html/back; lowercased sxml imports
+@
+text
+@d34 2
+a35 2
+(require-library 'sxml/sxml-tree-trans)
+(require-library 'sxml/sxml-to-html)
+d38 1
+a38 1
+  (send-html/suspend send-html/finish send-html/forward send-html/back)
+d97 1
+a97 9
+  (define (send-html/forward page-proc)
+    (send/forward
+     send-html
+     (lambda (k-url resume-k)
+       (make-dispatched-html (page-proc k-url) resume-k))))
+
+  (define (send-html/back page)
+    (send/back send-html (make-dispatched-html page (lambda (x) #f))))
+)@
+
+
+1.1.1.4
+log
+@spread functions from contcentric.scm onto sisclet.scm and response.scm
+@
+text
+@d32 1
+a32 1
+(require-library 'siscweb/response)
+d45 1
+a45 1
+  (import siscweb/response)
+@
+
+
+1.1.1.5
+log
+@now imports contcentric because it needs to access current-request
+@
+text
+@a31 1
+(require-library 'siscweb/contcentric)
+a44 1
+  (import siscweb/contcentric)
+@
+
+
+1.1.1.6
+log
+@rewritten url-dispatch using low-level continuation operations; removed unused java-method definitiaions
+@
+text
+@d50 1
+a50 1
+  (define-generic-java-methods get-writer set-attribute set-content-type write)
+d67 4
+a70 1
+               `(a (@@ (href ,(store/k! proc)))
+d106 1
+a106 2
+    (send/back send-html
+               (make-dispatched-html page (lambda (x) #f))))
+@
+
+
+1.1.1.7
+log
+@rewritten url-bindings using low-level continuation operations
+@
+text
+@d72 8
+a79 7
+                       ,(store/k! (lambda (request)
+                                    (set-attribute
+                                     (current-request)
+                                     (->jstring "bindings")
+                                     (java-wrap
+                                      (make <bindings> bindings-alist)))
+                                    (resume-k (current-request))))))
+@
+
+

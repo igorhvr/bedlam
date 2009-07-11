@@ -1,0 +1,540 @@
+head	1.4;
+access;
+symbols
+	rel-0-6-dev:1.4.0.4
+	rel-0-5-fix:1.4.0.2
+	rel-0-5:1.4
+	rel-0-5-dev-safe-frames:1.3.0.6
+	Root_rel-0-5-dev-safe-frames:1.3
+	rel-0-4-fix-0:1.3
+	rel-0-5-dev:1.3.0.4
+	rel-0-4-fix:1.3.0.2
+	rel-0-3-fix-3:1.2.2.2
+	rel-0-3-fix-2:1.2.2.1
+	rel-0-4-dev-sisc-1-11:1.2.4.1
+	rel-0-3-fix-1:1.2.2.1
+	rel-0-4-dev:1.2.0.4
+	rel-0-3-fix:1.2.0.2
+	rel-0-3:1.2
+	rel-0-3-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2007.04.12.03.51.17;	author acolomba;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2006.09.03.01.42.23;	author acolomba;	state Exp;
+branches
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.11.20.18.45.39;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.11.20.18.45.39;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2005.11.29.00.58.55;	author acolomba;	state Exp;
+branches;
+next	1.2.2.2;
+
+1.2.2.2
+date	2006.04.15.15.55.27;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.11.29.01.01.42;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2006.02.17.03.32.01;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2006.02.23.01.49.02;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2006.02.28.04.30.56;	author acolomba;	state Exp;
+branches;
+next	1.2.4.5;
+
+1.2.4.5
+date	2006.03.27.23.01.55;	author acolomba;	state Exp;
+branches;
+next	1.2.4.6;
+
+1.2.4.6
+date	2006.08.12.00.18.22;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2007.04.02.00.05.25;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@merged from rel-0-5-dev
+@
+text
+@<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="siscweb" default="dist" basedir="."
+         xmlns:artifact="urn:maven-artifact-ant">
+
+  <!-- *** SETTINGS *** -->
+
+  <!-- ** ENVIRO ** -->
+  <property environment="env"/>
+  <property file="../../build.properties"/>
+
+
+  <!-- ** LOCATIONS ** -->
+  <!-- siscweb root -->
+  <property name="siscweb" value="${basedir}/../.."/>
+  <property name="siscweb.dist" value="${siscweb}/dist"/>
+
+
+  <!-- sxml add-on root -->
+  <property name="opt.sxml.bin" value="${basedir}/bin"/>
+  <property name="opt.sxml.dist" value="${siscweb.dist}/opt/sxml"/>
+  <property name="opt.sxml.lib" value="${basedir}/lib"/>
+  <property name="opt.sxml.misc" value="${basedir}/misc"/>
+  <property name="opt.sxml.scm" value="${basedir}/scm"/>
+  <property name="opt.sxml.tmp" value="${basedir}/tmp"/>
+
+
+  <!-- ** COMPILE ** -->
+
+  <!-- * SISC CLASSPATH * -->
+  <path id="compile.classpath.sisc">
+    <fileset dir="${sisc.home}">
+      <include name="sisc.jar"/>
+      <include name="sisc-lib.jar"/>
+      <include name="sisc-opt.jar"/>
+    </fileset>
+  </path>
+
+  <!-- * CLASSPATH * -->
+  <path id="compile.classpath">
+    <path refid="compile.classpath.sisc"/>
+
+    <fileset dir="${siscweb.dist}"
+             includes="siscweb.jar"/>
+
+    <pathelement location="${compile.path.servlets}"/>
+  </path>
+
+
+
+  <!-- *** TASKS *** -->
+
+  <!-- ** PREPARE ** -->
+  <target name="prepare"
+          description="prepare project">
+    <mkdir dir="${opt.sxml.bin}"/>
+    <mkdir dir="${opt.sxml.dist}"/>
+    <mkdir dir="${opt.sxml.lib}"/>
+    <mkdir dir="${opt.sxml.tmp}"/>
+  </target>
+
+
+  <!-- ** COMPILE ** -->
+  <target name="compile"
+          depends="prepare, compile-scm"/>
+
+  <target name="check-compile-scm">
+    <uptodate property="compile.scm.not-required">
+      <!-- WARNING: this does not check for ssax being up-to-date -->
+      <srcfiles dir="${opt.sxml.scm}" includes="**/*.scm" excludes="ssax/*, sxpath/*"/>
+      <mapper type="glob" from="*.scm" to="${opt.sxml.bin}/*.scc"/>
+    </uptodate>
+  </target>
+
+  <target name="compile-scm"
+          depends="check-compile-scm"
+          unless="compile.scm.not-required">
+    <java classname="sisc.REPL"
+          dir="${opt.sxml.scm}"
+          fork="yes"
+          failonerror="true">
+      <arg value="-h"/>
+      <arg value="${sisc.home}/sisc.shp"/>
+      <arg value="-x"/>
+      <arg value="${opt.sxml.misc}/compile.scm"/>
+      <sysproperty key="sisc.maxStackTraceDepth" value="16"/>
+      <classpath>
+        <path refid="compile.classpath"/>
+        <pathelement location="${opt.sxml.bin}"/>
+      </classpath>
+    </java>
+  </target>
+
+
+  <!-- ** DIST ** -->
+
+  <!-- * SISCWEB-SXML.JAR DISTRIBUTABLE * -->
+  <target name="dist" depends="compile"
+          description="creates siscweb-sxml.jar">
+    <jar destfile="${opt.sxml.dist}/siscweb-sxml.jar">
+      <fileset dir="${opt.sxml.bin}">
+        <include name="**/*.class"/>
+        <include name="**/*.scc"/>
+      </fileset>
+      <zipfileset dir="${siscweb}" prefix="META-INF">
+        <include name="COPYING"/>
+        <include name="LEGAL"/>
+      </zipfileset>
+    </jar>
+
+    <copy todir="${opt.sxml.dist}">
+      <fileset  dir="${opt.sxml.lib}">
+        <include name="*.jar"/>
+      </fileset>
+    </copy>
+  </target>
+
+
+  <!-- ** CLEAN ** -->
+  <target name="clean"
+          depends="prepare"
+          description="cleans project">
+    <delete includeemptydirs="true">
+      <fileset dir="${opt.sxml.bin}">
+        <include name="**/*"/>
+      </fileset>
+      <fileset dir="${opt.sxml.dist}">
+        <include name="**/*"/>
+      </fileset>
+    </delete>
+  </target>
+</project>
+@
+
+
+1.3
+log
+@merged from rel-0-4-dev
+@
+text
+@d70 1
+a70 1
+      <srcfiles dir="${opt.sxml.scm}" includes="**/*.scm" excludes="ssax/*"/>
+@
+
+
+1.3.4.1
+log
+@excludes .scm files that do not result in a .scc file, and avoids
+needless recompiles
+@
+text
+@d70 1
+a70 1
+      <srcfiles dir="${opt.sxml.scm}" includes="**/*.scm" excludes="ssax/*, sxpath/*"/>
+@
+
+
+1.2
+log
+@merged from rel-0-3-dev
+@
+text
+@d69 2
+a70 1
+      <srcfiles dir="${opt.sxml.scm}" includes="**/*.scm"/>
+d76 1
+a76 1
+          depends="prepare"
+a78 1
+          classpathref="compile.classpath"
+d80 2
+a81 1
+          fork="yes">
+d86 5
+@
+
+
+1.2.4.1
+log
+@merged from rel-0-3-fix
+@
+text
+@d65 1
+a65 1
+          depends="prepare, check-compile-scm, compile-scm"/>
+@
+
+
+1.2.4.2
+log
+@changed compile-scm task for SISC 1.12 compatibility
+@
+text
+@d78 1
+a84 4
+      <classpath>
+        <path refid="compile.classpath"/>
+        <pathelement location="${opt.sxml.bin}"/>
+      </classpath>
+@
+
+
+1.2.4.3
+log
+@revised compile-scm-check dependency
+@
+text
+@d65 1
+a65 1
+          depends="prepare, compile-scm"/>
+d75 1
+a75 1
+          depends="check-compile-scm"
+@
+
+
+1.2.4.4
+log
+@added ssax
+@
+text
+@d69 1
+a69 2
+      <!-- WARNING: this does not check for ssax being up-to-date -->
+      <srcfiles dir="${opt.sxml.scm}" includes="**/*.scm" excludes="ssax/*"/>
+@
+
+
+1.2.4.5
+log
+@compile-scm task now fails on compile error
+@
+text
+@d80 1
+a80 2
+          fork="yes"
+          failonerror="true">
+@
+
+
+1.2.4.6
+log
+@sets stack trace depth during compilation
+@
+text
+@a85 1
+      <sysproperty key="sisc.maxStackTraceDepth" value="16"/>
+@
+
+
+1.2.2.1
+log
+@fixed scm compilation dependency check
+@
+text
+@d65 1
+a65 1
+          depends="prepare, check-compile-scm, compile-scm"/>
+@
+
+
+1.2.2.2
+log
+@merged from rel-0-4-dev
+@
+text
+@d65 1
+a65 1
+          depends="prepare, compile-scm"/>
+d69 1
+a69 2
+      <!-- WARNING: this does not check for ssax being up-to-date -->
+      <srcfiles dir="${opt.sxml.scm}" includes="**/*.scm" excludes="ssax/*"/>
+d75 1
+a75 1
+          depends="check-compile-scm"
+d78 1
+d80 1
+a80 2
+          fork="yes"
+          failonerror="true">
+a84 4
+      <classpath>
+        <path refid="compile.classpath"/>
+        <pathelement location="${opt.sxml.bin}"/>
+      </classpath>
+@
+
+
+1.1
+log
+@file build.xml was initially added on branch rel-0-3-dev.
+@
+text
+@d1 126
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 126
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="siscweb" default="dist" basedir="."
+         xmlns:artifact="urn:maven-artifact-ant">
+
+  <!-- *** SETTINGS *** -->
+
+  <!-- ** ENVIRO ** -->
+  <property environment="env"/>
+  <property file="../../build.properties"/>
+
+
+  <!-- ** LOCATIONS ** -->
+  <!-- siscweb root -->
+  <property name="siscweb" value="${basedir}/../.."/>
+  <property name="siscweb.dist" value="${siscweb}/dist"/>
+
+
+  <!-- sxml add-on root -->
+  <property name="opt.sxml.bin" value="${basedir}/bin"/>
+  <property name="opt.sxml.dist" value="${siscweb.dist}/opt/sxml"/>
+  <property name="opt.sxml.lib" value="${basedir}/lib"/>
+  <property name="opt.sxml.misc" value="${basedir}/misc"/>
+  <property name="opt.sxml.scm" value="${basedir}/scm"/>
+  <property name="opt.sxml.tmp" value="${basedir}/tmp"/>
+
+
+  <!-- ** COMPILE ** -->
+
+  <!-- * SISC CLASSPATH * -->
+  <path id="compile.classpath.sisc">
+    <fileset dir="${sisc.home}">
+      <include name="sisc.jar"/>
+      <include name="sisc-lib.jar"/>
+      <include name="sisc-opt.jar"/>
+    </fileset>
+  </path>
+
+  <!-- * CLASSPATH * -->
+  <path id="compile.classpath">
+    <path refid="compile.classpath.sisc"/>
+
+    <fileset dir="${siscweb.dist}"
+             includes="siscweb.jar"/>
+
+    <pathelement location="${compile.path.servlets}"/>
+  </path>
+
+
+
+  <!-- *** TASKS *** -->
+
+  <!-- ** PREPARE ** -->
+  <target name="prepare"
+          description="prepare project">
+    <mkdir dir="${opt.sxml.bin}"/>
+    <mkdir dir="${opt.sxml.dist}"/>
+    <mkdir dir="${opt.sxml.lib}"/>
+    <mkdir dir="${opt.sxml.tmp}"/>
+  </target>
+
+
+  <!-- ** COMPILE ** -->
+  <target name="compile"
+          depends="prepare, compile-scm"/>
+
+  <target name="check-compile-scm">
+    <uptodate property="compile.scm.not-required">
+      <srcfiles dir="${opt.sxml.scm}" includes="**/*.scm"/>
+      <mapper type="glob" from="*.scm" to="${opt.sxml.bin}/*.scc"/>
+    </uptodate>
+  </target>
+
+  <target name="compile-scm"
+          depends="prepare"
+          unless="compile.scm.not-required">
+    <java classname="sisc.REPL"
+          classpathref="compile.classpath"
+          dir="${opt.sxml.scm}"
+          fork="yes">
+      <arg value="-h"/>
+      <arg value="${sisc.home}/sisc.shp"/>
+      <arg value="-x"/>
+      <arg value="${opt.sxml.misc}/compile.scm"/>
+    </java>
+  </target>
+
+
+  <!-- ** DIST ** -->
+
+  <!-- * SISCWEB-SXML.JAR DISTRIBUTABLE * -->
+  <target name="dist" depends="compile"
+          description="creates siscweb-sxml.jar">
+    <jar destfile="${opt.sxml.dist}/siscweb-sxml.jar">
+      <fileset dir="${opt.sxml.bin}">
+        <include name="**/*.class"/>
+        <include name="**/*.scc"/>
+      </fileset>
+      <zipfileset dir="${siscweb}" prefix="META-INF">
+        <include name="COPYING"/>
+        <include name="LEGAL"/>
+      </zipfileset>
+    </jar>
+
+    <copy todir="${opt.sxml.dist}">
+      <fileset  dir="${opt.sxml.lib}">
+        <include name="*.jar"/>
+      </fileset>
+    </copy>
+  </target>
+
+
+  <!-- ** CLEAN ** -->
+  <target name="clean"
+          depends="prepare"
+          description="cleans project">
+    <delete includeemptydirs="true">
+      <fileset dir="${opt.sxml.bin}">
+        <include name="**/*"/>
+      </fileset>
+      <fileset dir="${opt.sxml.dist}">
+        <include name="**/*"/>
+      </fileset>
+    </delete>
+  </target>
+</project>
+@
+

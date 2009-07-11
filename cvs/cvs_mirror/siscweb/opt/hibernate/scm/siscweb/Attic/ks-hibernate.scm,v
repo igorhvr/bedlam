@@ -1,0 +1,140 @@
+head	1.1;
+access;
+symbols
+	rel-0-3-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2005.10.30.22.45.57;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.10.30.22.45.57;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.10.31.02.26.25;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@file ks-hibernate.scm was initially added on branch rel-0-3-dev.
+@
+text
+@@
+
+
+1.1.2.1
+log
+@moved from siscweb/ to siscweb/opt/hibernate/
+@
+text
+@a0 86
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'util/misc)
+
+(module siscweb/k-store
+  (ks/clear! ks/get ks/put!
+   ks/setup ks/teardown
+   ks/open ks/close
+   ks/purge-expired!)
+
+  (import s2j)
+
+  (import util/misc)
+
+  (define-generic-java-methods
+    clear fetch purge-expired store)
+
+  (define k-store #f)
+
+  (define (ks/open ks)
+    (set! k-store ks))
+
+  (define (ks/close)
+    (set! k-store #f))
+
+  (define (ks/setup)
+    #t)
+
+  (define (ks/teardown)
+    #t)
+
+
+  ;; stores the given continuation and
+  ;; returns a k-url made of the current
+  ;; request url with the k-id added/substituted
+  (define (ks/put! session-id k-hash g-hash k ttl current-k-hash)
+    (store k-store (->jstring session-id) (->jstring g-hash) (->jstring k-hash) (java-wrap k) (->jlong ttl)))
+
+  ;; fetches the continuation identified by k-hash from the repository
+  ;; in the session
+  (define (ks/get session-id k-hash)
+    (if (and k-hash (not (equal? "" k-hash)))
+        (let ((k-wrap (fetch k-store (->jstring session-id) (->jstring k-hash))))
+          (if (java-null? k-wrap)
+              #f
+              (java-unwrap k-wrap)))
+        #f))
+
+
+  ;; clears the continuation table
+  (define (ks/clear! session-id)
+    (clear k-store (->jstring session-id)))
+
+
+  (define (ks/purge-expired!)
+    (purge-expired k-store))
+  )
+@
+
+
+1.1.2.2
+log
+@checked in by mistake
+@
+text
+@@
+
+

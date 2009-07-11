@@ -1,0 +1,656 @@
+head	1.3;
+access;
+symbols
+	rel-0-3-fix-3:1.2
+	rel-0-3-fix-2:1.2
+	rel-0-4-dev-sisc-1-11:1.2
+	rel-0-3-fix-1:1.2
+	rel-0-4-dev:1.2.0.4
+	rel-0-3-fix:1.2.0.2
+	rel-0-3:1.2
+	rel-0-3-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2006.09.03.01.42.24;	author acolomba;	state dead;
+branches;
+next	1.2;
+
+1.2
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.10.30.22.31.24;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.10.30.22.31.24;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.11.16.02.24.02;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2005.11.16.03.36.58;	author acolomba;	state Exp;
+branches;
+next	1.1.2.4;
+
+1.1.2.4
+date	2005.11.17.02.51.29;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5;
+
+1.1.2.5
+date	2005.11.20.01.36.50;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2006.08.30.23.07.55;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@merged from rel-0-4-dev
+@
+text
+@<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="siscweb" default="dist" basedir="."
+         xmlns:artifact="urn:maven-artifact-ant">
+
+  <!-- *** SETTINGS *** -->
+
+  <!-- ** ENVIRO ** -->
+  <property environment="env"/>
+  <property file="../../build.properties"/>
+
+
+  <!-- ** LOCATIONS ** -->
+  <!-- siscweb root -->
+  <property name="siscweb" value="${basedir}/../.."/>
+  <property name="siscweb.dist" value="${siscweb}/dist"/>
+
+
+  <!-- hibernate add-on root -->
+  <property name="opt.hibernate.bin" value="${basedir}/bin"/>
+  <property name="opt.hibernate.dist" value="${siscweb.dist}/opt/hibernate"/>
+  <property name="opt.hibernate.lib" value="${basedir}/lib"/>
+  <property name="opt.hibernate.src" value="${basedir}/src"/>
+  <property name="opt.hibernate.tmp" value="${basedir}/tmp"/>
+
+
+  <!-- ** COMPILE ** -->
+
+  <!-- * CLASSPATH * -->
+  <path id="compile.classpath">
+    <fileset dir="${sisc.home}">
+      <include name="sisc.jar"/>
+      <include name="sisc-lib.jar"/>
+      <include name="sisc-opt.jar"/>
+    </fileset>
+
+    <fileset dir="${opt.hibernate.lib}"
+             includes="*.jar"/>
+
+    <fileset dir="${siscweb.dist}"
+             includes="siscweb.jar"/>
+
+    <pathelement location="${compile.path.servlets}"/>
+  </path>
+
+
+
+  <!-- *** TASKS *** -->
+
+  <!-- ** PREPARE ** -->
+  <target name="prepare"
+          description="prepare project">
+    <mkdir dir="${opt.hibernate.bin}"/>
+    <mkdir dir="${opt.hibernate.dist}"/>
+    <mkdir dir="${opt.hibernate.lib}"/>
+    <mkdir dir="${opt.hibernate.tmp}"/>
+  </target>
+
+
+  <!-- ** DEPENDENCIES ** -->
+  <target name="check-bootstrap"
+          depends="prepare">
+    <available property="check.bootstrap.not-required"
+               file="lib/maven-artifact-ant-2.0-dep.jar"/>
+  </target>
+
+  <!-- totally hardcoded -->
+  <target name="bootstrap"
+          depends="check-bootstrap"
+          unless="check.bootstrap.not-required">
+    <get src="http://mirrors.ccs.neu.edu/Apache/dist/maven/binaries/maven-artifact-ant-2.0-dep.jar"
+         dest="lib/maven-artifact-ant-2.0-dep.jar"/>
+  </target>
+
+  <target name="dependencies"
+          depends="bootstrap">
+    <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+             uri="urn:maven-artifact-ant">
+      <classpath>
+        <pathelement location="lib/maven-artifact-ant-2.0-dep.jar" />
+      </classpath>
+    </typedef>
+
+    <artifact:dependencies filesetId="dependencies.fileset"
+                           pathId="compile.classpath.dependencies"
+                           useScope="runtime">
+      <dependency artifactId="hibernate"
+                  groupId="org.hibernate"
+                  version="3.1rc2">
+        <exclusion artifactId="jta"
+                   groupId="javax.transaction"/>
+      </dependency>
+
+      <dependency artifactId="ehcache"
+                  groupId="ehcache"
+                  version="1.1"/>
+
+      <dependency artifactId="geronimo-spec-jta"
+                  groupId="geronimo-spec"
+                  version="1.0.1B-rc4"/>
+
+      <dependency artifactId="hsqldb"
+                  groupId="hsqldb"
+                  version="1.8.0.1"/>
+    </artifact:dependencies>
+  </target>
+
+
+
+  <!-- ** COMPILE ** -->
+  <target name="compile"
+          depends="prepare, dependencies, compile-java"/>
+
+  <target name="compile-java">
+    <javac srcdir="${opt.hibernate.src}"
+           destdir="${opt.hibernate.bin}"
+           compiler="${compile.compiler}"
+           debug="${compile.debug}"
+           deprecation="${compile.deprecation}"
+           source="${compile.source}"
+           target="${compile.target}"
+           optimize="${compile.optimize}">
+      <classpath refid="compile.classpath"/>
+      <classpath refid="compile.classpath.dependencies"/>
+    </javac>
+  </target>
+
+
+  <!-- ** DIST ** -->
+
+  <!-- * SISCWEB-HIBERNATE.JAR DISTRIBUTABLE * -->
+  <target name="dist" depends="compile"
+          description="creates siscweb-hibernate.jar">
+    <jar destfile="${opt.hibernate.dist}/siscweb-hibernate.jar">
+      <fileset dir="${opt.hibernate.bin}">
+        <include name="**/*.scc"/>
+        <include name="**/*.class"/>
+      </fileset>
+      <fileset dir="${opt.hibernate.src}">
+        <include name="**/*.properties"/>
+        <include name="**/*.xml"/>
+      </fileset>
+      <zipfileset dir="${siscweb}" prefix="META-INF">
+        <include name="COPYING"/>
+        <include name="LEGAL"/>
+      </zipfileset>
+    </jar>
+
+    <copy todir="${opt.hibernate.dist}">
+      <fileset refid="dependencies.fileset" />
+      <mapper type="flatten" />
+    </copy>
+  </target>
+
+
+  <!-- ** CLEAN ** -->
+  <target name="clean"
+          depends="prepare"
+          description="cleans project">
+    <delete includeemptydirs="true">
+      <fileset dir="${opt.hibernate.bin}">
+        <include name="**/*"/>
+      </fileset>
+      <fileset dir="${opt.hibernate.dist}">
+        <include name="**/*"/>
+      </fileset>
+    </delete>
+  </target>
+</project>
+@
+
+
+1.2
+log
+@merged from rel-0-3-dev
+@
+text
+@@
+
+
+1.2.4.1
+log
+@removed hibernate continuation store (adieu mon ami)
+@
+text
+@@
+
+
+1.1
+log
+@file build.xml was initially added on branch rel-0-3-dev.
+@
+text
+@d1 169
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 183
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="siscweb" default="compile" basedir="."
+         xmlns:artifact="urn:maven-artifact-ant">
+  <!-- *** SETTINGS *** -->
+
+  <!-- ** OPT TASKS ** -->
+  <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+           uri="urn:maven-artifact-ant">
+    <classpath>
+      <pathelement location="lib/maven-artifact-ant-2.0-dep.jar" />
+    </classpath>
+  </typedef>
+
+  <!-- ** ENVIRO ** -->
+  <property environment="env"/>
+  <property file="${basedir}/../../build.properties"/>
+
+
+  <!-- ** COMPILE ** -->
+
+  <!-- * CLASSPATH * -->
+  <path id="compile.classpath">
+    <fileset dir="${sisc.home}">
+      <include name="sisc.jar"/>
+      <include name="sisc-lib.jar"/>
+      <include name="sisc-opt.jar"/>
+    </fileset>
+
+    <fileset dir="${basedir}/lib"
+             includes="*.jar"/>
+    <fileset dir="${basedir}/../../dist"
+             includes="siscweb.jar"/>
+    <pathelement location="${compile.path.servlets}"/>
+  </path>
+
+  <!-- * SISC CLASSPATH * -->
+  <path id="compile.classpath.sisc">
+    <fileset dir="${sisc.home}">
+      <include name="sisc.jar"/>
+      <include name="sisc-lib.jar"/>
+      <include name="sisc-opt.jar"/>
+    </fileset>
+  </path>
+
+
+
+  <!-- *** TASKS *** -->
+
+  <!-- ** PREPARE ** -->
+  <target name="prepare"
+          description="prepare project">
+    <mkdir dir="${basedir}/bin"/>
+    <mkdir dir="${basedir}/dist"/>
+    <mkdir dir="${basedir}/lib"/>
+    <mkdir dir="${basedir}/tmp"/>
+  </target>
+
+  <!-- ** DEPENDENCIES ** -->
+
+  <target name="dependencies">
+    <artifact:dependencies filesetId="dependency.fileset"
+                           useScope="runtime">
+      <dependency artifactId="hibernate"
+                  groupId="org.hibernate"
+                  version="3.0.5">
+        <exclusion artifactId="avalon-framework"
+                   groupId="avalon-framework"/>
+        <exclusion artifactId="concurrent"
+                   groupId="concurrent"/>
+        <exclusion artifactId="logkit"
+                   groupId="logkit"/>
+        <exclusion artifactId="jacc"
+                   groupId="javax.security"/>
+        <exclusion artifactId="jboss-minimal"
+                   groupId="jboss"/>
+        <exclusion artifactId="jboss-cache"
+                   groupId="jboss"/>
+        <exclusion artifactId="jboss-common"
+                   groupId="jboss"/>
+        <exclusion artifactId="jboss-j2se"
+                   groupId="jboss"/>
+        <exclusion artifactId="jboss-system"
+                   groupId="jboss"/>
+        <exclusion artifactId="jta"
+                   groupId="javax.transaction"/>
+        <exclusion artifactId="odmg"
+                   groupId="odmg"/>
+        <exclusion artifactId="proxool"
+                   groupId="proxool"/>
+      </dependency>
+      <dependency artifactId="geronimo-spec-jta"
+                  groupId="geronimo-spec"
+                  version="1.0.1B-rc4"/>
+    </artifact:dependencies>
+
+    <copy todir="${basedir}/lib">
+      <fileset refid="dependency.fileset" />
+      <mapper type="flatten" />
+    </copy>
+  </target>
+
+
+
+  <!-- ** COMPILE ** -->
+  <target name="compile"
+          depends="prepare, dependencies, compile-java, compile-scm"/>
+
+
+  <target name="compile-java">
+    <javac srcdir="${basedir}/src"
+           destdir="${basedir}/bin"
+           compiler="${compile.compiler}"
+           debug="${compile.debug}"
+           deprecation="${compile.deprecation}"
+           source="${compile.source}"
+           target="${compile.target}"
+           optimize="${compile.optimize}"
+           classpathref="compile.classpath"/>
+  </target>
+
+  <target name="check-compile-scm">
+    <uptodate property="compile.scm.not-required">
+      <srcfiles dir="${basedir}/scm" includes="**/*.scm"/>
+      <mapper type="glob" from="*.scm" to="${basedir}/bin/*.scc"/>
+    </uptodate>
+  </target>
+
+  <target name="compile-scm"
+          depends="prepare"
+          unless="compile.scm.not-required">
+    <java classname="sisc.REPL"
+          classpathref="compile.classpath.sisc"
+          dir="${basedir}/scm"
+          fork="yes">
+      <arg value="-h"/>
+      <arg value="${sisc.home}/sisc.shp"/>
+      <arg value="-x"/>
+      <arg value="${basedir}/misc/compile.scm"/>
+    </java>
+  </target>
+
+
+  <!-- ** DIST ** -->
+
+  <!-- * SISCWEB-HIBERNATE.JAR DISTRIBUTABLE * -->
+  <target name="dist" depends="compile"
+          description="creates siscweb.jar for use in web apps (sisc jars not included)">
+    <jar destfile="${basedir}/dist/siscweb-hibernate.jar">
+      <fileset dir="${basedir}/bin">
+        <include name="**/*.class"/>
+      </fileset>
+      <!--
+      <fileset dir="${basedir}/bin">
+        <include name="**/*.scc"/>
+      </fileset>
+      -->
+      <fileset dir="${basedir}/scm">
+        <include name="**/*.scm"/>
+      </fileset>
+      <fileset dir="${basedir}/src">
+        <include name="**/*.xml"/>
+      </fileset>
+      <zipfileset dir="${basedir}/../.." prefix="META-INF">
+        <include name="COPYING"/>
+        <include name="LEGAL"/>
+      </zipfileset>
+    </jar>
+  </target>
+
+  <!-- ** CLEAN ** -->
+  <target name="clean"
+          description="cleans project">
+    <delete includeemptydirs="true">
+      <fileset dir="${basedir}/bin">
+        <include name="**/*"/>
+      </fileset>
+      <fileset dir="${basedir}/dist">
+        <include name="**/*"/>
+      </fileset>
+    </delete>
+  </target>
+</project>
+@
+
+
+1.1.2.2
+log
+@now bootstraps dependencies; removed cruft; deploys to misc/opt in
+parent siscweb project
+@
+text
+@d5 1
+d7 7
+a13 1
+  <!-- *** SETTINGS *** -->
+d17 1
+a17 5
+
+  <property name="basedir.siscweb" value="${basedir}/../.."/>
+
+  <property file="${basedir.siscweb}/build.properties"/>
+
+d32 1
+a32 2
+
+    <fileset dir="${basedir.siscweb}/dist"
+d34 2
+d37 7
+a43 1
+    <pathelement location="${compile.path.servlets}"/>
+d54 1
+a56 1
+    <mkdir dir="${basedir.siscweb}/dist/opt/hibernate"/>
+a58 1
+
+a59 21
+  <target name="check-bootstrap"
+          depends="prepare">
+    <available property="check.bootstrap.not-required"
+               file="lib/maven-artifact-ant-2.0-dep.jar"/>
+  </target>
+
+  <target name="bootstrap"
+          depends="check-bootstrap"
+          unless="check.bootstrap.not-required">
+    <get src="http://mirrors.ccs.neu.edu/Apache/dist/maven/binaries/maven-artifact-ant-2.0-dep.jar"
+         dest="lib/maven-artifact-ant-2.0-dep.jar"/>
+  </target>
+
+  <target name="dependencies"
+          depends="bootstrap">
+    <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+             uri="urn:maven-artifact-ant">
+      <classpath>
+        <pathelement location="lib/maven-artifact-ant-2.0-dep.jar" />
+      </classpath>
+    </typedef>
+d61 2
+a62 2
+    <artifact:dependencies filesetId="dependencies.fileset"
+                           pathId="compile.classpath.dependencies"
+a96 1
+    <!--
+a100 1
+    -->
+d107 2
+a108 1
+          depends="prepare, dependencies, compile-java"/>
+d118 23
+a140 4
+           optimize="${compile.optimize}">
+      <classpath refid="compile.classpath"/>
+      <classpath refid="compile.classpath.dependencies"/>
+    </javac>
+d148 2
+a149 2
+          description="creates siscweb-hibernate.jar">
+    <jar destfile="${basedir.siscweb}/dist/opt/hibernate/siscweb-hibernate.jar">
+d153 8
+d164 1
+a164 1
+      <zipfileset dir="${basedir.siscweb}" prefix="META-INF">
+a168 5
+
+    <copy todir="${basedir.siscweb}/dist/opt/hibernate">
+      <fileset refid="dependencies.fileset" />
+      <mapper type="flatten" />
+    </copy>
+a170 1
+
+d178 1
+a178 1
+      <fileset dir="${basedir.siscweb}/dist/opt/hibernate">
+@
+
+
+1.1.2.3
+log
+@updated and fixed hibernate dependency
+@
+text
+@d78 19
+a96 1
+                  version="3.1rc2">
+d99 4
+a103 5
+
+      <dependency artifactId="ehcache"
+                  groupId="ehcache"
+                  version="1.1"/>
+
+d107 1
+d109 6
+a114 4
+      <dependency artifactId="hsqldb"
+                  groupId="hsqldb"
+                  version="1.8.0.1"/>
+    </artifact:dependencies>
+a147 1
+        <include name="**/*.properties"/>
+@
+
+
+1.1.2.4
+log
+@default target set to "dist"
+@
+text
+@d3 1
+a3 1
+<project name="siscweb" default="dist" basedir="."
+a124 1
+        <include name="**/*.scc"/>
+@
+
+
+1.1.2.5
+log
+@created values for important locations
+@
+text
+@a9 1
+  <property file="../../build.properties"/>
+d11 1
+d13 1
+a13 4
+  <!-- ** LOCATIONS ** -->
+  <!-- siscweb root -->
+  <property name="siscweb" value="${basedir}/../.."/>
+  <property name="siscweb.dist" value="${siscweb}/dist"/>
+a15 7
+  <!-- hibernate add-on root -->
+  <property name="opt.hibernate.bin" value="${basedir}/bin"/>
+  <property name="opt.hibernate.dist" value="${siscweb.dist}/opt/hibernate"/>
+  <property name="opt.hibernate.lib" value="${basedir}/lib"/>
+  <property name="opt.hibernate.src" value="${basedir}/src"/>
+  <property name="opt.hibernate.tmp" value="${basedir}/tmp"/>
+
+d27 1
+a27 1
+    <fileset dir="${opt.hibernate.lib}"
+d30 1
+a30 1
+    <fileset dir="${siscweb.dist}"
+d43 4
+a46 4
+    <mkdir dir="${opt.hibernate.bin}"/>
+    <mkdir dir="${opt.hibernate.dist}"/>
+    <mkdir dir="${opt.hibernate.lib}"/>
+    <mkdir dir="${opt.hibernate.tmp}"/>
+a56 1
+  <!-- totally hardcoded -->
+d104 2
+a105 2
+    <javac srcdir="${opt.hibernate.src}"
+           destdir="${opt.hibernate.bin}"
+d123 2
+a124 2
+    <jar destfile="${opt.hibernate.dist}/siscweb-hibernate.jar">
+      <fileset dir="${opt.hibernate.bin}">
+d128 1
+a128 1
+      <fileset dir="${opt.hibernate.src}">
+d132 1
+a132 1
+      <zipfileset dir="${siscweb}" prefix="META-INF">
+d138 1
+a138 1
+    <copy todir="${opt.hibernate.dist}">
+a146 1
+          depends="prepare"
+d149 1
+a149 1
+      <fileset dir="${opt.hibernate.bin}">
+d152 1
+a152 1
+      <fileset dir="${opt.hibernate.dist}">
+@
+
+

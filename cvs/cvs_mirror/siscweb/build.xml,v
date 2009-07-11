@@ -1,0 +1,2835 @@
+head	1.6;
+access;
+symbols
+	rel-0-6-dev:1.6.0.4
+	rel-0-5-fix:1.6.0.2
+	rel-0-5:1.6
+	rel-0-5-dev-safe-frames:1.5.0.6
+	Root_rel-0-5-dev-safe-frames:1.5
+	rel-0-4-fix-0:1.5
+	rel-0-5-dev:1.5.0.4
+	rel-0-4-fix:1.5.0.2
+	rel-0-3-fix-3:1.4.2.4
+	rel-0-3-fix-2:1.4.2.3
+	rel-0-4-dev-sisc-1-11:1.4.4.2
+	rel-0-3-fix-1:1.4.2.2
+	rel-0-4-dev:1.4.0.4
+	rel-0-3-fix:1.4.0.2
+	rel-0-3:1.4.2.1
+	rel-0-3-dev-1:1.3.2.2
+	rel-0-2-fix-2:1.3
+	rel-0-2-fix-1:1.3
+	rel-0-2-fix:1.3.0.4
+	rel-0-3-dev:1.3.0.2
+	rel-0-2:1.3
+	rel-0-1-fix-1:1.2.2.1
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	start:1.1.1.1
+	rel-0-1-dev:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2007.04.12.03.51.15;	author acolomba;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2006.09.03.01.42.25;	author acolomba;	state Exp;
+branches
+	1.5.4.1;
+next	1.4;
+
+1.4
+date	2005.11.25.20.43.31;	author acolomba;	state Exp;
+branches
+	1.4.2.1
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2005.06.19.04.53.02;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.52;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches;
+next	1.1.1.2;
+
+1.1.1.2
+date	2005.02.17.01.43.59;	author acolomba;	state Exp;
+branches;
+next	1.1.1.3;
+
+1.1.1.3
+date	2005.03.06.23.00.11;	author acolomba;	state Exp;
+branches;
+next	1.1.1.4;
+
+1.1.1.4
+date	2005.03.13.06.16.05;	author acolomba;	state Exp;
+branches;
+next	1.1.1.5;
+
+1.1.1.5
+date	2005.03.30.02.28.13;	author acolomba;	state Exp;
+branches;
+next	1.1.1.6;
+
+1.1.1.6
+date	2005.04.02.01.51.56;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2005.04.07.00.34.12;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.04.07.02.09.41;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.04.21.00.41.57;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2005.05.15.16.17.18;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2005.06.04.04.38.54;	author acolomba;	state Exp;
+branches;
+next	1.2.4.5;
+
+1.2.4.5
+date	2005.06.05.18.11.09;	author acolomba;	state Exp;
+branches;
+next	1.2.4.6;
+
+1.2.4.6
+date	2005.06.11.05.13.36;	author acolomba;	state Exp;
+branches;
+next	1.2.4.7;
+
+1.2.4.7
+date	2005.06.18.00.42.10;	author acolomba;	state Exp;
+branches;
+next	1.2.4.8;
+
+1.2.4.8
+date	2005.06.18.02.19.21;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2005.09.13.23.06.23;	author acolomba;	state Exp;
+branches;
+next	1.3.2.2;
+
+1.3.2.2
+date	2005.09.28.02.44.05;	author acolomba;	state Exp;
+branches;
+next	1.3.2.3;
+
+1.3.2.3
+date	2005.10.24.03.25.03;	author acolomba;	state Exp;
+branches;
+next	1.3.2.4;
+
+1.3.2.4
+date	2005.10.31.02.54.25;	author acolomba;	state Exp;
+branches;
+next	1.3.2.5;
+
+1.3.2.5
+date	2005.11.12.21.56.50;	author acolomba;	state Exp;
+branches;
+next	1.3.2.6;
+
+1.3.2.6
+date	2005.11.16.03.37.44;	author acolomba;	state Exp;
+branches;
+next	1.3.2.7;
+
+1.3.2.7
+date	2005.11.17.02.52.45;	author acolomba;	state Exp;
+branches;
+next	1.3.2.8;
+
+1.3.2.8
+date	2005.11.19.16.10.47;	author acolomba;	state Exp;
+branches;
+next	1.3.2.9;
+
+1.3.2.9
+date	2005.11.20.01.35.41;	author acolomba;	state Exp;
+branches;
+next	1.3.2.10;
+
+1.3.2.10
+date	2005.11.20.18.52.01;	author acolomba;	state Exp;
+branches;
+next	1.3.2.11;
+
+1.3.2.11
+date	2005.11.23.02.25.08;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2005.10.24.03.23.47;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2;
+
+1.3.4.2
+date	2005.11.15.03.50.32;	author acolomba;	state Exp;
+branches;
+next	1.3.4.3;
+
+1.3.4.3
+date	2005.11.15.03.57.30;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.2.1
+date	2005.11.25.21.02.18;	author acolomba;	state Exp;
+branches;
+next	1.4.2.2;
+
+1.4.2.2
+date	2005.11.29.01.00.23;	author acolomba;	state Exp;
+branches;
+next	1.4.2.3;
+
+1.4.2.3
+date	2006.02.25.17.12.07;	author acolomba;	state Exp;
+branches;
+next	1.4.2.4;
+
+1.4.2.4
+date	2006.04.15.15.55.29;	author acolomba;	state Exp;
+branches;
+next	1.4.2.5;
+
+1.4.2.5
+date	2006.04.24.03.31.59;	author acolomba;	state Exp;
+branches;
+next	1.4.2.6;
+
+1.4.2.6
+date	2006.06.27.01.48.49;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2005.11.29.01.01.42;	author acolomba;	state Exp;
+branches;
+next	1.4.4.2;
+
+1.4.4.2
+date	2005.12.05.00.36.08;	author acolomba;	state Exp;
+branches;
+next	1.4.4.3;
+
+1.4.4.3
+date	2006.02.17.03.32.01;	author acolomba;	state Exp;
+branches;
+next	1.4.4.4;
+
+1.4.4.4
+date	2006.02.23.01.48.19;	author acolomba;	state Exp;
+branches;
+next	1.4.4.5;
+
+1.4.4.5
+date	2006.03.25.15.40.33;	author acolomba;	state Exp;
+branches;
+next	1.4.4.6;
+
+1.4.4.6
+date	2006.03.27.23.01.55;	author acolomba;	state Exp;
+branches;
+next	1.4.4.7;
+
+1.4.4.7
+date	2006.04.24.00.20.09;	author acolomba;	state Exp;
+branches;
+next	1.4.4.8;
+
+1.4.4.8
+date	2006.04.24.02.57.45;	author acolomba;	state Exp;
+branches;
+next	1.4.4.9;
+
+1.4.4.9
+date	2006.08.12.00.18.23;	author acolomba;	state Exp;
+branches;
+next	1.4.4.10;
+
+1.4.4.10
+date	2006.08.18.03.22.44;	author acolomba;	state Exp;
+branches;
+next	1.4.4.11;
+
+1.4.4.11
+date	2006.08.30.23.07.55;	author acolomba;	state Exp;
+branches;
+next	1.4.4.12;
+
+1.4.4.12
+date	2006.08.31.02.48.58;	author acolomba;	state Exp;
+branches;
+next	1.4.4.13;
+
+1.4.4.13
+date	2006.08.31.02.52.08;	author acolomba;	state Exp;
+branches;
+next	1.4.4.14;
+
+1.4.4.14
+date	2006.08.31.03.05.48;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.5.4.1
+date	2007.04.02.00.05.25;	author acolomba;	state Exp;
+branches;
+next	1.5.4.2;
+
+1.5.4.2
+date	2007.04.11.03.58.53;	author acolomba;	state Exp;
+branches;
+next	1.5.4.3;
+
+1.5.4.3
+date	2007.04.11.03.59.42;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@merged from rel-0-5-dev
+@
+text
+@<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="siscweb" default="dist" basedir=".">
+  <!-- *** SETTINGS *** -->
+
+  <!-- ** ENVIRO ** -->
+  <property environment="env"/>
+  <property file="${basedir}/build.properties"/>
+
+
+  <!-- ** LOCATIONS ** -->
+  <!-- siscweb root -->
+  <property name="siscweb.bin" value="${basedir}/bin"/>
+  <property name="siscweb.dist" value="${basedir}/dist"/>
+  <property name="siscweb.dist.swm" value="${basedir}/dist/swm"/>
+  <property name="siscweb.doc" value="${basedir}/doc"/>
+  <property name="siscweb.doc.swm" value="${basedir}/doc/swm"/>
+  <property name="siscweb.examples" value="${basedir}/examples"/>
+  <property name="siscweb.lib" value="${basedir}/lib"/>
+  <property name="siscweb.misc" value="${basedir}/misc"/>
+  <property name="siscweb.opt" value="${basedir}/opt"/>
+  <property name="siscweb.scm" value="${basedir}/scm"/>
+  <property name="siscweb.src" value="${basedir}/src"/>
+  <property name="siscweb.tmp" value="${basedir}/tmp"/>
+
+  <!-- add-ons -->
+  <property name="siscweb.dist.sql" value="${siscweb.dist}/opt/sql"/>
+  <property name="siscweb.opt.sql" value="${siscweb.opt}/sql"/>
+  <property name="siscweb.dist.sxml" value="${siscweb.dist}/opt/sxml"/>
+  <property name="siscweb.opt.sxml" value="${siscweb.opt}/sxml"/>
+
+
+  <!-- ** COMPILE ** -->
+
+  <!-- * SISC CLASSPATH * -->
+  <path id="compile.classpath.sisc">
+    <fileset dir="${sisc.home}">
+      <include name="sisc.jar"/>
+      <include name="sisc-lib.jar"/>
+      <include name="sisc-opt.jar"/>
+    </fileset>
+  </path>
+
+  <!-- * CLASSPATH * -->
+  <path id="compile.classpath">
+    <fileset dir="${siscweb.lib}"
+             includes="*.jar"/>
+    <path refid="compile.classpath.sisc"/>
+    <pathelement location="${compile.path.servlets}"/>
+  </path>
+
+
+
+  <!-- *** TASKS *** -->
+
+  <!-- ** PREPARE ** -->
+  <target name="prepare"
+          description="prepares project">
+    <mkdir dir="${siscweb.bin}"/>
+    <mkdir dir="${siscweb.dist}"/>
+    <mkdir dir="${siscweb.lib}"/>
+    <mkdir dir="${siscweb.dist.swm}"/>
+    <mkdir dir="${siscweb.tmp}"/>
+  </target>
+
+
+  <!-- ** COMPILE ** -->
+  <target name="compile"
+          description="compiles project (not opt modules)"
+          depends="prepare, compile-java, compile-scm"/>
+
+  <target name="compile-java">
+    <javac srcdir="${siscweb.src}"
+           destdir="${siscweb.bin}"
+           compiler="${compile.compiler}"
+           debug="${compile.debug}"
+           deprecation="${compile.deprecation}"
+           source="${compile.source}"
+           target="${compile.target}"
+           optimize="${compile.optimize}"
+           classpathref="compile.classpath"/>
+  </target>
+
+  <target name="check-compile-scm">
+    <uptodate property="compile.scm.not-required">
+      <srcfiles dir="${siscweb.scm}" includes="**/*.scm" excludes="util/letvalues.scm"/>
+      <mapper type="glob" from="*.scm" to="${siscweb.bin}/*.scc"/>
+    </uptodate>
+  </target>
+
+  <target name="compile-scm"
+          depends="check-compile-scm"
+          unless="compile.scm.not-required">
+    <java classname="sisc.REPL"
+          classpathref="compile.classpath"
+          dir="${siscweb.scm}"
+          fork="yes"
+          failonerror="true">
+      <arg value="-h"/>
+      <arg value="${sisc.home}/sisc.shp"/>
+      <arg value="-x"/>
+      <arg value="${siscweb.misc}/compile.scm"/>
+      <sysproperty key="sisc.maxStackTraceDepth" value="16"/>
+      <classpath>
+        <path refid="compile.classpath"/>
+        <pathelement location="${siscweb.bin}"/>
+      </classpath>
+    </java>
+  </target>
+
+
+  <!-- ** DOC ** -->
+
+  <!-- * MANUAL * -->
+  <target name="doc"
+          depends="prepare">
+    <!-- manual in chunks -->
+    <copy file="${siscweb.doc}/style/html.xsl"
+          tofile="${siscweb.tmp}/doc-style-chunks.xsl"/>
+    <replace file="${siscweb.tmp}/doc-style-chunks.xsl"
+             token="@@@@@@doc.style@@@@@@"
+             value="${doc.xsl.chunks}"/>
+
+    <xslt in="${siscweb.doc.swm}/swm.xml"
+          out="${siscweb.dist.swm}/index.html"
+          force="true"
+          style="${siscweb.tmp}/doc-style-chunks.xsl">
+      <param name="html.stylesheet"
+             expression="siscweb-manual.css"/>
+    </xslt>
+
+    <!-- manual in single file -->
+    <copy file="${siscweb.doc}/style/html.xsl"
+          tofile="${siscweb.tmp}/doc-style-single.xsl"/>
+    <replace file="${siscweb.tmp}/doc-style-single.xsl"
+             token="@@@@@@doc.style@@@@@@"
+             value="${doc.xsl.single}"/>
+
+    <xslt in="${siscweb.doc.swm}/swm.xml"
+          out="${siscweb.dist.swm}/siscweb-manual.html"
+          force="true"
+          style="${siscweb.tmp}/doc-style-single.xsl">
+      <param name="html.stylesheet"
+             expression="siscweb-manual.css"/>
+    </xslt>
+
+    <copy file="${siscweb.doc}/style/swm.css"
+          tofile="${siscweb.dist.swm}/siscweb-manual.css"/>
+  </target>
+
+
+  <!-- ** OPT ** -->
+
+  <!-- * SISCWEB-SQL * -->
+  <target name="opt-sql" depends="dist"
+          description="builds sql add-on">
+    <ant dir="${siscweb.opt.sql}"
+         inheritAll="false"/>
+  </target>
+
+  <!-- * SISCWEB-SXML * -->
+  <target name="opt-sxml" depends="dist"
+          description="builds sxml add-on">
+    <ant dir="${siscweb.opt.sxml}"
+         inheritAll="false"/>
+  </target>
+
+
+  <!-- ** DIST ** -->
+
+  <!-- * SISCWEB.JAR DISTRIBUTABLE * -->
+  <target name="dist" depends="compile"
+          description="creates siscweb.jar for use in web apps (sisc jars not included)">
+    <jar destfile="${siscweb.dist}/siscweb.jar">
+      <fileset dir="${siscweb.bin}">
+        <include name="**/*.class"/>
+        <include name="**/*.scc"/>
+      </fileset>
+    </jar>
+  </target>
+
+  <!-- * SOURCE DISTRIBUTABLE -->
+  <target name="dist-src" depends="prepare">
+    <fail unless="rel.tag" message="Please define rel.tag (e.g. rel-0-4)"/>
+    <fail unless="rel.ver" message="Please define rel.ver (e.g. 0.4)"/>
+
+    <cvs command="export"
+         cvsRoot="${env.CVSROOT}"
+         cvsRsh="${env.CVS_RSH}"
+         dest="${siscweb.tmp}"
+         package="siscweb"
+         tag="${rel.tag}"
+         quiet="true"
+         failonerror="true"/>
+    <move file="${siscweb.tmp}/siscweb" tofile="${siscweb.tmp}/siscweb-src-${rel.ver}"/>
+
+    <tar destfile="${siscweb.dist}/siscweb-src-${rel.ver}.tgz"
+         compression="gzip">
+      <tarfileset dir="${siscweb.tmp}">
+        <include name="siscweb-src-${rel.ver}/**/*"/>
+      </tarfileset>
+    </tar>
+    <zip destfile="${siscweb.dist}/siscweb-src-${rel.ver}.zip">
+      <fileset dir="${siscweb.tmp}">
+        <include name="siscweb-src-${rel.ver}/**/*"/>
+      </fileset>
+    </zip>
+
+    <delete includeemptydirs="true">
+      <fileset dir="${siscweb.tmp}/siscweb-src-${rel.ver}" includes="**/*"/>
+    </delete>
+  </target>
+
+  <!-- * BINARY DISTRIBUTABLE * -->
+  <target name="dist-bin" depends="dist, opt-sql, opt-sxml, doc">
+    <fail unless="rel.ver" message="Please define rel.ver (e.g. 0.4)"/>
+
+    <mkdir dir="${siscweb.tmp}/siscweb-bin-${rel.ver}"/>
+
+    <mkdir dir="${siscweb.tmp}/siscweb-bin-${rel.ver}/docs"/>
+    <copy todir="${siscweb.tmp}/siscweb-bin-${rel.ver}/docs">
+      <fileset dir="${siscweb.dist}/swm"/>
+    </copy>
+
+    <mkdir dir="${siscweb.tmp}/siscweb-bin-${rel.ver}/lib"/>
+    <copy file="${siscweb.dist}/siscweb.jar" todir="${siscweb.tmp}/siscweb-bin-${rel.ver}/lib"/>
+    <copy file="${siscweb.dist.sql}/siscweb-sql.jar" todir="${siscweb.tmp}/siscweb-bin-${rel.ver}/lib"/>
+    <copy file="${siscweb.dist.sxml}/siscweb-sxml.jar" todir="${siscweb.tmp}/siscweb-bin-${rel.ver}/lib"/>
+
+    <copy todir="${siscweb.tmp}/siscweb-bin-${rel.ver}">
+      <fileset dir="${siscweb.examples}/WEB-INF" includes="web.xml, sisc.properties"/>
+    </copy>
+    <copy todir="${siscweb.tmp}/siscweb-bin-${rel.ver}">
+      <fileset dir="${basedir}" includes="BUGS, COPYING, INSTALL, LEGAL, README"/>
+    </copy>
+
+    <tar destfile="${siscweb.dist}/siscweb-bin-${rel.ver}.tgz"
+         compression="gzip">
+      <tarfileset dir="${siscweb.tmp}">
+        <include name="siscweb-bin-${rel.ver}/**/*"/>
+      </tarfileset>
+    </tar>
+    <zip destfile="${siscweb.dist}/siscweb-bin-${rel.ver}.zip">
+      <fileset dir="${siscweb.tmp}">
+        <include name="siscweb-bin-${rel.ver}/**/*"/>
+      </fileset>
+    </zip>
+
+    <delete includeemptydirs="true">
+      <fileset dir="${siscweb.tmp}/siscweb-bin-${rel.ver}" includes="**/*"/>
+    </delete>
+  </target>
+
+  <!-- * SISCWEB-EXAMPLES.WAR DISTRIBUTABLE * -->
+  <target name="dist-examples" depends="dist-examples-hot"
+          description="creates a distributable examples.war ready for deployment">
+
+    <war destfile="${siscweb.dist}/siscweb-examples.war"
+         basedir="${siscweb.examples}"
+         webxml="${siscweb.examples}/WEB-INF/web.xml">
+    </war>
+  </target>
+
+  <!-- * SISCWEB-EXAMPLES HOTDEPLOY * -->
+  <target name="dist-examples-hot"
+          depends="compile, opt-sql, opt-sxml"
+          description="makes examples/ a hot-deployable web app">
+
+    <!-- sanity check for existence of sisc heap jar -->
+    <available file="${sisc.home}/sisc-heap.jar" property="sisc.heap.present"/>
+    <fail unless="sisc.heap.present"
+          message="Could not locate sisc-heap.jar. Make sure to build it using either: a) 'ant heap-jar' or the 'build-heapjar.scm' script in the SISC home, or b) 'ant sisc-heap-jar' in the SISCweb home."/>
+
+
+    <sync todir="${siscweb.examples}/WEB-INF/lib"
+          failonerror="false">
+      <!-- siscweb jar - comment out and use class files below during
+           SISCweb developement
+      -->
+      <fileset dir="${siscweb.dist}" includes="siscweb.jar"/>
+
+      <!-- sisc jars -->
+      <fileset dir="${sisc.home}">
+        <include name="sisc.jar"/>
+        <include name="sisc-lib.jar"/>
+        <include name="sisc-opt.jar"/>
+        <include name="sisc-heap.jar"/>
+      </fileset>
+
+      <!-- all jars in lib -->
+      <fileset dir="${siscweb.lib}"/>
+
+      <!-- all jars in sql dist -->
+      <fileset dir="${siscweb.dist.sql}"/>
+
+      <!-- all jars in sxml dist -->
+      <fileset dir="${siscweb.dist.sxml}"/>
+    </sync>
+
+    <!-- siscweb class files - uncomment during SISCweb development
+    <jar destfile="${siscweb.examples}/WEB-INF/lib/siscweb-scm.jar">
+      <fileset dir="${siscweb.bin}">
+        <include name="**/*.scc"/>
+      </fileset>
+    </jar>
+    <sync todir="${siscweb.examples}/WEB-INF/classes">
+      <fileset dir="${siscweb.bin}">
+        <exclude name="**/*.scc"/>
+      </fileset>
+    </sync>
+    -->
+  </target>
+
+
+  <!-- ** PUB ** -->
+
+  <!-- * MANUAL * -->
+  <target name="pub-doc" depends="doc">
+    <scp toDir="acolomba@@shell.sourceforge.net:/home/groups/s/si/siscweb/htdocs/swm"
+         keyfile="${user.home}/.ssh/id_dsa" passphrase="">
+      <fileset dir="${siscweb.dist}/swm"/>
+    </scp>
+  </target>
+
+
+  <!-- ** CLEAN ** -->
+
+  <!-- * CLEAN PROJECT * -->
+  <target name="clean"
+          depends="prepare"
+          description="cleans project">
+    <delete includeemptydirs="true">
+      <fileset dir="${siscweb.bin}"/>
+      <fileset dir="${siscweb.dist}"/>
+      <fileset dir="${siscweb.examples}/WEB-INF"
+               includes="classes/**/*, lib/**/*"/>
+    </delete>
+  </target>
+
+
+  <target name="clean-all"
+          depends="clean"
+          description="cleans project and opt modules">
+    <ant dir="${siscweb.opt.sql}"
+         inheritAll="false"
+         target="clean"/>
+    <ant dir="${siscweb.opt.sxml}"
+         inheritAll="false"
+         target="clean"/>
+  </target>
+
+  <!-- ** MISC ** -->
+  <target name="sisc-heap-jar"
+          description="builds sisc-heap.jar in the SISC home">
+    <unjar src="${sisc.home}/sisc-opt.jar"
+           dest="${siscweb.tmp}">
+      <patternset includes="sisc/boot/HeapAnchor.class"/>
+    </unjar>
+
+    <jar destfile="${sisc.home}/sisc-heap.jar">
+      <zipfileset dir="${siscweb.tmp}"
+                  includes="sisc/boot/HeapAnchor.class"/>
+      <zipfileset dir="${sisc.home}"
+                  prefix="sisc/boot"
+                  includes="sisc.shp"/>
+    </jar>
+  </target>
+</project>
+@
+
+
+1.5
+log
+@merged from rel-0-4-dev
+@
+text
+@d86 1
+a86 1
+      <srcfiles dir="${siscweb.scm}" includes="**/*.scm"/>
+d230 3
+a232 1
+    <copy file="${siscweb.examples}/WEB-INF/web.xml" todir="${siscweb.tmp}/siscweb-bin-${rel.ver}"/>
+d272 1
+a272 1
+          message="Could not locate sisc-heap.jar. Make sure to build it using either 'ant heap-jar' or the 'build-heapjar.scm' script the SISC home you specified."/>
+d351 17
+@
+
+
+1.5.4.1
+log
+@excludes .scm files that do not result in a .scc file, and avoids
+needless recompiles
+@
+text
+@d86 1
+a86 1
+      <srcfiles dir="${siscweb.scm}" includes="**/*.scm" excludes="util/letvalues.scm"/>
+@
+
+
+1.5.4.2
+log
+@bin dist includes sisc.properties; added sisc-heap-jar task
+@
+text
+@d230 1
+a230 3
+    <copy todir="${siscweb.tmp}/siscweb-bin-${rel.ver}">
+      <fileset dir="${siscweb.examples}/WEB-INF" includes="web.xml, sisc.properties"/>
+    </copy>
+d270 1
+a270 1
+          message="Could not locate sisc-heap.jar. Make sure to build it using either: a) 'ant heap-jar' or the 'build-heapjar.scm' script in the SISC home, or b) 'ant sisc-heap-jar' in the SISCweb home."/>
+a348 16
+
+  <!-- ** MISC ** -->
+  <target name="sisc-heap-jar">
+    <unjar src="${sisc.home}/sisc-opt.jar"
+           dest="${siscweb.tmp}">
+      <patternset includes="sisc/boot/HeapAnchor.class"/>
+    </unjar>
+
+    <jar destfile="${sisc.home}/sisc-heap.jar">
+      <zipfileset dir="${siscweb.tmp}"
+                  includes="sisc/boot/HeapAnchor.class"/>
+      <zipfileset dir="${sisc.home}"
+                  prefix="sisc/boot"
+                  includes="sisc.shp"/>
+    </jar>
+  </target>
+@
+
+
+1.5.4.3
+log
+@added description to sisc-heap-jar task
+@
+text
+@d353 1
+a353 2
+  <target name="sisc-heap-jar"
+          description="builds sisc-heap.jar in the SISC home">
+@
+
+
+1.4
+log
+@merged from rel-0-3-dev
+@
+text
+@d3 1
+a3 1
+<project name="siscweb" default="compile" basedir=".">
+a26 3
+  <property name="siscweb.dist.hibernate" value="${siscweb.dist}/opt/hibernate"/>
+  <property name="siscweb.opt.hibernate" value="${siscweb.opt}/hibernate"/>
+
+d58 1
+a58 1
+          description="prepare project">
+d69 2
+a70 2
+          description="compile project"
+          depends="prepare, compile-java, check-compile-scm, compile-scm"/>
+d92 1
+a92 1
+          depends="prepare"
+d95 1
+a95 1
+          classpathref="compile.classpath.sisc"
+d97 2
+a98 1
+          fork="yes">
+d103 5
+a153 6
+  <!-- * SISCWEB-HIBERNATE * -->
+  <target name="opt-hibernate" depends="dist"
+          description="builds hibernate add-on">
+    <ant dir="${siscweb.opt.hibernate}"/>
+  </target>
+
+d157 2
+a158 1
+    <ant dir="${siscweb.opt.sql}"/>
+d164 2
+a165 1
+    <ant dir="${siscweb.opt.sxml}"/>
+a178 5
+      <zipfileset dir="${basedir}" prefix="META-INF">
+        <include name="README"/>
+        <include name="COPYING"/>
+        <include name="LEGAL"/>
+      </zipfileset>
+d184 3
+d190 1
+a190 1
+         dest="${basedir}/tmp"
+d192 1
+a192 1
+         tag="${cvs.tag}"
+d195 14
+a208 3
+    <tar destfile="${siscweb.dist}/siscweb.tgz"
+         basedir="${siscweb.tmp}"
+         compression="gzip"/>
+d210 39
+a248 1
+      <fileset dir="${siscweb.tmp}/siscweb" includes="**/*"/>
+d253 1
+a253 1
+  <target name="dist-examples" depends="dist, opt-hibernate, opt-sql, opt-sxml"
+a255 5
+    <!-- sanity check for existence of sisc heap jar -->
+    <available file="${sisc.home}/sisc-heap.jar" property="sisc.heap.present"/>
+    <fail unless="sisc.heap.present"
+          message="Could not locate sisc-heap.jar. Make sure to build it with 'ant heap-jar' in the SISC home."/>
+
+a258 39
+
+      <!-- siscweb jar -->
+      <zipfileset dir="${siscweb.dist}" prefix="WEB-INF/lib"
+                  includes="siscweb.jar"/>
+
+      <!-- sisc jars -->
+      <zipfileset dir="${sisc.home}" prefix="WEB-INF/lib">
+        <include name="sisc.jar"/>
+        <include name="sisc-lib.jar"/>
+        <include name="sisc-opt.jar"/>
+        <include name="sisc-heap.jar"/>
+      </zipfileset>
+
+      <!-- all jars in lib -->
+      <zipfileset dir="${basedir}/lib"
+                  prefix="WEB-INF/lib"
+                  includes="*.jar"/>
+
+      <!-- all jars in hibernate dist -->
+      <zipfileset dir="${siscweb.dist.hibernate}"
+                  prefix="WEB-INF/lib"
+                  includes="*.jar"/>
+
+      <!-- all jars in sql dist -->
+      <zipfileset dir="${siscweb.dist.sql}"
+                  prefix="WEB-INF/lib"
+                  includes="*.jar"/>
+
+      <!-- all jars in sxml dist -->
+      <zipfileset dir="${siscweb.dist.sql}"
+                  prefix="WEB-INF/lib"
+                  includes="*.jar"/>
+
+      <!-- useful files -->
+      <zipfileset dir="${basedir}" prefix="META-INF">
+        <include name="README"/>
+        <include name="COPYING"/>
+        <include name="LEGAL"/>
+      </zipfileset>
+d264 2
+a265 1
+          depends="compile, opt-hibernate, opt-sql, opt-sxml">
+d267 1
+d270 9
+a278 1
+          message="Could not locate sisc-heap.jar. Make sure to build it with 'ant heap-jar' in the SISC home."/>
+a279 1
+    <sync todir="${siscweb.examples}/WEB-INF/lib">
+a290 3
+      <!-- all jars in hibernate dist -->
+      <fileset dir="${siscweb.dist.hibernate}"/>
+
+d298 6
+a303 1
+    <!-- siscweb code in classes rather than jar -->
+d305 3
+a307 1
+      <fileset dir="${siscweb.bin}"/>
+d309 1
+d316 4
+a319 3
+  <target name="pub-doc">
+    <scp toDir="acolomba@@shell.sourceforge.net:/home/groups/s/si/siscweb/htdocs/swm/">
+      <fileset dir="${siscweb.dist}" includes="siscweb-manual/*"/>
+d325 2
+d329 1
+a329 1
+          description="clean project">
+d337 12
+@
+
+
+1.4.4.1
+log
+@merged from rel-0-3-fix
+@
+text
+@d154 1
+a154 2
+    <ant dir="${siscweb.opt.hibernate}"
+         inheritAll="false"/>
+d160 1
+a160 2
+    <ant dir="${siscweb.opt.sql}"
+         inheritAll="false"/>
+d166 1
+a166 2
+    <ant dir="${siscweb.opt.sxml}"
+         inheritAll="false"/>
+d247 1
+a247 1
+      <zipfileset dir="${siscweb.dist.sxml}"
+@
+
+
+1.4.4.2
+log
+@added clean-all target
+@
+text
+@a310 2
+
+  <!-- * CLEAN PROJECT * -->
+a320 15
+
+
+  <target name="clean-all"
+          depends="clean"
+          description="clean project and opt modules">
+    <ant dir="${siscweb.opt.hibernate}"
+         inheritAll="false"
+         target="clean"/>
+    <ant dir="${siscweb.opt.sql}"
+         inheritAll="false"
+         target="clean"/>
+    <ant dir="${siscweb.opt.sxml}"
+         inheritAll="false"
+         target="clean"/>
+  </target>
+@
+
+
+1.4.4.3
+log
+@changed compile-scm task for SISC 1.12 compatibility
+@
+text
+@a2 2
+<!DOCTYPE project PUBLIC "-//ANT//DTD project//EN" "misc/project.dtd">
+
+d98 1
+a98 1
+          classpathref="compile.classpath"
+a104 4
+      <classpath>
+        <path refid="compile.classpath"/>
+        <pathelement location="${siscweb.bin}"/>
+      </classpath>
+@
+
+
+1.4.4.4
+log
+@optional hibernate build; made dist default target; revised target
+descriptions
+@
+text
+@d5 1
+a5 1
+<project name="siscweb" default="dist" basedir=".">
+d63 1
+a63 1
+          description="prepares project">
+d74 2
+a75 2
+          description="compiles project (not opt modules)"
+          depends="prepare, compile-java, compile-scm"/>
+d97 1
+a97 1
+          depends="check-compile-scm"
+d159 1
+a159 2
+          description="builds hibernate add-on (-Dopt.hibernate=true)"
+          if="opt.hibernate">
+d217 1
+a217 1
+          description="creates a distributable examples.war ready for deployment (-Dopt.hibernate=true if desired)">
+d247 2
+a248 3
+                  prefix="WEB-INF/lib">
+        <include name="*.jar" if="opt.hibernate"/>
+      </zipfileset>
+d271 1
+a271 2
+          depends="compile, opt-hibernate, opt-sql, opt-sxml"
+          description="makes examples/ a hot-deployable web app (-Dopt.hibernate=true if desired)">
+d290 1
+a290 3
+      <fileset dir="${siscweb.dist.hibernate}">
+        <include name="*.jar" if="opt.hibernate"/>
+      </fileset>
+d321 1
+a321 1
+          description="cleans project">
+d333 1
+a333 1
+          description="cleans project and opt modules">
+@
+
+
+1.4.4.5
+log
+@builds its own sisc-heap.jar
+@
+text
+@d217 1
+a217 1
+  <target name="dist-examples" depends="dist-examples-hot"
+d220 5
+d228 40
+a271 14
+  <target name="sisc-heap">
+    <unjar src="${sisc.home}/sisc-opt.jar"
+           dest="${siscweb.tmp}">
+      <patternset includes="sisc/boot/HeapAnchor.class"/>
+    </unjar>
+    <jar destfile="${siscweb.tmp}/sisc-heap.jar">
+      <zipfileset dir="${siscweb.tmp}"
+                  includes="sisc/boot/HeapAnchor.class"/>
+      <zipfileset dir="${sisc.home}"
+                  prefix="sisc/boot"
+                  includes="sisc.shp"/>
+    </jar>
+  </target>
+
+d273 1
+a273 1
+          depends="compile, sisc-heap, opt-hibernate, opt-sql, opt-sxml"
+d276 4
+d286 1
+a287 1
+      <fileset file="${siscweb.tmp}/sisc-heap.jar"/>
+@
+
+
+1.4.4.6
+log
+@compile-scm task now fails on compile error
+@
+text
+@d102 1
+a102 2
+          fork="yes"
+          failonerror="true">
+@
+
+
+1.4.4.7
+log
+@examples now include siscweb.jar instead of class files; doesn't build sisc-heap anymore
+@
+text
+@d228 14
+d243 1
+a243 1
+          depends="compile, opt-hibernate, opt-sql, opt-sxml"
+a245 6
+    <!-- sanity check for existence of sisc heap jar -->
+    <available file="${sisc.home}/sisc-heap.jar" property="sisc.heap.present"/>
+    <fail unless="sisc.heap.present"
+          message="Could not locate sisc-heap.jar. Make sure to build it using either 'ant heap-jar' or the 'build-heapjar.scm' script the SISC home you specified."/>
+
+
+a246 5
+      <!-- siscweb jar - comment out and use class files below during
+           SISCweb developement
+        -->
+      <fileset dir="${siscweb.dist}" includes="siscweb.jar"/>
+
+a251 1
+        <include name="sisc-heap.jar"/>
+d253 1
+d270 1
+a270 1
+    <!-- siscweb class files - uncomment during SISCweb development
+a273 1
+    -->
+@
+
+
+1.4.4.8
+log
+@dist-examples-hot target doesn't fail if one of the opts is not
+present
+@
+text
+@d238 1
+a238 2
+    <sync todir="${siscweb.examples}/WEB-INF/lib"
+          failonerror="false">
+@
+
+
+1.4.4.9
+log
+@sets stack trace depth during compilation
+@
+text
+@a107 1
+      <sysproperty key="sisc.maxStackTraceDepth" value="16"/>
+@
+
+
+1.4.4.10
+log
+@devel build more friendly to eclipse; removed dtd reference
+@
+text
+@d3 2
+d243 1
+a243 1
+      -->
+a269 5
+    <jar destfile="${siscweb.examples}/WEB-INF/lib/siscweb-scm.jar">
+      <fileset dir="${siscweb.bin}">
+        <include name="**/*.scc"/>
+      </fileset>
+    </jar>
+d271 1
+a271 3
+      <fileset dir="${siscweb.bin}">
+        <exclude name="**/*.scc"/>
+      </fileset>
+@
+
+
+1.4.4.11
+log
+@removed hibernate continuation store (adieu mon ami)
+@
+text
+@d27 3
+d157 8
+d218 1
+a218 1
+          description="creates a distributable examples.war ready for deployment">
+d228 2
+a229 2
+          depends="compile, opt-sql, opt-sxml"
+          description="makes examples/ a hot-deployable web app">
+d255 5
+d310 3
+@
+
+
+1.4.4.12
+log
+@improved dist-src and pub-doc tasks; added dist-bin task
+@
+text
+@a188 3
+    <fail unless="rel.tag" message="Please define rel.tag (e.g. rel-0-4)"/>
+    <fail unless="rel.ver" message="Please define rel.ver (e.g. 0.4)"/>
+
+d192 1
+a192 1
+         dest="${siscweb.tmp}"
+d194 1
+a194 1
+         tag="${rel.tag}"
+d197 3
+a199 52
+    <move file="${siscweb.tmp}/siscweb" tofile="${siscweb.tmp}/siscweb-src-${rel.ver}"/>
+
+    <tar destfile="${siscweb.dist}/siscweb-src-${rel.ver}.tgz"
+         compression="gzip">
+      <tarfileset dir="${siscweb.tmp}">
+        <include name="siscweb-src-${rel.ver}/**/*"/>
+      </tarfileset>
+    </tar>
+    <zip destfile="${siscweb.dist}/siscweb-src-${rel.ver}.zip">
+      <fileset dir="${siscweb.tmp}">
+        <include name="siscweb-src-${rel.ver}/**/*"/>
+      </fileset>
+    </zip>
+
+    <delete includeemptydirs="true">
+      <fileset dir="${siscweb.tmp}/siscweb-src-${rel.ver}" includes="**/*"/>
+    </delete>
+  </target>
+
+  <!-- * BINARY DISTRIBUTABLE * -->
+  <target name="dist-bin" depends="dist, opt-sql, opt-sxml, doc">
+    <fail unless="rel.ver" message="Please define rel.ver (e.g. 0.4)"/>
+
+    <mkdir dir="${siscweb.tmp}/siscweb-bin-${rel.ver}"/>
+
+    <mkdir dir="${siscweb.tmp}/siscweb-bin-${rel.ver}/docs"/>
+    <copy todir="${siscweb.tmp}/siscweb-bin-${rel.ver}/docs">
+      <fileset dir="${siscweb.dist}/swm"/>
+    </copy>
+
+    <mkdir dir="${siscweb.tmp}/siscweb-bin-${rel.ver}/lib"/>
+    <copy file="${siscweb.dist}/siscweb.jar" todir="${siscweb.tmp}/siscweb-bin-${rel.ver}/lib"/>
+    <copy file="${siscweb.dist.sql}/siscweb-sql.jar" todir="${siscweb.tmp}/siscweb-bin-${rel.ver}/lib"/>
+    <copy file="${siscweb.dist.sxml}/siscweb-sxml.jar" todir="${siscweb.tmp}/siscweb-bin-${rel.ver}/lib"/>
+
+    <copy file="${siscweb.examples}/WEB-INF/web.xml" todir="${siscweb.tmp}/siscweb-bin-${rel.ver}"/>
+    <copy todir="${siscweb.tmp}/siscweb-bin-${rel.ver}">
+      <fileset dir="${basedir}" includes="COPYING, INSTALL, LEGAL, README"/>
+    </copy>
+
+    <tar destfile="${siscweb.dist}/siscweb-bin-${rel.ver}.tgz"
+         compression="gzip">
+      <tarfileset dir="${siscweb.tmp}">
+        <include name="siscweb-bin-${rel.ver}/**/*"/>
+      </tarfileset>
+    </tar>
+    <zip destfile="${siscweb.dist}/siscweb-bin-${rel.ver}.zip">
+      <fileset dir="${siscweb.tmp}">
+        <include name="siscweb-bin-${rel.ver}/**/*"/>
+      </fileset>
+    </zip>
+
+d201 1
+a201 1
+      <fileset dir="${siscweb.tmp}/siscweb-bin-${rel.ver}" includes="**/*"/>
+d269 3
+a271 4
+  <target name="pub-doc" depends="doc">
+    <scp toDir="acolomba@@shell.sourceforge.net:/home/groups/s/si/siscweb/htdocs/swm-dev"
+         keyfile="${user.home}/.ssh/id_dsa" passphrase="">
+      <fileset dir="${siscweb.dist}" includes="swm/*"/>
+@
+
+
+1.4.4.13
+log
+@siscweb.jar doesn't contain README etc. anymore (they are now in the
+bin distribution)
+@
+text
+@d179 5
+d237 1
+a237 1
+      <fileset dir="${basedir}" includes="BUGS, COPYING, INSTALL, LEGAL, README"/>
+@
+
+
+1.4.4.14
+log
+@fixed pub-doc task
+@
+text
+@d317 1
+a317 1
+    <scp toDir="acolomba@@shell.sourceforge.net:/home/groups/s/si/siscweb/htdocs/swm"
+d319 1
+a319 1
+      <fileset dir="${siscweb.dist}/swm"/>
+@
+
+
+1.4.2.1
+log
+@now properly includes siscweb-sxml.jar in siscweb-examples.war
+@
+text
+@d247 1
+a247 1
+      <zipfileset dir="${siscweb.dist.sxml}"
+@
+
+
+1.4.2.2
+log
+@opt-* tasks now do not inherit settings from master build file
+@
+text
+@d154 1
+a154 2
+    <ant dir="${siscweb.opt.hibernate}"
+         inheritAll="false"/>
+d160 1
+a160 2
+    <ant dir="${siscweb.opt.sql}"
+         inheritAll="false"/>
+d166 1
+a166 2
+    <ant dir="${siscweb.opt.sxml}"
+         inheritAll="false"/>
+@
+
+
+1.4.2.3
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@a310 2
+
+  <!-- * CLEAN PROJECT * -->
+a320 15
+
+
+  <target name="clean-all"
+          depends="clean"
+          description="clean project and opt modules">
+    <ant dir="${siscweb.opt.hibernate}"
+         inheritAll="false"
+         target="clean"/>
+    <ant dir="${siscweb.opt.sql}"
+         inheritAll="false"
+         target="clean"/>
+    <ant dir="${siscweb.opt.sxml}"
+         inheritAll="false"
+         target="clean"/>
+  </target>
+@
+
+
+1.4.2.4
+log
+@merged from rel-0-4-dev
+@
+text
+@d3 1
+a3 3
+<!DOCTYPE project PUBLIC "-//ANT//DTD project//EN" "misc/project.dtd">
+
+<project name="siscweb" default="dist" basedir=".">
+d61 1
+a61 1
+          description="prepares project">
+d72 2
+a73 2
+          description="compiles project (not opt modules)"
+          depends="prepare, compile-java, compile-scm"/>
+d95 1
+a95 1
+          depends="check-compile-scm"
+d98 1
+a98 1
+          classpathref="compile.classpath"
+d100 1
+a100 2
+          fork="yes"
+          failonerror="true">
+a104 4
+      <classpath>
+        <path refid="compile.classpath"/>
+        <pathelement location="${siscweb.bin}"/>
+      </classpath>
+d153 1
+a153 2
+          description="builds hibernate add-on (-Dopt.hibernate=true)"
+          if="opt.hibernate">
+d210 7
+a216 2
+  <target name="dist-examples" depends="dist-examples-hot"
+          description="creates a distributable examples.war ready for deployment (-Dopt.hibernate=true if desired)">
+d221 39
+d264 2
+a265 13
+  <target name="sisc-heap">
+    <unjar src="${sisc.home}/sisc-opt.jar"
+           dest="${siscweb.tmp}">
+      <patternset includes="sisc/boot/HeapAnchor.class"/>
+    </unjar>
+    <jar destfile="${siscweb.tmp}/sisc-heap.jar">
+      <zipfileset dir="${siscweb.tmp}"
+                  includes="sisc/boot/HeapAnchor.class"/>
+      <zipfileset dir="${sisc.home}"
+                  prefix="sisc/boot"
+                  includes="sisc.shp"/>
+    </jar>
+  </target>
+d267 3
+a269 3
+  <target name="dist-examples-hot"
+          depends="compile, sisc-heap, opt-hibernate, opt-sql, opt-sxml"
+          description="makes examples/ a hot-deployable web app (-Dopt.hibernate=true if desired)">
+d277 1
+a278 1
+      <fileset file="${siscweb.tmp}/sisc-heap.jar"/>
+d284 1
+a284 3
+      <fileset dir="${siscweb.dist.hibernate}">
+        <include name="*.jar" if="opt.hibernate"/>
+      </fileset>
+d315 1
+a315 1
+          description="cleans project">
+d327 1
+a327 1
+          description="cleans project and opt modules">
+@
+
+
+1.4.2.5
+log
+@merged from rel-0-4-dev
+@
+text
+@d243 1
+a243 1
+          depends="compile, opt-hibernate, opt-sql, opt-sxml"
+d246 1
+a246 13
+    <!-- sanity check for existence of sisc heap jar -->
+    <available file="${sisc.home}/sisc-heap.jar" property="sisc.heap.present"/>
+    <fail unless="sisc.heap.present"
+          message="Could not locate sisc-heap.jar. Make sure to build it using either 'ant heap-jar' or the 'build-heapjar.scm' script the SISC home you specified."/>
+
+
+    <sync todir="${siscweb.examples}/WEB-INF/lib"
+          failonerror="false">
+      <!-- siscweb jar - comment out and use class files below during
+           SISCweb developement
+        -->
+      <fileset dir="${siscweb.dist}" includes="siscweb.jar"/>
+
+d270 1
+a270 1
+    <!-- siscweb class files - uncomment during SISCweb development
+a273 1
+    -->
+@
+
+
+1.4.2.6
+log
+@merged from rel-0-4-dev
+@
+text
+@d228 14
+a263 1
+        <include name="sisc-heap.jar"/>
+d265 1
+@
+
+
+1.3
+log
+@merged from rel-0-2-dev
+@
+text
+@d11 25
+d38 2
+a39 2
+  <!-- * CLASSPATH * -->
+  <path id="compile.classpath">
+d45 1
+d47 3
+a49 1
+    <fileset dir="${basedir}/lib"
+d51 1
+a51 1
+
+d62 5
+a66 5
+    <mkdir dir="${basedir}/bin"/>
+    <mkdir dir="${basedir}/dist"/>
+    <mkdir dir="${basedir}/dist/swm"/>
+    <mkdir dir="${basedir}/lib"/>
+    <mkdir dir="${basedir}/tmp"/>
+d71 3
+d75 3
+a77 4
+  <target name="compile"
+          depends="prepare">
+    <javac srcdir="${basedir}/src"
+           destdir="${basedir}/bin"
+d81 1
+d87 21
+d115 3
+a117 3
+    <copy file="${basedir}/doc/style/html.xsl"
+          tofile="${basedir}/tmp/doc-style-chunks.xsl"/>
+    <replace file="${basedir}/tmp/doc-style-chunks.xsl"
+d121 2
+a122 2
+    <xslt in="${basedir}/doc/swm/swm.xml"
+          out="${basedir}/dist/swm/index.html"
+d124 1
+a124 1
+          style="${basedir}/tmp/doc-style-chunks.xsl">
+d130 3
+a132 3
+    <copy file="${basedir}/doc/style/html.xsl"
+          tofile="${basedir}/tmp/doc-style-single.xsl"/>
+    <replace file="${basedir}/tmp/doc-style-single.xsl"
+d136 2
+a137 2
+    <xslt in="${basedir}/doc/swm/swm.xml"
+          out="${basedir}/dist/swm/siscweb-manual.html"
+d139 1
+a139 1
+          style="${basedir}/tmp/doc-style-single.xsl">
+d144 23
+a166 2
+    <copy file="${basedir}/doc/style/swm.css"
+          tofile="${basedir}/dist/swm/siscweb-manual.css"/>
+d175 2
+a176 2
+    <jar destfile="${basedir}/dist/siscweb.jar">
+      <fileset dir="${basedir}/bin">
+d178 1
+a178 3
+      </fileset>
+      <fileset dir="${basedir}/scm">
+        <include name="**/*.scm"/>
+d182 2
+a183 2
+	<include name="COPYING"/>
+	<include name="LEGAL"/>
+d198 2
+a199 2
+    <tar destfile="${basedir}/dist/siscweb.tgz"
+         basedir="${basedir}/tmp"
+d202 1
+a202 3
+      <fileset dir="${basedir}/tmp/siscweb">
+        <include name="**/*"/>
+      </fileset>
+d207 1
+a207 1
+  <target name="dist-examples" depends="dist"
+d209 12
+a220 4
+    <war destfile="${basedir}/dist/siscweb-examples.war"
+         basedir="${basedir}/examples"
+         webxml="${basedir}/examples/WEB-INF/web.xml">
+      <zipfileset dir="${basedir}/dist" prefix="WEB-INF/lib"
+d222 2
+d230 2
+d235 17
+d254 2
+a255 2
+	<include name="COPYING"/>
+	<include name="LEGAL"/>
+d260 36
+d302 1
+a302 3
+      <fileset dir="${basedir}/dist">
+        <include name="siscweb-manual/*"/>
+      </fileset>
+d309 1
+d311 5
+a315 7
+    <delete includeemptydirs="false">
+      <fileset dir="${basedir}/bin">
+        <include name="**/*.class"/>
+      </fileset>
+      <fileset dir="${basedir}/dist">
+        <include name="**/*"/>
+      </fileset>
+@
+
+
+1.3.4.1
+log
+@now specifies java compile source version, so as to avoid warning when
+using java 1.5
+@
+text
+@a50 1
+           source="${compile.target}"
+@
+
+
+1.3.4.2
+log
+@added scheme file compilation (greenash)
+@
+text
+@a43 21
+  <target name="check-compile-scm">
+    <uptodate property="compile.scm.not-required">
+      <srcfiles dir="${basedir}/scm" includes="**/*.scm"/>
+      <mapper type="glob" from="*.scm" to="${basedir}/bin/*.scc"/>
+    </uptodate>
+  </target>
+
+  <target name="compile-scm"
+          depends="prepare"
+          unless="compile.scm.not-required">
+    <java classname="sisc.REPL"
+          classpathref="compile.classpath"
+          dir="${basedir}/scm"
+          fork="yes">
+      <arg value="-h"/>
+      <arg value="${sisc.home}/sisc.shp"/>
+      <arg value="-x"/>
+      <arg value="${basedir}/misc/compile.scm"/>
+    </java>
+  </target>
+
+d45 1
+a45 1
+          depends="prepare,check-compile-scm,compile-scm">
+d107 2
+a108 2
+      <fileset dir="${basedir}/bin">
+        <include name="**/*.scc"/>
+a188 1
+
+@
+
+
+1.3.4.3
+log
+@now cleans compiled scheme files; minor stylistic changes to compile
+target
+@
+text
+@a42 16
+  <target name="compile"
+          depends="prepare, compile-java, check-compile-scm, compile-scm"/>
+
+
+  <target name="compile-java"
+          depends="prepare,check-compile-scm,compile-scm">
+    <javac srcdir="${basedir}/src"
+           destdir="${basedir}/bin"
+           compiler="${compile.compiler}"
+           debug="${compile.debug}"
+           deprecation="${compile.deprecation}"
+           source="${compile.target}"
+           target="${compile.target}"
+           optimize="${compile.optimize}"
+           classpathref="compile.classpath"/>
+  </target>
+d65 12
+d202 1
+a202 1
+        <include name="**/*"/>
+@
+
+
+1.3.2.1
+log
+@now compiles scheme files; added task to make siscweb-examples ready
+for hotdeploy; minor formatting changes
+@
+text
+@d23 1
+a26 9
+  <!-- * SISC CLASSPATH * -->
+  <path id="compile.classpath.sisc">
+    <fileset dir="${sisc.home}">
+      <include name="sisc.jar"/>
+      <include name="sisc-lib.jar"/>
+      <include name="sisc-opt.jar"/>
+    </fileset>
+  </path>
+
+d43 1
+d45 1
+a45 4
+          depends="prepare, compile-java, check-compile-scm, compile-scm"/>
+
+
+  <target name="compile-java">
+a55 42
+  <target name="check-compile-scm">
+    <uptodate property="compile.scm.not-required">
+      <srcfiles dir="${basedir}/scm" includes="**/*.scm"/>
+      <mapper type="glob" from="*.scm" to="${basedir}/bin/*.scc"/>
+    </uptodate>
+  </target>
+
+  <target name="compile-scm"
+          depends="prepare"
+          unless="compile.scm.not-required">
+    <java classname="sisc.REPL"
+          classpathref="compile.classpath.sisc"
+          dir="${basedir}/scm"
+          fork="yes">
+      <arg value="-h"/>
+      <arg value="${sisc.home}/sisc.shp"/>
+      <arg value="-x"/>
+      <arg value="${basedir}/misc/compile.scm"/>
+    </java>
+  </target>
+
+  <!-- alternative relying on srfi-22
+  <target name="compile-scm"
+          depends="prepare"
+          unless="compile.scm.not-required">
+    <apply executable="${basedir}/misc/compile.scm"
+           dir="${basedir}/scm"
+           dest="${basedir}/bin"
+           parallel="true"
+           skipemptyfilesets="true">
+      <!-
+      <srcfile/>
+      <targetfile/>
+      ->
+      <fileset dir="${basedir}/scm">
+        <include name="**/*.scm"/>
+      </fileset>
+      <mapper type="glob" from="*.scm" to="*.scc"/>
+    </apply>
+  </target>
+  -->
+
+a105 7
+      <fileset dir="${basedir}/bin">
+        <include name="**/*.scc"/>
+      </fileset>
+      <fileset dir="${basedir}/src">
+        <include name="**/*.xml"/>
+      </fileset>
+      <!--
+a108 1
+      -->
+d111 2
+a112 2
+        <include name="COPYING"/>
+        <include name="LEGAL"/>
+d156 2
+a157 2
+        <include name="COPYING"/>
+        <include name="LEGAL"/>
+a161 21
+  <!-- * SISCWEB-EXAMPLES AS HOTDEPLOY -->
+  <target name="dist-hot"
+          depends="compile">
+    <sync todir="${basedir}/examples/WEB-INF/lib">
+      <fileset dir="${basedir}/lib"/>
+      <fileset dir="${sisc.home}">
+        <include name="sisc.jar"/>
+        <include name="sisc-lib.jar"/>
+        <include name="sisc-opt.jar"/>
+        <include name="sisc-heap.jar"/>
+      </fileset>
+    </sync>
+    <sync todir="${basedir}/examples/WEB-INF/classes">
+      <fileset dir="${basedir}/bin"/>
+
+      <!-- this is for possible hibernate support -->
+      <fileset dir="${basedir}/src">
+        <include name="**/*.xml"/>
+      </fileset>
+    </sync>
+  </target>
+a180 1
+        <include name="**/*.scc"/>
+@
+
+
+1.3.2.2
+log
+@dist-examples and dist-hot targets now fail if the sisc-heap.jar is
+absent
+@
+text
+@a199 5
+
+    <available file="${sisc.home}/sisc-heap.jar" property="sisc.heap.present"/>
+    <fail unless="sisc.heap.present"
+          message="Could not locate sisc-heap.jar. Make sure to build it with 'ant heap-jar' in the SISC home."/>
+
+a224 5
+
+    <available file="${sisc.home}/sisc-heap.jar" property="sisc.heap.present"/>
+    <fail unless="sisc.heap.present"
+          message="Could not locate sisc-heap.jar. Make sure to build it with 'ant heap-jar' in the SISC home."/>
+
+@
+
+
+1.3.2.3
+log
+@now specifies java compile source version so as to avoid warnings when
+using java 1.5
+@
+text
+@a60 1
+           source="${compile.source}"
+d164 5
+d227 2
+a228 2
+  <!-- * SISCWEB-EXAMPLES HOTDEPLOY * -->
+  <target name="dist-examples-hot"
+d246 2
+a249 1
+        <include name="**/*.properties"/>
+a276 6
+      <fileset dir="${basedir}/examples/WEB-INF/classes">
+        <include name="**/*"/>
+      </fileset>
+      <fileset dir="${basedir}/examples/WEB-INF/lib">
+        <include name="**/*"/>
+      </fileset>
+@
+
+
+1.3.2.4
+log
+@now cleans better than ever
+@
+text
+@d264 1
+a264 1
+    <delete includeemptydirs="true">
+d266 2
+a267 1
+        <include name="**/*"/>
+@
+
+
+1.3.2.5
+log
+@minor fix to clean target
+@
+text
+@d271 5
+a275 3
+      <fileset dir="${basedir}/examples/WEB-INF">
+        <include name="classes/**/*"/>
+        <include name="lib/**/*"/>
+@
+
+
+1.3.2.6
+log
+@now picks up and deploys hibernate support to siscweb-examples, if
+present
+@
+text
+@a203 2
+
+      <!-- siscweb jar -->
+a205 2
+
+      <!-- sisc jars -->
+a211 2
+
+      <!-- all jars in lib -->
+a214 6
+
+      <!-- all jars in hibernate dist -->
+      <zipfileset dir="${basedir}/dist/opt/hibernate"
+                  prefix="WEB-INF/lib"
+                  includes="*.jar"/>
+
+d232 1
+a232 1
+      <!-- sisc jars -->
+a238 6
+
+      <!-- all jars in lib -->
+      <fileset dir="${basedir}/lib"/>
+
+      <!-- all jars in hibernate dist -->
+      <fileset dir="${basedir}/dist/opt/hibernate"/>
+a239 1
+
+a248 1
+
+@
+
+
+1.3.2.7
+log
+@added build of opt tasks; added support for sql library
+@
+text
+@d88 21
+a149 16
+  <!-- ** OPT ** -->
+
+  <!-- * SISCWEB-HIBERNATE * -->
+  <target name="opt-hibernate"
+          depends="dist">
+    <ant dir="${basedir}/opt/hibernate"/>
+  </target>
+
+
+  <!-- * SISCWEB-HIBERNATE * -->
+  <target name="opt-sql"
+          depends="dist">
+    <ant dir="${basedir}/opt/sql"/>
+  </target>
+
+
+d158 2
+d194 1
+a194 1
+  <target name="dist-examples" depends="dist, opt-hibernate, opt-sql"
+a226 5
+      <!-- all jars in sql dist -->
+      <zipfileset dir="${basedir}/dist/opt/sql"
+                  prefix="WEB-INF/lib"
+                  includes="*.jar"/>
+
+@
+
+
+1.3.2.8
+log
+@parameterized important locations
+@
+text
+@d11 1
+a11 18
+  <!-- ** LOCATIONS ** -->
+  <!-- siscweb root -->
+  <property name="siscweb.bin" value="${basedir}/bin"/>
+  <property name="siscweb.dist" value="${basedir}/dist"/>
+  <property name="siscweb.dist.swm" value="${basedir}/dist/swm"/>
+  <property name="siscweb.doc" value="${basedir}/doc"/>
+  <property name="siscweb.doc.swm" value="${basedir}/doc/swm"/>
+  <property name="siscweb.examples" value="${basedir}/examples"/>
+  <property name="siscweb.lib" value="${basedir}/lib"/>
+  <property name="siscweb.misc" value="${basedir}/misc"/>
+  <property name="siscweb.opt" value="${basedir}/opt"/>
+  <property name="siscweb.scm" value="${basedir}/scm"/>
+  <property name="siscweb.src" value="${basedir}/src"/>
+  <property name="siscweb.tmp" value="${basedir}/tmp"/>
+
+  <!-- add-ons -->
+  <property name="siscweb.dist.hibernate" value="${siscweb.dist}/opt/hibernate"/>
+  <property name="siscweb.opt.hibernate" value="${siscweb.opt}/hibernate"/>
+d13 7
+a19 2
+  <property name="siscweb.dist.sql" value="${siscweb.dist}/opt/sql"/>
+  <property name="siscweb.opt.sql" value="${siscweb.opt}/sql"/>
+d21 4
+a24 2
+
+  <!-- ** COMPILE ** -->
+a34 8
+  <!-- * CLASSPATH * -->
+  <path id="compile.classpath">
+    <fileset dir="${siscweb.lib}"
+             includes="*.jar"/>
+    <path refid="compile.classpath.sisc"/>
+    <pathelement location="${compile.path.servlets}"/>
+  </path>
+
+d42 5
+a46 5
+    <mkdir dir="${siscweb.bin}"/>
+    <mkdir dir="${siscweb.dist}"/>
+    <mkdir dir="${siscweb.lib}"/>
+    <mkdir dir="${siscweb.dist.swm}"/>
+    <mkdir dir="${siscweb.tmp}"/>
+a51 1
+          description="compile project"
+d54 1
+d56 2
+a57 2
+    <javac srcdir="${siscweb.src}"
+           destdir="${siscweb.bin}"
+d69 2
+a70 2
+      <srcfiles dir="${siscweb.scm}" includes="**/*.scm"/>
+      <mapper type="glob" from="*.scm" to="${siscweb.bin}/*.scc"/>
+d79 1
+a79 1
+          dir="${siscweb.scm}"
+d84 1
+a84 1
+      <arg value="${siscweb.misc}/compile.scm"/>
+d95 3
+a97 3
+    <copy file="${siscweb.doc}/style/html.xsl"
+          tofile="${siscweb.tmp}/doc-style-chunks.xsl"/>
+    <replace file="${siscweb.tmp}/doc-style-chunks.xsl"
+d101 2
+a102 2
+    <xslt in="${siscweb.doc.swm}/swm.xml"
+          out="${siscweb.dist.swm}/index.html"
+d104 1
+a104 1
+          style="${siscweb.tmp}/doc-style-chunks.xsl">
+d110 3
+a112 3
+    <copy file="${siscweb.doc}/style/html.xsl"
+          tofile="${siscweb.tmp}/doc-style-single.xsl"/>
+    <replace file="${siscweb.tmp}/doc-style-single.xsl"
+d116 2
+a117 2
+    <xslt in="${siscweb.doc.swm}/swm.xml"
+          out="${siscweb.dist.swm}/siscweb-manual.html"
+d119 1
+a119 1
+          style="${siscweb.tmp}/doc-style-single.xsl">
+d124 2
+a125 2
+    <copy file="${siscweb.doc}/style/swm.css"
+          tofile="${siscweb.dist.swm}/siscweb-manual.css"/>
+d132 3
+a134 3
+  <target name="opt-hibernate" depends="dist"
+          description="builds hibernate add-on">
+    <ant dir="${siscweb.opt.hibernate}"/>
+d139 3
+a141 3
+  <target name="opt-sql" depends="dist"
+          description="builds sql add-on">
+    <ant dir="${siscweb.opt.sql}"/>
+d150 2
+a151 2
+    <jar destfile="${siscweb.dist}/siscweb.jar">
+      <fileset dir="${siscweb.bin}">
+d155 3
+d176 2
+a177 2
+    <tar destfile="${siscweb.dist}/siscweb.tgz"
+         basedir="${siscweb.tmp}"
+d180 3
+a182 1
+      <fileset dir="${siscweb.tmp}/siscweb" includes="**/*"/>
+a189 1
+    <!-- sanity check for existence of sisc heap jar -->
+d194 3
+a196 3
+    <war destfile="${siscweb.dist}/siscweb-examples.war"
+         basedir="${siscweb.examples}"
+         webxml="${siscweb.examples}/WEB-INF/web.xml">
+d199 1
+a199 1
+      <zipfileset dir="${siscweb.dist}" prefix="WEB-INF/lib"
+d216 1
+a216 1
+      <zipfileset dir="${siscweb.dist.hibernate}"
+d221 1
+a221 1
+      <zipfileset dir="${siscweb.dist.sql}"
+a224 1
+      <!-- useful files -->
+d235 1
+a235 1
+          depends="compile, opt-hibernate, opt-sql">
+d241 1
+a241 1
+    <sync todir="${siscweb.examples}/WEB-INF/lib">
+d251 1
+a251 1
+      <fileset dir="${siscweb.lib}"/>
+d254 1
+a254 4
+      <fileset dir="${siscweb.dist.hibernate}"/>
+
+      <!-- all jars in hibernate dist -->
+      <fileset dir="${siscweb.dist.sql}"/>
+d257 6
+a262 3
+    <!-- siscweb code in classes rather than jar -->
+    <sync todir="${siscweb.examples}/WEB-INF/classes">
+      <fileset dir="${siscweb.bin}"/>
+d272 3
+a274 1
+      <fileset dir="${siscweb.dist}" includes="siscweb-manual/*"/>
+d283 10
+a292 4
+      <fileset dir="${siscweb.bin}"/>
+      <fileset dir="${siscweb.dist}"/>
+      <fileset dir="${siscweb.examples}/WEB-INF"
+               includes="classes/**/*, lib/**/*"/>
+@
+
+
+1.3.2.9
+log
+@clean task depends on prepare now
+@
+text
+@a293 1
+          depends="prepare"
+@
+
+
+1.3.2.10
+log
+@added sxml library
+@
+text
+@a31 2
+  <property name="siscweb.dist.sxml" value="${siscweb.dist}/opt/sxml"/>
+  <property name="siscweb.opt.sxml" value="${siscweb.opt}/sxml"/>
+d155 2
+a156 1
+  <!-- * SISCWEB-SQL * -->
+a161 6
+  <!-- * SISCWEB-SXML * -->
+  <target name="opt-sxml" depends="dist"
+          description="builds sxml add-on">
+    <ant dir="${siscweb.opt.sxml}"/>
+  </target>
+
+d200 1
+a200 1
+  <target name="dist-examples" depends="dist, opt-hibernate, opt-sql, opt-sxml"
+a238 5
+      <!-- all jars in sxml dist -->
+      <zipfileset dir="${siscweb.dist.sql}"
+                  prefix="WEB-INF/lib"
+                  includes="*.jar"/>
+
+@
+
+
+1.3.2.11
+log
+@added missing sql add-on dependencies
+@
+text
+@d262 1
+a262 1
+          depends="compile, opt-hibernate, opt-sql, opt-sxml">
+d283 1
+a283 1
+      <!-- all jars in sql dist -->
+a284 3
+
+      <!-- all jars in sxml dist -->
+      <fileset dir="${siscweb.dist.sxml}"/>
+@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@d3 1
+a3 1
+<project name="siscweb" default="echo" basedir=".">
+a12 7
+  <!-- * ASPECTJ TASKDEF * -->
+  <taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties">
+    <classpath>
+      <pathelement location="${aspectj.home}/lib/aspectjtools.jar"/>
+    </classpath>
+  </taskdef>
+
+d21 3
+a24 1
+    <pathelement location="${aspectj.home}/lib/aspectjrt.jar"/>
+d35 4
+a42 2
+  <target name="compile" depends="prepare, ajcompile"
+          description="compiles java files"/>
+d44 50
+a93 8
+  <!-- * COMPILE JAVA CODE W/ ASPECTS * -->
+  <target name="ajcompile">
+    <iajc srcdir="${basedir}/src"
+          destdir="${basedir}/bin"
+          debug="${compile.debug}"
+          deprecation="${compile.deprecation}"
+          target="${compile.target}"
+          classpathref="compile.classpath"/>
+d100 1
+a100 1
+  <target name="jar" depends="compile"
+d102 1
+a102 1
+    <jar destfile="${basedir}/siscweb.jar">
+d109 5
+a113 3
+      <zipfileset src="${aspectj.home}/lib/aspectjrt.jar"/>
+      <zipfileset dir="${basedir}" prefix="META-INF"
+                  includes="LEGAL"/>
+d117 20
+d138 1
+a138 1
+  <target name="examples-war" depends="jar"
+d140 1
+a140 1
+    <war destfile="${basedir}/siscweb-examples.war"
+d143 1
+a143 1
+      <zipfileset dir="${basedir}" prefix="WEB-INF/lib"
+d151 8
+a158 2
+      <zipfileset dir="${basedir}" prefix="META-INF"
+                  includes="LEGAL"/>
+d163 12
+d182 3
+a184 1
+      <fileset dir="${basedir}" includes="siscweb.jar"/>
+a186 12
+
+  <target name="clean-examples"
+          description="clean examples">
+    <delete file="${basedir}/siscweb-examples.war"/>
+  </target>
+
+
+  <!-- ** ECHO ** -->
+  <target name="echo">
+    <echo message="Please copy and edit build.properties.sample and then refer the INSTALL document"/>
+  </target>
+
+@
+
+
+1.2.4.1
+log
+@merged from rel-0-1-fix-1
+@
+text
+@a39 2
+    <mkdir dir="${basedir}/dist"/>
+    <mkdir dir="${basedir}/tmp"/>
+d61 1
+a61 1
+  <target name="dist" depends="compile"
+d63 1
+a63 1
+    <jar destfile="${basedir}/dist/siscweb.jar">
+d71 2
+a72 5
+      <zipfileset dir="${basedir}" prefix="META-INF">
+        <include name="README"/>
+	<include name="COPYING"/>
+	<include name="LEGAL"/>
+      </zipfileset>
+a75 20
+  <!-- * SOURCE DISTRIBUTABLE -->
+  <target name="dist-src" depends="prepare">
+    <cvs command="export"
+         cvsRoot="${env.CVSROOT}"
+         cvsRsh="${env.CVS_RSH}"
+         dest="${basedir}/tmp"
+         package="siscweb"
+         tag="${cvs.tag}"
+         quiet="true"
+         failonerror="true"/>
+    <tar destfile="${basedir}/dist/siscweb.tgz"
+         basedir="${basedir}/tmp"
+         compression="gzip"/>
+    <delete includeemptydirs="true">
+      <fileset dir="${basedir}/tmp/siscweb">
+        <include name="**/*"/>
+      </fileset>
+    </delete>
+  </target>
+
+d77 1
+a77 1
+  <target name="dist-examples" depends="dist"
+d79 1
+a79 1
+    <war destfile="${basedir}/dist/siscweb-examples.war"
+d82 1
+a82 1
+      <zipfileset dir="${basedir}/dist" prefix="WEB-INF/lib"
+d90 2
+a91 5
+      <zipfileset dir="${basedir}" prefix="META-INF">
+        <include name="README"/>
+	<include name="COPYING"/>
+	<include name="LEGAL"/>
+      </zipfileset>
+d103 1
+a103 3
+      <fileset dir="${basedir}/dist">
+        <include name="**/*"/>
+      </fileset>
+d107 5
+@
+
+
+1.2.4.2
+log
+@now includes files in ${basedir}/lib in examples jar
+@
+text
+@d3 1
+a3 1
+<project name="siscweb" default="compile" basedir=".">
+a27 3
+    <fileset dir="${basedir}/lib"
+             includes="*.jar"/>
+
+a40 1
+    <mkdir dir="${basedir}/lib"/>
+a114 3
+      <zipfileset dir="${basedir}/lib"
+                  prefix="WEB-INF/lib"
+                  includes="*.jar"/>
+d136 7
+@
+
+
+1.2.4.3
+log
+@removed reference to aspectj
+@
+text
+@d13 7
+d32 1
+d50 2
+d53 8
+a60 10
+  <target name="compile"
+          depends="prepare">
+    <javac srcdir="${basedir}/src"
+           destdir="${basedir}/bin"
+           compiler="${compile.compiler}"
+           debug="${compile.debug}"
+           deprecation="${compile.deprecation}"
+           target="${compile.target}"
+           optimize="${compile.optimize}"
+           classpathref="compile.classpath"/>
+d76 1
+@
+
+
+1.2.4.4
+log
+@added documentation generation task
+@
+text
+@a121 7
+  <!-- ** DOCUMENTATION ** -->
+  <target name="doc">
+    <xslt in="${basedir}/doc/manual.xml"
+          out="${basedir}/dist/manual.html"
+          style="${doc.xsl}"/>
+  </target>
+
+@
+
+
+1.2.4.5
+log
+@modified doc target
+@
+text
+@d123 4
+a126 19
+  <target name="doc"
+          depends="prepare">
+    <copy file="${basedir}/doc/style/html.xsl"
+          tofile="${basedir}/doc/style/doc-style.xsl"/>
+    <replace file="${basedir}/doc/style/doc-style.xsl"
+             token="@@@@@@doc.xsl@@@@@@"
+             value="${doc.xsl}"/>
+
+    <xslt in="${basedir}/doc/swm/swm.xml"
+          out="${basedir}/dist/siscweb-manual.html"
+          force="true"
+          style="${basedir}/doc/style/doc-style.xsl">
+      <param name="html.stylesheet"
+             expression="siscweb-manual.css"/>
+    </xslt>
+
+    <copy file="${basedir}/doc/style/swm.css"
+          tofile="${basedir}/dist/siscweb-manual.css"/>
+
+a128 1
+
+@
+
+
+1.2.4.6
+log
+@added doc generation target
+@
+text
+@a55 25
+  <!-- ** DOC ** -->
+
+  <!-- * MANUAL * -->
+  <target name="doc"
+          depends="prepare">
+    <copy file="${basedir}/doc/style/html.xsl"
+          tofile="${basedir}/doc/style/doc-style.xsl"/>
+    <replace file="${basedir}/doc/style/doc-style.xsl"
+             token="@@@@@@doc.style@@@@@@"
+             value="${doc.xsl}"/>
+
+    <xslt in="${basedir}/doc/swm/swm.xml"
+          out="${basedir}/dist/siscweb-manual.html"
+          force="true"
+          style="${basedir}/doc/style/doc-style.xsl">
+      <param name="html.stylesheet"
+             expression="siscweb-manual.css"/>
+    </xslt>
+
+    <copy file="${basedir}/doc/style/swm.css"
+          tofile="${basedir}/dist/siscweb-manual.css"/>
+
+  </target>
+
+
+d122 19
+a140 1
+  <!-- ** PUB ** -->
+a141 7
+  <!-- * MANUAL * -->
+  <target name="pub-doc">
+    <scp toDir="acolomba@@shell.sourceforge.net:/home/groups/s/si/siscweb/htdocs/swm/">
+      <fileset dir="${basedir}/dist">
+        <include name="siscweb-manual/*"/>
+      </fileset>
+    </scp>
+@
+
+
+1.2.4.7
+log
+@now temporary doc stylesheet is created in tmp/
+@
+text
+@d62 2
+a63 2
+          tofile="${basedir}/tmp/doc-style.xsl"/>
+    <replace file="${basedir}/tmp/doc-style.xsl"
+d70 1
+a70 1
+          style="${basedir}/tmp/doc-style.xsl">
+@
+
+
+1.2.4.8
+log
+@added generation of manual in chunks
+@
+text
+@a35 1
+    <mkdir dir="${basedir}/dist/swm"/>
+a60 1
+    <!-- manual in chunks -->
+d62 2
+a63 2
+          tofile="${basedir}/tmp/doc-style-chunks.xsl"/>
+    <replace file="${basedir}/tmp/doc-style-chunks.xsl"
+d65 1
+a65 1
+             value="${doc.xsl.chunks}"/>
+d68 1
+a68 1
+          out="${basedir}/dist/swm/index.html"
+d70 1
+a70 1
+          style="${basedir}/tmp/doc-style-chunks.xsl">
+d75 2
+a76 14
+    <!-- manual in single file -->
+    <copy file="${basedir}/doc/style/html.xsl"
+          tofile="${basedir}/tmp/doc-style-single.xsl"/>
+    <replace file="${basedir}/tmp/doc-style-single.xsl"
+             token="@@@@@@doc.style@@@@@@"
+             value="${doc.xsl.single}"/>
+
+    <xslt in="${basedir}/doc/swm/swm.xml"
+          out="${basedir}/dist/swm/siscweb-manual.html"
+          force="true"
+          style="${basedir}/tmp/doc-style-single.xsl">
+      <param name="html.stylesheet"
+             expression="siscweb-manual.css"/>
+    </xslt>
+a77 2
+    <copy file="${basedir}/doc/style/swm.css"
+          tofile="${basedir}/dist/swm/siscweb-manual.css"/>
+@
+
+
+1.2.2.1
+log
+@added dist-src task; renamed dist tasks
+@
+text
+@a39 2
+    <mkdir dir="${basedir}/dist"/>
+    <mkdir dir="${basedir}/tmp"/>
+d61 1
+a61 1
+  <target name="dist" depends="compile"
+d63 1
+a63 1
+    <jar destfile="${basedir}/dist/siscweb.jar">
+d71 2
+a72 5
+      <zipfileset dir="${basedir}" prefix="META-INF">
+        <include name="README"/>
+	<include name="COPYING"/>
+	<include name="LEGAL"/>
+      </zipfileset>
+a75 20
+  <!-- * SOURCE DISTRIBUTABLE -->
+  <target name="dist-src" depends="prepare">
+    <cvs command="export"
+         cvsRoot="${env.CVSROOT}"
+         cvsRsh="${env.CVS_RSH}"
+         dest="${basedir}/tmp"
+         package="siscweb"
+         tag="${cvs.tag}"
+         quiet="true"
+         failonerror="true"/>
+    <tar destfile="${basedir}/dist/siscweb.tgz"
+         basedir="${basedir}/tmp"
+         compression="gzip"/>
+    <delete includeemptydirs="true">
+      <fileset dir="${basedir}/tmp/siscweb">
+        <include name="**/*"/>
+      </fileset>
+    </delete>
+  </target>
+
+d77 1
+a77 1
+  <target name="dist-examples" depends="dist"
+d79 1
+a79 1
+    <war destfile="${basedir}/dist/siscweb-examples.war"
+d82 1
+a82 1
+      <zipfileset dir="${basedir}/dist" prefix="WEB-INF/lib"
+d90 2
+a91 5
+      <zipfileset dir="${basedir}" prefix="META-INF">
+        <include name="README"/>
+	<include name="COPYING"/>
+	<include name="LEGAL"/>
+      </zipfileset>
+d103 1
+a103 3
+      <fileset dir="${basedir}/dist">
+        <include name="**/*"/>
+      </fileset>
+d107 5
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d3 1
+a3 1
+<project name="siscweb" default="compile" basedir=".">
+d8 1
+a11 4
+  <property name="compile.debug" value="true"/>
+  <property name="compile.deprecation" value="true"/>
+  <property name="compile.target" value="1.4"/>
+  <property name="compile.optimize" value="true"/> <!-- useless in jdk -->
+d13 8
+d22 4
+a25 3
+    <fileset dir="${basedir}/WEB-INF/lib">
+      <include name="*.jar"/>
+      <include name="*.zip"/>
+d28 2
+a29 2
+    <!-- j2ee classes -->
+    <pathelement location="/opt/tomcat5/common/lib/servlet-api.jar"/>
+d36 4
+a39 3
+  <!-- *** PREPARE *** -->
+  <target name="prepare">
+    <mkdir dir="${basedir}/WEB-INF/classes"/>
+d42 1
+d44 31
+a74 1
+  <target name="compile" depends="prepare, jcompile"/>
+d76 17
+a92 8
+  <target name="jcompile">
+    <javac srcdir="${basedir}/src"
+           destdir="${basedir}/WEB-INF/classes"
+           debug="${compile.debug}"
+           deprecation="${compile.deprecation}"
+           optimize="${compile.optimize}"
+           target="${compile.target}"
+           classpathref="compile.classpath"/>
+d97 2
+a98 1
+  <target name="clean">
+d100 2
+a101 2
+      <fileset dir="${basedir}">
+        <include name="WEB-INF/classes/**/*.class"/>
+d103 1
+d106 12
+@
+
+
+1.1.1.1
+log
+@initial import
+@
+text
+@@
+
+
+1.1.1.2
+log
+@moved properties from build.xml to build.properties file.
+@
+text
+@d8 1
+a8 1
+  <property file="build.properties"/>
+d11 5
+d22 2
+a23 1
+    <pathelement location="${compile.path.servlets}"/>
+@
+
+
+1.1.1.3
+log
+@added dist task
+@
+text
+@d3 1
+a3 1
+<project name="siscweb" default="dist" basedir=".">
+d26 1
+a26 1
+    <mkdir dir="${basedir}/bin"/>
+d34 1
+a34 1
+           destdir="${basedir}/bin"
+a39 12
+  </target>
+
+  <target name="dist" depends="compile">
+    <jar destfile="${basedir}/WEB-INF/lib/siscweb.jar">
+      <fileset dir="${basedir}/scm">
+        <include name="**/*.scm"/>
+        <include name="**/*.ss"/>
+      </fileset>
+      <fileset dir="${basedir}/bin">
+        <include name="**/*.class"/>
+      </fileset>
+    </jar>
+@
+
+
+1.1.1.4
+log
+@modified to build siscweb and examples separately
+@
+text
+@d3 1
+a3 1
+<project name="siscweb" default="echo" basedir=".">
+d8 1
+a8 1
+  <property file="${basedir}/build.properties"/>
+d12 3
+a14 4
+    <fileset dir="${sisc.home}">
+      <include name="sisc.jar"/>
+      <include name="sisc-lib.jar"/>
+      <include name="sisc-opt.jar"/>
+d24 2
+a25 3
+  <!-- ** PREPARE ** -->
+  <target name="prepare"
+          description="prepare project">
+a28 1
+
+d30 1
+a30 2
+  <target name="compile" depends="prepare, jcompile"
+          description="compile java (and in future scheme) files"/>
+a31 1
+  <!-- * COMPILE JAVA CODE * -->
+d42 6
+a47 7
+
+  <!-- ** DIST ** -->
+
+  <!-- * SISCWEB.JAR DISTRIBUTABLE * -->
+  <target name="dist" depends="compile"
+          description="create a distribuable siscweb.jar (sisc jars not included)">
+    <jar destfile="${basedir}/siscweb.jar">
+a50 3
+      <fileset dir="${basedir}/scm">
+        <include name="**/*.scm"/>
+      </fileset>
+a54 18
+  <!-- * SISCWEB-EXAMPLES.WAR DISTRIBUTABLE * -->
+  <target name="dist-examples" depends="dist"
+          description="create a distributable examples.war ready for deployment">
+    <war destfile="${basedir}/siscweb-examples.war"
+         basedir="${basedir}/examples"
+         webxml="${basedir}/examples/WEB-INF/web.xml">
+      <zipfileset dir="${basedir}" prefix="WEB-INF/lib"
+                  includes="siscweb.jar"/>
+      <zipfileset dir="${sisc.home}" prefix="WEB-INF/lib">
+        <include name="sisc.jar"/>
+        <include name="sisc-lib.jar"/>
+        <include name="sisc-opt.jar"/>
+        <include name="sisc-heap.jar"/>
+      </zipfileset>
+    </war>
+  </target>
+
+
+d56 1
+a56 2
+  <target name="clean"
+          description="clean project">
+d58 2
+a59 2
+      <fileset dir="${basedir}/bin">
+        <include name="**/*.class"/>
+a60 1
+      <fileset dir="${basedir}" includes="siscweb.jar"/>
+a62 12
+
+  <target name="clean-examples"
+          description="clean examples">
+    <delete file="${basedir}/siscweb-examples.war"/>
+  </target>
+
+
+  <!-- ** ECHO ** -->
+  <target name="echo">
+    <echo message="Please edit build.properties and then refer to -projecthelp"/>
+  </target>
+
+@
+
+
+1.1.1.5
+log
+@now uses aspectj
+@
+text
+@a9 1
+
+a10 9
+
+  <!-- * ASPECTJ TASKDEF * -->
+  <taskdef resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties">
+    <classpath>
+      <pathelement location="${aspectj.home}/lib/aspectjtools.jar"/>
+    </classpath>
+  </taskdef>
+
+  <!-- * CLASSPATH * -->
+a18 1
+    <pathelement location="${aspectj.home}/lib/aspectjrt.jar"/>
+d33 2
+a34 2
+  <target name="compile" depends="prepare, ajcompile"
+          description="compiles java files"/>
+d36 9
+a44 8
+  <!-- * COMPILE JAVA CODE W/ ASPECTS * -->
+  <target name="ajcompile">
+    <iajc srcdir="${basedir}/src"
+          destdir="${basedir}/bin"
+          debug="${compile.debug}"
+          deprecation="${compile.deprecation}"
+          target="${compile.target}"
+          classpathref="compile.classpath"/>
+d51 2
+a52 2
+  <target name="jar" depends="compile"
+          description="creates siscweb.jar for use in web apps (sisc jars not included)">
+a59 1
+      <zipfileset src="${aspectj.home}/lib/aspectjrt.jar"/>
+d63 1
+d65 2
+a66 2
+  <target name="examples-war" depends="jar"
+          description="creates a distributable examples.war ready for deployment">
+d101 1
+a101 1
+    <echo message="Please copy and edit build.properties.sample and then refer the INSTALL document"/>
+@
+
+
+1.1.1.6
+log
+@now embeds LEGAL file in jar and war
+@
+text
+@a70 2
+      <zipfileset dir="${basedir}" prefix="META-INF"
+                  includes="LEGAL"/>
+a87 2
+      <zipfileset dir="${basedir}" prefix="META-INF"
+                  includes="LEGAL"/>
+@
+
+

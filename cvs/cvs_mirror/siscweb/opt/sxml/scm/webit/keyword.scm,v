@@ -1,0 +1,444 @@
+head	1.2;
+access;
+symbols
+	rel-0-6-dev:1.2.0.10
+	rel-0-5-fix:1.2.0.8
+	rel-0-5:1.2
+	rel-0-5-dev-safe-frames:1.2.0.6
+	Root_rel-0-5-dev-safe-frames:1.2
+	rel-0-4-fix-0:1.2
+	rel-0-5-dev:1.2.0.4
+	rel-0-4-fix:1.2.0.2
+	rel-0-3-fix-3:1.1.4.2
+	rel-0-3-fix-2:1.1.4.2
+	rel-0-3-fix:1.1.0.4
+	rel-0-4-dev-sisc-1-11:1.1.2.3
+	rel-0-4-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2006.09.03.01.42.23;	author acolomba;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.01.15.22.09.29;	author acolomba;	state dead;
+branches
+	1.1.2.1
+	1.1.4.1;
+next	;
+
+1.1.2.1
+date	2006.01.15.22.09.29;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2006.01.17.05.34.19;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2006.01.31.04.16.08;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.1.4.1
+date	2006.01.15.22.09.29;	author acolomba;	state dead;
+branches;
+next	1.1.4.2;
+
+1.1.4.2
+date	2006.02.25.17.12.02;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@merged from rel-0-4-dev
+@
+text
+@;;; WebIt! Collection
+;;; Copyright (c) 2000-2005 Jim Bender
+;;;
+;;; Permission is hereby granted, free of charge, to any person obtaining a
+;;; copy of this software and associated documentation files (the "Software"),
+;;; to deal in the Software without restriction, including without limitation
+;;; the rights to use, copy, modify, merge, publish, distribute, sublicense,
+;;; and/or sell copies of the Software, and to permit persons to whom the
+;;; Software is furnished to do so, subject to the following conditions:
+;;;
+;;; The above copyright notice and this permission notice shall be included in
+;;; all copies or substantial portions of the Software.
+;;; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+;;; IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+;;; FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+;;; THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+;;; LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+;;; FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+;;; DEALINGS IN THE SOFTWARE.
+
+;;; Contributor(s):
+;;; Alessandro Colomba: SISC port (2006)
+
+;; a DSSSL-like keywords
+
+;; missing from SISC port: declare-keyword macro
+
+(require-library 'sisc/libs/srfi/srfi-9) ; record types
+
+(module webit/keyword
+  (make-dsssl-keyword dsssl-keyword? dsssl-keyword-tag dsssl-keyword-print-tag dsssl-keyword-ns-uri)
+  ;; declare-keyword
+
+  (import srfi-9)
+
+  (define-record-type dsssl-keyword
+    (make-dsssl-keyword tag print-tag ns-uri)
+    dsssl-keyword?
+    (tag dsssl-keyword-tag)
+    (print-tag dsssl-keyword-print-tag)
+    (ns-uri dsssl-keyword-ns-uri))
+
+
+;   (define-syntax (declare-keyword stx)
+;     (syntax-case stx ()
+;       [(declare-dsssl-keyword tag)
+;        (with-syntax ((kwd (datum->syntax-object (syntax tag)
+;                                                 (string->symbol
+;                                                  (string-append
+;                                                   (symbol->string (syntax-object->datum (syntax tag)))
+;                                                   ":"))))
+;                      (kwd-syntax (datum->syntax-object (syntax tag)
+;                                                        (string->symbol
+;                                                         (string-append
+;                                                          (symbol->string (syntax-object->datum (syntax tag)))
+;                                                          ":attribute")))))
+;          (syntax
+;           (begin
+;             (define-syntax kwd-syntax 'tag)
+;             (define-syntax (kwd stx)
+;               (syntax-case stx ()
+;                 (name
+;                  (identifier? (syntax name))
+;                  (syntax (make-dsssl-keyword (quote tag)
+;                                              (quote tag)
+;                                              #f))))))))]
+;       [(declare-dsssl-keyword ptag ns-uri tag)
+;        (with-syntax ((kwd (datum->syntax-object (syntax ptag)
+;                                                 (string->symbol
+;                                                  (string-append
+;                                                   (symbol->string (syntax-object->datum (syntax ptag)))
+;                                                   ":"))))
+;                      (kwd-syntax (datum->syntax-object (syntax ptag)
+;                                                        (string->symbol
+;                                                         (string-append
+;                                                          (symbol->string (syntax-object->datum (syntax ptag)))
+;                                                          ":attribute"))))
+;                      (ename (datum->syntax-object (syntax ptag)
+;                                                   (let ((ns (syntax-object->datum (syntax ns-uri)))
+;                                                         (lname (syntax-object->datum (syntax tag))))
+;                                                     (if ns
+;                                                         (string->symbol
+;                                                          (string-append
+;                                                           (symbol->string ns)
+;                                                           ":"
+;                                                           (symbol->string lname)))
+;                                                         lname)))))
+;          (syntax
+;           (begin
+;             (define-syntax kwd-syntax 'ename)
+;             (define-syntax (kwd stx)
+;               (syntax-case stx ()
+;                 (name
+;                  (identifier? (syntax name))
+;                  (syntax (make-dsssl-keyword (quote ename)
+;                                              (quote tag)
+;                                              (quote ns-uri)))))))))]))
+
+  )
+@
+
+
+1.1
+log
+@file keyword.scm was initially added on branch rel-0-4-dev.
+@
+text
+@d1 99
+@
+
+
+1.1.4.1
+log
+@file keyword.scm was added on branch rel-0-3-fix on 2006-02-25 17:12:02 +0000
+@
+text
+@@
+
+
+1.1.4.2
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@a0 99
+;;; WebIt! Collection
+;;; Copyright (c) 2000-2005 Jim Bender
+;;;
+;;; Permission is hereby granted, free of charge, to any person obtaining a
+;;; copy of this software and associated documentation files (the "Software"),
+;;; to deal in the Software without restriction, including without limitation
+;;; the rights to use, copy, modify, merge, publish, distribute, sublicense,
+;;; and/or sell copies of the Software, and to permit persons to whom the
+;;; Software is furnished to do so, subject to the following conditions:
+;;;
+;;; The above copyright notice and this permission notice shall be included in
+;;; all copies or substantial portions of the Software.
+;;; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+;;; IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+;;; FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+;;; THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+;;; LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+;;; FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+;;; DEALINGS IN THE SOFTWARE.
+
+;;; Contributor(s):
+;;; Alessandro Colomba: SISC port (2006)
+
+;; a DSSSL-like keywords
+
+;; missing from SISC port: declare-keyword macro
+
+(require-library 'sisc/libs/srfi/srfi-9) ; record types
+
+(module webit/keyword
+  (make-dsssl-keyword dsssl-keyword? dsssl-keyword-tag dsssl-keyword-print-tag dsssl-keyword-ns-uri)
+  ;; declare-keyword
+
+  (import srfi-9)
+
+  (define-record-type dsssl-keyword
+    (make-dsssl-keyword tag print-tag ns-uri)
+    dsssl-keyword?
+    (tag dsssl-keyword-tag)
+    (print-tag dsssl-keyword-print-tag)
+    (ns-uri dsssl-keyword-ns-uri))
+
+
+;   (define-syntax (declare-keyword stx)
+;     (syntax-case stx ()
+;       [(declare-dsssl-keyword tag)
+;        (with-syntax ((kwd (datum->syntax-object (syntax tag)
+;                                                 (string->symbol
+;                                                  (string-append
+;                                                   (symbol->string (syntax-object->datum (syntax tag)))
+;                                                   ":"))))
+;                      (kwd-syntax (datum->syntax-object (syntax tag)
+;                                                        (string->symbol
+;                                                         (string-append
+;                                                          (symbol->string (syntax-object->datum (syntax tag)))
+;                                                          ":attribute")))))
+;          (syntax
+;           (begin
+;             (define-syntax kwd-syntax 'tag)
+;             (define-syntax (kwd stx)
+;               (syntax-case stx ()
+;                 (name
+;                  (identifier? (syntax name))
+;                  (syntax (make-dsssl-keyword (quote tag)
+;                                              (quote tag)
+;                                              #f))))))))]
+;       [(declare-dsssl-keyword ptag ns-uri tag)
+;        (with-syntax ((kwd (datum->syntax-object (syntax ptag)
+;                                                 (string->symbol
+;                                                  (string-append
+;                                                   (symbol->string (syntax-object->datum (syntax ptag)))
+;                                                   ":"))))
+;                      (kwd-syntax (datum->syntax-object (syntax ptag)
+;                                                        (string->symbol
+;                                                         (string-append
+;                                                          (symbol->string (syntax-object->datum (syntax ptag)))
+;                                                          ":attribute"))))
+;                      (ename (datum->syntax-object (syntax ptag)
+;                                                   (let ((ns (syntax-object->datum (syntax ns-uri)))
+;                                                         (lname (syntax-object->datum (syntax tag))))
+;                                                     (if ns
+;                                                         (string->symbol
+;                                                          (string-append
+;                                                           (symbol->string ns)
+;                                                           ":"
+;                                                           (symbol->string lname)))
+;                                                         lname)))))
+;          (syntax
+;           (begin
+;             (define-syntax kwd-syntax 'ename)
+;             (define-syntax (kwd stx)
+;               (syntax-case stx ()
+;                 (name
+;                  (identifier? (syntax name))
+;                  (syntax (make-dsssl-keyword (quote ename)
+;                                              (quote tag)
+;                                              (quote ns-uri)))))))))]))
+
+  )
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 96
+;;; WebIt! - An XML Framework for Scheme
+;;; Copyright (C) 2002-2005 Jim Bender
+;;;
+;;; This library is free software; you can redistribute it and/or
+;;; modify it under the terms of the GNU Library General Public
+;;; License as published by the Free Software Foundation; either
+;;; version 2 of the License, or (at your option) any later version.
+;;;
+;;; This library is distributed in the hope that it will be useful,
+;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;;; Library General Public License for more details.
+;;;
+;;; You should have received a copy of the GNU Library General Public
+;;; License along with this library; if not, write to the Free
+;;;  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+;;; Contributor(s):
+;;; Alessandro Colomba: SISC port
+
+;; a DSSSL-like keywords
+
+;; missing from SISC port: declare-keyword macro
+
+(require-library 'sisc/libs/srfi/srfi-9) ; record types
+
+(module keyword
+  (make-dsssl-keyword dsssl-keyword? dsssl-keyword-tag dsssl-keyword-print-tag dsssl-keyword-ns-uri)
+  ;; declare-keyword
+
+  (import srfi-9)
+
+  (define-record-type dsssl-keyword
+    (make-dsssl-keyword tag print-tag ns-uri)
+    dsssl-keyword?
+    (tag dsssl-keyword-tag)
+    (print-tag dsssl-keyword-print-tag)
+    (ns-uri dsssl-keyword-ns-uri))
+
+
+;   (define-syntax (declare-keyword stx)
+;     (syntax-case stx ()
+;       [(declare-dsssl-keyword tag)
+;        (with-syntax ((kwd (datum->syntax-object (syntax tag)
+;                                                 (string->symbol
+;                                                  (string-append
+;                                                   (symbol->string (syntax-object->datum (syntax tag)))
+;                                                   ":"))))
+;                      (kwd-syntax (datum->syntax-object (syntax tag)
+;                                                        (string->symbol
+;                                                         (string-append
+;                                                          (symbol->string (syntax-object->datum (syntax tag)))
+;                                                          ":attribute")))))
+;          (syntax
+;           (begin
+;             (define-syntax kwd-syntax 'tag)
+;             (define-syntax (kwd stx)
+;               (syntax-case stx ()
+;                 (name
+;                  (identifier? (syntax name))
+;                  (syntax (make-dsssl-keyword (quote tag)
+;                                              (quote tag)
+;                                              #f))))))))]
+;       [(declare-dsssl-keyword ptag ns-uri tag)
+;        (with-syntax ((kwd (datum->syntax-object (syntax ptag)
+;                                                 (string->symbol
+;                                                  (string-append
+;                                                   (symbol->string (syntax-object->datum (syntax ptag)))
+;                                                   ":"))))
+;                      (kwd-syntax (datum->syntax-object (syntax ptag)
+;                                                        (string->symbol
+;                                                         (string-append
+;                                                          (symbol->string (syntax-object->datum (syntax ptag)))
+;                                                          ":attribute"))))
+;                      (ename (datum->syntax-object (syntax ptag)
+;                                                   (let ((ns (syntax-object->datum (syntax ns-uri)))
+;                                                         (lname (syntax-object->datum (syntax tag))))
+;                                                     (if ns
+;                                                         (string->symbol
+;                                                          (string-append
+;                                                           (symbol->string ns)
+;                                                           ":"
+;                                                           (symbol->string lname)))
+;                                                         lname)))))
+;          (syntax
+;           (begin
+;             (define-syntax kwd-syntax 'ename)
+;             (define-syntax (kwd stx)
+;               (syntax-case stx ()
+;                 (name
+;                  (identifier? (syntax name))
+;                  (syntax (make-dsssl-keyword (quote ename)
+;                                              (quote tag)
+;                                              (quote ns-uri)))))))))]))
+
+  )
+@
+
+
+1.1.2.2
+log
+@corrected WebIt! license to MIT
+@
+text
+@d1 2
+a2 2
+;;; WebIt! Collection
+;;; Copyright (c) 2000-2005 Jim Bender
+d4 4
+a7 6
+;;; Permission is hereby granted, free of charge, to any person obtaining a
+;;; copy of this software and associated documentation files (the "Software"),
+;;; to deal in the Software without restriction, including without limitation
+;;; the rights to use, copy, modify, merge, publish, distribute, sublicense,
+;;; and/or sell copies of the Software, and to permit persons to whom the
+;;; Software is furnished to do so, subject to the following conditions:
+d9 8
+a16 9
+;;; The above copyright notice and this permission notice shall be included in
+;;; all copies or substantial portions of the Software.
+;;; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+;;; IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+;;; FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+;;; THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+;;; LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+;;; FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+;;; DEALINGS IN THE SOFTWARE.
+d19 1
+a19 1
+;;; Alessandro Colomba: SISC port (2006)
+@
+
+
+1.1.2.3
+log
+@added webit/ prefix to module name
+@
+text
+@d30 1
+a30 1
+(module webit/keyword
+@
+
+

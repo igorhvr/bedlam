@@ -1,0 +1,1511 @@
+head	1.3;
+access;
+symbols
+	rel-0-6-dev:1.3.0.4
+	rel-0-5-fix:1.3.0.2
+	rel-0-5:1.3
+	rel-0-5-dev-safe-frames:1.2.4.2.0.2
+	Root_rel-0-5-dev-safe-frames:1.2.4.2
+	rel-0-4-fix-0:1.2
+	rel-0-5-dev:1.2.0.4
+	rel-0-4-fix:1.2.0.2
+	rel-0-4-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2007.04.12.03.51.19;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2006.09.03.01.42.22;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2006.06.17.13.02.40;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2006.06.17.13.02.40;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2006.06.25.21.03.47;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2006.07.07.00.58.01;	author acolomba;	state Exp;
+branches;
+next	1.1.2.4;
+
+1.1.2.4
+date	2006.07.08.02.32.17;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5;
+
+1.1.2.5
+date	2006.07.08.21.39.26;	author acolomba;	state Exp;
+branches;
+next	1.1.2.6;
+
+1.1.2.6
+date	2006.08.02.02.46.17;	author acolomba;	state Exp;
+branches;
+next	1.1.2.7;
+
+1.1.2.7
+date	2006.08.14.03.21.09;	author acolomba;	state Exp;
+branches;
+next	1.1.2.8;
+
+1.1.2.8
+date	2006.08.27.02.44.28;	author acolomba;	state Exp;
+branches;
+next	1.1.2.9;
+
+1.1.2.9
+date	2006.08.29.03.28.01;	author acolomba;	state Exp;
+branches;
+next	1.1.2.10;
+
+1.1.2.10
+date	2006.08.31.00.06.07;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2006.09.20.02.31.25;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2006.09.19.02.31.17;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2006.10.04.01.35.14;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2007.09.09.01.59.54;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2007.10.13.18.49.32;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@merged from rel-0-5-dev
+@
+text
+@/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005-2006
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+package siscweb.util;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
+
+public class Environment
+{
+    public static boolean isREPL()
+    {
+        boolean isREPL = lookupBoolean("siscweb/repl-p", false);
+
+        return isREPL;
+    }
+
+    public static String getREPLHost()
+    {
+        return lookupString("siscweb/repl-host", null);
+    }
+
+    public static int getREPLPort()
+    {
+        return lookupInt("siscweb/repl-port", 0);
+    }
+
+    public static String getLoggingLevel()
+    {
+        return lookupString("siscweb/logging-level", "INFO");
+    }
+
+    public static String getLoggingFile()
+    {
+        return lookupString("siscweb/logging-file", "");
+    }
+
+    public static int getLoggingLimit()
+    {
+        return lookupInt ("siscweb/logging-limit", 5000000);
+    }
+
+    public static int getLoggingCount()
+    {
+        return lookupInt ("siscweb/logging-count", 1);
+    }
+
+
+    public static String getContinuationStoreClassName()
+    {
+        return lookupString("siscweb/continuation-store-class", "siscweb.contcentric.SessionContinuationStore");
+    }
+
+
+    public static long getContinuationTtl()
+    {
+        return lookupLong("siscweb/continuation-ttl", 1200);
+    }
+
+    public static int getUserHistorySize()
+    {
+        return lookupInt("siscweb/user-history-size", -1);
+    }
+
+    public static int getUserHistorySizeSerialized()
+    {
+        return lookupInt("siscweb/user-history-size-serialized", -1);
+    }
+
+    public static long getContinuationGroupCreationInterval()
+    {
+        return lookupInt("siscweb/continuation-group-creation-interval", 0);
+    }
+
+    public static long getContinuationCleanupInterval()
+    {
+        return lookupLong("siscweb/continuation-cleanup-interval", 30000L);
+    }
+
+
+    public static boolean lookupBoolean(final String name, final boolean defaultValue)
+    {
+        boolean useDefaultValue = false;
+        Boolean value = null;
+
+        try {
+            value = (Boolean) lookupMemoized(name);
+
+            if(value == null) {
+                useDefaultValue = true;
+            }
+        }
+        catch(final NamingException ne) {
+            useDefaultValue = true;
+        }
+        catch(final Exception e) {
+            if(Logger.logger.isLoggable(Level.WARNING)) {
+                Logger.logger.finest("Error retrieving " + name + " enviroment entry.");
+            }
+
+            useDefaultValue = true;
+        }
+
+        if(useDefaultValue == false) {
+            return value.booleanValue();
+        }
+        else {
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Using default value " + name + " : " + defaultValue);
+            }
+
+            return defaultValue;
+        }
+    }
+
+    public static int lookupInt(final String name, final int defaultValue)
+    {
+        boolean useDefaultValue = false;
+        Integer value = null;
+
+        try {
+            value = (Integer) lookupMemoized(name);
+
+            if(value == null) {
+                useDefaultValue = true;
+            }
+        }
+        catch(final NamingException ne) {
+            useDefaultValue = true;
+        }
+        catch(final Exception e) {
+            if(Logger.logger.isLoggable(Level.WARNING)) {
+                Logger.logger.finest("Error retrieving " + name + " enviroment entry.");
+            }
+
+            useDefaultValue = true;
+        }
+
+        if(useDefaultValue == false) {
+            return value.intValue();
+        }
+        else {
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Using default value " + name + " : " + defaultValue);
+            }
+
+            return defaultValue;
+        }
+    }
+
+    public static long lookupLong(final String name, final long defaultValue)
+    {
+        boolean useDefaultValue = false;
+        Long value = null;
+
+        try {
+            value = (Long) lookupMemoized(name);
+
+            if(value == null) {
+                useDefaultValue = true;
+            }
+        }
+        catch(final NamingException ne) {
+            useDefaultValue = true;
+        }
+        catch(final Exception e) {
+            if(Logger.logger.isLoggable(Level.WARNING)) {
+                Logger.logger.finest("Error retrieving " + name + " enviroment entry.");
+            }
+
+            useDefaultValue = true;
+        }
+
+        if(useDefaultValue == false) {
+            return value.longValue();
+        }
+        else {
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Using default value " + name + " : " + defaultValue);
+            }
+
+            return defaultValue;
+        }
+    }
+
+    public static String lookupString(final String name, final String defaultValue)
+    {
+        boolean useDefaultValue = false;
+        String value = null;
+
+        try {
+            value = (String) lookupMemoized(name);
+
+            if(value == null) {
+                useDefaultValue = true;
+            }
+        }
+        catch(final NamingException ne) {
+            useDefaultValue = true;
+        }
+        catch(final Exception e) {
+            if(Logger.logger.isLoggable(Level.WARNING)) {
+                Logger.logger.finest("Error retrieving " + name + " enviroment entry.");
+            }
+
+            useDefaultValue = true;
+        }
+
+        if(useDefaultValue == false) {
+            return value.trim();
+        }
+        else {
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Using default value " + name + " : " + defaultValue);
+            }
+
+            return defaultValue;
+        }
+   }
+
+
+    private static Map memo = new HashMap();     // memoized values
+    private static Map memoTime = new HashMap(); // time of last lookup, even if it failed
+    public static long memoInterval = 60000;     // interval between lookups; left public for hacking
+
+    public static Object lookupMemoized(final String name)
+        throws NamingException
+    {
+        // NOTE: we don't care much about concurrency; worst case,
+        //       the timestamps will be slightly off
+        final Date ts = (Date) memoTime.get(name);
+
+        if(ts == null || new Date().getTime() - ts.getTime() > memoInterval) {
+            memoTime.put(name, new Date());
+
+            final Object o = lookup(name);
+
+            memo.put(name, o);
+
+            return o;
+        }
+        else {
+            return memo.get(name);
+        }
+    }
+
+    public static Object lookup(final String name)
+        throws NamingException
+    {
+        try {
+            final InitialContext context = new InitialContext();
+            return context.lookup("java:comp/env/" + name);
+        }
+        catch(final NamingException ne) {
+            // entries are optional; if one is missing, record the
+            // fact without fuss
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Env entry \"" + name + "\" not defined.");
+            }
+
+            throw ne;
+        }
+    }
+}
+@
+
+
+1.3.4.1
+log
+@merged from rel-0-5-fix
+@
+text
+@d51 1
+a51 1
+        final boolean isREPL = lookupBoolean("siscweb/repl-p", false);
+d123 1
+a123 1
+        
+d142 1
+a142 1
+        if(!useDefaultValue) {
+d158 1
+a158 1
+        
+d177 1
+a177 1
+        if(!useDefaultValue) {
+d193 1
+a193 1
+        
+d212 1
+a212 1
+        if(!useDefaultValue) {
+d228 1
+a228 1
+        
+d247 1
+a247 1
+        if(!useDefaultValue) {
+d260 2
+a261 2
+    private static final Map memo = new HashMap();     // memoized values
+    private static final Map memoTime = new HashMap(); // time of last lookup, even if it failed
+d269 1
+a269 1
+        final Date timeStamp = (Date) memoTime.get(name);
+d271 1
+a271 1
+        if(timeStamp == null || new Date().getTime() - timeStamp.getTime() > memoInterval) {
+d274 1
+a274 1
+            final Object obj = lookup(name);
+d276 1
+a276 1
+            memo.put(name, obj);
+d278 1
+a278 1
+            return obj;
+@
+
+
+1.3.2.1
+log
+@minor syntactical cleanup
+@
+text
+@d51 1
+a51 1
+        final boolean isREPL = lookupBoolean("siscweb/repl-p", false);
+d123 1
+a123 1
+        
+d142 1
+a142 1
+        if(!useDefaultValue) {
+d158 1
+a158 1
+        
+d177 1
+a177 1
+        if(!useDefaultValue) {
+d193 1
+a193 1
+        
+d212 1
+a212 1
+        if(!useDefaultValue) {
+d228 1
+a228 1
+        
+d247 1
+a247 1
+        if(!useDefaultValue) {
+d260 2
+a261 2
+    private static final Map memo = new HashMap();     // memoized values
+    private static final Map memoTime = new HashMap(); // time of last lookup, even if it failed
+d269 1
+a269 1
+        final Date timeStamp = (Date) memoTime.get(name);
+d271 1
+a271 1
+        if(timeStamp == null || new Date().getTime() - timeStamp.getTime() > memoInterval) {
+d274 1
+a274 1
+            final Object obj = lookup(name);
+d276 1
+a276 1
+            memo.put(name, obj);
+d278 1
+a278 1
+            return obj;
+@
+
+
+1.2
+log
+@merged from rel-0-4-dev
+@
+text
+@d76 11
+d121 3
+d125 1
+a125 1
+            final boolean value = ((Boolean) lookupMemoized(name)).booleanValue();
+d127 2
+a128 2
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Looked up " + name + " : " + value);
+a129 2
+
+            return value;
+d132 5
+a136 2
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Using default value " + name + " : " + defaultValue);
+d139 5
+a143 1
+            return defaultValue;
+d145 3
+a147 3
+        catch(final Exception e) {
+            if(Logger.logger.isLoggable(Level.WARNING)) {
+                Logger.logger.finest("Error retrieving " + name + ". Using value : " + defaultValue);
+d156 3
+d160 1
+a160 1
+            final int value = ((Integer) lookupMemoized(name)).intValue();
+d162 2
+a163 2
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Looked up " + name + " : " + value);
+a164 2
+
+            return value;
+d167 5
+a171 2
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Using default value " + name + " : " + defaultValue);
+d174 5
+a178 1
+            return defaultValue;
+d180 3
+a182 3
+        catch(final Exception e) {
+            if(Logger.logger.isLoggable(Level.WARNING)) {
+                Logger.logger.finest("Error retrieving " + name + ". Using value : " + defaultValue);
+d191 3
+d195 1
+a195 1
+            final long value = ((Long) lookupMemoized(name)).intValue();
+d197 2
+a198 2
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Looked up " + name + " : " + value);
+a199 2
+
+            return value;
+d202 5
+a206 2
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Using default value " + name + " : " + defaultValue);
+d209 5
+a213 1
+            return defaultValue;
+d215 3
+a217 3
+        catch(final Exception e) {
+            if(Logger.logger.isLoggable(Level.WARNING)) {
+                Logger.logger.finest("Error retrieving " + name + ". Using value : " + defaultValue);
+d226 3
+d230 1
+a230 1
+            final String value = (String) lookupMemoized(name);
+d232 2
+a233 2
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Looked up " + name + " : " + value);
+a234 2
+
+            return value != null ? value.trim() : null;
+d237 5
+a241 2
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Using default value " + name + " : " + defaultValue);
+d244 5
+a248 1
+            return defaultValue;
+d250 3
+a252 3
+        catch(final Exception e) {
+            if(Logger.logger.isLoggable(Level.WARNING)) {
+                Logger.logger.finest("Error retrieving " + name + ". Using value : " + defaultValue);
+d257 1
+a257 1
+    }
+@
+
+
+1.2.2.1
+log
+@merged from rel-0-5-dev
+@
+text
+@a109 3
+        boolean useDefaultValue = false;
+        Boolean value = null;
+
+d111 1
+a111 1
+            value = (Boolean) lookupMemoized(name);
+d113 2
+a114 2
+            if(value == null) {
+                useDefaultValue = true;
+d116 2
+d120 5
+a124 1
+            useDefaultValue = true;
+d128 1
+a128 12
+                Logger.logger.finest("Error retrieving " + name + " enviroment entry.");
+            }
+
+            useDefaultValue = true;
+        }
+
+        if(useDefaultValue == false) {
+            return value.booleanValue();
+        }
+        else {
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Using default value " + name + " : " + defaultValue);
+a136 3
+        boolean useDefaultValue = false;
+        Integer value = null;
+
+d138 1
+a138 1
+            value = (Integer) lookupMemoized(name);
+d140 2
+a141 2
+            if(value == null) {
+                useDefaultValue = true;
+d143 2
+d147 5
+a151 1
+            useDefaultValue = true;
+d155 1
+a155 12
+                Logger.logger.finest("Error retrieving " + name + " enviroment entry.");
+            }
+
+            useDefaultValue = true;
+        }
+
+        if(useDefaultValue == false) {
+            return value.intValue();
+        }
+        else {
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Using default value " + name + " : " + defaultValue);
+a163 3
+        boolean useDefaultValue = false;
+        Long value = null;
+
+d165 1
+a165 1
+            value = (Long) lookupMemoized(name);
+d167 2
+a168 2
+            if(value == null) {
+                useDefaultValue = true;
+d170 2
+d174 5
+a178 1
+            useDefaultValue = true;
+d182 1
+a182 12
+                Logger.logger.finest("Error retrieving " + name + " enviroment entry.");
+            }
+
+            useDefaultValue = true;
+        }
+
+        if(useDefaultValue == false) {
+            return value.longValue();
+        }
+        else {
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Using default value " + name + " : " + defaultValue);
+a190 3
+        boolean useDefaultValue = false;
+        String value = null;
+
+d192 1
+a192 1
+            value = (String) lookupMemoized(name);
+d194 2
+a195 2
+            if(value == null) {
+                useDefaultValue = true;
+d197 2
+d201 5
+a205 1
+            useDefaultValue = true;
+d209 1
+a209 12
+                Logger.logger.finest("Error retrieving " + name + " enviroment entry.");
+            }
+
+            useDefaultValue = true;
+        }
+
+        if(useDefaultValue == false) {
+            return value.trim();
+        }
+        else {
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Using default value " + name + " : " + defaultValue);
+d214 1
+a214 1
+   }
+@
+
+
+1.2.4.1
+log
+@returns defaultValue in case the looked up value is null
+@
+text
+@a109 3
+        boolean useDefaultValue = false;
+        Boolean value = null;
+
+d111 1
+a111 1
+            value = (Boolean) lookupMemoized(name);
+d113 2
+a114 2
+            if(value == null) {
+                useDefaultValue = true;
+d116 2
+d120 5
+a124 1
+            useDefaultValue = true;
+d128 1
+a128 12
+                Logger.logger.finest("Error retrieving " + name + " enviroment entry.");
+            }
+
+            useDefaultValue = true;
+        }
+
+        if(useDefaultValue == false) {
+            return value.booleanValue();
+        }
+        else {
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Using default value " + name + " : " + defaultValue);
+a136 3
+        boolean useDefaultValue = false;
+        Integer value = null;
+
+d138 1
+a138 1
+            value = (Integer) lookupMemoized(name);
+d140 2
+a141 2
+            if(value == null) {
+                useDefaultValue = true;
+d143 2
+d147 5
+a151 1
+            useDefaultValue = true;
+d155 1
+a155 12
+                Logger.logger.finest("Error retrieving " + name + " enviroment entry.");
+            }
+
+            useDefaultValue = true;
+        }
+
+        if(useDefaultValue == false) {
+            return value.intValue();
+        }
+        else {
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Using default value " + name + " : " + defaultValue);
+a163 3
+        boolean useDefaultValue = false;
+        Long value = null;
+
+d165 1
+a165 1
+            value = (Long) lookupMemoized(name);
+d167 2
+a168 2
+            if(value == null) {
+                useDefaultValue = true;
+d170 2
+d174 5
+a178 1
+            useDefaultValue = true;
+d182 1
+a182 12
+                Logger.logger.finest("Error retrieving " + name + " enviroment entry.");
+            }
+
+            useDefaultValue = true;
+        }
+
+        if(useDefaultValue == false) {
+            return value.longValue();
+        }
+        else {
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Using default value " + name + " : " + defaultValue);
+a190 3
+        boolean useDefaultValue = false;
+        String value = null;
+
+d192 1
+a192 1
+            value = (String) lookupMemoized(name);
+d194 2
+a195 2
+            if(value == null) {
+                useDefaultValue = true;
+d197 2
+d201 5
+a205 1
+            useDefaultValue = true;
+d209 1
+a209 12
+                Logger.logger.finest("Error retrieving " + name + " enviroment entry.");
+            }
+
+            useDefaultValue = true;
+        }
+
+        if(useDefaultValue == false) {
+            return value.trim();
+        }
+        else {
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Using default value " + name + " : " + defaultValue);
+d214 1
+a214 1
+   }
+@
+
+
+1.2.4.2
+log
+@added log rotation
+@
+text
+@a75 11
+    public static int getLoggingLimit()
+    {
+        return lookupInt ("siscweb/logging-limit", 5000000);
+    }
+
+    public static int getLoggingCount()
+    {
+        return lookupInt ("siscweb/logging-count", 1);
+    }
+
+
+@
+
+
+1.1
+log
+@file Environment.java was initially added on branch rel-0-4-dev.
+@
+text
+@d1 259
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 112
+package siscweb.util;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
+
+public class Environment
+{
+    public static boolean isREPL()
+    {
+        boolean isREPL = false;
+
+        try {
+            InitialContext context = new InitialContext();
+            isREPL = ((Boolean) context.lookup("java:comp/env/siscweb/repl-p")).booleanValue();
+        }
+        catch(NamingException e) {
+            // do nothing
+        }
+
+        return isREPL;
+    }
+
+    public static String getREPLHost()
+    {
+        String host = null;
+        try {
+            InitialContext context = new InitialContext();
+            host = (String) context.lookup("java:comp/env/siscweb/repl-host");
+        }
+        catch(NamingException e) {
+            // do nothing
+        }
+
+        return host;
+    }
+
+    public static int getREPLPort()
+    {
+        int port = 0;
+
+        try {
+            InitialContext context = new InitialContext();
+            port = ((Integer) context.lookup("java:comp/env/siscweb/repl-port")).intValue();
+        }
+        catch(NamingException e) {
+            // do nothing
+        }
+
+        return port;
+    }
+
+    public static String getContinuationStoreClassName()
+    {
+        String className = null;
+        try {
+            InitialContext context = new InitialContext();
+            className = (String) context.lookup("java:comp/env/siscweb/continuation-store-class");
+        }
+        catch(NamingException e) {
+            // do nothing
+        }
+
+        return className;
+    }
+
+
+    public static int getContinuationCleanupInterval()
+    {
+        int interval = 30000;
+
+        try {
+            InitialContext context = new InitialContext();
+            interval = ((Integer) context.lookup("java:comp/env/siscweb/continuation-cleanup-interval")).intValue();
+        }
+        catch(NamingException e) {
+            // do nothing
+        }
+
+        return interval;
+    }
+
+    public static int getUserHistorySize()
+    {
+        int size = -1;
+
+        try {
+            InitialContext context = new InitialContext();
+            size = ((Integer) context.lookup("java:comp/env/siscweb/user-history-size")).intValue();
+        }
+        catch(NamingException e) {
+            // do nothing
+        }
+
+        return size;
+    }
+
+    public static int getUserHistorySizeSerialized()
+    {
+        int size = -1;
+
+        try {
+            InitialContext context = new InitialContext();
+            size = ((Integer) context.lookup("java:comp/env/siscweb/user-history-size-serialized")).intValue();
+        }
+        catch(NamingException e) {
+            // do nothing
+        }
+
+        return size;
+    }
+}
+@
+
+
+1.1.2.2
+log
+@simplified lookups; added logging
+@
+text
+@a0 35
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+a2 2
+import java.util.logging.Level;
+
+d11 9
+a19 1
+        boolean isREPL = lookupBoolean("siscweb/repl-p", false);
+d26 10
+a35 1
+        return lookupString("siscweb/repl-host", null);
+d40 11
+a50 1
+        return lookupInt("siscweb/repl-port", 0);
+d55 8
+a62 3
+        return lookupString("siscweb/continuation-store-class", null);
+    }
+
+d64 1
+a64 3
+    public static int getUserHistorySize()
+    {
+        return lookupInt("siscweb/user-history-size", -1);
+a66 9
+    public static int getUserHistorySizeSerialized()
+    {
+        return lookupInt("siscweb/user-history-size-serialized", -1);
+    }
+
+    public static int getContinuationGroupCreationInterval()
+    {
+        return lookupInt("siscweb/contcentric.user-continuation-group-creation-interval", 0);
+    }
+d70 1
+a70 2
+        return lookupInt("siscweb/continuation-cleanup-interval", 30000);
+    }
+a71 3
+
+    public static boolean lookupBoolean(String name, boolean defaultValue)
+    {
+d73 5
+a77 7
+            final boolean value = ((Boolean) lookup(name)).booleanValue();
+
+            if(Loggers.configuration.isLoggable(Level.FINER)) {
+                Loggers.configuration.finer("Looked up " + name + " : " + value);
+            }
+
+            return value;
+a78 4
+        catch(NamingException ne) {
+            if(Loggers.configuration.isLoggable(Level.FINER)) {
+                Loggers.configuration.finer("Using default value " + name + " : " + defaultValue);
+            }
+d80 1
+a80 2
+            return defaultValue;
+        }
+d83 1
+a83 1
+    public static int lookupInt(String name, int defaultValue)
+d85 2
+d88 2
+a89 7
+            final int value = ((Integer) lookup(name)).intValue();
+
+            if(Loggers.configuration.isLoggable(Level.FINER)) {
+                Loggers.configuration.finer("Looked up " + name + " : " + value);
+            }
+
+            return value;
+d92 2
+a93 3
+            if(Loggers.configuration.isLoggable(Level.FINER)) {
+                Loggers.configuration.finer("Using default value " + name + " : " + defaultValue);
+            }
+d95 1
+a95 2
+            return defaultValue;
+        }
+d98 1
+a98 1
+    public static String lookupString(String name, String defaultValue)
+d100 2
+d103 2
+a104 7
+            final String value = (String) lookup(name);
+
+            if(Loggers.configuration.isLoggable(Level.FINER)) {
+                Loggers.configuration.finer("Looked up " + name + " : " + value);
+            }
+
+            return value;
+d107 1
+a107 9
+            if(Loggers.configuration.isLoggable(Level.FINER)) {
+                Loggers.configuration.finer("Using default value " + name + " : " + defaultValue);
+            }
+
+            return defaultValue;
+        }
+        catch(Throwable e) {
+            e.printStackTrace(System.err);
+            return defaultValue;
+a108 14
+    }
+
+
+    public static Object lookup(String name)
+        throws NamingException
+    {
+        try {
+            InitialContext context = new InitialContext();
+            return context.lookup("java:comp/env/" + name);
+        }
+        catch(NamingException ne) {
+            if(Loggers.configuration.isLoggable(Level.WARNING)) {
+                Loggers.configuration.warning("Env entry \"" + name + "\" not defined.");
+            }
+d110 1
+a110 2
+            throw ne;
+        }
+@
+
+
+1.1.2.3
+log
+@now fetches continuation-group-creation-interval instead of
+contcentric.user-continuation-group-creation-interval
+@
+text
+@d81 1
+a81 1
+        return lookupInt("siscweb/continuation-group-creation-interval", 0);
+@
+
+
+1.1.2.4
+log
+@modified in accordance to Loggers -> Logger changes
+@
+text
+@d95 2
+a96 2
+            if(Logger.logger.isLoggable(Level.FINER)) {
+                Logger.logger.finer("Looked up " + name + " : " + value);
+d102 2
+a103 2
+            if(Logger.logger.isLoggable(Level.FINER)) {
+                Logger.logger.finer("Using default value " + name + " : " + defaultValue);
+d115 2
+a116 2
+            if(Logger.logger.isLoggable(Level.FINER)) {
+                Logger.logger.finer("Looked up " + name + " : " + value);
+d122 2
+a123 2
+            if(Logger.logger.isLoggable(Level.FINER)) {
+                Logger.logger.finer("Using default value " + name + " : " + defaultValue);
+d135 2
+a136 2
+            if(Logger.logger.isLoggable(Level.FINER)) {
+                Logger.logger.finer("Looked up " + name + " : " + value);
+d142 2
+a143 2
+            if(Logger.logger.isLoggable(Level.FINER)) {
+                Logger.logger.finer("Using default value " + name + " : " + defaultValue);
+d163 2
+a164 2
+            if(Logger.logger.isLoggable(Level.WARNING)) {
+                Logger.logger.warning("Env entry \"" + name + "\" not defined.");
+@
+
+
+1.1.2.5
+log
+@fixed logging level; added default to getContinuationStoreClassName()
+@
+text
+@d65 1
+a65 1
+        return lookupString("siscweb/continuation-store-class", "siscweb.contcentric.SessionContinuationStore");
+d95 2
+a96 2
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Looked up " + name + " : " + value);
+d102 2
+a103 2
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Using default value " + name + " : " + defaultValue);
+d115 2
+a116 2
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Looked up " + name + " : " + value);
+d122 2
+a123 2
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Using default value " + name + " : " + defaultValue);
+d135 2
+a136 2
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Looked up " + name + " : " + value);
+d142 2
+a143 2
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Using default value " + name + " : " + defaultValue);
+d148 4
+@
+
+
+1.1.2.6
+log
+@added logging getters; string values are now trimmed
+@
+text
+@a62 10
+    public static String getLoggingLevel()
+    {
+        return lookupString("siscweb/logging-level", "INFO");
+    }
+
+    public static String getLoggingFile()
+    {
+        return lookupString("siscweb/logging-file", "");
+    }
+
+d139 1
+a139 1
+            return value != null ? value.trim() : null;
+@
+
+
+1.1.2.7
+log
+@memoizes lookups
+@
+text
+@d17 1
+a17 1
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005-2006
+a37 3
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+d100 1
+a100 1
+    public static boolean lookupBoolean(final String name, final boolean defaultValue)
+d103 1
+a103 1
+            final boolean value = ((Boolean) lookupMemoized(name)).booleanValue();
+d120 1
+a120 1
+    public static int lookupInt(final String name, final int defaultValue)
+d123 1
+a123 1
+            final int value = ((Integer) lookupMemoized(name)).intValue();
+d140 1
+a140 1
+    public static String lookupString(final String name, final String defaultValue)
+d143 1
+a143 1
+            final String value = (String) lookupMemoized(name);
+d161 1
+a161 26
+    private static Map memo = new HashMap();     // memoized values
+    private static Map memoTime = new HashMap(); // time of last lookup, even if it failed
+    public static long memoInterval = 60000;     // interval between lookups; left public for hacking
+    
+    public static Object lookupMemoized(final String name)
+        throws NamingException
+    {
+        // NOTE: we don't care much about concurrency; worst case
+        //       the timestamps will be slightly off
+        Date ts = (Date) memoTime.get(name);
+        
+        if(ts == null || new Date().getTime() - ts.getTime() > memoInterval) {
+            memoTime.put(name, new Date());
+            
+            Object o = lookup(name);
+            
+            memo.put(name, o);
+            
+            return o;
+        }
+        else {
+            return memo.get(name);
+        }
+    }
+
+    public static Object lookup(final String name)
+@
+
+
+1.1.2.8
+log
+@changed logging level for optional entries to finest from warning;
+sprinkled finals
+@
+text
+@d114 1
+a114 1
+        catch(final NamingException ne) {
+d134 1
+a134 1
+        catch(final NamingException ne) {
+d154 1
+a154 1
+        catch(final NamingException ne) {
+d167 1
+a167 1
+
+d171 1
+a171 1
+        // NOTE: we don't care much about concurrency; worst case,
+d173 2
+a174 2
+        final Date ts = (Date) memoTime.get(name);
+
+d177 3
+a179 3
+
+            final Object o = lookup(name);
+
+d181 1
+a181 1
+
+d193 1
+a193 1
+            final InitialContext context = new InitialContext();
+d196 3
+a198 5
+        catch(final NamingException ne) {
+            // entries are optional; if one is missing, record the
+            // fact without fuss
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Env entry \"" + name + "\" not defined.");
+@
+
+
+1.1.2.9
+log
+@added getContinuationTtl; added more exception handling to protect
+against badly configured env-entries
+@
+text
+@a81 5
+    public static long getContinuationTtl()
+    {
+        return lookupLong("siscweb/continuation-ttl", 1200);
+    }
+
+d92 1
+a92 1
+    public static long getContinuationGroupCreationInterval()
+d94 1
+a94 1
+        return lookupInt("siscweb/continuation-group-creation-interval", 0L);
+d97 1
+a97 1
+    public static long getContinuationCleanupInterval()
+d99 1
+a99 1
+        return lookupLong("siscweb/continuation-cleanup-interval", 30000L);
+a120 7
+        catch(final Exception e) {
+            if(Logger.logger.isLoggable(Level.WARNING)) {
+                Logger.logger.finest("Error retrieving " + name + ". Using value : " + defaultValue);
+            }
+
+            return defaultValue;
+        }
+a140 34
+        catch(final Exception e) {
+            if(Logger.logger.isLoggable(Level.WARNING)) {
+                Logger.logger.finest("Error retrieving " + name + ". Using value : " + defaultValue);
+            }
+
+            return defaultValue;
+        }
+    }
+
+    public static long lookupLong(final String name, final long defaultValue)
+    {
+        try {
+            final long value = ((Long) lookupMemoized(name)).intValue();
+
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Looked up " + name + " : " + value);
+            }
+
+            return value;
+        }
+        catch(final NamingException ne) {
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Using default value " + name + " : " + defaultValue);
+            }
+
+            return defaultValue;
+        }
+        catch(final Exception e) {
+            if(Logger.logger.isLoggable(Level.WARNING)) {
+                Logger.logger.finest("Error retrieving " + name + ". Using value : " + defaultValue);
+            }
+
+            return defaultValue;
+        }
+a160 7
+        catch(final Exception e) {
+            if(Logger.logger.isLoggable(Level.WARNING)) {
+                Logger.logger.finest("Error retrieving " + name + ". Using value : " + defaultValue);
+            }
+
+            return defaultValue;
+        }
+@
+
+
+1.1.2.10
+log
+@fixed typo
+@
+text
+@d99 1
+a99 1
+        return lookupInt("siscweb/continuation-group-creation-interval", 0);
+@
+
+

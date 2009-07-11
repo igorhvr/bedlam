@@ -1,0 +1,109 @@
+head	1.1;
+branch	1.1.1;
+access;
+symbols
+	start:1.1.1.1 rel-0-1-dev:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches;
+next	1.1.1.2;
+
+1.1.1.2
+date	2005.02.17.01.08.27;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@(define-java-classes
+ (<secure-random> |java.security.SecureRandom|)
+ (<message-digest> |java.security.MessageDigest|))
+
+(define-generic-java-methods digest get-bytes get-instance next-int)
+
+
+(define (extract-k-hash url)
+  (let ((idx (string-index url #\;)))
+    (if idx
+        (string-drop url (+ 1 idx))
+        #f)))
+
+(define (remove-k-hash url)
+  (let ((idx (string-index url #\;)))
+    (if idx
+        (string-take url idx)
+        url)))
+
+(define (make-k-url url k-hash)
+  (string-append url ";" k-hash))
+
+
+(define prng)
+(define sha)
+  
+(define (get-random-hash)
+  (byte-array->hex-string
+   (digest sha
+           (get-bytes (->jstring
+                       (number->string
+                        (get-random-number prng)))))))
+
+(define (get-random-number secure-random)
+  (->number (next-int secure-random)))
+
+
+(define (byte-array->hex-string a)
+  (let loop ((hex-list (map (lambda (b)
+                              (number->string (abs (->number b)) 16))
+                            (->list a))))
+    (if (null? hex-list)
+        ""
+        (string-append (if (= 1 (string-length (car hex-list)))
+                           (string-append "0" (car hex-list))
+                           (car hex-list))
+                       (loop (cdr hex-list))))))
+
+
+(set! prng (get-instance
+            (java-null <secure-random>)
+            (->jstring "SHA1PRNG")))
+
+(set! sha (get-instance
+           (java-null <message-digest>)
+           (->jstring "SHA-1")))
+@
+
+
+1.1.1.1
+log
+@initial import
+@
+text
+@@
+
+
+1.1.1.2
+log
+@did away with the -inc business; i think it was a bad idea
+@
+text
+@@
+

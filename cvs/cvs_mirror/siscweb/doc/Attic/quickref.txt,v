@@ -1,0 +1,606 @@
+head	1.3;
+access;
+symbols
+	rel-0-1-fix-1:1.2.2.1
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	rel-0-1-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2005.06.19.04.53.02;	author acolomba;	state dead;
+branches;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.52;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.03.28.00.49.00;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.03.28.00.49.00;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.04.02.01.35.36;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2005.04.06.02.45.47;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.04.07.02.09.41;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.06.05.21.20.36;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@merged from rel-0-2-dev
+@
+text
+@SISCWEB QUICK REFERENCE
+
+This document lists the main modules in SISCweb, the functions
+provided, and a brief description of their functionality. The reader
+not familiar with any other scheme web framework might want to start
+from:
+
+http://docs.plt-scheme.org/web-server/web-server.html, or
+http://www.scsh.net/resources/sunet-manual/man-Z-H-8.html#node_chap_6
+
+Modules can be loaded by issuing:
+
+(require-library 'module-name)
+(import module-name)
+
+
+
+PUBLISHING
+----------
+module: siscweb/publish
+
+This module contains procedures to publish code to virtual paths of an
+application server withing the hierarchy of a siscweb
+application. Publishing can be done interactively at the server-side
+REPL or in the web.xml file. (See examples/WEB-INF/web.xml.)
+
+
+procedure: (publish <pattern> <procedure>) => <undefined>
+           (publish <pattern> <symbol>) => <undefined>
+
+Publishes a procedure to the given pattern. When a request is
+received, the path-info section of the request URL is compared to each
+published pattern. If a match is found, the corresponding procedure is
+invoked. If a symbol is passed instead of a procedure, the symbol is
+resolved every time to a procedure; this is useful during development,
+as it allows one to redifine the published procedure without having to
+republish it.
+
+Patterns use wildcards and double-wildcards between slashes, such as
+in "/hello/*" or "/hello/**/world". The first pattern matches requests
+such as "/hello/there", "/hello/", or even "/hello"; the second
+pattern matches "/hello/world" as well as
+"hello/what/a/wonderful/world/".
+
+
+procedure: (unpublish <pattern>) => <undefined>
+
+Removes a previously published procedure at the given pattern. The
+pattern passed to unpublish must be identical to the one used to
+publish.
+
+
+procedure: (unpublish-all) => <undefined>
+
+Removes all published procedures.
+
+
+procedure: (get-published <string>) => <procedure>/#f
+
+Returns the procedure published at the pattern matching <string>, or
+#f if none is found.
+
+
+procedure: (get-all-published) => alist
+
+Returns an association list containing all (<pattern>
+<procedure>/<symbol>) pairs, or '() if no procedures are published.
+
+
+procedure: (publish-bulk <alist>) => <undefined>
+
+Given a list of (<pattern> <procedure>/<symbol>) pairs, publishes all
+the given procedures or symbols. (publish-bulk (get-all-published))
+would republish everything that is already published.
+
+
+
+HTML
+----
+module: siscweb/html
+
+This module provides simple procedures to send HTML content to the
+browser. HTML documents are represented in the SXML syntax, and
+include a few special "tags" to assist with continuation-based
+programming.
+
+
+procedure: (send-html/suspend (lambda (k-url) <sxml>)) => <request>
+
+Sends the given SXML to the browser in the form of HTML and suspends
+execution. When the browser submits a request, send-html/suspend
+returns the browser request. The request is currently a J2EE request
+object, but this is subject to change.
+
+
+procedure: (send-html/finish <sxml>) => does not return
+
+Clears the continuation table, sends the given sxml to the browser as
+HTML, and stops.
+
+
+procedure: (send-html/forward (lambda (k-url) <sxml>)) => <request>
+
+Like send-html/suspend but clears the continuation table first.
+
+
+procedure: (send-html/back <sxml>)
+
+Like send-html/finish but does not clear the continuation table.
+
+
+The <sxml> in all cases is an SXML representation of an HTML document
+such as:
+
+`(html
+   (head (title "Page Title")
+   (body
+     (a (@@ (href ...
+     (form (@@ (action ...
+
+In the case of send-html/suspend and send-html/forward, besides the
+known uses of the k-url (i.e. specifying the k-url for hyperlinks and
+form actions), a special "tag" url-bindings can be used in the form:
+
+    (url-bindings <alist> <a href body>)
+
+This form will generate an href link corresponding to a continuation
+that places the bindings contained in the alist in the request object
+returned by send-html/suspend or send-html/forward. An example of its
+usage can be found in the wiki example. NOTE: Using url-bindings
+currently causes session serialization problems. This will be solved
+in the next release or so.
+
+All four send-html/* procedures accept the special "tag" url-dispatch:
+
+    (url-dispatch <procedure> <a href body>)
+
+The link generated by this form will correspond to a continuation that
+invokes the given <procedure>, thus abandoning the original flow of
+execution (e.g. this is a GOTO). The wiki provides an example of the
+usage of url-dispatch as well.
+
+
+BINDINGS
+--------
+module: siscweb/bindings
+
+This set of procedures assists developers in obtaining values of
+parameters passed in a request.
+
+
+procedure: (get-bindings <request>) => <bindings>
+
+Given a request object (such as that returned by the send-html/*
+procedures), this procedure returns an object representing the
+parameter key-value pairs.
+
+
+procedure: (exists-binding? <name> <bindings>) => #t/#f
+
+Given a <name> as a string or symbol, it returns a boolean indicating
+whether <name> is a parameter contained in the request object.
+
+
+procedure: (extract-single-binding <name> <bindings>) => <string>
+
+Returns the value associated to the given <name> or #f if <name> is
+not present in the request object. If more than a value is associated
+to <name>, only the first one is returned.
+
+
+procedure: (extract-bindings <name> <bindings>) => <list>
+
+Returns a list of strings associated to the <name> in the request
+object or '() if <name> is not present in the request.
+
+
+procedure: (bindings->alist <bindings>) => <alist>
+
+Returns an association list corresponding to the bindings. For each
+name/value pair, the value is always a list of values associated to
+the name (even if only a single value was associated.)
+
+
+syntax: (let-bindings ((<variable> <name>) ...) <bindings> <body>) => undefined
+
+Like (let..) but <variable>s are set to the values corresponding to
+the <name>s in <bindings>. Currently only single bindings are
+supported.
+
+
+
+CONTINUATIONS
+-------------
+module: siscweb/contcentric
+
+This modules provides the basic functions to store and retrieve
+continuations. These functions are subject to change, so we will only
+document one that is simply likely to move to a different module.
+
+
+procedure: (adjust-timeout! <seconds>) => <undefined>
+
+Sets the time to live for the continuations stored from this point
+on. The default is 500 seconds. This function will likely move to a
+different place, and additional expiration strategies will be added.
+
+
+
+(C) 2005 Alessandro Colomba <acolomba@@users.sourceforge.net>
+
+@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@@
+
+
+1.2.4.1
+log
+@merged from rel-0-1-fix-1
+@
+text
+@d3 4
+a6 4
+This document lists the main modules in SISCweb, and provides a brief
+description of their functionality. The reader not familiar with any
+other scheme web framework might want to start from the documentation
+of more mature frameworks:
+d107 1
+a107 1
+procedure: (send-html/back <sxml>) => does not return
+d188 2
+a189 2
+the <name>s in the <bindings> object. Currently only single bindings
+are supported.
+d197 1
+a197 1
+This module provides the basic functions to store and retrieve
+d199 1
+a199 1
+document one, which however is likely to move to a different module.
+@
+
+
+1.2.4.2
+log
+@removed; content moved to the docbook manual
+@
+text
+@@
+
+
+1.2.2.1
+log
+@misc fixes
+@
+text
+@d3 4
+a6 4
+This document lists the main modules in SISCweb, and provides a brief
+description of their functionality. The reader not familiar with any
+other scheme web framework might want to start from the documentation
+of more mature frameworks:
+d107 1
+a107 1
+procedure: (send-html/back <sxml>) => does not return
+d188 2
+a189 2
+the <name>s in the <bindings> object. Currently only single bindings
+are supported.
+d197 1
+a197 1
+This module provides the basic functions to store and retrieve
+d199 1
+a199 1
+document one, which however is likely to move to a different module.
+@
+
+
+1.1
+log
+@file quickref.txt was initially added on branch rel-0-1-dev.
+@
+text
+@d1 211
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 193
+SISCWEB QUICK REFERENCE
+
+This document lists the main modules in SISCweb, the functions
+provided, and a brief description of their functionality. The reader
+not familiar with any other scheme web framework might want to start
+from:
+
+http://docs.plt-scheme.org/web-server/web-server.html, or
+http://www.scsh.net/resources/sunet-manual/man-Z-H-8.html#node_chap_6
+
+Modules can be loaded by issuing:
+
+(require-library 'module-name)
+(import module-name)
+
+
+
+PUBLISHING
+----------
+module: siscweb/publish
+
+This module contains procedures to publish code to paths inside a
+siscweb application. Publishing can be done interactively at the
+server-side REPL or in the web.xml file. (See examples/WEB-INF/web.xml
+for examples.)
+
+
+procedure: (publish <pattern> <procedure>) => <undefined>
+           (publish <pattern> <symbol>) => <undefined>
+
+Publishes a procedure to the given pattern. When a request is
+received, the path-info section of the request URL is compared to each
+published pattern. If a match is found, the corresponding procedure is
+invoked. If a symbol is passed instead of a procedure, the symbol is
+resolved every time to a procedure; this is useful during development,
+as it allows one to redifine the published procedure without having to
+republish it.
+
+Patterns use wildcards and double-wildcards between slashes, such as
+in "/hello/*" or "/hello/**/world". The first pattern matches requests
+such as "/hello/there", "/hello/", or even "/hello"; the second
+pattern would match "/hello/world" as well as
+"hello/what/a/wonderful/world/".
+
+
+procedure: (unpublish <pattern>) => <undefined>
+
+Removes a previously published procedure at the given pattern. The
+pattern passed to unpublish must be identical to that used to publish.
+
+
+procedure: (unpublish-all) => <undefined>
+
+Removes all published procedures.
+
+
+procedure: (get-published <string>) => <procedure>/#f
+
+Returns the procedure published at the pattern matching <string>, or
+#f if none is found.
+
+
+procedure: (get-all-published) => alist
+
+Returns an association list containing all (<pattern>
+<procedure>/<symbol>) pairs, or '() if no procedures are published.
+
+
+procedure: (publish-bulk <alist>) => <undefined>
+
+Given a list of (<pattern> <procedure>/<symbol>) pairs, publishes all
+the given procedures or symbols. (publish-bulk (get-all-published))
+would republish everything that is already published.
+
+
+
+HTML
+----
+module: siscweb/html
+
+This module provides simple procedures to send HTML content to the
+browser. HTML documents are represented in the SXML syntax, and
+include a few special "tags" to assist with continuation-based
+programming.
+
+
+procedure: (send-html/suspend (lambda (k-url) <sxml>)) => <request>
+
+Sends the given SXML to the browser in the form of HTML and suspends
+execution. When the browser submits a request, send-html/suspend
+returns the browser request. The request is currently a J2EE request
+object, but this is subject to change.
+
+
+procedure: (send-html/finish <sxml>) => does not return
+
+Clears the continuation table, sends the given sxml to the browser as
+HTML, and stops.
+
+
+procedure: (send-html/forward (lambda (k-url) <sxml>)) => <request>
+
+Like send-html/suspend but clears the continuation table first.
+
+
+procedure: (send-html/back <sxml>)
+
+Like send-html/finish but does not clear the continuation table.
+
+
+The <sxml> in all cases is an SXML representation of an HTML document
+such as:
+
+`(html
+   (head (title "Page Title")
+   (body
+     (a (@@ (href ...
+     (form (@@ (action ...
+
+In the case of send-html/suspend and send-html/forward, besides the
+known uses of the k-url (i.e. specifying the k-url for hyperlinks and
+form actions), a special "tag" url-bindings can be used in the form:
+
+    (url-bindings <alist> <a href body>)
+
+This form will generate an href link corresponding to a continuation
+that places the bindings contained in the alist in the request object
+returned by send-html/suspend or send-html/forward. An example of its
+usage can be found in the wiki example. NOTE: Using url-bindings
+currently causes session serialization problems. This will be solved
+in the next release or so.
+
+All four send-html/* procedures accept the special "tag" url-dispatch:
+
+    (url-dispatch <procedure> <a href body>)
+
+The link generated by this form will correspond to a continuation that
+invokes the given <procedure>, thus abandoning the original flow of
+execution (e.g. this is a GOTO). The wiki provides an example of the
+usage of url-dispatch as well.
+
+
+BINDINGS
+--------
+module: siscweb/bindings
+
+This set of procedures assists developers in obtaining values of
+parameters passed in a request.
+
+
+procedure: (get-bindings <request>) => <bindings>
+
+Given a request object (such as that returned by the send-html/*
+procedures), it returns an object representing the parameter key-value
+pairs.
+
+
+procedure: (exists-binding? <name> <bindings>) => #t/#f
+
+Given a <name> as a string or symbol, it returns a boolean indicating
+whether <name> is a parameter contained in the request object.
+
+
+procedure: (extract-single-binding <name> <bindings>) => <string>
+
+Returns the value associated to the given <name> or #f if <name> is
+not present in the request object. If more than a value is associated
+to <name>, only the first one is returned.
+
+
+procedure: (extract-bindings <name> <bindings>) => <list>
+
+Returns a list of strings associated to the <name> in the request
+object or '() if <name> is not present in the request.
+
+
+procedure: (bindings->alist <bindings>) => <alist>
+
+Returns an association list corresponding to the bindings. For each
+name/value pair, the value is always a list of values associated to
+the name (even if only a single value was associated.)
+
+
+syntax: (let-bindings ((<variable> <name>) ...) <bindings> <body>)
+
+Like (let..) but <variable>s are set to the values corresponding to
+the <name>s in <bindings>. Currently only single bindings are
+supported.
+
+
+
+(C) 2005 Alessandro Colomba <acolomba@@users.sourceforge.net>
+
+@
+
+
+1.1.2.2
+log
+@edited wording, etc.
+@
+text
+@d22 4
+a25 4
+This module contains procedures to publish code to virtual paths of an
+application server withing the hierarchy of a siscweb
+application. Publishing can be done interactively at the server-side
+REPL or in the web.xml file. (See examples/WEB-INF/web.xml.)
+d42 1
+a42 1
+pattern matches "/hello/world" as well as
+d49 1
+a49 2
+pattern passed to unpublish must be identical to the one used to
+publish.
+d154 2
+a155 2
+procedures), this procedure returns an object representing the
+parameter key-value pairs.
+d184 1
+a184 1
+syntax: (let-bindings ((<variable> <name>) ...) <bindings> <body>) => undefined
+a188 17
+
+
+
+CONTINUATIONS
+-------------
+module: siscweb/contcentric
+
+This modules provides the basic functions to store and retrieve
+continuations. These functions are subject to change, so we will only
+document one that is simply likely to move to a different module.
+
+
+procedure: (adjust-timeout! <seconds>) => <undefined>
+
+Sets the time to live for the continuations stored from this point
+on. The default is 500 seconds. This function will likely move to a
+different place, and additional expiration strategies will be added.
+@
+
+

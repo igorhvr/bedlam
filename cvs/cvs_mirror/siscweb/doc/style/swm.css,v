@@ -1,0 +1,188 @@
+head	1.3;
+access;
+symbols
+	rel-0-6-dev:1.3.0.4
+	rel-0-5-fix:1.3.0.2
+	rel-0-5:1.3
+	rel-0-5-dev-safe-frames:1.2.0.14
+	Root_rel-0-5-dev-safe-frames:1.2
+	rel-0-4-fix-0:1.2
+	rel-0-5-dev:1.2.0.12
+	rel-0-4-fix:1.2.0.10
+	rel-0-3-fix-3:1.2
+	rel-0-3-fix-2:1.2
+	rel-0-4-dev-sisc-1-11:1.2
+	rel-0-3-fix-1:1.2
+	rel-0-4-dev:1.2.0.8
+	rel-0-3-fix:1.2.0.6
+	rel-0-3:1.2
+	rel-0-3-dev-1:1.2
+	rel-0-2-fix-2:1.2
+	rel-0-2-fix-1:1.2
+	rel-0-2-fix:1.2.0.2
+	rel-0-3-dev:1.2.0.4
+	rel-0-2:1.2
+	rel-0-2-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2007.04.12.03.51.15;	author acolomba;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2005.06.19.04.53.02;	author acolomba;	state Exp;
+branches
+	1.2.12.1;
+next	1.1;
+
+1.1
+date	2005.06.05.18.07.58;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.06.05.18.07.58;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.12.1
+date	2007.04.11.03.15.18;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@merged from rel-0-5-dev
+@
+text
+@.methodname { font-weight: bold }
+.parameter { font-style: italic }
+.type { }
+
+a:active { color: #ff0000; }
+a:hover { color: #000000; }
+a:link { text-decoration: none; color: #0000ff; }
+a:unvisited { text-decoration: none; color: #0000ff; }
+a:visited { text-decoration: none; color: #0000ff; }
+
+html {
+  font-size: 100.01%;
+}
+
+body {
+  background-color: #ffffff;
+  color: #333333;
+  font-size: 1em;
+  line-height: 1.4em;
+  padding-left: 3%;
+  padding-right: 3%;
+}
+
+
+h1, h2 { color: #009966; }
+
+h3, h4, h5 { color: #003399; }
+
+
+ul { list-style-type: square; }
+
+.programlisting {
+  background-color: #fafafa;
+  border-style: dashed;
+  border-width: 1px;
+#  font-family: monospace;
+  padding: 1%;
+}
+@
+
+
+1.2
+log
+@merged from rel-0-2-dev
+@
+text
+@d1 38
+a38 3
+.METHODNAME	{ font-weight: bold }
+.PARAMETER	{ font-style: italic }
+.TYPE		{ }
+@
+
+
+1.2.12.1
+log
+@prettyfied
+@
+text
+@d1 3
+a3 38
+.methodname { font-weight: bold }
+.parameter { font-style: italic }
+.type { }
+
+a:active { color: #ff0000; }
+a:hover { color: #000000; }
+a:link { text-decoration: none; color: #0000ff; }
+a:unvisited { text-decoration: none; color: #0000ff; }
+a:visited { text-decoration: none; color: #0000ff; }
+
+html {
+  font-size: 100.01%;
+}
+
+body {
+  background-color: #ffffff;
+  color: #333333;
+  font-size: 1em;
+  line-height: 1.4em;
+  padding-left: 3%;
+  padding-right: 3%;
+}
+
+
+h1, h2 { color: #009966; }
+
+h3, h4, h5 { color: #003399; }
+
+
+ul { list-style-type: square; }
+
+.programlisting {
+  background-color: #fafafa;
+  border-style: dashed;
+  border-width: 1px;
+#  font-family: monospace;
+  padding: 1%;
+}
+@
+
+
+1.1
+log
+@file swm.css was initially added on branch rel-0-2-dev.
+@
+text
+@d1 3
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 3
+.METHODNAME	{ font-weight: bold }
+.PARAMETER	{ font-style: italic }
+.TYPE		{ }
+@
+

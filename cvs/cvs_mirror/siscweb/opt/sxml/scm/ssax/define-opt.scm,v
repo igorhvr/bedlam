@@ -1,0 +1,215 @@
+head	1.2;
+access;
+symbols
+	rel-0-6-dev:1.2.0.10
+	rel-0-5-fix:1.2.0.8
+	rel-0-5:1.2
+	rel-0-5-dev-safe-frames:1.2.0.6
+	Root_rel-0-5-dev-safe-frames:1.2
+	rel-0-4-fix-0:1.2
+	rel-0-5-dev:1.2.0.4
+	rel-0-4-fix:1.2.0.2
+	rel-0-3-fix-3:1.1.4.2
+	rel-0-3-fix:1.1.0.4
+	rel-0-4-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2006.09.03.01.42.23;	author acolomba;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.02.28.01.38.58;	author acolomba;	state dead;
+branches
+	1.1.2.1
+	1.1.4.1;
+next	;
+
+1.1.2.1
+date	2006.02.28.01.38.58;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.1.4.1
+date	2006.02.28.01.38.58;	author acolomba;	state dead;
+branches;
+next	1.1.4.2;
+
+1.1.4.2
+date	2006.04.15.15.55.24;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@merged from rel-0-4-dev
+@
+text
+@  (define-syntax define-opt-helper
+    (syntax-rules (optional)
+      ((define-opt-helper name ((optional (opt-arg opt-init))) (args ...) body ...)
+       (define name
+	 (lambda (args ... . rest)
+	   (let ((opt-arg (if (null? rest)
+			      opt-init
+			      (car rest))))
+	     body ...))))
+      ((define-opt-helper name ((optional (opt-arg1 opt-init1) (opt-arg2 opt-init2)))
+	 (args ...) body ...)
+       (define name
+	 (lambda (args ... . rest)
+	   (let ((opt-arg1 (if (null? rest)
+			       opt-init1
+			       (car rest)))
+		 (opt-arg2 (if (or (null? rest) (null? (cdr rest)))
+			       opt-init2
+			       (cadr rest))))
+	     body ...))))
+      ((define-opt-helper name
+	 ((optional (opt-arg1 opt-init1) (opt-arg2 opt-init2) (opt-arg3 opt-init3)))
+	 (args ...) body ...)
+       (define name
+	 (lambda (args ... . rest)
+	   (let ((opt-arg1 (if (null? rest)
+			       opt-init1
+			       (car rest)))
+		 (opt-arg2 (if (or (null? rest) (null? (cdr rest)))
+			       opt-init2
+			       (cadr rest)))
+		 (opt-arg3 (if (or (null? rest) (null? (cdr rest)) (null? (cddr rest9)))
+			       opt-init3
+			       (caddr rest))))
+	     body ...))))
+      ((define-opt-helper name (arg1 argn ...) (args ...) body ...)
+       (define-opt-helper name (argn ...) (args ... arg1) body ...))))
+
+  (define-syntax define-opt
+    (syntax-rules (optional)
+      ((define-opt (name args ... ) body ...)
+       (define-opt-helper name (args ...) () body ...))))@
+
+
+1.1
+log
+@file define-opt.scm was initially added on branch rel-0-4-dev.
+@
+text
+@d1 42
+@
+
+
+1.1.4.1
+log
+@file define-opt.scm was added on branch rel-0-3-fix on 2006-04-15 15:55:24 +0000
+@
+text
+@@
+
+
+1.1.4.2
+log
+@merged from rel-0-4-dev
+@
+text
+@a0 42
+  (define-syntax define-opt-helper
+    (syntax-rules (optional)
+      ((define-opt-helper name ((optional (opt-arg opt-init))) (args ...) body ...)
+       (define name
+	 (lambda (args ... . rest)
+	   (let ((opt-arg (if (null? rest)
+			      opt-init
+			      (car rest))))
+	     body ...))))
+      ((define-opt-helper name ((optional (opt-arg1 opt-init1) (opt-arg2 opt-init2)))
+	 (args ...) body ...)
+       (define name
+	 (lambda (args ... . rest)
+	   (let ((opt-arg1 (if (null? rest)
+			       opt-init1
+			       (car rest)))
+		 (opt-arg2 (if (or (null? rest) (null? (cdr rest)))
+			       opt-init2
+			       (cadr rest))))
+	     body ...))))
+      ((define-opt-helper name
+	 ((optional (opt-arg1 opt-init1) (opt-arg2 opt-init2) (opt-arg3 opt-init3)))
+	 (args ...) body ...)
+       (define name
+	 (lambda (args ... . rest)
+	   (let ((opt-arg1 (if (null? rest)
+			       opt-init1
+			       (car rest)))
+		 (opt-arg2 (if (or (null? rest) (null? (cdr rest)))
+			       opt-init2
+			       (cadr rest)))
+		 (opt-arg3 (if (or (null? rest) (null? (cdr rest)) (null? (cddr rest9)))
+			       opt-init3
+			       (caddr rest))))
+	     body ...))))
+      ((define-opt-helper name (arg1 argn ...) (args ...) body ...)
+       (define-opt-helper name (argn ...) (args ... arg1) body ...))))
+
+  (define-syntax define-opt
+    (syntax-rules (optional)
+      ((define-opt (name args ... ) body ...)
+       (define-opt-helper name (args ...) () body ...))))@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 42
+  (define-syntax define-opt-helper
+    (syntax-rules (optional)
+      ((define-opt-helper name ((optional (opt-arg opt-init))) (args ...) body ...)
+       (define name
+	 (lambda (args ... . rest)
+	   (let ((opt-arg (if (null? rest)
+			      opt-init
+			      (car rest))))
+	     body ...))))
+      ((define-opt-helper name ((optional (opt-arg1 opt-init1) (opt-arg2 opt-init2)))
+	 (args ...) body ...)
+       (define name
+	 (lambda (args ... . rest)
+	   (let ((opt-arg1 (if (null? rest)
+			       opt-init1
+			       (car rest)))
+		 (opt-arg2 (if (or (null? rest) (null? (cdr rest)))
+			       opt-init2
+			       (cadr rest))))
+	     body ...))))
+      ((define-opt-helper name
+	 ((optional (opt-arg1 opt-init1) (opt-arg2 opt-init2) (opt-arg3 opt-init3)))
+	 (args ...) body ...)
+       (define name
+	 (lambda (args ... . rest)
+	   (let ((opt-arg1 (if (null? rest)
+			       opt-init1
+			       (car rest)))
+		 (opt-arg2 (if (or (null? rest) (null? (cdr rest)))
+			       opt-init2
+			       (cadr rest)))
+		 (opt-arg3 (if (or (null? rest) (null? (cdr rest)) (null? (cddr rest9)))
+			       opt-init3
+			       (caddr rest))))
+	     body ...))))
+      ((define-opt-helper name (arg1 argn ...) (args ...) body ...)
+       (define-opt-helper name (argn ...) (args ... arg1) body ...))))
+
+  (define-syntax define-opt
+    (syntax-rules (optional)
+      ((define-opt (name args ... ) body ...)
+       (define-opt-helper name (args ...) () body ...))))@
+

@@ -1,0 +1,677 @@
+head	1.4;
+access;
+symbols
+	rel-0-3-dev-1:1.3.4.1
+	rel-0-2-fix-2:1.3.2.1
+	rel-0-2-fix-1:1.3.2.1
+	rel-0-2-fix:1.3.0.2
+	rel-0-3-dev:1.3.0.4
+	rel-0-2:1.3
+	rel-0-1-fix-1:1.2
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	rel-0-1-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2005.11.25.20.46.38;	author acolomba;	state dead;
+branches;
+next	1.3;
+
+1.3
+date	2005.06.19.03.03.51;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.52;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.03.14.03.08.46;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.03.14.03.08.46;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.03.18.13.32.10;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2005.03.19.14.34.21;	author acolomba;	state Exp;
+branches;
+next	1.1.2.4;
+
+1.1.2.4
+date	2005.03.19.15.18.52;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5;
+
+1.1.2.5
+date	2005.03.19.17.36.26;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.05.14.23.13.35;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.05.15.16.22.30;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2005.07.10.20.04.00;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2005.07.04.02.31.29;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2;
+
+1.3.4.2
+date	2005.10.24.03.43.50;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@merged from rel-0-3-dev
+@
+text
+@/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+package siscweb.contcentric;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
+
+import siscweb.web.SessionTracker;
+
+
+public class ContinuationManager
+{
+    public static ContinuationManager getInstance(ServletContext context)
+    {
+        synchronized(context) {
+
+            ContinuationManager continuationManager = (ContinuationManager)
+                context.getAttribute("continuation-manager");
+
+            if(continuationManager == null) {
+                continuationManager = new ContinuationManager();
+
+                context.setAttribute("continuation-manager",
+                                     continuationManager);
+            }
+
+            return continuationManager;
+        }
+    }
+
+    public static void removeInstance(ServletContext context)
+    {
+        synchronized(context) {
+            context.removeAttribute("continuation-manager");
+        }
+    }
+
+
+    private ContinuationManager()
+    { }
+
+
+
+    private final HashMap continuationTables = new HashMap();
+
+    public void register(ContinuationTable ct)
+    {
+        this.continuationTables.put(ct.getID(), ct);
+    }
+
+
+    public void unregister(ContinuationTable ct)
+    {
+        this.continuationTables.remove(ct.getID());
+    }
+
+
+    public int purgeExpiredContinuations()
+    {
+        int n = 0;
+
+        for(Iterator i = new ArrayList(this.continuationTables.keySet()).iterator(); i.hasNext();) {
+            String sid = (String) i.next();
+            ContinuationTable ct = (ContinuationTable) this.continuationTables.get(sid);
+
+            // the table may have been unregistered in the meanwhile
+            if(ct != null) {
+                n += ct.purgeExpired();
+            }
+        }
+
+        return n;
+    }
+
+
+    public ContinuationTable getContinuationTable(String sid)
+    {
+        HttpSession session = SessionTracker.get(sid);
+
+        return session != null
+             ? ContinuationTable.getInstance(session)
+             : null;
+    }
+}
+@
+
+
+1.3
+log
+@merged from rel-0-2-dev
+@
+text
+@@
+
+
+1.3.2.1
+log
+@merged from rel-0-3-dev
+@
+text
+@a81 7
+    public HashMap getAllTables()
+    {
+        return this.continuationTables;
+    }
+
+
+
+a115 4
+        // this is a weird bugfix; sometimes the session is
+        // not registered, so we just try to get the ct
+        // from the map directly; if that fails, well, not
+        // much else we can do
+d118 1
+a118 1
+             : (ContinuationTable) this.continuationTables.get(sid);
+@
+
+
+1.3.4.1
+log
+@patch bugfix for cases in which the session does exist, but it was not
+inserted in the SessionTracker; we should look more into this
+@
+text
+@a81 7
+    public HashMap getAllTables()
+    {
+        return this.continuationTables;
+    }
+
+
+
+a115 4
+        // this is a weird bugfix; sometimes the session is
+        // not registered, so we just try to get the ct
+        // from the map directly; if that fails, well, not
+        // much else we can do
+d118 1
+a118 1
+             : (ContinuationTable) this.continuationTables.get(sid);
+@
+
+
+1.3.4.2
+log
+@removed ContinuationManager, extracted interface to ContinuationStore,
+moved code to SessionContinuationStore
+@
+text
+@@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@a40 1
+import java.util.logging.Logger;
+d42 4
+d52 1
+d80 1
+a80 1
+    final HashMap continuationTables = new HashMap();
+d94 1
+a94 1
+    protected void purgeExpiredContinuations()
+d96 2
+a98 1
+
+a99 1
+
+d102 3
+a104 2
+            if(ct != null) { // the table may have been unregistered in the meanwhile
+                ct.purgeExpired();
+d107 12
+@
+
+
+1.2.4.1
+log
+@is now an HttpSessionListener, so that it can provide a
+ContinuationTable given a session id; also now counts purged
+continuations
+@
+text
+@a42 3
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionListener;
+d44 1
+a44 2
+
+public class ContinuationManager implements HttpSessionListener
+a48 1
+
+d71 1
+a71 3
+    // public because the appserver instantiates
+    // HttpSessionListener objects
+    public ContinuationManager()
+d76 1
+a76 1
+    private final HashMap continuationTables = new HashMap();
+d90 1
+a90 1
+    public int purgeExpiredContinuations()
+a91 2
+        int n = 0;
+
+d97 4
+a100 1
+            n += ct.purgeExpired();
+a101 28
+
+        return n;
+    }
+
+
+    protected static HashMap sessions = new HashMap();
+
+    public void sessionCreated(HttpSessionEvent se)
+    {
+        HttpSession session = se.getSession();
+
+        ContinuationManager.sessions.put(session.getId(), session);
+    }
+
+    public void sessionDestroyed(HttpSessionEvent se)
+    {
+        HttpSession session = se.getSession();
+
+        ContinuationManager.sessions.remove(session.getId());
+    }
+
+
+    public ContinuationTable getContinuationTable(String sid)
+    {
+        return ContinuationManager.sessions.containsKey(sid)
+             ? ContinuationTable.getInstance(
+                   (HttpSession) ContinuationManager.sessions.get(sid))
+             : null;
+@
+
+
+1.2.4.2
+log
+@removed HttpSessionListener i/f; now uses SessionTracker instead;
+fixed a regression bug that could have caused NPEs in race conditions
+@
+text
+@d41 1
+d44 2
+a46 1
+import siscweb.web.SessionTracker;
+d48 1
+a48 2
+
+public class ContinuationManager
+d76 3
+a78 1
+    private ContinuationManager()
+d102 1
+d104 1
+d106 1
+a106 5
+
+            // the table may have been unregistered in the meanwhile
+            if(ct != null) {
+                n += ct.purgeExpired();
+            }
+d113 17
+d132 3
+a134 4
+        HttpSession session = SessionTracker.get(sid);
+
+        return session != null
+             ? ContinuationTable.getInstance(session)
+@
+
+
+1.1
+log
+@file ContinuationManager.java was initially added on branch rel-0-1-dev.
+@
+text
+@d1 103
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 107
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+package siscweb.contcentric;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+
+
+public class ContinuationManager implements Runnable
+{
+    final HashMap continuationTables = new HashMap();
+
+    public void register(String sid, ContinuationTable ct)
+    {
+        this.continuationTables.put(sid, ct);
+    }
+
+
+    public void unregister(String sid)
+    {
+        this.continuationTables.remove(sid);
+    }
+
+
+    protected void removeExpiredContinuations()
+    {
+        for(Iterator i = new ArrayList(this.continuationTables.keySet()).iterator(); i.hasNext();) {
+
+            if(this.isRunning == false) {
+                return;
+            }
+
+            String sid = (String) i.next();
+
+            ContinuationTable ct = (ContinuationTable) this.continuationTables.get(sid);
+
+            // the table may have been unregistered in the meanwhile
+            if(ct != null) {
+                ct.purgeExpired();
+            }
+        }
+    }
+
+    protected transient boolean isRunning = false;
+
+    public void run()
+    {
+    	Thread thisThread = Thread.currentThread();
+
+    	// FIXME: concurrent access
+    	synchronized(thisThread) {
+    		if(this.isRunning == true) {
+    			return;
+    		}
+
+                this.isRunning = true;
+    	}
+
+    	while(this.isRunning) {
+            this.removeExpiredContinuations();
+
+            try {
+                Thread.sleep(10000);
+            }
+            catch(InterruptedException e) { }
+    	}
+    }
+
+    void stop()
+    {
+    	this.isRunning = false;
+    }
+}
+@
+
+
+1.1.2.2
+log
+@better threading
+@
+text
+@d78 1
+a78 1
+    protected volatile boolean isRunning = false;
+d97 1
+a97 1
+                Thread.sleep(60000);
+d103 1
+a103 1
+    public void stop()
+a105 1
+        Thread.currentThread().interrupt();
+@
+
+
+1.1.2.3
+log
+@now uses ContinuationManagerThread
+@
+text
+@a41 1
+import java.util.logging.Logger;
+d43 1
+a43 3
+
+
+public class ContinuationManager // implements Runnable
+d59 1
+a59 1
+    protected void purgeExpiredContinuations()
+d63 4
+d78 1
+a78 3
+
+    /*
+    public volatile Thread thisThread = null;
+d82 7
+a88 1
+        this.thisThread = Thread.currentThread();
+d90 2
+a91 1
+        Logger.getLogger("siscweb.tracing").fine("sleepy" + this.thisThread);
+d93 2
+a94 2
+    	while(this.thisThread == Thread.currentThread()) {
+            this.purgeExpiredContinuations();
+d99 1
+a99 3
+            catch(InterruptedException e) {
+                Logger.getLogger("siscweb.tracing").fine("wooooow");
+            }
+d105 2
+a106 3
+        Thread t = this.thisThread;
+        this.thisThread = null;
+        t.interrupt();
+a107 1
+    */
+@
+
+
+1.1.2.4
+log
+@removed comments
+@
+text
+@d76 30
+@
+
+
+1.1.2.5
+log
+@is now a singleton relative to the servletcontext; changed register()/unregister() signature
+@
+text
+@d41 1
+a42 31
+import javax.servlet.ServletContext;
+
+public class ContinuationManager
+{
+    public static ContinuationManager getInstance(ServletContext context)
+    {
+        synchronized(context) {
+            ContinuationManager continuationManager = (ContinuationManager)
+                context.getAttribute("continuation-manager");
+
+            if(continuationManager == null) {
+                continuationManager = new ContinuationManager();
+
+                context.setAttribute("continuation-manager",
+                                     continuationManager);
+            }
+
+            return continuationManager;
+        }
+    }
+
+    public static void removeInstance(ServletContext context)
+    {
+        synchronized(context) {
+            context.removeAttribute("continuation-manager");
+        }
+    }
+
+
+    private ContinuationManager()
+    { }
+d46 2
+d50 1
+a50 1
+    public void register(ContinuationTable ct)
+d52 1
+a52 1
+        this.continuationTables.put(ct.getID(), ct);
+d56 1
+a56 1
+    public void unregister(ContinuationTable ct)
+d58 1
+a58 1
+        this.continuationTables.remove(ct.getID());
+d70 2
+a71 1
+            if(ct != null) { // the table may have been unregistered in the meanwhile
+@
+
+

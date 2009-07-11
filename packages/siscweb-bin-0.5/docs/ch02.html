@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Chapter 2. Installation</title><link href="siscweb-manual.css" rel="stylesheet" type="text/css" /><meta content="DocBook XSL Stylesheets V1.70.1" name="generator" /><link rel="start" href="index.html" title="SISCweb Manual" /><link rel="up" href="index.html" title="SISCweb Manual" /><link rel="prev" href="ch01.html" title="Chapter 1. Introduction" /><link rel="next" href="ch03.html" title="Chapter 3. Generating content" /></head><body><div class="navheader"><table summary="Navigation header" width="100%"><tr><th align="center" colspan="3">Chapter 2. Installation</th></tr><tr><td align="left" width="20%"><a accesskey="p" href="ch01.html">Prev</a> </td><th align="center" width="60%"> </th><td align="right" width="20%"> <a accesskey="n" href="ch03.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="install" />Chapter 2. Installation</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ch02.html#requirements">Requirements</a></span></dt><dt><span class="section"><a href="ch02.html#components">Components</a></span></dt><dt><span class="section"><a href="ch02.html#configuration">Configuration</a></span></dt><dd><dl><dt><span class="section"><a href="ch02.html#context-parameters">Context Parameters</a></span></dt><dt><span class="section"><a href="ch02.html#adapter-servlet">The Adapter Servlet</a></span></dt><dt><span class="section"><a href="ch02.html#sisc-params">SISC Configuration Parameters</a></span></dt></dl></dd><dt><span class="section"><a href="ch02.html#env-entries">Environment Entries</a></span></dt><dd><dl><dt><span class="section"><a href="ch02.html#env-repl">REPL Entries</a></span></dt><dt><span class="section"><a href="ch02.html#env-logging">Logging Entries</a></span></dt><dt><span class="section"><a href="ch02.html#env-contcentric">Continuation Manager Entries</a></span></dt></dl></dd></dl></div><p>
+    Using <span class="application">SISCweb</span> in web applications is simple matter of including
+    its components in the classpath and making some entries in the
+    <code class="literal">web.xml</code> deployment descriptor.
+  </p><p>
+    First-time users may want to check out the example WAR file
+    (siscweb-examples-[v].war). It can be deployed by simply dropping
+    it into the deployment folder of a J2EE appserver, and can also be
+    used as the starting point for developing a new application.
+  </p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3><p>
+      While the server-side REPL is disabled in the <span class="application">SISCweb</span> examples
+      WAR file available from sourceforge.net, if you build it from
+      sources, a REPL will be bound to the localhost:5156
+      socket. <span class="emphasis"><em>This is a security vulnerability.</em></span>
+      You should make sure to disable this feature if you are
+      concerned about other people on the same host gaining access to
+      a full-fledged REPL.
+    </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="requirements" />Requirements</h2></div></div></div><p>
+      <span class="application">SISCweb</span> requires a J2EE 1.3 application server (Servlet
+      spec. 2.3), Java 1.4 or later, and <span class="application">SISC</span> version 1.15.x or
+      later. <span class="application">SISC</span> version 1.16.x or later is recommended.
+    </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="components" />Components</h2></div></div></div><p>
+      <span class="application">SISCweb</span> is divided into different components:
+
+      <div class="itemizedlist"><ul type="disc"><li><span class="emphasis"><em>siscweb.jar</em></span>: The <span class="application">SISCweb</span> core
+          library manages continuations and provides functions to
+          forward requests to other J2EE component.
+          This is a mandatory component.
+        </li><li><span class="emphasis"><em>siscweb-sxml.jar</em></span>: An add-on library to
+          produce HTML/XHTML/XML pages and Graphviz graphs from SXML
+          notation. (In the future it will also provide
+          "recommended" SXML packages.)
+        </li><li><span class="emphasis"><em>siscweb-sql.jar</em></span>: An add-on library
+          providing a Scheme interface over JDBC. It supports a few
+          database vendors, and more can be easily added through
+          Scheme modules.
+        </li></ul></div>
+
+      The only required component is
+      <code class="literal">siscweb.jar</code>. The desired components should be
+      placed in the context's <code class="literal">WEB-INF/lib</code>.
+    </p><p>
+      The <span class="application">SISC</span> libraries, including the
+      <code class="literal">sisc-heap.jar</code> file, should be also added to
+      the load path. They are found in the <span class="application">SISC</span> binary distribution.
+    </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+        Starting from <span class="application">SISCweb</span> v0.5, the SISC libraries can be placed
+        in a classpath common to multiple contexts (e.g. in an EAR
+        root or in the application server's path).
+      </p><p>
+        The core <code class="literal">siscweb.jar</code> instead MUST be placed
+        in the context's <code class="literal">WEB-INF/lib</code>. While
+        <span class="application">SISCweb</span>'s critical data (e.g. the continuation table) is
+        per-context, the logger and the configuration settings
+        detailed below are (for now) in the Java static scope.
+      </p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="configuration" />Configuration</h2></div></div></div><p>
+      <span class="application">SISCweb</span> requires a couple of context parameters and a listener
+      in order to initialize. Besides that, the
+      <code class="literal">SISCAdapterServlet</code> should be associated to
+      the context path under which <span class="emphasis"><em>sisclets</em></span>
+      (<span class="application">SISC</span> servlets) should be published.
+    </p><p>
+      Optionally, a number of environment entries are used to control
+      various aspects of <span class="application">SISCweb</span>'s behavior and performance.
+    </p><p>
+      Beside <span class="application">SISCweb</span>-specific settings, it is also possible to specify
+      <span class="application">SISC</span> parameters.
+    </p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="context-parameters" />Context Parameters</h3></div></div></div><p>
+        Two servlet context parameters,
+        <code class="literal">siscweb.on-init-sexp</code> and
+        <code class="literal">siscweb.on-destroy-sexp</code>, contain Scheme
+        code executed respectively when the context is initialized and
+        destroyed (i.e. during application server startup and
+        shutdown, as well as during context restarts.)
+      </p><p>
+        The <code class="literal">siscweb.on-init-sexp</code>
+        <span class="emphasis"><em>must</em></span> contain a line to load the
+        <code class="literal">siscweb/sisclet</code> module in the Scheme
+        toplevel. While <span class="application">SISCweb</span> could well do this implicitly, the
+        current setup allows advanced users to substitute the module
+        with an equivalent one.
+      </p><p>
+        The context parameters are read by a the <span class="application">SISCweb</span> J2EE
+        listener, which must also be specified. The example below
+        shows a typical configuration.
+      </p><div class="informalexample"><pre class="programlisting">
+          
+&lt;context-param&gt;
+  &lt;param-name&gt;siscweb.on-init-sexp&lt;/param-name&gt;
+  &lt;param-value&gt;
+    &lt;![CDATA[
+      (require-extension (lib siscweb/sisclet))
+
+    ;; replace round parentheses below with square ones in real life
+    ))&gt;
+  &lt;/param-value&gt;
+&lt;/context-param&gt;
+
+&lt;context-param&gt;
+  &lt;param-name&gt;siscweb.on-destroy-sexp&lt;/param-name&gt;
+  &lt;param-value&gt;
+    &lt;![CDATA[
+      ;; generally nothing to do
+
+    ;; replace round parentheses below with square ones in real life
+    ))&gt;
+  &lt;/param-value&gt;
+&lt;/context-param&gt;
+
+&lt;listener&gt;
+  &lt;listener-class&gt;siscweb.web.SISCInitializer&lt;/listener-class&gt;
+&lt;/listener&gt;
+          
+        </pre></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="adapter-servlet" />The Adapter Servlet</h3></div></div></div><p>
+        A Java adapter servlet allows the mapping of context paths to
+        groups of sisclets. Sisclets are simply Scheme procedures
+        associated through the publish mechanism (see <a href="ch05.html" title="Chapter 5. Publishing Procedures">Chapter 5, <i>Publishing Procedures</i></a>) to paths <span class="emphasis"><em>below</em></span>
+        that of the adapter servlet.
+      </p><p>
+        The adapter servlet accepts two parameters,
+        <code class="literal">on-init-sexp</code> and
+        <code class="literal">on-destroy-sexp</code>, which are invoked when the
+        servlet is initialized and destroyed. As the example below
+        shows, they are typically used to respectively publish and
+        unpublish sisclets.
+      </p><div class="informalexample"><pre class="programlisting">
+          
+&lt;servlet&gt;
+  &lt;servlet-name&gt;examples&lt;/servlet-name&gt;
+  &lt;description&gt;siscweb examples&lt;/description&gt;
+  &lt;servlet-class&gt;siscweb.web.SISCAdapterServlet&lt;/servlet-class&gt;
+  &lt;init-param&gt;
+    &lt;param-name&gt;on-init-sexp&lt;/param-name&gt;
+    &lt;param-value&gt;
+      &lt;![CDATA[
+        ;; NOTE: scm/ is not generally a good place, since it is browsable
+        (class-path-extension-append! '("scm/" "WEB-INF/scm/"))
+
+        (require-extension (lib siscweb/publish))
+        (require-extension (lib examples/hello-world))
+
+        (publish "/hello/*" 'hello-world)
+
+      ;; replace round parentheses below with square ones in real life
+      ))&gt;
+    &lt;/param-value&gt;
+  &lt;/init-param&gt;
+  &lt;init-param&gt;
+    &lt;param-name&gt;on-destroy-sexp&lt;/param-name&gt;
+    &lt;param-value&gt;
+      &lt;![CDATA[
+        (require-extension (lib siscweb/publish))
+
+        (unpublish "/hello/*")
+      ;; replace round parentheses with square in real life
+      ))&gt;
+    &lt;/param-value&gt;
+  &lt;/init-param&gt;
+&lt;/servlet&gt;
+
+&lt;servlet-mapping&gt;
+  &lt;servlet-name&gt;examples&lt;/servlet-name&gt;
+  &lt;url-pattern&gt;/sisclets/*&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+          
+        </pre></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="sisc-params" />SISC Configuration Parameters</h3></div></div></div><p>
+        <span class="application">SISCweb</span> will initialize the <span class="application">SISC</span> interpreter with
+        parameters loaded from the file
+        <code class="literal">WEB-INF/sisc.properties</code> if present.  This
+        is particularly useful for static parameters, but also
+        convenient for dynamic parameters that are not changed by the
+        application. Some often-used settings are:
+      </p><div class="informalexample"><pre class="programlisting">
+          
+; max stack trace in case of errors
+sisc.maxStackTraceDepth = 16
+
+; web prompt
+sisc.replPrompt = "W;&gt; "
+
+; disable in production
+sisc.stackTraceOnError = true
+          
+        </pre></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="env-entries" />Environment Entries</h2></div></div></div><p>
+      Some aspects of <span class="application">SISCweb</span>'s inner workings can be controlled via
+      a number of environment entries. The advantage of environment
+      entries over Java properties or context parameters is that they
+      can be usually changed through the application server's
+      administrative console. This is especially useful because new
+      values for a select environment entries are dynamically
+      picked up within about one minute.
+    </p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="env-repl" />REPL Entries</h3></div></div></div><p>
+        Applications using <span class="application">SISCweb</span> can optionally provide a
+        network-accessible Scheme REPL. This is particularly useful
+        during development, and with precautions it can be an
+        invaluable feature in the deployment environment as well.
+      </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+          The server-side REPL amounts to a no-login shell into a
+          server, therefore it is highly advisable to at least bind it
+          to the local interface only (i.e. localhost).
+        </p><p>
+          The REPL can then be made remotely accessible in a secure
+          manner by establishing an SSH tunnel.
+        </p></div><div class="table"><a id="env-repl-list" /><p class="title"><b>Table 2.1. REPL-related environment entries</b></p><div class="table-contents"><table summary="REPL-related environment entries" border="1"><colgroup><col align="left" /><col align="left" /><col align="left" /></colgroup><thead><tr><th align="left">Name</th><th align="left">Values;Type</th><th align="left">Description</th></tr></thead><tbody><tr><td align="left"><code class="literal">siscweb/repl-p</code></td><td align="left">
+                <code class="literal">true</code>|<code class="literal">false</code>;
+                <code class="literal">java.lang.Boolean</code>
+              </td><td align="left">
+                Whether or not <span class="application">SISCweb</span> should bind a REPL to a
+                network socket. Static, defaults to
+                <code class="literal">false</code>.
+              </td></tr><tr><td align="left"><code class="literal">siscweb/repl-host</code></td><td align="left">
+                IP address (e.g. <code class="literal">127.0.0.1</code>);
+                <code class="literal">java.lang.String</code>
+              </td><td align="left">
+                The network address to which the REPL should be
+                bound. Static, defaults to <code class="literal">null</code>.
+              </td></tr><tr><td align="left"><code class="literal">siscweb/repl-port</code></td><td align="left">
+                Port number (e.g. <code class="literal">5156</code>);
+                <code class="literal">java.lang.Integer</code>
+              </td><td align="left">
+                The port to which the REPL should be bound. Static,
+                defaults to <code class="literal">0</code>.
+              </td></tr></tbody></table></div></div><br class="table-break" /></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="env-logging" />Logging Entries</h3></div></div></div><p>
+        <span class="application">SISCweb</span> logs its internal operations in order to aid
+        troubleshooting.
+      </p><div class="table"><a id="env-repl-list" /><p class="title"><b>Table 2.2. Log-related environment entries</b></p><div class="table-contents"><table summary="Log-related environment entries" border="1"><colgroup><col align="left" /><col align="left" /><col align="left" /></colgroup><thead><tr><th align="left">Name</th><th align="left">Values;Type</th><th align="left">Description</th></tr></thead><tbody><tr><td align="left"><code class="literal">siscweb/logging-level</code></td><td align="left">
+                <code class="literal">SEVERE</code>| <code class="literal">WARNING</code>|
+                <code class="literal">INFO</code>| <code class="literal">CONFIG</code>|
+                <code class="literal">FINE</code>| <code class="literal">FINER</code>|
+                <code class="literal">FINEST</code>;
+                <code class="literal">java.lang.String</code>
+              </td><td align="left">
+                The Java logging level that <span class="application">SISCweb</span> should adopt.
+                Static, defaults to <code class="literal">INFO</code>.
+              </td></tr><tr><td align="left"><code class="literal">siscweb/logging-file</code></td><td align="left">
+                File path (e.g. <code class="literal">%t/siscweb.log</code>);
+                <code class="literal">java.lang.String</code>
+              </td><td align="left">
+                A file path where <span class="application">SISCweb</span> should log its messages.
+                Static, defaults to <code class="literal">null</code>, i.e. it
+                logs to the application server's location.
+              </td></tr><tr><td align="left"><code class="literal">siscweb/logging-limit</code></td><td align="left">
+                <code class="literal">java.lang.Integer</code>
+              </td><td align="left">
+                The maximum number of bytes to write to the log
+                file. Static, defaults to <code class="literal">5000000</code>.
+              </td></tr><tr><td align="left"><code class="literal">siscweb/logging-count</code></td><td align="left">
+                <code class="literal">java.lang.Integer</code>
+              </td><td align="left">
+                The maximum number of log files to rotate. Static,
+                defaults to <code class="literal">1</code>.
+              </td></tr></tbody></table></div></div><br class="table-break" /></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="env-contcentric" />Continuation Manager Entries</h3></div></div></div><p>
+        <span class="application">SISCweb</span> stores and manages the lifecycle of the
+        continuations corresponding to URLs through a pluggable
+        class. This allows storing continuations in the Session object
+        (recommended), databases, flat files, or user-defined storage.
+      </p><div class="table"><a id="env-repl-list" /><p class="title"><b>Table 2.3. Continuation management environment entries</b></p><div class="table-contents"><table summary="Continuation management environment entries" border="1"><colgroup><col align="left" /><col align="left" /><col align="left" /></colgroup><thead><tr><th align="left">Name</th><th align="left">Domain</th><th align="left">Description</th></tr></thead><tbody><tr><td align="left"><code class="literal">siscweb/continuation-ttl</code></td><td align="left">
+                seconds; <code class="literal">java.lang.Long</code>
+              </td><td align="left">
+                New continuations will have the indicated time-to-live
+                unless overridden via the
+                <code class="function">adjust-timeout!</code> procedure.
+                Dynamic, defaults to <code class="literal">1200</code> seconds.
+              </td></tr><tr><td align="left"><code class="literal">siscweb/continuation-cleanup-interval</code></td><td align="left">
+                milliseconds; <code class="literal">java.lang.Long</code>
+              </td><td align="left">
+                <span class="application">SISCweb</span> will remove expired continuations
+                periodically according to the indicated
+                interval. Dynamic, defaults to
+                <code class="literal">30000</code>ms.
+              </td></tr><tr><td align="left"><code class="literal">siscweb/continuation-group-creation-interval</code></td><td align="left">
+                milliseconds; <code class="literal">java.lang.Long</code>
+              </td><td align="left">
+                This parameter can be used to limit the rate at which
+                new continuation groups -- each group corresponds to a
+                request --, are created for each session. A reasonable
+                value will go unnoticed by human users, but assist
+                against basic DoS attacks. Dynamic, defaults to
+                <code class="literal">500</code>ms.
+              </td></tr><tr><td align="left"><code class="literal">siscweb/user-history-size</code></td><td align="left">
+                <code class="literal">java.lang.Integer</code>
+              </td><td align="left">
+                Technically the maximum number of continuation groups
+                stored per user at any given time, in practice it
+                amounts to the number of pages/requests in the user
+                history for which continuations are still stored. If
+                the maximum number is reached, the continuation group
+                expiring the soonest is removed to make room for a new
+                group. This parameter can be used to roughly bound the
+                amount of resources devoted to each user. Dynamic,
+                defaults to <code class="literal">50</code>.
+              </td></tr><tr><td align="left"><code class="literal">siscweb/user-history-size-serialized</code></td><td align="left">
+                <code class="literal">java.lang.Integer</code>
+              </td><td align="left">
+                When a user session is passified, only the indicated
+                number of continuation groups is maintained. Dynamic,
+                defaults to <code class="literal">10</code>.
+              </td></tr></tbody></table></div></div><br class="table-break" /></div></div></div><div class="navfooter"><hr /><table summary="Navigation footer" width="100%"><tr><td align="left" width="40%"><a accesskey="p" href="ch01.html">Prev</a> </td><td align="center" width="20%"> </td><td align="right" width="40%"> <a accesskey="n" href="ch03.html">Next</a></td></tr><tr><td valign="top" align="left" width="40%">Chapter 1. Introduction </td><td align="center" width="20%"><a accesskey="h" href="index.html">Home</a></td><td valign="top" align="right" width="40%"> Chapter 3. Generating content</td></tr></table></div></body></html>

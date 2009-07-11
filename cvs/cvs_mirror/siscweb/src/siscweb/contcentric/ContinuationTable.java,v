@@ -1,0 +1,3123 @@
+head	1.7;
+access;
+symbols
+	rel-0-6-dev:1.7.0.4
+	rel-0-5-fix:1.7.0.2
+	rel-0-5:1.7
+	rel-0-5-dev-safe-frames:1.6.4.4.0.2
+	Root_rel-0-5-dev-safe-frames:1.6.4.4
+	rel-0-4-fix-0:1.6
+	rel-0-5-dev:1.6.0.4
+	rel-0-4-fix:1.6.0.2
+	rel-0-3-fix-3:1.4.2.1
+	rel-0-3-fix-2:1.4.2.1
+	rel-0-4-dev-sisc-1-11:1.4.4.1
+	rel-0-3-fix-1:1.4
+	rel-0-4-dev:1.4.0.4
+	rel-0-3-fix:1.4.0.2
+	rel-0-3:1.4
+	rel-0-3-dev-1:1.3
+	rel-0-2-fix-2:1.3
+	rel-0-2-fix-1:1.3
+	rel-0-2-fix:1.3.0.2
+	rel-0-3-dev:1.3.0.4
+	rel-0-2:1.3
+	rel-0-1-fix-1:1.2
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	rel-0-1-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.7
+date	2007.04.12.03.51.19;	author acolomba;	state Exp;
+branches
+	1.7.2.1
+	1.7.4.1;
+next	1.6;
+
+1.6
+date	2006.09.03.01.42.22;	author acolomba;	state Exp;
+branches
+	1.6.4.1;
+next	1.5;
+
+1.5
+date	2005.11.27.22.32.57;	author acolomba;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.4.2.1
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2005.06.19.03.03.51;	author acolomba;	state Exp;
+branches
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.52;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.03.14.03.08.46;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.03.14.03.08.46;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.03.16.02.18.48;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2005.03.19.14.31.16;	author acolomba;	state Exp;
+branches;
+next	1.1.2.4;
+
+1.1.2.4
+date	2005.03.19.17.39.04;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5;
+
+1.1.2.5
+date	2005.03.20.03.49.54;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.05.14.23.14.06;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.05.17.00.46.54;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2005.10.24.03.41.29;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2;
+
+1.3.4.2
+date	2005.11.21.01.41.01;	author acolomba;	state Exp;
+branches;
+next	1.3.4.3;
+
+1.3.4.3
+date	2005.11.23.02.32.31;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.2.1
+date	2006.02.25.17.12.01;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2005.11.30.03.44.43;	author acolomba;	state Exp;
+branches;
+next	1.4.4.2;
+
+1.4.4.2
+date	2006.06.11.22.35.28;	author acolomba;	state Exp;
+branches;
+next	1.4.4.3;
+
+1.4.4.3
+date	2006.06.17.13.00.46;	author acolomba;	state Exp;
+branches;
+next	1.4.4.4;
+
+1.4.4.4
+date	2006.06.25.13.32.47;	author acolomba;	state Exp;
+branches;
+next	1.4.4.5;
+
+1.4.4.5
+date	2006.07.08.02.32.35;	author acolomba;	state Exp;
+branches;
+next	1.4.4.6;
+
+1.4.4.6
+date	2006.07.08.21.38.40;	author acolomba;	state Exp;
+branches;
+next	1.4.4.7;
+
+1.4.4.7
+date	2006.07.28.03.06.10;	author acolomba;	state Exp;
+branches;
+next	1.4.4.8;
+
+1.4.4.8
+date	2006.08.11.23.29.25;	author acolomba;	state Exp;
+branches;
+next	1.4.4.9;
+
+1.4.4.9
+date	2006.08.24.01.34.02;	author acolomba;	state Exp;
+branches;
+next	1.4.4.10;
+
+1.4.4.10
+date	2006.08.26.02.06.06;	author acolomba;	state Exp;
+branches;
+next	1.4.4.11;
+
+1.4.4.11
+date	2006.08.26.02.57.35;	author acolomba;	state Exp;
+branches;
+next	1.4.4.12;
+
+1.4.4.12
+date	2006.08.27.02.43.11;	author acolomba;	state Exp;
+branches;
+next	1.4.4.13;
+
+1.4.4.13
+date	2006.08.29.03.33.34;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.6.4.1
+date	2007.01.05.05.39.00;	author acolomba;	state Exp;
+branches;
+next	1.6.4.2;
+
+1.6.4.2
+date	2007.01.05.05.45.12;	author acolomba;	state Exp;
+branches;
+next	1.6.4.3;
+
+1.6.4.3
+date	2007.01.08.01.28.38;	author acolomba;	state Exp;
+branches;
+next	1.6.4.4;
+
+1.6.4.4
+date	2007.01.08.03.45.24;	author acolomba;	state Exp;
+branches
+	1.6.4.4.2.1;
+next	1.6.4.5;
+
+1.6.4.5
+date	2007.04.01.23.55.26;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.6.4.4.2.1
+date	2007.03.25.03.36.41;	author acolomba;	state Exp;
+branches;
+next	1.6.4.4.2.2;
+
+1.6.4.4.2.2
+date	2007.04.01.20.35.11;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.7.2.1
+date	2007.09.09.01.59.54;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.7.4.1
+date	2007.10.13.18.49.32;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.7
+log
+@merged from rel-0-5-dev
+@
+text
+@/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005-2006
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+package siscweb.contcentric;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.logging.Level;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionActivationListener;
+import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionBindingListener;
+import javax.servlet.http.HttpSessionEvent;
+
+import sisc.data.Procedure;
+import siscweb.util.Environment;
+import siscweb.util.Logger;
+import siscweb.web.RequestScope;
+
+
+/**
+ * This class represents the table of continuations stored per each
+ * user. Continuations are grouped in <code>ContinuationGroup</code>s,
+ * each grouping continuations created during the same HTTP request.
+ *
+ * @@see siscweb.web.SISCApplicationServlet
+ *
+ */
+public class ContinuationTable
+    implements Serializable,
+               HttpSessionBindingListener, HttpSessionActivationListener
+{
+    private static final long serialVersionUID = 3688505502258902323L;
+
+    private transient String sessionId;
+
+    private ContinuationTable()
+    { }
+
+
+    /**
+     * Returns a <code>ContinuationTable</code> instance associated to
+     * the given session, creating the instance if necessary.
+     *
+     * @@param session a user session
+     */
+    public static ContinuationTable getInstance(final HttpSession session)
+    {
+        ContinuationTable ct;
+
+        synchronized(session) {
+            ct = (ContinuationTable)
+                    session.getAttribute("siscweb.continuation-table");
+
+            if(ct == null) {
+                ct = new ContinuationTable();
+                session.setAttribute("siscweb.continuation-table", ct);
+            }
+        }
+
+        return ct;
+    }
+
+    public String getSessionId()
+    {
+        return this.sessionId;
+    }
+
+    private void setSessionId(final String sessionId)
+    {
+        this.sessionId = sessionId;
+    }
+
+    /**
+     * Stores a SISC <code>Procedure</code> in this continuation
+     * table. A new continuation group is created if this is the first
+     * continuation stored under the given <code>groupId</code>.
+     *
+     * If the number of already-stored continuation groups plus the
+     * newly-created one exceeds the maximum allowed number
+     * (&quot;siscweb/user-history-size&quot;), the continuation group
+     * expiring the soonest is removed to make room for the new one.
+     *
+     * Also, the rate at which new continuation groups are created is
+     * limited by the environment entry
+     * &quot;siscweb/continuation-group-creation-interval&quot;.
+     *
+     * @@param session a session
+     * @@param groupId the <code>ContinuationGroup</code> id to which
+     *                this continuation should belong
+     * @@param continuationId the id under which to store this
+     *                       continuation; this is the same identifier
+     *                       used in URLs to recall a continuation
+     * @@param procedure the SISC <code>Procedure</code> to store
+     * @@param ttl the time-to-live left for this continuation in
+     *            milliseconds
+     */
+    // TODO: concurrency can be increased by smarter locking on groups
+    public synchronized void store(final String groupId,
+                                   final String continuationId,
+                                   final Procedure procedure,
+                                   final long ttl,
+                                   final Frame frame)
+    {
+        ContinuationGroup group = null;
+
+        group = getGroup(groupId);
+
+        if(group != null) {
+            touchGroup(group);
+        }
+        else {
+            waitGroupCreationInterval();
+            group = new ContinuationGroup(groupId, new Long(ttl),
+                                          getSessionId(), frame);
+            addGroup(group);
+        }
+
+        trimGroups();
+
+        addContinuation(continuationId, group, procedure);
+    }
+
+
+    /**
+     * Retrieves a continuation from this continuation table. Once
+     * retrieved, the group to which this continuation belongs is
+     * &quot;touched&quot;, i.e. the time at which its continuations
+     * expire is recalculated as the time-to-live starting from the
+     * current time.
+     *
+     * @@param session a user session
+     * @@param continuationId the identifier for the desired
+     *                       continuation
+     *
+     * @@returns a SISC <code>Procedure</code> previously stored under
+     *          the given identifier, or <code>null</code> if one is
+     *          not found.
+     */
+    public synchronized Procedure fetch(final String continuationId)
+    {
+        Continuation continuation = getContinuation(continuationId);
+
+        if(continuation != null) {
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Fetched continuation : " +
+                        continuation.getId() + ", group : " +
+                        continuation.getGroup().getId());
+            }
+
+            touchGroup(continuation.getGroup());
+
+            return continuation.getProcedure();
+        }
+        else {
+            return null;
+        }
+    }
+
+    public Frame getFrame(String continuationId)
+    {
+        Continuation continuation = getContinuation(continuationId);
+
+        if(continuation == null) {
+            return null;
+        }
+
+        return continuation.getGroup().getFrame();
+    }
+
+    /**
+     * Removes all continuations stored for the given session.
+     *
+     * @@param session a user session
+     */
+    public synchronized void clear()
+    {
+        clearHelper();
+
+        if(Logger.logger.isLoggable(Level.FINEST)) {
+            Logger.logger.finest("Cleared all continuations for session : " +
+                    getSessionId());
+        }
+    }
+
+
+    /**
+     * Removes all continuations past their time-to-live.
+     *
+     * @@returns the number of continuation groups removed
+     */
+    public synchronized int purgeExpired()
+    {
+        Date now = new Date();
+        int n = 0;
+
+        for(Iterator i = groupTimeline.iterator(); i.hasNext();) {
+            ContinuationGroup group = (ContinuationGroup) i.next();
+
+            if(group.getExpirationDate().compareTo(now) < 0) {
+                // pass the iterator so that the group can be safely
+                // removed from the timeline; i know, hackish
+                removeGroup(group, i);
+
+                n++;
+            }
+            else {
+                break; // no need to go further in the timeline
+            }
+        }
+
+        if(Logger.logger.isLoggable(Level.FINER)) {
+            Logger.logger.fine("Purged " + n +
+                    " expired continuation groups from session " +
+                    getSessionId());
+        }
+
+        return n;
+    }
+
+
+    // internal representation of continuation table;
+    // none of the internal operations are synchronized because
+    // the higher-level ones take care of that
+    private final Map groups = new HashMap();
+    private final SortedSet groupTimeline = new TreeSet();
+    private final Map continuations = new HashMap();
+    private long lastCreatedGroupTime = 0;
+
+
+    private void addGroup(final ContinuationGroup group)
+    {
+        this.groups.put(group.getId(), group);
+        this.groupTimeline.add(group);
+
+        if(Logger.logger.isLoggable(Level.FINEST)) {
+            Logger.logger.finest("Added continuation group : " +
+                group.getId() + ", session : " + getSessionId());
+        }
+    }
+
+    private ContinuationGroup getGroup(final String groupId)
+    {
+        return (ContinuationGroup) this.groups.get(groupId);
+    }
+
+    private void removeGroup(final ContinuationGroup group,
+                             final Iterator timelineIterator)
+    {
+        groups.remove(group.getId());
+        timelineIterator.remove();
+
+        for(Iterator i = group.getContinuations().keySet().iterator(); i.hasNext();) {
+            String continuationId = (String) i.next();
+
+            this.continuations.remove(continuationId);
+        }
+
+        if(Logger.logger.isLoggable(Level.FINEST)) {
+            Logger.logger.finest("Removed continuation group : " +
+                    group.getId() + ", session : " + getSessionId());
+        }
+    }
+
+    private void touchGroup(final ContinuationGroup group)
+    {
+        groupTimeline.remove(group);
+        group.touch();
+        groupTimeline.add(group);
+    }
+
+    private void clearHelper()
+    {
+        this.groups.clear();
+        this.groupTimeline.clear();
+        this.continuations.clear();
+    }
+
+    private void trimGroups()
+    {
+        final int maxHistorySize = Environment.getUserHistorySize();
+
+        if(maxHistorySize == -1) {
+            return;
+        }
+
+        this.trimGroups(maxHistorySize);
+    }
+
+    private int trimGroups(final int maxHistorySize)
+    {
+        int n = this.groupTimeline.size() - maxHistorySize;
+
+        if(n > 0) {
+            for(Iterator i = groupTimeline.iterator(); n > 0 && i.hasNext(); n--) {
+                ContinuationGroup group = (ContinuationGroup) i.next();
+
+                i.remove();
+                groups.remove(group.getId());
+
+                for(Iterator j = group.getContinuations().keySet().iterator(); j.hasNext();) {
+                    String continuationId = (String) j.next();
+
+                    this.continuations.remove(continuationId);
+                }
+            }
+
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Trimmed : " + n +
+                    " continuation groups from session : " +
+                    getSessionId());
+            }
+        }
+
+        return n;
+    }
+
+    private void waitGroupCreationInterval()
+    {
+        long now = new Date().getTime();
+        long interval = now - this.lastCreatedGroupTime;
+        long minInterval = Environment.getContinuationGroupCreationInterval();
+
+        if(interval < minInterval) {
+            try {
+                long waitTime = minInterval  - interval;
+
+                if(Logger.logger.isLoggable(Level.FINEST)) {
+                    Logger.logger.finest("Waiting " +  waitTime / 1000 +
+                            "ms before creating new continuation group for session : " +
+                            getSessionId());
+                }
+
+                wait(waitTime);
+            }
+            catch(InterruptedException ie) {
+                // do nothing
+            }
+        }
+
+        this.lastCreatedGroupTime = new Date().getTime();
+    }
+
+
+    private void addContinuation(final String continuationId,
+                                 final ContinuationGroup group,
+                                 final Procedure procedure)
+    {
+        Continuation continuation =
+                new Continuation(continuationId, group, procedure);
+
+        group.addContinuation(continuation);
+
+        if(Logger.logger.isLoggable(Level.FINEST)) {
+            Logger.logger.finest("Added continuation : " + continuationId +
+                    ", group : " + group.getId());
+        }
+
+        this.continuations.put(continuation.getId(), continuation);
+    }
+
+    private Continuation getContinuation(final String continuationId)
+    {
+        return (Continuation) this.continuations.get(continuationId);
+    }
+
+
+    // HttpSessionBindingListener inteface
+    public void valueBound(final HttpSessionBindingEvent be)
+    {
+        final HttpSession session = be.getSession();
+        final ServletContext servletContext = session.getServletContext();
+
+        setSessionId(session.getId());
+        this.register(servletContext);
+
+        if(Logger.logger.isLoggable(Level.FINE)) {
+            Logger.logger.fine("Continuation table bound to session : " +
+                    getSessionId());
+        }
+    }
+
+    public void valueUnbound(final HttpSessionBindingEvent be)
+    {
+        final HttpSession session = be.getSession();
+        final ServletContext servletContext = session.getServletContext();
+
+        if(Logger.logger.isLoggable(Level.FINE)) {
+            Logger.logger.fine("Continuation table unbound from session : " +
+                    getSessionId());
+        }
+
+        this.unregister(servletContext);
+        setSessionId(null);
+    }
+
+    // HttpSessionActivationListener interface
+    public void sessionDidActivate(final HttpSessionEvent se)
+    {
+        /* no contstore yet because siscinitlistener is run AFTER session deserialization */
+        final HttpSession session = se.getSession();
+        setSessionId(session.getId());
+
+        if(Logger.logger.isLoggable(Level.FINE)) {
+            Logger.logger.fine("Activated session : " +
+                getSessionId());
+        }
+
+        this.register(session.getServletContext());
+    }
+
+    public void sessionWillPassivate(HttpSessionEvent se)
+    {
+        final HttpSession session = se.getSession();
+        final ServletContext servletContext = session.getServletContext();
+
+        this.unregister(servletContext);
+        this.trimGroups(Environment.getUserHistorySizeSerialized());
+
+        if(Logger.logger.isLoggable(Level.FINE)) {
+            Logger.logger.fine("Passivated session : " +
+                    getSessionId());
+        }
+
+        setSessionId(null);
+    }
+
+    protected void register(ServletContext servletContext)
+    {
+        ContinuationStore store =
+                ContinuationStoreLocator.lookup(servletContext);
+
+        if(store instanceof SessionContinuationStore) {
+            ((SessionContinuationStore) store).register(this);
+
+            if(Logger.logger.isLoggable(Level.FINE)) {
+                Logger.logger.fine("Registered continuation table with continuation store for session : " +
+                        getSessionId());
+            }
+        }
+    }
+
+    protected void unregister(ServletContext servletContext)
+    {
+        ContinuationStore store =
+                ContinuationStoreLocator.lookup(servletContext);
+
+        if(store instanceof SessionContinuationStore) {
+            ((SessionContinuationStore) store).unregister(this);
+
+            if(Logger.logger.isLoggable(Level.FINE)) {
+                Logger.logger.fine("Unregistered continuation table from continuation store for session : " +
+                        getSessionId());
+            }
+        }
+    }
+}
+@
+
+
+1.7.4.1
+log
+@merged from rel-0-5-fix
+@
+text
+@d57 1
+d88 1
+a88 1
+        ContinuationTable continuationTable;
+d91 1
+a91 1
+            continuationTable = (ContinuationTable)
+d94 3
+a96 3
+            if(continuationTable == null) {
+                continuationTable = new ContinuationTable();
+                session.setAttribute("siscweb.continuation-table", continuationTable);
+d100 1
+a100 1
+        return continuationTable;
+d144 3
+a146 1
+        ContinuationGroup group = getGroup(groupId);
+d153 1
+a153 1
+            group = new ContinuationGroup(groupId, Long.valueOf(ttl),
+d181 1
+a181 1
+        final Continuation continuation = getContinuation(continuationId);
+d199 1
+a199 1
+    public Frame getFrame(final String continuationId)
+d201 5
+a205 1
+        final Continuation continuation = getContinuation(continuationId);
+d207 1
+a207 1
+        return continuation != null ? continuation.getGroup().getFrame() : null;
+d233 2
+a234 2
+        final Date now = new Date();
+        int purgedCounter = 0;
+d236 2
+a237 2
+        for(final Iterator i = groupTimeline.iterator(); i.hasNext();) {
+            final ContinuationGroup group = (ContinuationGroup) i.next();
+d244 1
+a244 1
+                purgedCounter++;
+d252 1
+a252 1
+            Logger.logger.fine("Purged " + purgedCounter +
+d257 1
+a257 1
+        return purgedCounter;
+d292 2
+a293 2
+        for(final Iterator i = group.getContinuations().keySet().iterator(); i.hasNext();) {
+            final String continuationId = (String) i.next();
+d331 1
+a331 1
+        int excessCount = this.groupTimeline.size() - maxHistorySize;
+d333 3
+a335 3
+        if(excessCount > 0) {
+            for(final Iterator i = groupTimeline.iterator(); excessCount > 0 && i.hasNext(); excessCount--) {
+                final ContinuationGroup group = (ContinuationGroup) i.next();
+d340 2
+a341 2
+                for(final Iterator j = group.getContinuations().keySet().iterator(); j.hasNext();) {
+                    final String continuationId = (String) j.next();
+d348 1
+a348 1
+                Logger.logger.finest("Trimmed : " + excessCount +
+d354 1
+a354 1
+        return excessCount;
+d359 3
+a361 3
+        final long now = new Date().getTime();
+        final long interval = now - this.lastCreatedGroupTime;
+        final long minInterval = Environment.getContinuationGroupCreationInterval();
+d365 1
+a365 1
+                final long waitTime = minInterval  - interval;
+d388 1
+a388 1
+        final Continuation continuation =
+d408 1
+a408 1
+    public void valueBound(final HttpSessionBindingEvent bindingEvent)
+d410 1
+a410 1
+        final HttpSession session = bindingEvent.getSession();
+d422 1
+a422 1
+    public void valueUnbound(final HttpSessionBindingEvent bindingEvent)
+d424 1
+a424 1
+        final HttpSession session = bindingEvent.getSession();
+d437 1
+a437 1
+    public void sessionDidActivate(final HttpSessionEvent sessionEvent)
+d440 1
+a440 1
+        final HttpSession session = sessionEvent.getSession();
+d451 1
+a451 1
+    public void sessionWillPassivate(final HttpSessionEvent sessionEvent)
+d453 1
+a453 1
+        final HttpSession session = sessionEvent.getSession();
+d467 1
+a467 1
+    protected void register(final ServletContext servletContext)
+d469 1
+a469 1
+        final ContinuationStore store =
+d482 1
+a482 1
+    protected void unregister(final ServletContext servletContext)
+d484 1
+a484 1
+        final ContinuationStore store =
+@
+
+
+1.7.2.1
+log
+@minor syntactical cleanup
+@
+text
+@d57 1
+d88 1
+a88 1
+        ContinuationTable continuationTable;
+d91 1
+a91 1
+            continuationTable = (ContinuationTable)
+d94 3
+a96 3
+            if(continuationTable == null) {
+                continuationTable = new ContinuationTable();
+                session.setAttribute("siscweb.continuation-table", continuationTable);
+d100 1
+a100 1
+        return continuationTable;
+d144 3
+a146 1
+        ContinuationGroup group = getGroup(groupId);
+d153 1
+a153 1
+            group = new ContinuationGroup(groupId, Long.valueOf(ttl),
+d181 1
+a181 1
+        final Continuation continuation = getContinuation(continuationId);
+d199 1
+a199 1
+    public Frame getFrame(final String continuationId)
+d201 5
+a205 1
+        final Continuation continuation = getContinuation(continuationId);
+d207 1
+a207 1
+        return continuation != null ? continuation.getGroup().getFrame() : null;
+d233 2
+a234 2
+        final Date now = new Date();
+        int purgedCounter = 0;
+d236 2
+a237 2
+        for(final Iterator i = groupTimeline.iterator(); i.hasNext();) {
+            final ContinuationGroup group = (ContinuationGroup) i.next();
+d244 1
+a244 1
+                purgedCounter++;
+d252 1
+a252 1
+            Logger.logger.fine("Purged " + purgedCounter +
+d257 1
+a257 1
+        return purgedCounter;
+d292 2
+a293 2
+        for(final Iterator i = group.getContinuations().keySet().iterator(); i.hasNext();) {
+            final String continuationId = (String) i.next();
+d331 1
+a331 1
+        int excessCount = this.groupTimeline.size() - maxHistorySize;
+d333 3
+a335 3
+        if(excessCount > 0) {
+            for(final Iterator i = groupTimeline.iterator(); excessCount > 0 && i.hasNext(); excessCount--) {
+                final ContinuationGroup group = (ContinuationGroup) i.next();
+d340 2
+a341 2
+                for(final Iterator j = group.getContinuations().keySet().iterator(); j.hasNext();) {
+                    final String continuationId = (String) j.next();
+d348 1
+a348 1
+                Logger.logger.finest("Trimmed : " + excessCount +
+d354 1
+a354 1
+        return excessCount;
+d359 3
+a361 3
+        final long now = new Date().getTime();
+        final long interval = now - this.lastCreatedGroupTime;
+        final long minInterval = Environment.getContinuationGroupCreationInterval();
+d365 1
+a365 1
+                final long waitTime = minInterval  - interval;
+d388 1
+a388 1
+        final Continuation continuation =
+d408 1
+a408 1
+    public void valueBound(final HttpSessionBindingEvent bindingEvent)
+d410 1
+a410 1
+        final HttpSession session = bindingEvent.getSession();
+d422 1
+a422 1
+    public void valueUnbound(final HttpSessionBindingEvent bindingEvent)
+d424 1
+a424 1
+        final HttpSession session = bindingEvent.getSession();
+d437 1
+a437 1
+    public void sessionDidActivate(final HttpSessionEvent sessionEvent)
+d440 1
+a440 1
+        final HttpSession session = sessionEvent.getSession();
+d451 1
+a451 1
+    public void sessionWillPassivate(final HttpSessionEvent sessionEvent)
+d453 1
+a453 1
+        final HttpSession session = sessionEvent.getSession();
+d467 1
+a467 1
+    protected void register(final ServletContext servletContext)
+d469 1
+a469 1
+        final ContinuationStore store =
+d482 1
+a482 1
+    protected void unregister(final ServletContext servletContext)
+d484 1
+a484 1
+        final ContinuationStore store =
+@
+
+
+1.6
+log
+@merged from rel-0-4-dev
+@
+text
+@d47 1
+d57 1
+d69 1
+a69 1
+    implements ContinuationStore, Serializable,
+d74 1
+a74 1
+    private transient HttpSession session;
+d103 1
+a103 1
+    public String getId()
+d105 1
+a105 1
+        return this.session.getId();
+d108 4
+d138 1
+a138 2
+    public synchronized void store(final HttpSession session,
+                                   final String groupId,
+d141 2
+a142 1
+                                   final long ttl)
+d154 1
+a154 1
+                                          session.getId());
+d179 1
+a179 2
+    public synchronized Procedure fetch(final HttpSession session,
+                                        final String continuationId)
+d199 10
+d215 1
+a215 1
+    public synchronized void clear(final HttpSession session)
+d217 1
+a217 1
+        clear();
+d221 1
+a221 1
+                    this.session.getId());
+d254 1
+a254 1
+                    this.session.getId());
+d277 1
+a277 1
+                group.getId() + ", session : " + this.session.getId());
+d300 1
+a300 1
+                    group.getId() + ", session : " + this.session.getId());
+d311 1
+a311 1
+    private void clear()
+d329 1
+a329 1
+    private int trimGroups(int maxHistorySize)
+d350 1
+a350 1
+                    this.session.getId());
+d370 1
+a370 1
+                            this.session.getId());
+d384 3
+a386 3
+    private void addContinuation(String continuationId,
+                                 ContinuationGroup group,
+                                 Procedure procedure)
+d401 1
+a401 1
+    private Continuation getContinuation(String continuationId)
+d408 1
+a408 1
+    public void valueBound(HttpSessionBindingEvent be)
+d410 5
+a414 2
+        this.session = be.getSession();
+        this.register();
+d418 1
+a418 1
+                    this.session.getId());
+d422 1
+a422 1
+    public void valueUnbound(HttpSessionBindingEvent be)
+d424 3
+d429 1
+a429 1
+                    this.session.getId());
+d432 2
+a433 2
+        this.unregister();
+        this.session = null;
+d437 1
+a437 1
+    public void sessionDidActivate(HttpSessionEvent se)
+d439 3
+a441 1
+        this.session = se.getSession();
+d445 1
+a445 1
+                this.session.getId());
+d448 1
+a448 1
+        this.register();
+d453 4
+a456 1
+        this.unregister();
+d461 1
+a461 1
+                    this.session.getId());
+d464 1
+a464 1
+        this.session = null;
+d467 1
+a467 1
+    protected void register()
+d470 1
+a470 1
+                ContinuationStoreSingletonDecorator.getInstance();
+d477 1
+a477 1
+                        this.session.getId());
+d482 1
+a482 1
+    protected void unregister()
+d485 1
+a485 1
+                ContinuationStoreSingletonDecorator.getInstance();
+d492 1
+a492 1
+                        this.session.getId());
+@
+
+
+1.6.4.1
+log
+@continuationtable does not store session anymore, just session id
+@
+text
+@d72 1
+a72 1
+    private transient String sessionId;
+d101 1
+a101 1
+    public String getSessionId()
+d103 1
+a103 1
+        return this.sessionId;
+d106 1
+a106 5
+    private void setSessionId(final String sessionId)
+    {
+        this.sessionId = sessionId;
+    }
+    
+d206 1
+a206 1
+                    getSessionId());
+d239 1
+a239 1
+                    getSessionId());
+d262 1
+a262 1
+                group.getId() + ", session : " + getSessionId());
+d285 1
+a285 1
+                    group.getId() + ", session : " + getSessionId());
+d314 1
+a314 1
+    private int trimGroups(final int maxHistorySize)
+d335 1
+a335 1
+                    getSessionId());
+d355 1
+a355 1
+                            getSessionId());
+d369 3
+a371 3
+    private void addContinuation(final String continuationId,
+                                 final ContinuationGroup group,
+                                 final Procedure procedure)
+d386 1
+a386 1
+    private Continuation getContinuation(final String continuationId)
+d393 1
+a393 1
+    public void valueBound(final HttpSessionBindingEvent be)
+d395 1
+a395 3
+        final HttpSession session = be.getSession();
+        setSessionId(session.getId());
+        
+d400 1
+a400 1
+                    getSessionId());
+d408 1
+a408 1
+                    getSessionId());
+d412 1
+a412 1
+        setSessionId(null);
+d418 1
+a418 2
+        final HttpSession session = se.getSession();
+        setSessionId(session.getId());
+d422 1
+a422 1
+                getSessionId());
+d435 1
+a435 1
+                    getSessionId());
+d438 1
+a438 1
+        setSessionId(null);
+d451 1
+a451 1
+                        getSessionId());
+d466 1
+a466 1
+                        getSessionId());
+@
+
+
+1.6.4.2
+log
+@continuationtable methods do not require session object
+@
+text
+@d67 1
+a67 1
+    implements Serializable,
+d136 2
+a137 1
+    public synchronized void store(final String groupId,
+d152 1
+a152 1
+                                          getSessionId());
+d177 2
+a178 1
+    public synchronized Procedure fetch(final String continuationId)
+d204 1
+a204 1
+    public synchronized void clear()
+d206 1
+a206 1
+        clearHelper();
+d300 1
+a300 1
+    private void clearHelper()
+@
+
+
+1.6.4.3
+log
+@continuationstore is now local to the servlet context, not the
+static scope (i.e. zapped the singleton)
+@
+text
+@a46 1
+import javax.servlet.ServletContext;
+d110 1
+a110 1
+
+a397 2
+        final ServletContext servletContext = session.getServletContext();
+
+d399 2
+a400 1
+        this.register(servletContext);
+d408 1
+a408 1
+    public void valueUnbound(final HttpSessionBindingEvent be)
+a409 3
+        final HttpSession session = be.getSession();
+        final ServletContext servletContext = session.getServletContext();
+
+d415 1
+a415 1
+        this.unregister(servletContext);
+d420 1
+a420 1
+    public void sessionDidActivate(final HttpSessionEvent se)
+a421 1
+        /* no contstore yet because siscinitlistener is run AFTER session deserialization */
+d430 1
+a430 1
+        this.register(session.getServletContext());
+d435 1
+a435 4
+        final HttpSession session = se.getSession();
+        final ServletContext servletContext = session.getServletContext();
+
+        this.unregister(servletContext);
+d446 1
+a446 1
+    protected void register(ServletContext servletContext)
+d449 1
+a449 1
+                ContinuationStoreLocator.getInstance(servletContext);
+d461 1
+a461 1
+    protected void unregister(ServletContext servletContext)
+d464 1
+a464 1
+                ContinuationStoreLocator.getInstance(servletContext);
+@
+
+
+1.6.4.4
+log
+@renamed getInstance -> lookup
+@
+text
+@d458 1
+a458 1
+                ContinuationStoreLocator.lookup(servletContext);
+d473 1
+a473 1
+                ContinuationStoreLocator.lookup(servletContext);
+@
+
+
+1.6.4.5
+log
+@merged from rel-0-5-dev-safe-frames
+@
+text
+@a56 1
+import siscweb.web.RequestScope;
+d140 1
+a140 2
+                                   final long ttl,
+                                   final Frame frame)
+d152 1
+a152 1
+                                          getSessionId(), frame);
+a196 10
+    public Frame getFrame(String continuationId)
+    {
+        Continuation continuation = getContinuation(continuationId);
+
+        if(continuation == null) {
+            return null;
+        }
+
+        return continuation.getGroup().getFrame();
+    }
+@
+
+
+1.6.4.4.2.1
+log
+@added getFrame() method
+@
+text
+@a56 1
+import siscweb.web.RequestScope;
+a196 10
+    public Frame getFrame(String continuationId)
+    {
+        Continuation continuation = getContinuation(continuationId);
+
+        if(continuation == null) {
+            return null;
+        }
+
+        return continuation.getGroup().getFrame();
+    }
+@
+
+
+1.6.4.4.2.2
+log
+@de-hacked ContinuationGroup
+@
+text
+@d141 1
+a141 2
+                                   final long ttl,
+                                   final Frame frame)
+d153 1
+a153 1
+                                          getSessionId(), frame);
+@
+
+
+1.5
+log
+@changed the session variable name used to store
+the continuation table
+@
+text
+@d17 1
+a17 1
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005
+a38 1
+import java.util.ArrayList;
+d42 4
+d54 2
+d58 8
+d67 2
+a68 1
+    implements ContinuationStore, Serializable, HttpSessionBindingListener, HttpSessionActivationListener
+d72 1
+a72 4
+    private HttpSession session;
+    private final HashMap continuationGroups = new HashMap();
+    private final HashMap continuations = new HashMap();
+
+d78 6
+d89 2
+a90 1
+            ct = (ContinuationTable) session.getAttribute("siscweb.continuation-table");
+a94 1
+                ct.register();
+d107 30
+a136 5
+    public void store(final String sessionId,
+                      final String groupId,
+                      final String continuationId,
+                      final Procedure procedure,
+                      final long ttl)
+d138 1
+a138 1
+        ContinuationGroup continuationGroup = null;
+d140 1
+a140 2
+        synchronized(this.continuationGroups) {
+            continuationGroup = (ContinuationGroup) this.continuationGroups.get(groupId);
+d142 8
+a149 7
+            if(continuationGroup != null) {
+                continuationGroup.touch();
+            }
+            else {
+                continuationGroup = new ContinuationGroup(groupId, new Long(ttl), sessionId);
+                this.continuationGroups.put(groupId, continuationGroup);
+            }
+d152 1
+a152 2
+        Continuation continuation = new Continuation(continuationId, procedure);
+        continuationGroup.addContinuation(continuation);
+d154 1
+a154 1
+        this.continuations.put(continuationId, continuation);
+d157 18
+a174 1
+    public Procedure fetch(final String sessionId, final String continuationId)
+d176 1
+a176 1
+        Continuation continuation = (Continuation) this.continuations.get(continuationId);
+d179 8
+a186 1
+            continuation.getGroup().touch();
+d194 7
+a200 1
+    public void clear(String sessionId)
+d203 5
+d210 63
+a272 1
+    private void clear()
+d274 7
+a280 2
+        synchronized(this.continuationGroups) {
+            this.continuationGroups.clear();
+d283 17
+d303 1
+a303 1
+    public int purgeExpired()
+d305 8
+a312 2
+        Date now = new Date();
+        int n = 0;
+d314 3
+a316 2
+        for(Iterator i = new ArrayList(this.continuationGroups.keySet()).iterator(); i.hasNext();) {
+            String continuationGroupId = (String) i.next();
+d318 3
+a320 2
+            ContinuationGroup continuationGroup =
+                (ContinuationGroup) this.continuationGroups.get(continuationGroupId);
+d322 2
+a323 4
+            if(continuationGroup != null
+            && now.compareTo(continuationGroup.getExpirationDate()) > 0) {
+                this.continuationGroups.remove(continuationGroupId);
+                n++;
+d325 1
+a325 1
+                for(Iterator j = continuationGroup.getContinuations().keySet().iterator(); j.hasNext();) {
+d331 6
+d342 49
+a392 1
+
+d396 6
+d406 6
+d419 6
+d431 7
+d443 2
+a444 1
+        ContinuationStore store = ContinuationStoreSingletonDecorator.getInstance();
+d448 5
+d458 2
+a459 1
+        ContinuationStore store = ContinuationStoreSingletonDecorator.getInstance();
+d463 5
+@
+
+
+1.4
+log
+@merged from rel-0-3-dev
+@
+text
+@d72 1
+a72 1
+            ct = (ContinuationTable) session.getAttribute("continuation-table");
+d76 1
+a76 1
+                session.setAttribute("continuation-table", ct);
+@
+
+
+1.4.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@d90 1
+a90 1
+    public void store(final HttpSession session,
+d105 1
+a105 1
+                continuationGroup = new ContinuationGroup(groupId, new Long(ttl), session.getId());
+d116 1
+a116 1
+    public Procedure fetch(final HttpSession session, final String continuationId)
+d129 1
+a129 1
+    public void clear(final HttpSession session)
+d172 1
+@
+
+
+1.4.4.1
+log
+@the continuation store now uses the session object instead of just the
+sessionId (simpler and more reliable)
+@
+text
+@d90 1
+a90 1
+    public void store(final HttpSession session,
+d105 1
+a105 1
+                continuationGroup = new ContinuationGroup(groupId, new Long(ttl), session.getId());
+d116 1
+a116 1
+    public Procedure fetch(final HttpSession session, final String continuationId)
+d129 1
+a129 1
+    public void clear(final HttpSession session)
+d172 1
+@
+
+
+1.4.4.2
+log
+@now allows for bounding the number of continuation groups (prototype)
+@
+text
+@d39 1
+a42 3
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
+d54 1
+a54 2
+    implements ContinuationStore, Serializable,
+               HttpSessionBindingListener, HttpSessionActivationListener
+a57 2
+    private static final int maxGroups = 50;
+
+d59 2
+a60 1
+
+d72 1
+a72 1
+            ct = (ContinuationTable) session.getAttribute("siscweb.continuation-table");
+d76 1
+a76 1
+                session.setAttribute("siscweb.continuation-table", ct);
+d96 1
+a96 1
+        ContinuationGroup group = null;
+d98 2
+a99 2
+        synchronized(this) {
+            group = getGroup(groupId);
+d101 2
+a102 2
+            if(group != null) {
+                touchGroup(group);
+d105 2
+a106 2
+                group = new ContinuationGroup(groupId, new Long(ttl), session.getId());
+                addGroup(group);
+d108 1
+d110 2
+a111 1
+            trimGroups();
+d113 1
+a113 2
+            addContinuation(continuationId, group, procedure);
+        }
+d118 1
+a118 2
+        synchronized(this) {
+            Continuation continuation = getContinuation(continuationId);
+d120 6
+a125 8
+            if(continuation != null) {
+                touchGroup(continuation.getGroup());
+
+                return continuation.getProcedure();
+            }
+            else {
+                return null;
+            }
+d131 1
+a131 3
+        synchronized(this) {
+            clear();
+        }
+d136 4
+a139 2
+        this.groups.clear();
+        this.groupTimeline.clear();
+d145 2
+a146 15
+        synchronized(this) {
+            Date now = new Date();
+            int n = 0;
+
+            for(Iterator i = groupTimeline.iterator(); i.hasNext();) {
+                ContinuationGroup group = (ContinuationGroup) i.next();
+
+                if(group.getExpirationDate().compareTo(now) < 0) {
+                    removeGroup(group);
+                    n++;
+                }
+                else {
+                    break; // no need to go further in the timeline
+                }
+            }
+d148 2
+a149 3
+            return n;
+        }
+    }
+d151 2
+d154 4
+a157 4
+    // internal representation of continuation table
+    private final Map groups = new HashMap(maxGroups);
+    private final SortedSet groupTimeline = new TreeSet();
+    private final Map continuations = new HashMap();
+d159 2
+a160 5
+    private void addGroup(final ContinuationGroup group)
+    {
+        this.groups.put(group.getId(), group);
+        this.groupTimeline.add(group);
+    }
+d162 2
+a163 39
+    private ContinuationGroup getGroup(final String groupId)
+    {
+        return (ContinuationGroup) this.groups.get(groupId);
+    }
+
+    private void removeGroup(final ContinuationGroup group)
+    {
+        groups.remove(group.getId());
+        groupTimeline.remove(group);
+
+        for(Iterator i = group.getContinuations().keySet().iterator(); i.hasNext();) {
+            String continuationId = (String) i.next();
+
+            this.continuations.remove(continuationId);
+        }
+
+    }
+
+    private void touchGroup(final ContinuationGroup group)
+    {
+        groupTimeline.remove(group);
+        group.touch();
+        groupTimeline.add(group);
+    }
+
+    private void trimGroups()
+    {
+        int morituri = this.groupTimeline.size() - maxGroups;
+
+        for(Iterator i = groupTimeline.iterator(); morituri > 0 && i.hasNext(); morituri--) {
+            ContinuationGroup group = (ContinuationGroup) i.next();
+
+            i.remove();
+            groups.remove(group.getId());
+
+            for(Iterator j = group.getContinuations().keySet().iterator(); j.hasNext();) {
+                String continuationId = (String) j.next();
+
+                this.continuations.remove(continuationId);
+a165 8
+    }
+
+    private void addContinuation(String continuationId,
+                                 ContinuationGroup group,
+                                 Procedure procedure)
+    {
+        Continuation continuation = new Continuation(continuationId, group, procedure);
+        group.addContinuation(continuation);
+d167 1
+a167 1
+        this.continuations.put(continuation.getId(), continuation);
+a169 4
+    private Continuation getContinuation(String continuationId)
+    {
+        return (Continuation) this.continuations.get(continuationId);
+    }
+@
+
+
+1.4.4.3
+log
+@looks up max history limit from environment
+@
+text
+@a52 1
+import siscweb.util.Environment;
+d61 2
+d173 1
+a173 1
+    private final Map groups = new HashMap();
+d210 1
+a210 12
+        final int maxHistorySize = Environment.getUserHistorySize();
+
+        if(maxHistorySize == -1) {
+            return;
+        }
+
+        this.trimGroups(maxHistorySize);
+    }
+
+    private void trimGroups(int maxHistorySize)
+    {
+        int morituri = this.groupTimeline.size() - maxHistorySize;
+a261 1
+        this.trimGroups(Environment.getUserHistorySizeSerialized());
+@
+
+
+1.4.4.4
+log
+@bounding of continuation group creation frequency
+@
+text
+@a107 1
+                waitGroupCreationInterval();
+a174 1
+    private long lastCreatedGroupTime = 0;
+a235 19
+    private void waitGroupCreationInterval()
+    {
+        long now = new Date().getTime();
+        long interval = now - this.lastCreatedGroupTime;
+        long minInterval = Environment.getContinuationGroupCreationInterval();
+
+        if(interval < minInterval) {
+            try {
+                wait(minInterval  - interval);
+            }
+            catch(InterruptedException ie) {
+                // do nothing
+            }
+        }
+
+        this.lastCreatedGroupTime = new Date().getTime();
+    }
+
+
+@
+
+
+1.4.4.5
+log
+@added logging
+@
+text
+@a44 1
+import java.util.logging.Level;
+a53 1
+import siscweb.util.Logger;
+d64 2
+a79 5
+
+                if(Logger.logger.isLoggable(Level.FINE)) {
+                    Logger.logger.fine("Attached new continuation table to session : " + session.getId());
+                }
+
+a110 4
+
+                if(Logger.logger.isLoggable(Level.FINEST)) {
+                    Logger.logger.finest("Added group : " + group.getId() + ", session : " + session.getId());
+                }
+a115 4
+
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Added continuation : " + continuationId + ", group : " + group.getId());
+            }
+a126 5
+                if(Logger.logger.isLoggable(Level.FINEST)) {
+                    Logger.logger.finest("Fetched continuation : " + continuation.getId() +
+                            ", group : " + continuation.getGroup().getId());
+                }
+
+a138 4
+
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Cleared all continuations for session : " + this.session.getId());
+            }
+a166 4
+            if(Logger.logger.isLoggable(Level.FINE)) {
+                Logger.logger.fine("Purged " + n + " expired continuation groups from session " + this.session.getId());
+            }
+
+a235 6
+
+        if(Logger.logger.isLoggable(Level.FINEST)) {
+            Logger.logger.finest("Trimmed : " + morituri +
+                    "continuation groups from session : " +
+                    this.session.getId());
+        }
+d246 1
+a246 9
+                long waitTime = minInterval  - interval;
+
+                if(Logger.logger.isLoggable(Level.FINEST)) {
+                    Logger.logger.finest("Waiting " +  waitTime / 1000 +
+                            "ms before creating new continuation group for session : " +
+                            this.session.getId());
+                }
+
+                wait(waitTime);
+a271 1
+
+a275 4
+
+        if(Logger.logger.isLoggable(Level.FINEST)) {
+            Logger.logger.finest("Continuation table bound to session : " + this.session.getId());
+        }
+a279 4
+        if(Logger.logger.isLoggable(Level.FINEST)) {
+            Logger.logger.finest("Continuation table unbound from session : " + this.session.getId());
+        }
+
+a286 5
+
+        if(Logger.logger.isLoggable(Level.FINEST)) {
+            Logger.logger.finest("Activated session : " + this.session.getId());
+        }
+
+a293 5
+
+        if(Logger.logger.isLoggable(Level.FINEST)) {
+            Logger.logger.finest("Passivated session : " + this.session.getId());
+        }
+
+a302 4
+
+            if(Logger.logger.isLoggable(Level.FINE)) {
+                Logger.logger.fine("Registered continuation table with session : " + this.session.getId());
+            }
+a311 4
+
+            if(Logger.logger.isLoggable(Level.FINE)) {
+                Logger.logger.finest("Unregistered continuation table from session : " + this.session.getId());
+            }
+@
+
+
+1.4.4.6
+log
+@simplified synchronization; added more logging
+@
+text
+@d98 5
+a102 7
+    // TODO: concurrency can be increased by smarter locking on groups
+
+    public synchronized void store(final HttpSession session,
+                                   final String groupId,
+                                   final String continuationId,
+                                   final Procedure procedure,
+                                   final long ttl)
+d106 15
+a120 1
+        group = getGroup(groupId);
+d122 1
+a122 8
+        if(group != null) {
+            touchGroup(group);
+        }
+        else {
+            waitGroupCreationInterval();
+            group = new ContinuationGroup(groupId, new Long(ttl), session.getId());
+            addGroup(group);
+        }
+d124 1
+a124 1
+        trimGroups();
+d126 4
+a129 1
+        addContinuation(continuationId, group, procedure);
+d132 1
+a132 1
+    public synchronized Procedure fetch(final HttpSession session, final String continuationId)
+d134 2
+a135 1
+        Continuation continuation = getContinuation(continuationId);
+d137 2
+a138 5
+        if(continuation != null) {
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Fetched continuation : " + continuation.getId() +
+                        ", group : " + continuation.getGroup().getId());
+            }
+d140 4
+a143 1
+            touchGroup(continuation.getGroup());
+d145 5
+a149 4
+            return continuation.getProcedure();
+        }
+        else {
+            return null;
+d153 1
+a153 1
+    public synchronized void clear(final HttpSession session)
+d155 2
+a156 1
+        clear();
+d158 3
+a160 2
+        if(Logger.logger.isLoggable(Level.FINEST)) {
+            Logger.logger.finest("Cleared all continuations for session : " + this.session.getId());
+d164 6
+d171 1
+a171 1
+    public synchronized int purgeExpired()
+d173 15
+a187 2
+        Date now = new Date();
+        int n = 0;
+d189 2
+a190 9
+        for(Iterator i = groupTimeline.iterator(); i.hasNext();) {
+            ContinuationGroup group = (ContinuationGroup) i.next();
+
+            if(group.getExpirationDate().compareTo(now) < 0) {
+                removeGroup(group);
+                n++;
+            }
+            else {
+                break; // no need to go further in the timeline
+a191 1
+        }
+d193 1
+a193 2
+        if(Logger.logger.isLoggable(Level.FINE)) {
+            Logger.logger.fine("Purged " + n + " expired continuation groups from session " + this.session.getId());
+a194 2
+
+        return n;
+a207 5
+
+        if(Logger.logger.isLoggable(Level.FINEST)) {
+            Logger.logger.finest("Added continuation group : " + group.getId() +
+                    ", session : " + this.session.getId());
+        }
+a225 3
+        if(Logger.logger.isLoggable(Level.FINEST)) {
+            Logger.logger.finest("Removed continuation group : " + group.getId() + ", session : " + this.session.getId());
+        }
+a234 7
+    private void clear()
+    {
+        this.groups.clear();
+        this.groupTimeline.clear();
+        this.continuations.clear();
+    }
+
+d246 1
+a246 1
+    private int trimGroups(int maxHistorySize)
+d248 1
+a248 1
+        int n = this.groupTimeline.size() - maxHistorySize;
+d250 1
+a250 1
+        for(Iterator i = groupTimeline.iterator(); n > 0 && i.hasNext(); n--) {
+d264 2
+a265 2
+            Logger.logger.finest("Trimmed : " + n +
+                    " continuation groups from session : " +
+a267 2
+
+        return n;
+a303 4
+        if(Logger.logger.isLoggable(Level.FINEST)) {
+            Logger.logger.finest("Added continuation : " + continuationId + ", group : " + group.getId());
+        }
+
+d364 1
+a364 2
+                Logger.logger.fine("Registered continuation table with continuation store for session : " +
+                        this.session.getId());
+d377 1
+a377 2
+                Logger.logger.fine("Unregistered continuation table from continuation store for session : " +
+                        this.session.getId());
+@
+
+
+1.4.4.7
+log
+@minor formatting
+@
+text
+@d212 1
+a212 2
+            Logger.logger.finest("Removed continuation group : " + group.getId() +
+                    ", session : " + this.session.getId());
+@
+
+
+1.4.4.8
+log
+@fixed ConcurrentModificationException
+@
+text
+@d17 1
+a17 1
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005-2006
+a57 8
+/**
+ * This class represents the table of continuations stored per each
+ * user. Continuations are grouped in <code>ContinuationGroup</code>s,
+ * each grouping continuations created during the same HTTP request.
+ *
+ * @@see siscweb.web.SISCApplicationServlet
+ *
+ */
+a69 6
+    /**
+     * Returns a <code>ContinuationTable</code> instance associated to
+     * the given session, creating the instance if necessary.
+     *
+     * @@param session a user session
+     */
+a97 24
+    /**
+     * Stores a SISC <code>Procedure</code> in this continuation
+     * table. A new continuation group is created if this is the first
+     * continuation stored under the given <code>groupId</code>.
+     *
+     * If the number of already-stored continuation groups plus the
+     * newly-created one exceeds the maximum allowed number
+     * (&quot;siscweb/user-history-size&quot;), the continuation group
+     * expiring the soonest is removed to make room for the new one.
+     *
+     * Also, the rate at which new continuation groups are created is
+     * limited by the environment entry
+     * &quot;siscweb/continuation-group-creation-interval&quot;.
+     *
+     * @@param session a session
+     * @@param groupId the <code>ContinuationGroup</code> id to which
+     *                this continuation should belong
+     * @@param continuationId the id under which to store this
+     *                       continuation; this is the same identifier
+     *                       used in URLs to recall a continuation
+     * @@param procedure the SISC <code>Procedure</code> to store
+     * @@param ttl the time-to-live left for this continuation in
+     *            milliseconds
+     */
+d99 1
+a123 16
+
+    /**
+     * Retrieves a continuation from this continuation table. Once
+     * retrieved, the group to which this continuation belongs is
+     * &quot;touched&quot;, i.e. the time at which its continuations
+     * expire is recalculated as the time-to-live starting from the
+     * current time.
+     *
+     * @@param session a user session
+     * @@param continuationId the identifier for the desired
+     *                       continuation
+     *
+     * @@returns a SISC <code>Procedure</code> previously stored under
+     *          the given identifier, or <code>null</code> if one is
+     *          not found.
+     */
+a142 6
+
+    /**
+     * Removes all continuations stored for the given session.
+     *
+     * @@param session a user session
+     */
+a152 5
+    /**
+     * Removes all continuations past their time-to-live.
+     *
+     * @@returns the number of continuation groups removed
+     */
+d162 1
+a162 4
+                // passed the iterator so that the group can be safely
+                // removed from the timeline
+                removeGroup(group, i);
+
+a183 1
+
+d200 1
+a200 1
+    private void removeGroup(final ContinuationGroup group, Iterator timelineIterator)
+d203 1
+a203 1
+        timelineIterator.remove();
+@
+
+
+1.4.4.9
+log
+@transient session field
+@
+text
+@d72 1
+a72 1
+    private transient HttpSession session;
+d314 2
+a315 3
+        if(n > 0) {
+            for(Iterator i = groupTimeline.iterator(); n > 0 && i.hasNext(); n--) {
+                ContinuationGroup group = (ContinuationGroup) i.next();
+d317 2
+a318 2
+                i.remove();
+                groups.remove(group.getId());
+d320 2
+a321 2
+                for(Iterator j = group.getContinuations().keySet().iterator(); j.hasNext();) {
+                    String continuationId = (String) j.next();
+d323 1
+a323 2
+                    this.continuations.remove(continuationId);
+                }
+d325 1
+d327 2
+a328 2
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Trimmed : " + n +
+a330 1
+            }
+@
+
+
+1.4.4.10
+log
+@registers/unregisters on session bound/unbound; some comments; minor
+formatting
+@
+text
+@d94 6
+d245 1
+a245 3
+    // internal representation of continuation table;
+    // none of the internal operations are synchronized because
+    // the higher-level ones take care of that
+d258 2
+a259 2
+            Logger.logger.finest("Added continuation group : " +
+                group.getId() + ", session : " + this.session.getId());
+d268 1
+a268 2
+    private void removeGroup(final ContinuationGroup group,
+                             final Iterator timelineIterator)
+d369 1
+a369 3
+        Continuation continuation =
+                new Continuation(continuationId, group, procedure);
+
+d373 1
+a373 2
+            Logger.logger.finest("Added continuation : " + continuationId +
+                    ", group : " + group.getId());
+a388 1
+        this.register();
+d391 1
+a391 2
+            Logger.logger.finest("Continuation table bound to session : " +
+                    this.session.getId());
+a396 3
+        this.unregister();
+        this.session = null;
+
+d398 1
+a398 2
+            Logger.logger.finest("Continuation table unbound from session : " +
+                    this.session.getId());
+d401 1
+d410 1
+a410 2
+            Logger.logger.finest("Activated session : " +
+                this.session.getId());
+d422 1
+a422 2
+            Logger.logger.finest("Passivated session : " +
+                    this.session.getId());
+d430 1
+a430 2
+        ContinuationStore store =
+                ContinuationStoreSingletonDecorator.getInstance();
+d436 2
+a437 1
+                Logger.logger.fine("Registered continuation table with continuation store for session : " + this.session.getId());
+d444 1
+a444 2
+        ContinuationStore store =
+                ContinuationStoreSingletonDecorator.getInstance();
+d450 2
+a451 1
+                Logger.logger.fine("Unregistered continuation table from continuation store for session : " + this.session.getId());
+@
+
+
+1.4.4.11
+log
+@had mistakenly swapped the order of two operations, thus causing an
+NPE
+@
+text
+@d399 3
+a406 2
+        this.unregister();
+        this.session = null;
+@
+
+
+1.4.4.12
+log
+@upgraded logging messages on session lifecycle events
+@
+text
+@d391 2
+a392 2
+        if(Logger.logger.isLoggable(Level.FINE)) {
+            Logger.logger.fine("Continuation table bound to session : " +
+d399 2
+a400 2
+        if(Logger.logger.isLoggable(Level.FINE)) {
+            Logger.logger.fine("Continuation table unbound from session : " +
+d413 2
+a414 2
+        if(Logger.logger.isLoggable(Level.FINE)) {
+            Logger.logger.fine("Activated session : " +
+d426 2
+a427 2
+        if(Logger.logger.isLoggable(Level.FINE)) {
+            Logger.logger.fine("Passivated session : " +
+@
+
+
+1.4.4.13
+log
+@changed reporting level of no of purged continuation groups; minor
+changes to formatting
+@
+text
+@d89 1
+a89 2
+            ct = (ContinuationTable)
+                    session.getAttribute("siscweb.continuation-table");
+d146 1
+a146 2
+            group = new ContinuationGroup(groupId, new Long(ttl),
+                                          session.getId());
+d171 1
+a171 2
+    public synchronized Procedure fetch(final HttpSession session,
+                                        final String continuationId)
+d177 2
+a178 3
+                Logger.logger.finest("Fetched continuation : " +
+                        continuation.getId() + ", group : " +
+                        continuation.getGroup().getId());
+d201 1
+a201 2
+            Logger.logger.finest("Cleared all continuations for session : " +
+                    this.session.getId());
+d220 2
+a221 2
+                // pass the iterator so that the group can be safely
+                // removed from the timeline; i know, hackish
+d231 2
+a232 4
+        if(Logger.logger.isLoggable(Level.FINER)) {
+            Logger.logger.fine("Purged " + n +
+                    " expired continuation groups from session " +
+                    this.session.getId());
+d277 2
+a278 2
+            Logger.logger.finest("Removed continuation group : " +
+                    group.getId() + ", session : " + this.session.getId());
+d443 1
+a443 2
+                Logger.logger.fine("Registered continuation table with continuation store for session : " +
+                        this.session.getId());
+d457 1
+a457 2
+                Logger.logger.fine("Unregistered continuation table from continuation store for session : " +
+                        this.session.getId());
+@
+
+
+1.3
+log
+@merged from rel-0-2-dev
+@
+text
+@d40 1
+a42 1
+import java.util.Date;
+a43 1
+import javax.servlet.ServletContext;
+d54 1
+a54 1
+    implements Serializable, HttpSessionBindingListener, HttpSessionActivationListener
+d58 3
+a60 2
+    protected HttpSession session;
+    protected final HashMap table = new HashMap();
+d84 1
+a84 1
+    public String getID()
+d90 5
+a94 3
+    public String storeContinuation(final String id,
+                                    final Procedure continuation,
+                                    final long ttl)
+d96 16
+a111 4
+        Continuation c  = new Continuation(id, continuation, ttl);
+        this.table.put(c.getID(), c);
+        return c.getID();
+    }
+d113 1
+a113 3
+    public boolean existsContinuation(final String id)
+    {
+        return this.table.containsKey(id);
+d116 1
+a116 1
+    public Procedure fetchContinuation(final String id)
+d118 1
+a118 1
+        Continuation continuation = (Continuation) this.table.get(id);
+d121 2
+a122 2
+            continuation.touch();
+            return continuation.getContinuation();
+d129 1
+a129 1
+    public void clear()
+d131 1
+a131 1
+        this.table.clear();
+d134 1
+a134 1
+    public int size()
+d136 5
+a140 1
+        return this.table.size();
+d148 2
+a149 2
+        for(Iterator i = new ArrayList(this.table.keySet()).iterator(); i.hasNext();) {
+            Continuation continuation = (Continuation) this.table.get((String) i.next());
+d151 2
+a152 3
+            // continuation may have been removed in the meanwhile
+            if(continuation != null &&
+               now.compareTo(continuation.getExpirationDate()) > 0) {
+d154 3
+a156 1
+                table.remove(continuation.getID());
+d158 6
+d171 1
+a171 1
+
+d183 1
+a183 1
+
+d198 5
+a202 1
+        ContinuationManager.getInstance(this.session.getServletContext()).register(this);
+d207 1
+a207 23
+        ContinuationManager.getInstance(this.session.getServletContext()).unregister(this);
+    }
+}
+
+
+class Continuation implements Serializable
+{
+    protected String id;
+    protected Procedure continuation;
+    protected Date creationDate;
+    protected Date visitDate;
+    protected long ttl;
+    protected Date expirationDate;
+
+    public Continuation(final String id, final Procedure continuation, final long ttl)
+    {
+        this.id = id;
+        this.continuation = continuation;
+        this.creationDate = new Date();
+        this.visitDate = null;
+        this.ttl = ttl;
+        this.expirationDate = new Date(this.creationDate.getTime() + ttl * 1000);
+    }
+d209 3
+a211 20
+
+    public String getID()
+    {
+        return this.id;
+    }
+
+    public Procedure getContinuation()
+    {
+        return this.continuation;
+    }
+
+    public Date getExpirationDate()
+    {
+        return this.expirationDate;
+    }
+
+    public void touch()
+    {
+        this.visitDate = new Date();
+        this.expirationDate = new Date(this.visitDate.getTime() + ttl * 1000);
+@
+
+
+1.3.4.1
+log
+@now manages continuation groups instead of plain continuations
+@
+text
+@a39 1
+import java.util.Date;
+d42 1
+d44 1
+d55 1
+a55 1
+    implements ContinuationStore, Serializable, HttpSessionBindingListener, HttpSessionActivationListener
+d59 2
+a60 3
+    private HttpSession session;
+    private final HashMap continuationGroups = new HashMap();
+    private final HashMap continuations = new HashMap();
+d90 3
+a92 5
+    public void store(final String sessionId,
+                                  final String groupId,
+                                  final String continuationId,
+                                  final Procedure procedure,
+                                  final long ttl)
+d94 4
+a97 1
+        ContinuationGroup continuationGroup = null;
+d99 3
+a101 16
+        synchronized(this.continuationGroups) {
+            continuationGroup = (ContinuationGroup) this.continuationGroups.get(groupId);
+
+            if(continuationGroup != null) {
+                continuationGroup.touch();
+            }
+            else {
+                continuationGroup = new ContinuationGroup(groupId, new Long(ttl), sessionId);
+                this.continuationGroups.put(groupId, continuationGroup);
+            }
+        }
+
+        Continuation continuation = new Continuation(continuationId, procedure);
+        continuationGroup.addContinuation(continuation);
+
+        this.continuations.put(continuationId, continuation);
+d104 1
+a104 1
+    public Procedure fetch(final String sessionId, final String continuationId)
+d106 1
+a106 1
+        Continuation continuation = (Continuation) this.continuations.get(continuationId);
+d109 2
+a110 2
+            continuation.getGroup().touch();
+            return continuation.getProcedure();
+d117 1
+a117 1
+    public void clear(String sessionId)
+d119 1
+a119 1
+        clear();
+d122 1
+a122 1
+    private void clear()
+d124 1
+a124 5
+        synchronized(this.continuationGroups) {
+            this.continuationGroups.clear();
+        }
+
+        this.continuations.clear();
+d132 2
+a133 2
+        for(Iterator i = new ArrayList(this.continuationGroups.keySet()).iterator(); i.hasNext();) {
+            String continuationGroupId = (String) i.next();
+d135 3
+a137 2
+            ContinuationGroup continuationGroup =
+                (ContinuationGroup) this.continuationGroups.get(continuationGroupId);
+d139 1
+a139 3
+            if(continuationGroup != null
+            && now.compareTo(continuationGroup.getExpirationDate()) > 0) {
+                this.continuationGroups.remove(continuationGroupId);
+a140 6
+
+                for(Iterator j = continuationGroup.getContinuations().keySet().iterator(); i.hasNext();) {
+                    String continuationId = (String) j.next();
+
+                    this.continuations.remove(continuationId);
+                }
+d148 1
+a148 1
+    // HttpSessionBindingListener inteface
+d160 1
+a160 1
+    // HttpSessionActivationListener interface
+d175 1
+a175 1
+        SessionContinuationStore.getInstance(this.session.getServletContext()).register(this);
+d180 44
+a223 1
+        SessionContinuationStore.getInstance(this.session.getServletContext()).unregister(this);
+@
+
+
+1.3.4.2
+log
+@bugfix in purgeExpired() (wrong iterator name)
+@
+text
+@d159 1
+a159 1
+                for(Iterator j = continuationGroup.getContinuations().keySet().iterator(); j.hasNext();) {
+@
+
+
+1.3.4.3
+log
+@adapted to ContinuationStoreSingletonDecorator
+@
+text
+@d84 1
+a84 1
+    public String getId()
+d91 4
+a94 4
+                      final String groupId,
+                      final String continuationId,
+                      final Procedure procedure,
+                      final long ttl)
+d198 1
+a198 5
+        ContinuationStore store = ContinuationStoreSingletonDecorator.getInstance();
+
+        if(store instanceof SessionContinuationStore) {
+            ((SessionContinuationStore) store).register(this);
+        }
+d203 1
+a203 5
+        ContinuationStore store = ContinuationStoreSingletonDecorator.getInstance();
+
+        if(store instanceof SessionContinuationStore) {
+            ((SessionContinuationStore) store).unregister(this);
+        }
+@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@d94 3
+a96 15
+        return storeContinuation(new Continuation(id, continuation, ttl));
+    }
+
+    public String storeContinuation(final String id,
+                                    final Procedure continuation,
+                                    final Date expirationDate)
+    {
+        return storeContinuation(new Continuation(id, continuation,
+                                                  expirationDate));
+    }
+
+    protected String storeContinuation(final Continuation continuation)
+    {
+        this.table.put(continuation.getID(), continuation);
+        return continuation.getID();
+d109 1
+d127 1
+a127 1
+    public void purgeExpired()
+d130 1
+d140 1
+d143 2
+d189 3
+d194 1
+a194 2
+    public Continuation(final String id, final Procedure continuation,
+                        final Date expirationDate)
+d198 4
+a201 1
+        this.expirationDate = expirationDate;
+a203 4
+    public Continuation(final String id, final Procedure continuation, final long ttl)
+    {
+        this(id, continuation, new Date(new Date().getTime() + ttl * 1000));
+    }
+d219 6
+@
+
+
+1.2.4.1
+log
+@now counts purged continuations
+@
+text
+@d138 1
+a138 1
+    public int purgeExpired()
+a140 1
+        int n = 0;
+a149 1
+                n++;
+a151 2
+
+        return n;
+@
+
+
+1.2.4.2
+log
+@now updates expiration date of visited continuation; minor cleanup
+@
+text
+@d94 15
+a108 3
+        Continuation c  = new Continuation(id, continuation, ttl);
+        this.table.put(c.getID(), c);
+        return c.getID();
+a120 1
+            continuation.touch();
+a199 3
+    protected Date creationDate;
+    protected Date visitDate;
+    protected long ttl;
+d202 2
+a203 1
+    public Continuation(final String id, final Procedure continuation, final long ttl)
+d207 1
+a207 4
+        this.creationDate = new Date();
+        this.visitDate = null;
+        this.ttl = ttl;
+        this.expirationDate = new Date(this.creationDate.getTime() + ttl * 1000);
+d210 4
+a228 6
+
+    public void touch()
+    {
+        this.visitDate = new Date();
+        this.expirationDate = new Date(this.visitDate.getTime() + ttl * 1000);
+    }
+@
+
+
+1.1
+log
+@file ContinuationTable.java was initially added on branch rel-0-1-dev.
+@
+text
+@d1 225
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 184
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+package siscweb.contcentric;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Date;
+
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionActivationListener;
+import javax.servlet.http.HttpSessionEvent;
+
+import sisc.data.Procedure;
+
+
+public class ContinuationTable implements Serializable, HttpSessionActivationListener
+{
+    private static final long serialVersionUID = 3688505502258902323L;
+
+    protected HashMap table = new HashMap();
+
+
+    private ContinuationTable()
+    { }
+
+    public static ContinuationTable getInstance(final HttpSession session)
+    {
+        ContinuationTable ct;
+
+        synchronized(session) {
+            ct = (ContinuationTable) session.getAttribute("continuation-table");
+
+            if(ct == null) {
+                ct = new ContinuationTable();
+                session.setAttribute("continuation-table", ct);
+            }
+        }
+
+        ((ContinuationManager) session.getServletContext().getAttribute("continuation-manager"))
+            .register(session.getId(), ct);
+
+        return ct;
+    }
+
+
+    public String storeContinuation(final String id,
+                                    final Procedure continuation,
+                                    final long ttl)
+    {
+        return storeContinuation(new Continuation(id, continuation, ttl));
+    }
+
+    public String storeContinuation(final String id,
+                                    final Procedure continuation,
+                                    final Date expirationDate)
+    {
+        return storeContinuation(new Continuation(id, continuation,
+                                                  expirationDate));
+    }
+
+    protected String storeContinuation(final Continuation continuation)
+    {
+        this.table.put(continuation.getID(), continuation);
+        return continuation.getID();
+    }
+
+    public Procedure fetchContinuation(String id)
+    {
+        Continuation continuation = (Continuation) this.table.get(id);
+
+        if(continuation != null) {
+            return continuation.getContinuation();
+        }
+        else {
+            return null;
+        }
+    }
+
+    public void clear()
+    {
+        this.table.clear();
+    }
+
+
+    public void purgeExpired()
+    {
+        Date now = new Date();
+
+        for(Iterator i = new ArrayList(this.table.keySet()).iterator(); i.hasNext();) {
+            Continuation continuation = (Continuation) this.table.get((String) i.next());
+
+            // continuation may have been removed in the meanwhile
+            if(continuation != null &&
+               now.compareTo(continuation.getExpirationDate()) < 0) {
+
+                table.remove(continuation.getID());
+            }
+        }
+    }
+
+
+    public void sessionDidActivate(HttpSessionEvent se)
+    {
+        ((ContinuationManager) se.getSession().getServletContext().getAttribute("continuation-manager"))
+            .register(se.getSession().getId(), this);
+    }
+
+    public void sessionWillPassivate(HttpSessionEvent se)
+    {
+        ((ContinuationManager) se.getSession().getServletContext().getAttribute("continuation-manager"))
+            .unregister(se.getSession().getId());
+    }
+}
+
+
+class Continuation implements Serializable
+{
+    protected String id;
+    protected Procedure continuation;
+    protected Date expirationDate;
+
+    public Continuation(final String id, final Procedure continuation,
+                        final Date expirationDate)
+    {
+        this.id = id;
+        this.continuation = continuation;
+        this.expirationDate = expirationDate;
+    }
+
+    public Continuation(final String id, final Procedure continuation, final long ttl)
+    {
+        this(id, continuation, new Date(new Date().getTime() + ttl));
+    }
+
+    public String getID()
+    {
+        return this.id;
+    }
+
+    public Procedure getContinuation()
+    {
+        return this.continuation;
+    }
+
+    public Date getExpirationDate()
+    {
+        return this.expirationDate;
+    }
+}
+@
+
+
+1.1.2.2
+log
+@added field pointing to the session to which the continuation table is bound; registration to the continuation manager is now performed conditionally to a flag, but it doesn't seem to work prooperly.
+@
+text
+@a45 2
+import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionBindingListener;
+d51 1
+a51 2
+public class ContinuationTable
+    implements Serializable, HttpSessionBindingListener, HttpSessionActivationListener
+d55 1
+a55 2
+    protected HttpSession session;
+    protected final HashMap table = new HashMap();
+d58 1
+a58 1
+    private ContinuationTable(final String name)
+a60 2
+
+
+d69 1
+a69 1
+                ct = new ContinuationTable(session.getId());
+d74 2
+a75 1
+        ct.register(session);
+d102 1
+a102 1
+    public Procedure fetchContinuation(final String id)
+a118 4
+    public int size()
+    {
+        return this.table.size();
+    }
+a136 12
+
+
+    public void valueBound(HttpSessionBindingEvent be)
+    {
+        this.session = be.getSession();
+    }
+
+    public void valueUnbound(HttpSessionBindingEvent be)
+    {
+        this.session = null;
+    }
+
+d139 2
+a140 2
+        this.session = se.getSession();
+        this.register(this.session);
+d145 2
+a146 29
+        this.session = null;
+        this.unregister(se.getSession());
+    }
+
+
+    protected Boolean isRegistered = Boolean.FALSE;
+
+    protected void register(HttpSession session)
+    {
+        synchronized(this.isRegistered) {
+            if(this.isRegistered == Boolean.FALSE) {
+                ((ContinuationManager) session.getServletContext().getAttribute("continuation-manager"))
+                    .register(session.getId(), this);
+
+                this.isRegistered = Boolean.TRUE;
+            }
+        }
+    }
+
+    protected void unregister(HttpSession session)
+    {
+        synchronized(this.isRegistered) {
+            if(this.isRegistered == Boolean.TRUE) {
+                ((ContinuationManager) session.getServletContext().getAttribute("continuation-manager"))
+                    .unregister(session.getId());
+
+                this.isRegistered = Boolean.FALSE;
+            }
+        }
+a147 2
+
+
+@
+
+
+1.1.2.3
+log
+@now name is properly initialized in constructor; fixed bug where ct was being registered every time an instance was provided; added existsContinuation() method; register methods do not take a session parameter anymore (they use the session in the ct object); removed some shenanigans with the isRegistered thingie
+@
+text
+@a57 1
+    protected String name;
+d63 2
+a64 3
+    {
+        this.name = name;
+    }
+a76 1
+                ct.register();
+d80 2
+a106 5
+    public boolean existsContinuation(final String id)
+    {
+        return this.table.containsKey(id);
+    }
+
+a157 1
+
+d161 1
+a161 1
+        this.register();
+d167 1
+a167 1
+        this.unregister();
+a169 1
+    Boolean isRegistered = Boolean.FALSE;
+d171 3
+a173 1
+    protected void register()
+d176 2
+a177 3
+            if(this.isRegistered == Boolean.FALSE &&
+               this.session != null) {
+                ((ContinuationManager) this.session.getServletContext().getAttribute("continuation-manager"))
+d185 1
+a185 1
+    protected void unregister()
+d188 3
+a190 4
+            if(this.isRegistered == Boolean.TRUE &&
+               this.session != null) {
+                ((ContinuationManager) this.session.getServletContext().getAttribute("continuation-manager"))
+                    .unregister(this.session.getId());
+@
+
+
+1.1.2.4
+log
+@fixed continuation timestamp comparison; simplified register()/unregister() code; removed unnecessary name field
+@
+text
+@a43 1
+import javax.servlet.ServletContext;
+d58 1
+d63 4
+a66 2
+    private ContinuationTable()
+    { }
+d77 1
+a77 1
+                ct = new ContinuationTable();
+a85 5
+    public String getID()
+    {
+        return this.session.getId();
+    }
+
+d144 1
+a144 1
+               now.compareTo(continuation.getExpirationDate()) > 0) {
+d173 1
+a174 1
+        this.session = null;
+d177 2
+d181 5
+a185 2
+        ServletContext context = this.session.getServletContext();
+        System.out.println("****** " + context);
+d187 3
+a189 1
+        ContinuationManager.getInstance(context).register(this);
+d194 9
+a202 1
+        ContinuationManager.getInstance(this.session.getServletContext()).unregister(this);
+d204 2
+@
+
+
+1.1.2.5
+log
+@minor fixes
+@
+text
+@d182 4
+a185 1
+        ContinuationManager.getInstance(this.session.getServletContext()).register(this);
+d211 1
+a211 1
+        this(id, continuation, new Date(new Date().getTime() + ttl * 1000));
+@
+
+

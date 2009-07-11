@@ -1,0 +1,96 @@
+head	1.1;
+access;
+symbols
+	rel-0-2-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2005.06.04.04.38.07;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.06.04.04.38.07;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.06.06.02.36.53;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@file manual.xml was initially added on branch rel-0-2-dev.
+@
+text
+@@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 42
+<?xml version="1.0"?>
+
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN"
+                      "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+  <!ENTITY SISC "<emphasis>SISC</emphasis>">
+  <!ENTITY SISCweb "<emphasis>SISCweb</emphasis>">
+  <!ENTITY SISC "<emphasis>SISC</emphasis>">
+  <!ENTITY syntax "<emphasis>syntax: </emphasis>emphasis>">
+  <!ENTITY returns "<emphasis>returns: </emphasis>emphasis>">
+  <!ENTITY procedure "<emphasis>procedure: </emphasis>emphasis> ">
+  <!ENTITY parameter "<emphasis>parameter: </emphasis>emphasis>">
+  <!ENTITY f "&num;f">
+  <!ENTITY t "&num;t">
+  <!ENTITY arrow ";=&gt;">
+  <!ENTITY requires "<emphasis>Requires: </emphasis>emphasis>">
+
+  <!ENTITY legalnotice SYSTEM "legalnotice.xml">
+  <!ENTITY introduction SYSTEM "introduction.xml">
+]>
+
+<book id="siscweb-manual" lang="en">
+
+  <bookinfo>
+    <title>SISCweb Manual</title>
+
+    <author>
+      <firstname>Alessandro</firstname>
+      <surname>Colomba</surname>
+    </author>
+
+    <copyright>
+      <year>2005</year>
+      <holder>Alessandro Colomba</holder>
+    </copyright>
+
+    &legalnotice;
+  </bookinfo>
+
+
+  &introduction;
+
+</book>
+@
+
+
+1.1.2.2
+log
+@moved to swm/
+@
+text
+@@
+
+

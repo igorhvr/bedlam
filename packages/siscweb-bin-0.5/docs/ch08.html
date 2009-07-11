@@ -1,0 +1,1517 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Chapter 8. Lower-level APIs</title><link href="siscweb-manual.css" rel="stylesheet" type="text/css" /><meta content="DocBook XSL Stylesheets V1.70.1" name="generator" /><link rel="start" href="index.html" title="SISCweb Manual" /><link rel="up" href="index.html" title="SISCweb Manual" /><link rel="prev" href="ch07.html" title="Chapter 7. Interaction with SQL Databases" /><link rel="next" href="apa.html" title="Appendix A. GNU General Public License" /></head><body><div class="navheader"><table summary="Navigation header" width="100%"><tr><th align="center" colspan="3">Chapter 8. Lower-level APIs</th></tr><tr><td align="left" width="20%"><a accesskey="p" href="ch07.html">Prev</a> </td><th align="center" width="60%"> </th><td align="right" width="20%"> <a accesskey="n" href="apa.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="lowlev" />Chapter 8. Lower-level APIs</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ch08.html#request">Request Procedures</a></span></dt><dt><span class="section"><a href="ch08.html#response">Response Procedures</a></span></dt><dt><span class="section"><a href="ch08.html#session">Session Procedures</a></span></dt><dt><span class="section"><a href="ch08.html#context">ServletContext Procedures</a></span></dt></dl></div><p>
+    Even though <span class="application">SISCweb</span> applies an abstraction layer over
+    characteristics of the HTTP protocol, it is still at times
+    convenient to access the details of requests, responses,
+    sessions and the servlet context in which they live.
+  </p><p>
+    For this reason <span class="application">SISCweb</span> provides wrappers around all the methods
+    of the <code class="function">Request</code>,
+    <code class="function">Response</code>, <code class="function">Session</code> and
+    <code class="function">ServletContext</code>objects. All the procedures
+    operate on the instances current at the time of invocation.
+  </p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="request" />Request Procedures</h2></div></div></div><p>
+      <span class="emphasis"><em>Requires:</em></span>
+      <span class="bold"><strong>
+        (import <span class="emphasis"><em>siscweb/request</em></span>)
+      </strong></span>
+      <br />
+      <span class="emphasis"><em>Located in:</em></span>
+      <span class="bold"><strong>
+        siscweb.jar
+      </strong></span>
+    </p><p>
+      This module provides wrappers around the Request object current
+      at the time of invocation.
+    </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+        Because of the large number of methods, they are here sorted
+        in alphabetical order. The descriptions are adapted from the
+        J2EE 1.3 javadoc.
+      </p></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11547" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">current-request</span>) =&gt; <span class="type">javax.servlet.http.HttpServletRequest</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the current Request object. Since complete
+            wrappers are provided by this module, this is normally
+            useful to either create Request adapters, or to use the
+            the procedure returned by
+            <code class="function">request/get-dispatcher</code>.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11561" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-auth-type</span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the name of the authentication scheme used to
+            protect the URL of the published procedure, or #f if the
+            URL does not require authentication.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11577" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-character-encoding</span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the name of the character encoding used in the
+            body of this request, or #f if the request does not
+            specify a character encoding.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N1158D" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-content-length</span>) =&gt; <span class="type">number</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the length, in bytes, of the request body and made
+            available by the input stream, or -1 if the length is not
+            known.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N115A3" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-content-type</span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the MIME type of the body of the request, or #f
+            if the type is not known.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N115B9" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-cookies</span>) =&gt; <span class="type">list</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a list containing all of the
+            <code class="function">javax.servlet.http.Cookie</code> objects the client sent with
+            this request. This method returns the empty list if no
+            cookies were sent.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N115D3" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-date-header</span> <span class="methodparam"><span class="parameter">name</span></span>) =&gt; <span class="type">time</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the value of the specified request header as a
+            SRFI-19 time structure. Use this method with headers that
+            contain dates, such as If-Modified-Since.
+          </p><p>
+            If the request did not have a header of the specified
+            name, this method returns #f. If the header can't be
+            converted to a date, the method throws a Java
+            <code class="function">IllegalArgumentException</code>.  </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N115F5" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-dispatcher</span> <span class="methodparam"><span class="parameter">c-url</span></span>) =&gt; <span class="type">proc</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a procedure <code class="function">proc</code> that, when
+            invoked with the parameters <em class="parameter"><code>request</code></em>
+            and <em class="parameter"><code>response</code></em>, will forward the
+            request to the resource located at the given
+            <em class="parameter"><code>c-url</code></em>. The resource can be dynamic
+            or static.
+          </p><p>
+            The specified <em class="parameter"><code>c-url</code></em> may be relative
+            to the path of the published procedure, although it cannot
+            extend outside the current servlet context. If the path
+            begins with a "/" it is interpreted as relative to the
+            current context root. This method returns #f if the
+            servlet container cannot return a RequestDispatcher.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11627" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-header</span> <span class="methodparam"><span class="parameter">name</span></span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the value of the specified request header as a
+            string. If the request did not include a header of the
+            specified <em class="parameter"><code>name</code></em>, this procedure
+            returns #f. The header <em class="parameter"><code>name</code></em> is
+            case insensitive. You can use this procedure with any
+            request header.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N1164B" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-header-alist</span>) =&gt; <span class="type">alist</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a <em class="parameter"><code>(name . value)</code></em>
+            association list of all the header names. All the header
+            <em class="parameter"><code>value</code></em>s are returned as strings.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11669" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-header-hashtable</span>) =&gt; <span class="type">hashtable</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns all the request headers as a hashtable of
+            <em class="parameter"><code>name</code></em>-<em class="parameter"><code>value</code></em>
+            associations. All the header <em class="parameter"><code>value</code></em>s
+            are returned as strings.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N1168B" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-header-names</span>) =&gt; <span class="type">list</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns list of all the header names this request
+            contains. If the request has no headers, this method
+            returns an empty list.
+          </p><p>
+            Some servlet containers do not allow do not allow servlets
+            to access headers using this method, in which case this
+            procedure returns #f.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N116A3" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-header-names</span>) =&gt; <span class="type">list</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns list of all the header names this request
+            contains. If the request has no headers, this method
+            returns an empty list.
+          </p><p>
+            Some servlet containers do not allow do not allow servlets
+            to access headers using this method, in which case this
+            procedure returns #f.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N116BB" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-int-header</span> <span class="methodparam"><span class="parameter">name</span></span>) =&gt; <span class="type">integer</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the value of the specified request header as an
+            integer. If the request does not have a header of the
+            specified name, this procedure returns #f. If the header
+            cannot be converted to an integer, this method throws a
+            Java <code class="function">NumberFormatException</code>.
+          </p><p>
+            The header name is case insensitive.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N116DD" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-java-attribute</span> <span class="methodparam"><span class="parameter">name</span></span>) =&gt; <span class="type">jobject</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the value of the <em class="parameter"><code>name</code></em>d
+            attribute as a Java object, or <code class="function">null</code>
+            if no attribute of the given <em class="parameter"><code>name</code></em>
+            exists.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11705" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-java-attribute-names</span>) =&gt; <span class="type">list</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a list of names of the attributes available to
+            this request. This method returns an empty list if the
+            request has no attributes available to it.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N1171B" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-locale</span>) =&gt; <span class="type">java.util.Locale</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a Java <code class="function">java.util.Locale</code>
+            object representing the preferred locale that the client
+            will accept content in, based on the Accept-Language
+            header. If the client request doesn't provide an
+            Accept-Language header, this method returns the default
+            locale for the server.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11735" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-locales</span>) =&gt; <span class="type">list</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a list of <code class="function">java.util.Locale</code>
+            objects indicating, in decreasing order starting with the
+            preferred locale, the locales that are acceptable to the
+            client based on the Accept-Language header. If the client
+            request doesn't provide an Accept-Language header, this
+            method returns an Enumeration containing one
+            <code class="function">java.util.Locale</code>, the default locale
+            for the server.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11753" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-method</span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the name of the HTTP method with which this
+            request was made, for example, GET, POST, or PUT.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11769" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-parameter</span> <span class="methodparam"><span class="parameter">name</span></span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the value of a request parameter as a string, or
+            #f if the parameter does not exist.
+          </p><p>
+            You should only use this method when you are sure the
+            parameter has only one value. If the parameter might have
+            more than one value, use
+            <code class="function">request/get-parameter-values</code>.  If you
+            use this method with a multivalued parameter, the value
+            returned is equal to the first value in the list returned
+            by <code class="function">request/get-parameter-values</code>.
+          </p><p>
+            If the parameter data was sent in the request body, such
+            as occurs with an HTTP POST request, then reading the body
+            directly via
+            <code class="function">request/open-binary-input-port</code> or
+            <code class="function">request/open-input-port</code> can interfere
+            with the execution of this procedure.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11799" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-parameter-alist</span>) =&gt; <span class="type">alist</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a <em class="parameter"><code>(name . (value1 ...))</code></em>
+            association list of all parameters and their values.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N117B3" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-parameter-hashtable</span>) =&gt; <span class="type">hashtable</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a hashtable containing the association between
+            parameter names and lists of the parameter values.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N117C9" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-parameter-names</span>) =&gt; <span class="type">list</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a list of names of the parameters contained in
+            this request. If the request has no parameters, the
+            procedure returns an empty list.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N117DF" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-parameter-values</span> <span class="methodparam"><span class="parameter">name</span></span>) =&gt; <span class="type">list</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a list of values of the given request parameter,
+            or the empty list if the parameter does not exist.
+          </p><p>
+            If the parameter has a single value, the list has a length
+            of 1.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N117FD" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-path-info</span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns any extra path information associated with the URL
+            the client sent when it made this request. The extra path
+            information follows the path of the
+            <code class="function">SISCAdapterServlet</code> but precedes the
+            query string. This procedure returns #f if there was no
+            extra path information.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11817" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-path-translated</span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns any extra path information after the servlet name
+            but before the query string, and translates it to a real
+            path.
+          </p><p>
+            If the URL does not have any extra path information, this
+            method returns #f. The web container does not decode
+            thins string.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N1182F" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-protocol</span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the name and version of the protocol the request
+            uses in the form protocol/majorVersion.minorVersion, for
+            example, HTTP/1.1.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11845" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-query-string</span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the query string that is contained in the request
+            URL after the path. This procedure returns #f if the URL
+            does not have a query string.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N1185B" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-remote-addr</span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the Internet Protocol (IP) address of the client
+            that sent the request.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11871" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-remote-host</span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the fully qualified name of the client that sent
+            the request. If the engine cannot or chooses not to
+            resolve the hostname (to improve performance), this
+            procedure returns the dotted-string form of the IP
+            address.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11887" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-remote-user</span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the login of the user making this request, if the
+            user has been authenticated, or #f if the user has not
+            been authenticated. Whether the user name is sent with
+            each subsequent request depends on the browser and type of
+            authentication.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N1189D" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-requested-session-id</span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the session ID specified by the client. This may
+            not be the same as the ID of the actual session in
+            use. For example, if the request specified an old
+            (expired) session ID and the server has started a new
+            session, this method gets a new session with a new ID. If
+            the request did not specify a session ID, this method
+            returns #f.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N118B3" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-scheme</span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the name of the scheme used to make this request.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N118C9" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-server-name</span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the host name of the server that received the
+            request.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N118DF" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-server-port</span>) =&gt; <span class="type">integer</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the port number on which this request was
+            received.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N118F5" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-servlet-path</span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the part of this request's URL that calls the
+            <code class="function">SISCAdapterServlet</code>. This includes
+            either the servlet name or a path to the servlet, but does
+            not include any extra path information or a query string.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N1190F" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-session</span> [<span class="methodparam"><span class="parameter">create?</span></span>]) =&gt; <span class="type">javax.servlet.http.HttpSession</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the current HttpSession associated with this
+            request or, if if there is no current session and the
+            <em class="parameter"><code>create?</code></em> is #t or absent, returns a
+            new session.
+          </p><p>
+            If <em class="parameter"><code>create</code></em> is #f and the request
+            has no valid <code class="function">HttpSession</code>, this method
+            returns <code class="function">null</code>.
+          </p><p>
+            To make sure the session is properly maintained, you must
+            call this method before the response is committed. If the
+            container is using cookies to maintain session integrity
+            and is asked to create a new session when the response is
+            committed, a Java
+            <code class="function">IllegalStateException</code> is thrown.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11943" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-uri</span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the part of this request's URL from the protocol
+            name up to the query string in the first line of the HTTP
+            request. The web container does not decode this String.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11959" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-url</span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Reconstructs the URL the client used to make the
+            request. The returned URL contains a protocol, server
+            name, port number, and server path, but it does not
+            include query string parameters.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N1196F" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-user-principal</span>) =&gt; <span class="type">java.security.Principal</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a <code class="function">java.security.Principal</code>
+            object containing the name of the current authenticated
+            user. If the user has not been authenticated, the method
+            returns <code class="function">null</code>.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N1198D" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/open-binary-input-port</span>) =&gt; <span class="type">binary-input-port</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Retrieves the body of the request as binary data using a
+            binary input port. Either this procedure or
+            <code class="function">request/open-input-port</code> may be called
+            to read the body, not both.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N119A7" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/open-input-port</span>) =&gt; <span class="type">character-input-port</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Retrieves the body of the request as character data using
+            a character input port. The port translates the character
+            data according to the character encoding used on the
+            body. Either this procedure or
+            <code class="function">request/open-binary-input-port</code> may be
+            called to read the body, not both.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N119C1" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/remove-java-attribute!</span> <span class="methodparam"><span class="parameter">name</span></span>) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Removes an attribute from this request. This method is not
+            generally needed as attributes only persist as long as the
+            request is being handled.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N119DD" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/session-id-from-cookie?</span>) =&gt; <span class="type">#t/#f</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Checks whether the requested session ID came in as a
+            cookie.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N119F3" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/session-id-from-url?</span>) =&gt; <span class="type">#t/#f</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Checks whether the requested session ID came in as part of
+            the request URL.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11A09" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/requested-session-id-valid?</span>) =&gt; <span class="type">#t/#f</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Checks whether the requested session ID is still valid.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11A1F" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/secure?</span>) =&gt; <span class="type">#t/#f</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Checks whether this request was made using a secure
+            channel, such as HTTPS.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11A35" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/set-character-encoding!</span> <span class="methodparam"><span class="parameter">encoding</span></span>) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Overrides the name of the character encoding used in the
+            body of this request. This method must be called prior to
+            reading request parameters or reading input using
+            <code class="function">request/open-input-port</code>.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11A55" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/set-java-attribute!</span> <span class="methodparam"><span class="parameter">name</span></span> <span class="methodparam"><span class="parameter">jobject</span></span>) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Stores a Java object in the <em class="parameter"><code>name</code></em>d
+            attribute in this request. Attributes are reset between
+            requests. This method is most often used in conjunction
+            with <code class="function">request/make-dispatcher</code>.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11A7F" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/user-in-role?</span> <span class="methodparam"><span class="parameter">username</span></span>) =&gt; <span class="type">#t/#f</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Checks whether the authenticated user is included in the
+            specified logical "role". Roles and role
+            membership can be defined using deployment descriptors. If
+            the user has not been authenticated, the method returns
+            #f.
+          </p></blockquote></div>
+      </p></blockquote></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="response" />Response Procedures</h2></div></div></div><p>
+      <span class="emphasis"><em>Requires:</em></span>
+      <span class="bold"><strong>
+        (import <span class="emphasis"><em>siscweb/response</em></span>)
+      </strong></span>
+      <br />
+      <span class="emphasis"><em>Located in:</em></span>
+      <span class="bold"><strong>
+        siscweb.jar
+      </strong></span>
+    </p><p>
+      This module provides wrappers around the Response object current
+      at the time of invocation.
+    </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+        Because of the large number of methods, they are here sorted
+        in alphabetical order. The descriptions are adapted from the
+        J2EE 1.3 javadoc.
+      </p></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11AB9" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">current-response</span>) =&gt; <span class="type">javax.servlet.http.HttpServletResponse</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the current Response object. Since complete
+            wrappers are provided by this module, this is normally
+            useful to either create Request adapters, or to use the
+            the procedure returned by
+            <code class="function">request/get-dispatcher</code>.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11AD3" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">response/add-cookie!</span> <span class="methodparam"><span class="parameter">javax.servlet.http.Cookie</span></span>) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Adds the specified cookie to the response. This method can
+            be called multiple times to set more than one cookie.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11AEF" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">response/add-header!</span> <span class="methodparam"><span class="parameter">name</span></span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Adds a response header with the given name and value. This
+            method allows response headers to have multiple values.
+          </p><p>
+            The <em class="parameter"><code>value</code></em> parameter can either be a
+            string, an integer number or an SRFI-19 date or time
+            structure.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11B17" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">response/add-headers!</span> <span class="methodparam"><span class="parameter">alist</span></span>) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Adds multiple headers, one for each
+            (<em class="parameter"><code>name</code></em>
+            . <em class="parameter"><code>value</code></em>) element of the
+            <em class="parameter"><code>alist</code></em>, with
+            <em class="parameter"><code>value</code></em> being either a string, an
+            integer number or an SRFI-19 time structure.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11B43" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">response/commit!</span>) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Commits the response, forcing any content in the buffer to
+            be written to the client, including the status code and
+            headers.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11B59" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">response/committed?</span>) =&gt; <span class="type">#t/#f</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Checks if the response has been committed. A commited
+            response has already had its status code and headers
+            written.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11B6F" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">response/contains-header?</span> <span class="methodparam"><span class="parameter">name</span></span>) =&gt; <span class="type">#t/#f</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Checks whether the <em class="parameter"><code>name</code></em>d response
+            header has already been set.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11B8F" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">response/encode-redirect-url</span> <span class="methodparam"><span class="parameter">url</span></span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Encodes the specified <em class="parameter"><code>url</code></em> for use
+            in the <code class="function">response/send-redirect</code>
+            procedure or, if encoding is not needed, returns the
+            <em class="parameter"><code>url</code></em> unchanged. The implementation
+            of this method includes the logic to determine whether the
+            session ID needs to be encoded in the URL. Because the
+            rules for making this determination can differ from those
+            used to decide whether to encode a normal link, this
+            procedure is separate from
+            <code class="function">response/encode-url</code>.
+          </p><p>
+            All URLs sent to the
+            <code class="function">response/send-redirect</code> procedure
+            should be run through this method. Otherwise, URL
+            rewriting cannot be used with browsers which do not
+            support cookies.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11BC1" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">response/encode-url</span> <span class="methodparam"><span class="parameter">url</span></span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Encodes the specified <em class="parameter"><code>url</code></em> by
+            including the session ID in it, or, if encoding is not
+            needed, returns the <em class="parameter"><code>url</code></em>
+            unchanged. The implementation of this method includes the
+            logic to determine whether the session ID needs to be
+            encoded in the URL. For example, if the browser supports
+            cookies, or if session tracking is turned off, URL
+            encoding is unnecessary.
+          </p><p>
+            For robust session tracking, all URLs emitted by a servlet
+            should be run through this method. Otherwise, URL
+            rewriting cannot be used with browsers which do not
+            support cookies.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11BE7" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">response/get-buffer-size</span>) =&gt; <span class="type">integer</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the actual buffer size used for the response. If
+            no buffering is used, this procedure returns 0.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11BFD" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">response/get-character-encoding</span>) =&gt; <span class="type">encoding</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the name of the charset used for the MIME body
+            sent in this response. If no charset has been assigned, it
+            is implicitly set to ISO-8859-1 (Latin-1).
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11C13" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">response/get-locale</span>) =&gt; <span class="type">java.util.Locale</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the locale assigned to the response.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11C29" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">response/open-binary-output-port</span>) =&gt; <span class="type">binary-output-port</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a binary output port suitable for writing binary
+            data in the response. The servlet container does not
+            encode the binary data.
+          </p><p>
+            Flushing the port commits the response. Either this method
+            or <code class="function">response/open-output-port</code> may be
+            called to write the body, not both.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11C45" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">response/open-output-port</span>) =&gt; <span class="type">character-output-port</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a character output port that can send character
+            text to the client. The character encoding used is the one
+            specified in the charset= property of the
+            <code class="function">response/set-content-type!</code> procedure,
+            which must be called before calling this procedure for the
+            charset to take effect.
+          </p><p>
+            If necessary, the MIME type of the response is modified to
+            reflect the character encoding used.
+          </p><p>
+            Flushing the port commits the response. Either this method
+            or <code class="function">response/open-binary-output-port</code>
+            may be called to write the body, not both.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11C67" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">response/reset!</span>) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Clears any data that exists in the buffer as well as the
+            status code and headers. If the response has been
+            committed, this method throws a Java
+            <code class="function">IllegalStateException</code>.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11C81" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">response/reset-buffer!</span>) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Clears the content of the underlying buffer in the
+            response without clearing headers or status code. If the
+            response has been committed, this method throws a Java
+            <code class="function">IllegalStateException</code>.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11C9B" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/send-error</span> <span class="methodparam"><span class="parameter">status-code</span></span> [<span class="methodparam"><span class="parameter">message</span></span>]) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Sends an error response to the client using the specified
+            status clearing the buffer. The server defaults to
+            creating the response to look like an HTML-formatted
+            server error page containing the specified message,
+            setting the content type to "text/html", leaving cookies
+            and other headers unmodified. If an error-page declaration
+            has been made for the web application corresponding to the
+            status code passed in, it will be served back in
+            preference to the suggested msg parameter.
+          </p><p>
+            If the response has already been committed, this method
+            throws a Java
+            <code class="function">IllegalStateException</code>. After using
+            this method, the response should be considered to be
+            committed and should not be written to.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11CC3" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/send-redirect</span> <span class="methodparam"><span class="parameter">url</span></span>) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Sends a temporary redirect response to the client using
+            the specified redirect <em class="parameter"><code>url</code></em>. This
+            method can accept relative URLs; the servlet container
+            must convert the relative URL to an absolute URL before
+            sending the response to the client. If the location is
+            relative without a leading '/' the container interprets it
+            as relative to the current request URI. If the location is
+            relative with a leading '/' the container interprets it as
+            relative to the servlet container root.
+          </p><p>
+            If the response has already been committed, this method
+            throws a Java
+            <code class="function">IllegalStateException</code>. After using
+            this method, the response should be considered to be
+            committed and should not be written to.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11CE9" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/set-buffer-size!</span> <span class="methodparam"><span class="parameter">bufsize</span></span>) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Sets the preferred buffer size for the body of the
+            response. The servlet container will use a buffer at least
+            as large as the size requested. The actual buffer size
+            used can be found using
+            <code class="function">response/get-buffer-size</code>.
+          </p><p>
+            This method must be called before any response body
+            content is written; if content has been written, this
+            method throws a Java
+            <code class="function">IllegalStateException</code>.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11D0F" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/set-content-length!</span> <span class="methodparam"><span class="parameter">length</span></span>) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Sets the length of the content body in the response In
+            HTTP servlets, this method sets the HTTP Content-Length
+            header.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11D2B" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/set-content-type!</span> <span class="methodparam"><span class="parameter">type</span></span>) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Sets the content type of the response being sent to the
+            client. The content type may include the type of character
+            encoding used, for example, text/html; charset=ISO-8859-4.
+          </p><p>
+            If obtaining a character output port, this method should
+            be called first.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11D49" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">response/set-header!</span> <span class="methodparam"><span class="parameter">name</span></span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Sets a response header with the given
+            <em class="parameter"><code>name</code></em> and
+            <em class="parameter"><code>value</code></em>. If the header had already
+            been set, the new value overwrites the previous one. The
+            <code class="function">response/contains-header?</code> procedure
+            can be used to test for the presence of a header before
+            setting its value.
+          </p><p>
+            The <em class="parameter"><code>value</code></em> parameter can either be a
+            string, an integer number or an SRFI-19 date or time
+            structure.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11D7D" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">response/set-locale!</span> <span class="methodparam"><span class="parameter">java.util.Locale</span></span>) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Sets the locale of the response, setting the headers
+            (including the Content-Type's charset) as
+            appropriate. This method should be called before a call to
+            <code class="function">reponse/open-output-port</code>. By default,
+            the response locale is the default locale for the server.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11D9D" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">response/set-status!</span> <span class="methodparam"><span class="parameter">status-code</span></span>) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Sets the status code for this response. This method is
+            used to set the return status code when there is no error
+            (for example, for the status codes SC_OK or
+            SC_MOVED_TEMPORARILY). If there is an error, and the
+            caller wishes to invoke an defined in the web applicaion,
+            the <code class="function">response/send-error</code> procedure
+            should be used instead.
+          </p><p>
+            The container clears the buffer and sets the Location
+            header, preserving cookies and other headers.
+          </p></blockquote></div>
+      </p></blockquote></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="session" />Session Procedures</h2></div></div></div><p>
+      <span class="emphasis"><em>Requires:</em></span>
+      <span class="bold"><strong>
+        (import <span class="emphasis"><em>siscweb/session</em></span>)
+      </strong></span>
+      <br />
+      <span class="emphasis"><em>Located in:</em></span>
+      <span class="bold"><strong>
+        siscweb.jar
+      </strong></span>
+    </p><p>
+      This module provides wrappers around the Response object current
+      at the time of invocation.
+    </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+        The procedures are sorted in alphabetical order. The
+        descriptions are adapted from the J2EE 1.3 javadoc.
+      </p></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11DDD" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">current-session</span>) =&gt; <span class="type">javax.servlet.HttpSession</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the current Session, or creates a new one if one
+            is not defined yet. Also see the procedure
+            <code class="function">request/get-session</code>.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11DF7" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">session/get-creation-time</span>) =&gt; <span class="type">time</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the time when this session was created as an
+            SRFI-19 time structure.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11E0D" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">session/get-id</span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a string containing the unique identifier assigned
+            to this session. The identifier is assigned by the servlet
+            container and is implementation dependent.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11E23" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">session/get-java-attribute</span> <span class="methodparam"><span class="parameter">name</span></span>) =&gt; <span class="type">jobject</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the Java object bound with the specified name in
+            this session, or <code class="function">null</code> if no object is
+            bound under the name.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11E43" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">session/get-java-attribute-names</span>) =&gt; <span class="type">list</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns an list of names of all the objects bound to this
+            session.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11E59" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">session/get-last-accessed-time</span>) =&gt; <span class="type">time</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the last time the client sent a request associated
+            with this session, as an SRFI-19 time structure, and
+            marked by the time the container received the request.
+          </p><p>
+            Actions that your application takes, such as getting or
+            setting a value associated with the session, do not affect
+            the access time.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11E71" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">session/get-max-inactive-interval</span>) =&gt; <span class="type">seconds</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the maximum time interval, in seconds, that the
+            servlet container will keep this session open between
+            client accesses. After this interval, the servlet
+            container will invalidate the session. The maximum time
+            interval can be set with the setMaxInactiveInterval
+            method. A negative time indicates the session should never
+            timeout.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11E87" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">session/get-servlet-context</span>) =&gt; <span class="type">javax.servlet.ServletContext</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the
+            <code class="function">javax.servlet.ServletContext</code> object
+            to which this session belongs.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11EA1" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">session/invalidate!</span>) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Invalidates this session then unbinds any objects bound to
+            it.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11EB7" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">session/make-parameter</span> <span class="methodparam"><span class="parameter">name</span></span>) =&gt; <span class="type">proc</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a procedure <code class="function">proc</code> that, when
+            invoked, sets or retrieves a Scheme value to/from the a
+            Session attribute named <em class="parameter"><code>name</code></em>,
+            depending on whether a value is passed or not to
+            <div class="procedure"><ol type="1" /></div>.  If <code class="function">proc</code>
+            is passed the #f value, the attribute is removed from the
+            Session object altogether.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11EE2" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">session/new?</span>) =&gt; <span class="type">#t/#f</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns #t if the client does not yet know about the
+            session or if the client chooses not to join the
+            session. For example, if the server used only cookie-based
+            sessions, and the client had disabled the use of cookies,
+            then a session would be new on each request.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11EF8" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">session/remove-java-attribute!</span> <span class="methodparam"><span class="parameter">name</span></span>) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Removes the object bound with the specified
+            <em class="parameter"><code>name</code></em> from this session. If the
+            session does not have an object bound with the specified
+            name, this method does nothing.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11F18" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">session/set-java-attribute!</span> <span class="methodparam"><span class="parameter">name</span></span> <span class="methodparam"><span class="parameter">jobject</span></span>) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Binds a Java object <em class="parameter"><code>jobject</code></em> to this
+            session, using the specified
+            <em class="parameter"><code>name</code></em>. If an object of the same name
+            is already bound to the session, that object is replaced.
+          </p><p>
+          If the value passed in is <code class="function">jnull</code>, this
+          has the same effect as calling
+          <code class="function">session/remove-java-attribute!</code>.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11F4C" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">session/set-max-inactive-interval!</span> <span class="methodparam"><span class="parameter">seconds</span></span>) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Specifies the time, in <em class="parameter"><code>seconds</code></em>,
+            between client requests before the servlet container will
+            invalidate this session. A negative time indicates the
+            session should never timeout.
+          </p></blockquote></div>
+      </p></blockquote></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="context" />ServletContext Procedures</h2></div></div></div><p>
+      <span class="emphasis"><em>Requires:</em></span>
+      <span class="bold"><strong>
+        (import <span class="emphasis"><em>siscweb/context</em></span>)
+      </strong></span>
+      <br />
+      <span class="emphasis"><em>Located in:</em></span>
+      <span class="bold"><strong>
+        siscweb.jar
+      </strong></span>
+    </p><p>
+      This module provides wrappers around the ServletContext object.
+    </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+        The procedures are sorted in alphabetical order. The
+        descriptions are adapted from the J2EE 1.3 javadoc.
+      </p></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11F8A" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">current-context</span>) =&gt; <span class="type">javax.servlet.ServletContext</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the current ServletContext. Also see the procedure
+            <code class="function">context/get</code>.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11FA4" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">context/get</span> <span class="methodparam"><span class="parameter">uripath</span></span>) =&gt; <span class="type">javax.servlet.ServletContext</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a ServletContext object that corresponds to a
+            specified URL on the server.
+          </p><p>
+            This method allows servlets to gain access to the context
+            for various parts of the server, and as needed obtain
+            RequestDispatcher objects from the context. The given path
+            must be begin with "/", is interpreted relative to the
+            server's document root and is matched against the context
+            roots of other web applications hosted on this container.
+          </p><p>
+            In a security conscious environment, the servlet container
+            may return <div class="procedure"><ol type="1" /></div> for a given URL.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11FC7" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">context/get-dispatcher</span> <span class="methodparam"><span class="parameter">c-url</span></span>) =&gt; <span class="type">proc</span></code>
+        <br />
+        <a class="indexterm" id="N11FDE" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">context/get-named-dispatcher</span> <span class="methodparam"><span class="parameter">servlet-name</span></span>) =&gt; <span class="type">proc</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a procedure <code class="function">proc</code> that, when
+            invoked with the parameters <em class="parameter"><code>request</code></em>
+            and <em class="parameter"><code>response</code></em>, will forward the
+            request to the resource located at the given
+            <em class="parameter"><code>c-url</code></em>. The resource can be dynamic
+            or static.
+          </p><p>
+            In the first form, the specified
+            <em class="parameter"><code>c-url</code></em> may be relative to the path
+            of the published procedure, although it cannot extend
+            outside the current servlet context. If the path begins
+            with a "/" it is interpreted as relative to the current
+            context root. This method returns #f if the servlet
+            container cannot return a RequestDispatcher.
+          </p><p>
+            In the second form, the specified
+            <em class="parameter"><code>servlet-name</code></em> indicates a Servlet or
+            JSP page named either via server administration or via a
+            web application deployment descriptor.
+          </p><p>
+            This method returns #f if the ServletContext cannot
+            return a dispatcher for any reason.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N12018" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">context/get-init-parameter</span> <span class="methodparam"><span class="parameter">name</span></span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the value of the <em class="parameter"><code>named</code></em>d
+            context-wide initialization parameter as a string, or #f
+            if the parameter does not exist.
+          </p><p>
+            This method can make available configuration information
+            useful to an entire "web application". For
+            example, it can provide a webmaster's email address or the
+            name of a system that holds critical data.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N1203A" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">context/get-init-parameter-alist</span>) =&gt; <span class="type">alist</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a <em class="parameter"><code>(name . value)</code></em>
+            association list of all the context's initialization
+            parameter names and their values.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N12054" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">context/get-init-parameter-hashtable</span>) =&gt; <span class="type">hashtable</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a hashtable containing the association between all
+            the context's initialization parameter names and their
+            values.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N1206A" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">request/get-init-parameter-names</span>) =&gt; <span class="type">list</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a list of names of the context' s initialization
+            parameters. If the has no initialization parameters, the
+            procedure returns an empty list.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N12080" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">context/get-java-attribute</span> <span class="methodparam"><span class="parameter">name</span></span>) =&gt; <span class="type">jobject</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the servlet container attribute with the given
+            name, or null if there is no attribute by that name. An
+            attribute allows a servlet container to give the servlet
+            additional information not already provided by this
+            interface. See your server documentation for information
+            about its attributes. A list of supported attributes can
+            be retrieved using
+            <code class="function">context/get-java-attribute-names</code>.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N120A0" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">context/get-java-attribute-names</span>) =&gt; <span class="type">list</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a list containing the attribute names available
+            within this servlet context. Use the
+            <code class="function">context/get-java-attribute</code> procedure
+            with an attribute name to get the value of an attribute.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N120BA" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">context/get-major-version</span>) =&gt; <span class="type">integer</span></code>
+        <br />
+        <a class="indexterm" id="N120CB" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">context/get-minor-version</span>) =&gt; <span class="type">integer</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            These procedures return the major and minor versions of
+            the Java Servlet API that this servlet container
+            supports. All implementations that comply with Version 2.3
+            must have this methods respectively return the integers 2 and 3.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N120E1" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">context/get-mime-type</span> <span class="methodparam"><span class="parameter">file-path</span></span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the MIME type of the specified file, or #f if the
+            MIME type is not known. The MIME type is determined by the
+            configuration of the servlet container, and may be
+            specified in a web application deployment
+            descriptor. Common MIME types are "text/html" and
+            "image/gif".
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N120FD" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">context/get-name</span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the name of this web application correponding to
+            this servlet context as specified in the deployment
+            descriptor for this web application by the
+            <code class="function">display-name</code> element.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N12117" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">context/get-real-path</span> <span class="methodparam"><span class="parameter">c-url</span></span>) =&gt; <span class="type">path</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a string containing the real path for a given
+            virtual path. For example, the path
+            "/index.html" returns the absolute file path on
+            the server's filesystem would be served by a request for
+            "http://host/contextPath/index.html", where
+            contextPath is the context path of this servlet context.
+          </p><p>
+            The real path returned will be in a form appropriate to
+            the computer and operating system on which the servlet
+            container is running, including the proper path
+            separators. This method returns null if the servlet
+            container cannot translate the virtual path to a real path
+            for any reason (such as when the content is being made
+            available from a .war archive).
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N12135" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">context/get-real-path</span> <span class="methodparam"><span class="parameter">c-url</span></span>) =&gt; <span class="type">path</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a string containing the real path for a given
+            virtual path. For example, the path
+            "/index.html" returns the absolute file path on
+            the server's filesystem would be served by a request for
+            "http://host/contextPath/index.html", where
+            contextPath is the context path of this servlet context.
+          </p><p>
+            The real path returned will be in a form appropriate to
+            the computer and operating system on which the servlet
+            container is running, including the proper path
+            separators. This method returns null if the servlet
+            container cannot translate the virtual path to a real path
+            for any reason (such as when the content is being made
+            available from a .war archive).
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N12153" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">context/get-resource</span> <span class="methodparam"><span class="parameter">file-path</span></span>) =&gt; <span class="type">url</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a string representing a URL to the resource that
+            is mapped to a specified path. The path must begin with a
+            "/" and is interpreted as relative to the
+            current context root.
+          </p><p>
+            This procedure allows the servlet container to make a
+            resource available to servlets from any source. Resources
+            can be located on a local or remote file system, in a
+            database, or in a .war file.
+          </p><p>
+            This procedure returns #f if no resource is mapped to the
+            pathname.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N12173" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">context/get-resource-paths</span> <span class="methodparam"><span class="parameter">file-path</span></span>) =&gt; <span class="type">list</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a directory-like list of all the paths to
+            resources within the web application whose longest
+            sub-path matches the supplied path argument. Paths
+            indicating subdirectory paths end with a
+            "/". The returned paths are all relative to the
+            root of the web application and have a leading
+            "/".
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N1218F" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">context/get-resource-paths</span>) =&gt; <span class="type">string</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the name and version of the servlet container on
+            which the servlet is running.
+          </p><p>
+            The form of the returned string is
+            servername/versionnumber. For example, the JavaServer Web
+            Development Kit may return the string JavaServer Web Dev
+            Kit/1.0.
+          </p><p>
+            The servlet container may return other optional
+            information after the primary string in parentheses, for
+            example, JavaServer Web Dev Kit/1.0 (JDK 1.1.6; Windows NT
+            4.0 x86).
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N121A9" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">context/make-parameter</span> <span class="methodparam"><span class="parameter">name</span></span>) =&gt; <span class="type">proc</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a procedure <code class="function">proc</code> that, when
+            invoked, sets or retrieves a Scheme value to/from the a
+            servlet context attribute named
+            <em class="parameter"><code>name</code></em>, depending on whether a value
+            is passed or not to <div class="procedure"><ol type="1" /></div>.  If
+            <code class="function">proc</code> is passed the #f value, the
+            attribute is removed from the servlet context altogether.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N121D4" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">context/open-resource-binary-input-port</span> <span class="methodparam"><span class="parameter">file-path</span></span>) =&gt; <span class="type">binary-input-port</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a binary input port that reads from the resource
+            located at the named <em class="parameter"><code>file-path</code></em> as
+            an InputStream object.
+          </p><p>
+            The data in file can be of any type or length. The
+            <em class="parameter"><code>file-path</code></em> must be specified
+            according to the rules given in
+            <code class="function">context/get-resource</code>. This procedure
+            returns #f if no resource exists at the specified path.
+          </p><p>
+            Meta-information such as content length and content type
+            that is available via
+            <code class="function">context/get-resource</code> method is lost
+            when using this method.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N12204" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">context/remove-java-attribute!</span> <span class="methodparam"><span class="parameter">name</span></span>) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Removes the attribute with the given name from the servlet
+            context. After removal, subsequent calls to
+            <code class="function">context/get-java-attribute</code> to
+            retrieve the attribute's value will return #f.
+          </p><p>
+            If listeners are configured on the ServletContext the
+            container notifies them accordingly.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N12226" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">context/set-java-attribute!</span> <span class="methodparam"><span class="parameter">name</span></span> <span class="methodparam"><span class="parameter">jobject</span></span>) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Binds an object to a given attribute
+            <em class="parameter"><code>name</code></em> in this servlet context. If
+            the name specified is already used for an attribute, this
+            method will replace the attribute with the new to the new
+            attribute.
+          </p><p>
+            If listeners are configured on the ServletContext the
+            container notifies them accordingly.
+          </p><p>
+            If a <code class="function">jnull</code> value is passed, the
+            effect is the same as calling
+            <code class="function">context/remove-java-attribute!</code>.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N12258" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">context/get-dispatcher</span> <span class="methodparam"><span class="parameter">c-url</span></span>) =&gt; <span class="type">proc</span></code>
+        <br />
+        <a class="indexterm" id="N1226F" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">context/get-named-dispatcher</span> <span class="methodparam"><span class="parameter">servlet-name</span></span>) =&gt; <span class="type">proc</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a procedure <code class="function">proc</code> that, when
+            invoked with the parameters <em class="parameter"><code>request</code></em>
+            and <em class="parameter"><code>response</code></em>, will forward the
+            request to the resource located at the given
+            <em class="parameter"><code>c-url</code></em>. The resource can be dynamic
+            or static.
+          </p><p>
+            In the first form, the specified
+            <em class="parameter"><code>c-url</code></em> may be relative to the path
+            of the published procedure, although it cannot extend
+            outside the current servlet context. If the path begins
+            with a "/" it is interpreted as relative to the current
+            context root. This method returns #f if the servlet
+            container cannot return a RequestDispatcher.
+          </p><p>
+            In the second form, the specified
+            <em class="parameter"><code>servlet-name</code></em> indicates a Servlet or
+            JSP page named either via server administration or via a
+            web application deployment descriptor.
+          </p><p>
+            This method returns #f if the ServletContext cannot
+            return a dispatcher for any reason.
+          </p></blockquote></div>
+      </p></blockquote></div></div></div><div class="navfooter"><hr /><table summary="Navigation footer" width="100%"><tr><td align="left" width="40%"><a accesskey="p" href="ch07.html">Prev</a> </td><td align="center" width="20%"> </td><td align="right" width="40%"> <a accesskey="n" href="apa.html">Next</a></td></tr><tr><td valign="top" align="left" width="40%">Chapter 7. Interaction with SQL Databases </td><td align="center" width="20%"><a accesskey="h" href="index.html">Home</a></td><td valign="top" align="right" width="40%"> Appendix A. GNU General Public License</td></tr></table></div></body></html>

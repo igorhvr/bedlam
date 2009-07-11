@@ -1,0 +1,79 @@
+head	1.1;
+access;
+symbols
+	rel-0-2-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2005.06.04.04.38.07;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.06.04.04.38.07;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.06.06.02.36.53;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@file legalnotice.xml was initially added on branch rel-0-2-dev.
+@
+text
+@@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 25
+<legalnotice>
+  <para>
+    This documentation is free software; you can redistribute it
+    and/or modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2 of
+    the License, or (at your option) any later version.
+  </para>
+  <para>
+    The source code refers to the DocBook XML source files.  The
+    object code refers to the generated HTML, PostScript, PDF, and
+    other forms.
+  </para>
+  <para>
+    This documentation is distributed in the hope that it will be
+    useful, but WITHOUT ANY WARRANTY; without even the implied
+    warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU General Public License for more details.
+  </para>
+  <para>
+    You should have received a copy of the GNU General Public License
+    (in <xref linkend="gpl"/>) along with this documentation; if not,
+    write to the Free Software Foundation, Inc., 59 Temple Place,
+    Suite 330, Boston, MA 02111-1307 USA
+  </para>
+</legalnotice>
+@
+
+
+1.1.2.2
+log
+@moved to swm/
+@
+text
+@@
+
+

@@ -1,0 +1,1541 @@
+head	1.5;
+access;
+symbols
+	rel-0-6-dev:1.5.0.4
+	rel-0-5-fix:1.5.0.2
+	rel-0-5:1.5
+	rel-0-5-dev-safe-frames:1.4.4.4.0.2
+	Root_rel-0-5-dev-safe-frames:1.4.4.4
+	rel-0-4-fix-0:1.4
+	rel-0-5-dev:1.4.0.4
+	rel-0-4-fix:1.4.0.2
+	rel-0-3-fix-3:1.3.2.1
+	rel-0-3-fix-2:1.3.2.1
+	rel-0-4-dev-sisc-1-11:1.3
+	rel-0-3-fix-1:1.3
+	rel-0-4-dev:1.3.0.4
+	rel-0-3-fix:1.3.0.2
+	rel-0-3:1.3
+	rel-0-3-dev-1:1.2.4.1
+	rel-0-2-fix-2:1.2.2.1
+	rel-0-2-fix-1:1.2
+	rel-0-2-fix:1.2.0.2
+	rel-0-3-dev:1.2.0.4
+	rel-0-2:1.2
+	rel-0-2-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.5
+date	2007.04.12.03.51.15;	author acolomba;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2006.09.03.01.42.25;	author acolomba;	state Exp;
+branches
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2005.11.25.20.43.31;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.06.19.04.53.02;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.06.05.20.56.40;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.06.05.20.56.40;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.06.18.02.22.59;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2005.06.19.02.05.13;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2005.08.02.02.04.15;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.08.02.01.46.11;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.11.25.20.11.11;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2006.02.25.19.13.15;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2006.04.15.02.08.32;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2007.01.27.04.29.24;	author acolomba;	state Exp;
+branches;
+next	1.4.4.2;
+
+1.4.4.2
+date	2007.01.27.05.45.46;	author acolomba;	state Exp;
+branches;
+next	1.4.4.3;
+
+1.4.4.3
+date	2007.03.02.06.01.22;	author acolomba;	state Exp;
+branches;
+next	1.4.4.4;
+
+1.4.4.4
+date	2007.03.10.20.59.47;	author acolomba;	state Exp;
+branches;
+next	1.4.4.5;
+
+1.4.4.5
+date	2007.04.08.10.45.33;	author acolomba;	state Exp;
+branches;
+next	1.4.4.6;
+
+1.4.4.6
+date	2007.04.08.14.37.53;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.5
+log
+@merged from rel-0-5-dev
+@
+text
+@<chapter id="bindings">
+  <title>Request Bindings</title>
+
+  <para>
+    Bindings associated with the request returned by the
+    <function>send-*/(suspend|forward)</function> functions, or passed
+    as parameters to procedures that are either published or the
+    target of a dispatch, can be extracted and associated to
+    language-level variables.
+  </para>
+
+  <para>
+    Bindings, as returned by the function
+    <function>get-bindings</function> are contained in an opaque
+    object. This object can be converted to an association list via
+    <function>bindings->alist</function>, or queried in constant time
+    using the <function>extract-bindings</function> or
+    <function>extract-single-binding</function> functions. The object
+    is guaranteed to be serializable, but code should not rely on its
+    specific implementation.
+  </para>
+
+  <section id="extracting-bindings">
+    <title>Extracting Bindings</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>siscweb/bindings</emphasis>)
+      </emphasis>
+      <sbr/>
+      &locatedin;
+      <emphasis role="bold">
+        siscweb.jar
+      </emphasis>
+    </para>
+
+    <para>
+      This module assists developers in obtaining values of parameters
+      passed in a request.
+    </para>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>get-bindings</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>bindings</type>
+          <methodname>get-bindings</methodname>
+          <methodparam choice="opt">
+            <parameter>char-set</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>request</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Given a request object, this procedure returns an opaque
+            object representing the request parameters as key-value(s)
+            pairs.
+          </para>
+          <para>
+            The optional <parameter>char-set</parameter> parameter can
+            be used to override the character encoding of the request.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>exists-binding?</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>&t;/&f;</type>
+          <methodname>exists-binding?</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>bindings</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a boolean indicating whether a parameter with the
+            given <parameter>name</parameter> contained in the request
+            object. <parameter>name</parameter> can be either a string
+            or a symbol.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>extract-single-binding</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string/&f;</type>
+          <methodname>extract-single-binding</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>bindings</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the value associated to the given
+            <parameter>name</parameter> or &f; if
+            <parameter>name</parameter> is not present in the request
+            object. If more than one value is bound to
+            <parameter>name</parameter>, only the first one is
+            returned.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>extract-bindings</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>list</type>
+          <methodname>extract-bindings</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>bindings</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the values bound to the given
+            <parameter>name</parameter> in a list. Even if only one
+            value is bound to the request parameter
+            <parameter>name</parameter>, a list will still be
+            returned.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>bindings-&gt;alist</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>((name . value) ...)</type>
+          <methodname>bindings-&gt;alist</methodname>
+          <methodparam>
+            <parameter>bindings</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns an association list corresponding to the
+            bindings. The <parameter>name</parameter> returned is
+            always a string to maintain its casing, while the
+            <parameter>value</parameter> returned is an atom or a list
+            if <parameter>name</parameter> is associated to multiple
+            values.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>let-bindings</primary>
+        </indexterm>
+        &syntax;
+        <methodsynopsis language="scheme">
+          <type>value</type>
+          <methodname>let-bindings</methodname>
+          <methodparam>
+            <parameter>((variable name) ... ) bindings body ...)</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Behaves like (let ...), but
+            <parameter>variable</parameter>s are set to the values
+            corresponding to the <parameter>name</parameter>s in the
+            <parameter>bindings</parameter> object. The
+            <parameter>value</parameter> returned is that of the last
+            expression in the <parameter>body</parameter>.  A typical
+            usage scenario could be:
+          </para>
+        </blockquote>
+
+        <informalexample>
+          <programlisting>
+            <![CDATA[
+(let-bindings ((name "name"))
+     (get-bindings
+       (send-html/suspend
+         (lambda (k-url)
+           `(html
+              (body
+                (form (@@ (action ,k-url))
+                  (input (@@ (type "text") (name "name")))))))))
+  (send-html/back
+    `(html
+       (body
+         (p "You typed: " ,name)))))
+            ]]>
+          </programlisting>
+        </informalexample>
+      </para>
+    </blockquote>
+  </section>
+
+  <section id="bindings-java">
+    <title>Extracting Bindings from Java</title>
+
+    <para>
+      Bindings specified in the <function>send-forward/*</function>
+      functions are assigned to request attributes. This method
+      supercedes the previous <literal>request.getBinding*()</literal>
+      API, which is now deprecated and will be removed in the
+      next release.
+    </para>
+
+    <para>
+      Multi-valued bindings, as in <literal>'((messages "hello"
+      "there"))</literal>, are turned into a
+      <literal>java.util.List</literal> and can be easily scanned
+      using such tools as JSTL's
+      <literal>&lt;c:forEach&gt;</literal>. Single-valued bindings,
+      such as <literal>'((message . "hello"))</literal> are simply
+      assigned to the attribute.
+    </para>
+
+    <para>
+      Multi-valued bindings originating from a Scheme list are also
+      marked as such, so that they can be converted back to a list of
+      values rather than to an object of type
+      <literal>java.util.List</literal>.
+    </para>
+
+    <para>
+      A minimal amount of type conversion is performed. Scheme values
+      are passed as &SISC; objects, except for Scheme strings, which
+      are converted to Java strings. Java objects are left
+      untouched. This also applies to the individual values of
+      multi-valued bindings.
+    </para>
+
+    <para>
+      For instance, below is the Polyglot Hello World example using
+      JSP/JSTL as the presentation layer. This example is not included
+      in the distribution because of its external dependencies on the
+      JSTL libraries.
+    </para>
+
+    <informalexample>
+      <programlisting>
+        <![CDATA[
+;; file: hello.scm
+(require-library 'siscweb/forward)
+
+(module examples/hello-world
+  (hello-world)
+
+  (import siscweb/forward)
+
+  (define messages '("Hello, world!" "Salve, mundo!" "Hallo, Welt!" "Salve, mondo!" "Bonjour, monde!" "Hola, mundo!"))
+
+  (define (hello-world req)
+    (let loop ()
+      (for-each
+       (lambda (message)
+         (send-forward/suspend "/jsp/hello.jsp" `((message . ,message))))
+       messages)
+      (loop)))
+  )
+
+
+<%-- File: jsp/hello.jsp
+--%><%@@ page contentType="text/html" %><%--
+--%><%@@ page isELIgnored="false" %><%-- just for servlet v2.3 containers
+--%><%@@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%><%--
+--%><%@@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%><%--
+--%><%@@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%><%--
+--%><%@@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%><%--
+--%><%@@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%><%--
+--%><?xml version="1.0"?>
+
+<!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title><c:out value="${requestScope.message}"/></title>
+
+    <c:url var="cssUrl" value="/css/default.css"/>
+    <link href="${cssUrl}"
+          rel="stylesheet"
+          type="text/css"/>
+  </head>
+
+  <body>
+      <h3>Polyglot hello world</h3>
+      <p>${requestScope.message}</p>
+
+    <p><a href="${requestScope["siscweb.kURL"]}">Next language &gt;</a></p>
+    <p><a href="${requestScope["siscweb.kURL"]}" target="_blank">Next language in new window</a></p>
+    <c:url var="homeUrl" value="/"/>
+    <p><a href="${homeUrl}">^ Home</a></p>
+  </body>
+</html>
+        ]]>
+      </programlisting>
+    </informalexample>
+  </section>
+
+  <section id="security-bindings">
+    <title>Bindings and Security</title>
+
+    <para>
+      At the lower level, bindings are looked up in the request scope
+      first (i.e. from request attributes) and then from request
+      parameters. This behavior allows a more natural integration with
+      standard J2EE components such as JSPs, but can be unsafe during
+      forwards.
+    </para>
+
+    <para>
+      Specifically, if the application performs a server-side forward
+      to Scheme code that relies on the absence of a binding to
+      determine a course of action, a malicious user can inject a
+      parameter by the same name into the request (provided they can
+      guess the name), and upset the application's behavior. The best
+      options in this case are:
+    </para>
+
+    <orderedlist>
+      <listitem>
+        <para>
+          When forwarding from Scheme, pass bindings to the
+          <function>forward/*</function> and
+          <function>send-forward/*</function> functions even if they
+          are #f or the empty list. SISCweb will add the name to a
+          per-request blacklist, and will not look up the binding
+          among the request parameters.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
+          When forwarding from Java to Scheme, set the attributes to
+          <literal>null</literal>. Again, the name will be
+          blacklisted.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
+          If the Java code that forwards to the Scheme code cannot be
+          trusted or modified for some reason, the Scheme side can
+          always use the <literal>java/get-request-attribute</literal>
+          function described in <xref linkend="request"/>.
+        </para>
+      </listitem>
+    </orderedlist>
+  </section>
+</chapter>
+@
+
+
+1.4
+log
+@merged from rel-0-4-dev
+@
+text
+@d5 16
+a20 3
+    Bindings associated with the request returned by the <function>send-*/(suspend|forward)</function>
+    functions, or passed as parameters to procedures that are either published or the target of
+    a dispatch, can be extracted and associated to language-level variables.
+d62 3
+a64 2
+            Given a request object, this procedure returns an object
+            representing the request parameters as key-value(s) pairs.
+d168 1
+a168 1
+          <type>((name value ...) ...)</type>
+d177 6
+a182 1
+            Returns an association list corresponding to the bindings.
+d217 12
+a228 11
+          (let-bindings ((name "name"))
+               (send-html/suspend
+                 (lambda (k-url)
+                   `(html
+                      (body
+                        (form (@@ (action ,k-url))
+                          (input (@@ (type "text") (name "name"))))))))
+            (send-html/back
+              `(html
+                 (body
+                   (p "You typed: " ,name)))))
+d240 5
+a244 4
+      &requires;
+      <emphasis role="bold">
+        siscweb.web.SISCHttpServletRequest
+      </emphasis>
+d248 7
+a254 6
+      Requests forwarded via the <function>send-forward/*</function>
+      functions are wrapped into SISCHttpServletRequest
+      objects. Besides the usual methods, these objects offer an API
+      for JSPs and servlets to consistently access bindings passed by
+      the Scheme side and the original request parameters with a
+      single API.
+d257 6
+a262 13
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>getBindings</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis>
+          <type>Object</type>
+          <methodname>getBinding</methodname>
+          <methodparam>
+            <parameter>String name</parameter>
+          </methodparam>
+        </methodsynopsis>
+d264 7
+a270 7
+        <blockquote>
+          <para>
+            Returns the binding associated to <parameter>name</parameter>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+d272 6
+a277 13
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>getBindingValues</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis>
+          <type>Object[]</type>
+          <methodname>getBindingValues</methodname>
+          <methodparam>
+            <parameter>String name</parameter>
+          </methodparam>
+        </methodsynopsis>
+d279 61
+a339 7
+        <blockquote>
+          <para>
+            Returns the bindings associated to <parameter>name</parameter>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+d341 2
+a342 10
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>getBindingNames</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis>
+          <type>Set</type>
+          <methodname>getBindingNames</methodname>
+        </methodsynopsis>
+d344 7
+a350 8
+        <blockquote>
+          <para>
+            Returns the names of all the binding associated to this
+            request.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+d352 8
+a359 19
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>getBindingMap</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis>
+          <type>Map</type>
+          <methodname>getBindingMap</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a map of all the bindings. The values in the map
+            are array of Objects.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+d361 29
+@
+
+
+1.4.4.1
+log
+@updated for new bindings syntax; minor fixes
+@
+text
+@d5 3
+a7 24
+    Bindings associated with the request returned by the
+    <function>send-*/(suspend|forward)</function> functions, or passed
+    as parameters to procedures that are either published or the
+    target of a dispatch, can be extracted and associated to
+    language-level variables.
+  </para>
+
+  <para>
+    The preferred Scheme representation of bindings is in the form of
+    an association list <literal>'((name . value) ...)</literal>,
+    where name is either a string or a symbol, and value is an atom if
+    the binding is single-valued, or a list if multi-valued.
+  </para>
+
+  <para>
+    However in the interest of performance, the function
+    <function>get-bindings</function> returns an opaque object rather
+    than an association list. This object can be converted to an
+    association list via <function>bindings->alist</function>, or
+    queried in constant time using the
+    <function>extract-bindings</function> or
+    <function>extract-single-binding</function> functions. The object
+    is guaranteed to be serializable, but code should not rely on its
+    specific implementation, as it may change in the future.
+d154 1
+a154 1
+          <type>((name . value) ...)</type>
+d163 1
+a163 4
+            Returns an association list corresponding to the
+            bindings. The <parameter>value</parameter> returned is a
+            list if <parameter>name</parameter> is associated to
+            multiple values.
+d220 4
+a223 5
+      Bindings specified in the <function>send-forward/*</function>
+      functions are assigned to request attributes. This method
+      supercedes the previous <literal>request.getBinding*()</literal>
+      API, which is now deprecated and will be removed in the
+      next release.
+d227 6
+a232 6
+      Multi-valued bindings, as in <literal>'((messages "hello"
+      "there"))</literal>, are turned into Object arrays and can be
+      easily scanned using such tools as JSTL's
+      <literal>&lt;c:forEach&gt;</literal>. Single-valued bindings,
+      such as <literal>'((message . "hello"))</literal> are simply
+      assigned to the attribute.
+d235 74
+a308 7
+    <para>
+      A minimal amount of type conversion is performed. Scheme values
+      are passed as &SISC; objects, except for Scheme strings, which
+      are converted to Java strings. Java objects are left
+      untouched. This also applies to the individual values of
+      multi-valued bindings.
+    </para>
+d310 8
+a317 6
+    <para>
+      For instance, below is the Polyglot Hello World example using
+      JSP/JSTL as the presentation layer. This example is not included
+      in the distribution because of its external dependencies on the
+      JSTL libraries.
+    </para>
+a318 60
+    <informalexample>
+      <programlisting>
+        <![CDATA[
+;; file: hello.scm
+(require-library 'siscweb/forward)
+
+(module examples/hello-world
+  (hello-world)
+
+  (import siscweb/forward)
+
+  (define messages '("Hello, world!" "Salve, mundo!" "Hallo, Welt!" "Salve, mondo!" "Bonjour, monde!" "Hola, mundo!"))
+
+  (define (hello-world req)
+    (let loop ()
+      (for-each
+       (lambda (message)
+         (send-forward/suspend "/jsp/hello.jsp" `((message . ,message))))
+       messages)
+      (loop)))
+  )
+
+
+<%-- File: jsp/hello.jsp
+--%><%@@ page contentType="text/html" %><%--
+--%><%@@ page isELIgnored="false" %><%-- just for servlet v2.3 containers
+--%><%@@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%><%--
+--%><%@@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%><%--
+--%><%@@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%><%--
+--%><%@@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%><%--
+--%><%@@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%><%--
+--%><?xml version="1.0"?>
+
+<!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title><c:out value="${requestScope.message}"/></title>
+
+    <c:url var="cssUrl" value="/css/default.css"/>
+    <link href="${cssUrl}"
+          rel="stylesheet"
+          type="text/css"/>
+  </head>
+
+  <body>
+      <h3>Polyglot hello world</h3>
+      <p>${requestScope.message}</p>
+
+    <p><a href="${requestScope["siscweb.kUrl"]}">Next language &gt;</a></p>
+    <p><a href="${requestScope["siscweb.kUrl"]}" target="_blank">Next language in new window</a></p>
+    <c:url var="homeUrl" value="/"/>
+    <p><a href="${homeUrl}">^ Home</a></p>
+  </body>
+</html>
+        ]]>
+      </programlisting>
+    </informalexample>
+@
+
+
+1.4.4.2
+log
+@minor fix
+@
+text
+@d253 2
+a254 3
+      "there"))</literal>, are turned into a
+      <literal>java.util.List</literal> and can be easily scanned
+      using such tools as JSTL's
+@
+
+
+1.4.4.3
+log
+@added section on security; clarified stucture of bindings
+@
+text
+@d13 13
+a25 5
+    Bindings, as returned by the function
+    <function>get-bindings</function> are contained in an opaque
+    object. This object can be converted to an association list via
+    <function>bindings->alist</function>, or queried in constant time
+    using the <function>extract-bindings</function> or
+d28 1
+a28 1
+    specific implementation.
+d70 2
+a71 3
+            Given a request object, this procedure returns an opaque
+            object representing the request parameters as key-value(s)
+            pairs.
+d185 3
+a187 5
+            bindings. The <parameter>name</parameter> returned is
+            always a string to maintain its casing, while the
+            <parameter>value</parameter> returned is an atom or a list
+            if <parameter>name</parameter> is associated to multiple
+            values.
+a261 7
+      Multi-valued bindings originating from a Scheme list are also
+      marked as such, so that they can be converted back to a list of
+      values rather than to an object of type
+      <literal>java.util.List</literal>.
+    </para>
+
+    <para>
+a336 51
+
+  <section id="security-bindings">
+    <title>Bindings and Security</title>
+
+    <para>
+      At the lower level, bindings are looked up in the request scope
+      first (i.e. from request attributes) and then from request
+      parameters. This behavior allows a more natural integration with
+      standard J2EE components such as JSPs, but can be unsafe during
+      forwards.
+    </para>
+
+    <para>
+      Specifically, if the application performs a server-side forward
+      to Scheme code that relies on the absence of a binding to
+      determine a course of action, a malicious user can inject a
+      parameter by the same name into the request (provided they can
+      guess the name), and upset the application's behavior. The best
+      options in this case are:
+    </para>
+
+    <orderedlist>
+      <listitem>
+        <para>
+          When forwarding from Scheme, pass bindings to the
+          <function>forward/*</function> and
+          <function>send-forward/*</function> functions even if they
+          are #f or the empty list. SISCweb will add the name to a
+          per-request blacklist, and will not look up the binding
+          among the request parameters.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
+          When forwarding from Java to Scheme, set the attributes to
+          <literal>null</literal>. Again, the name will be
+          blacklisted.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
+          If the Java code that forwards to the Scheme code cannot be
+          trusted or modified for some reason, the Scheme side can
+          always use the <literal>java/get-request-attribute</literal>
+          function described in <xref linkend="request"/>.
+        </para>
+      </listitem>
+    </orderedlist>
+  </section>
+@
+
+
+1.4.4.4
+log
+@removed references to kUrl; kURL is the right name
+@
+text
+@d329 2
+a330 2
+    <p><a href="${requestScope["siscweb.kURL"]}">Next language &gt;</a></p>
+    <p><a href="${requestScope["siscweb.kURL"]}" target="_blank">Next language in new window</a></p>
+@
+
+
+1.4.4.5
+log
+@fixed let-bindings example
+@
+text
+@d218 6
+a223 7
+               (get-bindings
+                 (send-html/suspend
+                   (lambda (k-url)
+                     `(html
+                        (body
+                          (form (@@ (action ,k-url))
+                            (input (@@ (type "text") (name "name")))))))))
+@
+
+
+1.4.4.6
+log
+@example formatting; nesting; clarifications
+@
+text
+@d217 12
+a228 12
+(let-bindings ((name "name"))
+     (get-bindings
+       (send-html/suspend
+         (lambda (k-url)
+           `(html
+              (body
+                (form (@@ (action ,k-url))
+                  (input (@@ (type "text") (name "name")))))))))
+  (send-html/back
+    `(html
+       (body
+         (p "You typed: " ,name)))))
+@
+
+
+1.3
+log
+@merged from rel-0-3-dev
+@
+text
+@d39 3
+d52 4
+@
+
+
+1.3.4.1
+log
+@merged from rel-0-3-fix-2
+@
+text
+@a38 3
+          <methodparam choice="opt">
+            <parameter>char-set</parameter>
+          </methodparam>
+a48 4
+          <para>
+            The optional <parameter>char-set</parameter> parameter can
+            be used to override the character encoding of the request.
+          </para>
+@
+
+
+1.3.2.1
+log
+@added forgotten char-set attribute
+@
+text
+@a38 3
+          <methodparam choice="opt">
+            <parameter>char-set</parameter>
+          </methodparam>
+a48 4
+          <para>
+            The optional <parameter>char-set</parameter> parameter can
+            be used to override the character encoding of the request.
+          </para>
+@
+
+
+1.2
+log
+@merged from rel-0-2-dev
+@
+text
+@d18 5
+d207 104
+d313 1
+a313 1
+</chapter>@
+
+
+1.2.2.1
+log
+@merged from rel-0-3-dev
+@
+text
+@a201 103
+  </section>
+
+  <section id="bindings-java">
+    <title>Extracting Bindings from Java</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        siscweb.web.SISCHttpServletRequest
+      </emphasis>
+    </para>
+
+    <para>
+      Requests forwarded via the <function>send-forward/*</function>
+      functions are wrapped into SISCHttpServletRequest
+      objects. Besides the usual methods, these objects offer an API
+      forJSP and servlets to consistently access bindings passed by
+      the Scheme side and the original request parameters with a
+      single API.
+    </para>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>getBindings</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis>
+          <type>Object</type>
+          <methodname>getBinding</methodname>
+          <methodparam>
+            <parameter>String name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the binding associated to <parameter>name</parameter>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>getBindingValues</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis>
+          <type>Object[]</type>
+          <methodname>getBindingValues</methodname>
+          <methodparam>
+            <parameter>String name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the bindings associated to <parameter>name</parameter>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>getBindingNames</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis>
+          <type>Set</type>
+          <methodname>getBindingNames</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the names of all the binding associated to this request.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>getBindingMap</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis>
+          <type>Map</type>
+          <methodname>getBindingMap</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a map of all the bindings. The values in the map
+            are array of Objects.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+d204 1
+a204 1
+</chapter>
+@
+
+
+1.2.4.1
+log
+@added section about SISCHttpServletRequest
+@
+text
+@a201 103
+  </section>
+
+  <section id="bindings-java">
+    <title>Extracting Bindings from Java</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        siscweb.web.SISCHttpServletRequest
+      </emphasis>
+    </para>
+
+    <para>
+      Requests forwarded via the <function>send-forward/*</function>
+      functions are wrapped into SISCHttpServletRequest
+      objects. Besides the usual methods, these objects offer an API
+      forJSP and servlets to consistently access bindings passed by
+      the Scheme side and the original request parameters with a
+      single API.
+    </para>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>getBindings</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis>
+          <type>Object</type>
+          <methodname>getBinding</methodname>
+          <methodparam>
+            <parameter>String name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the binding associated to <parameter>name</parameter>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>getBindingValues</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis>
+          <type>Object[]</type>
+          <methodname>getBindingValues</methodname>
+          <methodparam>
+            <parameter>String name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the bindings associated to <parameter>name</parameter>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>getBindingNames</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis>
+          <type>Set</type>
+          <methodname>getBindingNames</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the names of all the binding associated to this request.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>getBindingMap</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis>
+          <type>Map</type>
+          <methodname>getBindingMap</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a map of all the bindings. The values in the map
+            are array of Objects.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+d204 1
+a204 1
+</chapter>
+@
+
+
+1.2.4.2
+log
+@edits; added locations
+@
+text
+@a17 5
+      <sbr/>
+      &locatedin;
+      <emphasis role="bold">
+        siscweb.jar
+      </emphasis>
+d218 1
+a218 1
+      for JSPs and servlets to consistently access bindings passed by
+d280 1
+a280 2
+            Returns the names of all the binding associated to this
+            request.
+@
+
+
+1.1
+log
+@file bindings.xml was initially added on branch rel-0-2-dev.
+@
+text
+@d1 204
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 205
+<chapter id="bindings">
+  <title>Request Bindings</title>
+
+  <para>
+    Bindings associated with the request returned by the <function>send-*/(suspend|forward)</function>
+    functions, or passed as parameters to procedures that are either published or the target of
+    a dispatch, can be extracted and associated to language-level variables.
+  </para>
+
+  <section id="extracting-bindings">
+    <title>Extracting Bindings</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>siscweb/bindings</emphasis>)
+      </emphasis>
+    </para>
+
+    <para>
+      This module assists developers in obtaining values of parameters
+      passed in a request.
+    </para>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>get-bindings</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>bindings</type>
+          <methodname>get-bindings</methodname>
+          <methodparam>
+            <parameter>request</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Given a request object, this procedure returns an object
+            representing the request parameters as key-value(s) pairs.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>exists-binding?</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>&t;/&f;</type>
+          <methodname>exists-binding?</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>bindings</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            With <parameter>name</parameter> either a string or
+            symbol, it returns a boolean indicating whether a
+            parameter with the given <parameter>name</parameter>
+            contained in the request object.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>extract-single-binding</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string/&f;</type>
+          <methodname>extract-single-binding</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>bindings</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the value associated to the given
+            <parameter>name</parameter> or &f; if
+            <parameter>name</parameter> is not present in the request
+            object. If more than a value is associated to
+            <parameter>name</parameter>, only the first one is
+            returned.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>extract-bindings</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>list</type>
+          <methodname>extract-bindings</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>bindings</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the values associated to the given
+            <parameter>name</parameter> in a list. Even if only one
+            value was bound to the request parameter
+            <parameter>name</parameter>, a list will still be
+            returned.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>bindings-&gt;alist</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>alist</type>
+          <methodname>bindings-&gt;alist</methodname>
+          <methodparam>
+            <parameter>bindings</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns an association list corresponding to the
+            bindings. Each element in the list is always a list of
+            values associated to the name (even if only a single value
+            was associated.)
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>let-bindings</primary>
+        </indexterm>
+        &syntax;
+        <methodsynopsis language="scheme">
+          <type>undefined</type>
+          <methodname>let-bindings</methodname>
+          <methodparam>
+            <parameter>((variable name) ... ) bindings body ...)</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Behaves like (let ...), but
+            <parameter>variable</parameter>s are set to the values
+            corresponding to the <parameter>name</parameter>s in the
+            <parameter>bindings</parameter> object. A typical usage
+            scenario could be:
+          </para>
+        </blockquote>
+
+        <informalexample>
+          <programlisting>
+            <![CDATA[
+          (let-bindings ((name "name"))
+               (send-html/suspend
+                 (lambda (k-url)
+                   `(html
+                      (body
+                        (form (@@ (action ,k-url))
+                          (input (@@ (type "text") (name "name"))))))))
+            (send-html/back
+              `(html
+                 (body
+                   (p "You typed: " ,name)))))
+            ]]>
+          </programlisting>
+        </informalexample>
+      </para>
+    </blockquote>
+
+  </section>
+</chapter>@
+
+
+1.1.2.2
+log
+@minor additions
+@
+text
+@d167 1
+a167 1
+          <type>value</type>
+d179 2
+a180 4
+            <parameter>bindings</parameter> object. The
+            <parameter>value</parameter> returned is that of the last
+            expression in the <parameter>body</parameter>.  A typical
+            usage scenario could be:
+@
+
+
+1.1.2.3
+log
+@corrected typos and mechanics
+@
+text
+@d67 4
+a70 4
+            Returns a boolean indicating whether a parameter with the
+            given <parameter>name</parameter> contained in the request
+            object. <parameter>name</parameter> can be either a string
+            or a symbol.
+d98 1
+a98 1
+            object. If more than one value is bound to
+d125 1
+a125 1
+            Returns the values bound to the given
+d127 1
+a127 1
+            value is bound to the request parameter
+d142 1
+a142 1
+          <type>((name value ...) ...)</type>
+d151 4
+a154 1
+            Returns an association list corresponding to the bindings.
+@
+
+

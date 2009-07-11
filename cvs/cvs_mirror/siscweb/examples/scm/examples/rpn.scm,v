@@ -1,0 +1,784 @@
+head	1.5;
+access;
+symbols
+	rel-0-6-dev:1.5.0.10
+	rel-0-5-fix:1.5.0.8
+	rel-0-5:1.5
+	rel-0-5-dev-safe-frames:1.5.0.6
+	Root_rel-0-5-dev-safe-frames:1.5
+	rel-0-4-fix-0:1.5
+	rel-0-5-dev:1.5.0.4
+	rel-0-4-fix:1.5.0.2
+	rel-0-3-fix-3:1.4.2.2
+	rel-0-3-fix-2:1.4.2.1
+	rel-0-4-dev-sisc-1-11:1.4.4.2
+	rel-0-3-fix-1:1.4
+	rel-0-4-dev:1.4.0.4
+	rel-0-3-fix:1.4.0.2
+	rel-0-3:1.4
+	rel-0-3-dev-1:1.3.4.1
+	rel-0-2-fix-2:1.3.2.1
+	rel-0-2-fix-1:1.3
+	rel-0-2-fix:1.3.0.2
+	rel-0-3-dev:1.3.0.4
+	rel-0-2:1.3
+	rel-0-1-fix-1:1.2
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	start:1.1.1.1
+	rel-0-1-dev:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.5
+date	2006.09.03.01.42.24;	author acolomba;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2005.11.25.20.43.32;	author acolomba;	state Exp;
+branches
+	1.4.2.1
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2005.06.19.03.03.51;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.52;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches;
+next	1.1.1.2;
+
+1.1.1.2
+date	2005.03.12.17.26.49;	author acolomba;	state Exp;
+branches;
+next	1.1.1.3;
+
+1.1.1.3
+date	2005.03.20.03.48.10;	author acolomba;	state Exp;
+branches;
+next	1.1.1.4;
+
+1.1.1.4
+date	2005.03.31.03.25.05;	author acolomba;	state Exp;
+branches;
+next	1.1.1.5;
+
+1.1.1.5
+date	2005.04.02.01.20.16;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.05.22.20.19.25;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.05.22.20.24.42;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2005.05.30.05.14.07;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2005.07.31.20.04.04;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2005.07.23.20.28.15;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.2.1
+date	2006.02.25.17.12.05;	author acolomba;	state Exp;
+branches;
+next	1.4.2.2;
+
+1.4.2.2
+date	2006.04.15.15.55.28;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2006.01.16.00.22.15;	author acolomba;	state Exp;
+branches;
+next	1.4.4.2;
+
+1.4.4.2
+date	2006.02.11.20.21.43;	author acolomba;	state Exp;
+branches;
+next	1.4.4.3;
+
+1.4.4.3
+date	2006.04.08.21.40.41;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.5
+log
+@merged from rel-0-4-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+;;; "rpn.scm" (RPN Calc) is an example of a functional-style program.
+;;; As a result, the program is completely impervious to the back
+;;; browser button and to browser window cloning.
+
+(require-library 'sisc/libs/srfi/srfi-13) ; string library
+
+(require-library 'siscweb/xhtml)
+(require-library 'siscweb/bindings)
+
+(module examples/rpn
+  (rpn)
+
+  (import srfi-13)
+
+  (import siscweb/xhtml)
+  (import siscweb/bindings)
+
+  ;; returns the calculator page; this is the PRINT of REPL
+  (define (rpn/print stack)
+    (lambda (k-url)
+      `(*TOP*
+        (*PI* xml "version=\"1.0\"")
+        (*DTD-INFO/PUBLIC* "html"
+                           "-//W3C//DTD XHTML 1.0 Strict//EN"
+                           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+        (html (@@ (xmlns "http://www.w3.org/1999/xhtml")
+                 (xml:lang "en") (lang "en"))
+         (head
+          (title "RPN Calculator")
+          (link (@@ (rel "stylesheet")
+                   (href-c "/css/default.css")
+                   (type "text/css"))))
+         (body (@@ (onload "document.instructions.instructions.focus();"))
+          (h2 "RPN Calculator")
+
+          ;; prints the stack
+          ,(if (null? stack)
+               `(p "<empty stack>")
+               `(ol
+                 ,@@(map (lambda (value) `(li (b ,(number->string value))))
+                        (reverse stack))))
+
+          (form (@@ (action-e ,k-url) (name "instructions") (method "post"))
+            (input (@@ (id "instructions") (name "instructions") (type "text")))
+            (input (@@ (type "submit") (value "ENT"))))
+
+          (p
+           (label (@@ (style "font-style: italic;"))
+            "Enter any of <number> + - * / dup drop separated by spaces"))
+          (p (a (@@ (href-e ,k-url) (target "_blank")) "Clone me!"))
+          (p (a (@@ (href-c "/")) "^ Home")))))))
+
+
+
+  ;; reads (parses) the input from the user; this is the READ in REPL
+  (define (rpn/read stack)
+    (let-bindings ((instructions "instructions"))
+                  (get-bindings
+                   (send-xhtml/suspend
+                    (rpn/print stack)))
+      (if instructions
+          (string-tokenize instructions)
+          '())))
+
+
+  ;; interprets the instructions from the user; this is the EVAL in REPL
+  (define (rpn/eval instructions stack)
+    (let loop ((instructions instructions)
+               (stack stack))
+      (with/fc
+       (lambda (m e) stack)
+       (lambda ()
+         (if (null? instructions)
+             stack
+             (let ((instr (car instructions)))
+               (loop (cdr instructions)
+                     (cond ((string->number instr)
+                            (cons (string->number instr) stack))
+                           ((string=? instr "drop")
+                            (cdr stack))
+                           ((string=? instr "dup")
+                            (cons (car stack) stack))
+                           (else (case (string->symbol instr)
+                                   ((+ - * /)
+                                    (apply-op (string->symbol instr) stack))
+                                   (else stack)))))))))))
+
+  ;; some snarfing because we're lazy
+  (define (apply-op op stack)
+    (cons (eval `(,op ,(cadr stack) ,(car stack)))
+          (cddr stack)))
+
+
+  ;; this is the main application loop; this is the Loop in REPL
+  (define (rpn request)
+    (let loop ((stack '(42)))
+      (loop (rpn/eval (rpn/read stack) stack))))
+
+  )@
+
+
+1.4
+log
+@merged from rel-0-3-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+d38 1
+a38 1
+(require-library 'siscweb/html)
+d46 1
+a46 1
+  (import siscweb/html)
+d52 13
+a64 7
+      `(html
+        (head
+         (title "RPN Calculator")
+         (link (@@ (rel "stylesheet")
+                  (href-c "/css/default.css")
+                  (type "text/css"))))
+        (body (@@ (onload "document.instructions.instructions.focus();"))
+d75 1
+a75 1
+            (input (@@ (type "text") (name "instructions") (id "instructions")))
+d78 3
+a80 1
+          (p (label (i "Enter any of <number> + - * / dup drop separated by spaces")))
+d82 1
+a82 1
+          (p (a (@@ (href-c "/")) "^ Home"))))))
+d90 1
+a90 1
+                   (send-html/suspend
+@
+
+
+1.4.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@d38 1
+a38 1
+(require-library 'siscweb/xhtml)
+d46 1
+a46 1
+  (import siscweb/xhtml)
+d52 7
+a58 12
+      `(*TOP*
+        (*DTD-INFO/PUBLIC* "html"
+                           "-//W3C//DTD XHTML 1.0 Strict//EN"
+                           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+        (html (@@ (xmlns "http://www.w3.org/1999/xhtml")
+                 (xml:lang "en") (lang "en"))
+         (head
+          (title "RPN Calculator")
+          (link (@@ (rel "stylesheet")
+                   (href-c "/css/default.css")
+                   (type "text/css"))))
+         (body (@@ (onload "document.instructions.instructions.focus();"))
+d69 1
+a69 1
+            (input (@@ (id "instructions") (name "instructions") (type "text")))
+d72 1
+a72 3
+          (p
+           (label (@@ (style "font-style: italic;"))
+            "Enter any of <number> + - * / dup drop separated by spaces"))
+d74 1
+a74 1
+          (p (a (@@ (href-c "/")) "^ Home")))))))
+d82 1
+a82 1
+                   (send-xhtml/suspend
+@
+
+
+1.4.2.2
+log
+@merged from rel-0-4-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+a52 1
+        (*PI* xml "version=\"1.0\"")
+@
+
+
+1.4.4.1
+log
+@added DOCTYPE declarations
+@
+text
+@d52 7
+a58 10
+      `(*TOP*
+        (*DTD-INFO/PUBLIC* |HTML| "-//W3C//DTD HTML 4.01 Transitional//EN"
+                            "http://www.w3.org/TR/html4/loose.dtd")
+        (html
+         (head
+          (title "RPN Calculator")
+          (link (@@ (rel "stylesheet")
+                   (href-c "/css/default.css")
+                   (type "text/css"))))
+         (body (@@ (onload "document.instructions.instructions.focus();"))
+d74 1
+a74 1
+          (p (a (@@ (href-c "/")) "^ Home")))))))
+@
+
+
+1.4.4.2
+log
+@now outputs compliant xhtml
+@
+text
+@d38 1
+a38 1
+(require-library 'siscweb/xhtml)
+d46 1
+a46 1
+  (import siscweb/xhtml)
+d53 3
+a55 5
+        (*DTD-INFO/PUBLIC* "html"
+                           "-//W3C//DTD XHTML 1.0 Strict//EN"
+                           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+        (html (@@ (xmlns "http://www.w3.org/1999/xhtml")
+                 (xml:lang "en") (lang "en"))
+d72 1
+a72 1
+            (input (@@ (id "instructions") (name "instructions") (type "text")))
+d75 1
+a75 3
+          (p
+           (label (@@ (style "font-style: italic;"))
+            "Enter any of <number> + - * / dup drop separated by spaces"))
+d85 1
+a85 1
+                   (send-xhtml/suspend
+@
+
+
+1.4.4.3
+log
+@explicitely outputs <?xml pi in pages
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+a52 1
+        (*PI* xml "version=\"1.0\"")
+@
+
+
+1.3
+log
+@merged from rel-0-2-dev
+@
+text
+@d36 2
+@
+
+
+1.3.2.1
+log
+@merged from rel-0-3-dev
+@
+text
+@a35 2
+(require-library 'sisc/libs/srfi/srfi-13) ; string library
+
+@
+
+
+1.3.4.1
+log
+@added missing require-library for srfi-13
+@
+text
+@a35 2
+(require-library 'sisc/libs/srfi/srfi-13) ; string library
+
+@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@d52 4
+a55 1
+         (title "RPN Calculator"))
+d57 1
+a57 1
+          (h1 "RPN Calculator")
+d66 1
+a66 1
+          (form (@@ (name "instructions") (method "post") (action ,k-url))
+d71 2
+a72 2
+          (p (a (@@ (href ,k-url) (target "_blank")) "Clone me!"))
+          (p (a (@@ (href "/siscweb-examples/")) "^ Home"))))))
+@
+
+
+1.2.4.1
+log
+@now uses context-href and stylesheet; minor aestethic changes
+@
+text
+@d52 1
+a52 4
+         (title "RPN Calculator")
+         (link (@@ (rel "stylesheet")
+                  (context-href "/css/default.css")
+                  (type "text/css"))))
+d54 1
+a54 1
+          (h2 "RPN Calculatoro")
+d63 1
+a63 1
+          (form (@@ (action ,k-url) (name "instructions") (method "post"))
+d69 1
+a69 1
+          (p (a (@@ (context-href "/")) "^ Home"))))))
+@
+
+
+1.2.4.2
+log
+@fixed typo
+@
+text
+@d57 1
+a57 1
+          (h2 "RPN Calculator")
+@
+
+
+1.2.4.3
+log
+@modified to match changes in siscweb/html
+@
+text
+@d54 1
+a54 1
+                  (href-c "/css/default.css")
+d66 1
+a66 1
+          (form (@@ (action-e ,k-url) (name "instructions") (method "post"))
+d71 2
+a72 2
+          (p (a (@@ (href-e ,k-url) (target "_blank")) "Clone me!"))
+          (p (a (@@ (href-c "/")) "^ Home"))))))
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d42 1
+a42 1
+(import srfi-13)
+d44 2
+a45 2
+(import siscweb/html)
+(import siscweb/bindings)
+d47 69
+a115 56
+;; returns the calculator page; this is the PRINT of REPL
+(define (rpn/print stack)
+  (lambda (k-url)
+    `(html
+      (head
+       (title "RPN Calculator"))
+      (body (@@ (onload "document.instructions.instructions.focus();"))
+        (h1 "RPN Calculator")
+        (ol
+         ;; prints the stack
+         ,@@(map (lambda (value) `(li ,(number->string value)))
+                (reverse stack))))
+      (form (@@ (name "instructions") (method "post") (action ,k-url))
+        (input (@@ (type "text") (name "instructions") (id "instructions")))
+        (input (@@ (type "submit") (value "ENT")))))))
+
+
+;; reads (parses) the input from the user; this is the READ in REPL
+(define (rpn/read stack)
+  (string-tokenize
+   (extract-single-binding
+    "instructions"
+    (get-bindings
+     (send-html/suspend
+      (rpn/print stack))))))
+
+
+;; interprets the instructions from the user; this is the EVAL in REPL
+(define (rpn/eval instructions stack)
+  (let loop ((instructions instructions)
+             (stack stack))
+    (if (null? instructions)
+        stack
+        (let ((instr (car instructions)))
+          (loop (cdr instructions)
+                (cond ((string->number instr)
+                       (cons (string->number instr) stack))
+                      ((string=? instr "drop")
+                       (cdr stack))
+                      ((string=? instr "dup")
+                       (cons (car stack) stack))
+                      (else (case (string->symbol instr)
+                              ((+ - * /)
+                               (apply-op (string->symbol instr) stack))
+                              (else stack)))))))))
+
+;; some snarfing because we're lazy
+(define (apply-op op stack)
+  (cons (eval `(,op ,(cadr stack) ,(car stack)))
+        (cddr stack)))
+
+
+;; this is the main application loop; this is the Loop in REPL
+(define (rpn request)
+  (let loop ((stack '(42)))
+    (loop (rpn/eval (rpn/read stack) stack))))
+d117 1
+a117 1
+)
+@
+
+
+1.1.1.1
+log
+@initial import
+@
+text
+@@
+
+
+1.1.1.2
+log
+@no idea
+@
+text
+@d42 1
+a42 1
+  (import srfi-13)
+d44 59
+a102 2
+  (import siscweb/html)
+  (import siscweb/bindings)
+a103 55
+  ;; returns the calculator page; this is the PRINT of REPL
+  (define (rpn/print stack)
+    (lambda (k-url)
+      `(html
+        (head
+         (title "RPN Calculator"))
+        (body (@@ (onload "document.instructions.instructions.focus();"))
+          (h1 "RPN Calculator")
+          (ol
+           ;; prints the stack
+           ,@@(map (lambda (value) `(li ,(number->string value)))
+                  (reverse stack))))
+        (form (@@ (name "instructions") (method "post") (action ,k-url))
+          (input (@@ (type "text") (name "instructions") (id "instructions")))
+          (input (@@ (type "submit") (value "ENT")))))))
+
+
+  ;; reads (parses) the input from the user; this is the READ in REPL
+  (define (rpn/read stack)
+    (let-bindings ((instructions "instructions"))
+                  (get-bindings
+                   (send-html/suspend
+                    (rpn/print stack)))
+      (string-tokenize instructions)))
+
+
+  ;; interprets the instructions from the user; this is the EVAL in REPL
+  (define (rpn/eval instructions stack)
+    (let loop ((instructions instructions)
+               (stack stack))
+      (if (null? instructions)
+          stack
+          (let ((instr (car instructions)))
+            (loop (cdr instructions)
+                  (cond ((string->number instr)
+                         (cons (string->number instr) stack))
+                        ((string=? instr "drop")
+                         (cdr stack))
+                        ((string=? instr "dup")
+                         (cons (car stack) stack))
+                        (else (case (string->symbol instr)
+                                ((+ - * /)
+                                 (apply-op (string->symbol instr) stack))
+                                (else stack)))))))))
+
+  ;; some snarfing because we're lazy
+  (define (apply-op op stack)
+    (cons (eval `(,op ,(cadr stack) ,(car stack)))
+          (cddr stack)))
+
+
+  ;; this is the main application loop; this is the Loop in REPL
+  (define (rpn request)
+    (let loop ((stack '(42)))
+      (loop (rpn/eval (rpn/read stack) stack))))
+@
+
+
+1.1.1.3
+log
+@minor fixes
+@
+text
+@d55 7
+a61 15
+
+          ;; prints the stack
+          ,(if (null? stack)
+               `(p "<empty stack>")
+               `(ol
+                 ,@@(map (lambda (value) `(li ,(number->string value)))
+                        (reverse stack))))
+
+          (form (@@ (name "instructions") (method "post") (action ,k-url))
+            (input (@@ (type "text") (name "instructions") (id "instructions")))
+            (input (@@ (type "submit") (value "ENT"))))
+
+          (p (label (i "Enter any of <number> + - * / dup drop separated by spaces")))
+          (p (a (@@ (href "/siscweb-examples/")) "^ Home"))))))
+
+d70 1
+a70 3
+      (if instructions
+          (string-tokenize instructions)
+          '())))
+d77 14
+a90 17
+      (with/fc
+       (lambda (m e) stack)
+       (lambda ()
+         (if (null? instructions)
+             stack
+             (let ((instr (car instructions)))
+               (loop (cdr instructions)
+                     (cond ((string->number instr)
+                            (cons (string->number instr) stack))
+                           ((string=? instr "drop")
+                            (cdr stack))
+                           ((string=? instr "dup")
+                            (cons (car stack) stack))
+                           (else (case (string->symbol instr)
+                                   ((+ - * /)
+                                    (apply-op (string->symbol instr) stack))
+                                   (else stack)))))))))))
+d100 1
+a100 1
+    (let loop ((stack '(43)))
+d102 1
+a102 2
+
+  )@
+
+
+1.1.1.4
+log
+@added clone-me links
+@
+text
+@d60 1
+a60 1
+                 ,@@(map (lambda (value) `(li (b ,(number->string value))))
+a67 1
+b          (p (a (@@ (href ,k-url) (target "_blank")) "Clone me!"))
+d113 1
+a113 1
+    (let loop ((stack '(42)))
+@
+
+
+1.1.1.5
+log
+@removed extraneous character
+@
+text
+@d68 1
+a68 1
+          (p (a (@@ (href ,k-url) (target "_blank")) "Clone me!"))
+@
+
+

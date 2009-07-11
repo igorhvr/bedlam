@@ -1,0 +1,1813 @@
+head	1.6;
+access;
+symbols
+	rel-0-6-dev:1.6.0.4
+	rel-0-5-fix:1.6.0.2
+	rel-0-5:1.6
+	rel-0-5-dev-safe-frames:1.5.4.1.0.2
+	Root_rel-0-5-dev-safe-frames:1.5.4.1
+	rel-0-4-fix-0:1.5
+	rel-0-5-dev:1.5.0.4
+	rel-0-4-fix:1.5.0.2
+	rel-0-3-fix-3:1.4.2.2
+	rel-0-3-fix-2:1.4.2.1
+	rel-0-4-dev-sisc-1-11:1.4.4.3
+	rel-0-3-fix-1:1.4
+	rel-0-4-dev:1.4.0.4
+	rel-0-3-fix:1.4.0.2
+	rel-0-3:1.4
+	rel-0-3-dev-1:1.3.2.4
+	rel-0-2-fix-2:1.3.4.2
+	rel-0-2-fix-1:1.3.4.1
+	rel-0-2-fix:1.3.0.4
+	rel-0-3-dev:1.3.0.2
+	rel-0-2:1.3
+	rel-0-1-fix-1:1.2
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	start:1.1.1.1
+	rel-0-1-dev:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2007.04.12.03.51.15;	author acolomba;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2006.09.03.01.42.25;	author acolomba;	state Exp;
+branches
+	1.5.4.1;
+next	1.4;
+
+1.4
+date	2005.11.25.20.43.31;	author acolomba;	state Exp;
+branches
+	1.4.2.1
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2005.06.19.04.53.02;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.52;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches;
+next	1.1.1.2;
+
+1.1.1.2
+date	2005.03.06.18.52.05;	author acolomba;	state Exp;
+branches;
+next	1.1.1.3;
+
+1.1.1.3
+date	2005.03.06.22.59.48;	author acolomba;	state Exp;
+branches;
+next	1.1.1.4;
+
+1.1.1.4
+date	2005.03.13.01.06.07;	author acolomba;	state Exp;
+branches;
+next	1.1.1.5;
+
+1.1.1.5
+date	2005.03.13.01.29.22;	author acolomba;	state Exp;
+branches;
+next	1.1.1.6;
+
+1.1.1.6
+date	2005.03.13.06.15.10;	author acolomba;	state Exp;
+branches;
+next	1.1.1.7;
+
+1.1.1.7
+date	2005.03.13.06.20.08;	author acolomba;	state Exp;
+branches;
+next	1.1.1.8;
+
+1.1.1.8
+date	2005.03.14.03.05.54;	author acolomba;	state Exp;
+branches;
+next	1.1.1.9;
+
+1.1.1.9
+date	2005.03.19.15.16.45;	author acolomba;	state Exp;
+branches;
+next	1.1.1.10;
+
+1.1.1.10
+date	2005.03.19.17.47.44;	author acolomba;	state Exp;
+branches;
+next	1.1.1.11;
+
+1.1.1.11
+date	2005.03.20.03.47.40;	author acolomba;	state Exp;
+branches;
+next	1.1.1.12;
+
+1.1.1.12
+date	2005.03.24.03.07.45;	author acolomba;	state Exp;
+branches;
+next	1.1.1.13;
+
+1.1.1.13
+date	2005.03.27.19.17.54;	author acolomba;	state Exp;
+branches;
+next	1.1.1.14;
+
+1.1.1.14
+date	2005.04.02.01.35.37;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.04.23.00.13.34;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.05.08.17.34.04;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2005.05.14.04.31.22;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2005.05.14.23.17.41;	author acolomba;	state Exp;
+branches;
+next	1.2.4.5;
+
+1.2.4.5
+date	2005.05.22.20.06.37;	author acolomba;	state Exp;
+branches;
+next	1.2.4.6;
+
+1.2.4.6
+date	2005.05.22.20.23.34;	author acolomba;	state Exp;
+branches;
+next	1.2.4.7;
+
+1.2.4.7
+date	2005.05.30.22.53.58;	author acolomba;	state Exp;
+branches;
+next	1.2.4.8;
+
+1.2.4.8
+date	2005.06.05.18.17.28;	author acolomba;	state Exp;
+branches;
+next	1.2.4.9;
+
+1.2.4.9
+date	2005.06.10.01.45.57;	author acolomba;	state Exp;
+branches;
+next	1.2.4.10;
+
+1.2.4.10
+date	2005.06.17.03.11.26;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2005.07.04.16.02.59;	author acolomba;	state Exp;
+branches;
+next	1.3.2.2;
+
+1.3.2.2
+date	2005.07.17.23.53.51;	author acolomba;	state Exp;
+branches;
+next	1.3.2.3;
+
+1.3.2.3
+date	2005.07.30.16.03.12;	author acolomba;	state Exp;
+branches;
+next	1.3.2.4;
+
+1.3.2.4
+date	2005.09.13.23.12.35;	author acolomba;	state Exp;
+branches;
+next	1.3.2.5;
+
+1.3.2.5
+date	2005.10.24.03.17.34;	author acolomba;	state Exp;
+branches;
+next	1.3.2.6;
+
+1.3.2.6
+date	2005.11.20.20.02.30;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2005.07.10.20.07.45;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2;
+
+1.3.4.2
+date	2005.07.31.20.04.05;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.2.1
+date	2006.02.25.17.12.07;	author acolomba;	state Exp;
+branches;
+next	1.4.2.2;
+
+1.4.2.2
+date	2006.04.15.15.55.29;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2005.12.15.04.30.10;	author acolomba;	state Exp;
+branches;
+next	1.4.4.2;
+
+1.4.4.2
+date	2006.02.05.20.33.03;	author acolomba;	state Exp;
+branches;
+next	1.4.4.3;
+
+1.4.4.3
+date	2006.02.11.20.28.02;	author acolomba;	state Exp;
+branches;
+next	1.4.4.4;
+
+1.4.4.4
+date	2006.02.22.04.27.49;	author acolomba;	state Exp;
+branches;
+next	1.4.4.5;
+
+1.4.4.5
+date	2006.02.23.01.50.50;	author acolomba;	state Exp;
+branches;
+next	1.4.4.6;
+
+1.4.4.6
+date	2006.03.12.14.34.52;	author acolomba;	state Exp;
+branches;
+next	1.4.4.7;
+
+1.4.4.7
+date	2006.03.28.23.51.59;	author acolomba;	state Exp;
+branches;
+next	1.4.4.8;
+
+1.4.4.8
+date	2006.04.08.22.37.34;	author acolomba;	state Exp;
+branches;
+next	1.4.4.9;
+
+1.4.4.9
+date	2006.04.09.18.55.48;	author acolomba;	state Exp;
+branches;
+next	1.4.4.10;
+
+1.4.4.10
+date	2006.06.25.21.09.42;	author acolomba;	state Exp;
+branches;
+next	1.4.4.11;
+
+1.4.4.11
+date	2006.08.17.02.03.39;	author acolomba;	state Exp;
+branches;
+next	1.4.4.12;
+
+1.4.4.12
+date	2006.08.18.02.59.58;	author acolomba;	state Exp;
+branches;
+next	1.4.4.13;
+
+1.4.4.13
+date	2006.08.27.00.59.54;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.5.4.1
+date	2007.03.10.21.56.22;	author acolomba;	state Exp;
+branches;
+next	1.5.4.2;
+
+1.5.4.2
+date	2007.04.11.02.47.39;	author acolomba;	state Exp;
+branches;
+next	1.5.4.3;
+
+1.5.4.3
+date	2007.04.11.04.00.31;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@merged from rel-0-5-dev
+@
+text
+@TODO
+
+SHORT TERM
+
+* log messages should always include context name
+
+* profiling
+
+* finalize siscweb/redirect module
+
+* adopt a scheme->js compiler, or a sexp js
+
+* an SXML compiler would be nice; esp. if part of ehtml
+
+* add send-graphviz/[suspend|forward]; will need href-p, etc.
+
+* user-defined SXML transforms
+
+* formatted html output on demand; no comments for xml/xhtml on demand
+
+* alternate format for graphviz tag would allow one to use svg+png all
+  the time; embedding svg in html would be cool too
+
+* cool idea: *-p style dispatchers that invoke functions using
+  parameter names:
+
+(form (@@ action-f (function "a" "b")))
+
+* finish support for multiple bindings in let-bindings macro, or
+  revise bindings API
+
+* implement *-current-connection and transactions in util/sql module
+
+
+MEDIUM TERM
+
+* incorporate icing goodness
+
+* annotated dispatch (as in sunet)
+
+* "transactional" send/finish would be nice (i.e. the option of
+  invalidating a subgroup of continuations when exiting a lexical or
+  dynamic scope.
+
+* finish url pattern matching: more specific patterns should take precedence
+  over less specific ones: i.e. /hello/* should not override /hello/world/*;
+  right now the choice is random
+
+* might be nice to be able to recover latest good continuation -- the
+  latest tree leaf; also we might want to keep at least one tree leaf
+  around "forever",i.e. for the duration of the session, so that we may
+  offer a resume (to help against session hijacking, this should only be
+  an option if the jsessionid comes from a cookie)
+
+
+LONG TERM
+
+* build a tracking tool that collects stats about usage patterns and
+  "misses" or "near-misses"
+
+* nice to have: the whole annotated input fields in sunet (it
+  increases security b/c actual values become opaque and cannot be
+  manipulated.)
+
+
+THINGS THAT WOULD BREAK CODE
+
+- rename sql/* modules to db/*
+- rename sql/queries to db/sql
+- rename extract-*-binding to get-*-binding
+- make the k-url and urls returned by store/k! (and forward/store!)
+  context-relative
+@
+
+
+1.5
+log
+@merged from rel-0-4-dev
+@
+text
+@d5 2
+d9 2
+d15 1
+a15 2
+* plain HTML markup should not produce closing tags for CDATA-less
+  tags such as <img></img>
+d29 2
+a30 3
+* make sure that functions return sensible return values
+
+* finish support for multiple bindings in let-bindings macro
+@
+
+
+1.5.4.1
+log
+@updated
+@
+text
+@a4 2
+* log messages should always include context name
+
+d11 3
+d26 2
+@
+
+
+1.5.4.2
+log
+@updated
+@
+text
+@a8 2
+* finalize siscweb/redirect module
+
+d25 1
+a25 2
+* finish support for multiple bindings in let-bindings macro, or
+  revise bindings API
+@
+
+
+1.5.4.3
+log
+@updated
+@
+text
+@a14 2
+* add send-graphviz/[suspend|forward]; will need href-p, etc.
+
+@
+
+
+1.4
+log
+@merged from rel-0-3-dev
+@
+text
+@d5 1
+d7 1
+a7 1
+* cool idea: *-p style dispatchers that invoke functions using parameter names:
+d9 1
+a9 1
+(form (@@ action-f (function "a" "b")))
+d11 2
+d14 1
+a14 1
+* xhtml output
+d16 1
+a16 1
+* ajax?
+d18 2
+a19 3
+* more efficient output? (instead of converting to string); also add
+  servlet-input-port, binary-servlet-input-port,
+  binary-servlet-output-port to io/servlet-io module
+d21 2
+a22 1
+* have most functions return sensible return values
+d24 1
+a24 1
+* finish support for multiple bindings (i.e. let-bindings macro)
+d26 1
+a26 2
+* implement *-current-connection and transactions in util/sql module;
+  add customized datatype conversion
+d28 1
+a28 1
+* some unit testing
+d30 1
+a30 1
+* see surflet-request/response-*, and session functions in sunet
+d35 2
+d39 4
+a46 14
+* implement strategies to limit continuation table resource consumption, p.e.:
+        - locality principle - new continuation groups in session, older
+          continuation groups in db
+        - can only add a continuation group every n seconds (users are humans);
+        - limit the maximum number of outstanding continuation groups
+                * continuationtable-wide
+                * continuationmanager-wide
+        - track tree of continuations so we know what we want to preferably
+          keep (leaves)
+  (a load tester would be useful here)
+
+* "transactional" send/finish would be nice (i.e. the option of
+  invalidating a subtree of continuations when exiting a lexical scope.
+
+a52 2
+* sxml serialization needs to be fully xml-compliant; check
+  http://okmij.org/ftp/Scheme/sxml-db-conv.scm
+d54 1
+d56 2
+a57 1
+LONG TERM
+@
+
+
+1.4.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@a4 1
+* build process should be separated in minimal/default/all (default is w/o hib)
+d6 1
+a6 1
+* make-graphviz' caller does not expect #f in case of error
+d8 1
+a8 14
+* add optional header output to send-*/* functions
+
+* switch siscweb/html to using webit! instead of sxml/markup
+
+* allow global setting of content-type (esp. for charsets)
+
+* remove superfluous module dependencies
+
+* in siscweb/forward, change from using methods to case-lambda
+
+* better defaults for build process; use build.props instead of the sample file
+
+* "transactional" send/finish would be nice (i.e. the option of
+  invalidating a subtree of continuations when exiting a lexical scope.
+a9 4
+* alternate format for graphviz tag would allow one to use svg+png all the time;
+  embedding svg in html would be cool too
+
+* cool idea: *-p style dispatchers that invoke functions using parameter names:
+d11 1
+a11 1
+(form (@@ action-f (function "a" "b")))
+d13 1
+a13 1
+* ajax
+d50 3
+@
+
+
+1.4.2.2
+log
+@merged from rel-0-4-dev
+@
+text
+@d5 1
+a5 1
+* port klammerscript to scheme
+d7 1
+a7 2
+* HTML markup should not produce closing tags for CDATA-less tags such
+  as <img></img>
+d9 1
+a9 1
+* user-defined transform
+d11 9
+a19 1
+* formatted html output on demand; no comments for xml/xhtml on demand
+d24 2
+a25 2
+* alternate format for graphviz tag would allow one to use svg+png all
+  the time; embedding svg in html would be cool too
+d27 1
+a27 2
+* cool idea: *-p style dispatchers that invoke functions using
+  parameter names:
+d31 6
+d46 2
+d74 3
+@
+
+
+1.4.4.1
+log
+@updated
+@
+text
+@a4 6
+* build process should be separated in minimal/default/all (defaul is w/o hib)
+
+* better defaults for build process; use build.props instead of the sample file
+
+* "transactional" send/finish would be nice (i.e. the option of
+  invalidating a subtree of continuations when exiting a lexical scope.
+d10 1
+d50 3
+@
+
+
+1.4.4.2
+log
+@updated
+@
+text
+@d5 1
+a5 5
+* build process should be separated in minimal/default/all (default is w/o hib)
+
+* remove superfluous module dependencies
+
+* in siscweb/forward, change from using methods to case-lambda
+a11 3
+* alternate format for graphviz tag would allow one to use svg+png all the time;
+  embedding svg in html would be cool too
+
+d16 3
+a18 1
+* ajax
+@
+
+
+1.4.4.3
+log
+@updated
+@
+text
+@a6 8
+* make-graphviz' caller does not expect #f in case of error
+
+* add optional header output to send-*/* functions
+
+* switch siscweb/html to using webit! instead of sxml/markup
+
+* allow global setting of content-type (esp. for charsets)
+
+@
+
+
+1.4.4.4
+log
+@updated
+@
+text
+@d9 1
+a9 1
+* errors inside response/send are not reported?
+d11 1
+a11 1
+* switch siscweb/html to using webit! instead of sxml/markup?
+d13 1
+a13 1
+* allow global setting of content-type (esp. for charsets)?
+d24 2
+a25 2
+* alternate format for graphviz tag would allow one to use svg+png all
+  the time; embedding svg in html would be cool too
+d27 1
+a27 2
+* cool idea: *-p style dispatchers that invoke functions using
+  parameter names:
+@
+
+
+1.4.4.5
+log
+@updated
+@
+text
+@d5 1
+a5 1
+* what is the serialization cost of capturing the cc in forward/store! ?
+d13 2
+@
+
+
+1.4.4.6
+log
+@updated
+@
+text
+@d5 1
+a5 1
+* port klammerscript to scheme
+d7 1
+a7 1
+* formatted html/xhtml/xml output on demand
+d9 1
+a9 1
+* what is the serialization cost of capturing the cc in forward/store! ?
+d11 1
+a11 1
+* make-graphviz' caller does not expect #f in case of error
+d32 4
+@
+
+
+1.4.4.7
+log
+@updated
+@
+text
+@d7 1
+a7 2
+* HTML markup should not produce closing tags for CDATA-less tags such
+  as <img></img>
+d9 1
+a9 1
+* user-defined transform
+d11 1
+a11 1
+* formatted html/xhtml/xml output on demand
+d13 1
+a13 1
+* what is the serialization cost of capturing the cc in forward/store! ?
+d30 2
+@
+
+
+1.4.4.8
+log
+@updated
+@
+text
+@d12 7
+a18 1
+* formatted html output on demand; no comments for xml/xhtml on demand
+@
+
+
+1.4.4.9
+log
+@updated
+@
+text
+@d34 2
+d62 3
+@
+
+
+1.4.4.10
+log
+@updated
+@
+text
+@d10 1
+a10 1
+* user-defined SXML transforms
+d15 1
+a15 1
+  invalidating a subgroup of continuations when exiting a lexical scope.
+d32 2
+d43 11
+a62 3
+* build a tracking tool that collects stats about usage patterns and
+  "misses" or "near-misses"
+
+@
+
+
+1.4.4.11
+log
+@updated
+@
+text
+@d5 1
+a5 1
+* adopt a scheme->js compiler, or a sexp js
+d7 2
+a8 4
+* an SXML compiler would be nice; esp. if part of ehtml
+
+* plain HTML markup should not produce closing tags for CDATA-less
+  tags such as <img></img>
+d14 3
+d25 1
+a25 1
+* make sure that functions return sensible return values
+d27 1
+a27 1
+* finish support for multiple bindings in let-bindings macro
+d29 2
+a30 1
+* implement *-current-connection and transactions in util/sql module
+a36 3
+* "transactional" send/finish would be nice (i.e. the option of
+  invalidating a subgroup of continuations when exiting a lexical scope.
+
+@
+
+
+1.4.4.12
+log
+@updated
+@
+text
+@a4 5
+* published procs are local to the context, not the
+  servletadapters. uh-oh
+
+* profiling
+
+a32 2
+* incorporate icing goodness
+
+d36 1
+a36 2
+  invalidating a subgroup of continuations when exiting a lexical or
+  dynamic scope.
+@
+
+
+1.4.4.13
+log
+@updated
+@
+text
+@d5 3
+@
+
+
+1.3
+log
+@merged from rel-0-2-dev
+@
+text
+@a4 1
+* xhtml output?
+d6 8
+a13 1
+* move sxml serialization to own module (from siscweb/html)
+a29 2
+* dispatch/bindings urls for send-forward/*
+
+a34 6
+* speed up sxml transforms
+
+* finish publish mechanism
+  - files (can refresh by republishing, or automatically i guess)
+    we can use modules for this (publish <url> <module> [<proc>])
+
+d40 4
+a43 2
+        - can only add a continuation every n seconds (users are humans)
+        - limit the maximum number of outstanding continuations
+d48 1
+a48 1
+  (a load tester could be useful here)
+d51 1
+a51 1
+  removing only a subtree of continuations
+d65 12
+a76 21
+* nice to have: the whole annotated input fields in sunet; it's just
+  boring code really (can use request attributes), and it increases
+  security (b/c actual values become opaque and cannot be manipulated.)
+
+* IDEA: if send-*/suspend can store a pre-display continuation, we can use
+        it from subsequent pages to snap back to a page after the processing
+        has been done,even better than the javascript history.back();
+        two kinds of pre-display can be identified, before and after
+        the page proc has been resolved to a plain sxml:
+          - before allow page to reflect _some_ dynamic data that may
+            have mutated in the meanwhile, as long as the dynamic data is
+            is embedded in the sxml (precondition: the page proc cannot
+            have side effects
+          - after is the cleanest semantically, but will display EXACTLY
+            the previous page
+        they are both a bit weird -- the former can display a different page
+        but do so only if the data comes from the page proc; the latter will
+        show the same exact page, but, unlike the real back button, a refresh
+        will show that same exact page again... maybe that's why nobody's
+        ever done it. still, under controlled circumstances...
+        OK found out in some blog that the idea has been tought up before.
+@
+
+
+1.3.4.1
+log
+@updated
+@
+text
+@a4 3
+* BUG: sometimes sessions are not inserted in the SessionTracker,
+       typically after a restart
+
+@
+
+
+1.3.4.2
+log
+@merged from rel-0-3-dev
+@
+text
+@d5 1
+a5 1
+* BUG: sometimes sessions are not inserted in the sessiontracker,
+a7 3
+* BUG: if sisc.shp is not present in the sisc-heap.jar, no error is
+       raised during heap loading from SISCApplicationServlet.init()
+
+d10 1
+a10 4
+* group continuations by token, one token per interaction; then have
+  them expire in group; that way href-p-type closures won't risk
+  expiring at different times; also useful when implementing a n-max
+  policy of continuation retention -> number of groups of continuations
+d34 2
+d45 1
+a45 4
+        - locality principle - new continuations in session, older
+          continuations in db
+        - can only add a continuation every n seconds (users are humans);
+          this only applies to suspend continuations
+d72 17
+a88 8
+
+THINGS THAT WOULD BREAK CODE
+
+- rename sql/* modules to db/*
+- rename sql/queries to db/sql
+- rename extract-*-binding to get-*-binding
+- make the k-url and urls returned by store/k! (and forward/store!)
+  context-relative
+@
+
+
+1.3.2.1
+log
+@updated
+@
+text
+@a4 5
+* BUG: sometimes sessions are not inserted in the serssiontracker,
+       typically after a restart
+
+* finish graphviz support
+
+@
+
+
+1.3.2.2
+log
+@updated
+@
+text
+@d5 1
+a5 1
+* BUG: sometimes sessions are not inserted in the sessiontracker,
+d8 1
+a8 2
+* BUG: if sisc.shp is not present in the sisc-heap.jar, no error is
+       raised during heap loading from SISCApplicationServlet.init()
+d12 2
+d36 2
+d74 17
+@
+
+
+1.3.2.3
+log
+@removed aspectj notice
+@
+text
+@d10 1
+a12 5
+* group continuations by token, one token per interaction; then have
+  them expire in group; that way href-p-type closures won't risk
+  expiring at different times; also useful when implementing a n-max
+  policy of continuation retention -> number of groups of continuations
+
+d44 1
+a44 4
+        - locality principle - new continuations in session, older
+          continuations in db
+        - can only add a continuation every n seconds (users are humans);
+          this only applies to suspend continuations
+a70 8
+
+THINGS THAT WOULD BREAK CODE
+
+- rename sql/* modules to db/*
+- rename sql/queries to db/sql
+- rename extract-*-binding to get-*-binding
+- make the k-url and urls returned by store/k! (and forward/store!)
+  context-relative
+@
+
+
+1.3.2.4
+log
+@updated
+@
+text
+@d10 1
+d12 4
+a15 9
+* xhtml output
+
+* ajax?
+
+* split siscweb in core+libs
+
+* app-wide setting for outputting comments
+
+* persistence through hibernate
+d39 4
+d51 1
+a51 1
+          NB: this only applies to suspend continuations, not generic closures
+d74 3
+a76 3
+* nice to have: the whole annotated input fields in sunet (it
+  increases security b/c actual values become opaque and cannot be
+  manipulated.)
+@
+
+
+1.3.2.5
+log
+@updated; moved bugs to BUGS file
+@
+text
+@d5 2
+d8 2
+a9 4
+* cool idea: *-p style dispatchers that invoke functions using parameter names:
+
+(form (@@ action-f (function "a" "b")))
+
+d17 4
+d36 2
+@
+
+
+1.3.2.6
+log
+@updated
+@
+text
+@d15 2
+d42 5
+a46 4
+        - locality principle - new continuation groups in session, older
+          continuation groups in db
+        - can only add a continuation group every n seconds (users are humans);
+        - limit the maximum number of outstanding continuation groups
+d51 1
+a51 1
+  (a load tester would be useful here)
+d54 1
+a54 1
+  invalidating a subtree of continuations when exiting a lexical scope.
+@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@d5 1
+a5 2
+* properly escape HTML entities; the whole sxml->html thing is begging
+  for a rewrite
+d7 1
+a7 1
+* annotated dispatch (as in sunet)
+d9 3
+a11 2
+* either sisclet or SISCAdapterServlet should catch exceptions and redirect
+  to a default page
+d13 1
+a13 6
+* finish publish mechanism
+  - files (can refresh by republishing, or automatically i guess)
+    we can use modules for this (publish <url> <module> [<proc>])
+  - proc names - this is cool for development, since the name is
+    resolved to a proc at every invocation <- done
+  - procs (mostly so code can publish code) <- done
+d15 1
+a15 1
+* recheck abstraction layers
+d17 2
+a18 1
+* proper exception handling
+d20 1
+a20 1
+* use properties for system-wide settings
+d22 1
+a22 1
+* some logging all-around
+d24 1
+a24 1
+* some unit testing before it's too late
+a25 3
+* see surflet-request/response-*, and session functions in sunet; implementing
+  our own request/response objects should fix the serialization bug in
+  url-bindings
+d27 1
+a27 1
+* modularize the two servlets in siscweb.web.*; they are a bloated mess
+d29 1
+a29 1
+* write a short reference of siscweb modules and functions
+d31 1
+d33 3
+a35 5
+MEDIUM TERM
+
+* something like url-dispatch can be used for inlining content such as
+  dynamic images, inner frames, objects; for starters, it'd be wicked cool
+  to be able to do (img ,make-graph) or the such.
+d59 2
+a60 4
+* add redirect and forward to help with jsp code; it should pass the
+  cc url in a request attribute so that jsps can go back into the flow
+
+* i'm not entirely happy with sxml-tree-trans; check webit! and sxml-match
+a64 2
+* write a manual at the same level of detail as the SUnet SUrflet chapter
+
+a68 3
+* ContinuationTable should become a factory of continuation storages
+  specialized for storing continuations on filesystem, db, etc.
+
+a85 4
+
+* write a web-based repl; then one could do (send/suspend page) and
+  after interacting with the page in the same browser come back to the
+  repl with a return value...
+@
+
+
+1.2.4.1
+log
+@updated
+@
+text
+@a21 2
+* implement *-current-connection and transactions in util/sql module
+
+d30 3
+a32 3
+* see surflet-request/response-*, and session functions in sunet;
+  implementing our own request/response objects should fix the
+  serialization bug in url-bindings
+d34 1
+a34 2
+* modularize the two servlets in siscweb.web.*; they are a bloated
+  mess
+a82 2
+        -- sort of done; implemented continuation storage on hsqldb;
+           moving towards scheme-only continuation manager
+@
+
+
+1.2.4.2
+log
+@updated
+@
+text
+@d5 2
+a6 7
+* provide a way to represent html entities (symbols?)
+
+* more efficent output (instead of converting to string)
+
+* have most functions return sensible return codes
+
+* finish support for multiple bindings
+d11 1
+a11 1
+  to a default page; in development the page could well offer debug info
+d13 6
+d22 1
+a22 2
+* implement *-current-connection and transactions in util/sql module;
+  also implement set-null
+d32 3
+a34 1
+* see surflet-request/response-*, and session functions in sunet
+d39 2
+a47 7
+* finish publish mechanism
+  - files (can refresh by republishing, or automatically i guess)
+    we can use modules for this (publish <url> <module> [<proc>])
+  - proc names - this is cool for development, since the name is
+    resolved to a proc at every invocation <- done
+  - procs (mostly so code can publish code) <- done
+
+@
+
+
+1.2.4.3
+log
+@updated
+@
+text
+@a36 3
+* add servlet-input-port, binary-servlet-input-port,
+  binary-servlet-output-port to io/servlet-io module
+
+@
+
+
+1.2.4.4
+log
+@updated
+@
+text
+@d34 2
+a35 1
+* modularize the two servlets in siscweb.web.*
+a39 2
+* clean up classes in sisc.contcentric.*
+
+@
+
+
+1.2.4.5
+log
+@updated
+@
+text
+@d11 1
+a11 1
+* finish support for multiple bindings (i.e. let-bindings macro)
+d18 1
+d22 1
+a22 1
+  also proper datatype conversion using java.sql.Types
+d26 4
+d34 2
+d39 2
+d44 4
+d80 1
+a80 2
+* sxml serialization needs to be fully xml-compliant; check
+  http://okmij.org/ftp/Scheme/sxml-db-conv.scm
+d91 5
+@
+
+
+1.2.4.6
+log
+@updated
+@
+text
+@a4 5
+* fix sxml-matching or re-implement T in siscweb/html without
+
+* change return value of extract-single-binding to '() if no
+  value found, for consistency; will need to change rpn and sillywiki
+
+@
+
+
+1.2.4.7
+log
+@updated
+@
+text
+@d5 1
+a5 1
+* xhtml output?
+d7 6
+a12 1
+* more efficent output? (instead of converting to string)
+d18 2
+d26 1
+a26 1
+  add customized datatype conversion
+a39 2
+* annotated dispatch (as in sunet)
+
+@
+
+
+1.2.4.8
+log
+@updated
+@
+text
+@d7 1
+a7 3
+* more efficient output? (instead of converting to string); also add
+  servlet-input-port, binary-servlet-input-port,
+  binary-servlet-output-port to io/servlet-io module
+d9 1
+a9 1
+* have most functions return sensible return values
+d13 5
+d21 3
+a23 1
+* some unit testing
+d27 2
+a28 1
+* dispatch/bindings urls for send-forward/*
+d38 3
+d64 3
+d73 2
+@
+
+
+1.2.4.9
+log
+@updated
+@
+text
+@a4 2
+* fix the #f error with tictactoe
+
+a6 2
+* move sxml serialization to own module (from siscweb/html)
+
+@
+
+
+1.2.4.10
+log
+@updated
+@
+text
+@d5 2
+a32 2
+* speed up sxml transforms
+
+d86 4
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@a3 1
+* real url pattern matching
+d5 2
+a6 1
+* finish send/dispatch (the sunet kind, not the plt kind) and send/back (plt)
+d8 1
+a8 1
+* ant dist
+d11 1
+a11 1
+  to a page
+d15 4
+a18 4
+    we can use modules for this (publish <url> <module> [<thunk>])
+  - thunk names - this is cool for development, since thunk is looked up
+    every time
+  - thunk (mostly so code can publish code) ( <- done
+d22 1
+a22 1
+* see surflet-request/response-*, and session functions in sunet
+d24 13
+a36 12
+* if a continuation is not found, present a page saying so, listing the latest
+  active continuations (it'd be nice if each continuation knew about the
+  page title!); also the developer should be able to catch the event, as in
+  sunet
+
+* keep track of continuation tree; specifically must
+    1) expire trees and reverse subtrees for expiration
+    2) support "transactional" send/finish to invalidate only a subtree of continuations
+       (good in loop navigational structures)
+    3) recover latest good session -- the latest tree leaf
+    4) if cloning is disabled, every new continuation can remove other branches
+       from the parent continuation
+d40 31
+a70 4
+* continuation serialization: since the continuations are in the session object,
+  they seem to be serialized; however when they are de-serialized after a server
+  bounce, the k-manager object is not of the same type anymore; should it implement
+  a serializer interface or what?
+a73 2
+* nice to have: the whole annotated input fields in sunet; it's just boring code
+  really (can use request attributes)
+d75 8
+a82 1
+* might be nice to be able to forward/redirect to a jsp instead of sxml
+d102 3
+a104 1
+
+@
+
+
+1.1.1.1
+log
+@initial import
+@
+text
+@@
+
+
+1.1.1.2
+log
+@more changes
+@
+text
+@d6 1
+a6 1
+* properly escape HTML entities
+d8 1
+a8 5
+* write a thread that does continuation expiration every n seconds
+
+* annotated dispatch (as in sunet)
+
+* ant dist: package scm/ into a jar
+a12 3
+* REPLThread relies on sisc.REPL.listen(), which doesn't seem to offer a way
+  to kill spawned repls over sockets; fix that or roll your own.
+
+d18 1
+a18 1
+  - thunk (mostly so code can publish code) <- done
+d22 1
+a22 9
+* see surflet-request/response-*, and session functions in sunet; some sunet
+  session functions cannot be implemented (easily) because the j2ee spec has
+  deprecated the httpsessioncontext object
+
+* if a continuation is not found, present a page saying so, offering a restart;
+  also the developer should be able to catch the event, as in sunet
+
+* write a demo wiki in examples/; currently the biggest hurdle is to
+  regexp-split the page string into an html structure
+d24 4
+a27 5
+MEDIUM TERM
+* continuation serialization: since the continuations are in the session object,
+  they seem to be serialized; however when they are de-serialized after a server
+  bounce, the k-manager object is not of the same type anymore; should it implement
+  a serializer interface or what?
+d37 7
+a43 1
+* add redirect; it should pass the cc in a request attribute
+d47 3
+a49 2
+  really (can use request attributes), and it increases security (b/c actual values
+  become opaque and cannot be manipulated.)
+@
+
+
+1.1.1.3
+log
+@updated todo list
+@
+text
+@d6 1
+a6 2
+* properly escape HTML entities; in fact i suspect the whole sxml->html
+  thing needs to be rewritten.
+d8 1
+a8 4
+* write a thread that does continuation expiration every n seconds;
+  k-managers should subscribe to this thread when they are created or
+  deserialized, and unsubscribe when they are serialized; this may
+  require re-implementing k-manager in Java (sigh).
+d12 1
+a12 1
+* better separate the examples from the siscweb code
+d36 2
+a53 4
+
+* i'm not entirely happy with sxml-tree-trans; i wonder if there's anything more
+  schemeish around, like webit!.
+
+@
+
+
+1.1.1.4
+log
+@modified
+@
+text
+@d4 1
+d9 1
+a9 1
+* Write a thread that does continuation expiration every n seconds;
+d19 1
+a19 1
+  to a default page
+d22 1
+a22 1
+  to forcibly kill spawned repls over sockets; fix that or roll your own.
+d27 2
+a28 2
+  - thunk names - this is cool for development, since the name is
+    resolved to a thunk at every invocation <- done
+a32 2
+* proper exception handling
+
+d35 1
+a35 1
+  deprecated the httpsessioncontext class
+d47 3
+a49 6
+* finish url pattern matching: more specific patterns should take precedence
+  over less specific ones: i.e. /hello/* should not override /hello/world/*;
+  right now the choice is casual
+
+* keep track of continuation tree; specifically should
+    1) support "transactional" send/finish to invalidate only a subtree of continuations
+d51 2
+a52 5
+    2) be able to recover latest good continuation -- the latest tree leaf; also we might
+       want to keep the tree leaves around "forever", i.e. for the duration of the session,
+       so that we may offer a resume (to help security, this should only be an option if
+       the jsessionid comes from a cookie)
+    3) if cloning is disabled, every new continuation can remove other branches
+d58 1
+a58 1
+  schemeish around; check webit! and the one whose name i can't remember
+@
+
+
+1.1.1.5
+log
+@modified
+@
+text
+@a40 3
+* write a short reference manual for people already familiar with continuation-
+  based web development
+
+a42 1
+
+a66 2
+* write a manual at the same level of detail as the SUnet SUrflet chapter
+
+a68 1
+
+@
+
+
+1.1.1.6
+log
+@addition
+@
+text
+@a14 2
+* the bindings library should sanitize request parameters
+
+@
+
+
+1.1.1.7
+log
+@examples were separated from siscweb
+@
+text
+@d17 2
+@
+
+
+1.1.1.8
+log
+@updated
+@
+text
+@d6 6
+a11 1
+  thing needs to be rewritten (also check what plt and sunet do)
+a33 2
+* proper logging (aspectj may be nice for development-oriented loggin)
+
+d47 4
+a50 2
+* something like url-dispatch can be used for inlining content such as images,
+  inner frames, objects
+d54 1
+a54 1
+  right now the choice is random
+d57 6
+a62 7
+    1) support "transactional" send/finish to invalidate only a subtree of
+       continuations (good in loop navigational structures)
+    2) be able to recover latest good continuation -- the latest tree leaf;
+       also we might want to keep the tree leaves around "forever", i.e. for
+       the duration of the session, so that we may offer a resume (to help
+       against session hijacking, this should only be an option if the
+       jsessionid comes from a cookie)
+d66 1
+a66 1
+* add redirect and forward; it should pass the cc in a request attribute
+a78 3
+
+* ContinuationTable should become a factory of continuation storages
+  specialized for storing continuations on filesystem, db, etc.
+@
+
+
+1.1.1.9
+log
+@updated
+@
+text
+@a4 4
+* fix continuationtable registration into continuationmanager; probably
+  needs a workaround b/c tomcat doesn't properly notify objects in
+  session when the session is deserialized
+
+d15 3
+d29 1
+a29 1
+* some logging all-around
+d51 10
+a60 15
+* implement strategies to limit continuation table resource consumption, p.e.:
+        - can only add a continuation every n seconds (users are humans)
+        - limit the maximum number of outstanding continuations
+                * continuationtable-wide
+                * continuationmanager-wide
+        - track tree of continuations so we know what we want to preferably
+          keep (leaves)
+
+* "transactional" send/finish would be nice (i.e. the option of removing only
+  a subtree of continuations
+* might be nice to be able to recover latest good continuation -- the latest
+  tree leaf; also we might want to keep the tree leaves around "forever",
+  i.e. for the duration of the session, so that we may offer a resume (to help
+  against session hijacking, this should only be an option if the jsessionid
+  comes from a cookie)
+d62 1
+a62 5
+* add redirect and forward to help with jsp code; it should pass the cc url in a
+  request attribute so that jsps can go back into the flow
+
+* i'm not entirely happy with sxml-tree-trans; check webit! and the other
+  (forgot the name)
+d64 2
+d67 1
+a70 2
+
+* write a manual at the same level of detail as the SUnet SUrflet chapter
+@
+
+
+1.1.1.10
+log
+@updated
+@
+text
+@d5 4
+d36 3
+d73 2
+@
+
+
+1.1.1.11
+log
+@updated
+@
+text
+@d8 1
+a8 5
+* clean up examples
+
+* new tasks to prepare the examples/ folder for hotdeploy
+
+* repl thread is not quitting when the server is bounced
+d10 1
+a10 1
+* annotated dispatch (as in sunet)
+d17 4
+a20 6
+    we can use modules for this (publish <url> <module> [<proc>])
+  - output of get-all-published cannot be reused in publish-bulk
+  - BUG: publish doesn't override; this needs fixing before release
+  - proc names - this is cool for development, since the name is
+    resolved to a proc at every invocation <- done
+  - procs (mostly so code can publish code) <- done
+a25 2
+* use properties for system-wide settings
+
+d30 1
+a30 2
+  deprecated the httpsessioncontext class; but actually the continuationmanager
+  knows which sessions are active...
+d32 2
+a33 2
+* write a short reference for people already familiar with continuation-based
+  web development
+d38 2
+a39 2
+* something like url-dispatch can be used for inlining content such as
+  dynamic images, inner frames, objects
+a51 1
+  a load tester could be useful here
+d64 2
+a65 1
+* i'm not entirely happy with sxml-tree-trans; check webit! and sxml-match
+d97 1
+a97 2
+* a web-based repl; then one could do (send/suspend page) and after interacting
+  with the page in the same browser come back to the repl with a return value...
+@
+
+
+1.1.1.12
+log
+@updated
+@
+text
+@d12 1
+a12 7
+* BUG: repl thread is not killed off when somebody is connected to
+       the repl until an error is generated
+
+* BUG: send-html/finish works for mysterious reasons, and
+       send-html/back doesn't work for mysterious reasons
+
+* BUG: examples/rpn state doesn't de/serialize properly (hashtable?)
+d22 2
+a29 2
+* move some functions from contcentric.scm to sisclet.scm; technically contcentric should be a low-level interface to siscweb, while the only exposed functionality of sisclet is the sisclet entry point
+
+a35 2
+* some unit testing before it's too late
+
+d48 1
+a48 2
+  dynamic images, inner frames, objects; for starters, it'd be wicked cool
+  to be able to do (img ,make-graph) or the such.
+d65 5
+a69 6
+
+* might be nice to be able to recover latest good continuation -- the
+  latest tree leaf; also we might want to keep at least one tree leaf
+  around "forever",i.e. for the duration of the session, so that we may
+  offer a resume (to help against session hijacking, this should only be
+  an option if the jsessionid comes from a cookie)
+@
+
+
+1.1.1.13
+log
+@updated; moved bugs to BUGS file
+@
+text
+@d5 14
+a18 2
+* properly escape HTML entities; the whole sxml->html thing is begging
+  for a rewrite
+d34 2
+d44 4
+a47 3
+* see surflet-request/response-*, and session functions in sunet; implementing
+  our own request/response objects should fix the serialization bug in
+  url-bindings
+d49 2
+a50 1
+* write a short reference of siscweb modules and functions
+d70 1
+a70 1
+  (a load tester could be useful here)
+d72 2
+a73 2
+* "transactional" send/finish would be nice (i.e. the option of
+  removing only a subtree of continuations
+d81 2
+a82 2
+* add redirect and forward to help with jsp code; it should pass the
+  cc url in a request attribute so that jsps can go back into the flow
+d91 3
+a93 3
+* nice to have: the whole annotated input fields in sunet; it's just
+  boring code really (can use request attributes), and it increases
+  security (b/c actual values become opaque and cannot be manipulated.)
+d116 2
+a117 3
+* write a web-based repl; then one could do (send/suspend page) and
+  after interacting with the page in the same browser come back to the
+  repl with a return value...
+@
+
+
+1.1.1.14
+log
+@edited wording, etc.
+@
+text
+@a33 2
+* modularize the two servlets in siscweb.web.*; they are a bloated mess
+
+@
+
+

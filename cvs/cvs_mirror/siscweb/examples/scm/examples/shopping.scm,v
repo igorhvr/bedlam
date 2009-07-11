@@ -1,0 +1,1209 @@
+head	1.4;
+access;
+symbols
+	rel-0-6-dev:1.4.0.4
+	rel-0-5-fix:1.4.0.2
+	rel-0-5:1.4
+	rel-0-5-dev-safe-frames:1.3.4.1.0.2
+	Root_rel-0-5-dev-safe-frames:1.3.4.1
+	rel-0-4-fix-0:1.3
+	rel-0-5-dev:1.3.0.4
+	rel-0-4-fix:1.3.0.2
+	rel-0-3-fix-3:1.2.2.2
+	rel-0-3-fix-2:1.2.2.1
+	rel-0-4-dev-sisc-1-11:1.2.4.2
+	rel-0-3-fix-1:1.2
+	rel-0-4-dev:1.2.0.4
+	rel-0-3-fix:1.2.0.2
+	rel-0-3:1.2
+	rel-0-3-dev-1:1.1.2.1
+	rel-0-2-fix-2:1.1.4.2
+	rel-0-2-fix:1.1.0.4
+	rel-0-3-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2007.04.12.03.51.16;	author acolomba;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2006.09.03.01.42.24;	author acolomba;	state Exp;
+branches
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.11.25.20.43.32;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.07.23.19.44.04;	author acolomba;	state dead;
+branches
+	1.1.2.1
+	1.1.4.1;
+next	;
+
+1.1.2.1
+date	2005.07.23.19.44.04;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.1.4.1
+date	2005.07.23.19.44.04;	author acolomba;	state dead;
+branches;
+next	1.1.4.2;
+
+1.1.4.2
+date	2005.07.31.20.04.04;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2006.02.25.17.12.05;	author acolomba;	state Exp;
+branches;
+next	1.2.2.2;
+
+1.2.2.2
+date	2006.04.15.15.55.28;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2006.01.16.00.22.15;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2006.02.11.20.21.43;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2006.04.08.21.40.41;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2007.01.27.04.16.38;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@merged from rel-0-5-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+(require-library 'siscweb/bindings)
+(require-library 'siscweb/xhtml)
+
+(module examples/shopping
+  (shopping)
+
+  (import hashtable)
+
+  (import siscweb/bindings)
+  (import siscweb/xhtml)
+
+
+  ;;; *** MODEL ***
+
+  ;; cart object
+  (define (make-cart)
+    (make-hashtable equal? #t))
+
+  (define (add-to-cart! cart item)
+    (let ((qty (hashtable/get cart item 0)))
+      (hashtable/put! cart item (+ 1 qty))))
+
+  (define (remove-cart-item! cart item)
+    (hashtable/remove! cart item))
+
+  (define (update-cart-item-qty! cart item qty)
+    (if (<= 0 qty)
+        (remove-cart-item! cart item)
+        (hashtable/put! cart item qty)))
+
+  (define (cart->hashtable cart)
+    cart)
+
+
+  ;; items for sale - the names suffice for now; inventory and prices
+  ;; could be easily added;
+  (define item-names
+    (alist->hashtable
+     `((cat . "Cat")
+       (dog . "Dog")
+       (hamster . "Hamster"))))
+
+  (define (get-item-name item)
+    (hashtable/get item-names item "unknown"))
+
+  (define (item-names->hashtable)
+    item-names)
+
+
+
+  ;;; *** CONTROLLER ***
+
+  ;; entry point
+  (define (shopping req)
+    (set! req #f)
+    ;; instantiates a new cart and uses it to shop; instead it could
+    ;; also lookup a cart from persistent storage
+    (let ((cart (make-cart)))
+      (shop! cart)
+      (checkout! cart)))
+
+
+  ;; shops using a cart; the cart is mutated because otherwise it
+  ;; would snap back in time when using the back button in the browser
+  (define (shop! cart)
+    (let-bindings ((add? "add?")
+                   (item "item")
+                   (done? "done?"))
+        (get-bindings
+         (send-xhtml/suspend
+          (make-choose-page))) ; the page for the user
+
+      (cond
+       ;; adding an item?
+       (add?
+        (add-to-cart! cart item)
+        (manage-cart! cart)
+        (shop! cart))
+       ;; if done, returns the cart
+       (done? cart)
+       ;; loops on unknown actions
+       (else
+        (shop! cart)))))
+
+  ;; manages a cart, e.g. item removals; quantity updates could be
+  ;; easily implemented;
+  (define (manage-cart! cart)
+    (let-bindings ((done? "done?")
+                   (remove? "remove?")
+                   (item "item"))
+        (get-bindings
+          (send-xhtml/suspend
+           (make-manage-cart-page cart))) ; the page for the user
+      (cond
+       ;; are we done?
+       (done? #t)
+       ;; user asked to remove an item?
+       (remove?
+        (remove-cart-item! cart item)
+        (manage-cart! cart))
+       ;; loop on unknown commands
+       (else (manage-cart! cart)))))
+
+
+  ;; checkout operation; right now it just displays the cart
+  (define (checkout! cart)
+    (send-xhtml/back
+     (make-checkout-page cart)))
+
+
+
+  ;;; *** VIEW ***
+
+  ;; creates a suspendable page for the user
+  ;; to choose items to place in the cart
+  (define (make-choose-page)
+    (lambda (k-url)
+      `(*TOP*
+        (*PI* xml "version=\"1.0\"")
+        (*DTD-INFO/PUBLIC* "html"
+                           "-//W3C//DTD XHTML 1.0 Strict//EN"
+                           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+        (html (@@ (xmlns "http://www.w3.org/1999/xhtml")
+                 (xml:lang "en") (lang "en"))
+         (head
+          (title "Shopping")
+          (link (@@ (href-c "/css/default.css")
+                   (rel "stylesheet")
+                   (type "text/css"))))
+         (body
+          (h3 "Shopping")
+          (p "Choose:")
+          (ul
+           ,@@(hashtable/map
+              (lambda (item item-name)
+                `(li ,item-name
+                  " - "
+                  (a (@@ (bindings ((add? . "add") (item . ,item))))
+                   "add to cart")))
+              (item-names->hashtable)))
+          (a (@@ (bindings ((done? . "done"))))
+           "checkout >")
+          (p (a (@@ (href-c "/")) "^ Home")))))))
+
+
+  ;; creates a suspendable page for the user to manage the cart
+  (define (make-manage-cart-page cart)
+    (lambda (k-url)
+      `(*TOP*
+        (*PI* xml "version=\"1.0\"")
+        (*DTD-INFO/PUBLIC* "html"
+                           "-//W3C//DTD XHTML 1.0 Strict//EN"
+                           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+        (html (@@ (xmlns "http://www.w3.org/1999/xhtml")
+                 (xml:lang "en") (lang "en"))
+         (head
+          (title "Manage Cart")
+          (link (@@ (href-c "/css/default.css")
+                   (rel "stylesheet")
+                   (type "text/css"))))
+         (body
+          (h3 "Manage Cart")
+          (p "Your cart contains:")
+          (ul
+           ,@@(hashtable/map
+              (lambda (item qty)
+                `(li
+                  ,qty
+                  " of "
+                  ,(get-item-name item)
+                  " - "
+                  (a (@@ (bindings ((remove? . "remove") (item . ,item))))
+                   "remove from cart")))
+              (cart->hashtable cart)))
+          (p
+           (a (@@ (bindings ((done? . "done"))))
+            "< continue shopping"))
+          (p (a (@@ (href-c "/")) "^ Home")))))))
+
+
+
+  ;; creates a non-suspendable page with the cart contents
+  (define (make-checkout-page cart)
+    `(*TOP*
+      (*PI* xml "version=\"1.0\"")
+      (*DTD-INFO/PUBLIC* "html"
+                         "-//W3C//DTD XHTML 1.0 Strict//EN"
+                         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+      (html (@@ (xmlns "http://www.w3.org/1999/xhtml")
+               (xml:lang "en") (lang "en"))
+       (head
+        (title "Checkout")
+        (link (@@ (href-c "/css/default.css")
+                 (rel "stylesheet")
+                 (type "text/css"))))
+       (body
+        (h3 "Checkout")
+        (p "Your cart contains:")
+        (ul
+         ,@@(hashtable/map
+            (lambda (item qty)
+              `(li ,qty " of " ,(get-item-name item)))
+            (cart->hashtable cart)))
+        (p (a (@@ (href-c "/")) "^ Home"))))))
+
+  )
+@
+
+
+1.3
+log
+@merged from rel-0-4-dev
+@
+text
+@d168 1
+a168 1
+                  (a (@@ (bindings ((add? "add") (item ,item))))
+d171 1
+a171 1
+          (a (@@ (bindings ((done? "done"))))
+d202 1
+a202 1
+                  (a (@@ (bindings ((remove? "remove") (item ,item))))
+d206 1
+a206 1
+           (a (@@ (bindings ((done? "done"))))
+@
+
+
+1.3.4.1
+log
+@single @@bindings are now sent as such
+@
+text
+@d168 1
+a168 1
+                  (a (@@ (bindings ((add? . "add") (item . ,item))))
+d171 1
+a171 1
+          (a (@@ (bindings ((done? . "done"))))
+d202 1
+a202 1
+                  (a (@@ (bindings ((remove? . "remove") (item . ,item))))
+d206 1
+a206 1
+           (a (@@ (bindings ((done? . "done"))))
+@
+
+
+1.2
+log
+@merged from rel-0-3-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+d32 1
+a32 1
+(require-library 'siscweb/html)
+d40 1
+a40 1
+  (import siscweb/html)
+d100 1
+a100 1
+         (send-html/suspend
+d122 1
+a122 1
+          (send-html/suspend
+d137 1
+a137 1
+    (send-html/back
+d148 26
+a173 20
+      `(html
+        (head
+         (title "Shopping")
+         (link (@@ (href-c "/css/default.css")
+                  (rel "stylesheet")
+                  (type "text/css"))))
+        (body
+         (h3 "Shopping")
+         (p "Choose:")
+         (ul
+          ,@@(hashtable/map
+             (lambda (item item-name)
+               `(li ,item-name
+                    " - "
+                    (a (@@ (bindings ((add? "add") (item ,item))))
+                       "add to cart")))
+             (item-names->hashtable)))
+         (a (@@ (bindings ((done? "done"))))
+          "checkout >")
+         (p (a (@@ (href-c "/")) "^ Home"))))))
+d179 30
+a208 24
+      `(html
+        (head
+         (title "Manage Cart")
+         (link (@@ (href-c "/css/default.css")
+                  (rel "stylesheet")
+                  (type "text/css"))))
+        (body
+         (h3 "Manage Cart")
+         (p "Your cart contains:")
+         (ul
+          ,@@(hashtable/map
+             (lambda (item qty)
+               `(li
+                 ,qty
+                 " of "
+                 ,(get-item-name item)
+                 " - "
+                 (a (@@ (bindings ((remove? "remove") (item ,item))))
+                  "remove from cart")))
+             (cart->hashtable cart)))
+         (p
+          (a (@@ (bindings ((done? "done"))))
+           "< continue shopping"))
+         (p (a (@@ (href-c "/")) "^ Home"))))))
+d214 21
+a234 15
+    `(html
+      (head
+       (title "Checkout")
+       (link (@@ (href-c "/css/default.css")
+                (rel "stylesheet")
+                (type "text/css"))))
+      (body
+       (h3 "Checkout")
+       (p "Your cart contains:")
+       (ul
+        ,@@(hashtable/map
+           (lambda (item qty)
+             `(li ,qty " of " ,(get-item-name item)))
+           (cart->hashtable cart)))
+       (p (a (@@ (href-c "/")) "^ Home")))))
+@
+
+
+1.2.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@d32 1
+a32 1
+(require-library 'siscweb/xhtml)
+d40 1
+a40 1
+  (import siscweb/xhtml)
+d100 1
+a100 1
+         (send-xhtml/suspend
+d122 1
+a122 1
+          (send-xhtml/suspend
+d137 1
+a137 1
+    (send-xhtml/back
+d148 20
+a167 25
+      `(*TOP*
+        (*DTD-INFO/PUBLIC* "html"
+                           "-//W3C//DTD XHTML 1.0 Strict//EN"
+                           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+        (html (@@ (xmlns "http://www.w3.org/1999/xhtml")
+                 (xml:lang "en") (lang "en"))
+         (head
+          (title "Shopping")
+          (link (@@ (href-c "/css/default.css")
+                   (rel "stylesheet")
+                   (type "text/css"))))
+         (body
+          (h3 "Shopping")
+          (p "Choose:")
+          (ul
+           ,@@(hashtable/map
+              (lambda (item item-name)
+                `(li ,item-name
+                  " - "
+                  (a (@@ (bindings ((add? "add") (item ,item))))
+                   "add to cart")))
+              (item-names->hashtable)))
+          (a (@@ (bindings ((done? "done"))))
+           "checkout >")
+          (p (a (@@ (href-c "/")) "^ Home")))))))
+d173 24
+a196 29
+      `(*TOP*
+        (*DTD-INFO/PUBLIC* "html"
+                           "-//W3C//DTD XHTML 1.0 Strict//EN"
+                           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+        (html (@@ (xmlns "http://www.w3.org/1999/xhtml")
+                 (xml:lang "en") (lang "en"))
+         (head
+          (title "Manage Cart")
+          (link (@@ (href-c "/css/default.css")
+                   (rel "stylesheet")
+                   (type "text/css"))))
+         (body
+          (h3 "Manage Cart")
+          (p "Your cart contains:")
+          (ul
+           ,@@(hashtable/map
+              (lambda (item qty)
+                `(li
+                  ,qty
+                  " of "
+                  ,(get-item-name item)
+                  " - "
+                  (a (@@ (bindings ((remove? "remove") (item ,item))))
+                   "remove from cart")))
+              (cart->hashtable cart)))
+          (p
+           (a (@@ (bindings ((done? "done"))))
+            "< continue shopping"))
+          (p (a (@@ (href-c "/")) "^ Home")))))))
+d202 15
+a216 20
+    `(*TOP*
+      (*DTD-INFO/PUBLIC* "html"
+                         "-//W3C//DTD XHTML 1.0 Strict//EN"
+                         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+      (html (@@ (xmlns "http://www.w3.org/1999/xhtml")
+               (xml:lang "en") (lang "en"))
+       (head
+        (title "Checkout")
+        (link (@@ (href-c "/css/default.css")
+                 (rel "stylesheet")
+                 (type "text/css"))))
+       (body
+        (h3 "Checkout")
+        (p "Your cart contains:")
+        (ul
+         ,@@(hashtable/map
+            (lambda (item qty)
+              `(li ,qty " of " ,(get-item-name item)))
+            (cart->hashtable cart)))
+        (p (a (@@ (href-c "/")) "^ Home"))))))
+@
+
+
+1.2.2.2
+log
+@merged from rel-0-4-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+a148 1
+        (*PI* xml "version=\"1.0\"")
+a178 1
+        (*PI* xml "version=\"1.0\"")
+a212 1
+      (*PI* xml "version=\"1.0\"")
+@
+
+
+1.2.4.1
+log
+@added DOCTYPE declarations
+@
+text
+@d148 20
+a167 23
+      `(*TOP*
+        (*DTD-INFO/PUBLIC* |HTML| "-//W3C//DTD HTML 4.01 Transitional//EN"
+                           "http://www.w3.org/TR/html4/loose.dtd")
+        (html
+         (head
+          (title "Shopping")
+          (link (@@ (href-c "/css/default.css")
+                   (rel "stylesheet")
+                   (type "text/css"))))
+         (body
+          (h3 "Shopping")
+          (p "Choose:")
+          (ul
+           ,@@(hashtable/map
+              (lambda (item item-name)
+                `(li ,item-name
+                  " - "
+                  (a (@@ (bindings ((add? "add") (item ,item))))
+                   "add to cart")))
+              (item-names->hashtable)))
+          (a (@@ (bindings ((done? "done"))))
+           "checkout >")
+          (p (a (@@ (href-c "/")) "^ Home")))))))
+d173 24
+a196 27
+      `(*TOP*
+        (*DTD-INFO/PUBLIC* |HTML| "-//W3C//DTD HTML 4.01 Transitional//EN"
+                           "http://www.w3.org/TR/html4/loose.dtd")
+        (html
+         (head
+          (title "Manage Cart")
+          (link (@@ (href-c "/css/default.css")
+                   (rel "stylesheet")
+                   (type "text/css"))))
+         (body
+          (h3 "Manage Cart")
+          (p "Your cart contains:")
+          (ul
+           ,@@(hashtable/map
+              (lambda (item qty)
+                `(li
+                  ,qty
+                  " of "
+                  ,(get-item-name item)
+                  " - "
+                  (a (@@ (bindings ((remove? "remove") (item ,item))))
+                   "remove from cart")))
+              (cart->hashtable cart)))
+          (p
+           (a (@@ (bindings ((done? "done"))))
+            "< continue shopping"))
+          (p (a (@@ (href-c "/")) "^ Home")))))))
+d202 15
+a216 18
+    `(*TOP*
+      (*DTD-INFO/PUBLIC* |HTML| "-//W3C//DTD HTML 4.01 Transitional//EN"
+                         "http://www.w3.org/TR/html4/loose.dtd")
+      (html
+       (head
+        (title "Checkout")
+        (link (@@ (href-c "/css/default.css")
+                 (rel "stylesheet")
+                 (type "text/css"))))
+       (body
+        (h3 "Checkout")
+        (p "Your cart contains:")
+        (ul
+         ,@@(hashtable/map
+            (lambda (item qty)
+              `(li ,qty " of " ,(get-item-name item)))
+            (cart->hashtable cart)))
+        (p (a (@@ (href-c "/")) "^ Home"))))))
+@
+
+
+1.2.4.2
+log
+@now outputs compliant xhtml
+@
+text
+@d32 1
+a32 1
+(require-library 'siscweb/xhtml)
+d40 1
+a40 1
+  (import siscweb/xhtml)
+d100 1
+a100 1
+         (send-xhtml/suspend
+d122 1
+a122 1
+          (send-xhtml/suspend
+d137 1
+a137 1
+    (send-xhtml/back
+d149 3
+a151 5
+        (*DTD-INFO/PUBLIC* "html"
+                           "-//W3C//DTD XHTML 1.0 Strict//EN"
+                           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+        (html (@@ (xmlns "http://www.w3.org/1999/xhtml")
+                 (xml:lang "en") (lang "en"))
+d177 3
+a179 5
+        (*DTD-INFO/PUBLIC* "html"
+                           "-//W3C//DTD XHTML 1.0 Strict//EN"
+                           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+        (html (@@ (xmlns "http://www.w3.org/1999/xhtml")
+                 (xml:lang "en") (lang "en"))
+d209 3
+a211 5
+      (*DTD-INFO/PUBLIC* "html"
+                         "-//W3C//DTD XHTML 1.0 Strict//EN"
+                         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+      (html (@@ (xmlns "http://www.w3.org/1999/xhtml")
+               (xml:lang "en") (lang "en"))
+@
+
+
+1.2.4.3
+log
+@explicitely outputs <?xml pi in pages
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+a148 1
+        (*PI* xml "version=\"1.0\"")
+a178 1
+        (*PI* xml "version=\"1.0\"")
+a212 1
+      (*PI* xml "version=\"1.0\"")
+@
+
+
+1.1
+log
+@file shopping.scm was initially added on branch rel-0-3-dev.
+@
+text
+@d1 218
+@
+
+
+1.1.4.1
+log
+@file shopping.scm was added on branch rel-0-2-fix on 2005-07-31 20:04:04 +0000
+@
+text
+@@
+
+
+1.1.4.2
+log
+@merged from rel-0-3-dev
+@
+text
+@a0 218
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+(require-library 'siscweb/bindings)
+(require-library 'siscweb/html)
+
+(module examples/shopping
+  (shopping)
+
+  (import hashtable)
+
+  (import siscweb/bindings)
+  (import siscweb/html)
+
+
+  ;;; *** MODEL ***
+
+  ;; cart object
+  (define (make-cart)
+    (make-hashtable equal? #t))
+
+  (define (add-to-cart! cart item)
+    (let ((qty (hashtable/get cart item 0)))
+      (hashtable/put! cart item (+ 1 qty))))
+
+  (define (remove-cart-item! cart item)
+    (hashtable/remove! cart item))
+
+  (define (update-cart-item-qty! cart item qty)
+    (if (<= 0 qty)
+        (remove-cart-item! cart item)
+        (hashtable/put! cart item qty)))
+
+  (define (cart->hashtable cart)
+    cart)
+
+
+  ;; items for sale - the names suffice for now; inventory and prices
+  ;; could be easily added;
+  (define item-names
+    (alist->hashtable
+     `((cat . "Cat")
+       (dog . "Dog")
+       (hamster . "Hamster"))))
+
+  (define (get-item-name item)
+    (hashtable/get item-names item "unknown"))
+
+  (define (item-names->hashtable)
+    item-names)
+
+
+
+  ;;; *** CONTROLLER ***
+
+  ;; entry point
+  (define (shopping req)
+    (set! req #f)
+    ;; instantiates a new cart and uses it to shop; instead it could
+    ;; also lookup a cart from persistent storage
+    (let ((cart (make-cart)))
+      (shop! cart)
+      (checkout! cart)))
+
+
+  ;; shops using a cart; the cart is mutated because otherwise it
+  ;; would snap back in time when using the back button in the browser
+  (define (shop! cart)
+    (let-bindings ((add? "add?")
+                   (item "item")
+                   (done? "done?"))
+        (get-bindings
+         (send-html/suspend
+          (make-choose-page))) ; the page for the user
+
+      (cond
+       ;; adding an item?
+       (add?
+        (add-to-cart! cart item)
+        (manage-cart! cart)
+        (shop! cart))
+       ;; if done, returns the cart
+       (done? cart)
+       ;; loops on unknown actions
+       (else
+        (shop! cart)))))
+
+  ;; manages a cart, e.g. item removals; quantity updates could be
+  ;; easily implemented;
+  (define (manage-cart! cart)
+    (let-bindings ((done? "done?")
+                   (remove? "remove?")
+                   (item "item"))
+        (get-bindings
+          (send-html/suspend
+           (make-manage-cart-page cart))) ; the page for the user
+      (cond
+       ;; are we done?
+       (done? #t)
+       ;; user asked to remove an item?
+       (remove?
+        (remove-cart-item! cart item)
+        (manage-cart! cart))
+       ;; loop on unknown commands
+       (else (manage-cart! cart)))))
+
+
+  ;; checkout operation; right now it just displays the cart
+  (define (checkout! cart)
+    (send-html/back
+     (make-checkout-page cart)))
+
+
+
+  ;;; *** VIEW ***
+
+  ;; creates a suspendable page for the user
+  ;; to choose items to place in the cart
+  (define (make-choose-page)
+    (lambda (k-url)
+      `(html
+        (head
+         (title "Shopping")
+         (link (@@ (href-c "/css/default.css")
+                  (rel "stylesheet")
+                  (type "text/css"))))
+        (body
+         (h3 "Shopping")
+         (p "Choose:")
+         (ul
+          ,@@(hashtable/map
+             (lambda (item item-name)
+               `(li ,item-name
+                    " - "
+                    (a (@@ (bindings ((add? "add") (item ,item))))
+                       "add to cart")))
+             (item-names->hashtable)))
+         (a (@@ (bindings ((done? "done"))))
+          "checkout >")
+         (p (a (@@ (href-c "/")) "^ Home"))))))
+
+
+  ;; creates a suspendable page for the user to manage the cart
+  (define (make-manage-cart-page cart)
+    (lambda (k-url)
+      `(html
+        (head
+         (title "Manage Cart")
+         (link (@@ (href-c "/css/default.css")
+                  (rel "stylesheet")
+                  (type "text/css"))))
+        (body
+         (h3 "Manage Cart")
+         (p "Your cart contains:")
+         (ul
+          ,@@(hashtable/map
+             (lambda (item qty)
+               `(li
+                 ,qty
+                 " of "
+                 ,(get-item-name item)
+                 " - "
+                 (a (@@ (bindings ((remove? "remove") (item ,item))))
+                  "remove from cart")))
+             (cart->hashtable cart)))
+         (p
+          (a (@@ (bindings ((done? "done"))))
+           "< continue shopping"))
+         (p (a (@@ (href-c "/")) "^ Home"))))))
+
+
+
+  ;; creates a non-suspendable page with the cart contents
+  (define (make-checkout-page cart)
+    `(html
+      (head
+       (title "Checkout")
+       (link (@@ (href-c "/css/default.css")
+                (rel "stylesheet")
+                (type "text/css"))))
+      (body
+       (h3 "Checkout")
+       (p "Your cart contains:")
+       (ul
+        ,@@(hashtable/map
+           (lambda (item qty)
+             `(li ,qty " of " ,(get-item-name item)))
+           (cart->hashtable cart)))
+       (p (a (@@ (href-c "/")) "^ Home")))))
+
+  )
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 218
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+(require-library 'siscweb/bindings)
+(require-library 'siscweb/html)
+
+(module examples/shopping
+  (shopping)
+
+  (import hashtable)
+
+  (import siscweb/bindings)
+  (import siscweb/html)
+
+
+  ;;; *** MODEL ***
+
+  ;; cart object
+  (define (make-cart)
+    (make-hashtable equal? #t))
+
+  (define (add-to-cart! cart item)
+    (let ((qty (hashtable/get cart item 0)))
+      (hashtable/put! cart item (+ 1 qty))))
+
+  (define (remove-cart-item! cart item)
+    (hashtable/remove! cart item))
+
+  (define (update-cart-item-qty! cart item qty)
+    (if (<= 0 qty)
+        (remove-cart-item! cart item)
+        (hashtable/put! cart item qty)))
+
+  (define (cart->hashtable cart)
+    cart)
+
+
+  ;; items for sale - the names suffice for now; inventory and prices
+  ;; could be easily added;
+  (define item-names
+    (alist->hashtable
+     `((cat . "Cat")
+       (dog . "Dog")
+       (hamster . "Hamster"))))
+
+  (define (get-item-name item)
+    (hashtable/get item-names item "unknown"))
+
+  (define (item-names->hashtable)
+    item-names)
+
+
+
+  ;;; *** CONTROLLER ***
+
+  ;; entry point
+  (define (shopping req)
+    (set! req #f)
+    ;; instantiates a new cart and uses it to shop; instead it could
+    ;; also lookup a cart from persistent storage
+    (let ((cart (make-cart)))
+      (shop! cart)
+      (checkout! cart)))
+
+
+  ;; shops using a cart; the cart is mutated because otherwise it
+  ;; would snap back in time when using the back button in the browser
+  (define (shop! cart)
+    (let-bindings ((add? "add?")
+                   (item "item")
+                   (done? "done?"))
+        (get-bindings
+         (send-html/suspend
+          (make-choose-page))) ; the page for the user
+
+      (cond
+       ;; adding an item?
+       (add?
+        (add-to-cart! cart item)
+        (manage-cart! cart)
+        (shop! cart))
+       ;; if done, returns the cart
+       (done? cart)
+       ;; loops on unknown actions
+       (else
+        (shop! cart)))))
+
+  ;; manages a cart, e.g. item removals; quantity updates could be
+  ;; easily implemented;
+  (define (manage-cart! cart)
+    (let-bindings ((done? "done?")
+                   (remove? "remove?")
+                   (item "item"))
+        (get-bindings
+          (send-html/suspend
+           (make-manage-cart-page cart))) ; the page for the user
+      (cond
+       ;; are we done?
+       (done? #t)
+       ;; user asked to remove an item?
+       (remove?
+        (remove-cart-item! cart item)
+        (manage-cart! cart))
+       ;; loop on unknown commands
+       (else (manage-cart! cart)))))
+
+
+  ;; checkout operation; right now it just displays the cart
+  (define (checkout! cart)
+    (send-html/back
+     (make-checkout-page cart)))
+
+
+
+  ;;; *** VIEW ***
+
+  ;; creates a suspendable page for the user
+  ;; to choose items to place in the cart
+  (define (make-choose-page)
+    (lambda (k-url)
+      `(html
+        (head
+         (title "Shopping")
+         (link (@@ (href-c "/css/default.css")
+                  (rel "stylesheet")
+                  (type "text/css"))))
+        (body
+         (h3 "Shopping")
+         (p "Choose:")
+         (ul
+          ,@@(hashtable/map
+             (lambda (item item-name)
+               `(li ,item-name
+                    " - "
+                    (a (@@ (bindings ((add? "add") (item ,item))))
+                       "add to cart")))
+             (item-names->hashtable)))
+         (a (@@ (bindings ((done? "done"))))
+          "checkout >")
+         (p (a (@@ (href-c "/")) "^ Home"))))))
+
+
+  ;; creates a suspendable page for the user to manage the cart
+  (define (make-manage-cart-page cart)
+    (lambda (k-url)
+      `(html
+        (head
+         (title "Manage Cart")
+         (link (@@ (href-c "/css/default.css")
+                  (rel "stylesheet")
+                  (type "text/css"))))
+        (body
+         (h3 "Manage Cart")
+         (p "Your cart contains:")
+         (ul
+          ,@@(hashtable/map
+             (lambda (item qty)
+               `(li
+                 ,qty
+                 " of "
+                 ,(get-item-name item)
+                 " - "
+                 (a (@@ (bindings ((remove? "remove") (item ,item))))
+                  "remove from cart")))
+             (cart->hashtable cart)))
+         (p
+          (a (@@ (bindings ((done? "done"))))
+           "< continue shopping"))
+         (p (a (@@ (href-c "/")) "^ Home"))))))
+
+
+
+  ;; creates a non-suspendable page with the cart contents
+  (define (make-checkout-page cart)
+    `(html
+      (head
+       (title "Checkout")
+       (link (@@ (href-c "/css/default.css")
+                (rel "stylesheet")
+                (type "text/css"))))
+      (body
+       (h3 "Checkout")
+       (p "Your cart contains:")
+       (ul
+        ,@@(hashtable/map
+           (lambda (item qty)
+             `(li ,qty " of " ,(get-item-name item)))
+           (cart->hashtable cart)))
+       (p (a (@@ (href-c "/")) "^ Home")))))
+
+  )
+@
+

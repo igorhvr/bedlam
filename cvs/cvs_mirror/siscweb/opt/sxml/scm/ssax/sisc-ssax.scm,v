@@ -1,0 +1,386 @@
+head	1.2;
+access;
+symbols
+	rel-0-6-dev:1.2.0.10
+	rel-0-5-fix:1.2.0.8
+	rel-0-5:1.2
+	rel-0-5-dev-safe-frames:1.2.0.6
+	Root_rel-0-5-dev-safe-frames:1.2
+	rel-0-4-fix-0:1.2
+	rel-0-5-dev:1.2.0.4
+	rel-0-4-fix:1.2.0.2
+	rel-0-3-fix-3:1.1.4.2
+	rel-0-3-fix:1.1.0.4
+	rel-0-4-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2006.09.03.01.42.23;	author acolomba;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.02.28.01.38.58;	author acolomba;	state dead;
+branches
+	1.1.2.1
+	1.1.4.1;
+next	;
+
+1.1.2.1
+date	2006.02.28.01.38.58;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.1.4.1
+date	2006.02.28.01.38.58;	author acolomba;	state dead;
+branches;
+next	1.1.4.2;
+
+1.1.4.2
+date	2006.04.15.15.55.24;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@merged from rel-0-4-dev
+@
+text
+@; sisc-ssax.scm
+
+(require-library 'sisc/libs/srfi/srfi-13)
+(import srfi-13)
+(import string-io)
+
+(define (inc x) (+ x 1))
+
+(define (dec x) (- x 1))
+
+(define-syntax inc!
+   (syntax-rules ()
+        ((inc! x) (set! x (+ x 1)))))
+
+(define-syntax dec!
+   (syntax-rules ()
+        ((dec! x) (set! x (- x 1)))))
+
+(define-syntax env.bind
+   (syntax-rules () ((env.bind key value) (%%env.bind 'key value))))
+
+(define-syntax env.find
+   (syntax-rules () ((env.find key) (%%env.find 'key))))
+
+(define-syntax env.demand
+   (syntax-rules () ((env.demand key) (%%env.demand 'key))))
+
+(define (ssax:warn port msg . other-msg)
+   (apply cerr (cons* nl "Warning: " msg other-msg)))
+
+(define namespaces '())
+
+;;;;;;;;;; LOAD ;;;;;;;;;;
+
+(current-directory "c:/sisc/contrib/pure-scheme/ssax/")
+;;
+(load "myenv-sisc.scm")
+
+(current-directory "c:/SSAX/lib/")
+;;
+(load "char-encoding.scm")
+(load "define-opt.scm")
+(load "catch-error.scm")
+(load "srfi-13-local.scm")
+(load "util.scm")
+(load "look-for-str.scm")
+(load "input-parse.scm")
+(load "env.scm")
+;(load "SSAX.scm")
+(load "SSAX-code.scm")
+(load "SXML-tree-trans.scm")
+(load "SXML-to-HTML.scm")
+(load "SXML-to-HTML-ext.scm")
+
+ ;;;;;;;;;; TEST ;;;;;;;;;;
+
+(current-directory "../tests/")
+;;
+(load "vmyenv.scm")
+(if (failed? (load "vinput-parse.scm"))
+       (begin
+              (display "************* vinput-parse.scm failed ******************\n")))
+(load "vSXML-tree-trans.scm")
+(load "vSXML-to-HTML.scm")
+
+;;;;;;;;;; EXAMPLES ;;;;;;;;;;
+
+(current-directory "../examples/")
+;;
+(load "remove-markup.scm")
+(display
+  (call-with-input-file "xml/ddn.rdf" remove-markup))
+(load "outline.scm")
+(call-with-input-file "xml/total_weather.xsl" outline)
+(call-with-input-file "xml/OMF-sample.xml"
+   (lambda (port) (ssax:xml->sxml port '())))
+(load "html-parser.scm")
+;;(load "apply-templates.scm")
+(load "pull-punct-sxml.scm")
+;;(load "sxml-db-conv.scm")
+;;(load "daml-parse-unparse.scm")
+(load "sxslt-advanced.scm")
+
+;;;;;;;;;; SXPATH ;;;;;;;;;;
+
+(current-directory "c:/sxml-tools/")
+;;
+(load "sxml-tools.scm")
+(load "sxpathlib.scm")
+(load "sxpath-ext.scm")
+(load "xpath-parser.scm")
+(load "txpath.scm")
+
+(load "tests/xtest-harness.scm")
+(load "tests/xtest-lib.scm")
+
+;;(load "sxpath/test/sxpathlib-tst.scm")
+;;(load "sxpath/test/sxpath-ext-tf.scm")
+;;(load "sxpath/test/txpath-tf.scm")@
+
+
+1.1
+log
+@file sisc-ssax.scm was initially added on branch rel-0-4-dev.
+@
+text
+@d1 99
+@
+
+
+1.1.4.1
+log
+@file sisc-ssax.scm was added on branch rel-0-3-fix on 2006-04-15 15:55:24 +0000
+@
+text
+@@
+
+
+1.1.4.2
+log
+@merged from rel-0-4-dev
+@
+text
+@a0 99
+; sisc-ssax.scm
+
+(require-library 'sisc/libs/srfi/srfi-13)
+(import srfi-13)
+(import string-io)
+
+(define (inc x) (+ x 1))
+
+(define (dec x) (- x 1))
+
+(define-syntax inc!
+   (syntax-rules ()
+        ((inc! x) (set! x (+ x 1)))))
+
+(define-syntax dec!
+   (syntax-rules ()
+        ((dec! x) (set! x (- x 1)))))
+
+(define-syntax env.bind
+   (syntax-rules () ((env.bind key value) (%%env.bind 'key value))))
+
+(define-syntax env.find
+   (syntax-rules () ((env.find key) (%%env.find 'key))))
+
+(define-syntax env.demand
+   (syntax-rules () ((env.demand key) (%%env.demand 'key))))
+
+(define (ssax:warn port msg . other-msg)
+   (apply cerr (cons* nl "Warning: " msg other-msg)))
+
+(define namespaces '())
+
+;;;;;;;;;; LOAD ;;;;;;;;;;
+
+(current-directory "c:/sisc/contrib/pure-scheme/ssax/")
+;;
+(load "myenv-sisc.scm")
+
+(current-directory "c:/SSAX/lib/")
+;;
+(load "char-encoding.scm")
+(load "define-opt.scm")
+(load "catch-error.scm")
+(load "srfi-13-local.scm")
+(load "util.scm")
+(load "look-for-str.scm")
+(load "input-parse.scm")
+(load "env.scm")
+;(load "SSAX.scm")
+(load "SSAX-code.scm")
+(load "SXML-tree-trans.scm")
+(load "SXML-to-HTML.scm")
+(load "SXML-to-HTML-ext.scm")
+
+ ;;;;;;;;;; TEST ;;;;;;;;;;
+
+(current-directory "../tests/")
+;;
+(load "vmyenv.scm")
+(if (failed? (load "vinput-parse.scm"))
+       (begin
+              (display "************* vinput-parse.scm failed ******************\n")))
+(load "vSXML-tree-trans.scm")
+(load "vSXML-to-HTML.scm")
+
+;;;;;;;;;; EXAMPLES ;;;;;;;;;;
+
+(current-directory "../examples/")
+;;
+(load "remove-markup.scm")
+(display
+  (call-with-input-file "xml/ddn.rdf" remove-markup))
+(load "outline.scm")
+(call-with-input-file "xml/total_weather.xsl" outline)
+(call-with-input-file "xml/OMF-sample.xml"
+   (lambda (port) (ssax:xml->sxml port '())))
+(load "html-parser.scm")
+;;(load "apply-templates.scm")
+(load "pull-punct-sxml.scm")
+;;(load "sxml-db-conv.scm")
+;;(load "daml-parse-unparse.scm")
+(load "sxslt-advanced.scm")
+
+;;;;;;;;;; SXPATH ;;;;;;;;;;
+
+(current-directory "c:/sxml-tools/")
+;;
+(load "sxml-tools.scm")
+(load "sxpathlib.scm")
+(load "sxpath-ext.scm")
+(load "xpath-parser.scm")
+(load "txpath.scm")
+
+(load "tests/xtest-harness.scm")
+(load "tests/xtest-lib.scm")
+
+;;(load "sxpath/test/sxpathlib-tst.scm")
+;;(load "sxpath/test/sxpath-ext-tf.scm")
+;;(load "sxpath/test/txpath-tf.scm")@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 99
+; sisc-ssax.scm
+
+(require-library 'sisc/libs/srfi/srfi-13)
+(import srfi-13)
+(import string-io)
+
+(define (inc x) (+ x 1))
+
+(define (dec x) (- x 1))
+
+(define-syntax inc!
+   (syntax-rules ()
+        ((inc! x) (set! x (+ x 1)))))
+
+(define-syntax dec!
+   (syntax-rules ()
+        ((dec! x) (set! x (- x 1)))))
+
+(define-syntax env.bind
+   (syntax-rules () ((env.bind key value) (%%env.bind 'key value))))
+
+(define-syntax env.find
+   (syntax-rules () ((env.find key) (%%env.find 'key))))
+
+(define-syntax env.demand
+   (syntax-rules () ((env.demand key) (%%env.demand 'key))))
+
+(define (ssax:warn port msg . other-msg)
+   (apply cerr (cons* nl "Warning: " msg other-msg)))
+
+(define namespaces '())
+
+;;;;;;;;;; LOAD ;;;;;;;;;;
+
+(current-directory "c:/sisc/contrib/pure-scheme/ssax/")
+;;
+(load "myenv-sisc.scm")
+
+(current-directory "c:/SSAX/lib/")
+;;
+(load "char-encoding.scm")
+(load "define-opt.scm")
+(load "catch-error.scm")
+(load "srfi-13-local.scm")
+(load "util.scm")
+(load "look-for-str.scm")
+(load "input-parse.scm")
+(load "env.scm")
+;(load "SSAX.scm")
+(load "SSAX-code.scm")
+(load "SXML-tree-trans.scm")
+(load "SXML-to-HTML.scm")
+(load "SXML-to-HTML-ext.scm")
+
+ ;;;;;;;;;; TEST ;;;;;;;;;;
+
+(current-directory "../tests/")
+;;
+(load "vmyenv.scm")
+(if (failed? (load "vinput-parse.scm"))
+       (begin
+              (display "************* vinput-parse.scm failed ******************\n")))
+(load "vSXML-tree-trans.scm")
+(load "vSXML-to-HTML.scm")
+
+;;;;;;;;;; EXAMPLES ;;;;;;;;;;
+
+(current-directory "../examples/")
+;;
+(load "remove-markup.scm")
+(display
+  (call-with-input-file "xml/ddn.rdf" remove-markup))
+(load "outline.scm")
+(call-with-input-file "xml/total_weather.xsl" outline)
+(call-with-input-file "xml/OMF-sample.xml"
+   (lambda (port) (ssax:xml->sxml port '())))
+(load "html-parser.scm")
+;;(load "apply-templates.scm")
+(load "pull-punct-sxml.scm")
+;;(load "sxml-db-conv.scm")
+;;(load "daml-parse-unparse.scm")
+(load "sxslt-advanced.scm")
+
+;;;;;;;;;; SXPATH ;;;;;;;;;;
+
+(current-directory "c:/sxml-tools/")
+;;
+(load "sxml-tools.scm")
+(load "sxpathlib.scm")
+(load "sxpath-ext.scm")
+(load "xpath-parser.scm")
+(load "txpath.scm")
+
+(load "tests/xtest-harness.scm")
+(load "tests/xtest-lib.scm")
+
+;;(load "sxpath/test/sxpathlib-tst.scm")
+;;(load "sxpath/test/sxpath-ext-tf.scm")
+;;(load "sxpath/test/txpath-tf.scm")@
+

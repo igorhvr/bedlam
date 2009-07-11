@@ -1,0 +1,385 @@
+head	1.6;
+access;
+symbols
+	rel-0-6-dev:1.6.0.4
+	rel-0-5-fix:1.6.0.2
+	rel-0-5:1.6
+	rel-0-5-dev-safe-frames:1.5.4.2.0.2
+	Root_rel-0-5-dev-safe-frames:1.5.4.2
+	rel-0-4-fix-0:1.5
+	rel-0-5-dev:1.5.0.4
+	rel-0-4-fix:1.5.0.2
+	rel-0-3-fix-3:1.4.2.1
+	rel-0-3-fix-2:1.4.2.1
+	rel-0-4-dev-sisc-1-11:1.4.4.1
+	rel-0-3-fix-1:1.4
+	rel-0-4-dev:1.4.0.4
+	rel-0-3-fix:1.4.0.2
+	rel-0-3:1.4
+	rel-0-3-dev-1:1.3
+	rel-0-2-fix-2:1.3
+	rel-0-2-fix-1:1.3
+	rel-0-2-fix:1.3.0.4
+	rel-0-3-dev:1.3.0.2
+	rel-0-2:1.3
+	rel-0-1-fix-1:1.2
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	rel-0-1-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2007.04.12.03.51.15;	author acolomba;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2006.09.03.01.42.25;	author acolomba;	state Exp;
+branches
+	1.5.2.1
+	1.5.4.1;
+next	1.4;
+
+1.4
+date	2005.11.25.20.43.31;	author acolomba;	state Exp;
+branches
+	1.4.2.1
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2005.06.19.04.53.02;	author acolomba;	state Exp;
+branches
+	1.3.2.1;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.51;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.03.27.19.17.39;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.03.27.19.17.39;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.04.17.22.27.28;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2005.10.24.03.16.54;	author acolomba;	state Exp;
+branches;
+next	1.3.2.2;
+
+1.3.2.2
+date	2005.11.23.02.24.38;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.2.1
+date	2006.02.25.17.12.07;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2005.12.10.02.11.30;	author acolomba;	state Exp;
+branches;
+next	1.4.4.2;
+
+1.4.4.2
+date	2006.04.24.00.21.17;	author acolomba;	state Exp;
+branches;
+next	1.4.4.3;
+
+1.4.4.3
+date	2006.08.31.02.50.42;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.5.2.1
+date	2006.09.20.02.31.26;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.5.4.1
+date	2006.09.19.02.29.39;	author acolomba;	state Exp;
+branches;
+next	1.5.4.2;
+
+1.5.4.2
+date	2007.03.10.21.08.06;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@merged from rel-0-5-dev
+@
+text
+@BUGS
+
+None known
+@
+
+
+1.5
+log
+@merged from rel-0-4-dev
+@
+text
+@d3 1
+a3 18
+In some application servers, after a context restart, continuation
+tables persisted with sessions are not being purged of expired
+continuations.
+
+It appears that Tomcat does not send the
+HttpSessionActivationListener.sessionDidActivate() message to the
+continuation table attached to the session (but does send the
+sessionWillPassivate()), so the continuation table has no way to know
+it was just deserialized, and that it should register itself with the
+thread that scans continuation tables and removes expired continuation
+groups.
+
+This bug is not critical in the current alpha stage because the number
+of continuation groups per user is limited anyway. This bug will cause (on some application servers) expired continuations to linger on longer than necessary, however:
+
+   a) If the user is not actively using the application (thus leading
+      to expired continuations), the session will be serialized anyway.
+   b) The session will be destroyed at some point anyway.
+@
+
+
+1.5.2.1
+log
+@merged from rel-0-5-dev
+@
+text
+@d16 1
+a16 3
+of continuation groups per user is limited anyway. This bug will cause
+(on some application servers) expired continuations to linger on
+longer than necessary, however:
+@
+
+
+1.5.4.1
+log
+@fixed formatting
+@
+text
+@d16 1
+a16 3
+of continuation groups per user is limited anyway. This bug will cause
+(on some application servers) expired continuations to linger on
+longer than necessary, however:
+@
+
+
+1.5.4.2
+log
+@updated
+@
+text
+@d3 20
+a22 1
+None known
+@
+
+
+1.4
+log
+@merged from rel-0-3-dev
+@
+text
+@d3 3
+a5 2
+sometimes sessions are not inserted in the sessiontracker, typically
+after a restart
+d7 14
+a20 3
+if sisc.shp is not present in the sisc-heap.jar, no error is raised
+during heap loading from SISCApplicationServlet.init()
+(partially solved by improved build process)
+@
+
+
+1.4.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@d3 3
+d7 2
+a8 2
+during heap loading from SISCApplicationServlet.init() (partially
+solved by improved build process)
+@
+
+
+1.4.4.1
+log
+@updated
+@
+text
+@d3 2
+a4 3
+forward.scm checked in rel-0-4-dev breaks with hibernate because in an
+attempt to capture dynamically bound variables with continuations, it
+also captures some non-serializable value
+d7 2
+a8 2
+during heap loading from SISCApplicationServlet.init() (partially
+solved by improved build process)
+@
+
+
+1.4.4.2
+log
+@updated
+@
+text
+@d3 4
+@
+
+
+1.4.4.3
+log
+@updated
+@
+text
+@d3 3
+a5 18
+In some application servers, after a context restart, continuation
+tables persisted with sessions are not being purged of expired
+continuations.
+
+It appears that Tomcat does not send the
+HttpSessionActivationListener.sessionDidActivate() message to the
+continuation table attached to the session (but does send the
+sessionWillPassivate()), so the continuation table has no way to know
+it was just deserialized, and that it should register itself with the
+thread that scans continuation tables and removes expired continuation
+groups.
+
+This bug is not critical in the current alpha stage because the number
+of continuation groups per user is limited anyway. This bug will cause (on some application servers) expired continuations to linger on longer than necessary, however:
+
+   a) If the user is not actively using the application (thus leading
+      to expired continuations), the session will be serialized anyway.
+   b) The session will be destroyed at some point anyway.
+@
+
+
+1.3
+log
+@merged from rel-0-2-dev
+@
+text
+@d3 6
+a8 5
+D: serialization problems whenever url-bindings is used (e.g. example wiki)
+R: the continuation stored in siscweb/html::make-dispatched-html for
+   url-bindings possibly holds on to the java request object.
+S: this should get fixed once our own request/response objects are
+   implemented
+@
+
+
+1.3.2.1
+log
+@updated
+@
+text
+@d3 5
+a7 5
+sometimes sessions are not inserted in the sessiontracker, typically
+after a restart
+
+if sisc.shp is not present in the sisc-heap.jar, no error is raised
+during heap loading from SISCApplicationServlet.init()
+@
+
+
+1.3.2.2
+log
+@updated
+@
+text
+@a7 1
+(partially solved by improved build process)
+@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@a2 6
+D: repl thread is not killed off when somebody is connected to
+   the repl until an error is generated
+R: REPL.listen() doesn't seem to be affected by Thread.interrupt() when
+   a socket is open
+S: unknown
+
+@
+
+
+1.2.4.1
+log
+@removed repl bug notice; it got fixed after sisc 1.11
+@
+text
+@d3 6
+@
+
+
+1.1
+log
+@file BUGS was initially added on branch rel-0-1-dev.
+@
+text
+@d1 13
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 13
+BUGS
+
+D: repl thread is not killed off when somebody is connected to
+   the repl until an error is generated
+R: REPL.listen() doesn't seem to be affected by Thread.interrupt() when
+   a socket is open
+S: unknown
+
+D: serialization problems whenever url-bindings is used (e.g. example wiki)
+R: the continuation stored in siscweb/html::make-dispatched-html for
+   url-bindings possibly holds on to the java request object.
+S: this should get fixed once our own request/response objects are
+   implemented
+@
+
+

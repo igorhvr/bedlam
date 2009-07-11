@@ -1,0 +1,75 @@
+head	1.1;
+access;
+symbols
+	rel-0-3-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2005.10.24.03.52.55;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.10.24.03.52.55;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.11.23.02.39.30;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2005.11.25.19.55.05;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@file destroy.scm was initially added on branch rel-0-3-dev.
+@
+text
+@@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 5
+(require-extension (siscweb contcentric))
+
+(stop-ks-manager)
+
+(close-ks)
+@
+
+
+1.1.2.2
+log
+@removed setup/teardown code
+@
+text
+@d1 5
+a5 1
+;; nothing to do
+@
+
+
+1.1.2.3
+log
+@moved init sexprs from separate files back into web.xml
+@
+text
+@@
+
+

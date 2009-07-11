@@ -1,0 +1,866 @@
+head	1.3;
+access;
+symbols
+	rel-0-3-dev-1:1.2.4.2
+	rel-0-2-fix-2:1.2
+	rel-0-2-fix-1:1.2
+	rel-0-2-fix:1.2.0.2
+	rel-0-3-dev:1.2.0.4
+	rel-0-2:1.2
+	rel-0-2-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2005.11.25.20.46.38;	author acolomba;	state dead;
+branches;
+next	1.2;
+
+1.2
+date	2005.06.19.03.03.51;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.04.23.00.40.40;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.04.23.00.40.40;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.04.23.15.35.22;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2005.04.24.01.19.41;	author acolomba;	state Exp;
+branches;
+next	1.1.2.4;
+
+1.1.2.4
+date	2005.04.24.02.27.28;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5;
+
+1.1.2.5
+date	2005.05.14.23.10.17;	author acolomba;	state Exp;
+branches;
+next	1.1.2.6;
+
+1.1.2.6
+date	2005.05.22.20.10.45;	author acolomba;	state Exp;
+branches;
+next	1.1.2.7;
+
+1.1.2.7
+date	2005.05.30.22.52.09;	author acolomba;	state Exp;
+branches;
+next	1.1.2.8;
+
+1.1.2.8
+date	2005.06.10.01.39.24;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.08.25.02.28.22;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.08.28.14.36.04;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2005.10.24.03.47.49;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2005.11.17.02.49.39;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@merged from rel-0-3-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'sisc/libs/srfi/srfi-19) ; time data types and procedures
+(require-library 'sisc/libs/srfi/srfi-45) ; primitives for expressing iterative lazy algorithms
+
+(require-library 'util/misc)
+(require-library 'sql/jdbc)
+(require-library 'sql/query)
+(require-library 'sql/hsqldb)
+
+(module siscweb/k-store
+  (ks/clear! ks/get ks/put!
+   ks/setup ks/teardown
+   ks/open ks/close
+   ks/purge-expired!)
+
+  (import s2j)
+  (import hashtable)
+
+  (import srfi-19)
+  (import srfi-45)
+
+  (import util/misc)
+  (import sql/jdbc)
+  (import sql/query)
+
+  (define-generic-java-methods
+    (get-id |getId|))
+
+
+  (define db-url #f)
+  (define db-usr #f)
+  (define db-pwd #f)
+
+
+  (define (ks/open url usr pwd)
+    (set! db-url url)
+    (set! db-usr usr)
+    (set! db-pwd pwd))
+
+  (define (ks/close)
+    (jdbc/call/conn
+     (get-connection)
+     (lambda (c)
+       (sql/execute c "SHUTDOWN;")))
+
+    (set! db-url #f)
+    (set! db-usr #f)
+    (set! db-pwd #f))
+
+
+
+  (define (ks/setup db-url db-usr db-pwd)
+    (define create-table-continuation-sql
+      (string-append "CREATE TABLE continuation (\n"
+                     "    id INTEGER IDENTITY,\n"
+                     "    jsessionid CHAR(32) NOT NULL,\n"
+                     "    hash CHAR(40) NOT NULL,\n"
+                     "    creation_time TIMESTAMP DEFAULT CURRENT_TIME NOT NULL,\n"
+                     "    visit_time TIMESTAMP,\n"
+                     "    ttl INTEGER DEFAULT 1200 NOT NULL,\n"
+                     "    expiration_time TIMESTAMP NOT NULL,\n"
+                     "    parent INTEGER,\n"
+                     "    procedure OBJECT,\n"
+                     "    FOREIGN KEY (parent) REFERENCES continuation(id) ON DELETE SET NULL);\n"
+                     "CREATE UNIQUE INDEX continuation_uniq_idx ON continuation(jsessionid, hash);\n"
+                     "CREATE INDEX continuation_expr_time_idx ON continuation(expiration_time) DESC;\n"
+                     "CREATE INDEX continuation_parent_idx ON continuation(parent);\n"
+                     "\n"
+                     "CREATE TABLE dual(dummy VARCHAR);\n"
+                     "INSERT INTO dual VALUES(NULL);"))
+
+
+    (jdbc/call/conn
+     (get-connection)
+     (lambda (c)
+       (sql/execute-update c create-table-continuation-sql))))
+
+  (define (ks/teardown db-url db-usr db-pwd)
+    (define drop-table-continuation-sql
+      (string-append "DROP TABLE continuation;"))
+
+    (jdbc/call/conn
+     (get-connection)
+     (lambda (c)
+       (sql/execute-update c drop-table-continuation-sql))))
+
+
+  (define (ks/put! session-id hash k ttl parent-hash)
+    (define insert-continuation-sql
+      (string-append "INSERT INTO continuation\n"
+                     "    (jsessionid, hash, creation_time, ttl, expiration_time, procedure, parent)\n"
+                     "VALUES (?, ?, ?, ?, ?, ?,\n"
+                     "    SELECT  id\n"
+                     "    FROM    continuation\n"
+                     "    WHERE   1=1\n"
+                     "    AND     jsessionid = ?\n"
+                     "    AND     hash = ?\n"
+                     "    UNION\n"
+                     "    SELECT  NULL\n"
+                     "    FROM    dual\n"
+                     "    WHERE   1=1\n"
+                     "    AND     NOT EXISTS(\n"
+                     "        SELECT  id\n"
+                     "        FROM    continuation\n"
+                     "        WHERE   1=1\n"
+                     "        AND     jsessionid = ?\n"
+                     "        AND     hash = ?));"))
+
+    (jdbc/call/conn
+     (get-connection)
+     (lambda (conn)
+       (sql/execute-update conn insert-continuation-sql
+                           session-id hash (current-time) ttl
+                           (add-duration
+                            (current-time)
+                            (make-time 'time-duration 0 ttl))
+                           k
+                           session-id parent-hash
+                           session-id parent-hash))))
+
+
+  (define (ks/get session-id k-hash)
+    (define select-continuation-sql
+      (string-append "SELECT  procedure,\n"
+                     "        ttl\n"
+                     "FROM    continuation\n"
+                     "WHERE   1=1\n"
+                     "    AND jsessionid = ?\n"
+                     "    AND hash = ?\n"))
+
+    (define update-continuation-sql
+      (string-append "UPDATE  continuation\n"
+                     "    SET visit_time = ?,\n"
+                     "        expiration_time = ?\n"
+                     "WHERE   1=1\n"
+                     "    AND jsessionid = ?\n"
+                     "    AND hash = ?\n"))
+    (if (not k-hash)
+        #f
+        (jdbc/call/conn
+         (get-connection)
+         (lambda (c)
+           (let ((rs (force (sql/execute-query c select-continuation-sql
+                                               session-id k-hash))))
+             (cond ((and (not (null? rs))
+                         (not (null? (hashtable/get (car rs)
+                                                    'procedure))))
+                    (let ((ttl (hashtable/get (car rs) 'ttl)))
+                      (sql/execute-update c update-continuation-sql
+                                          (current-time)
+                                          (add-duration
+                                           (current-time)
+                                           (make-time 'time-duration 0 ttl))
+                                          session-id k-hash))
+                    (hashtable/get (car rs) 'procedure))
+                   (else #f)))))))
+
+  (define (ks/clear! session-id)
+    (define delete-continuations-sql
+      (string-append "DELETE FROM continuation\n"
+                     "WHERE   1=1\n"
+                     "    AND jsessionid = ?\n"))
+
+    (jdbc/call/conn
+     (get-connection)
+     (lambda (c)
+       (sql/execute-update c delete-continuations-sql session-id))))
+
+
+  (define (ks/purge-expired!)
+    (define purge-continuations-sql
+      (string-append "DELETE FROM continuation\n"
+                     "WHERE   1=1\n"
+                     "    AND expiration_time < NOW()\n"))
+    (jdbc/call/conn
+     (get-connection)
+     (lambda (c)
+       (sql/execute-update c purge-continuations-sql))))
+
+
+  (define (get-connection)
+    (jdbc/open-connection db-url db-usr db-pwd))
+  )
+@
+
+
+1.2
+log
+@merged from rel-0-2-dev
+@
+text
+@@
+
+
+1.2.4.1
+log
+@removed unnecessary parameters to ks/setup, ks/teardown
+@
+text
+@d82 1
+a82 1
+  (define (ks/setup)
+d108 1
+a108 1
+  (define (ks/teardown)
+@
+
+
+1.2.4.2
+log
+@saves continuations/closures in groups per http request, so that they
+can be refreshed/expired together
+@
+text
+@d83 18
+a100 26
+    (define create-tables-sql
+      (string-append
+       "CREATE TABLE continuation_group (\n"
+       "    id INTEGER IDENTITY,\n"
+       "    jsessionid CHAR(32) NOT NULL,\n"
+       "    hash CHAR(40) NOT NULL,\n"
+       "    creation_time TIMESTAMP DEFAULT CURRENT_TIME NOT NULL,\n"
+       "    visit_time TIMESTAMP,\n"
+       "    ttl INTEGER DEFAULT 1200 NOT NULL,\n"
+       "    expiration_time TIMESTAMP NOT NULL,\n"
+       "    parent INTEGER,\n"
+       "    FOREIGN KEY (parent) REFERENCES continuation_group(id) ON DELETE SET NULL);\n"
+       "CREATE UNIQUE INDEX continuation_group_uniq_idx ON continuation_group(jsessionid, hash);\n"
+       "CREATE INDEX continuation_group_expr_time_idx ON continuation_group(expiration_time) DESC;\n"
+       "CREATE INDEX continuation_group_parent_idx ON continuation_group(parent);\n"
+       "CREATE TABLE continuation (\n"
+       "    id INTEGER IDENTITY,\n"
+       "    hash CHAR(40) NOT NULL,\n"
+       "    grp INTEGER,\n"
+       "    procedure OBJECT,\n"
+       "    FOREIGN KEY (grp) REFERENCES continuation_group(id) ON DELETE CASCADE);\n"
+       "CREATE UNIQUE INDEX continuation_uniq_idx ON continuation(hash);\n"
+       "CREATE INDEX continuation_group_idx ON continuation(grp);\n"
+       "\n"
+       "CREATE TABLE dual(dummy VARCHAR);\n"
+       "INSERT INTO dual VALUES(NULL);"))
+d106 1
+a106 1
+       (sql/execute-update c create-tables-sql))))
+d110 1
+a110 4
+      (string-append
+       "DROP TABLE continuation;\n"
+       "DROP TABLE continuation_group;\n"
+       "DROP TABLE dual;"))
+d118 1
+a118 36
+  (define (ks/put! session-id k-hash g-hash k ttl current-k-hash)
+    (define select-continuation-group-sql
+      (string-append
+       "SELECT  id\n"
+       "FROM    continuation_group\n"
+       "WHERE   1=1\n"
+       "    AND jsessionid = ?\n"
+       "    AND hash = ?\n;"))
+
+    (define insert-continuation-group-sql
+      (string-append
+       "INSERT INTO continuation_group\n"
+       "    (jsessionid, hash, creation_time, ttl, expiration_time, parent)\n"
+       "VALUES (?, ?, ?, ?, ?,\n"
+       "    SELECT  grp\n"
+       "    FROM    continuation\n"
+       "    WHERE   1=1\n"
+       "    AND     hash = ?\n"
+       "    UNION\n"
+       "    SELECT  NULL\n"
+       "    FROM    dual\n"
+       "    WHERE   1=1\n"
+       "    AND     NOT EXISTS(\n"
+       "        SELECT  grp\n"
+       "        FROM    continuation\n"
+       "        WHERE   1=1\n"
+       "        AND     hash = ?));"))
+
+    (define update-continuation-group-sql
+      (string-append "UPDATE  continuation_group\n"
+                     "    SET visit_time = ?,\n"
+                     "        expiration_time = ?\n"
+                     "WHERE   1=1\n"
+                     "    AND jsessionid = ?\n"
+                     "    AND hash = ?\n"))
+
+d120 18
+a137 9
+      (string-append
+       "INSERT INTO continuation\n"
+       "    (hash, procedure, grp)\n"
+       "VALUES (?, ?,\n"
+       "    SELECT  id\n"
+       "    FROM    continuation_group\n"
+       "    WHERE   1=1\n"
+       "        AND jsessionid = ?\n"
+       "        AND hash = ?);"))
+d142 8
+a149 23
+       (jdbc/call/tran
+        conn
+        (lambda (conn)
+          ;; checks if a continuation group is already present
+          (if (null? (force (sql/execute-query conn select-continuation-group-sql
+                                               session-id g-hash)))
+              ;; must insert
+              (sql/execute-update conn insert-continuation-group-sql
+                                  session-id g-hash (current-time) ttl
+                                  (add-duration
+                                   (current-time)
+                                   (make-time 'time-duration 0 ttl))
+                                  current-k-hash current-k-hash)
+              ;; must update
+              (sql/execute-update conn update-continuation-group-sql
+                                  (current-time)
+                                  (add-duration
+                                   (current-time)
+                                   (make-time 'time-duration 0 ttl))
+                                  session-id g-hash))
+
+          (sql/execute-update conn insert-continuation-sql
+                              k-hash k session-id g-hash))))))
+d154 6
+a159 10
+      (string-append
+       "SELECT  cont.procedure,\n"
+       "        cont_grp.ttl,\n"
+       "        cont_grp.hash\n"
+       "FROM    continuation cont,\n"
+       "        continuation_group cont_grp\n"
+       "WHERE   1=1\n"
+       "    AND cont_grp.jsessionid = ?\n"
+       "    AND cont.hash = ?\n"
+       "    AND cont.grp = cont_grp.id;"))
+d161 2
+a162 2
+    (define update-continuation-group-sql
+      (string-append "UPDATE  continuation_group\n"
+d168 19
+a186 22
+    (jdbc/call/conn
+     (get-connection)
+     (lambda (conn)
+       (jdbc/call/tran
+        conn
+        (lambda (conn)
+          (let ((rk #f))
+            (sql/for-each-row (sql/execute-query conn select-continuation-sql
+                                                 session-id k-hash)
+                ((k 'procedure)
+                 (ttl 'ttl)
+                 (g-hash 'hash))
+              (set! rk k)
+              (sql/execute-update conn update-continuation-group-sql
+                                  (current-time)
+                                  (add-duration
+                                   (current-time)
+                                   (make-time 'time-duration 0 ttl))
+                                  session-id g-hash))
+            rk))))))
+
+
+d190 1
+a190 1
+      (string-append "DELETE FROM continuation_group\n"
+d202 1
+a202 1
+      (string-append "DELETE FROM continuation_group\n"
+@
+
+
+1.2.4.3
+log
+@renamed module name to match file name; more changes are upcoming
+@
+text
+@d40 1
+a40 1
+(module siscweb/ks-hsqldb
+@
+
+
+1.2.4.4
+log
+@moved from project root to opt/sql/
+@
+text
+@@
+
+
+1.1
+log
+@file ks-hsqldb.scm was initially added on branch rel-0-2-dev.
+@
+text
+@d1 213
+@
+
+
+1.1.2.1
+log
+@renamed from k-session; changed interface slightly; minor bugfixes
+@
+text
+@a0 192
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'sisc/libs/srfi/srfi-19) ; time data types and procedures
+(require-library 'sisc/libs/srfi/srfi-45) ; primitives for expressing iterative lazy algorithms
+
+(require-library 'siscweb/util)
+(require-library 'util/sql)
+
+(module siscweb/ks-hsqldb
+  (clear/k! fetch/k store/k!
+   ks/setup ks/teardown
+   ks/open ks/close
+   ks/purge-expired!)
+
+  (import s2j)
+  (import hashtable)
+
+  (import srfi-19)
+  (import srfi-45)
+
+  (import siscweb/util)
+  (import util/sql)
+
+  (define-generic-java-methods
+    (get-id |getId|))
+
+
+  (define db-url "jdbc:hsqldb:file:/tmp/siscweb-examples-db")
+  (define db-usr "sa")
+  (define db-pwd "")
+
+
+  (define (ks/open url usr pwd)
+    (set! db-url url)
+    (set! db-usr usr)
+    (set! db-pwd pwd))
+
+  (define (ks/close)
+    (jdbc/call/conn
+     (get-connection)
+     (lambda (c)
+       (sql/execute c "SHUTDOWN;")))
+
+    (set! db-url #f)
+    (set! db-usr #f)
+    (set! db-pwd #f))
+
+
+
+  (define (ks/setup db-url db-usr db-pwd)
+    (define create-table-continuation-sql
+      (string-append "CREATE TABLE continuation (\n"
+                     "    id INTEGER IDENTITY,\n"
+                     "    jsessionid CHAR(32) NOT NULL,\n"
+                     "    hash CHAR(40) NOT NULL,\n"
+                     "    creation_time TIMESTAMP DEFAULT CURRENT_TIME NOT NULL,\n"
+                     "    visit_time TIMESTAMP,\n"
+                     "    ttl INTEGER DEFAULT 1200 NOT NULL,\n"
+                     "    expiration_time TIMESTAMP NOT NULL,\n"
+                     "    parent INTEGER,\n"
+                     "    procedure OBJECT,\n"
+                     "    FOREIGN KEY (parent) REFERENCES continuation(id) ON DELETE SET NULL);\n"
+                     "CREATE UNIQUE INDEX continuation_uniq_idx ON continuation(jsessionid, hash);\n"
+                     "CREATE INDEX continuation_expr_time_idx ON continuation(expiration_time) DESC;\n"
+                     "CREATE INDEX continuation_parent_idx ON continuation(parent);\n"))
+
+
+    (jdbc/call/conn
+     (get-connection)
+     (lambda (c)
+       (sql/execute-update c create-table-continuation-sql))))
+
+  (define (ks/teardown db-url db-usr db-pwd)
+    (define drop-table-continuation-sql
+      (string-append "DROP TABLE continuation;"))
+
+    (jdbc/call/conn
+     (get-connection)
+     (lambda (c)
+       (sql/execute-update c drop-table-continuation-sql))))
+
+
+  (define (store/k! session-id hash k ttl)
+    (define insert-continuation-sql
+      (string-append "INSERT INTO continuation\n"
+                     "    (jsessionid, hash, creation_time, ttl, expiration_time, procedure)\n"
+                     "VALUES (?, ?, ?, ?, ?, ?);"))
+
+    (jdbc/call/conn
+     (get-connection)
+     (lambda (conn)
+       (sql/execute-update conn insert-continuation-sql
+                           session-id hash (current-time) ttl
+                           (add-duration
+                            (current-time)
+                            (make-time 'time-duration 0 ttl))
+                           k))))
+
+
+  (define (fetch/k session-id k-hash)
+    (define select-continuation-sql
+      (string-append "SELECT  procedure,\n"
+                     "        ttl\n"
+                     "FROM    continuation\n"
+                     "WHERE   1=1\n"
+                     "    AND jsessionid = ?\n"
+                     "    AND hash = ?\n"))
+
+    (define update-continuation-sql
+      (string-append "UPDATE  continuation\n"
+                     "    SET visit_time = ?,\n"
+                     "        expiration_time = ?\n"
+                     "WHERE   1=1\n"
+                     "    AND jsessionid = ?\n"
+                     "    AND hash = ?\n"))
+    (if (not k-hash)
+        #f
+        (jdbc/call/conn
+         (get-connection)
+         (lambda (c)
+           (let ((rs (force (sql/execute-query c select-continuation-sql
+                                               session-id k-hash))))
+             (cond ((and (not (null? rs))
+                         (not (null? (hashtable/get (car rs)
+                                                    'procedure))))
+                    (let ((ttl (hashtable/get (car rs) 'ttl)))
+                      (sql/execute-update c update-continuation-sql
+                                          (current-time)
+                                          (add-duration
+                                           (current-time)
+                                           (make-time 'time-duration 0 ttl))
+                                          session-id k-hash))
+                    (hashtable/get (car rs) 'procedure))
+                   (else #f)))))))
+
+  (define (clear/k! session-id)
+    (define delete-continuations-sql
+      (string-append "DELETE FROM continuation\n"
+                     "WHERE   1=1\n"
+                     "    AND jsessionid = ?\n"))
+
+    (jdbc/call/conn
+     (get-connection)
+     (lambda (c)
+       (sql/execute-update c delete-continuations-sql session-id))))
+
+
+  (define (ks/purge-expired!)
+    (define purge-continuations-sql
+      (string-append "DELETE FROM continuation\n"
+                     "WHERE   1=1\n"
+                     "    AND expiration_time < NOW()\n"))
+    (jdbc/call/conn
+     (get-connection)
+     (lambda (c)
+       (sql/execute-update c purge-continuations-sql))))
+
+
+  (define (get-connection)
+    (jdbc/open-connection db-url db-usr db-pwd))
+
+  (jdbc/load-driver "org.hsqldb.jdbcDriver")
+  )@
+
+
+1.1.2.2
+log
+@renamed clear/k!, fetch/k, store/k! to ks/clear!, ks/get, ks/put!
+@
+text
+@d39 1
+a39 1
+  (ks/clear! ks/get ks/put!
+d112 1
+a112 1
+  (define (ks/put! session-id hash k ttl)
+d129 1
+a129 1
+  (define (ks/get session-id k-hash)
+d165 1
+a165 1
+  (define (ks/clear! session-id)
+@
+
+
+1.1.2.3
+log
+@now records the continuation parent
+@
+text
+@d112 1
+a112 1
+  (define (ks/put! session-id hash k ttl parent-hash)
+d115 2
+a116 2
+                     "    (jsessionid, hash, creation_time, ttl, expiration_time, procedure, parent)\n"
+                     "VALUES (?, ?, ?, ?, ?, ?, SELECT id FROM continuation WHERE jsessionid = ? AND hash = ?);"))
+d126 1
+a126 2
+                           k
+                           session-id parent-hash))))
+@
+
+
+1.1.2.4
+log
+@when no rows corresponding to a given parent-k-hash was found, the
+INSERT stmt was failing
+@
+text
+@d94 1
+a94 4
+                     "CREATE INDEX continuation_parent_idx ON continuation(parent);\n"
+                     "\n"
+                     "CREATE TABLE dual(dummy VARCHAR);\n"
+                     "INSERT INTO dual VALUES(NULL);"))
+d116 1
+a116 16
+                     "VALUES (?, ?, ?, ?, ?, ?,\n"
+                     "    SELECT  id\n"
+                     "    FROM    continuation\n"
+                     "    WHERE   1=1\n"
+                     "    AND     jsessionid = ?\n"
+                     "    AND     hash = ?\n"
+                     "    UNION\n"
+                     "    SELECT  NULL\n"
+                     "    FROM    dual\n"
+                     "    WHERE   1=1\n"
+                     "    AND     NOT EXISTS(\n"
+                     "        SELECT  id\n"
+                     "        FROM    continuation\n"
+                     "        WHERE   1=1\n"
+                     "        AND     jsessionid = ?\n"
+                     "        AND     hash = ?));"))
+a126 1
+                           session-id parent-hash
+@
+
+
+1.1.2.5
+log
+@renamed module; this is a first step toward make ks-* modules
+pluggable
+@
+text
+@d38 1
+a38 1
+(module siscweb/k-store
+@
+
+
+1.1.2.6
+log
+@now uses renamed util/misc module
+@
+text
+@d35 1
+a35 1
+(require-library 'util/misc)
+d50 1
+a50 1
+  (import util/misc)
+@
+
+
+1.1.2.7
+log
+@removed url/usr/pwd literals
+@
+text
+@d57 3
+a59 3
+  (define db-url #f)
+  (define db-usr #f)
+  (define db-pwd #f)
+@
+
+
+1.1.2.8
+log
+@changed to support new sql modules
+@
+text
+@d36 1
+a36 3
+(require-library 'sql/jdbc)
+(require-library 'sql/query)
+(require-library 'sql/hsqldb)
+d51 1
+a51 2
+  (import sql/jdbc)
+  (import sql/query)
+d210 3
+a212 1
+  )
+@
+
+

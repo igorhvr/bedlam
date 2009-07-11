@@ -1,0 +1,366 @@
+head	1.4;
+access;
+symbols
+	rel-0-6-dev:1.4.0.4
+	rel-0-5-fix:1.4.0.2
+	rel-0-5:1.4
+	rel-0-5-dev-safe-frames:1.3.4.1.0.2
+	Root_rel-0-5-dev-safe-frames:1.3.4.1
+	rel-0-4-fix-0:1.3
+	rel-0-5-dev:1.3.0.4
+	rel-0-4-fix:1.3.0.2
+	rel-0-3-fix-3:1.2.2.2
+	rel-0-3-fix-2:1.2.2.1
+	rel-0-4-dev-sisc-1-11:1.2.4.2
+	rel-0-3-fix-1:1.2
+	rel-0-4-dev:1.2.0.4
+	rel-0-3-fix:1.2.0.2
+	rel-0-3:1.2
+	rel-0-3-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2007.04.12.03.51.17;	author acolomba;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2006.09.03.01.42.23;	author acolomba;	state Exp;
+branches
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.11.20.18.45.39;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.11.20.18.45.39;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2006.02.25.17.12.04;	author acolomba;	state Exp;
+branches;
+next	1.2.2.2;
+
+1.2.2.2
+date	2006.04.15.15.55.26;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2006.01.16.01.06.03;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2006.02.05.15.06.29;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2006.02.25.01.34.49;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2006.02.28.04.30.56;	author acolomba;	state Exp;
+branches;
+next	1.2.4.5;
+
+1.2.4.5
+date	2006.03.10.02.32.28;	author acolomba;	state Exp;
+branches;
+next	1.2.4.6;
+
+1.2.4.6
+date	2006.08.11.03.34.33;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2006.09.20.04.30.22;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@merged from rel-0-5-dev
+@
+text
+@(require-library 'sisc/libs/srfi)
+
+(require-library 'siscweb/bindings)
+(require-library 'siscweb/config)
+(require-library 'siscweb/forward)
+(require-library 'siscweb/response)
+
+(require-library 'lshift/error)
+
+(require-library 'util/misc)
+(require-library 'util/regexp)
+
+(import file-manipulation)
+
+(define dest "../bin/")
+
+(current-directory "../scm")
+
+(for-each
+ (lambda (name)
+   (make-directory! (string-append dest name)))
+ '("siscweb" "lshift" "ssax" "sxml" "sxpath" "webit"))
+
+(for-each
+ (lambda (name)
+   (display (string-append "Compiling " name " ..."))
+   (compile-file (string-append name ".scm")
+                 (string-append dest name ".scc"))
+   (display "done.\n"))
+ '("webit/keyword" "webit/xml-core"
+   "sxml/sxml-match" "sxml/markup" "sxml/dotml"
+   "siscweb/graphviz" "sxml/ehtml" "sxml/sxml-to-xml"
+   "sxml/sxml-to-html" "sxml/sxml-tree-trans"
+   "siscweb/xhtml" "siscweb/html"
+   "ssax/ssax" "ssax/util"
+   "sxpath/sxpathlib" "sxpath/sxpath-ext"
+   "sxpath/xpath-parser" "sxpath/txpath" "sxpath/sxml-tools"
+   "sxpath/sxpath" "lshift/sxml-tools"
+   "siscweb/xml"))
+@
+
+
+1.3
+log
+@merged from rel-0-4-dev
+@
+text
+@d8 2
+d22 1
+a22 1
+ '("siscweb" "ssax" "sxml" "webit"))
+d35 4
+a38 1
+   "ssax/ssax" "ssax/sxpath"
+@
+
+
+1.3.4.1
+log
+@added superduper xpath and lshift util
+@
+text
+@a7 2
+(require-library 'lshift/error)
+
+d20 1
+a20 1
+ '("siscweb" "lshift" "ssax" "sxml" "sxpath" "webit"))
+d33 1
+a33 4
+   "ssax/ssax" "ssax/util"
+   "sxpath/sxpathlib" "sxpath/sxpath-ext"
+   "sxpath/xpath-parser" "sxpath/txpath" "sxpath/sxml-tools"
+   "sxpath/sxpath" "lshift/sxml-tools"
+@
+
+
+1.2
+log
+@merged from rel-0-3-dev
+@
+text
+@a6 1
+(require-library 'io/servlet-io)
+d20 1
+a20 1
+ '("siscweb" "sxml"))
+d28 3
+a30 1
+ '("sxml/sxml-match" "sxml/markup" "sxml/dotml"
+d32 3
+a34 1
+   "siscweb/graphviz" "siscweb/html"))
+@
+
+
+1.2.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@d21 1
+a21 1
+ '("siscweb" "sxml" "webit"))
+d29 1
+a29 3
+ '("webit/sisc-compat" "webit/keyword" "webit/xml-core"
+   "sxml/sxml-match" "sxml/markup" "sxml/dotml"
+   "siscweb/graphviz" "sxml/ehtml" "sxml/sxml-to-xml"
+d31 1
+a31 1
+   "siscweb/xhtml" "siscweb/html" "siscweb/xml"))
+@
+
+
+1.2.2.2
+log
+@merged from rel-0-4-dev
+@
+text
+@d21 1
+a21 1
+ '("siscweb" "ssax" "sxml" "webit"))
+d29 1
+a29 1
+ '("webit/keyword" "webit/xml-core"
+d33 1
+a33 3
+   "siscweb/xhtml" "siscweb/html"
+   "ssax/ssax" "ssax/sxpath"
+   "siscweb/xml"))
+@
+
+
+1.2.4.1
+log
+@added webit files, ehtml, xml
+@
+text
+@d21 1
+a21 1
+ '("siscweb" "sxml" "webit"))
+d29 1
+a29 3
+ '("webit/keyword" "webit/xml-core"
+   "sxml/sxml-match" "sxml/markup" "sxml/dotml"
+   "siscweb/graphviz" "sxml/ehtml" "sxml/sxml-to-xml"
+d31 1
+a31 1
+   "siscweb/xhtml" "siscweb/html" "siscweb/xml"))
+@
+
+
+1.2.4.2
+log
+@added webit/sisc-compat
+@
+text
+@d29 1
+a29 1
+ '("webit/sisc-compat" "webit/keyword" "webit/xml-core"
+@
+
+
+1.2.4.3
+log
+@removed sisc-compat b/c SISC now implements the port? predicate
+@
+text
+@d29 1
+a29 1
+ '("webit/keyword" "webit/xml-core"
+@
+
+
+1.2.4.4
+log
+@added ssax
+@
+text
+@d21 1
+a21 1
+ '("siscweb" "ssax" "sxml" "webit"))
+d33 1
+a33 3
+   "siscweb/xhtml" "siscweb/html"
+   "ssax/ssax"
+   "siscweb/xml"))
+@
+
+
+1.2.4.5
+log
+@added sxpath
+@
+text
+@d34 1
+a34 1
+   "ssax/ssax" "ssax/sxpath"
+@
+
+
+1.2.4.6
+log
+@switched from using util/s2j-io to using SISC's java-io library (same code really)
+@
+text
+@d7 1
+@
+
+
+1.1
+log
+@file compile.scm was initially added on branch rel-0-3-dev.
+@
+text
+@d1 31
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 31
+(require-library 'sisc/libs/srfi)
+
+(require-library 'siscweb/bindings)
+(require-library 'siscweb/config)
+(require-library 'siscweb/forward)
+(require-library 'siscweb/response)
+(require-library 'io/servlet-io)
+
+(require-library 'util/misc)
+(require-library 'util/regexp)
+
+(import file-manipulation)
+
+(define dest "../bin/")
+
+(current-directory "../scm")
+
+(for-each
+ (lambda (name)
+   (make-directory! (string-append dest name)))
+ '("siscweb" "sxml"))
+
+(for-each
+ (lambda (name)
+   (display (string-append "Compiling " name " ..."))
+   (compile-file (string-append name ".scm")
+                 (string-append dest name ".scc"))
+   (display "done.\n"))
+ '("sxml/sxml-match" "sxml/markup" "sxml/dotml"
+   "sxml/sxml-to-html" "sxml/sxml-tree-trans"
+   "siscweb/graphviz" "siscweb/html"))
+@
+

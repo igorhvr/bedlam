@@ -1,0 +1,464 @@
+head	1.5;
+access;
+symbols
+	rel-0-6-dev:1.5.0.4
+	rel-0-5-fix:1.5.0.2
+	rel-0-5:1.5
+	rel-0-5-dev-safe-frames:1.4.0.6
+	Root_rel-0-5-dev-safe-frames:1.4
+	rel-0-4-fix-0:1.4
+	rel-0-5-dev:1.4.0.4
+	rel-0-4-fix:1.4.0.2
+	rel-0-3-fix-3:1.3.2.2
+	rel-0-3-fix-2:1.3.2.1
+	rel-0-4-dev-sisc-1-11:1.3.4.2
+	rel-0-3-fix-1:1.3
+	rel-0-4-dev:1.3.0.4
+	rel-0-3-fix:1.3.0.2
+	rel-0-3:1.3
+	rel-0-3-dev-1:1.2.4.1
+	rel-0-2-fix-2:1.2.2.1
+	rel-0-2-fix-1:1.2
+	rel-0-2-fix:1.2.0.2
+	rel-0-3-dev:1.2.0.4
+	rel-0-2:1.2
+	rel-0-2-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.5
+date	2007.04.12.03.51.15;	author acolomba;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2006.09.03.01.42.24;	author acolomba;	state Exp;
+branches
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2005.11.25.20.43.32;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.06.19.04.53.02;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.06.05.18.07.58;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.06.05.18.07.58;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.06.05.20.58.37;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2005.06.17.23.47.35;	author acolomba;	state Exp;
+branches;
+next	1.1.2.4;
+
+1.1.2.4
+date	2005.06.18.02.24.27;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2005.07.31.20.04.04;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.07.17.23.46.12;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.11.25.20.11.11;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2006.02.25.17.12.07;	author acolomba;	state Exp;
+branches;
+next	1.3.2.2;
+
+1.3.2.2
+date	2006.04.15.15.55.29;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2005.12.11.03.00.40;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2;
+
+1.3.4.2
+date	2006.02.24.04.11.53;	author acolomba;	state Exp;
+branches;
+next	1.3.4.3;
+
+1.3.4.3
+date	2006.04.11.02.59.23;	author acolomba;	state Exp;
+branches;
+next	1.3.4.4;
+
+1.3.4.4
+date	2006.08.15.00.52.19;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2007.04.11.03.14.53;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.5
+log
+@merged from rel-0-5-dev
+@
+text
+@<?xml version="1.0"?>
+
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN"
+                      "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+  <!ENTITY SISC "<application>SISC</application>">
+  <!ENTITY SISCweb "<application>SISCweb</application>">
+  <!ENTITY syntax "<emphasis>syntax: </emphasis>">
+  <!ENTITY returns "<emphasis>returns: </emphasis>">
+  <!ENTITY procedure "<emphasis>procedure: </emphasis>">
+  <!ENTITY parameter "<emphasis>parameter: </emphasis>">
+  <!ENTITY sxml-attribute "<emphasis>attribute: </emphasis>">
+  <!ENTITY f "&num;f">
+  <!ENTITY t "&num;t">
+  <!ENTITY arrow ";=&gt;">
+  <!ENTITY requires "<emphasis>Requires:</emphasis>">
+  <!ENTITY locatedin "<emphasis>Located in:</emphasis>">
+
+  <!ENTITY legalnotice SYSTEM "legalnotice.xml">
+  <!ENTITY introduction SYSTEM "introduction.xml">
+  <!ENTITY install SYSTEM "install.xml">
+  <!ENTITY pages SYSTEM "pages.xml">
+  <!ENTITY state SYSTEM "state.xml">
+  <!ENTITY publishing SYSTEM "publishing.xml">
+  <!ENTITY bindings SYSTEM "bindings.xml">
+  <!ENTITY sql SYSTEM "sql.xml">
+  <!ENTITY lowlev SYSTEM "lowlev.xml">
+  <!ENTITY gpl SYSTEM "gpl.xml">
+  <!ENTITY index SYSTEM "index.xml">
+]>
+
+<book id="siscweb-manual" lang="en">
+
+  <bookinfo>
+    <title>SISCweb Manual</title>
+
+    <author>
+      <firstname>Alessandro</firstname>
+      <surname>Colomba</surname>
+    </author>
+
+    <copyright>
+      <year>2005-2007</year>
+      <holder>Alessandro Colomba</holder>
+    </copyright>
+
+    &legalnotice;
+  </bookinfo>
+
+
+  &introduction;
+  &install;
+  &pages;
+  &state;
+  &publishing;
+  &bindings;
+  &sql;
+  &lowlev;
+
+  &gpl;
+  &index;
+</book>
+@
+
+
+1.4
+log
+@merged from rel-0-4-dev
+@
+text
+@d42 1
+a42 1
+      <year>2005-2006</year>
+@
+
+
+1.4.4.1
+log
+@updated copyright year
+@
+text
+@d42 1
+a42 1
+      <year>2005-2007</year>
+@
+
+
+1.3
+log
+@merged from rel-0-3-dev
+@
+text
+@d20 1
+d22 1
+d26 1
+d42 1
+a42 1
+      <year>2005</year>
+d51 1
+d53 1
+d57 1
+@
+
+
+1.3.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@a20 1
+  <!ENTITY state SYSTEM "state.xml">
+d39 1
+a39 1
+      <year>2005-2006</year>
+a48 1
+  &state;
+@
+
+
+1.3.2.2
+log
+@merged from rel-0-4-dev
+@
+text
+@a24 1
+  <!ENTITY lowlev SYSTEM "lowlev.xml">
+a53 1
+  &lowlev;
+@
+
+
+1.3.4.1
+log
+@added state.xml
+@
+text
+@a20 1
+  <!ENTITY state SYSTEM "state.xml">
+a48 1
+  &state;
+@
+
+
+1.3.4.2
+log
+@updated copyright year
+@
+text
+@d40 1
+a40 1
+      <year>2005-2006</year>
+@
+
+
+1.3.4.3
+log
+@added reference to lowlev.xml
+@
+text
+@a24 1
+  <!ENTITY lowlev SYSTEM "lowlev.xml">
+a53 1
+  &lowlev;
+@
+
+
+1.3.4.4
+log
+@added install document
+@
+text
+@a19 1
+  <!ENTITY install SYSTEM "install.xml">
+a49 1
+  &install;
+@
+
+
+1.2
+log
+@merged from rel-0-2-dev
+@
+text
+@d16 1
+d23 1
+d51 1
+@
+
+
+1.2.2.1
+log
+@merged from rel-0-3-dev
+@
+text
+@a21 1
+  <!ENTITY sql SYSTEM "sql.xml">
+a48 1
+  &sql;
+@
+
+
+1.2.4.1
+log
+@added sql chapter
+@
+text
+@a21 1
+  <!ENTITY sql SYSTEM "sql.xml">
+a48 1
+  &sql;
+@
+
+
+1.2.4.2
+log
+@edits; added locations
+@
+text
+@a15 1
+  <!ENTITY locatedin "<emphasis>Located in:</emphasis>">
+@
+
+
+1.1
+log
+@file swm.xml was initially added on branch rel-0-2-dev.
+@
+text
+@d1 52
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 50
+<?xml version="1.0"?>
+
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN"
+                      "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+  <!ENTITY SISC "<emphasis>SISC</emphasis>">
+  <!ENTITY SISCweb "<emphasis>SISCweb</emphasis>">
+  <!ENTITY SISC "<emphasis>SISC</emphasis>">
+  <!ENTITY syntax "<emphasis>syntax: </emphasis>">
+  <!ENTITY returns "<emphasis>returns: </emphasis>">
+  <!ENTITY procedure "<emphasis>procedure: </emphasis>">
+  <!ENTITY parameter "<emphasis>parameter: </emphasis>">
+  <!ENTITY f "&num;f">
+  <!ENTITY t "&num;t">
+  <!ENTITY arrow ";=&gt;">
+  <!ENTITY requires "<emphasis>Requires:</emphasis>">
+
+  <!ENTITY legalnotice SYSTEM "legalnotice.xml">
+  <!ENTITY introduction SYSTEM "introduction.xml">
+  <!ENTITY pages SYSTEM "pages.xml">
+  <!ENTITY publishing SYSTEM "publishing.xml">
+  <!ENTITY gpl SYSTEM "gpl.xml">
+  <!ENTITY index SYSTEM "index.xml">
+]>
+
+<book id="siscweb-manual" lang="en">
+
+  <bookinfo>
+    <title>SISCweb Manual</title>
+
+    <author>
+      <firstname>Alessandro</firstname>
+      <surname>Colomba</surname>
+    </author>
+
+    <copyright>
+      <year>2005</year>
+      <holder>Alessandro Colomba</holder>
+    </copyright>
+
+    &legalnotice;
+  </bookinfo>
+
+
+  &introduction;
+  &pages;
+  &publishing;
+
+  &gpl;
+  &index;
+</book>
+@
+
+
+1.1.2.2
+log
+@added bindings chapter
+@
+text
+@a20 1
+  <!ENTITY bindings SYSTEM "bindings.xml">
+a46 1
+  &bindings;
+@
+
+
+1.1.2.3
+log
+@added attribute entity
+@
+text
+@a11 1
+  <!ENTITY sxml-attribute "<emphasis>attribute: </emphasis>">
+@
+
+
+1.1.2.4
+log
+@now uses <application> tag for program names
+@
+text
+@d5 3
+a7 2
+  <!ENTITY SISC "<application>SISC</application>">
+  <!ENTITY SISCweb "<application>SISCweb</application>">
+@
+
+
