@@ -1,0 +1,147 @@
+/* ---- CSS Document ISO ---------------------*/
+/* ---- NOSE AG Design Intelligence ----------*/
+/* ---- Florian Steiner, 16.10.2006 ----------*/
+/* ---- layout handling container objects ----*/
+/*<![CDATA[*/
+
+/* AREA DEFINITION */
+
+html,
+body {
+	height: 100%;
+}
+body{
+	margin: 0;
+	padding: 0;
+	background-color: #FFF;
+	text-align: center;
+}
+#container{
+	margin: 0 auto;
+	padding: 1.2em 0 0 0;
+	width: 97em;
+	background-color:#F0F2F9;
+	text-align: left;
+	border-left: 2px solid #F1F1F1;
+	border-right: 2px solid #F1F1F1;
+}
+#header{
+	margin: 0;
+	padding: 0;
+	background-color: #F0F2F9;
+	border-bottom: 1px solid #A03;
+	position: relative;
+	top: 0;
+	left: 0;
+	height: 9.5em;
+}
+#bar{
+	margin: 0;
+	padding: 0 2em;
+	background-color: #E2E6F3;
+	height: 5.8em;
+}
+#logo{
+	display: table-cell;
+	vertical-align: middle;
+	margin: 0;
+	padding: 0;
+	background-color: #D5DBEE;
+	width: 20em;
+	height: 5.8em;
+}
+#printlogo{
+	display: none;
+}
+#access{
+	margin: 0;
+	padding: 0;
+	height: 0;
+	overflow: hidden;
+}
+#claim{
+	margin: 1.7em 0 0 1em;
+	padding: 0;
+	width: 29em;
+	float: left;
+}
+#search{
+	margin: 0;
+	padding: 1.8em 0 0 0.5em;
+	background-color: #D5DBEE;
+	width: 30.5em;
+	height: 4em;
+	float: right;
+}
+#mainNav{
+	margin: 1.5em 0 0 2em;
+	padding: 0;
+	float: left;
+	width: 60em;
+	clear: both;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+#metaNav{	
+	margin: 1.6em 2em 0 0;
+	padding: 0;
+	width: 40em;
+	float: right;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+#main{
+	margin: 0;
+	padding: 0;
+	clear: both;
+	background-color: #FFF;
+}
+#breadCrumb{
+	margin: 0 0 0 0;
+	padding: 0.5em 0 0 2em;
+	clear: both;
+}
+#sectionNav{
+	margin: 0;
+	padding: 2em 0 2em 2em;
+	clear: both;
+	width: 17.93em;
+	float: left; 
+}
+#mainContent{
+	margin: 0;
+	padding: 1em 0 2em 0;
+	width: 77em;
+	float: right;
+}
+#mainContent.totalPage{
+	width: 95em;
+}
+#content{
+	margin: 0;
+	padding: 0 0 1em 0;
+	float: left;
+}
+#content.fullPage{
+	width: 75em;
+}
+#content.totalPage{
+	width: 95em;
+}
+#mainEnd{
+	clear: both;
+	height: 0;
+	overflow: hidden;
+}
+#footer{
+	clear: both;
+	margin: 0;
+	padding: 0;
+	background-color: #DDE2F1;
+	border-top: 1em solid #FFF;
+	border-bottom: 3em solid #FFF;
+}
+
+/*]]>*/

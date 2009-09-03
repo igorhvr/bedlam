@@ -1,0 +1,3 @@
+Everything in bedlam can be freely redistributed and modified according to the below:
+  All code by Igor Hjelmstrom Vinhas Ribeiro is under GPL v2 - you will find a copy of it under the legal directory in this distribution.
+  All other code is under its respective license - see the individual files and directories for details.

@@ -1,0 +1,74 @@
+/* ---- CSS Document ISO --------------------*/
+/* ---- NOSE AG Design Intelligence ---------*/
+/* ---- Florian Steiner, 16.10.2006 ---------*/
+/* ---- PRINT MODIFICATIONS -----------------*/
+
+#body{
+	font-size: 10pt;
+}
+#container{
+	width: 18cm;
+	background: none;
+}
+#header{
+	display: none;
+}
+#printlogo{
+	display: block;
+}
+#printlogo img{
+	width: 5cm;
+	height: 1.5cm;
+}
+#sectionNav{
+	display: none;
+}
+#main{
+	float: none;
+	clear: both;
+	padding: 1cm 0 0 0;
+	background-image: none;
+}
+#mainContent{
+	width: 18cm;
+	float: none;
+	clear: both;
+}
+#content{
+	width: 18cm;
+	float: none;
+	clear: both;
+}
+#content table{
+	width: 97%;
+}
+#footer{
+	display: none;
+}
+#content .sideBarRight{
+	display: none;
+}
+#content .colGroup .col66{
+	width: 98%;
+}
+#content div.cite{
+	margin-top: 1em;
+	clear: both;
+}
+.fond{
+	background-color: #FFFFFF;
+}
+ul.printlink, #content ul.printlink{
+	display: none;
+}
+
+
+#content.fullPage{
+ width: 98%;
+}
+#content.totalPage{
+ width: 98%;
+}
+#content.fullPage table{
+ width: 98%;
+}

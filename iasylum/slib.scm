@@ -1,0 +1,1 @@
+(load "slib/iasylum-sisc.init")

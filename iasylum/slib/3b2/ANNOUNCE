@@ -1,0 +1,97 @@
+This message announces the availability of Scheme Library release slib-3b2.
+
+SLIB is a portable Scheme library providing compatibiliy and utility
+functions for all standard Scheme implementations.
+
+SLIB supports Bigloo, Chez, ELK 3.0, Gambit 4.0, Guile, JScheme,
+MacScheme, MITScheme, PLT Scheme (DrScheme and MzScheme), Pocket
+Scheme, RScheme, scheme->C, Scheme48, SCM, SCM Mac, scsh, SISC, Stk,
+T3.1, umb-scheme, and VSCM.
+
+SLIB is free software.  It has a Permissive-Non-Warranty license
+(http://people.csail.mit.edu/jaffer/SLIB_COPYING.txt).
+
+Documentation and distributions in several formats are linked from
+SLIB's home page:
+
+             http://people.csail.mit.edu/jaffer/SLIB.html
+
+Links to distributions of SLIB and related softwares are at the end of
+this message.
+
+				-=-=-
+slib-3b2 news:
+
+ From Clemens Fischer
+
+  * html4each.scm (htm-fields): Value always is string.
+
+ From Sarah Jaffer
+
+  * prec.scm: Rewrote to make thread-safe; fluid-let variables
+  replaced with `dyn' argument to most procedures.
+
+ From Andrea Girotto
+
+  * kawa.init (scheme-implementation-version): Update for Kawa-1.9.3.
+
+ From Adam Sampson
+
+  * Makefile (install): Fixed DESTDIR use.
+
+ From Aubrey Jaffer
+
+  * prec.scm (prec:parse): Removed input newline flushing.
+  Added initial-column argument.
+
+  * require.scm (report:print): Report locations if given filename
+  argument.
+
+  * html4each.scm (htm-fields): Treat DTDs like comments.  Fixed
+  handling of closing tags.  Corrected documentation.
+
+  * qp.scm (qp): Don't add newlines when *qp-width* is #f.
+  * trace.scm (debug:trace-procedure): Increased indent increment to
+  2; wrap at column 31 so that depths 16 to 31 are offset.
+
+  * dynamic.scm (dynamic-environment-rtd, dynamic-rtd):
+  * priorque.scm (make-heap):
+  * queue.scm (make-queue):
+  * synclo.scm (make-reserved-name-item):
+  * values.scm (values): In SISC (1.16.6), the second argument to
+  'record-constructor' is not optional.  Second arguments added.
+  * sisc.init (syncase:eval, syncase:load): Added.
+
+  * mitscheme.init(system): Now called run-shell-command.
+  (print-call-stack): Added dummy definition for trace.
+
+  * guile.init (list->array): Redefine to take 3 arguments.
+  (vector->array, array->vector): Define if missing.
+  (implementation-vicinity): Thomas Bushnell points out
+  that %site-dir mashes all slibcat for all versions together.
+  %library-dir (since Guile-1.6) is the versioned directory.
+  (library-vicinity): Last resort changed to "/usr/share/slib/".
+
+  * slib.texi (Catalog Creation): Added mention of implcat.
+  (Compiled and Implementation-Specific Features): Added section.
+  (System Interface): The procedure `system' is Posix.
+  (Input/Output): Fixed typo in file-position.
+  (System): Macro:load doesn't affect current-error-port.
+  * fdl.texi: Updated to Version 1.3.
+
+				-=-=-
+
+SLIB is available from:
+ http://groups.csail.mit.edu/mac/ftpdir/scm/slib-3b2.zip
+ http://groups.csail.mit.edu/mac/ftpdir/scm/slib-3b2-1.noarch.rpm
+ http://groups.csail.mit.edu/mac/ftpdir/scm/slib-3b2-1.exe
+
+SLIB-PSD is a portable debugger for Scheme (requires emacs editor):
+ http://groups.csail.mit.edu/mac/ftpdir/scm/slib-psd1-3.tar.gz
+
+SCHELOG is an embedding of Prolog in Scheme+SLIB:
+ http://www.ccs.neu.edu/home/dorai/schelog/schelog.html
+
+Programs for printing and viewing TexInfo documentation (which SLIB
+has) come with GNU Emacs or can be obtained via ftp from:
+ ftp://ftp.gnu.org/pub/gnu/texinfo

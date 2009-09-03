@@ -1,0 +1,427 @@
+/* ---- CSS Document ISO -------------------------*/
+/* ---- NOSE AG Design Intelligence --------------*/
+/* ---- Florian Steiner, 16.10.2006 --------------*/
+/* ---- font definitions overall and elements ----*/
+/*<![CDATA[*/
+
+/* GENERAL DEFINITIONS */
+
+body{
+	font-size: 62.5%;
+	font-family: Arial, Helvetica, sans-serif;
+	line-height: 1.5em;
+	color: #335;
+}
+body.big{
+	font-size: 87.5%;
+}
+h1{
+	color: #A03;
+	font-size: 2.4em;
+	line-height: 1.3em;
+	font-weight: 300;
+}
+h2{
+	font-size: 1.4em;
+	line-height: 1.3em;
+	font-weight: bold;
+}
+h3{
+	font-size: 1.2em;
+	line-height: 1.3em;
+	font-weight: bold;
+}
+h4{
+	font-size: 1.2em;
+	line-height: 1.3em;
+	font-weight: bold;
+}
+h5{
+	font-size: 1.1em;
+	line-height: 1.2em;
+	font-weight: bold;
+}
+h6{
+	font-size: 1.2em;
+	line-height: 1.3em;
+	font-weight: normal;
+	font-style: italic;
+}
+p, a{
+	font-size: 1.2em;
+	line-height: 1.3em;
+	font-weight: normal;
+}
+blockquote{
+	font-size: 1.4em;
+	line-height: 1.3em;
+	font-weight: bold;
+	font-style: italic;
+}
+cite{
+	font-size: 1em;
+	line-height: 1.3em;
+	font-weight: normal;
+	font-style: normal;
+}
+h1 a{
+	font-size: 0.9em;
+}
+h2 a, h3 a, p a, ul a, ol a, table th a, table td a{
+	font-size: 1em;
+}
+h2 a, h3 a{
+	font-weight: bold;
+}
+a, #container a{
+	color: #022798;
+}
+a:hover, #container a:hover{
+	text-decoration: underline;
+	color: #A03;
+}
+table{
+	font-size: 1.2em;
+}
+table caption{
+	font-size: 1em;
+	text-align: left;
+	font-weight: bold;
+}
+table th, table tbody th{
+	font-size: 1em;
+	font-weight: normal;
+	text-align: left;
+	vertical-align: top;
+}
+table thead th{
+	font-size: 1em;
+	font-weight: bold;
+	text-align: left;
+	vertical-align: top;
+}
+table td{
+	font-size: 1em;
+	vertical-align: top;
+}
+table th a{
+	font-weight: bold;
+}
+form{
+	font-size: 1.2em;
+	line-height: 1.3em;
+}
+td form{
+	font-size: 1em;
+}
+input{
+	font-size: 1em;
+}
+ul, ol{
+	font-size: 1.2em;
+	line-height: 1.3em;
+}
+ul ul, ol ol{
+	font-size: 1em;
+}
+ul ol, ol ul{
+	font-size: 1em;
+}
+form ul, form ol{
+	font-size: 1em;
+}
+
+/* GENERIC CLASSES FOR USE ON VARIOUS OBJECTS */
+.textRight{
+	text-align: right;
+}
+
+/* DEFINITION PER AREA */
+#logo{
+	font-size: 1em;
+}
+#claim{
+	color: #676884;
+	font-size: 1.3em;
+}
+
+/* SEARCH */
+#search a{
+	text-decoration: none;
+	font-size: 0.9em;
+	font-weight: normal;
+}
+#search ul li a{
+	font-size: 1em;
+}
+#search ul li.active a{
+	color: #A03;
+}
+#search input#searchSubmit{
+	color: #022798;
+	text-decoration: none;
+	cursor: pointer;
+	font-weight: bold;
+}
+#search input#searchSubmit:hover{
+	text-decoration: underline;
+}
+
+/* META NAVIGATION */
+#metaNav{
+	text-align: right;
+}
+#metaNav ul li a{
+	color: #022798;
+	font-weight: normal;
+	text-decoration: none;
+	white-space: nowrap;
+}
+#metaNav ul li a:hover{
+	text-decoration: underline;
+}
+#metaNav ul li.storeLink a{
+	color: #FFF;
+	font-weight: bold;
+	line-height: 1em;
+}
+#metaNav ul li.storeLink a:hover, #metaNav ul li.storeBasket a:hover {
+	color: #FFF;
+	cursor: pointer;
+}
+#metaNav ul li.storeBasket a{
+	line-height: 1em;
+}
+#metaNav li.storeBasket a span {
+	font-size: 1em;
+	line-height: 1em;
+}
+#metaNav ul li a.active{
+	cursor: default;
+}
+#metaNav ul li.storelink a.active:hover{
+	color: #FFF;
+	text-decoration: none;	
+}
+
+/* MAIN NAVIGATION */
+#mainNav ul li a{
+	color: #022798;
+	font-weight: bold;
+	text-decoration: none;
+	white-space: nowrap;
+}
+#mainNav ul li a:hover{
+	text-decoration: underline;
+}
+#mainNav ul li.active a{
+	color: #FFF;
+	cursor: default;
+}
+#mainNav ul li.active a:hover{
+	text-decoration: none;
+	cursor: default;
+	color: #FFF;
+}
+
+/* BREADCRUMB */
+#breadCrumb ul li a{
+	text-decoration: none;
+}
+#breadCrumb ul li a:hover{
+	text-decoration: underline;
+}
+#breadCrumb ul li.active a{
+	color: #A03;
+}
+#breadCrumb ul li.active a:hover{
+	text-decoration: none;
+}
+
+/* SECTION NAVIGATION */
+#sectionNav ul li a{
+	text-decoration: none;
+}
+#sectionNav ul li a:hover, #sectionNav ul ul li a:hover, #sectionNav ul li.open li a:hover, #sectionNav ul li.active li a:hover{
+	text-decoration: underline;
+	color: #A03;
+}
+#sectionNav li.active a, #sectionNav li.open li.active a{
+	color: #A03;
+}
+#sectionNav li.active a:hover, #sectionNav li.open li.active a:hover{
+	color: #A03;
+	text-decoration: none;
+	cursor: default;
+}
+#sectionNav li.active li a, #sectionNav li.open li.active li a{
+	color: #022798;
+}
+/*#sectionNav ul li.open a{
+	color: #A03;
+}
+#sectionNav ul li.open ul li a{
+	color: #022798;
+}*/
+
+/* CONTENT OBJECTS */
+#content h1.special{
+	font-family: "Trebuchet MS", Arial;
+	font-size: 5em;
+	color: #8C93B4;
+}
+#content h1.special span{
+	font-size: 0.4em;
+	color: #900;
+}
+#content p.comment{
+	font-size: 1.1em;
+	line-height: 1.3em;
+}
+#content div.cite ul li a{
+	font-size: 0.8em;
+	line-height: 1.3em;
+}
+#content p.imageCaption{
+	font-size: 1.1em;
+	line-height: 1.3em;
+}
+#content div.paging ul li a{
+	text-decoration: none;
+	font-weight: bold;
+}
+#content div.paging ul li.active a{
+	color: #A03;
+}
+#content ul.links li a, #content ul.printlink li a{
+	font-weight: bold;
+	text-decoration: none;
+}
+#content table th ul.links a, #content table td ul.links a{
+	font-size: 0.85em;
+	line-height: 1.4em;
+}
+#content ul.links li a:hover, #content ul.printlink li a:hover{
+	text-decoration: underline;
+}
+#content table td a.shoppingcart{
+	font-weight: bold;
+	text-decoration: none;
+}
+#content table td a.shoppingcart:hover{
+	text-decoration: underline;
+}
+#content ul.printlink, #content ul.printlink li, #content ul.printlink li a{
+	line-height: 1em;
+}
+#content ul.printlink li a{
+	font-weight: bold;
+	text-decoration: none;
+}
+#content h3 ul.printlink li a{
+	font-size: 0.9em;
+}
+#content div.imageItem60 ul li a, #content div.imageItem130 ul li a{
+	font-weight: bold;
+	text-decoration: none;
+}
+#content div.imageItem60 ul li a:hover, #content div.imageItem130 ul li a:hover{
+	text-decoration: underline;
+}
+#content table th a.sort{
+	text-decoration: none;
+}
+#content table th a.sortDownActive, #content table th a.sortUpActive{
+	/*color: #A03;*/
+	text-decoration: none;
+}
+#content table th a.sortDownActive:hover, #content table th a.sortUpActive:hover{
+	/*text-decoration: none;*/
+	/*color: #022798;*/
+	/*cursor: default;*/
+}
+#content .tabs ul li.active a {
+	text-decoration: none;
+	font-weight: bold;
+	cursor: default;
+	color: #A03;
+}
+#content .tabs ul li.activeVar a {
+	text-decoration: none;
+	font-weight: bold;
+	cursor: default;
+	color: #FFF;
+}
+#content .tabs ul li.active a:hover {
+	text-decoration: none;
+}
+
+/* COLGROUP OBJECTS */
+#content .colGroup a{
+	font-size: 1em;
+}
+#content .colGroup h4 a{
+	font-size: 1em;
+	font-weight: bold;
+	text-decoration: none;
+}
+#content .colGroup h4 a:hover{
+	text-decoration: underline;
+}
+#content .sideBarRight h2{
+	font-weight: 800;
+}
+#content .colGroup span.active {
+	text-decoration: none;
+	font-weight: bold;
+	cursor: default;
+	color: #A03;
+}
+
+
+/* FORM OBJECTS */
+#content form h3{
+	font-size: 1em;
+}
+#content form h4{
+	font-size: 1em;
+}
+#content form fieldset legend{
+	color: #999;
+}
+#content form input.formAdd{
+	font-weight: bold;
+	color: #022798;
+}
+#content form input.formSubmit{
+	font-weight: bold;
+	color: #022798;
+}
+#content form input.formReset{
+	font-weight: normal;
+	color: #022798;
+}
+#content form input.inactive, #content form select.inactive, #content form textarea.inactive{
+	color: #666;
+}
+#content p.error, #content form label.error, #content form span.error, #content form h4.error, #content form strong.error{
+	color: #F40;
+}
+#content form .srchAdvContent{
+	font-size: 0.9em;
+}
+
+
+/* FOOTER */
+#footer ul{
+	font-size: 1.1em;
+	color: #022798;
+}
+#footer ul a{
+	font-size: 1em;
+	text-decoration: none;
+}
+#footer ul a:hover{
+	text-decoration: underline;
+}
+/*]]>*/

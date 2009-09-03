@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/chicken-eggs/!svn/ver/11108/release/4/matchable
+END
+matchable.setup
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/chicken-eggs/!svn/ver/11065/release/4/matchable/matchable.setup
+END
+matchable.scm
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/chicken-eggs/!svn/ver/11108/release/4/matchable/matchable.scm
+END
+match-simple.scm
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/chicken-eggs/!svn/ver/11051/release/4/matchable/match-simple.scm
+END
+matchable.meta
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/chicken-eggs/!svn/ver/11051/release/4/matchable/matchable.meta
+END
+matchable-test.scm
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/chicken-eggs/!svn/ver/11051/release/4/matchable/matchable-test.scm
+END

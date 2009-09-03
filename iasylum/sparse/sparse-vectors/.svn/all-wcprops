@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/chicken-eggs/!svn/ver/14383/release/4/sparse-vectors
+END
+sparse-vectors.setup
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/chicken-eggs/!svn/ver/14383/release/4/sparse-vectors/sparse-vectors.setup
+END
+sparse-vectors.scm
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/chicken-eggs/!svn/ver/14383/release/4/sparse-vectors/sparse-vectors.scm
+END
+sparse-vectors.meta
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/chicken-eggs/!svn/ver/14382/release/4/sparse-vectors/sparse-vectors.meta
+END

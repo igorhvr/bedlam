@@ -1,0 +1,9 @@
+;;; sparse-vectors.meta -*- Hen -*-
+
+((egg "sparse-vectors.egg")
+ (files "sparse-vectors.scm" "sparse-vectors.html" "sparse-vectors.setup")
+ (category data)
+ (doc-from-wiki)
+ (synopsis "Arbitrarily large vectors")
+ (license "BSD")
+ (author "Richard Kelsey and Jonathan Rees") )
