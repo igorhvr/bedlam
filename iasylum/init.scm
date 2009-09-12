@@ -138,4 +138,4 @@
 ;; let-optionals
 (load (string-append (iasylum-bedlam-location) "iasylum/let-optionals/let-optionals.scm"))
 
-(display "\n\nLOADED iasylum-bedlam.\n\n")
+;(display "\n\nLOADED iasylum-bedlam.\n\n")
