@@ -1,10 +1,23 @@
 ;;; Code by Igor Hjelmstrom Vinhas Ribeiro - this is licensed under GNU GPL v2.
 
-;(begin (define iasylum-bedlam-location "/home/igorhvr/idm/iasylum-bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")))
-(display "\n\nThe variable iasylum-bedlam-location must be defined and initialized to the location of the library...\n\n")
-(display "\n\nStarting iasylum-bedlam at [")
-(display iasylum-bedlam-location)
-(display "] ...\n\n")
+;(begin (define iasylum-bedlam-location "/home/igorhvr/idm/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")))
+
+(with-failure-continuation 
+ (lambda (e p)
+   (display "\n\nThe variable iasylum-bedlam-location must be defined and initialized to the location of the library - which must be writable by you...\n")
+   (display "\nExample of code to use this library.: \n")
+   (display "   (begin (define iasylum-bedlam-location \"/home/igorhvr/idm/bedlam/\") (load (string-append iasylum-bedlam-location \"iasylum/init.scm\")))\n\n\n")
+   
+   
+                                        ;(display "\n\nStarting iasylum-bedlam at [")
+                                        ;(display iasylum-bedlam-location)
+  ;(display "] ...\n\n")
+  (throw e))
+ (lambda ()
+   (define tmp iasylum-bedlam-location)
+   (string-append "test" tmp)
+   (void)
+   ))
 
 (require-extension (srfi 39)) ; make-parameter
 
