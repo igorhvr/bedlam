@@ -1,8 +1,10 @@
 ;;; Code by Igor Hjelmstrom Vinhas Ribeiro - this is licensed under GNU GPL v2.
 ;;; Irregex itself is under its own license - see the irregex directory for more information.
 
+(require-extension (srfi 43)) ; vector-copy!
+
 ;; irregex
-(load (string-append (iasylum-bedlam-location) "iasylum/irregex/irregex-0.7.3/irregex.scm"))
+(load (string-append (iasylum-bedlam-location) "iasylum/irregex/irregex-0.7.5/irregex.scm"))
 
 ;; A chunker that works on scheme ports. It can be used as:
 ;; ---> (irregex-fold/chunked sre kons '() (port-chunker) (list port #f #f))
