@@ -86,7 +86,7 @@
 (define (irregex-copy-matches m)
   (and (vector? m)
        (let ((r (make-vector (vector-length m))))
-         (vector-copy! m r)
+         (vector-copy! r 0 m)
          r)))
 
 (define irregex-match-tag '*irregex-match-tag*)
