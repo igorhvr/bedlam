@@ -1,5 +1,7 @@
 ;;; Code by Igor Hjelmstrom Vinhas Ribeiro - this is licensed under GNU GPL v2.
 
+(require-extension (lib iasylum/iasylum))
+
 (module iasylum/log
   (log-m log-o get-timestamp make-mark-logger log-debug log-info log-warn log-error log-fatal timestamped-log)
 
@@ -23,4 +25,4 @@
   (define log-fatal (make-mark-logger "FATAL"))
   
   (define (timestamped-log mark m)
-    (log (write-string (list mark (get-timestamp) m)))))
+    (log-o (iasylum-write-string (list mark (get-timestamp) m)))))
