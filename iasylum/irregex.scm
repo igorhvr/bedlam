@@ -5,6 +5,7 @@
 
 ;; irregex
 (load (string-append (iasylum-bedlam-location) "iasylum/irregex/irregex-0.7.5/irregex.scm"))
+(load (string-append (iasylum-bedlam-location) "iasylum/irregex/irregex-0.7.5/irregex-utils.scm"))
 
 ;; A chunker that works on scheme ports. It can be used as:
 ;; ---> (irregex-fold/chunked sre kons '() (port-chunker) (list port #f #f))
