@@ -1,6 +1,7 @@
 (require-extension (srfi 1))
 (require-extension (srfi 6))
 (require-extension (srfi 9))
+(require-extension (srfi 11))
 
 (module iasylum/packrat
          (parse-result?
