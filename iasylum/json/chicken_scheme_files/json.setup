@@ -1,0 +1,6 @@
+(compile -R syntax-case json.scm -s -O2 -d1)
+(install-extension 
+ 'json 
+ '("json.so")
+ '((version "1.2.1") 
+   (documentation "json.html")))

@@ -1,0 +1,11 @@
+;;; json.meta -*- Hen -*-
+
+((egg "json.egg")
+ (synopsis "A JSON library")
+ (needs syntax-case packrat)
+ (category parsing)
+ (license "MIT")
+ (eggdoc "doc.scm")
+ (author "Tony Garnock-Jones")
+ (eggdoc "doc.scm")
+ (files "json.setup" "json.scm" "json.html"))

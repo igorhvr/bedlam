@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/chicken-eggs/!svn/ver/15147/release/4/packrat
+END
+packrat.setup
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/chicken-eggs/!svn/ver/15147/release/4/packrat/packrat.setup
+END
+doc.scm
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/chicken-eggs/!svn/ver/15105/release/4/packrat/doc.scm
+END
+packrat.scm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/chicken-eggs/!svn/ver/15105/release/4/packrat/packrat.scm
+END
+packrat.meta
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/chicken-eggs/!svn/ver/15147/release/4/packrat/packrat.meta
+END
+packrat.pdf
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/chicken-eggs/!svn/ver/15105/release/4/packrat/packrat.pdf
+END

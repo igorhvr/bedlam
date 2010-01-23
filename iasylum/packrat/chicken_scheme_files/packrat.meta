@@ -1,0 +1,11 @@
+;;; packrat.meta -*- Hen -*-
+
+((egg "packrat.egg")
+ (synopsis "A packrat parsing library")
+ (category parsing)
+ (license "MIT")
+ (author "Tony Garnock-Jones")
+ (files "packrat.setup" "packrat.scm" "doc.scm")
+ (needs eggdoc)
+ (eggdoc "doc.scm")
+ )

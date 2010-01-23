@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/chicken-eggs/!svn/ver/9940/release/3/json/trunk
+END
+doc.scm
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/chicken-eggs/!svn/ver/9939/release/3/json/trunk/doc.scm
+END
+json.setup
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/chicken-eggs/!svn/ver/9940/release/3/json/trunk/json.setup
+END
+json.scm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/chicken-eggs/!svn/ver/9939/release/3/json/trunk/json.scm
+END
+json.html
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/chicken-eggs/!svn/ver/9939/release/3/json/trunk/json.html
+END
+json.meta
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/chicken-eggs/!svn/ver/9939/release/3/json/trunk/json.meta
+END
