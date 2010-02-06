@@ -180,7 +180,7 @@
            ((pair? value) (any->jbyte-array value))
            ((and (number? value)
                  (integer? value))
-            (java-new <integer> (->jstring (number->string value))))
+            (java-new <integer> (->jstring (number->string (inexact->exact value)))))
            ((and (number? value)
                  (real? value))
             (java-new <big-decimal> (->jstring (number->string value))))
