@@ -1,0 +1,57 @@
+SISCWEB
+
+OVERVIEW
+
+SISCweb is a framework aimed to facilitate writing stateful Scheme web
+applications in J2EE environments.
+
+
+FEATURES
+
+SISCweb sports an interactive, REPL-based web application development
+style. Developers can write applications interactively, without ever
+restarting the context, and, insofar as it is desirable, without ever
+losing application state. (In fact, save for the Java portion, SISCweb
+itself is developed interactively in its own REPL.)
+
+Through the use of continuations, SISCweb does away with the
+page-centric execution model typical of web applications [*].  Every
+time a response is sent to the browser, the program execution flow is
+suspended, to be then resumed from that exact point when the browser
+submits a request.
+
+[*] More information can be found in this paper: Christian
+Queinnec. "Inverting back the inversion of control or, continuations
+versus page-centric programming". Technical Report 7, LIP6. May
+2001. (http://www-spi.lip6.fr/~queinnec/Papers/www.ps.gz)
+
+
+REQUIREMENTS
+
+SISCweb requires a J2EE 1.3 application server and a JDK 1.4 or
+later. More detailed information is contained in the documentation.
+
+
+CREDITS
+
+SISCweb is based on SISC (sisc.sf.net), a Scheme interpreter for the
+JVM, and is heavily influenced by other Lisp web frameworks:
+
+  - the PLT web server collection
+    (http://download.plt-scheme.org/scheme/docs/html/web-server/)
+  - SUnet (http://www.scsh.net/resources/sunet.html)
+  - AllegroServe (http://allegroserve.sourceforge.net/)
+
+A couple of initial design decisions were also lifted from Matthias
+Radestock's servlet code in the contrib section of the SISC CVS tree.
+
+
+CONTRIBUTING, BUG REPORTS
+
+Comments, ideas, and bug reports are welcome at:
+
+    acolomba@users.sourceforge.net
+
+Thank you!
+
+(C) 2005-2006 Alessandro Colomba <acolomba@users.sourceforge.net>

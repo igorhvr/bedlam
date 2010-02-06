@@ -1,0 +1,72 @@
+TODO
+
+SHORT TERM
+
+* log messages should always include context name
+
+* profiling
+
+* finalize siscweb/redirect module
+
+* adopt a scheme->js compiler, or a sexp js
+
+* an SXML compiler would be nice; esp. if part of ehtml
+
+* add send-graphviz/[suspend|forward]; will need href-p, etc.
+
+* user-defined SXML transforms
+
+* formatted html output on demand; no comments for xml/xhtml on demand
+
+* alternate format for graphviz tag would allow one to use svg+png all
+  the time; embedding svg in html would be cool too
+
+* cool idea: *-p style dispatchers that invoke functions using
+  parameter names:
+
+(form (@ action-f (function "a" "b")))
+
+* finish support for multiple bindings in let-bindings macro, or
+  revise bindings API
+
+* implement *-current-connection and transactions in util/sql module
+
+
+MEDIUM TERM
+
+* incorporate icing goodness
+
+* annotated dispatch (as in sunet)
+
+* "transactional" send/finish would be nice (i.e. the option of
+  invalidating a subgroup of continuations when exiting a lexical or
+  dynamic scope.
+
+* finish url pattern matching: more specific patterns should take precedence
+  over less specific ones: i.e. /hello/* should not override /hello/world/*;
+  right now the choice is random
+
+* might be nice to be able to recover latest good continuation -- the
+  latest tree leaf; also we might want to keep at least one tree leaf
+  around "forever",i.e. for the duration of the session, so that we may
+  offer a resume (to help against session hijacking, this should only be
+  an option if the jsessionid comes from a cookie)
+
+
+LONG TERM
+
+* build a tracking tool that collects stats about usage patterns and
+  "misses" or "near-misses"
+
+* nice to have: the whole annotated input fields in sunet (it
+  increases security b/c actual values become opaque and cannot be
+  manipulated.)
+
+
+THINGS THAT WOULD BREAK CODE
+
+- rename sql/* modules to db/*
+- rename sql/queries to db/sql
+- rename extract-*-binding to get-*-binding
+- make the k-url and urls returned by store/k! (and forward/store!)
+  context-relative

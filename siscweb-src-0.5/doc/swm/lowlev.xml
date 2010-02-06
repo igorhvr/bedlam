@@ -1,0 +1,3001 @@
+<chapter id="lowlev">
+  <title>Lower-level APIs</title>
+
+  <para>
+    Even though &SISCweb; applies an abstraction layer over
+    characteristics of the HTTP protocol, it is still at times
+    convenient to access the details of requests, responses,
+    sessions and the servlet context in which they live.
+  </para>
+
+  <para>
+    For this reason &SISCweb; provides wrappers around all the methods
+    of the <function>Request</function>,
+    <function>Response</function>, <function>Session</function> and
+    <function>ServletContext</function>objects. All the procedures
+    operate on the instances current at the time of invocation.
+  </para>
+
+  <section id="request">
+    <title>Request Procedures</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>siscweb/request</emphasis>)
+      </emphasis>
+      <sbr/>
+      &locatedin;
+      <emphasis role="bold">
+        siscweb.jar
+      </emphasis>
+    </para>
+
+    <para>
+      This module provides wrappers around the Request object current
+      at the time of invocation.
+    </para>
+
+    <note>
+      <para>
+        Because of the large number of methods, they are here sorted
+        in alphabetical order. The descriptions are adapted from the
+        J2EE 1.3 javadoc.
+      </para>
+    </note>
+
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>current-request</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>javax.servlet.http.HttpServletRequest</type>
+          <methodname>current-request</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the current Request object. Since complete
+            wrappers are provided by this module, this is normally
+            useful to either create Request adapters, or to use the
+            the procedure returned by
+            <function>request/get-dispatcher</function>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-auth-type</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>request/get-auth-type</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the name of the authentication scheme used to
+            protect the URL of the published procedure, or &f; if the
+            URL does not require authentication.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-character-encoding</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>request/get-character-encoding</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the name of the character encoding used in the
+            body of this request, or &f; if the request does not
+            specify a character encoding.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-content-length</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>number</type>
+          <methodname>request/get-content-length</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the length, in bytes, of the request body and made
+            available by the input stream, or -1 if the length is not
+            known.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-content-type</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>request/get-content-type</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the MIME type of the body of the request, or &f;
+            if the type is not known.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-cookies</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>list</type>
+          <methodname>request/get-cookies</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a list containing all of the
+            <function>javax.servlet.http.Cookie</function> objects the client sent with
+            this request. This method returns the empty list if no
+            cookies were sent.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-date-header</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>time</type>
+          <methodname>request/get-date-header</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the value of the specified request header as a
+            SRFI-19 time structure. Use this method with headers that
+            contain dates, such as If-Modified-Since.
+          </para>
+          <para>
+            If the request did not have a header of the specified
+            name, this method returns &f;. If the header can't be
+            converted to a date, the method throws a Java
+            <function>IllegalArgumentException</function>.  </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-dispatcher</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>proc</type>
+          <methodname>request/get-dispatcher</methodname>
+          <methodparam>
+            <parameter>c-url</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a procedure <function>proc</function> that, when
+            invoked with the parameters <parameter>request</parameter>
+            and <parameter>response</parameter>, will forward the
+            request to the resource located at the given
+            <parameter>c-url</parameter>. The resource can be dynamic
+            or static.
+          </para>
+          <para>
+            The specified <parameter>c-url</parameter> may be relative
+            to the path of the published procedure, although it cannot
+            extend outside the current servlet context. If the path
+            begins with a &quot;/&quot; it is interpreted as relative to the
+            current context root. This method returns &f; if the
+            servlet container cannot return a RequestDispatcher.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-header</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>request/get-header</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the value of the specified request header as a
+            string. If the request did not include a header of the
+            specified <parameter>name</parameter>, this procedure
+            returns &f;. The header <parameter>name</parameter> is
+            case insensitive. You can use this procedure with any
+            request header.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-header-alist</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>alist</type>
+          <methodname>request/get-header-alist</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a <parameter>(name . value)</parameter>
+            association list of all the header names. All the header
+            <parameter>value</parameter>s are returned as strings.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-header-hashtable</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>hashtable</type>
+          <methodname>request/get-header-hashtable</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns all the request headers as a hashtable of
+            <parameter>name</parameter>-<parameter>value</parameter>
+            associations. All the header <parameter>value</parameter>s
+            are returned as strings.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-header-names</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>list</type>
+          <methodname>request/get-header-names</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns list of all the header names this request
+            contains. If the request has no headers, this method
+            returns an empty list.
+          </para>
+          <para>
+            Some servlet containers do not allow do not allow servlets
+            to access headers using this method, in which case this
+            procedure returns &f;.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-header-names</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>list</type>
+          <methodname>request/get-header-names</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns list of all the header names this request
+            contains. If the request has no headers, this method
+            returns an empty list.
+          </para>
+          <para>
+            Some servlet containers do not allow do not allow servlets
+            to access headers using this method, in which case this
+            procedure returns &f;.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-int-header</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>integer</type>
+          <methodname>request/get-int-header</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the value of the specified request header as an
+            integer. If the request does not have a header of the
+            specified name, this procedure returns &f;. If the header
+            cannot be converted to an integer, this method throws a
+            Java <function>NumberFormatException</function>.
+          </para>
+          <para>
+            The header name is case insensitive.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-java-attribute</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>jobject</type>
+          <methodname>request/get-java-attribute</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the value of the <parameter>name</parameter>d
+            attribute as a Java object, or <function>null</function>
+            if no attribute of the given <parameter>name</parameter>
+            exists.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-java-attribute-names</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>list</type>
+          <methodname>request/get-java-attribute-names</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a list of names of the attributes available to
+            this request. This method returns an empty list if the
+            request has no attributes available to it.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-locale</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>java.util.Locale</type>
+          <methodname>request/get-locale</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a Java <function>java.util.Locale</function>
+            object representing the preferred locale that the client
+            will accept content in, based on the Accept-Language
+            header. If the client request doesn't provide an
+            Accept-Language header, this method returns the default
+            locale for the server.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-locales</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>list</type>
+          <methodname>request/get-locales</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a list of <function>java.util.Locale</function>
+            objects indicating, in decreasing order starting with the
+            preferred locale, the locales that are acceptable to the
+            client based on the Accept-Language header. If the client
+            request doesn't provide an Accept-Language header, this
+            method returns an Enumeration containing one
+            <function>java.util.Locale</function>, the default locale
+            for the server.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-method</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>request/get-method</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the name of the HTTP method with which this
+            request was made, for example, GET, POST, or PUT.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-parameter</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>request/get-parameter</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the value of a request parameter as a string, or
+            &f; if the parameter does not exist.
+          </para>
+          <para>
+            You should only use this method when you are sure the
+            parameter has only one value. If the parameter might have
+            more than one value, use
+            <function>request/get-parameter-values</function>.  If you
+            use this method with a multivalued parameter, the value
+            returned is equal to the first value in the list returned
+            by <function>request/get-parameter-values</function>.
+          </para>
+          <para>
+            If the parameter data was sent in the request body, such
+            as occurs with an HTTP POST request, then reading the body
+            directly via
+            <function>request/open-binary-input-port</function> or
+            <function>request/open-input-port</function> can interfere
+            with the execution of this procedure.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-parameter-alist</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>alist</type>
+          <methodname>request/get-parameter-alist</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a <parameter>(name . (value1 ...))</parameter>
+            association list of all parameters and their values.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-parameter-hashtable</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>hashtable</type>
+          <methodname>request/get-parameter-hashtable</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a hashtable containing the association between
+            parameter names and lists of the parameter values.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-parameter-names</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>list</type>
+          <methodname>request/get-parameter-names</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a list of names of the parameters contained in
+            this request. If the request has no parameters, the
+            procedure returns an empty list.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-parameter-values</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>list</type>
+          <methodname>request/get-parameter-values</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a list of values of the given request parameter,
+            or the empty list if the parameter does not exist.
+          </para>
+          <para>
+            If the parameter has a single value, the list has a length
+            of 1.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-path-info</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>request/get-path-info</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns any extra path information associated with the URL
+            the client sent when it made this request. The extra path
+            information follows the path of the
+            <function>SISCAdapterServlet</function> but precedes the
+            query string. This procedure returns &f; if there was no
+            extra path information.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-path-translated</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>request/get-path-translated</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns any extra path information after the servlet name
+            but before the query string, and translates it to a real
+            path.
+          </para>
+          <para>
+            If the URL does not have any extra path information, this
+            method returns &f;. The web container does not decode
+            thins string.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-protocol</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>request/get-protocol</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the name and version of the protocol the request
+            uses in the form protocol/majorVersion.minorVersion, for
+            example, HTTP/1.1.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-query-string</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>request/get-query-string</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the query string that is contained in the request
+            URL after the path. This procedure returns &f; if the URL
+            does not have a query string.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-remote-addr</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>request/get-remote-addr</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the Internet Protocol (IP) address of the client
+            that sent the request.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-remote-host</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>request/get-remote-host</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the fully qualified name of the client that sent
+            the request. If the engine cannot or chooses not to
+            resolve the hostname (to improve performance), this
+            procedure returns the dotted-string form of the IP
+            address.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-remote-user</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>request/get-remote-user</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the login of the user making this request, if the
+            user has been authenticated, or &f; if the user has not
+            been authenticated. Whether the user name is sent with
+            each subsequent request depends on the browser and type of
+            authentication.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-requested-session-id</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>request/get-requested-session-id</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the session ID specified by the client. This may
+            not be the same as the ID of the actual session in
+            use. For example, if the request specified an old
+            (expired) session ID and the server has started a new
+            session, this method gets a new session with a new ID. If
+            the request did not specify a session ID, this method
+            returns &f;.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-scheme</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>request/get-scheme</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the name of the scheme used to make this request.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-server-name</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>request/get-server-name</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the host name of the server that received the
+            request.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-server-port</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>integer</type>
+          <methodname>request/get-server-port</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the port number on which this request was
+            received.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-servlet-path</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>request/get-servlet-path</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the part of this request's URL that calls the
+            <function>SISCAdapterServlet</function>. This includes
+            either the servlet name or a path to the servlet, but does
+            not include any extra path information or a query string.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-session</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>javax.servlet.http.HttpSession</type>
+          <methodname>request/get-session</methodname>
+          <methodparam choice="opt">
+            <parameter>create?</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the current HttpSession associated with this
+            request or, if if there is no current session and the
+            <parameter>create?</parameter> is &t; or absent, returns a
+            new session.
+          </para>
+          <para>
+            If <parameter>create</parameter> is &f; and the request
+            has no valid <function>HttpSession</function>, this method
+            returns <function>null</function>.
+          </para>
+          <para>
+            To make sure the session is properly maintained, you must
+            call this method before the response is committed. If the
+            container is using cookies to maintain session integrity
+            and is asked to create a new session when the response is
+            committed, a Java
+            <function>IllegalStateException</function> is thrown.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-uri</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>request/get-uri</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the part of this request's URL from the protocol
+            name up to the query string in the first line of the HTTP
+            request. The web container does not decode this String.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-url</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>request/get-url</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Reconstructs the URL the client used to make the
+            request. The returned URL contains a protocol, server
+            name, port number, and server path, but it does not
+            include query string parameters.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-user-principal</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>java.security.Principal</type>
+          <methodname>request/get-user-principal</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a <function>java.security.Principal</function>
+            object containing the name of the current authenticated
+            user. If the user has not been authenticated, the method
+            returns <function>null</function>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/open-binary-input-port</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>binary-input-port</type>
+          <methodname>request/open-binary-input-port</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Retrieves the body of the request as binary data using a
+            binary input port. Either this procedure or
+            <function>request/open-input-port</function> may be called
+            to read the body, not both.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/open-input-port</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>character-input-port</type>
+          <methodname>request/open-input-port</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Retrieves the body of the request as character data using
+            a character input port. The port translates the character
+            data according to the character encoding used on the
+            body. Either this procedure or
+            <function>request/open-binary-input-port</function> may be
+            called to read the body, not both.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/remove-java-attribute!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>request/remove-java-attribute!</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Removes an attribute from this request. This method is not
+            generally needed as attributes only persist as long as the
+            request is being handled.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/session-id-from-cookie?</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>&t;/&f;</type>
+          <methodname>request/session-id-from-cookie?</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Checks whether the requested session ID came in as a
+            cookie.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/session-id-from-url?</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>&t;/&f;</type>
+          <methodname>request/session-id-from-url?</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Checks whether the requested session ID came in as part of
+            the request URL.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/requested-session-id-valid?</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>&t;/&f;</type>
+          <methodname>request/requested-session-id-valid?</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Checks whether the requested session ID is still valid.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/secure?</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>&t;/&f;</type>
+          <methodname>request/secure?</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Checks whether this request was made using a secure
+            channel, such as HTTPS.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/set-character-encoding!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>request/set-character-encoding!</methodname>
+          <methodparam>
+            <parameter>encoding</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Overrides the name of the character encoding used in the
+            body of this request. This method must be called prior to
+            reading request parameters or reading input using
+            <function>request/open-input-port</function>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/set-java-attribute!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>request/set-java-attribute!</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>jobject</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Stores a Java object in the <parameter>name</parameter>d
+            attribute in this request. Attributes are reset between
+            requests. This method is most often used in conjunction
+            with <function>request/make-dispatcher</function>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/user-in-role?</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>&t;/&f;</type>
+          <methodname>request/user-in-role?</methodname>
+          <methodparam>
+            <parameter>username</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Checks whether the authenticated user is included in the
+            specified logical &quot;role&quot;. Roles and role
+            membership can be defined using deployment descriptors. If
+            the user has not been authenticated, the method returns
+            &f;.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+  </section>
+
+  <section id="response">
+    <title>Response Procedures</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>siscweb/response</emphasis>)
+      </emphasis>
+      <sbr/>
+      &locatedin;
+      <emphasis role="bold">
+        siscweb.jar
+      </emphasis>
+    </para>
+
+    <para>
+      This module provides wrappers around the Response object current
+      at the time of invocation.
+    </para>
+
+    <note>
+      <para>
+        Because of the large number of methods, they are here sorted
+        in alphabetical order. The descriptions are adapted from the
+        J2EE 1.3 javadoc.
+      </para>
+    </note>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>current-response</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>javax.servlet.http.HttpServletResponse</type>
+          <methodname>current-response</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the current Response object. Since complete
+            wrappers are provided by this module, this is normally
+            useful to either create Request adapters, or to use the
+            the procedure returned by
+            <function>request/get-dispatcher</function>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>response/add-cookie!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>response/add-cookie!</methodname>
+          <methodparam>
+            <parameter>javax.servlet.http.Cookie</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Adds the specified cookie to the response. This method can
+            be called multiple times to set more than one cookie.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>response/add-header!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>response/add-header!</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>value</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Adds a response header with the given name and value. This
+            method allows response headers to have multiple values.
+          </para>
+          <para>
+            The <parameter>value</parameter> parameter can either be a
+            string, an integer number or an SRFI-19 date or time
+            structure.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>response/add-headers!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>response/add-headers!</methodname>
+          <methodparam>
+            <parameter>alist</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Adds multiple headers, one for each
+            (<parameter>name</parameter>
+            . <parameter>value</parameter>) element of the
+            <parameter>alist</parameter>, with
+            <parameter>value</parameter> being either a string, an
+            integer number or an SRFI-19 time structure.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>response/commit!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>response/commit!</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Commits the response, forcing any content in the buffer to
+            be written to the client, including the status code and
+            headers.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>response/committed?</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>&t;/&f;</type>
+          <methodname>response/committed?</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Checks if the response has been committed. A commited
+            response has already had its status code and headers
+            written.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>response/contains-header?</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>&t;/&f;</type>
+          <methodname>response/contains-header?</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Checks whether the <parameter>name</parameter>d response
+            header has already been set.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>response/encode-redirect-url</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>response/encode-redirect-url</methodname>
+          <methodparam>
+            <parameter>url</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Encodes the specified <parameter>url</parameter> for use
+            in the <function>response/send-redirect</function>
+            procedure or, if encoding is not needed, returns the
+            <parameter>url</parameter> unchanged. The implementation
+            of this method includes the logic to determine whether the
+            session ID needs to be encoded in the URL. Because the
+            rules for making this determination can differ from those
+            used to decide whether to encode a normal link, this
+            procedure is separate from
+            <function>response/encode-url</function>.
+          </para>
+          <para>
+            All URLs sent to the
+            <function>response/send-redirect</function> procedure
+            should be run through this method. Otherwise, URL
+            rewriting cannot be used with browsers which do not
+            support cookies.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>response/encode-url</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>response/encode-url</methodname>
+          <methodparam>
+            <parameter>url</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Encodes the specified <parameter>url</parameter> by
+            including the session ID in it, or, if encoding is not
+            needed, returns the <parameter>url</parameter>
+            unchanged. The implementation of this method includes the
+            logic to determine whether the session ID needs to be
+            encoded in the URL. For example, if the browser supports
+            cookies, or if session tracking is turned off, URL
+            encoding is unnecessary.
+          </para>
+          <para>
+            For robust session tracking, all URLs emitted by a servlet
+            should be run through this method. Otherwise, URL
+            rewriting cannot be used with browsers which do not
+            support cookies.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>response/get-buffer-size</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>integer</type>
+          <methodname>response/get-buffer-size</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the actual buffer size used for the response. If
+            no buffering is used, this procedure returns 0.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>response/get-character-encoding</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>encoding</type>
+          <methodname>response/get-character-encoding</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the name of the charset used for the MIME body
+            sent in this response. If no charset has been assigned, it
+            is implicitly set to ISO-8859-1 (Latin-1).
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>response/get-locale</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>java.util.Locale</type>
+          <methodname>response/get-locale</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the locale assigned to the response.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>response/open-binary-output-port</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>binary-output-port</type>
+          <methodname>response/open-binary-output-port</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a binary output port suitable for writing binary
+            data in the response. The servlet container does not
+            encode the binary data.
+          </para>
+          <para>
+            Flushing the port commits the response. Either this method
+            or <function>response/open-output-port</function> may be
+            called to write the body, not both.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>response/open-output-port</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>character-output-port</type>
+          <methodname>response/open-output-port</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a character output port that can send character
+            text to the client. The character encoding used is the one
+            specified in the charset= property of the
+            <function>response/set-content-type!</function> procedure,
+            which must be called before calling this procedure for the
+            charset to take effect.
+          </para>
+          <para>
+            If necessary, the MIME type of the response is modified to
+            reflect the character encoding used.
+          </para>
+          <para>
+            Flushing the port commits the response. Either this method
+            or <function>response/open-binary-output-port</function>
+            may be called to write the body, not both.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>response/reset!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>response/reset!</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Clears any data that exists in the buffer as well as the
+            status code and headers. If the response has been
+            committed, this method throws a Java
+            <function>IllegalStateException</function>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>response/reset-buffer!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>response/reset-buffer!</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Clears the content of the underlying buffer in the
+            response without clearing headers or status code. If the
+            response has been committed, this method throws a Java
+            <function>IllegalStateException</function>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/send-error</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>request/send-error</methodname>
+          <methodparam>
+            <parameter>status-code</parameter>
+          </methodparam>
+          <methodparam choice="opt">
+            <parameter>message</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Sends an error response to the client using the specified
+            status clearing the buffer. The server defaults to
+            creating the response to look like an HTML-formatted
+            server error page containing the specified message,
+            setting the content type to &quot;text/html&quot;, leaving cookies
+            and other headers unmodified. If an error-page declaration
+            has been made for the web application corresponding to the
+            status code passed in, it will be served back in
+            preference to the suggested msg parameter.
+          </para>
+          <para>
+            If the response has already been committed, this method
+            throws a Java
+            <function>IllegalStateException</function>. After using
+            this method, the response should be considered to be
+            committed and should not be written to.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/send-redirect</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>request/send-redirect</methodname>
+          <methodparam>
+            <parameter>url</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Sends a temporary redirect response to the client using
+            the specified redirect <parameter>url</parameter>. This
+            method can accept relative URLs; the servlet container
+            must convert the relative URL to an absolute URL before
+            sending the response to the client. If the location is
+            relative without a leading '/' the container interprets it
+            as relative to the current request URI. If the location is
+            relative with a leading '/' the container interprets it as
+            relative to the servlet container root.
+          </para>
+          <para>
+            If the response has already been committed, this method
+            throws a Java
+            <function>IllegalStateException</function>. After using
+            this method, the response should be considered to be
+            committed and should not be written to.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/set-buffer-size!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>request/set-buffer-size!</methodname>
+          <methodparam>
+            <parameter>bufsize</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Sets the preferred buffer size for the body of the
+            response. The servlet container will use a buffer at least
+            as large as the size requested. The actual buffer size
+            used can be found using
+            <function>response/get-buffer-size</function>.
+          </para>
+          <para>
+            This method must be called before any response body
+            content is written; if content has been written, this
+            method throws a Java
+            <function>IllegalStateException</function>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/set-content-length!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>request/set-content-length!</methodname>
+          <methodparam>
+            <parameter>length</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Sets the length of the content body in the response In
+            HTTP servlets, this method sets the HTTP Content-Length
+            header.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/set-content-type!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>request/set-content-type!</methodname>
+          <methodparam>
+            <parameter>type</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Sets the content type of the response being sent to the
+            client. The content type may include the type of character
+            encoding used, for example, text/html; charset=ISO-8859-4.
+          </para>
+          <para>
+            If obtaining a character output port, this method should
+            be called first.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>response/set-header!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>response/set-header!</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>value</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Sets a response header with the given
+            <parameter>name</parameter> and
+            <parameter>value</parameter>. If the header had already
+            been set, the new value overwrites the previous one. The
+            <function>response/contains-header?</function> procedure
+            can be used to test for the presence of a header before
+            setting its value.
+          </para>
+          <para>
+            The <parameter>value</parameter> parameter can either be a
+            string, an integer number or an SRFI-19 date or time
+            structure.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>response/set-locale!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>response/set-locale!</methodname>
+          <methodparam>
+            <parameter>java.util.Locale</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Sets the locale of the response, setting the headers
+            (including the Content-Type's charset) as
+            appropriate. This method should be called before a call to
+            <function>reponse/open-output-port</function>. By default,
+            the response locale is the default locale for the server.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>response/set-status!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>response/set-status!</methodname>
+          <methodparam>
+            <parameter>status-code</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Sets the status code for this response. This method is
+            used to set the return status code when there is no error
+            (for example, for the status codes SC_OK or
+            SC_MOVED_TEMPORARILY). If there is an error, and the
+            caller wishes to invoke an defined in the web applicaion,
+            the <function>response/send-error</function> procedure
+            should be used instead.
+          </para>
+          <para>
+            The container clears the buffer and sets the Location
+            header, preserving cookies and other headers.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+  </section>
+
+  <section id="session">
+    <title>Session Procedures</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>siscweb/session</emphasis>)
+      </emphasis>
+      <sbr/>
+      &locatedin;
+      <emphasis role="bold">
+        siscweb.jar
+      </emphasis>
+    </para>
+
+    <para>
+      This module provides wrappers around the Response object current
+      at the time of invocation.
+    </para>
+
+    <note>
+      <para>
+        The procedures are sorted in alphabetical order. The
+        descriptions are adapted from the J2EE 1.3 javadoc.
+      </para>
+    </note>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>current-session</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>javax.servlet.HttpSession</type>
+          <methodname>current-session</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the current Session, or creates a new one if one
+            is not defined yet. Also see the procedure
+            <function>request/get-session</function>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/get-creation-time</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>time</type>
+          <methodname>session/get-creation-time</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the time when this session was created as an
+            SRFI-19 time structure.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/get-id</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>session/get-id</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a string containing the unique identifier assigned
+            to this session. The identifier is assigned by the servlet
+            container and is implementation dependent.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/get-java-attribute</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>jobject</type>
+          <methodname>session/get-java-attribute</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the Java object bound with the specified name in
+            this session, or <function>null</function> if no object is
+            bound under the name.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/get-java-attribute-names</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>list</type>
+          <methodname>session/get-java-attribute-names</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns an list of names of all the objects bound to this
+            session.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/get-last-accessed-time</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>time</type>
+          <methodname>session/get-last-accessed-time</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the last time the client sent a request associated
+            with this session, as an SRFI-19 time structure, and
+            marked by the time the container received the request.
+          </para>
+          <para>
+            Actions that your application takes, such as getting or
+            setting a value associated with the session, do not affect
+            the access time.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/get-max-inactive-interval</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>seconds</type>
+          <methodname>session/get-max-inactive-interval</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the maximum time interval, in seconds, that the
+            servlet container will keep this session open between
+            client accesses. After this interval, the servlet
+            container will invalidate the session. The maximum time
+            interval can be set with the setMaxInactiveInterval
+            method. A negative time indicates the session should never
+            timeout.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/get-servlet-context</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>javax.servlet.ServletContext</type>
+          <methodname>session/get-servlet-context</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the
+            <function>javax.servlet.ServletContext</function> object
+            to which this session belongs.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/invalidate!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>session/invalidate!</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Invalidates this session then unbinds any objects bound to
+            it.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/make-parameter</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>proc</type>
+          <methodname>session/make-parameter</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a procedure <function>proc</function> that, when
+            invoked, sets or retrieves a Scheme value to/from the a
+            Session attribute named <parameter>name</parameter>,
+            depending on whether a value is passed or not to
+            <procedure>proc</procedure>.  If <function>proc</function>
+            is passed the &f; value, the attribute is removed from the
+            Session object altogether.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/new?</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>&t;/&f;</type>
+          <methodname>session/new?</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns &t; if the client does not yet know about the
+            session or if the client chooses not to join the
+            session. For example, if the server used only cookie-based
+            sessions, and the client had disabled the use of cookies,
+            then a session would be new on each request.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/remove-java-attribute!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>session/remove-java-attribute!</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Removes the object bound with the specified
+            <parameter>name</parameter> from this session. If the
+            session does not have an object bound with the specified
+            name, this method does nothing.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/set-java-attribute!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>session/set-java-attribute!</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>jobject</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Binds a Java object <parameter>jobject</parameter> to this
+            session, using the specified
+            <parameter>name</parameter>. If an object of the same name
+            is already bound to the session, that object is replaced.
+          </para>
+          <para>
+          If the value passed in is <function>jnull</function>, this
+          has the same effect as calling
+          <function>session/remove-java-attribute!</function>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/set-max-inactive-interval!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>session/set-max-inactive-interval!</methodname>
+          <methodparam>
+            <parameter>seconds</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Specifies the time, in <parameter>seconds</parameter>,
+            between client requests before the servlet container will
+            invalidate this session. A negative time indicates the
+            session should never timeout.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+  </section>
+
+  <section id="context">
+    <title>ServletContext Procedures</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>siscweb/context</emphasis>)
+      </emphasis>
+      <sbr/>
+      &locatedin;
+      <emphasis role="bold">
+        siscweb.jar
+      </emphasis>
+    </para>
+
+    <para>
+      This module provides wrappers around the ServletContext object.
+    </para>
+
+    <note>
+      <para>
+        The procedures are sorted in alphabetical order. The
+        descriptions are adapted from the J2EE 1.3 javadoc.
+      </para>
+    </note>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>current-context</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>javax.servlet.ServletContext</type>
+          <methodname>current-context</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the current ServletContext. Also see the procedure
+            <function>context/get</function>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>context/get</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>javax.servlet.ServletContext</type>
+          <methodname>context/get</methodname>
+          <methodparam>
+            <parameter>uripath</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a ServletContext object that corresponds to a
+            specified URL on the server.
+          </para>
+          <para>
+            This method allows servlets to gain access to the context
+            for various parts of the server, and as needed obtain
+            RequestDispatcher objects from the context. The given path
+            must be begin with &quot;/&quot;, is interpreted relative to the
+            server's document root and is matched against the context
+            roots of other web applications hosted on this container.
+          </para>
+          <para>
+            In a security conscious environment, the servlet container
+            may return <procedure>null</procedure> for a given URL.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>context/get-dispatcher</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>proc</type>
+          <methodname>context/get-dispatcher</methodname>
+          <methodparam>
+            <parameter>c-url</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <sbr/>
+        <indexterm>
+          <primary>context/get-named-dispatcher</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>proc</type>
+          <methodname>context/get-named-dispatcher</methodname>
+          <methodparam>
+            <parameter>servlet-name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a procedure <function>proc</function> that, when
+            invoked with the parameters <parameter>request</parameter>
+            and <parameter>response</parameter>, will forward the
+            request to the resource located at the given
+            <parameter>c-url</parameter>. The resource can be dynamic
+            or static.
+          </para>
+          <para>
+            In the first form, the specified
+            <parameter>c-url</parameter> may be relative to the path
+            of the published procedure, although it cannot extend
+            outside the current servlet context. If the path begins
+            with a &quot;/&quot; it is interpreted as relative to the current
+            context root. This method returns &f; if the servlet
+            container cannot return a RequestDispatcher.
+          </para>
+          <para>
+            In the second form, the specified
+            <parameter>servlet-name</parameter> indicates a Servlet or
+            JSP page named either via server administration or via a
+            web application deployment descriptor.
+          </para>
+          <para>
+            This method returns &f; if the ServletContext cannot
+            return a dispatcher for any reason.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>context/get-init-parameter</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>context/get-init-parameter</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the value of the <parameter>named</parameter>d
+            context-wide initialization parameter as a string, or &f;
+            if the parameter does not exist.
+          </para>
+          <para>
+            This method can make available configuration information
+            useful to an entire &quot;web application&quot;. For
+            example, it can provide a webmaster's email address or the
+            name of a system that holds critical data.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>context/get-init-parameter-alist</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>alist</type>
+          <methodname>context/get-init-parameter-alist</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a <parameter>(name . value)</parameter>
+            association list of all the context's initialization
+            parameter names and their values.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>context/get-init-parameter-hashtable</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>hashtable</type>
+          <methodname>context/get-init-parameter-hashtable</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a hashtable containing the association between all
+            the context's initialization parameter names and their
+            values.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>request/get-init-parameter-names</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>list</type>
+          <methodname>request/get-init-parameter-names</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a list of names of the context' s initialization
+            parameters. If the has no initialization parameters, the
+            procedure returns an empty list.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>context/get-java-attribute</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>jobject</type>
+          <methodname>context/get-java-attribute</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the servlet container attribute with the given
+            name, or null if there is no attribute by that name. An
+            attribute allows a servlet container to give the servlet
+            additional information not already provided by this
+            interface. See your server documentation for information
+            about its attributes. A list of supported attributes can
+            be retrieved using
+            <function>context/get-java-attribute-names</function>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>context/get-java-attribute-names</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>list</type>
+          <methodname>context/get-java-attribute-names</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a list containing the attribute names available
+            within this servlet context. Use the
+            <function>context/get-java-attribute</function> procedure
+            with an attribute name to get the value of an attribute.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>context/get-major-version</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>integer</type>
+          <methodname>context/get-major-version</methodname>
+        </methodsynopsis>
+        <sbr/>
+        <indexterm>
+          <primary>context/get-minor-version</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>integer</type>
+          <methodname>context/get-minor-version</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            These procedures return the major and minor versions of
+            the Java Servlet API that this servlet container
+            supports. All implementations that comply with Version 2.3
+            must have this methods respectively return the integers 2 and 3.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>context/get-mime-type</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>context/get-mime-type</methodname>
+          <methodparam>
+            <parameter>file-path</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the MIME type of the specified file, or &f; if the
+            MIME type is not known. The MIME type is determined by the
+            configuration of the servlet container, and may be
+            specified in a web application deployment
+            descriptor. Common MIME types are &quot;text/html&quot; and
+            &quot;image/gif&quot;.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>context/get-name</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>context/get-name</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the name of this web application correponding to
+            this servlet context as specified in the deployment
+            descriptor for this web application by the
+            <function>display-name</function> element.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>context/get-real-path</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>path</type>
+          <methodname>context/get-real-path</methodname>
+          <methodparam>
+            <parameter>c-url</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a string containing the real path for a given
+            virtual path. For example, the path
+            &quot;/index.html&quot; returns the absolute file path on
+            the server's filesystem would be served by a request for
+            &quot;http://host/contextPath/index.html&quot;, where
+            contextPath is the context path of this servlet context.
+          </para>
+          <para>
+            The real path returned will be in a form appropriate to
+            the computer and operating system on which the servlet
+            container is running, including the proper path
+            separators. This method returns null if the servlet
+            container cannot translate the virtual path to a real path
+            for any reason (such as when the content is being made
+            available from a .war archive).
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>context/get-real-path</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>path</type>
+          <methodname>context/get-real-path</methodname>
+          <methodparam>
+            <parameter>c-url</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a string containing the real path for a given
+            virtual path. For example, the path
+            &quot;/index.html&quot; returns the absolute file path on
+            the server's filesystem would be served by a request for
+            &quot;http://host/contextPath/index.html&quot;, where
+            contextPath is the context path of this servlet context.
+          </para>
+          <para>
+            The real path returned will be in a form appropriate to
+            the computer and operating system on which the servlet
+            container is running, including the proper path
+            separators. This method returns null if the servlet
+            container cannot translate the virtual path to a real path
+            for any reason (such as when the content is being made
+            available from a .war archive).
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>context/get-resource</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>url</type>
+          <methodname>context/get-resource</methodname>
+          <methodparam>
+            <parameter>file-path</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a string representing a URL to the resource that
+            is mapped to a specified path. The path must begin with a
+            &quot;/&quot; and is interpreted as relative to the
+            current context root.
+          </para>
+          <para>
+            This procedure allows the servlet container to make a
+            resource available to servlets from any source. Resources
+            can be located on a local or remote file system, in a
+            database, or in a .war file.
+          </para>
+          <para>
+            This procedure returns &f; if no resource is mapped to the
+            pathname.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>context/get-resource-paths</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>list</type>
+          <methodname>context/get-resource-paths</methodname>
+          <methodparam>
+            <parameter>file-path</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a directory-like list of all the paths to
+            resources within the web application whose longest
+            sub-path matches the supplied path argument. Paths
+            indicating subdirectory paths end with a
+            &quot;/&quot;. The returned paths are all relative to the
+            root of the web application and have a leading
+            &quot;/&quot;.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>context/get-resource-paths</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>string</type>
+          <methodname>context/get-resource-paths</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the name and version of the servlet container on
+            which the servlet is running.
+          </para>
+          <para>
+            The form of the returned string is
+            servername/versionnumber. For example, the JavaServer Web
+            Development Kit may return the string JavaServer Web Dev
+            Kit/1.0.
+          </para>
+          <para>
+            The servlet container may return other optional
+            information after the primary string in parentheses, for
+            example, JavaServer Web Dev Kit/1.0 (JDK 1.1.6; Windows NT
+            4.0 x86).
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>context/make-parameter</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>proc</type>
+          <methodname>context/make-parameter</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a procedure <function>proc</function> that, when
+            invoked, sets or retrieves a Scheme value to/from the a
+            servlet context attribute named
+            <parameter>name</parameter>, depending on whether a value
+            is passed or not to <procedure>proc</procedure>.  If
+            <function>proc</function> is passed the &f; value, the
+            attribute is removed from the servlet context altogether.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>context/open-resource-binary-input-port</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>binary-input-port</type>
+          <methodname>context/open-resource-binary-input-port</methodname>
+          <methodparam>
+            <parameter>file-path</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a binary input port that reads from the resource
+            located at the named <parameter>file-path</parameter> as
+            an InputStream object.
+          </para>
+          <para>
+            The data in file can be of any type or length. The
+            <parameter>file-path</parameter> must be specified
+            according to the rules given in
+            <function>context/get-resource</function>. This procedure
+            returns &f; if no resource exists at the specified path.
+          </para>
+          <para>
+            Meta-information such as content length and content type
+            that is available via
+            <function>context/get-resource</function> method is lost
+            when using this method.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>context/remove-java-attribute!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>context/remove-java-attribute!</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Removes the attribute with the given name from the servlet
+            context. After removal, subsequent calls to
+            <function>context/get-java-attribute</function> to
+            retrieve the attribute's value will return &f;.
+          </para>
+          <para>
+            If listeners are configured on the ServletContext the
+            container notifies them accordingly.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>context/set-java-attribute!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>context/set-java-attribute!</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>jobject</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Binds an object to a given attribute
+            <parameter>name</parameter> in this servlet context. If
+            the name specified is already used for an attribute, this
+            method will replace the attribute with the new to the new
+            attribute.
+          </para>
+          <para>
+            If listeners are configured on the ServletContext the
+            container notifies them accordingly.
+          </para>
+          <para>
+            If a <function>jnull</function> value is passed, the
+            effect is the same as calling
+            <function>context/remove-java-attribute!</function>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>context/get-dispatcher</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>proc</type>
+          <methodname>context/get-dispatcher</methodname>
+          <methodparam>
+            <parameter>c-url</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <sbr/>
+        <indexterm>
+          <primary>context/get-named-dispatcher</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>proc</type>
+          <methodname>context/get-named-dispatcher</methodname>
+          <methodparam>
+            <parameter>servlet-name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a procedure <function>proc</function> that, when
+            invoked with the parameters <parameter>request</parameter>
+            and <parameter>response</parameter>, will forward the
+            request to the resource located at the given
+            <parameter>c-url</parameter>. The resource can be dynamic
+            or static.
+          </para>
+          <para>
+            In the first form, the specified
+            <parameter>c-url</parameter> may be relative to the path
+            of the published procedure, although it cannot extend
+            outside the current servlet context. If the path begins
+            with a &quot;/&quot; it is interpreted as relative to the current
+            context root. This method returns &f; if the servlet
+            container cannot return a RequestDispatcher.
+          </para>
+          <para>
+            In the second form, the specified
+            <parameter>servlet-name</parameter> indicates a Servlet or
+            JSP page named either via server administration or via a
+            web application deployment descriptor.
+          </para>
+          <para>
+            This method returns &f; if the ServletContext cannot
+            return a dispatcher for any reason.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+  </section>
+</chapter>

@@ -1,0 +1,1592 @@
+<chapter id="pages">
+  <title>Generating content</title>
+
+  <para>
+    &SISCweb; programs can generate HTTP responses of a variety of
+    data types -- HTML/XML/XHTML represented in SXML notation, images
+    --, or they can forward requests to standard JSPs/Servlet
+    components.  Procedures to generate HTTP errors are also
+    available. Other response types can be easily plugged on top of a
+    basic set of response procedures.
+  </para>
+
+  <para>
+    The procedures that produce HTTP responses are in the form
+    <function>send-*/*</function>, with the first pattern indicating
+    the type of response, and the latter determining whether or not to
+    save the execution state, and whether or not to clear previously
+    saved states.
+  </para>
+  <para>
+    All the procedures accept an optional association list of HTTP
+    response headers as the first, optional argument. The association
+    list is in the form <parameter>((name value)
+    ...)</parameter>. This can be used to override the default
+    Content-Type, to set caching options, etc.
+  </para>
+
+
+  <section id="markup">
+    <title>Markup</title>
+
+    <para>
+      &SISCweb; provides a number of modules with an uniform API to
+      produce HTML, XHTML and XML markup. Their procedures accept
+      documents in SXML syntax, and in the case of HTML and XHTML, a
+      few extra elements and attributes are used to assist with
+      continuation-based programming (see <xref linkend="ehtml"/>.)
+    </para>
+
+    <section id="send-html">
+      <title>(X)HTML Core Procedures</title>
+
+      <para>
+        &requires;
+        <emphasis role="bold">
+          (import <emphasis>siscweb/html</emphasis>)
+        </emphasis>
+        <sbr/>
+        &requires;
+        <emphasis role="bold">
+          (import <emphasis>siscweb/xhtml</emphasis>)
+        </emphasis>
+        <sbr/>
+        &locatedin;
+        <emphasis role="bold">
+          siscweb-sxml.jar
+        </emphasis>
+      </para>
+
+      <para>
+        The core procedures to send (X)HTML content follow the basic
+        <function>send-html/*</function> and
+        <function>send-xhtml/*</function> patterns. They differ in
+        whether or not they clear the continuation table, and whether
+        or not they return after the user interacts with the page.
+      </para>
+
+      <note>
+        <para>
+          The XHTML and HTML modules serialize SXML differently, with
+          the former producing pure XML, and the latter producing
+          markup tweaked to display properly in known browsers. When
+          producing XHTML for common user agents, it is advisable to
+          keep the <link
+          url="http://www.w3.org/TR/xhtml1/#guidelines">HTML
+          Compatibility Guidelines</link> in mind.
+        </para>
+
+        <para>
+          Also, while the XHTML module implements the complete SXML
+          specification, the HTML module is more limited in that only
+          understands DTD declarations,
+          <function>*VERBATIM*</function> and
+          <function>*COMMENT*</function> elements besides the basic
+          element+attribute syntax. Also, while the XHTML module
+          considers the <function>*TOP*</function> element functional,
+          the HTML module silently ignores it.
+        </para>
+      </note>
+
+      <blockquote>
+        <para>
+          <indexterm>
+            <primary>send-html/suspend</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>request</type>
+            <methodname>send-html/suspend</methodname>
+            <methodparam choice="opt">
+              <parameter>header-alist</parameter>
+            </methodparam>
+            <methodparam>
+              <parameter>(lambda (k-url) &lt;sxml&gt;)</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <sbr/>
+          <indexterm>
+            <primary>send-xhtml/suspend</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>request</type>
+            <methodname>send-xhtml/suspend</methodname>
+            <methodparam choice="opt">
+              <parameter>header-alist</parameter>
+            </methodparam>
+            <methodparam>
+              <parameter>(lambda (k-url) &lt;sxml&gt;)</parameter>
+            </methodparam>
+          </methodsynopsis>
+
+          <blockquote>
+            <para>
+              Sends the given SXML to the browser in the form of
+              (X)HTML and suspends the execution flow. The
+              <parameter>k-url</parameter> will contain a hash used to
+              resume the program's execution, and should therefore be
+              used in forms and links as needed. When the browser
+              submits a request to the <parameter>k-url</parameter>,
+              said request will become the return value of the
+              procedure.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+(let loop ((n 0))
+  (send-html/suspend
+    (lambda (k-url)
+      `(html
+         (body
+           (a (@ (href ,k-url)) ,n)))))
+  (loop (+ n 1)))
+          ]]>
+        </programlisting>
+      </informalexample>
+
+      <blockquote>
+        <para>
+          <indexterm>
+            <primary>send-html/forward</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>request</type>
+            <methodname>send-html/forward</methodname>
+            <methodparam choice="opt">
+              <parameter>header-alist</parameter>
+            </methodparam>
+            <methodparam>
+              <parameter>(lambda (k-url) &lt;sxml&gt;)</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <sbr/>
+          <indexterm>
+            <primary>send-xhtml/forward</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>request</type>
+            <methodname>send-xhtml/forward</methodname>
+            <methodparam choice="opt">
+              <parameter>header-alist</parameter>
+            </methodparam>
+            <methodparam>
+              <parameter>(lambda (k-url) &lt;sxml&gt;)</parameter>
+            </methodparam>
+          </methodsynopsis>
+
+
+          <blockquote>
+            <para>
+              These procedures behave like
+              <function>send-html/suspend</function> and
+              <function>send-xhtml/suspend</function>, except that
+              they clear the continuation table first. This will
+              prevent the client from using the back button to resume
+              the program flow from earlier points.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+
+      <blockquote>
+        <para>
+          <indexterm>
+            <primary>send-html/back</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>does not return</type>
+            <methodname>send-html/back</methodname>
+            <methodparam choice="opt">
+              <parameter>header-alist</parameter>
+            </methodparam>
+            <methodparam>
+              <parameter>&lt;sxml&gt;</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <sbr/>
+          <indexterm>
+            <primary>send-xhtml/back</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>does not return</type>
+            <methodname>send-xhtml/back</methodname>
+            <methodparam choice="opt">
+              <parameter>header-alist</parameter>
+            </methodparam>
+            <methodparam>
+              <parameter>&lt;sxml&gt;</parameter>
+            </methodparam>
+          </methodsynopsis>
+
+          <blockquote>
+            <para>
+              These procedures send the provided SXML to the browser and stop.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+
+      <informalexample>
+        <programlisting>
+(send-html/back
+  `(html
+    (body
+      (a (@ (href "http://www.w3.org")) "w3c"))))
+        </programlisting>
+      </informalexample>
+
+      <blockquote>
+        <para>
+          <indexterm>
+            <primary>send-html/finish</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>does not return</type>
+            <methodname>send-html/finish</methodname>
+            <methodparam choice="opt">
+              <parameter>header-alist</parameter>
+            </methodparam>
+            <methodparam>
+              <parameter>&lt;sxml&gt;</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <sbr/>
+          <indexterm>
+            <primary>send-xhtml/finish</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>does not return</type>
+            <methodname>send-xhtml/finish</methodname>
+            <methodparam choice="opt">
+              <parameter>header-alist</parameter>
+            </methodparam>
+            <methodparam>
+              <parameter>&lt;sxml&gt;</parameter>
+            </methodparam>
+          </methodsynopsis>
+
+          <blockquote>
+            <para>
+              Like <function>send-html/back</function> and
+              <function>send-html/back</function>, these procedures
+              send the provided SXML to the browser and stop, but
+              clear the continuation table first.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+    </section>
+
+    <section id="send-xml">
+      <title>XML Core Procedures</title>
+
+      <para>
+        &requires;
+        <emphasis role="bold">
+          (import <emphasis>siscweb/xml</emphasis>)
+        </emphasis>
+        <sbr/>
+        &locatedin;
+        <emphasis role="bold">
+          siscweb-sxml.jar
+        </emphasis>
+      </para>
+
+      <para>
+        This module provides functions to send XML responses with the
+        same features as those in the HTML and XHTML modules. This
+        enables clients to conduct a stateful conversation with the
+        server. The same features available through the extended
+        (X)HTML can be reproduced in any XML element by using the
+        <function>store/forward!</function> procedure described in
+        <xref linkend="forward"/>.
+      </para>
+
+      <blockquote>
+        <para>
+          <indexterm>
+            <primary>send-xml/suspend</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>request</type>
+            <methodname>send-xml/suspend</methodname>
+            <methodparam choice="opt">
+              <parameter>header-alist</parameter>
+            </methodparam>
+            <methodparam>
+              <parameter>(lambda (k-url) &lt;sxml&gt;)</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <sbr/>
+          <indexterm>
+            <primary>send-xml/forward</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>request</type>
+            <methodname>send-xml/forward</methodname>
+            <methodparam choice="opt">
+              <parameter>header-alist</parameter>
+            </methodparam>
+            <methodparam>
+              <parameter>(lambda (k-url) &lt;sxml&gt;)</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <sbr/>
+          <indexterm>
+            <primary>send-xml/back</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>does not return</type>
+            <methodname>send-xml/back</methodname>
+            <methodparam choice="opt">
+              <parameter>header-alist</parameter>
+            </methodparam>
+            <methodparam>
+              <parameter>&lt;sxml&gt;</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <sbr/>
+          <indexterm>
+            <primary>send-xml/finish</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>does not return</type>
+            <methodname>send-xml/finish</methodname>
+            <methodparam choice="opt">
+              <parameter>header-alist</parameter>
+            </methodparam>
+            <methodparam>
+              <parameter>&lt;sxml&gt;</parameter>
+            </methodparam>
+          </methodsynopsis>
+
+          <blockquote>
+            <para>
+              These functions are analogous to those in the HTML and
+              XHTML modules.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+    </section>
+
+    <section id="sxml">
+      <title>Extended SXML</title>
+      <para>
+        SISCweb's <function>send-[html/xhtml/xml]/*</function>
+        procedures accept a slightly extended version of the SXML
+        syntax.
+      </para>
+
+      <warning>
+        <para>
+          The <function>send-html/*</function> procedures transform
+          symbols in the markup into entities. This usage is now
+          deprecated, and the form <function>(&amp; name)</function>
+          should be used instead for HTML, XHTML and XML.
+        </para>
+      </warning>
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+(send-html/back
+  `(html
+    (body
+     (p "Can't" (& nbsp) "wrap" (& nbsp) "me.")
+     (p "Nor" (& |#160|) "me."))))
+          ]]>
+        </programlisting>
+      </informalexample>
+
+      <para>
+        Numbers in attributes and text nodes are automatically
+        converted to strings using <function>pretty-print</function>.
+      </para>
+
+      <informalexample>
+        <programlisting>
+(send-html/back
+  `(html
+    (body
+     (table (@ (width 42))
+       (tr (td 42))))))
+        </programlisting>
+      </informalexample>
+
+      <para>
+        The value &f; as an element or attribute value is
+        ignored. This comes handy when generating dynamic content.
+      </para>
+
+      <informalexample>
+        <programlisting>
+;; equivalent to (html (body (p)))
+(send-html/back
+  `(html
+    (body
+     (p (@ (align #f))
+      ,(hashtable/get ht 'para)))))
+        </programlisting>
+      </informalexample>
+
+      <para>
+        The element *VERBATIM* can be used to produce non-escaped text.
+      </para>
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+(send-html/back
+  `(*VERBATIM*
+    "<html><body><p>Hello, &quot;world&quot;</p></body></html>))
+          ]]>
+        </programlisting>
+      </informalexample>
+
+      <para>
+        The elements *DTD-INFO* and *DTD-INFO/PUBLIC* can be used to
+        generate DTD declarations. For XML/XHTML only, the *PI*
+        element should be used to generate the XML declaration.
+      </para>
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+(send-xhtml/back
+ `(*TOP*
+   (*PI* xml "version=\"1.0\"")
+   (*DTD-INFO/PUBLIC* "html"
+                      "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+   (html (@ (xmlns "http://www.w3.org/1999/xhtml")
+            (xml:lang "en") (lang "en"))
+    (head
+     (title "Hello"))
+    (body
+     (p "Hello")))))
+          ]]>
+        </programlisting>
+      </informalexample>
+    </section>
+
+    <section id="ehtml">
+      <title>Extended HTML markup</title>
+
+      <para>
+        The HTML and XHTML modules support a number of extra
+        attributes to support continuation-centric programming and
+        interaction with the J2EE environment.
+      </para>
+
+      <blockquote>
+        <para>
+          <indexterm>
+            <primary>@bindings</primary>
+          </indexterm>
+          &sxml-attribute;
+          <literal>`(a (@ (bindings ,binding-alist [(anchor name)]...) ...)</literal>
+          <sbr/>
+          &sxml-attribute;
+          <literal>`(form (@ (bindings ,binding-alist) [(anchor name)] ...) ...)</literal>
+          <sbr/>
+          &sxml-attribute;
+          <literal>`(iframe (@ (bindings ,binding-alist) [(anchor name)] ...) ...)</literal>
+          <sbr/>
+          &sxml-attribute;
+          <literal>`(img (@ (bindings ,binding-alist) ...) ...)</literal>
+          <sbr/>
+          &sxml-attribute;
+          <literal>`(link (@ (bindings ,binding-alist) ...) ...)</literal>
+          <sbr/>
+          &sxml-attribute;
+          <literal>`(object (@ (bindings ,binding-alist) [(anchor name)] ...) ...)</literal>
+          <sbr/>
+          &sxml-attribute;
+          <literal>`(script (@ (bindings ,binding-alist) ...) ...)</literal>
+          <blockquote>
+            <para>
+              This syntax is only usable from the
+              <function>*/suspend</function> and
+              <function>*/forward</function> procedures. It will
+              produce a link that, when followed, will bind the given
+              bindings to the request object returned by these two
+              functions. The <parameter>binding-alist</parameter> is
+              in the format specified in <xref linkend="bindings"/>.
+            </para>
+            <para>
+              The optional <parameter>anchor</parameter> attribute allowed by some
+              of the elements is made part of the generated URL.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+
+      <blockquote>
+        <para>
+          <indexterm>
+            <primary>@action-p</primary>
+          </indexterm>
+          <indexterm>
+            <primary>@data-p</primary>
+          </indexterm>
+          <indexterm>
+            <primary>@href-p</primary>
+          </indexterm>
+          <indexterm>
+            <primary>@src-p</primary>
+          </indexterm>
+          &sxml-attribute;
+          <literal>`(a (@ (href-p ,proc) [(bindings ,binding-alist)] [(anchor ,name)] ...) ...)</literal>
+          <sbr/>
+          &sxml-attribute;
+          <literal>`(form (@ (action-p ,proc) [(bindings ,binding-alist)] [(anchor ,name)] ...) ...)</literal>
+          <sbr/>
+          &sxml-attribute;
+          <literal>`(iframe (@ (src-p ,proc) [(bindings ,binding-alist)] [(anchor ,name)] ...) ...)</literal>
+          <sbr/>
+          &sxml-attribute;
+          <literal>`(img (@ (src-p ,proc) [(bindings ,binding-alist)] ...))</literal>
+          <sbr/>
+          &sxml-attribute;
+          <literal>`(link (@ (href-p ,proc) [(bindings ,binding-alist)] ...))</literal>
+          <sbr/>
+          &sxml-attribute;
+          <literal>`(object (@ (data-p ,proc) [(bindings ,binding-alist)] [(anchor ,name) ...) ...)</literal>
+          <sbr/>
+          &sxml-attribute;
+          <literal>`(script (@ (src-p ,proc) [(bindings ,binding-alist)] ...) ...)</literal>
+          <blockquote>
+            <para>
+              These attributes produce links that invoke the given
+              procedure <parameter>proc</parameter> when followed. The
+              HTTP request object will be passed as the only parameter
+              to the procedure, and will contain the bindings
+              specified in <parameter>binding-alist</parameter>, if
+              present.
+            </para>
+            <para>
+              In the case of <function>@action-p</function>, the form
+              field values and the specified bindings will be merged,
+              with the latter taking precedence over the former.
+            </para>
+            <para>
+              The optional <parameter>anchor</parameter> attribute
+              allowed by some of the elements is made part of the
+              generated URL.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+
+      <blockquote>
+        <para>
+          <indexterm>
+            <primary>@action-c</primary>
+          </indexterm>
+          <indexterm>
+            <primary>@data-c</primary>
+          </indexterm>
+          <indexterm>
+            <primary>@href-c</primary>
+          </indexterm>
+          <indexterm>
+            <primary>@src-c</primary>
+          </indexterm>
+          &sxml-attribute;
+          <literal>`(a (@ (href-c ,c-url) [(bindings ,binding-alist)] ...) ...)</literal>
+          <sbr/>
+          &sxml-attribute;
+          <literal>`(form (@ (action-c ,c-url) [(bindings ,binding-alist)] ...) ...)</literal>
+          <sbr/>
+          &sxml-attribute;
+          <literal>`(iframe (@ (src-c ,c-url) [(bindings ,binding-alist)] ...))</literal>
+          <sbr/>
+          &sxml-attribute;
+          <literal>`(img (@ (src-c ,c-url) [(bindings ,binding-alist)] ...))</literal>
+          <sbr/>
+          &sxml-attribute;
+          <literal>`(link (@ (href-c ,c-url) [(bindings ,binding-alist)] ...))</literal>
+          <sbr/>
+          &sxml-attribute;
+          <literal>`(object (@ (data-c ,c-url) [(bindings ,binding-alist)] ...) ...)</literal>
+          <sbr/>
+          &sxml-attribute;
+          <literal>`(script (@ (src-c ,c-url) [(bindings ,binding-alist)] ...) ...)</literal>
+          <blockquote>
+            <para>
+              These attributes allow specifying URLs relative to the
+              context in which the &SISCweb; application is
+              running. They are useful to reference plain HTML files
+              or JSPs that co-exist in the same context. If any
+              bindings are specified, they will
+              be included in the request associated to the
+              <parameter>c-url</parameter>.
+            </para>
+            <para>
+              The <parameter>anchor</parameter> attribute is not
+              allowed, as it can be directly specified in the
+              <parameter>c-url</parameter> parameter.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+
+      <blockquote>
+        <para>
+          <indexterm>
+            <primary>@action-e</primary>
+          </indexterm>
+          <indexterm>
+            <primary>@data-e</primary>
+          </indexterm>
+          <indexterm>
+            <primary>@href-e</primary>
+          </indexterm>
+          <indexterm>
+            <primary>@src-e</primary>
+          </indexterm>
+          &sxml-attribute;
+          <literal>`(a (@ (href-e ,url) ...) ...)</literal>
+          <sbr/>
+          &sxml-attribute;
+          <literal>`(form (@ (action-e ,url) ...) ...)</literal>
+          <sbr/>
+          &sxml-attribute;
+          <literal>`(iframe (@ (src-e ,url) ...))</literal>
+          <sbr/>
+          &sxml-attribute;
+          <literal>`(img (@ (src-e ,url) ...))</literal>
+          <sbr/>
+          &sxml-attribute;
+          <literal>`(link (@ (href-e ,url) ...))</literal>
+          <sbr/>
+          &sxml-attribute;
+          <literal>`(object (@ (data-e ,url) ...) ...)</literal>
+          <sbr/>
+          &sxml-attribute;
+          <literal>`(script (@ (src-e ,url) ...) ...)</literal>
+          <blockquote>
+            <para>
+              These attributes encode the given
+              <parameter>url</parameter> as per the the Java
+              <function>HttpServletResponse.encodeURL()</function>
+              method. This is useful to support cookie-less
+              interaction, as it will encode the session ID in the
+              <parameter>url</parameter> as needed.
+            </para>
+            <para>
+              The <parameter>anchor</parameter> attribute is not
+              allowed, as it can be directly specified in the
+              <attribute>c-url</attribute>.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+
+      <blockquote>
+        <para>
+          <indexterm>
+            <primary>@type "graphviz"</primary>
+          </indexterm>
+          &sxml-attribute;
+          <literal>`(object (@ (type "graphviz") (layout ,layout) (format ,format) ...)
+          (graph (@ (id ,id) ...))</literal>
+          <blockquote>
+            <para>
+              If the attribute <parameter>type "graphviz"</parameter>
+              is specified for the <function>object</function>
+              element, a Graphviz graph will be embedded in the
+              document.
+            </para>
+            <para>
+              The <parameter>layout</parameter> and
+              <parameter>format</parameter> attributes are analogous
+              to the omonymous parameters to the
+              <function>send-graphviz/*</function> functions (see
+              <xref linkend="send-graphviz"/>.) However, the value of
+              <parameter>format</parameter> determines how the content
+              is included:
+            </para>
+
+            <itemizedlist>
+              <listitem>
+                <parameter>gif, jpg, png</parameter>: The graph is
+                embedded as an <function>img</function> tag, and a
+                corresponding image map is generated. Links associated
+                to nodes, edges and records will be mapped
+                appropriately. Just as for other document elements,
+                the <function>@href[-[p|c|e]]</function> and
+                <function>@bindings</function> attributes are
+                available, and behave as described in <xref
+                linkend="ehtml"/>.
+              </listitem>
+              <listitem>
+                <parameter>ps, svg, etc.</parameter>: The graph is
+                embedded as an <function>object</function> tag. The
+                appropriate mime type is automatically set, and needs
+                not be specified explicitely.
+              </listitem>
+            </itemizedlist>
+
+            <para>
+              In both cases, any attribute specified for the
+              <function>object</function> tag will be applied toward
+              the generated <function>object</function> or
+              <function>img</function> tag.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+
+      <informalexample>
+        <programlisting>
+(send-html/suspend
+ (lambda (k-url)
+  `(html
+    (head
+     (title "Embedded Graphviz")
+    (body
+    (h3 "Embedded Graphviz")
+
+    (object (@ (type "graphviz")
+               (layout dot) (format png))
+      (graph (@ (id "G"))
+        (node (@ (id "c") (label "scissors") (href "http://www.google.com/search?q=scissors")))
+        (node (@ (id "p") (label "paper") (href "http://www.google.com/search?q=paper")))
+        (node (@ (id "s") (label "stone") (href "http://www.google.com/search?q=stone")))
+        (edge (@ (from "c") (to "p") (label "cut") (href-p ,cut)))
+        (edge (@ (from "p") (to "s") (label "wraps") (href-c "/")))
+        (edge (@ (from "s") (to "c") (label "breaks") (href-e ,k-url))))))))))
+        </programlisting>
+      </informalexample>
+    </section>
+  </section>
+
+  <section id="send-text">
+    <title>Plain Text</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>siscweb/text</emphasis>)
+      </emphasis>
+      <sbr/>
+      &locatedin;
+      <emphasis role="bold">
+        siscweb.jar
+      </emphasis>
+    </para>
+
+    <para>
+      This module provides functions to send plain text responses.
+    </para>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>send-text/suspend</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>request</type>
+          <methodname>send-text/suspend</methodname>
+          <methodparam choice="opt">
+            <parameter>header-alist</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>(lambda (k-url) &lt;text&gt;)</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <sbr/>
+        <indexterm>
+          <primary>send-text/forward</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>request</type>
+          <methodname>send-text/forward</methodname>
+          <methodparam choice="opt">
+            <parameter>header-alist</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>(lambda (k-url) &lt;text&gt;)</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <sbr/>
+        <indexterm>
+          <primary>send-text/back</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>does not return</type>
+          <methodname>send-text/back</methodname>
+          <methodparam choice="opt">
+            <parameter>header-alist</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>&lt;text&gt;</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <sbr/>
+        <indexterm>
+          <primary>send-text/finish</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>does not return</type>
+          <methodname>send-text/finish</methodname>
+          <methodparam choice="opt">
+            <parameter>header-alist</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>&lt;text&gt;</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            These functions are analogous to those in the HTML and
+            XHTML modules.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+  </section>
+
+  <section id="forward">
+    <title>Forwarding Requests</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>siscweb/forward</emphasis>)
+      </emphasis>
+      <sbr/>
+      &locatedin;
+      <emphasis role="bold">
+        siscweb.jar
+      </emphasis>
+    </para>
+
+    <para>
+      Since &SISCweb; lives in a J2EE environment, it is sometimes
+      convenient to generate content using traditional techniques such
+      as JSPs and servlets rather than SXML.
+    </para>
+
+    <para>
+      The <function>send-forward/*</function> procedures dispatch the
+      request to the indicated context-relative URL. Bindings can be
+      attached in the form of &lt;bindings&gt; objects or a-lists. The
+      <function>forward/store!</function> function can also be used to
+      pass URLs mapped to closures in the style of the
+      <function>@[action|data|href|src]-p</function> tags. Coupled
+      with the URL corresponding to the current-continuation being set
+      in the <parameter>siscweb.kURL</parameter> request attribute,
+      this enables one to use &SISCweb; for control and JSP/Servlets
+      for presentation without losing too many features.
+    </para>
+
+    <para>
+      See <xref linkend="bindings-java"/> for details on how to access
+      bindings from Java.
+    </para>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>send-forward/suspend</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>request</type>
+          <methodname>send-forward/suspend</methodname>
+          <methodparam>
+            <parameter>context-url</parameter>
+          </methodparam>
+          <methodparam choice="opt">
+            <parameter>bindings</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Forwards the current request and suspends. The
+            <parameter>context-url</parameter> is relative to the
+            context in which the &SISCweb; application is running.
+            The optional <parameter>bindings</parameter> parameter is
+            either a &lt;bindings&gt; object or an a-list as
+            specified in <xref linkend="bindings"/>. The continuation
+            URL will be set in the <parameter>siscweb.kURL</parameter>
+            request attribute.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>send-forward/forward</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>request</type>
+          <methodname>send-forward/forward</methodname>
+          <methodparam>
+            <parameter>context-url</parameter>
+          </methodparam>
+          <methodparam choice="opt">
+            <parameter>bindings</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            This function behaves like
+            <function>send-forward/suspend</function>, except that it
+            clears the continuation table first. This will prevent the
+            client from using the back button and resume the program
+            flow from earlier points.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>send-forward/back</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>does not return</type>
+          <methodname>send-forward/back</methodname>
+          <methodparam>
+            <parameter>context-url</parameter>
+          </methodparam>
+          <methodparam choice="opt">
+            <parameter>bindings</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Forwards the current request to the provided
+            <parameter>context-url</parameter> and stops.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>send-forward/finish</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>does not return</type>
+          <methodname>send-forward/finish</methodname>
+          <methodparam>
+            <parameter>context-url</parameter>
+          </methodparam>
+          <methodparam choice="opt">
+            <parameter>bindings</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Like <function>send-forward/back</function>, this function
+            forwards the current request to the provided
+            <parameter>context-url</parameter> and stops, but clears
+            the continuation table first.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>forward/store!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>k-url</type>
+          <methodname>forward/store!</methodname>
+          <methodparam>
+            <parameter>proc</parameter>
+          </methodparam>
+          <methodparam choice="opt">
+            <parameter>bindings</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <sbr/>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>k-url</type>
+          <methodname>forward/store!</methodname>
+          <methodparam>
+            <parameter>c-url</parameter>
+          </methodparam>
+          <methodparam choice="opt">
+            <parameter>bindings</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            In the first form, stores a closure
+            <parameter>proc</parameter> in the continuation table, and
+            returns the url that will invoke it.  The
+            <parameter>proc</parameter> procedure should accept a
+            request object as its only argument.  If
+            <parameter>bindings</parameter> are specified, either as
+            an a-list or a &lt;bindings&gt; object,
+            <procedure>proc</procedure> will see them as bindings in
+            its request.
+          </para>
+
+          <para>
+            In the second form <function>forward/store!</function>
+            stores a closure that forwards the request to the given
+            context-relative <parameter>c-url</parameter>, including
+            any specified bindings, if any.
+          </para>
+
+          <para>
+            This function is especially useful when passing bindings
+            through the <function>send-forward/*</function> functions,
+            as it allows to embed links to closures in JSPs and the
+            such, and can thus be used to implement the same style of
+            page navigation afforded by the tags
+            <function>@*-c</function>+<function>@bindings</function>
+            and
+            <function>@*-c</function>+<function>@bindings</function>
+            in the extended (X)HTML described in <xref
+            linkend="ehtml"/> Notably missing is the equivalent of the
+            plain <function>@bindings</function>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>forward/store!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>k-url</type>
+          <methodname>forward/store!</methodname>
+          <methodparam>
+            <parameter>proc</parameter>
+          </methodparam>
+          <methodparam choice="opt">
+            <parameter>bindings</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            This procedure is similar to the first form of
+            <function>forward/store!</function>, except that when
+            <function>proc</function> is executed, it will run in the
+            dynamic context in effect when
+            <function>forward/dynenv/store!</function> is invoked.
+          </para>
+          <para>
+            The main reason to use this procedure is that
+            <function>proc</function> will see the same SRFI-39
+            parameter bindings established at the time
+            <function>forward/dynenv/store!</function> was called.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+  </section>
+
+  <section id="image">
+    <title>Images</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>siscweb/image</emphasis>)
+      </emphasis>
+      <sbr/>
+      &locatedin;
+      <emphasis role="bold">
+        siscweb.jar
+      </emphasis>
+    </para>
+
+    <para>
+      This module provides procedures to send images from
+      <function>java.awt.image.RenderedImage</function> or files.
+    </para>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>send-image/back</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>does not return</type>
+          <methodname>send-image/back</methodname>
+          <methodparam choice="opt">
+            <parameter>header-alist</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>format</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>java.awt.image.RenderedImage</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Sends the given image to the browser in the specified
+            <parameter>format</parameter>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>send-image/finish</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>does not return</type>
+          <methodname>send-image/finish</methodname>
+          <methodparam choice="opt">
+            <parameter>header-alist</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>format</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>java.awt.image.RenderedImage</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            This procedure behaves like
+            <function>send-image/back</function>, except that it
+            clears the continuation table. This will prevent the user
+            from using the back button to resume the program flow from
+            earlier points.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>send-image-file/back</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>does not return</type>
+          <methodname>send-image-file/back</methodname>
+          <methodparam choice="opt">
+            <parameter>header-alist</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>format</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>filename</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Sends the image contained in the specified
+            <parameter>filename</parameter> to the browser in the
+            specified <parameter>format</parameter>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>send-image-file/finish</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>does not return</type>
+          <methodname>send-image-file/finish</methodname>
+          <methodparam choice="opt">
+            <parameter>header-alist</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>format</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>filename</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            This procedure behaves like
+            <function>send-image-file/back</function>, except that it
+            clears the continuation table. This will prevent the user
+            from using the back button to resume the program flow from
+            earlier points.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+  </section>
+
+  <section id="graphviz">
+    <title>GraphViz Graphs</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>siscweb/graphviz</emphasis>)
+      </emphasis>
+      <sbr/>
+      &locatedin;
+      <emphasis role="bold">
+        siscweb-sxml.jar
+      </emphasis>
+    </para>
+
+    <para>
+      This module provides procedures to send graphs in various
+      formats as generated by Graphviz (<ulink
+      url="http://www.graphviz.org">http://www.graphviz.org</ulink>). Most of the functions accept a
+      markup representation of DOT, the GraphViz language, in the form
+      of DotML (see <xref linkend="dotml"/>.)
+    </para>
+
+    <para>
+      The GraphViz programs (dot, neato, etc.) should be installed
+      somewhere in the system path. This is usually the case in
+      UNIX. Alternatively, it is possible to set the absolute paths to
+      the GraphViz programs by using the
+      <function>graphiz/put-layout-command!</function> function.
+    </para>
+
+    <para>
+      Graphs can be generated either using the
+      <function>send-graphviz/*</function> functions, or by embedding
+      the <parameter>@type=&quot;graphviz&quot;</parameter> attribute
+      in the (X)HTML <function>object</function> tag (see <xref linkend="ehtml"/>.)
+    </para>
+
+    <section id="send-graphviz">
+      <title>Graphviz Procedures</title>
+
+      <para>
+        Both <function>send-graphviz/*</function> procedures accept
+        the same three parameters:
+      </para>
+      <itemizedlist>
+        <listitem>
+          <parameter>layout</parameter>: This is a string specifying
+          which Graphviz layout engine to use. The current choices are
+          dot, neato, twopi, circo, and fdp.
+        </listitem>
+        <listitem>
+          <parameter>format</parameter>: This is a string specifying
+          the output format. The most useful choices currently are
+          gif, jpg, 'png, 'ps, and 'svg.
+        </listitem>
+        <listitem>
+          <parameter>&lt;dotml&gt;</parameter>: This is an sxml
+          representation of the DotML language. See <xref
+          linkend="dotml"/>.
+        </listitem>
+      </itemizedlist>
+
+      <blockquote>
+        <para>
+          <indexterm>
+            <primary>send-graphviz/back</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>does not return</type>
+            <methodname>send-graphviz/back</methodname>
+            <methodparam>
+              <parameter>layout</parameter>
+            </methodparam>
+            <methodparam>
+              <parameter>format</parameter>
+            </methodparam>
+            <methodparam>
+              <parameter>&lt;dotml&gt;</parameter>
+            </methodparam>
+          </methodsynopsis>
+
+          <blockquote>
+            <para>
+              Sends the given <parameter>dotml</parameter> graph in
+              the specified <parameter>format</parameter> to the
+              browser after laying the graph out using the indicated
+              <parameter>layout</parameter> engine.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+(send-graphviz/back
+  'dot 'png
+  `(graph (@ (id "G"))
+    (node (@ (id "c") (label "scissors")))
+    (node (@ (id "p") (label "paper")))
+    (node (@ (id "s") (label "stone")))
+    (edge (@ (from "c") (to "p") (label "cut")))
+    (edge (@ (from "p") (to "s") (label "wraps")))
+    (edge (@ (from "s") (to "c") (label "breaks")))))
+          ]]>
+        </programlisting>
+      </informalexample>
+
+      <blockquote>
+        <para>
+          <indexterm>
+            <primary>send-graphviz/finish</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>does not return</type>
+            <methodname>send-graphviz/finish</methodname>
+            <methodparam>
+              <parameter>layout</parameter>
+            </methodparam>
+            <methodparam>
+              <parameter>format</parameter>
+            </methodparam>
+            <methodparam>
+              <parameter>&lt;dotml&gt;</parameter>
+            </methodparam>
+          </methodsynopsis>
+
+          <blockquote>
+            <para>
+              This procedure behaves like
+              <function>send-graphviz/back</function>, except that it
+              clears the continuation table. This will prevent the
+              user from using the back button to resume the program
+              flow from earlier points.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+
+      <blockquote>
+        <para>
+          <indexterm>
+            <primary>graphviz/put-layout-command!</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>undefined</type>
+            <methodname>graphviz/put-layout-command!</methodname>
+            <methodparam>
+              <parameter>layout</parameter>
+              <parameter>command</parameter>
+            </methodparam>
+          </methodsynopsis>
+
+          <blockquote>
+            <para>
+              Associates a given <parameter>layout</parameter> to the
+              specified <parameter>command</parameter>.  This function
+              can be used to add Graphviz layout engines, or to
+              specify absolute paths for existing engines. The latter
+              is likely to be an issue in Windows.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+(graphviz/put-layout-command "dot" "d:/bin/dot.exe")
+          ]]>
+        </programlisting>
+      </informalexample>
+
+      <blockquote>
+        <para>
+          <indexterm>
+            <primary>graphviz/get-layout-command</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>command/&f;</type>
+            <methodname>graphviz/get-layout-command</methodname>
+            <methodparam>
+              <parameter>layout</parameter>
+            </methodparam>
+          </methodsynopsis>
+
+          <blockquote>
+            <para>
+              Retrieves the <parameter>command</parameter> associated
+              to the given <parameter>layout</parameter>, or &f; if no
+              association is present.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+    </section>
+
+    <section id="dotml">
+      <title>DotML</title>
+
+      <para>
+        The <function>send-graphviz/*</function> procedures accept a
+        graph description expressed in DotML. DotML was created by
+        Martin Loetzsch, and an exhaustive description rich with
+        excellent examples is at <ulink
+        url="http://www.martin-loetzsch.de/DOTML"/>.
+      </para>
+      <para>
+        SISCweb does not use code from the DotML project, but it
+        implements the same markup syntax in sxml form. There are a
+        few differences between SISCweb's implementation and the
+        original:
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          The generated DOT code (which is then fed into GraphViz) is somewhat different.
+        </listitem>
+        <listitem>
+          The <function>graph</function>,
+          <function>sub-graph</function>, <function>cluster</function>
+          and <function>node</function> elements must always specify
+          an <parameter>id</parameter> attribute.
+        </listitem>
+        <listitem>
+          The <parameter>id</parameter> attribute values at the moment
+          are limited to strings of alphanumeric characters and
+          underscore.
+        </listitem>
+        <listitem>
+          The enclosing <function>record</function> elements must
+          specify an <parameter>id</parameter> attribute, but nested
+          <function>record</function> and <function>node</function>
+          elements do not have to.
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+
+  <section id="errors">
+    <title>HTTP errors</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>siscweb/error</emphasis>)
+      </emphasis>
+      <sbr/>
+      &locatedin;
+      <emphasis role="bold">
+        siscweb.jar
+      </emphasis>
+    </para>
+
+    <para>
+      HTTP error responses can be generated using two functions, which
+      differ in how the affect the continuation table. Neither
+      function returns. The error codes should abide to the <ulink
+      url="http://www.faqs.org/rfcs/rfc2616.html">RFC2616</ulink>
+      specifications.
+    </para>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>send-error/back</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>does not return</type>
+          <methodname>send-error/back</methodname>
+          <methodparam>
+            <parameter>code</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>message</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Sends the specified HTTP error <parameter>code</parameter>
+            and <parameter>message</parameter>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>send-error/finish</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>does not return</type>
+          <methodname>send-error/finish</methodname>
+          <methodparam>
+            <parameter>code</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>message</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Like <function>send-error/back</function>, but clears the
+            continuation table.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+  </section>
+</chapter>

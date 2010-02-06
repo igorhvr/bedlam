@@ -1,0 +1,39 @@
+a:active { color: #ff0000; }
+a:hover { color: #000000; }
+a:link { text-decoration: none; color: #0000ff; }
+a:unvisited { text-decoration: none; color: #0000ff; }
+a:visited { text-decoration: none; color: #0000ff; }
+
+html {
+  font-size: 100.01%;
+}
+
+body {
+  background-color: #ffffff;
+  color: #333333;
+  font-size: 1em;
+  line-height: 1.4em;
+  padding-left: 3%;
+  padding-right: 3%;
+}
+
+
+h1, h2 { color: #009966; }
+
+h3, h4, h5 { color: #003399; }
+
+
+ul { list-style-type: square; }
+
+.code {
+  background-color: #fafafa;
+  border-style: dashed;
+  border-width: 1px;
+  font-family: monospace;
+  padding: 1%;
+}
+
+a.tic-tac-toe:link { color: #ffffff; }
+a.tic-tac-toe:hover { color: #003399; text-decoration: none; }
+
+td.tic-tac-toe { font-size: 200%; width: 1em; height: 1em; text-align: center; }

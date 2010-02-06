@@ -1,0 +1,21 @@
+# *** COMPILE ***
+
+# ** FLAGS **
+compile.compiler = modern
+compile.debug = true
+compile.deprecation = true
+compile.source = 1.4
+compile.target = 1.4
+compile.optimize = true
+
+# ** PATHS **
+
+# path to servlet-api jar
+#compile.path.servlets = /opt/tomcat5/common/lib/servlet-api.jar
+
+# path to SISC home; it should also contain sisc-heap.jar
+#sisc.home = /home/acolomba/src/sisc
+
+# stylesheet file to generate the html manual from the docbook source
+#doc.xsl.single = /usr/share/sgml/docbook/xsl-stylesheets-1.70.1/xhtml/docbook.xsl
+#doc.xsl.chunks = /usr/share/sgml/docbook/xsl-stylesheets-1.70.1/xhtml/chunk.xsl

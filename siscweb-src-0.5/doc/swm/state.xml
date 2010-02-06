@@ -1,0 +1,487 @@
+<chapter id="state">
+  <title>Managing Program State</title>
+
+  <section id="stateful">
+    <title>Introduction to Statefulness</title>
+
+    <section id="state-traditional">
+      <title>State in Traditional Web Applications</title>
+
+      <para>
+        Introductions to web programming often mention the
+        statelessness of the HTTP protocol, to then describe how cookies
+        and sessions solve the problem. This is not a complete solution
+        however: being &quot;sessionful&quot; is not the same as being
+        &quot;stateful.&quot;
+      </para>
+
+      <para>
+        Cookies and sessions are mechanisms laid on top of the HTTP
+        protocol respectively to: a) allow an application to recognize
+        two requests coming from the same browser as such, and b) to
+        store data common to such requests.
+      </para>
+
+      <para>
+        Neither cookies nor sessions completely address the issue of
+        statelesness because, while programs have the means to
+        associate two requests to a given user (as they contain the
+        same cookie), they have no means by which to associate two
+        requests as being part of the same navigation flow. It is in
+        fact possible to manually place requests out of sync with
+        program state, and often trigger incorrect
+        behavior. Traditional web applications are thus less like a
+        program with a GUI interface and more like an API open to the
+        world. Forced browsing, or even using the back button, can
+        cause an application to misbehave in ways that are not easily
+        foreseeable as application complexity increases.
+      </para>
+
+      <para>
+        Aside from state, the Session object is common to all requests
+        from the same browser, so simply using a web application from
+        two windows can produce concurrency problems such as loss of
+        consistency or race conditions. Moreover, since the session is
+        a global scope for the application, in fact the only scope
+        that traditionally persists from request to request,
+        developers are unable to take advantage of the finer scoping
+        mechanisms available in modern programming languages.
+      </para>
+
+      <para>
+        One last major issue with traditional web applications is that
+        they are made of short-lived code snippets which, after
+        parsing the request in the context of the session, generate a
+        response and exit. Because their state is lost, it is
+        impossible to use structured programming techniques in code
+        spanning multiple requests. Even the simplest for-loop must be
+        expressed in terms of a (global) session variable increment
+        and a GOTO (HREF).
+      </para>
+    </section>
+
+    <section id="state-continuation">
+      <title>Continuations and State</title>
+
+      <para>
+        Continuations afford a truly stateful approach. When a program
+        generates a response, it suspends its execution instead of
+        exiting. This suspended state is a continuation, and it
+        includes stack and variables in scope.  When the execution is
+        resumed by the subsequent request, stack and variables are as
+        they were left -- no manual storage in the session is
+        needed.
+      </para>
+
+      <para>
+        &SISCweb;, like other similar frameworks, is able to determine
+        which requests are associated with which continuations by
+        branding each request and its corresponding continuation with
+        a unique, cryptographically strong hash.
+      </para>
+
+      <para>
+        Branding reduces the issue of the back button because any
+        request originating from a page in the browser history is
+        associated with a unique continuation. Re-submitting the same
+        request results in the same code being run, with the same
+        local variables and stack it had at the time it was
+        suspended. A program written in functional style (i.e. with no
+        side effects) will be completely immune to the back button.
+      </para>
+
+      <para>
+        Saving the local state means that a for-loop can be written at
+        the language level. (The <ulink
+        url="http://cvs.sourceforge.net/viewcvs.py/siscweb/siscweb/examples/scm/examples/hello-world.scm?view=markup">Polyglot
+        Hello World</ulink> example included with &SISCweb;
+        demonstrates this feature.)  Saving the stack also means that
+        an entire navigation flow can be represented as a subroutine
+        returning a value, rather than as a sequence of code snippets
+        connected by GOTOs (HREFs) finally depositing a value in the
+        global scope.
+      </para>
+    </section>
+
+    <section id="state-finer">
+      <title>Finer Statefulness</title>
+
+      <para>
+        Most complex applications will require a finer amount of
+        control over state. For instance, a shopping cart should
+        reflect the most recent operations even if the user were to
+        backtrack by a few pages and resume shopping from a point in
+        the navigation history. SRFI-39 or plain session variables can
+        be used in such cases.
+      </para>
+
+      <para>
+        In other cases state is more closely dependent to the specific
+        page, such as in the case of sorting a table in the
+        browser. The sorting order should behave consistently in the
+        presence of backtracking, cloning, and concurrent requests.
+      </para>
+
+      <para>
+        A possible solution for these cases is state-passing style,
+        where a structure is passed from continuation to continuation
+        and updated non-destructively. This can be somewhat
+        inconvenient though, so instead &SISCweb; implements Web
+        Cells, a dynamic scoping mechanism that follows the page flow
+        and branches with backtracking and cloning.
+      </para>
+    </section>
+  </section>
+
+  <section id="parameters">
+    <title>State with SRFI-39 Parameter Objects</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>srfi-39</emphasis>)
+      </emphasis>
+    </para>
+
+    <para>
+      A complete treatment of parameters is available in <ulink
+      url="http://srfi.schemers.org/srfi-39/">SRFI-39</ulink>. This
+      section is concerned with the use of the dynamic environment to
+      maintain state shared by all requests for the same user in the
+      same execution flow.
+    </para>
+
+    <para>
+      SRFI-39 parameters are essentially dynamically-scoped
+      variables. They can be defined in the global or the module scope
+      and then bound to the dynamic scope -- the scope of the
+      execution flow -- in the application entry point through the
+      <function>parameterize</function> form.
+    </para>
+
+    <para>
+      When using <function>send-*/[suspend|forward]</function>, the
+      parameters, being part of the dynamic environment, are captured
+      in the suspended state -- the suspension of the program
+      execution is transparent to parameter bindings.
+    </para>
+
+    <para>
+      However procedures stored with
+      <function>@href-p</function>-style attributes or the
+      <function>forward/store!</function> procedure will run in the
+      base dynamic environment, and thus will see fresh values of the
+      parameters. In those cases on can use
+      <function>forward/dynenv/store!</function>, which instead
+      preserves the dynamic environment.
+    </para>
+
+    <para>
+      The <ulink
+      url="http://cvs.sourceforge.net/viewcvs.py/siscweb/siscweb/examples/scm/examples/counter-parameter.scm?view=markup">Counter
+      with SRFI-39 Parameters</ulink> example demonstrates this
+      technique.
+    </para>
+  </section>
+
+  <section id="webcells">
+    <title>State with Web Cells</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>siscweb/webcells</emphasis>)
+      </emphasis>
+    </para>
+
+    <para>
+      Web Cells are a way to track program state according to the
+      navigation flow. They are described in full in the paper <ulink
+      url="http://library.readscheme.org/servlets/cite.ss?pattern=McCarthySK-Scheme2006">Interaction-Safe
+      State for the Web</ulink>.
+    </para>
+
+    <para>
+      In essence, cells establish a dynamic scope over the navigation
+      path of a user. Successive pages can overshadow values of
+      bindings set in previous pages, but do not destroy them.
+    </para>
+
+    <para>
+      If a user backtracks the browser window, previous values are
+      again visible. If the user clones the window and proceeds
+      through two different navigation branches, each branch sees the
+      values it overshadows.
+    </para>
+
+    <para>
+      The <ulink
+      url="http://cvs.sourceforge.net/viewcvs.py/siscweb/siscweb/examples/scm/examples/counter-webcells.scm?view=markup">Counter
+      with Webcells</ulink> example demonstrates this technique.
+    </para>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>webcell/make</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>&lt;cell&gt;</type>
+          <methodname>webcell/make</methodname>
+          <methodparam choice="opt">
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>default-value</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Creates a cell with the given
+            <parameter>default-value</parameter> with the specified
+            name. Please note that <literal>webcell/make</literal>
+            is a macro, so <parameter>name</parameter> is an
+            identifier, not a symbol.
+          </para>
+
+          <para>
+            If <parameter>name</parameter> is omitted, a random name
+            is generated. Omitting a specific name is useful to avoid
+            name collisions (since cells are dynamically, not
+            lexically, scoped). However if it is expected that
+            sessions be serialized across context or server restarts,
+            it may be important to guarantee that cells defined in the
+            toplevel or int the module scope carry the same name.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>webcell/make-parameter</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>cell-parameter-proc</type>
+          <methodname>webcell/make-parameter</methodname>
+          <methodparam choice="opt">
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>default-value</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Creates a parameter procedure in the sense of SRFI-39. As
+            in the case of <function>webcell/make</function>, the
+            <parameter>name</parameter> parameter is optional, but
+            recommended if maintaining the same name across context or
+            server restarts is important.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>webcell/set!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>undefined</type>
+          <methodname>webcell/set!</methodname>
+          <methodparam>
+            <parameter>cell</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>value</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Sets the content of the given <parameter>cell</parameter>
+            to the specified <parameter>value</parameter>.
+          </para>
+
+          <para>
+            Of course the specified value is only accessible to the
+            current and successive request.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>webcell/ref</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>value</type>
+          <methodname>webcell/ref</methodname>
+          <methodparam>
+            <parameter>cell</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the value of the specified <parameter>cell</parameter>
+            in the context of the current request.
+          </para>
+
+          <para>
+            If the current request did not set a value already, the
+            value will be looked up from the previous request (leading
+            to the current), and then the previous again.
+          </para>
+
+          <para>
+            If no value can be found through the history of requests,
+            then the cell's default value is returned.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+  </section>
+
+  <section id="session-parameters">
+    <title>State with the Session Object</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>siscweb/session</emphasis>)
+      </emphasis>
+      <sbr/>
+      &locatedin;
+      <emphasis role="bold">
+        siscweb.jar
+      </emphasis>
+    </para>
+
+    <para>
+      In some situations a global, per-user scope may be
+      desirable. This approach is more prone to concurrency
+      problems, but its semantics is very straightforward.
+    </para>
+
+    <para>
+      The Session object can be accessed via a syntax similar to that
+      of <ulink
+      url="http://srfi.schemers.org/srfi-39/">SRFI-39</ulink>
+      parameters, or via Scheme wrappers around the
+      <function>Session.get/setAttribute()</function> calls. While the
+      former is appropriate for storing Scheme values, the latter is
+      provided as a means to store and retrieve Java objects (or
+      <function>java-wrap</function>ped Scheme values.)
+    </para>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/make-parameter</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>proc</type>
+          <methodname>session/make-parameter</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a procedure <function>proc</function> that, when
+            invoked, sets or retrieves a Scheme value to/from the a
+            Session attribute named <parameter>name</parameter>,
+            depending on whether a value is passed or not to
+            <procedure>proc</procedure>.  If <function>proc</function>
+            is passed the &f; value, the attribute is removed from the
+            Session object altogether.
+          </para>
+        </blockquote>
+      </para>
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+(module security
+  (define auth-token (session/make-parameter "auth-key"))
+
+  ;; sets an auth token in the session object
+  (define (login usr pwd)
+    (auth-token (make-token usr pwd))))
+          ]]>
+        </programlisting>
+      </informalexample>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/get-java-attribute</primary>
+          <primary>session/get-java-attribute-names</primary>
+          <primary>session/remove-java-attribute!</primary>
+          <primary>session/set-java-attribute!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>jobject</type>
+          <methodname>session/get-java-attribute</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <sbr/>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>list</type>
+          <methodname>session/get-java-attribute-names</methodname>
+        </methodsynopsis>
+        <sbr/>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>session/set-java-attribute!</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>jobject</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <sbr/>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>session/set-java-attribute!</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>jobject</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            These functions access Java attributes as session
+            objects. Complete descriptions are given in <xref
+            linkend="session"/>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+  </section>
+</chapter>
