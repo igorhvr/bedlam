@@ -50,11 +50,17 @@
   (define-generic-java-methods get-column-count get-column-name get-column-type get-column-type-name get-meta-data get-object get-scale next prepare-statement to-lower-case was-null)
 
 
-  (define (get-column-names rs)
+  (define (get-column-names-as-symbols rs)
     (define md (get-meta-data rs))
 
     (list-ec (:range i 1 (+ 1 (->number (get-column-count md))))
       (->symbol (to-lower-case (get-column-name md (->jint i))))))
+
+  (define (get-column-names rs)
+    (define md (get-meta-data rs))
+
+    (list-ec (:range i 1 (+ 1 (->number (get-column-count md))))
+      (->string (get-column-name md (->jint i)))))
 
 
   (define (make-rs-accessor rs vendor)
@@ -70,12 +76,18 @@
 
     (define (make-accessor-table)
       (let* ((n (->number (get-column-count md)))
-             (at (make-hashtable eq? #f)))
+             (at (make-hashtable string=? #f)))
         (do-ec (:range i 1 (+ 1 n))
           (let* ((ji (->jint i))
-                 (name (->symbol
-                        (to-lower-case
-                         (get-column-name md ji))))
+                 (name
+                  ;(->symbol
+                  ; (to-lower-case
+                  (->string
+                    (get-column-name md ji)
+                    )
+                  ;  )
+                  ; )                  
+                       )
                  (type (get-column-type md ji))
                  (sql->scheme (get-sql->scheme-proc type vendor)))
             (hashtable/put! at name (make-field-accessor sql->scheme ji))))

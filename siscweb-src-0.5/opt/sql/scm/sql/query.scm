@@ -144,7 +144,7 @@
     (let* ((rs (get-result-set pstmt))
            (:rs (make-rs-accessor rs vendor))
            (get-row (lambda ()
-                      (let ((row (make-hashtable eqv? #f)))
+                      (let ((row (make-hashtable string=? #f)))
                         (do-ec (:list name (get-column-names rs))
                           (hashtable/put! row name (:rs name)))
                         row)))
