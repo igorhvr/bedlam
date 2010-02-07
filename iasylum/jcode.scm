@@ -7,6 +7,12 @@
 
 (module iasylum/jcode
   (j
+   _n_   
+   _0_
+   _1_
+   _2_
+   _3_
+   _4_
    ->jobject
    
      ; s2j convenience exports

@@ -1,5 +1,14 @@
 ;;; Code by Igor Hjelmstrom Vinhas Ribeiro - this is licensed under GNU GPL v2.
 
+(define (_n_ o i) (java-array-ref o i))
+(define (_0_ o) (java-array-ref o 0))
+(define (_1_ o) (java-array-ref o 1))
+(define (_2_ o) (java-array-ref o 2))
+(define (_3_ o) (java-array-ref o 3))
+(define (_4_ o) (java-array-ref o 3))
+
+
+
 (define-java-class |bsh.Interpreter|)
 (define-generic-java-method |eval|)
 (define-generic-java-method |set|)
