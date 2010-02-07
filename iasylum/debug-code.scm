@@ -25,4 +25,13 @@
            (if (unbox force-stop) (iasylum-debug-nothing-continuation))
            )))))
 
+
+  (define-syntax debug-on-error
+    (syntax-rules ()
+      ((_ expressions ...)
+       (call/cc
+        (lambda (block-k)
+          (with-failure-continuation  (lambda (error-record error-k) (debug error-record error-k block-k))
+                                      (lambda () (begin expressions ...))))))))
+
   (call/cc (lambda (c) (set! iasylum-debug-nothing-continuation c)))
