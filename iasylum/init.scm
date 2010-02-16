@@ -1,6 +1,7 @@
 ;;; Code by Igor Hjelmstrom Vinhas Ribeiro - this is licensed under GNU GPL v2.
 
 ;(begin (define iasylum-bedlam-location "/home/igorhvr/idm/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")))
+(require-extension (srfi 23)) ; error
 
 (with-failure-continuation 
  (lambda (e p)
