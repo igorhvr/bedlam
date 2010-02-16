@@ -13,15 +13,63 @@
 (define-generic-java-method |eval|)
 (define-generic-java-method |set|)
 
+(define (->scm-object v)
+  (if (java-object? v)
+      (let ((obj-class (->string (j "v.getClass().getName();" `((v ,v))))))
+        (cond
+         ((string=? obj-class "java.lang.String") (->string v))
+         ((or
+           (string=? obj-class "java.lang.Byte")
+           (string=? obj-class "java.lang.Short")
+           (string=? obj-class "java.lang.Integer")
+           (string=? obj-class "java.lang.Long")
+           (string=? obj-class "java.lang.Float")
+           (string=? obj-class "java.lang.Double")
+           )
+          (->number v))
+         ((string=? obj-class "java.lang.Character") (->character v))
+         ((->boolean (j "(tobj instanceof java.util.Date);" `((tobj ,v)))) (jdate->date v))
+         (else  (java-unwrap v)))) ; Ok. I give up.         
+      v))
+
+(define-java-classes (<date> |java.util.Date|))
+
+(define (date->jdate the-date)
+   (let ((t (date->time-utc the-date)))
+     (java-new <date> (->jlong (* 1000 (time-second t))))))
+
+(define (jdate->date jd)
+  (let ((vls (j "import java.util.Calendar;
+                 TimeZone tz = TimeZone.getTimeZone(\"UTC\");
+                 cal=new java.util.GregorianCalendar(tz,java.util.Locale.getDefault());
+                 cal.setTime(jd);
+                 new Object[]{
+                 cal.get(Calendar.MILLISECOND),
+                 cal.get(Calendar.SECOND),cal.get(Calendar.MINUTE),cal.get(Calendar.HOUR_OF_DAY),
+                 cal.get(Calendar.DAY_OF_MONTH),cal.get(Calendar.MONTH),cal.get(Calendar.YEAR)};" `((jd ,jd)))))
+    (let ((milliseconds (->number (java-array-ref vls 0)))
+          (seconds (->number (java-array-ref vls 1)))
+          (minutes (->number (java-array-ref vls 2)))
+          (hours (->number (java-array-ref vls 3)))
+          (day-of-month (->number (java-array-ref vls 4)))
+          (orig-month-of-year (->number (java-array-ref vls 5)))
+          (year (->number (java-array-ref vls 6))))
+        (let ((month-of-year (+ 1 orig-month-of-year)))
+          ;;make-date nanosecond second minute hour day month year zone-offset
+           (make-date (* 1000 milliseconds) seconds minutes hours day-of-month month-of-year year 0)))))
+
+
 (define (->jobject v)
-  (cond
-   ((boolean? v) (->jboolean v))
-   ((char? v) (->jchar v))
-   ((string? v) (->jstring v))
-   ((integer? v) (if (or (< v -2147483648) (> v 2147483647)) (->jlong v) (->jint v)))
-   ((number? v) (->jdouble v))
-   (else  (java-wrap v)) ; Ok. I give up.
-   ))
+  (if (java-object? v) v
+      (cond
+       ((boolean? v) (->jboolean v))
+       ((char? v) (->jchar v))
+       ((string? v) (->jstring v))
+       ((integer? v) (if (or (< v -2147483648) (> v 2147483647)) (->jlong v) (->jint v)))
+       ((number? v) (->jdouble v))
+       ((date? v) (date->jdate v))
+       (else  (java-wrap v)) ; Ok. I give up.
+       )))
 
 (define j)
 (define tint)

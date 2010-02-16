@@ -4,6 +4,7 @@
 
 (require-extension (lib iasylum/srfi-89))
 (require-extension (lib iasylum/match))
+(require-extension (srfi 19)) ; date & time
 
 (module iasylum/jcode
   (j
@@ -13,7 +14,12 @@
    _2_
    _3_
    _4_
+   
    ->jobject
+   ->scm-object
+   
+   date->jdate
+   jdate->date
    
      ; s2j convenience exports
      java-new
