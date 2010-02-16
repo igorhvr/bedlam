@@ -249,13 +249,13 @@ result-set))) (l (+ i 1) m))
   (lambda (result-set)
     (let l ()
       (if (->boolean (next result-set))
-   (begin
-     (display-and-update-counter)
-     (let ((r (read-row result-set)))
-       (append (list r) (l))
-       )
-     )
-   ()))))
+          (begin
+            (display-and-update-counter)
+            (let ((r (read-row result-set)))
+              (append (list r) (l))
+              )
+            )
+          ()))))
 
 (define write-result-set-data
   (lambda (result-set filename)
