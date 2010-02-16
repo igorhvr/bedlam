@@ -37,6 +37,7 @@
   (lambda (name)
     (class-path-extension-append! (cons (string-append (iasylum-bedlam-location) "jars/" name) (class-path-extension)))))
 
+(add-lib "u/jdbc-postgresql.jar")
 (add-lib "excel/poi-3.2-FINAL-20081019.jar")
 (add-lib "excel/poi-contrib-3.2-FINAL-20081019.jar")
 (add-lib "excel/poi-scratchpad-3.2-FINAL-20081019.jar")
