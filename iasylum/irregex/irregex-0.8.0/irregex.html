@@ -1,0 +1,1118 @@
+<html><head><title>IrRegular Expressions</title>
+</head><body bgcolor=white>
+
+<h1><span class=subject>IrRegular Expressions</span></h1>
+
+<style>
+body {
+color: black;
+background-color: white;
+margin-top: 2em;
+margin-left: 10%;
+width: 400pt;
+}
+
+pre {
+  background-color: beige;
+}
+
+pre.scheme {
+  background-color: white;
+}
+
+blockquote {
+color: green;
+font-size: small;
+}
+
+.subject {
+}
+
+h1 {
+margin-left: -5%;
+margin-top: 2em;
+font-size: large;
+}
+
+h2 {
+margin-left: -4%;
+margin-top: 1em;
+font-size: large;
+}
+
+h3,h4,h5,h6 {
+margin-left: -3%;
+margin-top: .5em;
+font-size: small;
+}
+
+.navigation {
+color: red;
+background-color: beige;
+text-align: right;
+font-style: italic;
+}
+
+
+.scheme {
+color: brown;
+}
+
+.scheme .keyword {
+color: #cc0000;
+font-weight: bold;
+}
+
+.scheme .variable {
+color: navy;
+}
+
+.scheme .global {
+color: purple;
+}
+
+.scheme .constant,.number,.char,.string,.boolean {
+color: green;
+}
+
+.scheme .comment {
+color: teal;
+}
+</style>
+<div align=right><a href="http://synthcode.com/">Alex Shinn</a></div>
+<div align=right><a href="http://synthcode.com/scheme/irregex/irregex-0.8.0.tar.gz">Download Version 0.8.0</a></div>
+<p>
+
+<br /><br />
+
+<blockquote>At this moment there was a loud ring at the bell, and I could
+hear Mrs. Hudson, our landlady, raising her voice in a wail of
+expostulation and dismay.
+<p>
+
+&quot;By heaven, Holmes,&quot; I said, half rising, &quot;I believe that
+they are really after us.&quot;
+<p>
+
+&quot;No, it's not quite so bad as that.  It is the unofficial
+force, -- the Baker Street irregulars.&quot;
+<p>
+
+</blockquote>
+
+<br /><br />
+
+A fully portable and efficient R[456]RS implementation of regular
+expressions, supporting both POSIX syntax with various (irregular)
+PCRE extensions, as well as SCSH's SRE syntax, with various aliases
+for commonly used patterns.  DFA matching is used when possible,
+otherwise a closure-compiled NFA approach is used.  The library makes
+no assumptions about the encoding of strings or range of characters
+and can thus be used in Unicode-aware Scheme implementations.
+Matching may be performed over standard Scheme strings, or over
+arbitrarily chunked streams of strings.
+<p>
+
+<br /><br />
+
+<a name="SECTION_1"><h1>1&nbsp;&nbsp;Table of Contents</h1>
+
+
+
+<ol>
+<li><a href="#SECTION_1">Table of Contents</a>
+<li><a href="#SECTION_2">Installation</a>
+<li><a href="#SECTION_3">Specification</a>
+<ol>
+<li><a href="#SECTION_3.1">Procedures</a>
+<li><a href="#SECTION_3.2">Extended SRE Syntax</a>
+<a name="SECTION_3.2.1"><h3>3.2.1&nbsp;&nbsp;Basic SRE Patterns</h3>
+<a name="SECTION_3.2.2"><h3>3.2.2&nbsp;&nbsp;SRE Repetition Patterns</h3>
+<a name="SECTION_3.2.3"><h3>3.2.3&nbsp;&nbsp;SRE Character Sets</h3>
+<a name="SECTION_3.2.4"><h3>3.2.4&nbsp;&nbsp;SRE Assertion Patterns</h3>
+<a name="SECTION_3.2.5"><h3>3.2.5&nbsp;&nbsp;SRE Utility Patterns</h3>
+<li><a href="#SECTION_3.3">Supported PCRE Syntax</a>
+<li><a href="#SECTION_3.4">Chunked String Matching</a>
+<li><a href="#SECTION_3.5">Utilities</a>
+</ol>
+<li><a href="#SECTION_4">Roadmap</a>
+<li><a href="#SECTION_5">License</a>
+<li><a href="#SECTION_6">References</a>
+</ol>
+
+<br /><br />
+
+<a name="SECTION_2"><h1>2&nbsp;&nbsp;Installation</h1>
+
+Just
+<p>
+
+<pre class=scheme>
+  (<span class=variable>load</span> <span class=string>&quot;irregex.scm&quot;</span>)
+</pre>
+<p>
+
+in your favorite Scheme implementation and you're good to go!
+<p>
+
+There is a global variable <code class=scheme><span class=global>*all-chars*</span></code> which is used for
+generating character set complements.  This defaults to the full
+Unicode range 0..#x10FFFF, but if your implementation can't handle
+characters that large you'll need to adjust it (a suitable ASCII
+definition is commented out in the source).
+<p>
+
+If you are using an R6RS Scheme, you can instead
+<p>
+
+<pre class=scheme>
+  (<span class=variable>load</span> <span class=string>&quot;irregex-r6rs.scm&quot;</span>)
+</pre>
+<p>
+
+There are also a handful of utility procedures described below you may
+wish to use in irregex-utils.scm.
+<p>
+
+If you are using Chicken Scheme, you can just run chicken-setup, or
+wait for it to show up in the eggs repository.
+<p>
+
+<a name="SECTION_3"><h1>3&nbsp;&nbsp;Specification</h1>
+
+<a name="SECTION_3.1"><h2>3.1&nbsp;&nbsp;Procedures</h2>
+
+<h3>(irregex &lt;posix-string-or-sre&gt; [&lt;options&gt; ...])</h3>
+
+<h3>(string-&gt;irregex &lt;posix-string&gt; [&lt;options&gt; ...])</h3>
+
+<h3>(sre-&gt;irregex &lt;sre&gt; [&lt;options&gt; ...])</h3>
+
+Compiles a regular expression from either a POSIX-style regular
+expression string (with most PCRE extensions) or an SCSH-style SRE.
+There is no <code class=scheme>(<span class=variable>rx</span> ...)</code> syntax - just use normal Scheme lists, with
+<code class=scheme><span class=keyword>quasiquote</span></code> if you like.
+<p>
+
+Technically a string by itself could be considered a valid (though
+rather silly) SRE, so if you want to just match a literal string you
+should use something like <code class=scheme>(<span class=variable>irregex</span> `(<span class=constant>:</span> ,<span class=variable>str</span>))</code>, or use the explicit
+<code class=scheme>(<span class=variable>sre-&gt;irregex</span> <span class=variable>str</span>)</code>.
+<p>
+
+The options are a list of any of the following symbols:
+<p>
+
+<code class=scheme>'<span class=variable>i</span></code>, <code class=scheme>'<span class=variable>case-insensitive</span></code> - match case-insensitively
+<p>
+
+<code class=scheme>'<span class=variable>m</span></code>, <code class=scheme>'<span class=variable>multi-line</span></code>       - treat string as multiple lines (effects ^ and $)
+<p>
+
+<code class=scheme>'<span class=variable>s</span></code>, <code class=scheme>'<span class=variable>single-line</span></code>      - treat string as a single line (. can match newline)
+<p>
+
+<code class=scheme>'<span class=variable>utf8</span></code>             - utf8-mode (assumes strings are byte-strings)
+<p>
+
+<code class=scheme>'<span class=variable>fast</span></code>             - try to optimize the regular expression
+<p>
+
+<code class=scheme>'<span class=variable>small</span></code>            - try to compile a smaller regular expression
+<p>
+
+<code class=scheme>'<span class=variable>backtrack</span></code>        - enforce a backtracking implementation
+<p>
+
+The <code class=scheme>'<span class=variable>fast</span></code> and <code class=scheme>'<span class=variable>small</span></code> options are heuristic guidelines and will
+not necessarily make the compiled expression faster or smaller.
+<p>
+
+<h3>(string-&gt;sre &lt;str&gt;)</h3>
+
+<h3>(maybe-string-&gt;sre &lt;obj&gt;)</h3>
+
+For backwards compatibility, procedures to convert a POSIX string into
+an SRE.
+<p>
+
+<code class=scheme><span class=variable>maybe-string-&gt;sre</span></code> does the same thing, but only if the argument is
+a string, otherwise it assumes <code class=scheme><span class=variable>&lt;obj&gt;</span></code> is an SRE and returns it
+as-is.  This is useful when you want to provide an API that allows
+either a POSIX string or SRE (like <code class=scheme><span class=variable>irregex</span></code> or <code class=scheme><span class=variable>irregex-search</span></code>
+below) - it ensures the result is an SRE.
+<p>
+
+<h3>(irregex? &lt;obj&gt;)</h3>
+
+Returns <code class=scheme><span class=boolean>#t</span></code> iff the object is a regular expression.
+<p>
+
+<h3>(irregex-search &lt;irx&gt; &lt;str&gt; [&lt;start&gt; &lt;end&gt;])</h3>
+
+Searches for any instances of the pattern &lt;irx&gt; (a POSIX string, SRE
+sexp, or pre-compiled regular expression) in &lt;str&gt;, optionally between
+the given range.  If a match is found, returns a match object,
+otherwise returns <code class=scheme><span class=boolean>#f</span></code>.
+<p>
+
+Match objects can be used to query the original range of the string or
+its submatches using the <code class=scheme><span class=variable>irregex-match-*</span></code> procedures below.
+<p>
+
+Examples:
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> <span class=string>&quot;foobar&quot;</span> <span class=string>&quot;abcFOOBARdef&quot;</span>) <span class=keyword>=&gt;</span> <span class=boolean>#f</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> <span class=string>&quot;foobar&quot;</span> <span class=string>&quot;abcFOOBARdef&quot;</span> '<span class=variable>i</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> '(<span class=variable>w/nocase</span> <span class=string>&quot;foobar&quot;</span>) <span class=string>&quot;abcFOOBARdef&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+Note, the actual match result is represented by a vector in the
+default implementation.  Throughout this document, we'll just write
+<code class=scheme><span class=variable>&lt;match&gt;</span></code> to show that a successful match was returned when the
+details are not important.
+<p>
+
+Matching follows the POSIX leftmost, longest semantics, when
+searching.  That is, of all possible matches in the string,
+<code class=scheme><span class=variable>irregex-search</span></code> will return the match at the first position
+(leftmost).  If multiple matches are possible from that same first
+position, the longest match is returned.
+<p>
+
+<h3>(irregex-match &lt;irx&gt; &lt;str&gt;)</h3>
+
+Like <code class=scheme><span class=variable>irregex-search</span></code>, but performs an anchored match against the
+beginning and end of the string, without searching.
+<p>
+
+Examples:
+<p>
+
+<code class=scheme>(<span class=variable>irregex-match</span> '(<span class=variable>w/nocase</span> <span class=string>&quot;foobar&quot;</span>) <span class=string>&quot;abcFOOBARdef&quot;</span>) <span class=keyword>=&gt;</span> <span class=boolean>#f</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-match</span> '(<span class=variable>w/nocase</span> <span class=string>&quot;foobar&quot;</span>) <span class=string>&quot;FOOBAR&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+<h3>(irregex-match-data? &lt;obj&gt;)</h3>
+
+Returns <code class=scheme><span class=boolean>#t</span></code> iff the object is a successful match result from
+<code class=scheme><span class=variable>irregex-search</span></code> or <code class=scheme><span class=variable>irregex-match</span></code>.
+<p>
+
+<h3>(irregex-match-substring &lt;match&gt; [&lt;index-or-name&gt;])</h3>
+
+<h3>(irregex-match-start-index &lt;match&gt; &lt;index-or-name&gt;)</h3>
+
+<h3>(irregex-match-end-index &lt;match&gt; &lt;index-or-name&gt;)</h3>
+
+Fetches the matched substring (or its start or end offset) at the
+given submatch index, or named submatch.  The entire match is index 0,
+the first 1, etc.  The default is index 0.
+<p>
+
+<h3>(irregex-match-subchunk &lt;match&gt; [&lt;index-or-name&gt;])</h3>
+
+Generates a chunked data-type for the given match item, of the same
+type as the underlying chunk type (see Chunked String Matching below).
+This is only available if the chunk type specifies the get-subchunk
+API, otherwise an error is raised.
+<p>
+
+<h3>(irregex-replace &lt;irx&gt; &lt;str&gt; [&lt;replacements&gt; ...])</h3>
+
+<h3>(irregex-replace/all &lt;irx&gt; &lt;str&gt; [&lt;replacements&gt; ...])</h3>
+
+Matches a pattern in a string, and replaces it with a (possibly empty)
+list of substitutions.  Each <code class=scheme><span class=variable>&lt;replacement&gt;</span></code> can be either a string
+literal, a numeric index, a symbol (as a named submatch), or a
+procedure which takes one argument (the match object) and returns a
+string.
+<p>
+
+Examples:
+<p>
+
+<code class=scheme>(<span class=variable>irregex-replace</span> <span class=string>&quot;[aeiou]&quot;</span> <span class=string>&quot;hello world&quot;</span> <span class=string>&quot;*&quot;</span>) <span class=keyword>=&gt;</span> <span class=string>&quot;h*llo world&quot;</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-replace/all</span> <span class=string>&quot;[aeiou]&quot;</span> <span class=string>&quot;hello world&quot;</span> <span class=string>&quot;*&quot;</span>) <span class=keyword>=&gt;</span> <span class=string>&quot;h*ll* w*rld&quot;</span></code>
+<p>
+
+<h3>(irregex-split &lt;irx&gt; &lt;str&gt; [&lt;start&gt; &lt;end&gt;])</h3>
+
+<h3>(irregex-extract &lt;irx&gt; &lt;str&gt; [&lt;start&gt; &lt;end&gt;])</h3>
+
+<code class=scheme><span class=variable>irregex-split</span></code> splits the string <code class=scheme><span class=variable>&lt;str&gt;</span></code> into substrings divided
+by the pattern in <code class=scheme><span class=variable>&lt;irx&gt;</span></code>.  <code class=scheme><span class=variable>irregex-extract</span></code> does the opposite,
+returning a list of each instance of the pattern matched disregarding
+the substrings in between.
+<p>
+
+<h3>(irregex-fold &lt;irx&gt; &lt;kons&gt; &lt;knil&gt; &lt;str&gt; [&lt;finish&gt; &lt;start&gt; &lt;end&gt;])</h3>
+
+This performs a fold operation over every non-overlapping place
+<code class=scheme><span class=variable>&lt;irx&gt;</span></code> occurs in the string <code class=scheme><span class=variable>str</span></code>.
+<p>
+
+The <code class=scheme><span class=variable>&lt;kons&gt;</span></code> procedure takes the following signature:
+<p>
+
+<code class=scheme>(<span class=variable>&lt;kons&gt;</span> <span class=variable>&lt;from-index&gt;</span> <span class=variable>&lt;match&gt;</span> <span class=variable>&lt;seed&gt;</span>)</code>
+<p>
+
+where <code class=scheme><span class=variable>&lt;from-index&gt;</span></code> is the index from where we started searching
+(initially <code class=scheme><span class=variable>&lt;start&gt;</span></code> and thereafter the end index of the last
+match), <code class=scheme><span class=variable>&lt;match&gt;</span></code> is the resulting match-data object, and <code class=scheme><span class=variable>&lt;seed&gt;</span></code>
+is the accumulated fold result starting with <code class=scheme><span class=variable>&lt;knil&gt;</span></code>.
+<p>
+
+The rationale for providing the <code class=scheme><span class=variable>&lt;from-index&gt;</span></code> (which is not
+provided in the SCSH <code class=scheme><span class=variable>regexp-fold</span></code> utility), is because this
+information is useful (e.g. for extracting the unmatched portion of
+the string before the current match, as needed in
+<code class=scheme><span class=variable>irregex-replace</span></code>), and not otherwise directly accessible.
+<p>
+
+The optional <code class=scheme><span class=variable>&lt;finish&gt;</span></code> takes two arguments:
+<p>
+
+<code class=scheme>(<span class=variable>&lt;finish&gt;</span> <span class=variable>&lt;from-index&gt;</span> <span class=variable>&lt;seed&gt;</span>)</code>
+<p>
+
+which simiarly allows you to pick up the unmatched tail of the string,
+and defaults to just returning the <code class=scheme><span class=variable>&lt;seed&gt;</span></code>.
+<p>
+
+<code class=scheme><span class=variable>&lt;start&gt;</span></code> and <code class=scheme><span class=variable>&lt;end&gt;</span></code> are numeric indices letting you specify the
+boundaries of the string on which you want to fold.
+<p>
+
+To extract all instances of a match out of a string, you can use
+<p>
+
+<code class=scheme>(<span class=variable>map</span> <span class=variable>irregex-match-substring</span> (<span class=variable>irregex-fold</span> <span class=variable>&lt;irx&gt;</span> (<span class=keyword>lambda</span> (<span class=variable>i</span> <span class=variable>m</span> <span class=variable>s</span>) (<span class=variable>cons</span> <span class=variable>m</span> <span class=variable>s</span>)) '() <span class=variable>&lt;str&gt;</span> (<span class=keyword>lambda</span> (<span class=variable>i</span> <span class=variable>s</span>) (<span class=variable>reverse</span> <span class=variable>s</span>))))</code>
+<p>
+
+<a name="SECTION_3.2"><h2>3.2&nbsp;&nbsp;Extended SRE Syntax</h2>
+
+Irregex provides the first native implementation of SREs (Scheme
+Regular Expressions), and includes many extensions necessary both for
+minimal POSIX compatibility, as well as for modern extensions found in
+libraries such as PCRE.
+<p>
+
+The following table summarizes the SRE syntax, with detailed
+explanations following.
+<p>
+
+<pre class=scheme>
+  <span class=comment>;; basic patterns</span>
+  <span class=variable>&lt;string&gt;</span>                          <span class=comment>; literal string</span>
+  (<span class=variable>seq</span> <span class=variable>&lt;sre&gt;</span> ...)                   <span class=comment>; sequence</span>
+  (<span class=constant>:</span> <span class=variable>&lt;sre&gt;</span> ...)
+  (<span class=keyword>or</span> <span class=variable>&lt;sre&gt;</span> ...)                    <span class=comment>; alternation</span>
+
+  <span class=comment>;; optional/multiple patterns</span>
+  (<span class=variable>?</span> <span class=variable>&lt;sre&gt;</span> ...)                     <span class=comment>; 0 or 1 matches</span>
+  (<span class=global>*</span> <span class=variable>&lt;sre&gt;</span> ...)                     <span class=comment>; 0 or more matches</span>
+  (<span class=variable>+</span> <span class=variable>&lt;sre&gt;</span> ...)                     <span class=comment>; 1 or more matches</span>
+  (<span class=variable>=</span> <span class=variable>&lt;n&gt;</span> <span class=variable>&lt;sre&gt;</span> ...)                 <span class=comment>; exactly &lt;n&gt; matches</span>
+  (<span class=variable>&gt;=</span> <span class=variable>&lt;n&gt;</span> <span class=variable>&lt;sre&gt;</span> ...)                <span class=comment>; &lt;n&gt; or more matches</span>
+  (<span class=global>**</span> <span class=variable>&lt;from&gt;</span> <span class=variable>&lt;to&gt;</span> <span class=variable>&lt;sre&gt;</span> ...)        <span class=comment>; &lt;n&gt; to &lt;m&gt; matches</span>
+  (<span class=variable>??</span> <span class=variable>&lt;sre&gt;</span> ...)                    <span class=comment>; non-greedy (non-greedy) pattern: (0 or 1)</span>
+  (<span class=variable>*?</span> <span class=variable>&lt;sre&gt;</span> ...)                    <span class=comment>; non-greedy kleene star</span>
+  (<span class=variable>**?</span> <span class=variable>&lt;from&gt;</span> <span class=variable>&lt;to&gt;</span> <span class=variable>&lt;sre&gt;</span> ...)       <span class=comment>; non-greedy range</span>
+
+  <span class=comment>;; submatch patterns</span>
+  (<span class=variable>submatch</span> <span class=variable>&lt;sre&gt;</span> ...)              <span class=comment>; numbered submatch</span>
+  (<span class=variable>$</span> <span class=variable>&lt;sre&gt;</span> ...)
+  (<span class=variable>submatch-named</span> <span class=variable>&lt;name&gt;</span> <span class=variable>&lt;sre&gt;</span> ...) <span class=comment>; named submatch</span>
+  (<span class=keyword>=&gt;</span> <span class=variable>&lt;name&gt;</span> <span class=variable>&lt;sre&gt;</span> ...)
+  (<span class=variable>backref</span> <span class=variable>&lt;n-or-name&gt;</span>)             <span class=comment>; match a previous submatch</span>
+
+  <span class=comment>;; toggling case-sensitivity</span>
+  (<span class=variable>w/case</span> <span class=variable>&lt;sre&gt;</span> ...)                <span class=comment>; enclosed &lt;sre&gt;s are case-sensitive</span>
+  (<span class=variable>w/nocase</span> <span class=variable>&lt;sre&gt;</span> ...)              <span class=comment>; enclosed &lt;sre&gt;s are case-insensitive</span>
+
+  <span class=comment>;; character sets</span>
+  <span class=variable>&lt;char&gt;</span>                            <span class=comment>; singleton char set</span>
+  (<span class=variable>&lt;string&gt;</span>)                        <span class=comment>; set of chars</span>
+  (<span class=keyword>or</span> <span class=variable>&lt;cset-sre&gt;</span> ...)               <span class=comment>; set union</span>
+  (<span class=variable>~</span> <span class=variable>&lt;cset-sre&gt;</span> ...)                <span class=comment>; set complement (i.e. [^...])</span>
+  (<span class=variable>-</span> <span class=variable>&lt;cset-sre&gt;</span> ...)                <span class=comment>; set difference</span>
+  (<span class=variable>&amp;</span> <span class=variable>&lt;cset-sre&gt;</span> ...)                <span class=comment>; set intersection</span>
+  (<span class=variable>/</span> <span class=variable>&lt;range-spec&gt;</span> ...)              <span class=comment>; pairs of chars as ranges</span>
+
+  <span class=comment>;; named character sets</span>
+  <span class=variable>any</span>
+  <span class=variable>nonl</span>
+  <span class=variable>ascii</span>
+  <span class=variable>lower-case</span>     <span class=variable>lower</span>
+  <span class=variable>upper-case</span>     <span class=variable>upper</span>
+  <span class=variable>alphabetic</span>     <span class=variable>alpha</span>
+  <span class=variable>numeric</span>        <span class=variable>num</span>
+  <span class=variable>alphanumeric</span>   <span class=variable>alphanum</span>  <span class=variable>alnum</span>
+  <span class=variable>punctuation</span>    <span class=variable>punct</span>
+  <span class=variable>graphic</span>        <span class=variable>graph</span>
+  <span class=variable>whitespace</span>     <span class=variable>white</span>     <span class=variable>space</span>
+  <span class=variable>printing</span>       <span class=variable>print</span>
+  <span class=variable>control</span>        <span class=variable>cntrl</span>
+  <span class=variable>hex-digit</span>      <span class=variable>xdigit</span>
+
+  <span class=comment>;; assertions and conditionals</span>
+  <span class=variable>bos</span> <span class=variable>eos</span>                           <span class=comment>; beginning/end of string</span>
+  <span class=variable>bol</span> <span class=variable>eol</span>                           <span class=comment>; beginning/end of line</span>
+  <span class=variable>bow</span> <span class=variable>eow</span>                           <span class=comment>; beginning/end of word</span>
+  <span class=variable>nwb</span>                               <span class=comment>; non-word-boundary</span>
+  (<span class=variable>look-ahead</span> <span class=variable>&lt;sre&gt;</span> ...)            <span class=comment>; zero-width look-ahead assertion</span>
+  (<span class=variable>look-behind</span> <span class=variable>&lt;sre&gt;</span> ...)           <span class=comment>; zero-width look-behind assertion</span>
+  (<span class=variable>neg-look-ahead</span> <span class=variable>&lt;sre&gt;</span> ...)        <span class=comment>; zero-width negative look-ahead assertion</span>
+  (<span class=variable>neg-look-behind</span> <span class=variable>&lt;sre&gt;</span> ...)       <span class=comment>; zero-width negative look-behind assertion</span>
+  (<span class=variable>atomic</span> <span class=variable>&lt;sre&gt;</span> ...)                <span class=comment>; for (?&gt;...) independent patterns</span>
+  (<span class=keyword>if</span> <span class=variable>&lt;test&gt;</span> <span class=variable>&lt;pass&gt;</span> [<span class=variable>&lt;fail&gt;</span>])       <span class=comment>; conditional patterns</span>
+  <span class=variable>commit</span>                            <span class=comment>; don't backtrack beyond this (i.e. cut)</span>
+
+  <span class=comment>;; backwards compatibility</span>
+  (<span class=variable>posix-string</span> <span class=variable>&lt;string&gt;</span>)           <span class=comment>; embed a POSIX string literal</span>
+</pre>
+<p>
+
+<a name="SECTION_3.2.1"><h3>3.2.1&nbsp;&nbsp;Basic SRE Patterns</h3>
+
+The simplest SRE is a literal string, which matches that string
+exactly.
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> <span class=string>&quot;needle&quot;</span> <span class=string>&quot;hayneedlehay&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+By default the match is case-sensitive, though you can control this
+either with the compiler flags or local overrides:
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> <span class=string>&quot;needle&quot;</span> <span class=string>&quot;haynEEdlehay&quot;</span>) <span class=keyword>=&gt;</span> <span class=boolean>#f</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> (<span class=variable>irregex</span> <span class=string>&quot;needle&quot;</span> '<span class=variable>i</span>) <span class=string>&quot;haynEEdlehay&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> '(<span class=variable>w/nocase</span> <span class=string>&quot;needle&quot;</span>) <span class=string>&quot;haynEEdlehay&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+You can use <code class=scheme><span class=variable>w/case</span></code> to switch back to case-sensitivity inside a
+<code class=scheme><span class=variable>w/nocase</span></code> or when the SRE was compiled with <code class=scheme>'<span class=variable>i</span></code>:
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> '(<span class=variable>w/nocase</span> <span class=string>&quot;SMALL&quot;</span> (<span class=variable>w/case</span> <span class=string>&quot;BIG&quot;</span>)) <span class=string>&quot;smallBIGsmall&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> '(<span class=variable>w/nocase</span> <span class=string>&quot;small&quot;</span> (<span class=variable>w/case</span> <span class=string>&quot;big&quot;</span>)) <span class=string>&quot;smallBIGsmall&quot;</span>) <span class=keyword>=&gt;</span> <span class=boolean>#f</span></code>
+<p>
+
+Of course, literal strings by themselves aren't very interesting
+regular expressions, so we want to be able to compose them.  The most
+basic way to do this is with the <code class=scheme><span class=variable>seq</span></code> operator (or its abbreviation
+<code class=scheme><span class=constant>:</span></code>), which matches one or more patterns consecutively:
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> '(<span class=constant>:</span> <span class=string>&quot;one&quot;</span> <span class=variable>space</span> <span class=string>&quot;two&quot;</span> <span class=variable>space</span> <span class=string>&quot;three&quot;</span>) <span class=string>&quot;one two three&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+As you may have noticed above, the <code class=scheme><span class=variable>w/case</span></code> and <code class=scheme><span class=variable>w/nocase</span></code>
+operators allowed multiple SREs in a sequence - other operators that
+take any number of arguments (e.g. the repetition operators below)
+allow such implicit sequences.
+<p>
+
+To match any one of a set of patterns use the <code class=scheme><span class=keyword>or</span></code> alternation
+operator:
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> '(<span class=keyword>or</span> <span class=string>&quot;eeney&quot;</span> <span class=string>&quot;meeney&quot;</span> <span class=string>&quot;miney&quot;</span>) <span class=string>&quot;meeney&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> '(<span class=keyword>or</span> <span class=string>&quot;eeney&quot;</span> <span class=string>&quot;meeney&quot;</span> <span class=string>&quot;miney&quot;</span>) <span class=string>&quot;moe&quot;</span>) <span class=keyword>=&gt;</span> <span class=boolean>#f</span></code>
+<p>
+
+<a name="SECTION_3.2.2"><h3>3.2.2&nbsp;&nbsp;SRE Repetition Patterns</h3>
+
+There are also several ways to control the number of times a pattern
+is matched.  The simplest of these is <code class=scheme><span class=variable>?</span></code> which just optionally
+matches the pattern:
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> '(<span class=constant>:</span> <span class=string>&quot;match&quot;</span> (<span class=variable>?</span> <span class=string>&quot;es&quot;</span>) <span class=string>&quot;!&quot;</span>) <span class=string>&quot;matches!&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> '(<span class=constant>:</span> <span class=string>&quot;match&quot;</span> (<span class=variable>?</span> <span class=string>&quot;es&quot;</span>) <span class=string>&quot;!&quot;</span>) <span class=string>&quot;match!&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> '(<span class=constant>:</span> <span class=string>&quot;match&quot;</span> (<span class=variable>?</span> <span class=string>&quot;es&quot;</span>) <span class=string>&quot;!&quot;</span>) <span class=string>&quot;matche!&quot;</span>) <span class=keyword>=&gt;</span> <span class=boolean>#f</span></code>
+<p>
+
+To optionally match any number of times, use <code class=scheme><span class=global>*</span></code>, the Kleene star:
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> '(<span class=constant>:</span> <span class=string>&quot;&lt;&quot;</span> (<span class=global>*</span> (<span class=variable>~</span> <span class=char>#\&gt;</span>)) <span class=string>&quot;&gt;&quot;</span>) <span class=string>&quot;&lt;html&gt;&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> '(<span class=constant>:</span> <span class=string>&quot;&lt;&quot;</span> (<span class=global>*</span> (<span class=variable>~</span> <span class=char>#\&gt;</span>)) <span class=string>&quot;&gt;&quot;</span>) <span class=string>&quot;&lt;&gt;&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> '(<span class=constant>:</span> <span class=string>&quot;&lt;&quot;</span> (<span class=global>*</span> (<span class=variable>~</span> <span class=char>#\&gt;</span>)) <span class=string>&quot;&gt;&quot;</span>) <span class=string>&quot;&lt;html&quot;</span>) <span class=keyword>=&gt;</span> <span class=boolean>#f</span></code>
+<p>
+
+Often you want to match any number of times, but at least one time is
+required, and for that you use <code class=scheme><span class=variable>+</span></code>:
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> '(<span class=constant>:</span> <span class=string>&quot;&lt;&quot;</span> (<span class=variable>+</span> (<span class=variable>~</span> <span class=char>#\&gt;</span>)) <span class=string>&quot;&gt;&quot;</span>) <span class=string>&quot;&lt;html&gt;&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> '(<span class=constant>:</span> <span class=string>&quot;&lt;&quot;</span> (<span class=variable>+</span> (<span class=variable>~</span> <span class=char>#\&gt;</span>)) <span class=string>&quot;&gt;&quot;</span>) <span class=string>&quot;&lt;a&gt;&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> '(<span class=constant>:</span> <span class=string>&quot;&lt;&quot;</span> (<span class=variable>+</span> (<span class=variable>~</span> <span class=char>#\&gt;</span>)) <span class=string>&quot;&gt;&quot;</span>) <span class=string>&quot;&lt;&gt;&quot;</span>) <span class=keyword>=&gt;</span> <span class=boolean>#f</span></code>
+<p>
+
+More generally, to match at least a given number of times, use <code class=scheme><span class=variable>&gt;=</span></code>:
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> '(<span class=constant>:</span> <span class=string>&quot;&lt;&quot;</span> (<span class=variable>&gt;=</span> <span class=number>3</span> (<span class=variable>~</span> <span class=char>#\&gt;</span>)) <span class=string>&quot;&gt;&quot;</span>) <span class=string>&quot;&lt;table&gt;&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> '(<span class=constant>:</span> <span class=string>&quot;&lt;&quot;</span> (<span class=variable>&gt;=</span> <span class=number>3</span> (<span class=variable>~</span> <span class=char>#\&gt;</span>)) <span class=string>&quot;&gt;&quot;</span>) <span class=string>&quot;&lt;pre&gt;&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> '(<span class=constant>:</span> <span class=string>&quot;&lt;&quot;</span> (<span class=variable>&gt;=</span> <span class=number>3</span> (<span class=variable>~</span> <span class=char>#\&gt;</span>)) <span class=string>&quot;&gt;&quot;</span>) <span class=string>&quot;&lt;tr&gt;&quot;</span>) <span class=keyword>=&gt;</span> <span class=boolean>#f</span></code>
+<p>
+
+To match a specific number of times exactly, use <code class=scheme><span class=variable>=</span></code>:
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> '(<span class=constant>:</span> <span class=string>&quot;&lt;&quot;</span> (<span class=variable>=</span> <span class=number>4</span> (<span class=variable>~</span> <span class=char>#\&gt;</span>)) <span class=string>&quot;&gt;&quot;</span>) <span class=string>&quot;&lt;html&gt;&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> '(<span class=constant>:</span> <span class=string>&quot;&lt;&quot;</span> (<span class=variable>=</span> <span class=number>4</span> (<span class=variable>~</span> <span class=char>#\&gt;</span>)) <span class=string>&quot;&gt;&quot;</span>) <span class=string>&quot;&lt;table&gt;&quot;</span>) <span class=keyword>=&gt;</span> <span class=boolean>#f</span></code>
+<p>
+
+And finally, the most general form is <code class=scheme><span class=global>**</span></code> which specifies a range
+of times to match.  All of the earlier forms are special cases of this.
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> '(<span class=constant>:</span> (<span class=variable>=</span> <span class=number>3</span> (<span class=global>**</span> <span class=number>1</span> <span class=number>3</span> <span class=variable>numeric</span>) <span class=string>&quot;.&quot;</span>) (<span class=global>**</span> <span class=number>1</span> <span class=number>3</span> <span class=variable>numeric</span>)) <span class=string>&quot;192.168.1.10&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-search</span> '(<span class=constant>:</span> (<span class=variable>=</span> <span class=number>3</span> (<span class=global>**</span> <span class=number>1</span> <span class=number>3</span> <span class=variable>numeric</span>) <span class=string>&quot;.&quot;</span>) (<span class=global>**</span> <span class=number>1</span> <span class=number>3</span> <span class=variable>numeric</span>)) <span class=string>&quot;192.0168.1.10&quot;</span>) <span class=keyword>=&gt;</span> <span class=boolean>#f</span></code>
+<p>
+
+There are also so-called &quot;non-greedy&quot; variants of these repetition
+operators, by convention suffixed with an additional <code class=scheme><span class=variable>?</span></code>.  Since the
+normal repetition patterns can match any of the allotted repetition
+range, these operators will match a string if and only if the normal
+versions matched.  However, when the endpoints of which submatch
+matched where are taken into account (specifically, all matches when
+using irregex-search since the endpoints of the match itself matter),
+the use of a non-greedy repetition can change the result.
+<p>
+
+So, whereas <code class=scheme><span class=variable>?</span></code> can be thought to mean &quot;match or don't match,&quot;
+<code class=scheme><span class=variable>??</span></code> means &quot;don't match or match.&quot;  <code class=scheme><span class=global>*</span></code> typically consumes as much
+as possible, but <code class=scheme><span class=variable>*?</span></code> tries first to match zero times, and only
+consumes one at a time if that fails.  If you have a greedy operator
+followed by a non-greedy operator in the same pattern, they can
+produce surprisins results as they compete to make the match longer or
+shorter.  If this seems confusing, that's because it is.  Non-greedy
+repetitions are defined only in terms of the specific backtracking
+algorithm used to implement them, which for compatibility purposes
+always means the Perl algorithm.  Thus, when using these patterns you
+force IrRegex to use a backtracking engine, and can't rely on
+efficient execution.
+<p>
+
+<a name="SECTION_3.2.3"><h3>3.2.3&nbsp;&nbsp;SRE Character Sets</h3>
+
+Perhaps more common than matching specific strings is matching any of
+a set of characters.  You can use the <code class=scheme><span class=keyword>or</span></code> alternation pattern on a
+list of single-character strings to simulate a character set, but this
+is too clumsy for everyday use so SRE syntax allows a number of
+shortcuts.
+<p>
+
+A single character matches that character literally, a trivial
+character class.  More conveniently, a list holding a single element
+which is a string refers to the character set composed of every
+character in the string.
+<p>
+
+<code class=scheme>(<span class=variable>irregex-match</span> '(<span class=global>*</span> <span class=char>#\-</span>) <span class=string>&quot;---&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-match</span> '(<span class=global>*</span> <span class=char>#\-</span>) <span class=string>&quot;-_-&quot;</span>) <span class=keyword>=&gt;</span> <span class=boolean>#f</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-match</span> '(<span class=global>*</span> (<span class=string>&quot;aeiou&quot;</span>)) <span class=string>&quot;oui&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-match</span> '(<span class=global>*</span> (<span class=string>&quot;aeiou&quot;</span>)) <span class=string>&quot;ouais&quot;</span>) <span class=keyword>=&gt;</span> <span class=boolean>#f</span></code>
+<p>
+
+Ranges are introduced with the <code class=scheme><span class=variable>/</span></code> operator.  Any strings or
+characters in the <code class=scheme><span class=variable>/</span></code> are flattened and then taken in pairs to
+represent the start and end points, inclusive, of character ranges.
+<p>
+
+<code class=scheme>(<span class=variable>irregex-match</span> '(<span class=global>*</span> (<span class=variable>/</span> <span class=string>&quot;AZ09&quot;</span>)) <span class=string>&quot;R2D2&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-match</span> '(<span class=global>*</span> (<span class=variable>/</span> <span class=string>&quot;AZ09&quot;</span>)) <span class=string>&quot;C-3PO&quot;</span>) <span class=keyword>=&gt;</span> <span class=boolean>#f</span></code>
+<p>
+
+In addition, a number of set algebra operations are provided.  <code class=scheme><span class=keyword>or</span></code>,
+of course, has the same meaning, but when all the options are
+character sets it can be thought of as the set union operator.  This
+is further extended by the <code class=scheme><span class=variable>&amp;</span></code> set intersection, <code class=scheme><span class=variable>-</span></code> set
+difference, and <code class=scheme><span class=variable>~</span></code> set complement operators.
+<p>
+
+<code class=scheme>(<span class=variable>irregex-match</span> '(<span class=global>*</span> (<span class=variable>&amp;</span> (<span class=variable>/</span> <span class=string>&quot;az&quot;</span>) (<span class=variable>~</span> (<span class=string>&quot;aeiou&quot;</span>)))) <span class=string>&quot;xyzzy&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-match</span> '(<span class=global>*</span> (<span class=variable>&amp;</span> (<span class=variable>/</span> <span class=string>&quot;az&quot;</span>) (<span class=variable>~</span> (<span class=string>&quot;aeiou&quot;</span>)))) <span class=string>&quot;vowels&quot;</span>) <span class=keyword>=&gt;</span> <span class=boolean>#f</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-match</span> '(<span class=global>*</span> (<span class=variable>-</span> (<span class=variable>/</span> <span class=string>&quot;az&quot;</span>) (<span class=string>&quot;aeiou&quot;</span>))) <span class=string>&quot;xyzzy&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-match</span> '(<span class=global>*</span> (<span class=variable>-</span> (<span class=variable>/</span> <span class=string>&quot;az&quot;</span>) (<span class=string>&quot;aeiou&quot;</span>))) <span class=string>&quot;vowels&quot;</span>) <span class=keyword>=&gt;</span> <span class=boolean>#f</span></code>
+<p>
+
+<a name="SECTION_3.2.4"><h3>3.2.4&nbsp;&nbsp;SRE Assertion Patterns</h3>
+
+There are a number of times it can be useful to assert something about
+the area around a pattern without explicitly making it part of the
+pattern.  The most common cases are specifically anchoring some
+pattern to the beginning or end of a word or line or even the whole
+string.  For example, to match on the end of a word:
+<p>
+
+<code class=scheme>(<span class=variable>irregex-match</span> '(<span class=constant>:</span> <span class=string>&quot;foo&quot;</span> <span class=variable>eow</span>) <span class=string>&quot;foo&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-match</span> '(<span class=constant>:</span> <span class=string>&quot;foo&quot;</span> <span class=variable>eow</span>) <span class=string>&quot;foo!&quot;</span>) <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>irregex-match</span> '(<span class=constant>:</span> <span class=string>&quot;foo&quot;</span> <span class=variable>eow</span>) <span class=string>&quot;foof&quot;</span>) <span class=keyword>=&gt;</span> <span class=boolean>#f</span></code>
+<p>
+
+The <code class=scheme><span class=variable>bow</span></code>, <code class=scheme><span class=variable>bol</span></code>, <code class=scheme><span class=variable>eol</span></code>, <code class=scheme><span class=variable>bos</span></code> and <code class=scheme><span class=variable>eos</span></code> work similarly.
+<code class=scheme><span class=variable>nwb</span></code> asserts that you are not in a word-boundary - if replaced for
+<code class=scheme><span class=variable>eow</span></code> in the above examples it would reverse all the results.
+<p>
+
+There is no <code class=scheme><span class=variable>wb</span></code>, since you tend to know from context whether it
+would be the beginning or end of a word, but if you need it you can
+always use <code class=scheme>(<span class=keyword>or</span> <span class=variable>bow</span> <span class=variable>eow</span>)</code>.
+<p>
+
+Somewhat more generally, Perl introduced positive and negative
+look-ahead and look-behind patterns.  Perl look-behind patterns are
+limited to a fixed length, however the IrRegex versions have no such
+limit.
+<p>
+
+<code class=scheme>(<span class=variable>irregex-match</span> '(<span class=constant>:</span> <span class=string>&quot;regular&quot;</span> (<span class=variable>look-ahead</span> <span class=string>&quot; expression&quot;</span>))
+                    <span class=string>&quot;regular expression&quot;</span>)
+      <span class=keyword>=&gt;</span> <span class=constant>#&lt;match&gt;</span></code>
+<p>
+
+The most general case, of course, would be an <code class=scheme><span class=keyword>and</span></code> pattern to
+complement the <code class=scheme><span class=keyword>or</span></code> pattern - all the patterns must match or the
+whole pattern fails.  This may be provided in a future release,
+although it (and look-ahead and look-behind assertions) are unlikely
+to be compiled efficiently.
+<p>
+
+<a name="SECTION_3.2.5"><h3>3.2.5&nbsp;&nbsp;SRE Utility Patterns</h3>
+
+The following utility regular expressions are also provided for common
+patterns that people are eternally reinventing.  They are not
+necessarily the official patterns matching the RFC definitions of the
+given data, because of the way that such patterns tend to be used.
+There are three general usages for regexps:
+<p>
+
+<h4>searching</h4>
+
+- search for a pattern matching a desired object in a larger text
+<p>
+
+<h4>validation</h4>
+
+- determine whether an entire string matches a pattern
+<p>
+
+<h4>extraction</h4>
+
+- given a string already known to be valid, extract certain fields from it as submatches
+<p>
+
+In some cases, but not always, these will overlap.  When they are
+different, <code class=scheme><span class=variable>irregex-search</span></code> will naturally always want the searching
+version, so IrRegex provides that version.
+<p>
+
+As an example where these might be different, consider a URL.  If you
+want to match all the URLs in some arbitrary text, you probably want
+to exclude a period or comma at the tail end of a URL, since it's more
+likely being used as punctuation rather than part of the URL, despite
+the fact that it would be valid URL syntax.
+<p>
+
+Another problem with the RFC definitions is the standard itself may
+have become irrelevant.  For example, the pattern IrRegex provides for
+email addresses doesn't match quoted local parts (e.g.  &quot;first
+last&quot;@domain.com) because these are increasingly rare, and unsupported
+by enough software that it's better to discourage their use.
+Conversely, technically consecutive periods
+(e.g. first..last@domain.com) are not allowed in email addresses, but
+most email software does allow this, and in fact such addresses are
+quite common in Japan.
+<p>
+
+The current patterns provided are:
+<p>
+
+<pre class=scheme>
+  <span class=variable>newline</span>                        <span class=comment>; general newline pattern (crlf, cr, lf)</span>
+  <span class=variable>integer</span>                        <span class=comment>; an integer</span>
+  <span class=variable>real</span>                           <span class=comment>; a real number (including scientific)</span>
+  <span class=variable>string</span>                         <span class=comment>; a &quot;quoted&quot; string</span>
+  <span class=variable>symbol</span>                         <span class=comment>; an R5RS Scheme symbol</span>
+  <span class=variable>ipv4-address</span>                   <span class=comment>; a numeric decimal ipv4 address</span>
+  <span class=variable>ipv6-address</span>                   <span class=comment>; a numeric hexadecimal ipv6 address</span>
+  <span class=variable>domain</span>                         <span class=comment>; a domain name</span>
+  <span class=variable>email</span>                          <span class=comment>; an email address</span>
+  <span class=variable>http-url</span>                       <span class=comment>; a URL beginning with https?://</span>
+</pre>
+<p>
+
+Because of these issues the exact definitions of these patterns are
+subject to be changed, but will be documented clearly when they are
+finalized.  More common patterns are also planned, but as what you
+want increases in complexity it's probably better to use a real
+parser.
+<p>
+
+<a name="SECTION_3.3"><h2>3.3&nbsp;&nbsp;Supported PCRE Syntax</h2>
+
+Since the PCRE syntax is so overwhelming complex, it's easier to just
+list what we *don't* support for now.  Refer to the
+<a href="http://pcre.org/pcre.txt">PCRE documentation</a> for details.  You
+should be using the SRE syntax anyway!
+<p>
+
+Unicode character classes (\P) are not supported, but will be
+in an upcoming release.  \C named characters are not supported.
+<p>
+
+Callbacks, subroutine patterns and recursive patterns are not
+supported.  (*FOO) patterns are not supported and may never be.
+<p>
+
+\G and \K are not supported.
+<p>
+
+Octal character escapes are not supported because they are ambiguous
+with back-references - just use hex character escapes.
+<p>
+
+Other than that everything should work, including named submatches,
+zero-width assertions, conditional patterns, etc.
+<p>
+
+In addition, \< and \> act as beginning-of-word and end-of-word marks,
+respectively, as in Emacs regular expressions.
+<p>
+
+Also, two escapes are provided to embed SRE patterns inside PCRE
+strings, &quot;\'&lt;sre&gt;&quot; and &quot;(*'&lt;sre&gt;)&quot;.  For example, to match a
+comma-delimited list of integers you could use
+<p>
+
+&quot;\\'integer(,\\'integer)*&quot;
+<p>
+
+and to match a URL in angle brackets you could use
+<p>
+
+&quot;&lt;('*http-url)&gt;&quot;
+<p>
+
+Note in the second example the enclosing &quot;('*...)&quot; syntax is needed
+because the Scheme reader would consider the closing &quot;&gt;&quot; as part of
+the SRE symbol.
+<p>
+
+The following chart gives a quick reference from PCRE form to the SRE
+equivalent:
+<p>
+
+<pre class=scheme>
+  <span class=comment>;; basic syntax</span>
+  <span class=string>&quot;^&quot;</span>                     <span class=comment>;; bos (or eos inside (?m: ...))</span>
+  <span class=string>&quot;$&quot;</span>                     <span class=comment>;; eos (or eos inside (?m: ...))</span>
+  <span class=string>&quot;.&quot;</span>                     <span class=comment>;; nonl</span>
+  <span class=string>&quot;a?&quot;</span>                    <span class=comment>;; (? a)</span>
+  <span class=string>&quot;a*&quot;</span>                    <span class=comment>;; (* a)</span>
+  <span class=string>&quot;a+&quot;</span>                    <span class=comment>;; (+ a)</span>
+  <span class=string>&quot;a??&quot;</span>                   <span class=comment>;; (?? a)</span>
+  <span class=string>&quot;a*?&quot;</span>                   <span class=comment>;; (*? a)</span>
+  <span class=string>&quot;a+?&quot;</span>                   <span class=comment>;; (+? a)</span>
+  <span class=string>&quot;a{n,m}&quot;</span>                <span class=comment>;; (** n m a)</span>
+
+  <span class=comment>;; grouping</span>
+  <span class=string>&quot;(...)&quot;</span>                 <span class=comment>;; (submatch ...)</span>
+  <span class=string>&quot;(?:...)&quot;</span>               <span class=comment>;; (: ...)</span>
+  <span class=string>&quot;(?i:...)&quot;</span>              <span class=comment>;; (w/nocase ...)</span>
+  <span class=string>&quot;(?-i:...)&quot;</span>             <span class=comment>;; (w/case ...)</span>
+  <span class=string>&quot;(?&lt;name&gt;...)&quot;</span>          <span class=comment>;; (=&gt; &lt;name&gt;...)</span>
+
+  <span class=comment>;; character classes</span>
+  <span class=string>&quot;[aeiou]&quot;</span>               <span class=comment>;; (&quot;aeiou&quot;)</span>
+  <span class=string>&quot;[^aeiou]&quot;</span>              <span class=comment>;; (~ &quot;aeiou&quot;)</span>
+  <span class=string>&quot;[a-z]&quot;</span>                 <span class=comment>;; (/ &quot;az&quot;) or (/ &quot;a&quot; &quot;z&quot;)</span>
+  <span class=string>&quot;[[:alpha:]]&quot;</span>           <span class=comment>;; alpha</span>
+
+  <span class=comment>;; assertions</span>
+  <span class=string>&quot;(?=...)&quot;</span>               <span class=comment>;; (look-ahead ...)</span>
+  <span class=string>&quot;(?!...)&quot;</span>               <span class=comment>;; (neg-look-ahead ...)</span>
+  <span class=string>&quot;(?&lt;=...)&quot;</span>              <span class=comment>;; (look-behind ...)</span>
+  <span class=string>&quot;(?&lt;!...)&quot;</span>              <span class=comment>;; (neg-look-behind ...)</span>
+  <span class=string>&quot;(?(test)pass|fail)&quot;</span>    <span class=comment>;; (if test pass fail)</span>
+  <span class=string>&quot;(*COMMIT)&quot;</span>             <span class=comment>;; commit</span>
+</pre>
+<p>
+
+<a name="SECTION_3.4"><h2>3.4&nbsp;&nbsp;Chunked String Matching</h2>
+
+It's often desirable to perform regular expression matching over
+sequences of characters not represented as a single string.  The most
+obvious example is a text-buffer data structure, but you may also want
+to match over lists or trees of strings (i.e. ropes), over only
+certain ranges within a string, over an input port, etc.  With
+existing regular expression libraries, the only way to accomplish this
+is by converting the abstract sequence into a freshly allocated
+string.  This can be expensive, or even impossible if the object is a
+text-buffer opened onto a 500MB file.
+<p>
+
+IrRegex provides a chunked string API specifically for this purpose.
+You define a chunking API with
+<p>
+
+<h3>(make-irregex-chunker &lt;get-next&gt; &lt;get-string&gt; [&lt;get-start&gt; &lt;get-end&gt; &lt;get-substring&gt; &lt;get-subchunk&gt;])</h3>
+
+where 
+<p>
+
+<code class=scheme>(<span class=variable>&lt;get-next&gt;</span> <span class=variable>chunk</span>) <span class=keyword>=&gt;</span> </code> returns the next chunk, or <code class=scheme><span class=boolean>#f</span></code> if there are no more chunks
+<p>
+
+<code class=scheme>(<span class=variable>&lt;get-string&gt;</span> <span class=variable>chunk</span>) <span class=keyword>=&gt;</span> </code> a string source for the chunk
+<p>
+
+<code class=scheme>(<span class=variable>&lt;get-start&gt;</span> <span class=variable>chunk</span>) <span class=keyword>=&gt;</span> </code> the start index of the result of <code class=scheme><span class=variable>&lt;get-string&gt;</span></code> (defaults to always 0)
+<p>
+
+<code class=scheme>(<span class=variable>&lt;get-end&gt;</span> <span class=variable>chunk</span>) <span class=keyword>=&gt;</span> </code> the end (exclusive) of the string (defaults to <code class=scheme><span class=variable>string-length</span></code> of the source string)
+<p>
+
+<code class=scheme>(<span class=variable>&lt;get-substring&gt;</span> <span class=variable>cnk1</span> <span class=variable>i</span> <span class=variable>cnk2</span> <span class=variable>j</span>) <span class=keyword>=&gt;</span> </code> a substring for the range between the chunk <code class=scheme><span class=variable>cnk1</span></code> starting at index <code class=scheme><span class=variable>i</span></code> and ending at <code class=scheme><span class=variable>cnk2</span></code> at index <code class=scheme><span class=variable>j</span></code>
+<p>
+
+<code class=scheme>(<span class=variable>&lt;get-subchunk&gt;</span> <span class=variable>cnk1</span> <span class=variable>i</span> <span class=variable>cnk2</span> <span class=variable>j</span>) <span class=keyword>=&gt;</span> </code> as above but returns a new chunked data type instead of a string (optional)
+<p>
+
+There are two important constraints on the <code class=scheme><span class=variable>&lt;get-next&gt;</span></code> procedure.
+It must return an <code class=scheme><span class=variable>eq?</span></code> identical object when called multiple times
+on the same chunk, and it must not return a chunk with an empty string
+(start == end).  This second constraint is for performance reasons -
+we push the work of possibly filtering empty chunks to the chunker
+since there are many chunk types for which empty strings aren't
+possible, and this work is thus not needed.  Note that the initial
+chunk passed to match on is allowed to be empty.
+<p>
+
+<code class=scheme><span class=variable>&lt;get-substring&gt;</span></code> is provided for possible performance improvements
+- without it a default is used.  <code class=scheme><span class=variable>&lt;get-subchunk&gt;</span></code> is optional -
+without it you may not use <code class=scheme><span class=variable>irregex-match-subchunk</span></code> described above.
+<p>
+
+You can then match chunks of these types with the following
+procedures:
+<p>
+
+<h3>(irregex-search/chunked &lt;irx&gt; &lt;chunker&gt; &lt;chunk&gt; [&lt;start&gt;])</h3>
+
+<h3>(irregex-match/chunked &lt;irx&gt; &lt;chunker&gt; &lt;chunk&gt; [&lt;start&gt;])</h3>
+
+These return normal match-data objects.
+<p>
+
+Example:
+<p>
+
+To match against a simple, flat list of strings use:
+<p>
+
+<pre class=scheme>
+  (<span class=keyword>define</span> (<span class=variable>rope-&gt;string</span> <span class=variable>rope1</span> <span class=variable>start</span> <span class=variable>rope2</span> <span class=variable>end</span>)
+    (<span class=keyword>if</span> (<span class=variable>eq?</span> <span class=variable>rope1</span> <span class=variable>rope2</span>)
+        (<span class=variable>substring</span> (<span class=variable>car</span> <span class=variable>rope1</span>) <span class=variable>start</span> <span class=variable>end</span>)
+        (<span class=keyword>let</span> <span class=variable>loop</span> ((<span class=variable>rope</span> (<span class=variable>cdr</span> <span class=variable>rope1</span>))
+                   (<span class=variable>res</span> (<span class=variable>list</span> (<span class=variable>substring</span> (<span class=variable>car</span> <span class=variable>rope1</span>) <span class=variable>start</span>))))
+           (<span class=keyword>if</span> (<span class=variable>eq?</span> <span class=variable>rope</span> <span class=variable>rope2</span>)
+               (<span class=variable>string-concatenate-reverse</span>      <span class=comment>; from SRFI-13</span>
+                (<span class=variable>cons</span> (<span class=variable>substring</span> (<span class=variable>car</span> <span class=variable>rope</span>) <span class=number>0</span> <span class=variable>end</span>) <span class=variable>res</span>))
+               (<span class=variable>loop</span> (<span class=variable>cdr</span> <span class=variable>rope</span>) (<span class=variable>cons</span> (<span class=variable>car</span> <span class=variable>rope</span>) <span class=variable>res</span>))))))
+
+  (<span class=keyword>define</span> <span class=variable>rope-chunker</span>
+    (<span class=variable>make-irregex-chunker</span> (<span class=keyword>lambda</span> (<span class=variable>x</span>) (<span class=keyword>and</span> (<span class=variable>pair?</span> (<span class=variable>cdr</span> <span class=variable>x</span>)) (<span class=variable>cdr</span> <span class=variable>x</span>)))
+                          <span class=variable>car</span>
+                          (<span class=keyword>lambda</span> (<span class=variable>x</span>) <span class=number>0</span>)
+                          (<span class=keyword>lambda</span> (<span class=variable>x</span>) (<span class=variable>string-length</span> (<span class=variable>car</span> <span class=variable>x</span>)))
+                          <span class=variable>rope-&gt;string</span>))
+
+  (<span class=variable>irregex-search/chunked</span> <span class=variable>&lt;pat&gt;</span> <span class=variable>rope-chunker</span> <span class=variable>&lt;list-of-strings&gt;</span>)
+</pre>
+<p>
+
+Here we are just using the default start, end and substring behaviors,
+so the above chunker could simply be defined as:
+<p>
+
+<pre class=scheme>
+  (<span class=keyword>define</span> <span class=variable>rope-chunker</span>
+    (<span class=variable>make-irregex-chunker</span> (<span class=keyword>lambda</span> (<span class=variable>x</span>) (<span class=keyword>and</span> (<span class=variable>pair?</span> (<span class=variable>cdr</span> <span class=variable>x</span>)) (<span class=variable>cdr</span> <span class=variable>x</span>))) <span class=variable>car</span>))
+</pre>
+<p>
+
+<h3>(irregex-fold/chunked &lt;irx&gt; &lt;kons&gt; &lt;knil&gt; &lt;chunker&gt; &lt;chunk&gt; [&lt;finish&gt; [&lt;start-index&gt;]])</h3>
+
+Chunked version of <code class=scheme><span class=variable>irregex-fold</span></code>.
+<p>
+
+<a name="SECTION_3.5"><h2>3.5&nbsp;&nbsp;Utilities</h2>
+
+The following procedures are available in irregex-utils.scm.
+<p>
+
+<h3>(irregex-quote &lt;str&gt;)</h3>
+
+Returns a new string with any special regular expression characters
+escaped, to match the original string literally in POSIX regular
+expressions.
+<p>
+
+<h3>(irregex-opt &lt;list-of-strings&gt;)</h3>
+
+Returns an optimized SRE matching any of the literal strings
+in the list, like Emacs' <code class=scheme><span class=variable>regexp-opt</span></code>.  Note this optimization
+doesn't help when irregex is able to build a DFA.
+<p>
+
+<h3>(sre-&gt;string &lt;sre&gt;)</h3>
+
+Convert an SRE to a POSIX-style regular expression string, if
+possible.
+<p>
+
+<a name="SECTION_4"><h1>4&nbsp;&nbsp;Roadmap</h1>
+
+0.8   - utilities and API finalization
+<p>
+
+0.9   - (real) benchmarks and performance enhancements
+<p>
+
+1.0   - cleanup and better documentation
+<p>
+
+<a name="SECTION_5"><h1>5&nbsp;&nbsp;License</h1>
+
+Copyright (c) 2005-2009 Alex Shinn
+All rights reserved.
+<p>
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+<p>
+
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+3. The name of the author may not be used to endorse or promote products
+   derived from this software without specific prior written permission.
+<p>
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+<p>
+
+<a name="SECTION_6"><h1>6&nbsp;&nbsp;References</h1>
+
+<a name="BIBITEM_1">[1]&nbsp; R. Kelsey, W. Clinger, J. Rees (eds.)
+<a href="http://www.schemers.org/Documents/Standards/R5RS/">Revised^5 Report on the Algorithmic Language Scheme</a>
+<p>
+
+<a name="BIBITEM_2">[2]&nbsp; Russ Cox
+<a href="http://swtch.com/~rsc/regexp/">Implementing Regular Expressions</a>
+<p>
+
+<a name="BIBITEM_3">[3]&nbsp; Russ Cox
+<a href="http://compilers.iecc.com/comparch/article/07-10-026">Henry Spencer's Tcl Regex Library</a>
+<p>
+
+<a name="BIBITEM_4">[4]&nbsp; Olin Shivers
+<a href="http://www.scsh.net/docu/post/sre.html">Proposed SRE regular-expression notation</a>
+<p>
+
+<a name="BIBITEM_5">[5]&nbsp; Olin Shivers
+<a href="http://www.scsh.net/docu/html/man-Z-H-7.html">Pattern-matching strings with regular expressions</a>
+<p>
+
+<a name="BIBITEM_6">[6]&nbsp; Shiro Kawai
+<a href="http://practical-scheme.net/gauche/man/gauche-refe_49.html">Gauche Scheme - Regular Expressions</a>
+<p>
+
+<a name="BIBITEM_7">[7]&nbsp; Damian Conway
+<a href="http://www.perl.com/pub/a/2002/08/22/exegesis5.html">Perl6 Exegesis 5 - Regular Expressions</a>
+<p>
+
+<a name="BIBITEM_8">[8]&nbsp; Philip Hazel
+<a href="http://www.pcre.org/">PCRE - Perl Compatible Regular Expressions</a>
+<p>
+
+<br /><br /><br /><br />
+<p><div align=right><small><font color=gray>Last modified: Dec. 8, 2009</font></small></div><p>
+<!-- page created by Mistie, http://www.cs.rice.edu/~dorai/mistie/ -->
+</body></html>
