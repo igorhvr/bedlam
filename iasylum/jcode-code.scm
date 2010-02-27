@@ -10,8 +10,24 @@
 
 
 (define-java-class |bsh.Interpreter|)
+
+
 (define-generic-java-method |eval|)
 (define-generic-java-method |set|)
+
+(define-java-class |iu.ThreadLocalVariableManager|)
+(define-generic-java-method get-bsh-interpreter)
+(define-generic-java-method set-bsh-interpreter)
+
+(define (get-local-interpreter)
+  (let ((current-value (get-bsh-interpreter (java-null |iu.ThreadLocalVariableManager|))))    
+    (if (java-null? current-value)
+        (let ((result (java-new |bsh.Interpreter|)))
+          (display "\n\n\nAHAAAAAAAAAAAAA! JUST CREATED NEW INTERPRETER!!!!!!\n")
+          (set-bsh-interpreter (java-null |iu.ThreadLocalVariableManager|) result)
+          (startup-interpreter result)
+          result)
+        current-value)))
 
 (define (->scm-object v)
   (if (java-object? v)
@@ -72,33 +88,21 @@
        )))
 
 (define j)
-(define tint)
 
-(set! tint
-      (begin
-        (let ((tint (java-new |bsh.Interpreter|)))
-          (|eval| tint
-                  (->jstring
-                   (string-append "s(cmd_str) {
+(define (startup-interpreter tint)
+  (|eval| tint
+          (->jstring
+           (string-append "s(cmd_str) {
                                               java.lang.Object siscInterpreter = sisc.interpreter.Context.enter();
                                               java.lang.Object result=siscInterpreter.eval(cmd_str);
                                               sisc.interpreter.Context.exit();
                                               return result;
-                                          } ")))
-          (|eval| tint
-                         (->jstring
-                          (string-append "s(cmd_str) {
-                                              java.lang.Object siscInterpreter = sisc.interpreter.Context.enter();
-                                              java.lang.Object result=siscInterpreter.eval(cmd_str);
-                                              sisc.interpreter.Context.exit();
-                                              return result;
-                                          } ")))
-          tint)))
+                                          } "))))
         
       
 (set! j
       (lambda* (str (vars #f))
-               (let ((tint tint))
+               (let ((tint (get-local-interpreter)))
                  (cond ( (eqv? vars #t) ; This is not a mistake. It could be a list too - and we should not enter this code.
                          (begin
                            (let ((env-data1 (interaction-environment))

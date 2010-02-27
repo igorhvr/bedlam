@@ -32,6 +32,8 @@
 
 ;; IASylum
 
+(class-path-extension-append! (cons (string-append (iasylum-bedlam-location) "java-base/") (class-path-extension)))
+
   ;;; Low level - java libraries.
 (define add-lib
   (lambda (name)
