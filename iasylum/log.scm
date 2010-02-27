@@ -11,7 +11,8 @@
     (send-email (mail-server) "igorhvr@localhost" "igorhvr" (system-email) (system-handle) m m))
   
   (define (log-o m)
-    (j "System.out.println(m); System.out.flush();" `((m ,(->jstring m)))))
+    (j "System.out.println(m); System.out.flush();" `((m ,(->jstring m))))
+    (void))
   
   (define (get-timestamp)
     (->string (j "new java.text.SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss.SSS\").format(new java.util.Date());")))
