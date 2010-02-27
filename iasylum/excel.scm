@@ -101,14 +101,14 @@
         v.getTime();"
        `((numericdate ,(->jint numericdate)))))
 
-    (define (excel-numeric-date-to-date numericdate zone-offset)
-      (let ((jd (excel-numeric-date-to-jdate numericdate)))
-        (let ((vls (j "new Object[]{jd.getDate(),jd.getMonth(),jd.getYear()};" `((jd ,jd)))))
-          (let ((day-of-month (->number (java-array-ref vls 0)))
-                (month-of-year (+ 1 (->number (java-array-ref vls 1))))
-                (year (->number (java-array-ref vls 2))))
-            ;;make-date nanosecond second minute hour day month year zone-offset 
-            (make-date 0 0 0 0 day-of-month month-of-year year (* zone-offset 3600))))))
+  (define (excel-numeric-date-to-date numericdate zone-offset)
+    (let ((jd (excel-numeric-date-to-jdate numericdate)))
+      (let ((vls (j "new Object[]{jd.getDate(),jd.getMonth(),jd.getYear()};" `((jd ,jd)))))
+        (let ((day-of-month (->number (java-array-ref vls 0)))
+              (month-of-year (+ 1 (->number (java-array-ref vls 1))))
+              (year (+ 1900 (->number (java-array-ref vls 2)))))
+          ;;make-date nanosecond second minute hour day month year zone-offset 
+          (make-date 0 0 0 0 day-of-month month-of-year year (* zone-offset 3600))))))
 
 
 ;;(excel-numeric-date-to-jdate 39539) --> #<java java.util.Date Tue Apr 01 00:00:00 BRT 2008>
