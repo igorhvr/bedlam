@@ -117,7 +117,6 @@
 
 (set! random
      (let ((number-from-time
-; SCSH            (call-with-values  (lambda () (time+ticks))                              (lambda (time ticks) (+ (* 1000000 time) ticks)))
             (->number (j "new java.util.Date().getTime();"))
             ))
        (let ((random-function (random-maker number-from-time)))
