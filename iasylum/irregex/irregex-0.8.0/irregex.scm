@@ -376,7 +376,7 @@
           ((pred (car ls)) ls)
           (else (lp (cdr ls))))))
 
-(define (last ls)
+(define (last-irregex ls)
   (if (not (pair? ls))
       (error "can't take last of empty list" ls)
       (let lp ((ls ls))
@@ -649,7 +649,7 @@
         (let* ((ls (collect))
                (func
                 (and (pair? ls)
-                     (memq (last ls)
+                     (memq (last-irregex ls)
                            '(atomic if look-ahead neg-look-ahead
                                     look-behind neg-look-behind
                                     => submatch-named
@@ -1348,7 +1348,7 @@
             (sre-sequence
              (append
               (map integer->char (reverse (cdr (reverse (cdr lo-ls)))))
-              `((/ ,(integer->char (last lo-ls))
+              `((/ ,(integer->char (last-irregex lo-ls))
                    ,(integer->char #xFF)))))))))))
 
 (define (unicode-range-up-to hi-ls)
@@ -1365,7 +1365,7 @@
              (append
               (map integer->char (reverse (cdr (reverse (cdr hi-ls)))))
               `((/ ,(integer->char #x80)
-                   ,(integer->char (last hi-ls))))))))))))
+                   ,(integer->char (last-irregex hi-ls))))))))))))
 
 (define (unicode-range-climb-digits lo-ls hi-ls)
   (let ((lo-len (length lo-ls)))
@@ -1563,7 +1563,7 @@
       (case (car sre)
         ((* +) (sre-any? (sre-sequence (cdr sre))))
         ((seq : $ submatch => submatch-named)
-         (and (pair? (cdr sre)) (sre-consumer? (last sre))))
+         (and (pair? (cdr sre)) (sre-consumer? (last-irregex sre))))
         ((or) (every sre-consumer? (cdr sre)))
         (else #f))
       (eq? 'eos sre)))
