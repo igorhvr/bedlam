@@ -1,8 +1,7 @@
 ;;; Code by Igor Hjelmstrom Vinhas Ribeiro - this is licensed under GNU GPL v2.
 
-;(require-extension (lib iasylum/srfi-89))
-;(require-extension (lib iasylum/match))
-
+(require-extension (lib iasylum/srfi-89))
+(require-extension (lib iasylum/match))
 ;; TODO - Merge all pumps
 
 (module iasylum/iasylum
@@ -24,9 +23,16 @@
    pump_binary-input-port->character-output-port   
    r r-split r/s r/d r-base
    dp
+   smart-compile
    )
   (import hashtable)
 
+  (define (smart-compile fname)
+    (let ((data-match (irregex-search
+                  '(seq (submatch-named file-name (+ any)) ".scm") fname)))
+      (let ((fn-prefix (irregex-match-substring data-match 'file-name)))
+        (compile-file fname (string-append fn-prefix ".scc")))))
+  
   (define hashtable/values
     (lambda (ht)
       (hashtable/map (lambda (k v) v) ht)))
@@ -225,5 +231,4 @@
   (set! w (let ((m (mutex/new))) (lambda p (mutex/lock! m) (for-each write p) (mutex/unlock! m) (void))))
   
   ;; (define d (lambda p (for-each display p)))
-  
-  )
+)
