@@ -28,6 +28,7 @@
   (import hashtable)
 
   (define (smart-compile fname)
+    (for-each display (list "\n\n(smart-compile \"" fname "\")..."))
     (let ((data-match (irregex-search
                   '(seq (submatch-named file-name (+ any)) ".scm") fname)))
       (let ((fn-prefix (irregex-match-substring data-match 'file-name)))
