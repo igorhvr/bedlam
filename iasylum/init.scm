@@ -131,15 +131,14 @@
 (import custom-io)
 (require-extension (lib iasylum/iasylum))
 
-
-;; SLIB
-(load (string-append (iasylum-bedlam-location) "iasylum/slib.scm"))
-(require 'new-catalog)
-
 ;; irregex
 (load (string-append (iasylum-bedlam-location) "iasylum/irregex.scm"))
 
 ;; let-optionals
 (load (string-append (iasylum-bedlam-location) "iasylum/let-optionals/let-optionals.scm"))
+
+;; SLIB
+(load (string-append (iasylum-bedlam-location) "iasylum/slib.scm"))
+(require 'new-catalog)
 
 ;(display "\n\nLOADED iasylum-bedlam.\n\n")
