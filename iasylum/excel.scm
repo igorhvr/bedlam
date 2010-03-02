@@ -4,9 +4,18 @@
 (require-extension (srfi 19)) ; date & time
 
 (module iasylum/excel
-  (list->spreadsheet make-workbook make-sheet add-row add-cell set-cell-value save-wb iterable->list for-each-iterable excel-row->scheme load-excel-sheet-data for-each-excel-sheet-data excel-numeric-date-to-jdate excel-numeric-date-to-date get-excel-workbook get-excel-sheet-by-name get-excel-sheet-by-index)
+  (list->spreadsheet list->spreadsheet-file make-workbook make-sheet add-row add-cell set-cell-value save-wb save-wb-file iterable->list for-each-iterable excel-row->scheme load-excel-sheet-data for-each-excel-sheet-data excel-numeric-date-to-jdate excel-numeric-date-to-date get-excel-workbook get-excel-sheet-by-name get-excel-sheet-by-index)
 
-  (define (list->spreadsheet l fn)
+  (define (list->spreadsheet-file l fn)
+    (let ((file-stream
+           (j "import java.io.*;
+               FileOutputStream fileOut = new FileOutputStream(filename);
+           fileOut;" `((filename ,(->jstring fn))))))
+      (list->spreadsheet l file-stream)
+      (j "fileOut.close();" `((fileOut ,file-stream)))))
+
+  
+  (define (list->spreadsheet l stream)
     (let* ((wb (make-workbook))
            (sheet (make-sheet wb)))
       (map
@@ -18,7 +27,7 @@
             (set-cell-value cell v))
           v))
        l)
-      (save-wb wb fn)))
+      (save-wb wb stream)))
   
   (define (make-workbook) (j "import org.apache.poi.hssf.usermodel.*; HSSFWorkbook wb = new HSSFWorkbook(); wb;"))
   (define (make-sheet wb) (j "import org.apache.poi.hssf.usermodel.*; HSSFSheet sheet = wb.createSheet(\"data\"); sheet" `((wb ,wb))))
@@ -39,11 +48,17 @@
   (define (set-cell-value cell value)
     (j "cell.setCellValue(value); " `((cell ,cell) (value ,(->jobject value)))))
   
-  (define (save-wb wb filename)
-    (j "import java.io.*;
-      FileOutputStream fileOut = new FileOutputStream(filename);
-      wb.write(fileOut);
-      fileOut.close();" `((filename ,(->jstring filename)) (wb ,wb))))
+  (define (save-wb-file wb filename)
+    (let ((file-stream
+           (j "import java.io.*;
+               FileOutputStream fileOut = new FileOutputStream(filename);
+           fileOut;" `((filename ,(->jstring filename))))))
+      (save-wb wb file-stream)
+      (j "fileOut.close();" `((fileOut ,file-stream)))))
+
+  (define (save-wb wb stream)
+    (j "wb.write(stream);"
+       `((stream ,stream) (wb ,wb))))
   
   (define iterable->list
     (lambda* (o (proc (lambda (p) p)))
