@@ -5,7 +5,9 @@
 (require-extension (lib sql/postgresql))
 
 (module iasylum/jdbc
-  (jdbc/load-drivers jdbc/map-result-set jdbc/get-connection jdbc/for-each-result-set)
+  (jdbc/load-drivers jdbc/map-result-set jdbc/get-connection jdbc/for-each-result-set
+                     result-set->iterator
+                     get-data)
 
   (define (jdbc/load-drivers)
     (and (j "Class.forName(\"org.postgresql.Driver\");") #t))
@@ -21,8 +23,7 @@
          (url ,(->jstring url))
          (username ,(->jstring username))
          (password ,(->jstring password))
-         ))
-    )
+         )))
 
   (define-generic-java-method gmd |getMetaData|)
   
@@ -73,5 +74,79 @@
        result-set)
       (reverse result)
       ))
+
+  (define-generic-java-method execute-query)
+  
+  (define-generic-java-method create-statement)
+  (define new-statement
+    (lambda (connection)
+      (create-statement connection)))
+  
+
+
+  (define-generic-java-method get-column-type)
+  (define-generic-java-method get-meta-data)
+  
+  (define (result-set->iterator rs)
+    (j "
+     import java.sql.ResultSet;
+     import java.sql.SQLException;
+     import java.util.ArrayList;
+     import java.util.Iterator;
+     import java.util.List;
+     
+     public class ResultSetIterator implements Iterator {
+         private ResultSet resultSet;
+         private boolean hasNext;
+     
+         public ResultSetIterator(ResultSet resultSet) {
+             this.resultSet=resultSet;
+             try {
+                 this.hasNext=resultSet.next();
+             } catch (SQLException e) {
+                 throw new RuntimeException(e);
+             }
+         }
+     
+         public boolean hasNext() {
+             return hasNext;
+         }
+     
+         public Object next() {
+             try {
+                 int columns=resultSet.getMetaData().getColumnCount();
+                 List result=new ArrayList(columns);
+     
+                 for(int i=1;i<=columns;i++) {                    
+                     result.add(resultSet.getObject(i));
+                 }
+
+                 hasNext=resultSet.next();
+     
+                 return result;
+             }catch(Exception e){
+                 throw new RuntimeException(e);
+             }
+         }
+     
+         public void remove() {
+             throw new RuntimeException();
+         }
+     }
+     ")
+  (j "new ResultSetIterator(rs);" `((rs ,rs))))
+
+  (define (get-data connection query)
+    (define (read-metadata p)
+      (let l ((i 1) (m (->number (get-column-count p))))
+        (if (> i m) '()
+            (cons
+             (cons (->scm-object (get-column-name p (->jint i)))
+                   (->scm-object (get-column-type-name p (->jint i))))
+             (l (+ i 1) m)))))
+    (let ((rs (execute-query (new-statement connection) (->jstring query))))
+      (let ((rs-md (read-metadata (get-meta-data rs)))
+            (data (iterable->list (result-set->iterator rs) (lambda (v) (->scm-object v)))))
+            (cons rs-md data))))
   
   )
