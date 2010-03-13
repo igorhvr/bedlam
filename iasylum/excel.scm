@@ -4,7 +4,7 @@
 (require-extension (srfi 19)) ; date & time
 
 (module iasylum/excel
-  (list->spreadsheet list->spreadsheet-file make-workbook make-sheet add-row add-cell set-cell-value save-wb save-wb-file iterable->list for-each-iterable excel-row->scheme load-excel-sheet-data for-each-excel-sheet-data excel-numeric-date-to-jdate excel-numeric-date-to-date get-excel-workbook get-excel-sheet-by-name get-excel-sheet-by-index)
+  (list->spreadsheet list->spreadsheet-file make-workbook make-sheet add-row add-cell set-cell-value save-wb save-wb-file excel-row->scheme load-excel-sheet-data for-each-excel-sheet-data excel-numeric-date-to-jdate excel-numeric-date-to-date get-excel-workbook get-excel-sheet-by-name get-excel-sheet-by-index)
 
   (define (list->spreadsheet-file l fn)
     (let ((file-stream
@@ -59,27 +59,6 @@
   (define (save-wb wb stream)
     (j "wb.write(stream);"
        `((stream ,stream) (wb ,wb))))
-  
-  (define iterable->list
-    (lambda* (o (proc (lambda (p) p)))
-      (let ((result (list)))
-        (define (p d)
-          (set! result (cons (proc d) result)))
-        (for-each-iterable o p)
-        (reverse result))))
-
-  (define for-each-iterable
-    (lambda (o proc)
-      (define-generic-java-method iterator)
-      (define-generic-java-method has-next)
-      (define-generic-java-method next)
-      (let ((it (if (->boolean (j "o instanceof java.util.Iterator;"  `((o ,o)))) o (iterator o))))
-        (let loop ()
-          (let ((more-data (->boolean (has-next it))))
-            (if more-data
-                (let ((e (next it)))
-                  (proc e)
-                  (loop))))))))
 
   (define excel-row->scheme
     (lambda (row)

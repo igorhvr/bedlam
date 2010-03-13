@@ -20,6 +20,9 @@
    
    date->jdate
    jdate->date
+
+   iterable->list
+   for-each-iterable
    
      ; s2j convenience exports
      java-new

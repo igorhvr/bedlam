@@ -47,6 +47,28 @@
          (else  (java-unwrap v)))) ; Ok. I give up.         
       v))
 
+  (define iterable->list
+    (lambda* (o (proc (lambda (p) p)))
+             (let ((result (list)))
+               (define (p d)
+                 (set! result (cons (proc d) result)))
+               (for-each-iterable o p)
+               (reverse result))))
+  
+  (define for-each-iterable
+    (lambda (o proc)
+      (define-generic-java-method iterator)
+      (define-generic-java-method has-next)
+      (define-generic-java-method next)
+      (let ((it (if (->boolean (j "o instanceof java.util.Iterator;"  `((o ,o)))) o (iterator o))))
+        (let loop ()
+          (let ((more-data (->boolean (has-next it))))
+            (if more-data
+                (let ((e (next it)))
+                  (proc e)
+                  (loop))))))))
+          
+
 (define-java-classes (<date> |java.util.Date|))
 
 (define (date->jdate the-date)
