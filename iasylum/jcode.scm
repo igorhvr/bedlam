@@ -21,6 +21,8 @@
    date->jdate
    jdate->date
 
+   instance-of
+
    iterable->list
    for-each-iterable
    

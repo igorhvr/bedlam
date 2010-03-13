@@ -68,6 +68,10 @@
                   (proc e)
                   (loop))))))))
           
+(define (instance-of object class)
+  (if (java-object? object)
+      (->boolean (j (string-append "(tobj instanceof " class ");")  `((tobj ,object))))
+      #f))
 
 (define-java-classes (<date> |java.util.Date|))
 
