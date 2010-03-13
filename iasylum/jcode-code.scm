@@ -30,22 +30,33 @@
 
 (define (->scm-object v)
   (if (java-object? v)
-      (let ((obj-class (->string (j "v.getClass().getName();" `((v ,v))))))
-        (cond
-         ((string=? obj-class "java.lang.String") (->string v))
-         ((or
-           (string=? obj-class "java.lang.Byte")
-           (string=? obj-class "java.lang.Short")
-           (string=? obj-class "java.lang.Integer")
-           (string=? obj-class "java.lang.Long")
-           (string=? obj-class "java.lang.Float")
-           (string=? obj-class "java.lang.Double")
-           )
-          (->number v))
-         ((string=? obj-class "java.lang.Character") (->character v))
-         ((->boolean (j "(tobj instanceof java.util.Date);" `((tobj ,v)))) (jdate->date v))
-         (else  (java-unwrap v)))) ; Ok. I give up.         
-      v))
+      (if (java-null? v) '()
+          (let ((obj-class (->string (j "v.getClass().getName();" `((v ,v))))))
+            (cond
+             ((string=? obj-class "java.lang.String") (->string v))
+             ((or
+               (string=? obj-class "java.lang.Byte")
+               (string=? obj-class "java.lang.Short")
+               (string=? obj-class "java.lang.Integer")
+               (string=? obj-class "java.lang.Long")
+               (string=? obj-class "java.lang.Float")
+               (string=? obj-class "java.lang.Double")
+               )
+              (->number v))
+             ((string=? obj-class "java.lang.Character") (->character v))
+             ((->boolean (j "(tobj instanceof java.util.Date);" `((tobj ,v))) ) (jdate->date v))
+             ((instance-of v "java.util.Collection")
+              (let ((it (j "c.iterator();" `((c ,v)))))
+                (map ->scm-object (iterable->list it))))
+             
+             ((string=? obj-class "bsh.Primitive")
+              (->scm-object (j "hhhhhhhhhh.getValue();" `((hhhhhhhhhh ,v))))
+              )
+             (else  (begin
+                      ;(display (string-append "\n[" obj-class "]\n"))
+                      (java-unwrap v)))))) ; Ok. I give up.         
+          v))
+
 
   (define iterable->list
     (lambda* (o (proc (lambda (p) p)))
