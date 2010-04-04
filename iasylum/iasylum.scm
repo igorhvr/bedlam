@@ -24,6 +24,7 @@
    r r-split r/s r/d r-base
    dp
    smart-compile
+   flatten
    )
   (import hashtable)
 
@@ -224,7 +225,24 @@
                 (define symbolic-identifier
                   (make-parameter value)))))))
         ((_ fname) (syntax (_ fname #f))))))
-
+  
+  (define (flatten tree)
+    (define result (list))
+    ;; This leaves nothing pending on the stack, and doesn't build
+    ;; intermediate results that it throws away.
+    (define (flatten-element elt)
+      (if (list? elt)
+          (flatten-a-list elt)
+          (set! result (cons elt result))))
+    (define (flatten-a-list lst)
+      (for-each flatten-element lst))
+    
+    (if (list? tree)
+        (begin
+          (flatten-a-list tree)
+          (reverse! result))
+        tree))
+  
   (define d)
   (define w)
   
