@@ -25,8 +25,10 @@
    dp
    smart-compile
    flatten
+   rglob
    )
   (import hashtable)
+  (import file-manipulation)  ;; rglob uses this.
 
   (define (smart-compile fname)
     (for-each display (list "\n\n(smart-compile \"" fname "\")..."))
@@ -242,6 +244,18 @@
           (flatten-a-list tree)
           (reverse! result))
         tree))
+  
+  (define (rglob pdirectory)
+    (define (do-rglob directory)
+      (let ( (d-contents (directory-list directory)) )
+        (map (lambda e
+               (let ((se (car e)))
+                 (let ((full-path (string-append directory "/" se)))
+                   (if (file-is-directory? full-path)
+                       (do-rglob full-path)
+                       full-path))))
+             d-contents)))
+    (flatten (do-rglob pdirectory)))
   
   (define d)
   (define w)
