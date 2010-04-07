@@ -1,1 +1,0 @@
-(require-extension (lib iasylum/sparse/2d-array/2d-array)) 
