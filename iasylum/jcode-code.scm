@@ -7,7 +7,7 @@
 (define (_3_ o) (java-array-ref o 3))
 (define (_4_ o) (java-array-ref o 3))
 
-
+(define (quote-convert s) (irregex-replace/all "'" s "\"") )
 
 (define-java-class |bsh.Interpreter|)
 

@@ -14,6 +14,8 @@
    _2_
    _3_
    _4_
+
+   quote-convert
    
    ->jobject
    ->scm-object
