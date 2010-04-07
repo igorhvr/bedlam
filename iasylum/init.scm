@@ -34,6 +34,9 @@
 
 (class-path-extension-append! (cons (string-append (iasylum-bedlam-location) "java-base/") (class-path-extension)))
 
+;; Configuration files.
+(class-path-extension-append! (cons (string-append (iasylum-bedlam-location) "config/") (class-path-extension)))
+
   ;;; Low level - java libraries.
 (define add-lib
   (lambda (name)
@@ -82,6 +85,8 @@
 (add-lib "tomcat/catalina.jar")
 (add-lib "tomcat/annotations-api.jar")
 (add-lib "tomcat/standard.jar")
+
+(add-lib "u/quartz-all-1.7.3.jar")
 
 (import os)
 (import java-io)
