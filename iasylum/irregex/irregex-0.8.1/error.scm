@@ -3,5 +3,5 @@
   (display msg)
   (for-each (lambda (x) (display " ") (write x)) args)
   (newline)
-  (void))
+  (0))
 
