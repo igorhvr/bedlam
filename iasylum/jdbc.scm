@@ -7,6 +7,7 @@
 (module iasylum/jdbc
   (jdbc/load-drivers jdbc/map-result-set jdbc/get-connection jdbc/for-each-result-set
                      result-set->iterator
+                     execute-jdbc-query
                      get-data)
 
   (define (jdbc/load-drivers)
@@ -74,8 +75,6 @@
        result-set)
       (reverse result)
       ))
-
-  (define-generic-java-method execute-query)
   
   (define-generic-java-method create-statement)
   (define new-statement
@@ -136,6 +135,11 @@
      ")
   (j "new ResultSetIterator(rs);" `((rs ,rs))))
 
+
+  (define-generic-java-method execute-query)
+  (define (execute-jdbc-query connection query)
+    (execute-query (new-statement connection) (->jstring query)))
+  
   (define (get-data connection query)
     (define (read-metadata p)
       (let l ((i 1) (m (->number (get-column-count p))))
@@ -144,7 +148,7 @@
              (cons (->scm-object (get-column-name p (->jint i)))
                    (->scm-object (get-column-type-name p (->jint i))))
              (l (+ i 1) m)))))
-    (let ((rs (execute-query (new-statement connection) (->jstring query))))
+    (let ((rs (execute-jdbc-query connection query) ))
       (let ((rs-md (read-metadata (get-meta-data rs)))
             (data (iterable->list (result-set->iterator rs) (lambda (v) (->scm-object v)))))
             (cons rs-md data))))
