@@ -24,6 +24,9 @@
   (define log-warn (make-mark-logger "WARN"))
   (define log-error (make-mark-logger "ERROR"))
   (define log-fatal (make-mark-logger "FATAL"))
+
+  (define (get-thread-info)
+    (string-append "[thread=" (number->string (->number (j "Thread.currentThread().getId();"))) "]"))
   
   (define (timestamped-log mark m)
-    (log-o (iasylum-write-string (list mark (get-timestamp) m)))))
+    (log-o (iasylum-write-string (list mark (get-thread-info) (get-timestamp) m)))))
