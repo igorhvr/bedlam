@@ -48,12 +48,18 @@
              ((instance-of v "java.util.Collection")
               (let ((it (j "c.iterator();" `((c ,v)))))
                 (map ->scm-object (iterable->list it))))
-             
+             ((instance-of v "java.util.Map")
+              (let ((it (j "c.entrySet().iterator();" `((c ,v)))))
+                (map ->scm-object (iterable->list it))))
+             ((instance-of v "java.util.Map.Entry")
+              (let ((key (j "c.getKey();" `((c ,v))))
+                    (value (j "c.getValue();" `((c ,v)))))
+                (cons (->scm-object key) (->scm-object value))))
              ((string=? obj-class "bsh.Primitive")
               (->scm-object (j "hhhhhhhhhh.getValue();" `((hhhhhhhhhh ,v))))
               )
              (else  (begin
-                      ;(display (string-append "\n[" obj-class "]\n"))
+                      ;;(display (string-append "\n[" obj-class "]\n"))
                       (java-unwrap v)))))) ; Ok. I give up.         
           v))
 
