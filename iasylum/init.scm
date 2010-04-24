@@ -147,3 +147,9 @@
 (require 'new-catalog)
 
 ;(display "\n\nLOADED iasylum-bedlam.\n\n")
+
+(begin
+;; Jackcess and required libraries.
+(add-lib "microsoft_access/commons-lang-2.5.jar")
+(add-lib "microsoft_access/jackcess-1.1.21.jar")
+)
