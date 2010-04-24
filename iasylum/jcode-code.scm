@@ -77,7 +77,9 @@
             (if more-data
                 (let ((e (next it)))
                   (proc e)
-                  (loop))))))))
+                  (loop))))))
+      (void)
+      ))
           
 (define (instance-of object class)
   (if (java-object? object)
