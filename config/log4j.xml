@@ -11,20 +11,18 @@
     </appender>
 
     <logger name="org.quartz">
-      <level value ="TRACE" />
+      <level value ="WARN" />
       <appender-ref ref="ConsoleAppender" />
     </logger>	
 
     <logger name="closureJobLogger">
-      <level value ="TRACE" />
+      <level value ="WARN" />
       <appender-ref ref="ConsoleAppender" />
     </logger>	
 
     <logger name="com.healthmarketscience.jackcess.PageChannel">
-      <level value ="TRACE" />
+      <level value ="WARN" />
       <appender-ref ref="ConsoleAppender" />
     </logger>	
-
-
 
 </log4j:configuration>
