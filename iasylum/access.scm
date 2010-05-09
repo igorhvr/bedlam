@@ -15,4 +15,4 @@
       (if (java-null? result) #f
           result)))
   
-  (define (get-table-columns table) (iterable->list (j "table.getColumns();" `((table ,table))) )))
+  (define (get-table-columns table) (iterable->list (j "table.getColumns();" `((table ,table))))))
