@@ -24,7 +24,7 @@
          (map
           (lambda (v)
             (define cell (add-cell row))
-            (set-cell-value cell v))
+            (unless (eqv? v '()) (set-cell-value cell v)))
           v))
        l)
       (save-wb wb stream)))
