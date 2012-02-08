@@ -135,6 +135,7 @@
 (import networking)
 (import binary-io)
 (import custom-io)
+(import file-manipulation)
 (require-extension (lib iasylum/iasylum))
 
 ;; irregex

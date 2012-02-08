@@ -26,10 +26,23 @@
    smart-compile
    flatten
    rglob
+   file->string
    )
   (import hashtable)
   (import file-manipulation)  ;; rglob uses this.
 
+  (define* (file->string file-name (max-size #f))
+    (let ((filesize (file-length file-name)))
+      (let ((desired-bytes
+             (if max-size
+                 (if (> filesize max-size) max-size filesize)
+                 filesize)))
+        (let ((result (make-string desired-bytes)))
+            (call-with-input-file file-name
+              (lambda (i)
+                (read-string result 0 desired-bytes i)))
+            result))))
+  
   (define (smart-compile fname)
     (for-each display (list "\n\n(smart-compile \"" fname "\")..."))
     (let ((data-match (irregex-search
