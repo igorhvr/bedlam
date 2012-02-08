@@ -139,7 +139,7 @@
 (require-extension (lib iasylum/iasylum))
 
 ;; irregex
-(load (string-append (iasylum-bedlam-location) "iasylum/irregex.scm"))
+(load (string-append (iasylum-bedlam-location) "iasylum/irregex.scc"))
 
 ;; let-optionals
 (load (string-append (iasylum-bedlam-location) "iasylum/let-optionals/let-optionals.scm"))
