@@ -90,6 +90,7 @@
 
 (import os)
 (import java-io)
+(import serial-io)
 (import networking) (import binary-io) (import custom-io)
 (import threading) 
   ;;; IAsylum scheme files.

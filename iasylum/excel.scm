@@ -140,8 +140,6 @@
   )
 ; Example:
 ;(define excel-data (load-excel-sheet-data (get-excel-sheet-by-index (get-excel-workbook (j "new java.io.FileInputStream(\"/tmp/s.xls\");")) 0)))
-;(import java-io)
-;(import serial-io)
 ;(call-with-serial-output-file "/tmp/excel-data" (lambda (p) (serialize excel-data p)))
 ; (define excel-data (call-with-serial-input-file "/tmp/excel-data" (lambda (p) (deserialize p))))
 ;(call-with-serial-input-file "/tmp/excel-data" (lambda (p) (deserialize p)))
