@@ -4,7 +4,8 @@
 (require-extension (srfi 19)) ; date & time
 
 (module iasylum/excel
-  (list->spreadsheet list->spreadsheet-file make-workbook make-sheet add-row add-cell set-cell-value save-wb save-wb-file excel-row->scheme load-excel-sheet-data for-each-excel-sheet-data excel-numeric-date-to-jdate excel-numeric-date-to-date get-excel-workbook get-excel-sheet-by-name get-excel-sheet-by-index)
+  (list->spreadsheet list->spreadsheet-file make-workbook make-sheet add-row add-cell set-cell-value save-wb save-wb-file excel-row->scheme load-excel-sheet-data for-each-excel-sheet-data excel-numeric-date-to-jdate excel-numeric-date-to-date get-excel-workbook get-excel-sheet-by-name get-excel-sheet-by-index
+  get-workbook-number-of-sheets)
 
   (define (list->spreadsheet-file l fn)
     (let ((file-stream
@@ -120,9 +121,18 @@
        HSSFWorkbook wb = new HSSFWorkbook(fs);
        wb;"
      `((inputstream ,input-stream))))
+
   
-  (define (get-excel-sheet-by-name workbook sheetname)
+  (define (get-workbook-number-of-sheets workbook)
     (j
+     " import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+       import org.apache.poi.hssf.usermodel.HSSFSheet;
+       wb.getNumberOfSheets();"
+     `((wb ,workbook))))
+  
+
+  (define (get-excel-sheet-by-name workbook sheetname)
+    (j.
      " import org.apache.poi.hssf.usermodel.HSSFWorkbook;
        import org.apache.poi.hssf.usermodel.HSSFSheet;
        HSSFSheet sheet = wb.getSheet(sheetname);
