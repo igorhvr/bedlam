@@ -27,6 +27,11 @@
    flatten
    rglob
    file->string
+   sort
+   /*
+   find-zipfiles
+   get-streams-in-zipfile
+   for-each-row-in-a-spreadsheet-in-a-zipfile
    )
   (import hashtable)
   (import file-manipulation)  ;; rglob uses this.
@@ -42,6 +47,40 @@
               (lambda (i)
                 (read-string result 0 desired-bytes i)))
             result))))
+
+  ;; Sorting routine.
+  (define (binarysort cmp-func L)
+    (if (null? L) '()
+        (traverse (btree L cmp-func))))
+  
+  (define sort binarysort)
+  
+  (define (btree L cmp-func)
+    (if (= (length L) 1) (leaf (car L))
+        (binsert (btree (cdr L) cmp-func) (car L) cmp-func)))
+  
+  (define (binsert T A cmp-func)     ; insert A into the tree
+    (cond  ( (null? T) (leaf A) )        ; insert here
+           ( (cmp-func (car T) A) (list (car T) 
+                                        (binsert (car (cdr T)) A cmp-func)
+                                        (car (cdr (cdr T)))))  ; left subtree 
+           ( else (list (car T)
+                        (car (cdr T)) 
+                        (binsert (car (cdr (cdr T))) A cmp-func))))); right subtree
+  
+                                        ; add a leaf to the tree (A ()())
+  (define (leaf A) (list A '() '()))
+  
+                                        ; output sorted list by traversing the tree 
+  (define (traverse L)   
+    (cond ( (null? L) L)
+          ( else
+            (append (traverse (car (cdr L)))
+                    (cons (car L)(traverse (car (cdr (cdr L)))))))))
+  
+  (define (length L)
+    (if (null? L) 0
+        (+ 1 (length (cdr L)))))
   
   (define (smart-compile fname)
     (for-each display (list "\n\n(smart-compile \"" fname "\")..."))
@@ -241,6 +280,8 @@
                   (make-parameter value)))))))
         ((_ fname) (syntax (_ fname #f))))))
   
+
+  
   (define (flatten tree)
     (define result (list))
     ;; This leaves nothing pending on the stack, and doesn't build
@@ -256,7 +297,7 @@
         (begin
           (flatten-a-list tree)
           (reverse! result))
-        tree))
+      tree))
   
   (define (rglob pdirectory)
     (define (do-rglob directory)
@@ -265,10 +306,74 @@
                (let ((se (car e)))
                  (let ((full-path (string-append directory "/" se)))
                    (if (file-is-directory? full-path)
-                       (do-rglob full-path)
+                       (do-rglob (string-append full-path))
                        full-path))))
              d-contents)))
-    (flatten (do-rglob pdirectory)))
+    (flatten (do-rglob (string-append pdirectory))))
+    
+  ;; use like this:
+  ;; (/* content ... */ <default-return>)
+  ;; or
+  ;; (/* content ... */) => #f
+  (define-syntax /*
+    (syntax-rules (*/)
+      ((/* body ... */) #f)
+      ((/* body ... */ r) r)))
+
+  
+  (define (find-zipfiles location)
+    (filter
+     (lambda (data)
+       (irregex-search (irregex '(w/nocase (seq ".zip" eos))) data))
+     (rglob location)))
+  
+  (define (get-streams-in-zipfile fname)
+    (j
+     "  import java.io.IOException;
+      import java.io.InputStream;
+      import java.util.Enumeration;
+      import java.util.LinkedList;
+      import java.util.zip.ZipEntry;
+      import java.util.zip.ZipFile;
+      LinkedList result = new LinkedList();
+      ZipFile f=new ZipFile(fname);
+      Enumeration e = f.entries();
+      while(e.hasMoreElements()){
+          ZipEntry currE = e.nextElement();
+          InputStream is = f.getInputStream(currE);
+          Object[] res=new Object[2];
+          res[0]=is;
+          res[1]=currE.getName();
+          result.add(res);
+      }
+      result;"
+     `((fname ,(->jstring fname)))))
+  
+  
+  (define (for-each-row-in-a-spreadsheet-in-a-zipfile table-name proc fname)
+    (log-debug table-name "for-each-row-in-a-spreadsheet-in-a-zipfile" "START" fname)
+    (with/fc (lambda (error-record error-k)
+               (log-error table-name "Failure processing zipfile" fname "Moving to defective files location")
+               (log-error table-name "(move-to-failure-location fname) => " (move-to-failure-location fname))
+               (print-exception (make-exception error-record error-k)))
+             (lambda ()
+               (let ((streams+names (get-streams-in-zipfile fname)))    
+                 (map
+                  (lambda (cstream+name)
+                    (let ((ss-name (->string (_1_ cstream+name))))
+                      (log-debug table-name "Spreadsheet processing" "START" ss-name)
+                      (with/fc (lambda (error-record error-k)
+                                 (log-error table-name "Failure processing spreadsheet" ss-name)
+                                 (print-exception (make-exception error-record error-k)))
+                               (lambda ()
+                                 (for-each-excel-sheet-data
+                                  (lambda (v) (proc v fname ss-name))
+                                  (get-excel-sheet-by-index (get-excel-workbook (_0_ cstream+name))  0))))
+                      (log-debug table-name "Spreadsheet processing" "END" ss-name)))
+                  (iterable->list streams+names)))
+               (file-delete! fname)
+               ))
+    (log-debug table-name "for-each-row-in-a-spreadsheet-in-a-zipfile" "END" fname))
   
   (define d)
   (define w)
