@@ -238,31 +238,31 @@
   
   (define r-base
     (lambda* (cmd-string stdout stdout-output-lock stderr stderr-output-lock)
-        (define process (spawn-process "bash" (list "-c" cmd-string)))
-        (define process-lock (mutex/new))
-        (define process-return-code)
-        (define stdout-thread)
-        (define stderr-thread)
-        
-        (define (grab-results stream-retriever output-stream stream-lock)
-          (thread/spawn
-           (lambda ()
-             (define processInputStream)             
-             (mutex/lock! process-lock)
-             (set! processInputStream (stream-retriever process))
-             (mutex/unlock! process-lock)
-             
-             (pump_binary-input-port->character-output-port processInputStream output-stream stream-lock)             
-             (mutex/unlock! ending-lock))))
-
-        (set! stdout-thread (grab-results get-process-stdout stdout stdout-output-lock))
-        (set! stderr-thread (grab-results get-process-stderr stderr stderr-output-lock))
-        
-        (set! process-return-code (wait-for-process process))
-
-        (thread/join stdout-thread)
-        (thread/join stderr-thread)
-        process-return-code))
+             ((lambda ()
+               (define process (spawn-process "bash" (list "-c" cmd-string)))
+               (define process-lock (mutex/new))
+               (define process-return-code)
+               (define stdout-thread)
+               (define stderr-thread)
+               
+               (define (grab-results stream-retriever output-stream stream-lock)
+                 (thread/spawn
+                  (lambda ()
+                    (define processInputStream)
+                    (mutex/lock! process-lock)
+                    (set! processInputStream (stream-retriever process))
+                    (mutex/unlock! process-lock)
+                    
+                    (pump_binary-input-port->character-output-port processInputStream output-stream stream-lock))))
+               
+               (set! stdout-thread (grab-results get-process-stdout stdout stdout-output-lock))
+               (set! stderr-thread (grab-results get-process-stderr stderr stderr-output-lock))
+               
+               (set! process-return-code (wait-for-process process))
+               
+               (thread/join stdout-thread)
+               (thread/join stderr-thread)
+               process-return-code))))
 
 
   (define r/s (lambda p (r (apply string-append p))))
