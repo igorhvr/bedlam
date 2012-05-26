@@ -36,18 +36,23 @@
   (import hashtable)
   (import file-manipulation)  ;; rglob uses this.
 
-  (define* (file->string file-name (max-size #f))
-    (let ((filesize (file-length file-name)))
-      (let ((desired-bytes
-             (if max-size
-                 (if (> filesize max-size) max-size filesize)
-                 filesize)))
-        (let ((result (make-string desired-bytes)))
-            (call-with-input-file file-name
-              (lambda (i)
-                (read-string result 0 desired-bytes i)))
-            result))))
+;;  (define* (file->string file-name (max-size #f))
+;;    (let ((filesize (file-length file-name)))
+;;      (let ((desired-bytes
+;;             (if max-size
+;;                 (if (> filesize max-size) max-size filesize)
+;;                 filesize)))
+;;        (let ((result (make-string desired-bytes)))
+;;            (call-with-input-file file-name
+;;              (lambda (i)
+;;                (read-string result 0 desired-bytes i)))
+;;            result))))
 
+  (define (file->string fname)
+    (->string
+     (j "in = new FileReader(filename);
+      org.apache.bsf.util.IOUtils.getStringFromReader(in);" `((filename ,(->jstring fname))))))
+  
   ;; Sorting routine.
   (define (binarysort cmp-func L)
     (if (null? L) '()
