@@ -2,7 +2,6 @@
 (require-extension (srfi 19)) ; date & time
 (require-extension (lib sql/query))
 (require-extension (lib sql/jdbc))
-(require-extension (lib sql/postgresql))
 
 (module iasylum/jdbc
   (jdbc/load-drivers jdbc/map-result-set jdbc/get-connection jdbc/for-each-result-set
