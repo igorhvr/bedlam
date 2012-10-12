@@ -68,7 +68,7 @@
   (syntax-rules (=>)
     ;; no more clauses, the match failed
     ((match-next v g s)
-     (error "no matching pattern"))
+     (error 'match "no matching pattern"))
     ;; named failure continuation
     ((match-next v g s (pat (=> failure) . body) . rest)
      (let ((failure (lambda () (match-next v g s . rest))))
