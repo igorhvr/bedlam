@@ -151,6 +151,11 @@
 (load (string-append (iasylum-bedlam-location) "iasylum/slib.scm"))
 (require 'new-catalog)
 
+;; FIXXXME I am not sure with require 'line-i/o does not work, even after line-i/o
+;; was added to supported features. This will do for now, providing the very useful
+;; read-line.
+(load (string-append (iasylum-bedlam-location) "iasylum/slib/3b2/lineio.scm")) 
+
 ;(display "\n\nLOADED iasylum-bedlam.\n\n")
 
 (begin
@@ -158,3 +163,5 @@
 (add-lib "microsoft_access/commons-lang-2.5.jar")
 (add-lib "microsoft_access/jackcess-1.1.21.jar")
 )
+
+(add-lib "u/junrar-0.7-SNAPSHOT.jar")

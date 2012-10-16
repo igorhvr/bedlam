@@ -31,6 +31,7 @@
    /*
    find-zipfiles
    get-streams-in-zipfile
+   get-streams-in-rarfile
    for-each-row-in-a-spreadsheet-in-a-zipfile
    )
   (import hashtable)
@@ -379,6 +380,52 @@
                (file-delete! fname)
                ))
     (log-debug table-name "for-each-row-in-a-spreadsheet-in-a-zipfile" "END" fname))
+
+  ;; Return a stream for each file inside a rarfile.
+  ;; This is not thread safe - files have to be read in order.
+  (define (get-streams-in-rarfile fname)
+    (iterable->list
+     (j
+     "import java.io.IOException;
+      import java.io.InputStream;
+      import java.util.Enumeration;
+      import java.util.LinkedList;
+      import java.util.zip.ZipEntry;
+      import java.util.zip.ZipFile;
+      import com.github.junrar.Archive;
+
+      LinkedList result = new LinkedList();
+      Archive archive = new Archive(new java.io.File(fname));
+
+      extractor(currE, pout, archive, previousT) {
+          run() {
+              if(previousT!=null) previousT.join();
+
+              archive.extractFile(currE, pout);
+          }
+          return this;
+      }
+
+      Iterator e = archive.getFileHeaders().iterator();
+
+      previousT = null;
+      while(e.hasNext()){
+          com.github.junrar.rarfile.FileHeader currE = e.next();
+
+          pinp = new java.io.PipedInputStream();
+          pout = new java.io.PipedOutputStream(pinp);
+
+          thread = new Thread( extractor(currE, pout, archive, previousT) );
+          thread.start();
+          previousT = thread;
+
+          Object[] res=new Object[2];
+          res[0]=pinp;
+          res[1]=currE.getFileNameString();
+          result.add(res);
+      }
+      result;"
+     `((fname ,(->jstring fname))))))
   
   (define d)
   (define w)
