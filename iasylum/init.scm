@@ -165,3 +165,49 @@
 )
 
 (add-lib "u/junrar-0.7-SNAPSHOT.jar")
+
+;;(add-lib "clojure/clojure-1.4.0.jar")
+(add-lib "clojure-1.5.0-master-SNAPSHOT.jar")
+(add-lib "clojure/tools.nrepl-0.2.0-SNAPSHOT.jar")
+
+(define (extend-classpath i)
+  (class-path-extension-append! (cons i (class-path-extension))))
+
+(define (find-jars-in-directory dir)
+  (map car (filter (lambda (v) (not (eqv? v '()))) (map (lambda (v) (irregex-extract (irregex '(seq (* any) ".jar")) v)) (rglob dir)))))
+
+(define (add-jars-in-directory-to-classpath dir)
+  (for-each
+   extend-classpath
+   (find-jars-in-directory dir))
+  (class-path-extension))
+
+(define (gen-classpath-str dir)
+  (apply string-append
+         (map
+          (lambda (v)
+            (string-append "export CLASSPATH=$CLASSPATH:" v " ; "))
+          (find-jars-in-directory dir))))
+
+(require-extension (srfi 1 6 13 23 66 69))
+;;(require-extension (lib iasylum/fmt)) ; Disabled because of
+;;{warning: naked left-hand reference in letrec rhs: '%%_FXYoD_hd61_pad'.}
+;;{warning: naked left-hand reference in letrec rhs: '%%_FXa1-0dd61_make-string-fmt-transformer'.}
+;; and similar issues, tstill to be debugged.
+
+ (define (force-fmt-load)
+    (load (string-append (iasylum-bedlam-location) "iasylum/fmt/fmt-0.8.1/let-optionals.scm"))  ; if you don't have LET-OPTIONALS*
+    (load (string-append (iasylum-bedlam-location) "iasylum/fmt/fmt-0.8.1/read-line.scm"))      ; if you don't have READ-LINE
+    (load (string-append (iasylum-bedlam-location) "iasylum/fmt/fmt-0.8.1/string-ports.scm"))   ; if you don't have CALL-WITH-OUTPUT-STRING
+    (load (string-append (iasylum-bedlam-location) "iasylum/fmt/fmt-0.8.1/make-eq-table.scm"))
+    (load (string-append (iasylum-bedlam-location) "iasylum/fmt/fmt-0.8.1/mantissa.scm"))
+    (load (string-append (iasylum-bedlam-location) "iasylum/fmt/fmt-0.8.1/fmt.scm"))
+    (load (string-append (iasylum-bedlam-location) "iasylum/fmt/fmt-0.8.1/fmt-pretty.scm"))     ; optional pretty printing
+    (load (string-append (iasylum-bedlam-location) "iasylum/fmt/fmt-0.8.1/fmt-column.scm"))     ; optional columnar output
+    (load (string-append (iasylum-bedlam-location) "iasylum/fmt/fmt-0.8.1/fmt-c.scm"))          ; optional C formatting utilities
+    (load (string-append (iasylum-bedlam-location) "iasylum/fmt/fmt-0.8.1/fmt-color.scm"))      ; optional color utilities
+    (load (string-append (iasylum-bedlam-location) "iasylum/fmt/fmt-0.8.1/fmt-js.scm"))         ; javascript utilities. 
+    (load (string-append (iasylum-bedlam-location) "iasylum/fmt/fmt-0.8.1/fmt-unicode.scm")))         ; javascript utilities.
+
+;; FIXXXME Hack that will be used until I debug the naked left-hand reference issues above.
+(force-fmt-load)
