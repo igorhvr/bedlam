@@ -211,3 +211,6 @@
 
 ;; FIXXXME Hack that will be used until I debug the naked left-hand reference issues above.
 (force-fmt-load)
+
+
+(add-lib "jdbc/jtds-1.2.5.jar")
