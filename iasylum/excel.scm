@@ -5,7 +5,7 @@
 
 (module iasylum/excel
   (list->spreadsheet list->spreadsheet-file make-workbook make-sheet add-row add-cell set-cell-value save-wb save-wb-file excel-row->scheme load-excel-sheet-data for-each-excel-sheet-data excel-numeric-date-to-jdate excel-numeric-date-to-date get-excel-workbook get-excel-sheet-by-name get-excel-sheet-by-index
-  get-workbook-number-of-sheets)
+  get-workbook-number-of-sheets excel-spreadsheet->list)
 
   (define (list->spreadsheet-file l fn)
     (let ((file-stream
@@ -147,6 +147,14 @@
        sheet;"
      `((wb ,workbook) (index ,(->jint index)))))
 
+;;       (load-excel-sheet-data (get-excel-sheet-by-index (get-excel-workbook (j "new java.io.FileInputStream(fname);" `((fname ,(->jstring fname))))
+
+  (define excel-spreadsheet->list
+    (map
+     (lambda (idx) 
+       (load-excel-sheet-data (get-excel-sheet-by-index (get-excel-workbook (j "new java.io.FileInputStream(fname);" `((fname ,(->jstring fname)))) ) idx)))
+     (iota (->scm-object (get-workbook-number-of-sheets (get-excel-workbook (j "new java.io.FileInputStream(fname);" `((fname ,(->jstring fname)))) ))))))
+  
   )
 ; Example:
 ;(define excel-data (load-excel-sheet-data (get-excel-sheet-by-index (get-excel-workbook (j "new java.io.FileInputStream(\"/tmp/s.xls\");")) 0)))
