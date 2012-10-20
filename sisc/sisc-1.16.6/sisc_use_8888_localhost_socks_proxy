@@ -1,6 +1,6 @@
 #!/bin/sh
 
-RLWRAP_FILE=~/.sisc-rlwrap
+RLWRAP-DISABLED_FILE=~/.sisc-rlwrap-disabled
 
 checkIfNonInteractive() {
 # returns true if parameter for "non-interactive" was passed to the script
@@ -39,23 +39,23 @@ then
   PROPERTIES="-p $SISC_HOME/sisc.properties"
 fi
 
-# We'll attempt to use the rlwrap unix utility to get readline support
+# We'll attempt to use the rlwrap-disabled unix utility to get readline support
 # for the REPL.  However, due to some weirdness in the way threading
-# works in the JVM, interrupts using CTL-C will cause rlwrap to exit
-# prematurely.  To remedy this, we call rlwrap recursively on this shell
-# script, so that the script must terminate to exit through to rlwrap.
+# works in the JVM, interrupts using CTL-C will cause rlwrap-disabled to exit
+# prematurely.  To remedy this, we call rlwrap-disabled recursively on this shell
+# script, so that the script must terminate to exit through to rlwrap-disabled.
 
-#If the rlwrap readline wrapper is in the path, enable it for SISC, 
+#If the rlwrap-disabled readline wrapper is in the path, enable it for SISC, 
 #unless the -x or --no-repl switches were used
 checkIfNonInteractive $@;
-if [ "$?" -eq "0" ] && [ -z "$RLWRAPPED" ] && [ -x "`which rlwrap`" ]
+if [ "$?" -eq "0" ] && [ -z "$RLWRAP-DISABLEDPED" ] && [ -x "`which rlwrap-disabled`" ]
 then
-  if [ ! -f $RLWRAP_FILE ]
+  if [ ! -f $RLWRAP-DISABLED_FILE ]
   then
-    touch $RLWRAP_FILE 
+    touch $RLWRAP-DISABLED_FILE 
   fi
-  RLWRAP="rlwrap -b '(){}[],+=&^%$#@\;|' -f $RLWRAP_FILE -l $RLWRAP_FILE "
-  RLWRAPPED=yes rlwrap $0 $@
+  RLWRAP-DISABLED="rlwrap-disabled -b '(){}[],+=&^%$#@\;|' -f $RLWRAP-DISABLED_FILE -l $RLWRAP-DISABLED_FILE "
+  RLWRAP-DISABLEDPED=yes rlwrap-disabled $0 $@
 else
     EXTENSIONS=""
     if [ -z "$JAVA" ] || ! which $JAVA 
@@ -70,6 +70,6 @@ else
         D=";" ;;
     esac
       
-    $JAVA $JAVAOPT -classpath $SISC_HOME/sisc-opt.jar${D}$SISC_HOME/sisc.jar${D}$SISC_HOME/sisc-lib.jar${D}$CLASSPATH -Dsisc.home=$SISC_HOME sisc.REPL -h $SISC_HOME/sisc.shp $PROPERTIES $EXTENSIONS "$@"
+    $JAVA -DsocksProxyHost=localhost -DsocksProxyPort=8888 -Xmx1G $JAVAOPT -classpath $SISC_HOME/sisc-opt.jar${D}$SISC_HOME/sisc.jar${D}$SISC_HOME/sisc-lib.jar${D}$CLASSPATH -Dsisc.home=$SISC_HOME sisc.REPL -h $SISC_HOME/sisc.shp $PROPERTIES $EXTENSIONS "$@"
 fi
 
