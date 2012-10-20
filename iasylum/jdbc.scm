@@ -7,7 +7,11 @@
   (jdbc/load-drivers jdbc/map-result-set jdbc/get-connection jdbc/for-each-result-set
                      result-set->iterator
                      execute-jdbc-query
-                     get-data)
+                     get-data
+                     for-each-data
+                     map-each-data
+                     jdbc/for-each-triple
+                     )
 
   (define (jdbc/load-drivers)
     (and (j "Class.forName(\"org.postgresql.Driver\");") #t))
@@ -84,7 +88,7 @@
 
   (define-generic-java-method get-column-type)
   (define-generic-java-method get-meta-data)
-  
+
   (define (result-set->iterator rs)
     (j "
      import java.sql.ResultSet;
@@ -136,8 +140,13 @@
 
 
   (define-generic-java-method execute-query)
-  (define (execute-jdbc-query connection query)
-    (execute-query (new-statement connection) (->jstring query)))
+  (define-generic-java-method set-fetch-size)
+  
+  (define execute-jdbc-query
+    (lambda* (connection query (fetch-size #f))
+        (let ((stmt (new-statement connection)))
+          (when fetch-size (set-fetch-size stmt (->jint fetch-size)))
+          (execute-query  stmt (->jstring query)))))
   
   (define (get-data connection query)
     (define (read-metadata p)
@@ -151,5 +160,60 @@
       (let ((rs-md (read-metadata (get-meta-data rs)))
             (data (iterable->list (result-set->iterator rs) (lambda (v) (->scm-object v)))))
             (cons rs-md data))))
+
+  (define (for-each-data connection query proc)
+    (define (read-metadata p)
+      (let l ((i 1) (m (->number (get-column-count p))))
+        (if (> i m) '()
+            (cons
+             (cons (->scm-object (get-column-name p (->jint i)))
+                   (->scm-object (get-column-type-name p (->jint i))))
+             (l (+ i 1) m)))))
+    (let ((rs (execute-jdbc-query connection query) ))
+      (let ((rs-md (read-metadata (get-meta-data rs))))
+            (for-each-iterable (result-set->iterator rs) (lambda (v) (proc (list rs-md (->scm-object v))))))))
+
+  (define (map-each-data connection query proc)
+    (define result (list))
+    (define (proc v)
+      (set! result (cons v result)))
+    (for-each-data connection query proc)
+    result)
+
+  ;;; Triples with column name, column type and column value.
+  (define (jdbc/for-each-triple function result-set)
+    (define (more-data?)
+      (->boolean (next result-set)))
+    (define metadata (get-meta-data result-set))
+    (let l ()
+      ;;(debug more-data? result-set)
+      (when (more-data?)
+        ;;(debug function result-set)
+        (function 
+         (reverse
+          (let l ((i 1) (m (column-count result-set))(acc '()))
+            (if (not (> i m))                
+                (l (+ i 1) m (cons
+                              (cons
+                               (column-name i result-set)
+                               (cons
+                                (->scm-object (get-column-type-name metadata (->jint i)))
+                                (cons
+                                 (->scm-object (get-object result-set         (->jint i)))
+                                 '()))
+                               )
+                              acc))
+                acc)))
+         )
+         (l))))
+
+  (define (jdbc/map-triple function result-set)
+    (let ((result (list)))
+      (jdbc/for-each-triple
+       (lambda (v) (set! result (cons (function v) result)))
+       result-set)
+      (reverse result)
+      ))
+    
   
   )
