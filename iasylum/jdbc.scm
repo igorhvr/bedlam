@@ -180,7 +180,7 @@
     (for-each-data connection query proc)
     result)
 
-  ;;; Triples with column name, column type and column value.
+  ;;; Triples with column name, column type and unwrapped column value.
   (define (jdbc/for-each-triple function result-set)
     (define (more-data?)
       (->boolean (next result-set)))
@@ -199,7 +199,7 @@
                                (cons
                                 (->scm-object (get-column-type-name metadata (->jint i)))
                                 (cons
-                                 (->scm-object (get-object result-set         (->jint i)))
+                                 (get-object result-set         (->jint i))
                                  '()))
                                )
                               acc))
