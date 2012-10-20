@@ -1,0 +1,484 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 11.  Extensibility</title><link rel="stylesheet" href="sss.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.71.0"><link rel="start" href="index.html" title="SISC for Seasoned Schemers"><link rel="up" href="index.html" title="SISC for Seasoned Schemers"><link rel="prev" href="ch10.html" title="Chapter 10.  Modules and Libraries"><link rel="next" href="apa.html" title="Appendix A. Errata"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 11. 
+    Extensibility
+  </th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch10.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="apa.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="Extensibility"></a>Chapter 11. 
+    Extensibility
+  </h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch11.html#id2644279">Adding Types</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch11.html#id2644297">External Representation of Values</a></span></dt><dt><span class="sect2"><a href="ch11.html#id2645541">Equality</a></span></dt><dt><span class="sect2"><a href="ch11.html#id2645678">Serializable Values</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch11.html#id2645722">Adding Native Bindings</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch11.html#id2645899">Native Procedures</a></span></dt><dt><span class="sect2"><a href="ch11.html#id2646026">Fixable Native Procedures</a></span></dt><dt><span class="sect2"><a href="ch11.html#id2646371">Indexed Native Libraries</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch11.html#serialization">Serialization</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch11.html#id2646924">Deserializer methods</a></span></dt><dt><span class="sect2"><a href="ch11.html#id2647290">Serializer methods</a></span></dt></dl></dd></dl></div><p>
+    Occasionally functionality may be desired that is not easily
+    accomplished at the Scheme level.  A new first-class type may be
+    desired, or efficient access to a Java library.  <span class="emphasis"><em>SISC</em></span> 
+    provides a simple API for such modifications.
+  </p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id2644279"></a>Adding Types</h2></div></div></div><p>
+        A Scheme value is represented in <span class="emphasis"><em>SISC</em></span> as a subclass of the
+        abstract Java class <code class="classname">sisc.data.Value</code>. 
+      </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2644297"></a>External Representation of Values</h3></div></div></div><p>
+          In order to be able to display the value in the Scheme
+          system, all <span class="type">Value</span>s must implement the
+          <code class="function">display</code> method:
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2644928"></a>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="void">void </span><span class="methodname">display</span>(<span class="methodparam"><span class="type">sisc.io.ValueWriter </span><span class="parameter">writer</span></span>);</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Uses the various output methods of
+                <span class="type">sisc.io.ValueWriter</span> to construct an
+                external representation of the given Value
+                suitable for output from the
+                <code class="function">display</code> Scheme function.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+          If the programmer desires the Value to have a different
+          representation when written with <code class="function">write</code>,
+          the <code class="function">write</code> method must be overridden.  If it
+          is not, the output of <code class="function">display</code> is used for
+          <code class="function">write</code> as well.
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2645025"></a>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="void">void </span><span class="methodname">write</span>(<span class="methodparam"><span class="type">sisc.io.ValueWriter </span><span class="parameter">writer</span></span>);</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Uses the various output methods of
+                <span class="type">sisc.io.ValueWriter</span> to construct an
+                external representation of the given Value
+                suitable for output from the
+                <code class="function">write</code> Scheme function.
+                If not implemented, the output constructed the by the
+                <code class="function">display</code> method is used as output
+                from <code class="function">write</code>.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+          Finally, if the external representation of a new Value is
+          likely to be long, the programmer should implement the
+          <code class="function">synopsis</code> method, which generates a
+          <span class="emphasis"><em>summary representation</em></span> of the value.
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2645122"></a>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="type">String </span><span class="methodname">synopsis</span>(<span class="methodparam"><span class="type">int </span><span class="parameter">limit</span></span>);</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns approximately <em class="parameter"><code>limit</code></em>
+                characters from the printable representation of this
+                value as if returned by <code class="function">write</code>.
+                This method is used for displaying the value in error
+                messages where the entire representation may be superfluous.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+          The <span class="type">sisc.io.ValueWriter</span> type that is passed as an
+          argument to both <code class="function">display</code> and
+          <code class="function">write</code> contains a number of methods to
+          generate the representation.  First there are several methods
+          for appending Java Strings, characters, and SISC Values.  In
+          each, the called <span class="type">ValueWriter</span> is returned, to
+          allow for easy chaining of calls.
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2645220"></a>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="type">sisc.io.ValueWriter </span><span class="methodname">append</span>(<span class="methodparam"><span class="type">char </span><span class="parameter">c</span></span>);</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Appends a single character to the external
+                representation.  
+              </p></blockquote></div><p>
+          </p><p>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="type">sisc.io.ValueWriter </span><span class="methodname">append</span>(<span class="methodparam"><span class="type">String </span><span class="parameter">s</span></span>);</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Appends the contents of a Java String to the external
+                representation.  
+              </p></blockquote></div><p>
+          </p><p>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="type">sisc.io.ValueWriter </span><span class="methodname">append</span>(<span class="methodparam"><span class="type">sisc.data.Value </span><span class="parameter">v</span></span>);</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Appends the contents of a Scheme value to the external
+                representation.  The value is converted to an external
+                representation using the print style with which the
+                <span class="type">ValueWriter</span> was constructed (for example,
+                <code class="function">display</code> or <code class="function">write</code>).
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+          In addition to the above <code class="function">append</code> methods, the
+          programmer may wish to force <code class="function">display</code> or
+          <code class="function">write</code> rather than use the same method as
+          the <span class="type">ValueWriter</span>.  To do this, one can call the
+          <code class="function">display</code> or <code class="function">write</code> methods on
+          the <span class="type">ValueWriter</span>.
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2645427"></a>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="void">void </span><span class="methodname">display</span>(<span class="methodparam"><span class="type">sisc.data.Value </span><span class="parameter">v</span></span>);</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Appends the external representation of the given value
+                as returned by <code class="function">display</code>.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2645484"></a>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="void">void </span><span class="methodname">write</span>(<span class="methodparam"><span class="type">sisc.data.Value </span><span class="parameter">v</span></span>);</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Appends the external representation of the given value
+                as returned by <code class="function">write</code>.
+              </p></blockquote></div><p>
+          </p></blockquote></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2645541"></a>Equality</h3></div></div></div><p>
+          If the one wants a Value to be comparable for any
+          more than pointer equality, or for the concept of pointer
+          equality to be less strict than actual pointer equality, one
+          or more of the equality methods must be overridden.
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2645558"></a>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="type">boolean </span><span class="methodname">eq</span>(<span class="methodparam"><span class="type">Object </span><span class="parameter">other</span></span>);</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns true if another provided Java object is equal in
+                the sense of <code class="function">eq?</code> to this Value.
+              </p></blockquote></div><p>
+          </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2645619"></a>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="type">boolean </span><span class="methodname">valueEqual</span>(<span class="methodparam"><span class="type">Value </span><span class="parameter">other</span></span>);</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns true if another provided Scheme value is equal in
+                the sense of <code class="function">equal?</code> to this Value.
+              </p></blockquote></div><p>
+          </p></blockquote></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2645678"></a>Serializable Values</h3></div></div></div><p>
+          If the type that is being added will be serialized in a <span class="emphasis"><em>SISC</em></span>
+          heap, and it contains one or more member variables, the Value
+          must include a default constructor (a constructor with no
+          arguments), and implement the <code class="function">deserialize</code>,
+          <code class="function">serialize</code>, and
+          <code class="function">visit</code> methods described in <a href="ch11.html#serialization" title="Serialization">the section called &#8220;Serialization&#8221;</a>.
+        </p></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id2645722"></a>Adding Native Bindings</h2></div></div></div><p>
+        One can add native bindings to the Scheme environment by 
+        implementing a subclass of the abstract class
+        <code class="classname">sisc.nativefun.NativeLibrary</code>.  Such a
+        subclass needs to implement four methods:
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2645742"></a>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="type">String </span><span class="methodname">getLibraryName</span>();</code><br>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the name of this library.  The name should also
+                be acceptable for use in filenames.
+              </p></blockquote></div><p>
+            <a class="indexterm" name="id2645777"></a>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="type">float </span><span class="methodname">getLibraryVersion</span>();</code><br>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the version of this library.
+              </p></blockquote></div><p>
+            <a class="indexterm" name="id2645811"></a>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="type">sisc.data.Symbol[] </span><span class="methodname">getLibraryBindingNames</span>();</code><br>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns an array of the names of the bindings
+                exported by this library.  Each name is a Scheme symbol.
+              </p></blockquote></div><p>
+            <a class="indexterm" name="id2645846"></a>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="type">Value </span><span class="methodname">getBindingValue</span>(<span class="methodparam"><span class="type">sisc.data.Symbol </span><span class="parameter">name</span></span>);</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the value of a given binding exported by this library.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2645899"></a>Native Procedures</h3></div></div></div><p>
+	  It is possible to implement Scheme functions whose behavior
+	  is implemented natively in Java code.  Many of <span class="emphasis"><em>SISC</em></span>'s
+	  procedures are implemented this way.  Native procedures extend
+	  the <code class="classname">sisc.nativefun.NativeProcedure</code>
+	  abstract class.  Working NativeProcedure subclasses must
+	  implement the <code class="function">doApply</code> method, as
+          described below.
+	</p><div class="blockquote"><blockquote class="blockquote"><p>
+	    <a class="indexterm" name="id2645931"></a>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="type">Value </span><span class="methodname">doApply</span>(<span class="methodparam"><span class="type">sisc.interpreter.Interpreter </span><span class="parameter">interp</span></span>);</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+	        Perform the necessary computations of the
+		NativeProcedure, returning a Value as the result of
+		the procedure call.  The arguments to the procedure
+                can be found in the value rib array field,
+                <code class="literal">vlr</code>, of the Interpreter passed 
+                as an argument.  The number of arguments to the
+                procedure can be found from the length of the array
+                (<code class="literal">vlr.length</code>).
+              </p></blockquote></div><p>
+           </p></blockquote></div><p> 
+	  If the native procedure wishes to raise an error, it may do
+          so by throwing any Java runtime exception (subclass of
+	  <code class="classname">java.lang.Runtime</code>).
+	  For a more descriptive error, one may raise a <span class="emphasis"><em>SISC</em></span> error 
+	  using any of a number of <code class="function">error</code>
+	  forms in <code class="classname">sisc.util.Util</code>.  Consult the
+	  source of Util or inquire on the sisc-devel mailinglist for
+          assistance.
+       </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2646026"></a>Fixable Native Procedures</h3></div></div></div><p>
+         Often it is unnecessary to have access to the full Interpreter
+         context to implement a native procedure.  If the 
+         arguments to the procedure are sufficient and the procedure
+         is purely functional (causes no side effects), it is recommended
+         that the programmer create a <span class="emphasis"><em>fixable</em></span>
+         native procedure.  These native procedures may be inlined
+         into generated code when enabled, allowing much faster
+         execution.  In addition, the fixable native procedure
+         interface is simpler to use. 
+        </p><p>The
+         <code class="literal">FixableProcedure</code> abstract class consists
+         of five methods which may or may not be subclassed.  These
+         five methods correspond to the case of calling the
+         procedure with no, one, two, three, and more than three
+         arguments respectively.  Not overriding one of these methods
+         will cause a call to the fixable procedure to throw the
+         invalid number of arguments error to the caller.
+       </p><div class="blockquote"><blockquote class="blockquote"><p>
+	    <a class="indexterm" name="id2646069"></a>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="type">Value </span><span class="methodname">apply</span>();</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+	        Perform the necessary computations of the
+		FixableNativeProcedure, returning a Value as the result of
+		the procedure call.  No argument variant.
+              </p></blockquote></div><p>
+           </p><p>
+	    <a class="indexterm" name="id2646107"></a>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="type">Value </span><span class="methodname">apply</span>(<span class="methodparam"><span class="type">Value </span><span class="parameter">v1</span></span>);</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+	        Perform the necessary computations of the
+		FixableNativeProcedure, returning a Value as the result of
+		the procedure call.  One argument variant.
+              </p></blockquote></div><p>
+           </p><p>
+	    <a class="indexterm" name="id2646161"></a>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="type">Value </span><span class="methodname">apply</span>(<span class="methodparam"><span class="type">Value </span><span class="parameter">v1</span></span>,<br>                   <span class="methodparam"><span class="type">Value </span><span class="parameter">v2</span></span>);</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+	        Perform the necessary computations of the
+		FixableNativeProcedure, returning a Value as the result of
+		the procedure call.  Two argument variant.
+              </p></blockquote></div><p>
+           </p><p>
+	    <a class="indexterm" name="id2646231"></a>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="type">Value </span><span class="methodname">apply</span>(<span class="methodparam"><span class="type">Value </span><span class="parameter">v1</span></span>,<br>                   <span class="methodparam"><span class="type">Value </span><span class="parameter">v2</span></span>,<br>                   <span class="methodparam"><span class="type">Value </span><span class="parameter">v3</span></span>);</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+	        Perform the necessary computations of the
+		FixableNativeProcedure, returning a Value as the result of
+		the procedure call.  Three argument variant.
+              </p></blockquote></div><p>
+           </p><p>
+	    <a class="indexterm" name="id2646318"></a>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="type">Value </span><span class="methodname">apply</span>(<span class="methodparam"><span class="type">Value[] </span><span class="parameter">v</span></span>);</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+	        Perform the necessary computations of the
+		FixableNativeProcedure, returning a Value as the result of
+		the procedure call.  More than three argument variant.
+              </p></blockquote></div><p>
+           </p></blockquote></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2646371"></a>Indexed Native Libraries</h3></div></div></div><p>
+        In the most common case, a Library is created to define several
+        bindings, including procedures whose implementations are in Java
+        code.  For this common case, a skeleton subclass of
+	<code class="classname">NativeLibrary</code>,
+	<code class="classname">sisc.nativefun.IndexedLibraryAdapter</code>
+	is provided.  The IndexedLibraryAdapter class provides
+	implementations for all four required NativeLibrary methods, and
+	introduces a new abstract method which must be implemented, called
+	<code class="function">construct</code>.  In addition, the method
+	<code class="function">define</code> is provided.
+       </p><p>
+        In an indexed native library, each binding is associated with
+        a Java <code class="literal">int</code> unique to that binding within
+	the library.  The IndexedLibraryAdapter subclass should in its
+	constructor call <code class="function">define</code> for each
+	binding provided by the library, according to the
+	contract of the method:
+	</p><div class="blockquote"><blockquote class="blockquote"><p>
+	    <a class="indexterm" name="id2646430"></a>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="type">void </span><span class="methodname">define</span>(<span class="methodparam"><span class="type">String </span><span class="parameter">name</span></span>,<br>                   <span class="methodparam"><span class="type">int </span><span class="parameter">id</span></span>);</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+	        Register the native binding with the given name,
+                and assign it the given library-unique id.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        In implementing the
+	<code class="function">getBindingValue</code> method of the 
+	<code class="classname">NativeLibrary</code> class, an
+	<code class="classname">IndexedLibraryAdapter</code> will call the
+	abstract method <code class="function">construct</code> 
+	required by the its subclasses:
+	</p><div class="blockquote"><blockquote class="blockquote"><p>
+	    <a class="indexterm" name="id2646527"></a>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="type">sisc.data.Value </span><span class="methodname">construct</span>(<span class="methodparam"><span class="type">int </span><span class="parameter">id</span></span>);</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+	        Return an instance of the indexed binding.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        Most frequently, the bindings created in an indexed library
+	are native procedures.  In such a case, a second class is
+        created which subclasses
+	<code class="classname">sisc.nativefun.IndexedProcedure</code>.
+	IndexedProcedure is subclass of
+	<code class="classname">NativeProcedure</code>.
+	An IndexedProcedure subclass' constructor must call the
+	superconstructor with an <code class="literal">int</code>, the unique id
+	for that binding.  That <code class="literal">int</code> is stored in
+	the <code class="literal">id</code> field of
+	<code class="classname">IndexedProcedure</code>.  A subclass can 
+	then use the <code class="literal">id</code> instance variable to
+	dispatch to many native procedures in the body of the
+	<code class="function">doApply</code> method required by native 
+	procedures.
+      </p><p>
+        So, typically, an IndexedNativeLibrary subclass is created
+	whose <code class="function">construct</code> method creates 
+	instances of IndexedProcedure subclasses.  The
+	IndexedNativeLibrary subclass its itself nested in the
+	IndexedProcedure class which it is constructing.  See the
+	various indexed libraries in
+	<code class="classname">sisc.modules</code>
+	for concrete examples.
+      </p></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="serialization"></a>Serialization</h2></div></div></div><p>
+        <span class="emphasis"><em>SISC</em></span> provides an API for serializing the state of a running
+        Interpreter.  The <span class="emphasis"><em>SISC</em></span> heap is a dump of the state of an
+        Interpreter with the necessary code to implement R<sup>5</sup>RS
+        Scheme, for example.  In order to facilitate this
+        serialization, <span class="emphasis"><em>SISC</em></span> Expressions and Values can implement
+        helper methods to define the serialization of the object.
+        If the Expression or Value contains no internal state that
+        need be serialized, the serialization methods may be ignored.
+        If not, the Expression or Value must contain a default (no
+        argument) constructor, and implement the following three methods:
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2646694"></a>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="void">void </span><span class="methodname">serialize</span>(<span class="methodparam"><span class="type">sisc.ser.Serializer </span><span class="parameter">serializer</span></span>)<br>    throws <span class="exceptionname">java.io.IOException</span>;</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Serializes the contents of the Expression to
+                the given Serialization context.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2646749"></a>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="void">void </span><span class="methodname">deserialize</span>(<span class="methodparam"><span class="type">sisc.ser.Deserializer </span><span class="parameter">deserializer</span></span>)<br>    throws <span class="exceptionname">java.io.IOException</span>;</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Sets the state of the Expression to the serialized
+                data read from <em class="parameter"><code>deserializer</code></em>.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2646810"></a>
+            <code class="methodsynopsis"><span class="modifier">public </span><span class="type">boolean </span><span class="methodname">visit</span>(<span class="methodparam"><span class="type">sisc.util.ExpressionVisitor </span><span class="parameter">visitor</span></span>);</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                When called, the Expression should call
+                <code class="literal">visitor.visit(n)</code> on any nested
+                Expressions.  
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        The <code class="classname">Serializer</code> and
+        <code class="classname">Deserializer</code> objects implement Java's
+        <code class="classname">java.io.DataOutput</code> and
+        <code class="classname">java.io.DataInput</code> interfaces,
+        respectively.  This means that you can use any of the
+        write/read functions in those interfaces to serialize the
+        state of your Expression or Value.  In addition, a
+        number of methods are provided that are helpful for this
+        domain.
+      </p><p>
+        The <span class="type">ExpressionVisitor</span> passed to visit contains
+        only one method, <code class="function">visit</code>, which bears the
+        same contract as the <code class="function">visit</code> above.  When
+        called, an Expression would then call the
+        ExpressionVisitor's <code class="function">visit</code> method once for
+        each nested Expression.  This method is used during
+        serialization and during printing to detect cycles in data
+        and code structures.
+      </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2646924"></a>Deserializer methods</h3></div></div></div><p>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              <a class="indexterm" name="id2646937"></a>
+              <code class="methodsynopsis"><span class="modifier">public </span><span class="type">BigInteger </span><span class="methodname">readBigInteger</span>()<br>    throws <span class="exceptionname">java.io.IOException</span>;</code>          
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Reads a BigInteger from the stream.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2646978"></a>
+              <code class="methodsynopsis"><span class="modifier">public </span><span class="type">BigDecimal </span><span class="methodname">readBigDecimal</span>()<br>    throws <span class="exceptionname">java.io.IOException</span>;</code>          
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Reads a BigDecimal from the stream.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2647018"></a>
+              <code class="methodsynopsis"><span class="modifier">public </span><span class="type">Class </span><span class="methodname">readClass</span>()<br>    throws <span class="exceptionname">java.io.IOException</span>;</code>          
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Reads a Java Class object from the stream.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2647059"></a>
+              <code class="methodsynopsis"><span class="modifier">public </span><span class="type">Expression </span><span class="methodname">readExpression</span>()<br>    throws <span class="exceptionname">java.io.IOException</span>;</code>          
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Reads a <span class="emphasis"><em>SISC</em></span> Expression from the stream.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2647104"></a>
+              <code class="methodsynopsis"><span class="modifier">public </span><span class="type">Expression </span><span class="methodname">readInitializedExpression</span>()<br>    throws <span class="exceptionname">java.io.IOException</span>;</code>          
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Reads a <span class="emphasis"><em>SISC</em></span> Expression from the stream, fully
+                  initialized. This method should
+                  <span class="emphasis"><em>only</em></span> be used if fields internal
+                  to the Expression returned must be available during
+                  deserialization.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2647155"></a>
+              <code class="methodsynopsis"><span class="modifier">public </span><span class="type">sisc.data.Expression[] </span><span class="methodname">readExpressionArray</span>()<br>    throws <span class="exceptionname">java.io.IOException</span>;</code>          
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Reads an array of <code class="classname">Expression</code>s from the stream.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2647200"></a>
+              <code class="methodsynopsis"><span class="modifier">public </span><span class="type">sisc.data.Value[] </span><span class="methodname">readValueArray</span>()<br>    throws <span class="exceptionname">java.io.IOException</span>;</code>          
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Reads an array of <code class="classname">Value</code>s from the stream.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2647244"></a>
+              <code class="methodsynopsis"><span class="modifier">public </span><span class="type">SymbolicEnvironment </span><span class="methodname">readSymbolicEnvironment</span>()<br>    throws <span class="exceptionname">java.io.IOException</span>;</code>          
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Reads a <span class="emphasis"><em>SISC</em></span> Symbolic Environment from the stream.
+                </p></blockquote></div><p>
+            </p></blockquote></div><p>
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2647290"></a>Serializer methods</h3></div></div></div><p>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              <a class="indexterm" name="id2647302"></a>
+              <code class="methodsynopsis"><span class="modifier">public </span><span class="type">void </span><span class="methodname">writeBigInteger</span>(<span class="methodparam"><span class="type">BigInteger </span><span class="parameter">bigint</span></span>)<br>    throws <span class="exceptionname">java.io.IOException</span>;</code>          
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Writes a BigInteger to the stream.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2647358"></a>
+              <code class="methodsynopsis"><span class="modifier">public </span><span class="type">void </span><span class="methodname">writeBigDecimal</span>(<span class="methodparam"><span class="type">BigDecimal </span><span class="parameter">bigdecim</span></span>)<br>    throws <span class="exceptionname">java.io.IOException</span>;</code>          
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Writes a BigDecimal to the stream.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2647413"></a>
+              <code class="methodsynopsis"><span class="modifier">public </span><span class="type">void </span><span class="methodname">writeClass</span>(<span class="methodparam"><span class="type">Class </span><span class="parameter">clazz</span></span>)<br>    throws <span class="exceptionname">java.io.IOException</span>;</code>          
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Writes a Java Class object to the stream.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2647468"></a>
+              <code class="methodsynopsis"><span class="modifier">public </span><span class="type">void </span><span class="methodname">writeExpression</span>(<span class="methodparam"><span class="type">Expression </span><span class="parameter">expr</span></span>)<br>    throws <span class="exceptionname">java.io.IOException</span>;</code>          
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Writes a <span class="emphasis"><em>SISC</em></span> Expression to the stream.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2647528"></a>
+              <code class="methodsynopsis"><span class="modifier">public </span><span class="type">void </span><span class="methodname">writeInitializedExpression</span>(<span class="methodparam"><span class="type">Expression </span><span class="parameter">expr</span></span>)<br>    throws <span class="exceptionname">java.io.IOException</span>;</code>          
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Writes a <span class="emphasis"><em>SISC</em></span> Expression to the stream.
+                  This method should
+                  <span class="emphasis"><em>only</em></span> be used if fields internal
+                  to the Expression returned must be available during
+                  deserialization.         
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2647594"></a>
+              <code class="methodsynopsis"><span class="modifier">public </span><span class="type">void </span><span class="methodname">writeExpressionArray</span>(<span class="methodparam"><span class="type">sisc.data.Expression[] </span><span class="parameter">ary</span></span>)<br>    throws <span class="exceptionname">java.io.IOException</span>;</code>          
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Writes an array of <code class="classname">Expression</code>s to the stream.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2647653"></a>
+              <code class="methodsynopsis"><span class="modifier">public </span><span class="type">void </span><span class="methodname">writeValueArray</span>(<span class="methodparam"><span class="type">sisc.data.Value[] </span><span class="parameter">ary</span></span>)<br>    throws <span class="exceptionname">java.io.IOException</span>;</code>          
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Writes an array of <code class="classname">Value</code>s to the stream.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2647712"></a>
+              <code class="methodsynopsis"><span class="modifier">public </span><span class="type">void </span><span class="methodname">writeSymbolicEnvironment</span>(<span class="methodparam"><span class="type">SymbolicEnvironment </span><span class="parameter">e</span></span>)<br>    throws <span class="exceptionname">java.io.IOException</span>;</code>          
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Writes a <span class="emphasis"><em>SISC</em></span> Symbolic Environment to the
+                  stream.
+                </p></blockquote></div><p>
+            </p></blockquote></div><p>
+        </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch10.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="apa.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 10. 
+    Modules and Libraries
+   </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Appendix A. Errata</td></tr></table></div></body></html>

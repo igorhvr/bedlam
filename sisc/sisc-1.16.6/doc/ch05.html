@@ -1,0 +1,2088 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 5. I/O</title><link rel="stylesheet" href="sss.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.71.0"><link rel="start" href="index.html" title="SISC for Seasoned Schemers"><link rel="up" href="index.html" title="SISC for Seasoned Schemers"><link rel="prev" href="ch04.html" title="Chapter 4.  Debugging Facilities"><link rel="next" href="ch06.html" title="Chapter 6.  Threads and Concurrency"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 5. I/O</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch06.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="IO"></a>Chapter 5. I/O</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch05.html#id2565425">Ports</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch05.html#urlfile">URLs</a></span></dt><dt><span class="sect2"><a href="ch05.html#id2566388">Buffered I/O</a></span></dt><dt><span class="sect2"><a href="ch05.html#charports">Character Ports</a></span></dt><dt><span class="sect2"><a href="ch05.html#StringPorts">String Ports</a></span></dt><dt><span class="sect2"><a href="ch05.html#BinaryIO">Binary Ports and Block IO</a></span></dt><dt><span class="sect2"><a href="ch05.html#JavaPorts">Java Ports</a></span></dt><dt><span class="sect2"><a href="ch05.html#SerialIO">Serialization</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch05.html#netio">Networking</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch05.html#netutils">IP Addressing</a></span></dt><dt><span class="sect2"><a href="ch05.html#sockets">Socket Operations</a></span></dt><dt><span class="sect2"><a href="ch05.html#TCP">TCP</a></span></dt><dt><span class="sect2"><a href="ch05.html#SSL">TLS and SSL</a></span></dt><dt><span class="sect2"><a href="ch05.html#UDP">UDP</a></span></dt><dt><span class="sect2"><a href="ch05.html#id2574686">Multicast UDP</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch05.html#UserDefinedPorts">User Defined Ports</a></span></dt><dt><span class="sect1"><a href="ch05.html#id2576800">Miscellaneous</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch05.html#PrettyPrinting">Pretty-Printing</a></span></dt><dt><span class="sect2"><a href="ch05.html#id2576908">Source Loading</a></span></dt><dt><span class="sect2"><a href="ch05.html#id2577037">Location Tracking</a></span></dt><dt><span class="sect2"><a href="ch05.html#Resources">Locating Resources</a></span></dt><dt><span class="sect2"><a href="ch05.html#FileManipulation">File Manipulation</a></span></dt><dt><span class="sect2"><a href="ch05.html#ClassLoading">Class Loading</a></span></dt></dl></dd></dl></div><p>
+      <span class="emphasis"><em>SISC</em></span>'s I/O routines are implemented in a flexible manner, allowing
+    extensions to create new I/O sources that will behave as
+    standard Scheme port objects.  The ports can then be operated on
+    with all R<sup>5</sup>RS port operations, as well as some <span class="emphasis"><em>SISC</em></span> specific
+    port functions.
+  </p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id2565425"></a>Ports</h2></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="urlfile"></a>URLs</h3></div></div></div><p>
+        In <span class="emphasis"><em>SISC</em></span> all procedures that create ports for accessing
+        files, e.g. <code class="function">open-input-file</code>,
+        <code class="function">open-output-file</code> accept URLs in addition
+        to ordinary file names. Here are some examples of valid URLs:
+        </p><pre class="programlisting">
+http://foo.com/bar/bar1.scm
+file:/tmp/foo.scm
+file:c:\bar\baz.scm
+file:foo.scm
+jar:http://foo.com/bar.jar!/bar/bar1.scm
+        </pre><p>
+        The last is a URL referring to a file stored in a JAR on a
+        remote web server. For further details on the format of URLs
+        please consult <a href="http://www.ietf.org/rfc/rfc2396.txt" target="_top">this
+        specification</a>. The format of JAR URLs is defined in
+        <a href="http://java.sun.com/j2se/1.4/docs/api/java/net/JarURLConnection.html" target="_top">the
+        JDK API documentation</a>.  What types of URLs are
+        supported by a particular installation of Java depends on the
+        configured protocol handlers. See <a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html" target="_top">the
+        JDK API documentation</a> for details.
+        <sup>[<a name="id2566103" href="#ftn.id2566103">3</a>]</sup>
+      </p><p>
+        Relative file names or URLs are resolved in relation to the
+        following parameter:
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2566126"></a>
+              <span class="emphasis"><em>parameter: </em></span>
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">current-url</span> [<span class="methodparam"><span class="parameter">url</span></span>]) =&gt; <span class="type">url</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Retrieves or sets the URL which forms the basis for
+                resolving relative filenames and URLs. It is
+                initialized on start up with the path to the current
+                directory. All parameters and the returned value are
+                strings.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+        The algorithm for resolving relative URLs is defined in <a href="http://www.ietf.org/rfc/rfc2396.txt" target="_top">this
+        specification</a>.  For compatibility with other Schemes,
+        <span class="emphasis"><em>SISC</em></span> also supports the
+        <code class="function">current-directory</code> procedure, which is a
+        simple wrapper around <code class="function">current-url</code>.
+      </p><p>
+        A convenience procedure exists for executing a procedure while
+        the <code class="function">current-url</code> is temporarily set to a
+        different value:
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2566217"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">with-current-url</span> <span class="methodparam"><span class="parameter">url</span></span> <span class="methodparam"><span class="parameter">thunk</span></span>) =&gt; <span class="type">value</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Sets the current URL to the URL obtained by
+                normalizing <em class="parameter"><code>url</code></em> in relation to
+                the current URL, then executes
+                <em class="parameter"><code>thunk</code></em>, and then sets
+                the current URL back to the previous value.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        URLs can be normalized using
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2566298"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">normalize-url</span> <span class="methodparam"><span class="parameter">url1</span></span> [<span class="methodparam"><span class="parameter">url2</span></span>]) =&gt; <span class="type">url</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                When called with one string argument,
+                <code class="function">normalize-url</code> returns the
+                normalized version of the given URL. Normalization
+                involves, amongst other things, the replacement of
+                relative path references such as <code class="literal">.</code>
+                and <code class="literal">..</code>.
+              </p><p>
+                When called with two string arguments, the procedure
+                returns the normalized version of the second URL when
+                interpreted as a being relative to the first URL.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2566388"></a>Buffered I/O</h3></div></div></div><p>
+		Buffered ports are provided in <span class="emphasis"><em>SISC</em></span> to layer over any existing
+		port, and read or write in larger, more efficient chunks.
+	    Buffered ports are created with the following constructors, which
+	    accept the underlying port and an optional size, indicating the number
+	    of bytes or characters to buffer before making an underlying read or write.
+	  </p><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" name="id2566411"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-buffered-binary-input-port</span> <span class="methodparam"><span class="parameter">binary-input-port</span></span>) =&gt; <span class="type">binary-input-port</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Creates a binary-input-port which is buffered, and
+              reads its bytes from the provided port.
+            </p></blockquote></div><p>
+        </p><p>
+          <a class="indexterm" name="id2566463"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-buffered-binary-output-port</span> <span class="methodparam"><span class="parameter">binary-output-port</span></span>) =&gt; <span class="type">binary-output-port</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Creates a binary-output-port which is buffered, and
+              writes its bytes to the provided port.
+            </p></blockquote></div><p>
+        </p><p>
+          <a class="indexterm" name="id2566515"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-buffered-character-input-port</span> <span class="methodparam"><span class="parameter">character-input-port</span></span>) =&gt; <span class="type">character-input-port</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Creates a character-input-port which is buffered, and
+              reads its characters from the provided port.
+            </p></blockquote></div><p>
+        </p><p>
+          <a class="indexterm" name="id2566567"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-buffered-character-output-port</span> <span class="methodparam"><span class="parameter">character-output-port</span></span>) =&gt; <span class="type">character-output-port</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Creates a character-output-port which is buffered, and
+              writes its characters to the provided port.
+            </p></blockquote></div><p>
+        </p></blockquote></div><p>
+        With buffered output ports, individual writes may not actually 
+		reach the eventual output source, so the programmer must explicitly
+		flush the port when it the output data <span class="emphasis"><em>must</em></span>
+		reach its destination.  
+      </p><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" name="id2566633"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">flush-output-port</span> [<span class="methodparam"><span class="parameter">output-port</span></span>]) =&gt; <span class="type">undefined</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Causes the specified
+              <em class="parameter"><code>output-port</code></em>'s buffered data to be
+              written immediately.  This operation is allowed on any
+              output port, but may have no affect on some.
+              <em class="parameter"><code>output-port</code></em> defaults to
+              <code class="literal">current-output-port</code>.
+            </p></blockquote></div><p>
+        </p></blockquote></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="charports"></a>Character Ports</h3></div></div></div><p>
+        The R<sup>5</sup>RS I/O primitives implemented by <span class="emphasis"><em>SISC</em></span> create
+        <span class="emphasis"><em>character ports</em></span>.  Character ports read
+        characters from input sources and treat the data as characters
+        in a given character set.  Correspondingly, character ports
+        output bytes from characters according to a given character
+        set's encoding rules.
+      </p><p>
+        By default character ports use the value of the string
+        parameter <code class="function">character-set</code> as the character
+        encoding name.  A list of many possible encoding names can be
+        found in the
+        <a href="http://java.sun.com/j2se/1.4/docs/guide/intl/encoding.doc.html" target="_top">
+        Java Platform Documentation</a>
+      </p><p>
+        One may temporarily change the default character set using
+        the <code class="function">with-character-set</code> function.
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2566773"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">with-character-set</span> <span class="methodparam"><span class="parameter">encoding</span></span> <span class="methodparam"><span class="parameter">thunk</span></span>) =&gt; <span class="type">value</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Changes the value of the
+                <code class="function">character-set</code> parameter, and the
+                default character set to the named encoding while
+                executing the body of <em class="parameter"><code>thunk</code></em>.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2566850"></a>Port Creation</h4></div></div></div><p>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              <a class="indexterm" name="id2566862"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-input-file</span> <span class="methodparam"><span class="parameter">url</span></span> [<span class="methodparam"><span class="parameter">encoding</span></span>]) =&gt; <span class="type">input-port</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Creates an input port from the specified
+                  <em class="parameter"><code>url</code></em>.  If the optional
+                  <em class="parameter"><code>encoding</code></em> parameter, a string,
+                  is supplied input will be decoded from the specified
+                  encoding rather than the default.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2566943"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-output-file</span> <span class="methodparam"><span class="parameter">url</span></span> [<span class="methodparam"><span class="parameter">encoding</span></span>] [<span class="methodparam"><span class="parameter">auto-flush</span></span>]) =&gt; <span class="type">output-port</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Creates an output port to the specified
+                  <em class="parameter"><code>url</code></em>.  If the optional
+                  <em class="parameter"><code>encoding</code></em> parameter, a string,
+                  is supplied output will be encoded in the specified
+                  encoding rather than the default.  If the optional
+                  <em class="parameter"><code>auto-flush</code></em> argument is provided
+                  and is non-false, the port will automatically flush
+                  after each write call.  If the specified file exists,
+                  it will be overwritten silently when the port is
+                  opened.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2567044"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-character-input-port</span> <span class="methodparam"><span class="parameter">binary-input-port</span></span> [<span class="methodparam"><span class="parameter">character-set</span></span>]) =&gt; <span class="type">input-port</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Creates an input port which reads from the
+                  provided binary input port.  One may specify the
+                  desired character set as a string, otherwise the character
+                  set is retrieved from the <code class="literal">character-set</code>
+                  dynamic parameter.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2567117"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-character-output-port</span> <span class="methodparam"><span class="parameter">binary-output-port</span></span> [<span class="methodparam"><span class="parameter">character-set</span></span>] [<span class="methodparam"><span class="parameter">auto-flush</span></span>]) =&gt; <span class="type">output-port</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Creates an output port which writes to the
+                  provided binary output port.  One may specify the
+                  desired character set as a string, otherwise the character
+                  set is retrieved from the <code class="literal">character-set</code>
+                  dynamic parameter.  If the optional
+                  <em class="parameter"><code>auto-flush</code></em> argument is provided
+                  and is non-false, the port will automatically flush
+                  after each write call.
+                </p></blockquote></div><p>
+            </p></blockquote></div><p>
+        </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="bulkchario"></a>Bulk Character I/O</h4></div></div></div><p>
+          In addition to the R<sup>5</sup>RS I/O primitives, <span class="emphasis"><em>SISC</em></span> provides
+          two functions for reading and writing blocks of characters
+          from a character port.
+        </p><p>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              <a class="indexterm" name="id2567246"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">read-string</span> <span class="methodparam"><span class="parameter">buffer</span></span> <span class="methodparam"><span class="parameter">offset</span></span> <span class="methodparam"><span class="parameter">count</span></span> [<span class="methodparam"><span class="parameter">character-input-port</span></span>]) =&gt; <span class="type">integer</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Reads up to <em class="parameter"><code>count</code></em> characters from the
+                  implicit or specified character port into the string
+                  <em class="parameter"><code>buffer</code></em> starting from the position
+                  specified by the integer <em class="parameter"><code>offset</code></em>.  The
+                  number of characters successfully read (which may be
+                  fewer than <em class="parameter"><code>count</code></em>) is returned, or the
+                  end-of-file value if the end-of-file was reached
+                  before any characters were encountered.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2567360"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">write-string</span> <span class="methodparam"><span class="parameter">buffer</span></span> <span class="methodparam"><span class="parameter">offset</span></span> <span class="methodparam"><span class="parameter">count</span></span> [<span class="methodparam"><span class="parameter">character-output-port</span></span>]) =&gt; <span class="type">undefined</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Writes exactly <em class="parameter"><code>count</code></em> characters from
+                  the given string <em class="parameter"><code>buffer</code></em> starting from
+                  the integer position <em class="parameter"><code>offset</code></em> to the
+                  implicit or specified character output port.
+                </p></blockquote></div><p>
+            </p></blockquote></div><p>
+        </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="iodelegate"></a>Port Creation Wrappers</h4></div></div></div><p>
+          The next set of procedures assists in creating a port,
+          followed by calling a given procedure with that port.  When
+          the procedure returns, the port is closed. Invoking escaping
+          continuations from inside the procedure does not close the
+          port, and invoking a continuation captured inside the
+          procedure does not open the port.
+        </p><p>
+          </p><div class="blockquote"><blockquote class="blockquote"><p><a name="func-call-with-input-file"></a>
+              <a class="indexterm" name="id2567496"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">call-with-input-file</span> <span class="methodparam"><span class="parameter">url</span></span> [<span class="methodparam"><span class="parameter">encoding</span></span>] <span class="methodparam"><span class="parameter">procedure</span></span>) =&gt; <span class="type">value</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Calls <em class="parameter"><code>procedure</code></em> with a new
+                  input port attached to <em class="parameter"><code>url</code></em>.
+                  The result of the thunk is returned.
+                </p><p>
+                  If the optional <em class="parameter"><code>encoding</code></em>
+                  parameter is provided, the character port created will
+                  use the specified encoding rather than the default.
+                </p></blockquote></div><p>
+            </p><p><a name="func-call-with-output-file"></a>
+              <a class="indexterm" name="id2567602"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">call-with-output-file</span> <span class="methodparam"><span class="parameter">url</span></span> [<span class="methodparam"><span class="parameter">encoding</span></span>] <span class="methodparam"><span class="parameter">procedure</span></span>) =&gt; <span class="type">value</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Calls <em class="parameter"><code>procedure</code></em> with a new
+                  character output port attached to
+                  <em class="parameter"><code>url</code></em>. The result of the thunk is
+                  returned.
+                </p><p>
+                  If the optional <em class="parameter"><code>encoding</code></em>
+                  parameter is provided, the character port created will
+                  use the specified encoding rather than the default.
+                </p></blockquote></div><p>
+            </p></blockquote></div><p>
+        </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="redirectedio"></a>Replacing Standard Ports</h4></div></div></div><p>
+          The following procedures wrap a thunk, redirecting the input
+          and output of the thunk while it is evaluating to an input or
+          output port other than the
+          <code class="literal">current-input-port</code>
+          and <code class="literal">current-output-port</code>. Invoking escaping
+          continuations from inside the procedure restores the original
+          port, and invoking a continuation captured inside the procedure
+          restores the redirection.
+        </p><p>
+          </p><div class="blockquote"><blockquote class="blockquote"><p><a name="func-with-input-from-port"></a>
+              <a class="indexterm" name="id2567748"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">with-input-from-port</span> <span class="methodparam"><span class="parameter">input-port</span></span> <span class="methodparam"><span class="parameter">thunk</span></span>) =&gt; <span class="type">value</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Evaluates <em class="parameter"><code>thunk</code></em> with
+                  <em class="parameter"><code>input-port</code></em> as the
+                  <code class="literal">current-input-port</code> for the duration
+                  of the evaluation.
+                </p></blockquote></div><p>
+            </p><p><a name="func-with-output-to-port"></a>
+              <a class="indexterm" name="id2567835"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">with-output-to-port</span> <span class="methodparam"><span class="parameter">output-port</span></span> <span class="methodparam"><span class="parameter">thunk</span></span>) =&gt; <span class="type">value</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Evaluates <em class="parameter"><code>thunk</code></em> with
+                  <em class="parameter"><code>output-port</code></em> as the
+                  <code class="literal">current-output-port</code> for the duration
+                  of the evaluation.
+                </p></blockquote></div><p>
+            </p><p><a name="func-with-input-from-file"></a>
+              <a class="indexterm" name="id2567922"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">with-input-from-file</span> <span class="methodparam"><span class="parameter">url</span></span> [<span class="methodparam"><span class="parameter">encoding</span></span>] <span class="methodparam"><span class="parameter">thunk</span></span>) =&gt; <span class="type">value</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Evaluates <em class="parameter"><code>thunk</code></em> with an input
+                  port attached to a file opened for reading from
+                  <em class="parameter"><code>url</code></em> as the
+                  <code class="literal">current-input-port</code> for the duration
+                  of the evaluation. The port is closed when
+                  <em class="parameter"><code>thunk</code></em> returns normally.
+                </p><p>
+                  If the optional <em class="parameter"><code>encoding</code></em>
+                  parameter is provided, the character port created will
+                  use the specified encoding rather than the default.
+                </p></blockquote></div><p>
+            </p><p><a name="func-with-output-to-file"></a>
+              <a class="indexterm" name="id2568042"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">with-output-to-file</span> <span class="methodparam"><span class="parameter">url</span></span> [<span class="methodparam"><span class="parameter">encoding</span></span>] <span class="methodparam"><span class="parameter">thunk</span></span>) =&gt; <span class="type">value</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Evaluates <em class="parameter"><code>thunk</code></em> with an input
+                  port attached to a file opened for writing to
+                  <em class="parameter"><code>url</code></em> as the
+                  <code class="literal">current-output-port</code> for the
+                  duration of the evaluation. The port is closed when
+                  <em class="parameter"><code>thunk</code></em> returns normally.
+                </p><p>
+                  If the optional <em class="parameter"><code>encoding</code></em>
+                  parameter is provided, the character port created will
+                  use the specified encoding rather than the default.
+                </p></blockquote></div><p>
+            </p></blockquote></div><p>
+        </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2568159"></a>Port Predicates</h4></div></div></div><p>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              <a class="indexterm" name="id2568171"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">input-port?</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">#t/#f</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Returns #t if <em class="parameter"><code>value</code></em> is an
+                  input port, #f otherwise.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2568228"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">output-port?</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">#t/#f</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Returns #t if <em class="parameter"><code>value</code></em> is an
+                  output port, #f otherwise.
+                </p></blockquote></div><p>
+            </p></blockquote></div><p>
+        </p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="StringPorts"></a>String Ports</h3></div></div></div><p>
+        <span class="emphasis"><em>Requires: </em></span>
+        <span class="bold"><strong>
+          (import <span class="emphasis"><em>string-io</em></span>)
+        </strong></span>
+      </p><p>
+        String ports are input or output ports that read or write to a
+        string rather than a file or other stream.  String ports can
+        be used to parse or emit formatted strings using the standard
+        Scheme port operations.  A String Input port will read from a
+        given string until the end of string is reached, at which
+        point <code class="computeroutput">#!eof</code> is returned.
+      </p><p>
+        String ports deal with characters as the atomic unit, and as such
+        preserve full unicode width characters at all times.
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p><a name="func-open-input-string"></a>
+            <a class="indexterm" name="id2568345"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-input-string</span> <span class="methodparam"><span class="parameter">string</span></span>) =&gt; <span class="type">string-input-port</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Creates a string input port whose characters are read
+                from the provided string.  Characters will be returned
+                from any read operation on the port until the end of
+                the string is reached.  Read calls after reaching the
+                end of the string will return #!eof.
+              </p></blockquote></div><p>
+          </p><p><a name="func-open-output-string"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-output-string</span>) =&gt; <span class="type">string-output-port</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Creates a string output port, which behaves as an
+                ordinary output port, except that writes are used to
+                create a string as output.  The results of all the
+                write operations are retrieved using
+                <code class="function">get-output-string</code>.
+              </p></blockquote></div><p>
+          </p><p><a name="func-get-output-string"></a>
+            <a class="indexterm" name="id2568449"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">get-output-string</span> <span class="methodparam"><span class="parameter">string-output-port</span></span>) =&gt; <span class="type">string</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the string that was created by zero or more
+                writes to a string output port.  If no writes were
+                performed on the string output port, an empty string
+                ("") is returned.  After this call, the provided
+                string output port is reset to its initial, empty
+                state.
+              </p></blockquote></div><p>
+          </p><p><a name="func-call-with-input-string"></a>
+            <a class="indexterm" name="id2568509"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">call-with-input-string</span> <span class="methodparam"><span class="parameter">string</span></span> <span class="methodparam"><span class="parameter">procedure</span></span>) =&gt; <span class="type">value</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p> Calls <em class="parameter"><code>procedure</code></em> with a new
+              string input port created from
+              <em class="parameter"><code>string</code></em>.  The result of the thunk
+              is returned.
+              </p></blockquote></div><p>
+          </p><p><a name="func-call-with-output-string"></a>
+            <a class="indexterm" name="id2568591"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">call-with-output-string</span> <span class="methodparam"><span class="parameter">procedure</span></span>) =&gt; <span class="type">string</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p> Calls <em class="parameter"><code>procedure</code></em> with a new
+              string output port.  The contents of the
+              string-output-port are returned when the procedure
+              returns.
+              </p></blockquote></div><p>
+          </p><p><a name="func-with-input-from-string"></a>
+            <a class="indexterm" name="id2568653"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">with-input-from-string</span> <span class="methodparam"><span class="parameter">string</span></span> <span class="methodparam"><span class="parameter">thunk</span></span>) =&gt; <span class="type">value</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Evaluates <em class="parameter"><code>thunk</code></em> with a
+                string-input-port created from
+                <em class="parameter"><code>string</code></em> as the
+                <code class="literal">current-input-port</code> for the duration
+                of the evaluation.
+              </p></blockquote></div><p>
+          </p><p><a name="func-with-output-to-string"></a>
+            <a class="indexterm" name="id2568741"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">with-output-to-string</span> <span class="methodparam"><span class="parameter">thunk</span></span>) =&gt; <span class="type">string</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Evaluates <em class="parameter"><code>thunk</code></em> with a
+                string-output-port created as the
+                <code class="literal">current-output-port</code> for the duration
+                of the evaluation.  When the thunk returns, the
+                contents of the string-output-port are returned.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2568805"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">string-input-port?</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns #t if <em class="parameter"><code>value</code></em> is a
+                string input port, #f otherwise.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2568862"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">string-output-port?</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns #t if <em class="parameter"><code>value</code></em> is a
+                string output port, #f otherwise.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+          This interface complies with SRFI-6 (Basic String Ports).
+        </p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="BinaryIO"></a>Binary Ports and Block IO</h3></div></div></div><p>
+        <span class="emphasis"><em>Requires: </em></span>
+        <span class="bold"><strong>
+          (import <span class="emphasis"><em>binary-io</em></span>)
+        </strong></span>
+      </p><p>
+        In addition to the R<sup>5</sup>RS I/O functions, <span class="emphasis"><em>SISC</em></span> provides a
+        symmetric set of functions for reading and writing binary data
+        to and from ports with no character set translation.  These
+        ports are operated on using the binary I/O functions described below.
+        Using character-oriented operations (such as the traditional R<sup>5</sup>RS
+        functions <code class="function">read</code>,
+        <code class="function">read-char</code>, <code class="function">display</code>,
+        etc.) is an error.
+        Binary ports also provide block input/output functions, that allow
+        a Scheme program to read blocks of more than one byte of data at a
+        time from binary ports. <span class="emphasis"><em>SISC</em></span> stores data that is read or is to be
+        written in block fashion in a binary buffer (see <a href="ch09.html#Buffers" title="Binary Buffers">the section called &#8220;Binary Buffers&#8221;</a>).
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2569016"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-binary-input-file</span> <span class="methodparam"><span class="parameter">url</span></span>) =&gt; <span class="type">binary-input-port</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Creates an input port in the same manner as R<sup>5</sup>RS
+                <code class="function">open-input-file</code>, producing an
+                input port that does no character-set decoding on the
+                bytes read as input.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2569081"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-binary-output-file</span> <span class="methodparam"><span class="parameter">url</span></span> [<span class="methodparam"><span class="parameter">auto-flush</span></span>]) =&gt; <span class="type">binary-output-port</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Creates an output port in the same manner as
+                <code class="function">open-output-file</code>, producing an
+                output port that does no character-set encoding.
+              </p></blockquote></div><p>
+          </p><p><a name="func-call-with-binary-input-file"></a>
+            <a class="indexterm" name="id2569157"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">call-with-binary-input-file</span> <span class="methodparam"><span class="parameter">url</span></span> <span class="methodparam"><span class="parameter">procedure</span></span>) =&gt; <span class="type">value</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Calls <em class="parameter"><code>procedure</code></em> with a new
+                binary input port attached to
+                <em class="parameter"><code>url</code></em>.  The result of the thunk
+                is returned.
+              </p></blockquote></div><p>
+          </p><p><a name="func-call-with-binary-output-file"></a>
+            <a class="indexterm" name="id2569238"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">call-with-binary-output-file</span> <span class="methodparam"><span class="parameter">url</span></span> <span class="methodparam"><span class="parameter">procedure</span></span>) =&gt; <span class="type">value</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Calls <em class="parameter"><code>procedure</code></em> with a new
+                binary output port attached to
+                <em class="parameter"><code>url</code></em>. The result of the thunk is
+                returned.
+              </p></blockquote></div><p>
+          </p><p><a name="func-with-binary-input-from-file"></a>
+            <a class="indexterm" name="id2569319"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">with-binary-input-from-file</span> <span class="methodparam"><span class="parameter">url</span></span> <span class="methodparam"><span class="parameter">thunk</span></span>) =&gt; <span class="type">value</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Evaluates <em class="parameter"><code>thunk</code></em> with a binary
+                input port attached to a file opened for reading from
+                <em class="parameter"><code>url</code></em> as the
+                <code class="literal">current-input-port</code> for the duration
+                of the evaluation. The port is closed when
+                <em class="parameter"><code>thunk</code></em> returns normally.
+              </p></blockquote></div><p>
+          </p><p><a name="func-with-binary-output-to-file"></a>
+            <a class="indexterm" name="id2569414"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">with-binary-output-to-file</span> <span class="methodparam"><span class="parameter">url</span></span> <span class="methodparam"><span class="parameter">thunk</span></span>) =&gt; <span class="type">value</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Evaluates <em class="parameter"><code>thunk</code></em> with a binary
+                output port attached to a file opened for writing to
+                <em class="parameter"><code>url</code></em> as the
+                <code class="literal">current-output-port</code> for the
+                duration of the evaluation. The port is closed when
+                <em class="parameter"><code>thunk</code></em> returns normally.
+              </p></blockquote></div><p>
+          </p><p>
+            There are several operations specifically available for
+            use on binary ports.
+          </p><p><a name="func-peek-byte"></a>
+            <a class="indexterm" name="id2569513"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">peek-byte</span> [<span class="methodparam"><span class="parameter">binary-input-port</span></span>]) =&gt; <span class="type">integer</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Similar to <code class="function">peek-char</code>, reads ahead
+                one byte in the stream, returning the next byte available
+                but not advancing the stream.  The byte is returned
+                as an integer.  The current input port is used
+                unless specified.
+              </p></blockquote></div><p>
+          </p><p><a name="func-read-byte"></a>
+            <a class="indexterm" name="id2569576"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">read-byte</span> [<span class="methodparam"><span class="parameter">binary-input-port</span></span>]) =&gt; <span class="type">integer</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Reads a single byte from the stream, advancing the
+                stream and returning the byte as an integer.
+                The current input port is used unless specified.
+              </p></blockquote></div><p>
+          </p><p><a name="func-read-block"></a>
+            <a class="indexterm" name="id2569632"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">read-block</span> <span class="methodparam"><span class="parameter">buffer</span></span> <span class="methodparam"><span class="parameter">offset</span></span> <span class="methodparam"><span class="parameter">count</span></span> [<span class="methodparam"><span class="parameter">binary-input-port</span></span>]) =&gt; <span class="type">integer</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Reads up to <em class="parameter"><code>count</code></em> bytes of data
+                from the current input port or the
+                <em class="parameter"><code>binary-input-port</code></em> parameter
+                if provided,
+                into the binary buffer <em class="parameter"><code>buffer</code></em>
+                starting at position <em class="parameter"><code>offset</code></em>.
+                Note that less
+                than <em class="parameter"><code>count</code></em> bytes may be read.
+                The number of bytes actually read is returned.  If the
+                end-of-file is encountered before any bytes could be
+                read, <code class="literal">#!eof</code> will be returned.
+              </p></blockquote></div><p>
+          </p><p><a name="func-write-byte"></a>
+            <a class="indexterm" name="id2569768"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">write-byte</span> <span class="methodparam"><span class="parameter">integer</span></span> [<span class="methodparam"><span class="parameter">binary-output-port</span></span>]) =&gt; <span class="type">undefined</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Writes a single byte specified as an integer
+                to the given <em class="parameter"><code>binary-output-port</code></em>
+                if provided, current output port otherwise.
+              </p></blockquote></div><p>
+          </p><p><a name="func-write-block"></a>
+            <a class="indexterm" name="id2569842"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">write-block</span> <span class="methodparam"><span class="parameter">buffer</span></span> <span class="methodparam"><span class="parameter">offset</span></span> <span class="methodparam"><span class="parameter">count</span></span> [<span class="methodparam"><span class="parameter">binary-output-port</span></span>]) =&gt; <span class="type">undefined</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Writes <em class="parameter"><code>count</code></em> bytes of data from
+                the provided <em class="parameter"><code>buffer</code></em> at
+                starting point <em class="parameter"><code>offset</code></em> to the
+                given <em class="parameter"><code>binary-output-port</code></em> or
+                to the current output port if unspecified.  Exactly
+                <em class="parameter"><code>count</code></em> bytes will be written.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2569964"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">binary-input-port?</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns #t if <em class="parameter"><code>value</code></em> is a
+                binary input port, #f otherwise.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2570022"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">binary-output-port?</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns #t if <em class="parameter"><code>value</code></em> is a
+                binary output port, #f otherwise.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2570079"></a>Buffer I/O</h4></div></div></div><p>
+          <span class="emphasis"><em>Requires: </em></span>
+          <span class="bold"><strong>
+            (import <span class="emphasis"><em>buffer-io</em></span>)
+          </strong></span>
+        </p><p>
+          A module is also provided for input and output to and from
+          binary buffers using buffer ports, similar to character I/O to
+          and from strings using string ports.
+        </p><p>
+          </p><div class="blockquote"><blockquote class="blockquote"><p><a name="func-open-input-buffer"></a>
+              <a class="indexterm" name="id2570118"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-input-buffer</span> <span class="methodparam"><span class="parameter">buffer</span></span>) =&gt; <span class="type">buffer-input-port</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Creates a buffer input port whose bytes are read
+                  from the provided buffer.  Bytes will be returned
+                  from any read operation on the port until the end of
+                  the buffer is reached.  Read calls after reaching the
+                  end of the buffer will return #!eof.
+                </p></blockquote></div><p>
+            </p><p><a name="func-open-output-buffer"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-output-buffer</span>) =&gt; <span class="type">buffer-output-port</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Creates a buffer output port, which behaves as an
+                  ordinary output port, except that writes are used to
+                  create a buffer as output.  The results of all the
+                  write operations are retrieved using
+                  <code class="function">get-output-buffer</code>.
+                </p></blockquote></div><p>
+            </p><p><a name="func-get-output-buffer"></a>
+              <a class="indexterm" name="id2570222"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">get-output-buffer</span> <span class="methodparam"><span class="parameter">buffer-output-port</span></span>) =&gt; <span class="type">buffer</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Returns the buffer that was created by zero or more
+                  writes to a buffer output port.  If no writes were
+                  performed on the buffer output port, an empty buffer
+                  is returned.  After this call, the provided
+                  buffer output port is reset to its initial, empty
+                  state.
+                </p></blockquote></div><p>
+            </p><p><a name="func-call-with-input-buffer"></a>
+              <a class="indexterm" name="id2570282"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">call-with-input-buffer</span> <span class="methodparam"><span class="parameter">buffer</span></span> <span class="methodparam"><span class="parameter">procedure</span></span>) =&gt; <span class="type">value</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p> Calls <em class="parameter"><code>procedure</code></em> with a new
+                  buffer input port created from
+                  <em class="parameter"><code>buffer</code></em>.  The result of the thunk
+                  is returned.
+                </p></blockquote></div><p>
+            </p><p><a name="func-call-with-output-buffer"></a>
+              <a class="indexterm" name="id2570363"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">call-with-output-buffer</span> <span class="methodparam"><span class="parameter">procedure</span></span>) =&gt; <span class="type">buffer</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p> Calls <em class="parameter"><code>procedure</code></em> with a new
+                  buffer output port.  The contents of the
+                  buffer-output-port are returned when the procedure
+                  returns.
+                </p></blockquote></div><p>
+            </p><p><a name="func-with-input-from-buffer"></a>
+              <a class="indexterm" name="id2570425"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">with-input-from-buffer</span> <span class="methodparam"><span class="parameter">buffer</span></span> <span class="methodparam"><span class="parameter">thunk</span></span>) =&gt; <span class="type">value</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Evaluates <em class="parameter"><code>thunk</code></em> with a
+                  buffer-input-port created from
+                  <em class="parameter"><code>buffer</code></em> as the
+                  <code class="literal">current-input-port</code> for the duration
+                  of the evaluation.
+                </p></blockquote></div><p>
+            </p><p><a name="func-with-output-to-buffer"></a>
+              <a class="indexterm" name="id2570512"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">with-output-to-buffer</span> <span class="methodparam"><span class="parameter">thunk</span></span>) =&gt; <span class="type">buffer</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Evaluates <em class="parameter"><code>thunk</code></em> with a
+                  buffer-output-port created as the
+                  <code class="literal">current-output-port</code> for the duration
+                  of the evaluation.  When the thunk returns, the
+                  contents of the buffer-output-port are returned.
+                </p></blockquote></div><p>
+            </p></blockquote></div><p>
+        </p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="JavaPorts"></a>Java Ports</h3></div></div></div><p>
+        <span class="emphasis"><em>Requires: </em></span>
+        <span class="bold"><strong>
+          (import <span class="emphasis"><em>java-io</em></span>)
+        </strong></span>
+      </p><p>
+        This module provides procedures to convert between Scheme and
+        Java I/O types. In general, binary Scheme ports map to
+        plain Java streams, while character Scheme ports map to Java
+        readers and writers.
+      </p><p>
+        The following example is somewhat contrived, but illustrates
+        a common usage pattern:
+        </p><pre class="programlisting">
+          
+;; A convoluted Hello World example.
+(import s2j)
+(import java-io)
+
+(define-java-classes
+  (&lt;java.lang.system&gt; |java.lang.System|))
+
+(define-generic-java-field-accessors
+  (:jout out))
+
+(let ((stdout (open-character-output-port
+               (-&gt;binary-output-port
+                (:jout (java-null &lt;java.lang.system&gt;)) #t) #t)))
+  (display "Hello, world!" stdout))
+          
+        </pre><p>
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p><a name="func--&gt;binary-input-port"></a>
+            <a class="indexterm" name="id2570649"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">-&gt;binary-input-port</span> <span class="methodparam"><span class="parameter">jinput-stream</span></span>) =&gt; <span class="type">binary-input-port</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns a binary input port associated to the
+                <code class="classname">java.io.InputStream</code> object
+                passed as the <em class="parameter"><code>jinput-stream</code></em>
+                parameter.
+              </p></blockquote></div><p>
+          </p><p><a name="func--&gt;binary-output-port"></a>
+            <a class="indexterm" name="id2570716"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">-&gt;binary-output-port</span> <span class="methodparam"><span class="parameter">joutput-stream</span></span> [<span class="methodparam"><span class="parameter">aflush?</span></span>]) =&gt; <span class="type">binary-output-port</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns a binary input port associated to the
+                <code class="classname">java.io.OutputStream</code> object
+                passed as the <em class="parameter"><code>joutput-stream</code></em>
+                parameter. If the optional boolean
+                <em class="parameter"><code>aflush?</code></em> parameter is not
+                provided, the port will not autoflush by default.
+              </p></blockquote></div><p>
+          </p><p><a name="func--&gt;character-input-port"></a>
+            <a class="indexterm" name="id2570803"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">-&gt;character-input-port</span> <span class="methodparam"><span class="parameter">jreader</span></span>) =&gt; <span class="type">character-input-port</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns a character input port associated to the
+                <code class="classname">java.io.Reader</code> object passed as
+                the <em class="parameter"><code>jreader</code></em> parameter.
+              </p></blockquote></div><p>
+          </p><p><a name="func--&gt;character-output-port"></a>
+            <a class="indexterm" name="id2570870"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">-&gt;character-output-port</span> <span class="methodparam"><span class="parameter">jwriter</span></span> [<span class="methodparam"><span class="parameter">aflush?</span></span>]) =&gt; <span class="type">character-output-port</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns a binary input port associated to the
+                <code class="classname">java.io.Writer</code> object passed as
+                the <em class="parameter"><code>joutput-stream</code></em>
+                parameter. If the optional boolean
+                <em class="parameter"><code>aflush?</code></em> parameter is not
+                provided, the port will not autoflush by default.
+              </p></blockquote></div><p>
+          </p><p><a name="func--&gt;jinput-stream"></a>
+            <a class="indexterm" name="id2570959"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">-&gt;jinput-stream</span> <span class="methodparam"><span class="parameter">input-port</span></span>) =&gt; <span class="type">jinput-stream</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns a <code class="classname">java.io.InputStream</code>
+                object associated to the given Scheme
+                <em class="parameter"><code>input-port</code></em>. The function
+                produces an error if a character port is passed.
+              </p></blockquote></div><p>
+          </p><p><a name="func--&gt;joutput-stream"></a>
+            <a class="indexterm" name="id2571026"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">-&gt;joutput-stream</span> <span class="methodparam"><span class="parameter">output-port</span></span>) =&gt; <span class="type">joutput-stream</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns a <code class="classname">java.io.OutputStream</code>
+                object associated to the given Scheme
+                <em class="parameter"><code>output-port</code></em>. The function
+                produces an error if a character port is passed.
+              </p></blockquote></div><p>
+          </p><p><a name="func--&gt;jreader"></a>
+            <a class="indexterm" name="id2571092"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">-&gt;jreader</span> <span class="methodparam"><span class="parameter">character-input-port</span></span>) =&gt; <span class="type">jreader</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns a <code class="classname">java.io.Reader</code> object
+                associated to the given Scheme
+                <em class="parameter"><code>character-input-port</code></em>.
+              </p></blockquote></div><p>
+          </p><p><a name="func--&gt;jwriter"></a>
+            <a class="indexterm" name="id2571158"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">-&gt;jwriter</span> <span class="methodparam"><span class="parameter">character-output-port</span></span>) =&gt; <span class="type">jwriter</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns a <code class="classname">java.io.Writer</code> object
+                associated to the given Scheme
+                <em class="parameter"><code>character-output-port</code></em>.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        Scheme ports can also be used from Java.  See <a href="ch08.html#SchemePortsInJava" title="Scheme I/O">the section called &#8220;Scheme I/O&#8221;</a>
+        for information.
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="SerialIO"></a>Serialization</h3></div></div></div><p>
+        <span class="emphasis"><em>Requires: </em></span>
+        <span class="bold"><strong>
+          (import <span class="emphasis"><em>serial-io</em></span>)
+        </strong></span>
+      </p><p>
+        With <code class="function">read</code> and <code class="function">write</code>,
+        Scheme values are read and written in a standardized, textual
+        external representation. However, this external representation
+        only fully describes a limited subset of Scheme types. For
+        instance it is impossible to read/write a procedure, or
+        closure, or continuation.
+      </p><p>
+        <span class="emphasis"><em>SISC</em></span> provides a special composed port type and procedures
+        for reading and writing <span class="emphasis"><em>any</em></span> Scheme value using a
+        binary representation. The (de)serialization preserves the
+        referential structure of the object graph comprising the
+        serialized values.
+      </p><p>
+        Serial ports are composed onto and thus are binary ports,
+        i.e. all operations applicable to binary ports also apply to
+        serial ports.
+      </p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="serialportcreation"></a>Port Creation and Identification</h4></div></div></div><p>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              <a class="indexterm" name="id2571314"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-serial-input-port</span> <span class="methodparam"><span class="parameter">binary-input-port</span></span>) =&gt; <span class="type">serial-input-port</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Creates a serial input port which reads external
+                  representations of Scheme values from the given
+                  binary input port.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2571366"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-serial-output-port</span> <span class="methodparam"><span class="parameter">binary-output-port</span></span> [<span class="methodparam"><span class="parameter">auto-flush</span></span>]) =&gt; <span class="type">serial-output-port</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Creates a serial output port which can be used to
+                  write external representations of Scheme values
+                  to the provided binary output port.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2571432"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">serial-input-port?</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">#t/#f</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Returns #t if <em class="parameter"><code>value</code></em> is a
+                  serial input port, #f otherwise.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2571490"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">serial-output-port?</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">#t/#f</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Returns #t if <em class="parameter"><code>value</code></em> is a
+                  serial output port, #f otherwise.
+                </p></blockquote></div><p>
+            </p></blockquote></div><p>
+        </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="serialportwrappers"></a>Serial Port Wrappers</h4></div></div></div><p>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              <a class="indexterm" name="id2571564"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">call-with-serial-input-port</span> <span class="methodparam"><span class="parameter">binary-input-port</span></span> <span class="methodparam"><span class="parameter">procedure</span></span>) =&gt; <span class="type">value</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Calls <em class="parameter"><code>procedure</code></em> with a new
+                  serial input port attached to
+                  <em class="parameter"><code>binary-input-port</code></em>.
+                  The result of the thunk is returned.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2571641"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">call-with-serial-output-port</span> <span class="methodparam"><span class="parameter">binary-output-port</span></span> <span class="methodparam"><span class="parameter">procedure</span></span>) =&gt; <span class="type">value</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Calls <em class="parameter"><code>procedure</code></em> with a new
+                  serial output port attached to
+                  <em class="parameter"><code>binary-output-port</code></em>.
+                  The result of the thunk is returned.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2571719"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">with-serial-input-from-port</span> <span class="methodparam"><span class="parameter">binary-input-port</span></span> <span class="methodparam"><span class="parameter">thunk</span></span>) =&gt; <span class="type">value</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Evaluates <em class="parameter"><code>thunk</code></em> with a serial
+                  input port attached to the specified
+                  <em class="parameter"><code>binary-input-port</code></em> as the
+                  <code class="literal">current-input-port</code> for the duration
+                  of the evaluation. The port is
+                  <span class="emphasis"><em>not</em></span> closed when
+                  <em class="parameter"><code>thunk</code></em> returns.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2571813"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">with-serial-output-to-port</span> <span class="methodparam"><span class="parameter">binary-output-port</span></span> <span class="methodparam"><span class="parameter">thunk</span></span>) =&gt; <span class="type">value</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Evaluates <em class="parameter"><code>thunk</code></em> with a serial
+                  input port attached to the specified
+                  <em class="parameter"><code>binary-output-port</code></em> as the
+                  <code class="literal">current-output-port</code> for the
+                  duration of the evaluation. The port is
+                  <span class="emphasis"><em>not</em></span> closed when
+                  <em class="parameter"><code>thunk</code></em> returns.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2571908"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">call-with-serial-input-file</span> <span class="methodparam"><span class="parameter">url</span></span> <span class="methodparam"><span class="parameter">procedure</span></span>) =&gt; <span class="type">value</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Calls <em class="parameter"><code>procedure</code></em> with a new
+                  serial input port attached to
+                  <em class="parameter"><code>url</code></em>. The result of the thunk is
+                  returned.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2571985"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">call-with-serial-output-file</span> <span class="methodparam"><span class="parameter">url</span></span> <span class="methodparam"><span class="parameter">procedure</span></span>) =&gt; <span class="type">value</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Calls <em class="parameter"><code>procedure</code></em> with a new
+                  serial output port attached to
+                  <em class="parameter"><code>url</code></em>. The result of the thunk is
+                  returned.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2572062"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">with-serial-input-from-file</span> <span class="methodparam"><span class="parameter">url</span></span> <span class="methodparam"><span class="parameter">thunk</span></span>) =&gt; <span class="type">value</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Evaluates <em class="parameter"><code>thunk</code></em> with a serial
+                  input port attached to a file opened for reading from
+                  <em class="parameter"><code>url</code></em> as the
+                  <code class="literal">current-input-port</code> for the duration
+                  of the evaluation. The port is closed when
+                  <em class="parameter"><code>thunk</code></em> returns normally.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2572152"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">with-serial-output-to-file</span> <span class="methodparam"><span class="parameter">url</span></span> <span class="methodparam"><span class="parameter">thunk</span></span>) =&gt; <span class="type">value</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Evaluates <em class="parameter"><code>thunk</code></em> with a serial
+                  input port attached to a file opened for writing to
+                <em class="parameter"><code>url</code></em> as the
+                  <code class="literal">current-output-port</code> for the
+                  duration of the evaluation. The port is closed when
+                  <em class="parameter"><code>thunk</code></em> returns normally.
+                </p></blockquote></div><p>
+            </p></blockquote></div><p>
+        </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="serialprims"></a>Serialization Procedures</h4></div></div></div><p>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              <a class="indexterm" name="id2572260"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">deserialize</span> [<span class="methodparam"><span class="parameter">serial-input-port</span></span>]) =&gt; <span class="type">value</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Reads a Scheme value from an external representation
+                  retrieved from
+                  <em class="parameter"><code>serial-input-port</code></em>. If
+                  <em class="parameter"><code>serial-input-port</code></em> is absent the
+                  data is read from the current input port.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2572325"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">serialize</span> <span class="methodparam"><span class="parameter">value</span></span> [<span class="methodparam"><span class="parameter">serial-output-port</span></span>]) =&gt; <span class="type">undefined</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Writes an external representation of
+                  <em class="parameter"><code>value</code></em> to
+                  <em class="parameter"><code>serial-output-port</code></em>. If
+                  <em class="parameter"><code>serial-output-port</code></em> is absent
+                  the data is written to the current output port.
+                </p></blockquote></div><p>
+            </p></blockquote></div><p>
+        </p></div></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="netio"></a>Networking</h2></div></div></div><p>
+        <span class="emphasis"><em>Requires: </em></span>
+      <span class="bold"><strong>
+        (import <span class="emphasis"><em>networking</em></span>)
+      </strong></span>
+    </p><p>
+      The <span class="emphasis"><em>SISC</em></span> Networking library provides a mechanism for
+      creating and manipulating IP network protocols as standard
+      Scheme ports.  <span class="emphasis"><em>SISC</em></span> supports TCP, UDP, and Multicast UDP.
+      Each is described in the sections that follow.
+    </p><p>
+      Each protocol provides one or more <span class="emphasis"><em>socket
+        constructors</em></span>.  These functions produce a Socket
+      handle, which is represented in <span class="emphasis"><em>SISC</em></span> as
+      <code class="computeroutput">#&lt;socket&gt;</code>.  A
+      socket handle is then used to obtain Scheme ports.
+    </p><p>
+      IP addresses and network hostnames are represented as strings in
+      <span class="emphasis"><em>SISC</em></span>.  Unless otherwise noted, the network library functions
+      that require an address may take a network address as a string
+      which may be any of:
+    </p><div class="itemizedlist"><ul type="disc"><li><p>
+          A hostname, to be resolved through the domain name system.
+        </p></li><li><p>
+          An IPv4 network address in the standard dotted quad format. (RFC-791)
+        </p></li><li><p>
+          An IPv6 network address in colon separated hexadecimal form,
+          and zero-shortened form. (RFC-2373)
+        </p></li></ul></div><p>
+      IPv6 addresses must be supported by the underlying operating
+      system.  An error may be raised if the address is not
+      supported.  All IP port values must be exact
+      integers in the proper range.
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="netutils"></a>IP Addressing</h3></div></div></div><p>
+        Several utility functions are provided for manipulating IP
+        addresses.  These are described below.
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2572537"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">get-host-ip-by-name</span> <span class="methodparam"><span class="parameter">hostname</span></span>) =&gt; <span class="type">string</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Attempts to resolve a hostname provided as a string into an
+                IP address in dotted-quad form.  If the host cannot be
+                found, #f is returned.
+              </p></blockquote></div><p>
+          </p><p><a name="func-get-host-name-by-ip"></a>
+            <a class="indexterm" name="id2572595"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">get-host-name-by-ip</span> <span class="methodparam"><span class="parameter">ip-address</span></span>) =&gt; <span class="type">string</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Attempts a reverse lookup of the given dotted-quad address
+                to determine a registered domain name.  If unsuccessful, #f
+                is returned.
+              </p></blockquote></div><p>
+          </p><p><a name="func-get-local-host"></a>
+            <a class="indexterm" name="id2572655"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">get-local-host</span>) =&gt; <span class="type">string</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Attempts to determine the Internet visible IP address of the
+                local machine.  If successful, this address is returned in
+                dotted-quad notation.  #f is returned otherwise.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="sockets"></a>Socket Operations</h3></div></div></div><p>
+        Once obtained using a protocol specific constructor, a
+        Socket Handle allows manipulation of common socket options,
+        the creation of Scheme input/output ports, and closing of
+        the socket.
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2572719"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">socket?</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns true if and only if the provided value is a socket.
+              </p></blockquote></div><p>
+          </p><p><a name="func-open-socket-input-port"></a>
+            <a class="indexterm" name="id2572773"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-socket-input-port</span> <span class="methodparam"><span class="parameter">socket</span></span> [<span class="methodparam"><span class="parameter">encoding</span></span>]) =&gt; <span class="type">input-port</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Opens a character input port to the socket.  If the optional <em class="parameter"><code>encoding</code></em>
+                parameter is provided, the character port created will
+                use the specified encoding rather than the default.
+              </p></blockquote></div><p>
+          </p><p><a name="func-open-socket-output-port"></a>
+            <a class="indexterm" name="id2572848"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-socket-output-port</span> <span class="methodparam"><span class="parameter">socket</span></span> [<span class="methodparam"><span class="parameter">encoding</span></span>] [<span class="methodparam"><span class="parameter">auto-flush</span></span>]) =&gt; <span class="type">output-port</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Opens a character output port to the socket.  If provided, the
+                boolean argument specifies whether the given port should be
+                set to auto-flush mode.  If unspecified, the port does
+                <span class="emphasis"><em>not</em></span> auto-flush.
+                If the optional <em class="parameter"><code>encoding</code></em>
+                parameter is provided, the character port created will
+                use the specified encoding rather than the default.
+              </p></blockquote></div><p>
+          </p><p><a name="func-open-binary-socket-input-port"></a>
+            <a class="indexterm" name="id2572944"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-binary-socket-input-port</span> <span class="methodparam"><span class="parameter">socket</span></span>) =&gt; <span class="type">binary-input-port</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Opens a binary input port to the socket.
+              </p></blockquote></div><p>
+          </p><p><a name="func-open-binary-socket-output-port"></a>
+            <a class="indexterm" name="id2572998"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-binary-socket-output-port</span> <span class="methodparam"><span class="parameter">socket</span></span> [<span class="methodparam"><span class="parameter">auto-flush</span></span>]) =&gt; <span class="type">binary-output-port</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Opens a character output port to the socket.  If provided, the
+                boolean argument specifies whether the given port should be
+                set to auto-flush mode.  If unspecified, the port does
+                <span class="emphasis"><em>not</em></span> auto-flush.
+              </p></blockquote></div><p>
+          </p><p><a name="func-close-socket"></a>
+            <a class="indexterm" name="id2573071"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">close-socket</span> <span class="methodparam"><span class="parameter">socket</span></span>) =&gt; <span class="type">unspecified</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Closes an IP socket.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        The port-obtaining functions above work on most sockets.
+        An exception applies for  TCP server sockets, which are used only to
+        obtain connected TCP sockets.
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="TCP"></a>TCP</h3></div></div></div><p>
+        The most commonly used Internet protocol maps most favorably
+        to Scheme's input/output model.  Writing to an output port
+        retrieved from a TCP socket writes the data to that socket.
+        Reading from an input port reads from the connected socket.
+        One important note is that one can control the amount of data
+        that fills a TCP packet by using an output port that does
+        not auto-flush.  Data is written to the port until one
+        considers the packet complete, and then uses
+        <code class="computeroutput">(flush-output-port port)</code> to
+        complete the packet.  Note also that this does not
+        <span class="emphasis"><em>guarantee</em></span> that one gets the desired
+        packet size, but does allow one to construct reasonably
+        sized packets.
+      </p><p>
+        TCP sockets are obtained one of two ways.  Either one
+        creates an outgoing connection to another listening host and
+        then subsequently obtains a socket handle, or one creates a
+        <span class="emphasis"><em>listening socket</em></span> and then obtains a
+        socket by waiting for an incoming connection on the
+        specified port.  In either case, the result is a socket
+        handle with an available input and output port that can be
+        obtained using a function in the previous section.
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p><a name="func-open-tcp-socket"></a>
+            <a class="indexterm" name="id2573186"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-tcp-socket</span> <span class="methodparam"><span class="parameter">host</span></span> <span class="methodparam"><span class="parameter">port</span></span>) =&gt; <span class="type">socket</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Attempts to connect to the host at the given hostname or IP
+                address encoded as a string, at the given TCP port
+                specified as an integer.  An error is raised if the host
+                cannot be found or the connection fails.  If successful,
+                a socket is returned.
+              </p></blockquote></div><p>
+          </p><p><a name="func-open-tcp-listener"></a>
+            <a class="indexterm" name="id2573264"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-tcp-listener</span> <span class="methodparam"><span class="parameter">port</span></span> [<span class="methodparam"><span class="parameter">interface-address</span></span>]) =&gt; <span class="type">server-socket</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Creates a TCP server socket, which may only be used with
+                accept-tcp-socket, or closed.  The server socket will listen
+                on the integer port specified.  If provided, the
+                interface-address, a string specifies the address of a
+                local interface to bind to.  If not provided, the port
+                is bound on all available interfaces.  An error is
+                raised if the socket cannot be bound and set listening.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2573335"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">server-socket?</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns true if and only if the provided value is a server
+                socket.
+              </p></blockquote></div><p>
+          </p><p><a name="func-accept-tcp-socket"></a>
+            <a class="indexterm" name="id2573389"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">accept-tcp-socket</span> <span class="methodparam"><span class="parameter">server-socket</span></span>) =&gt; <span class="type">socket</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Accepts an incoming connection on the provided
+                server-socket, and returns a TCP socket handle.  This
+                function will block until an incoming connection is made,
+                or, if set, the socket timeout is exceeded.  If the latter
+                happens, an error will be raised.
+              </p></blockquote></div><p>
+          </p><p><a name="func-set-so-timeout"></a>
+            <a class="indexterm" name="id2573447"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">set-so-timeout!</span> <span class="methodparam"><span class="parameter">socket</span></span> <span class="methodparam"><span class="parameter">timeout</span></span>) =&gt; <span class="type">undefined</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Sets the socket timeout on a socket.  The socket can be
+                either a server socket or connected socket.  In the former
+                case, this value specifies the number of milliseconds that
+                an accept-tcp-socket can wait before timing out.  In the
+                latter, the value specifies the number of milliseconds that
+                can elapse during a read call before timing out.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="SSL"></a>TLS and SSL</h3></div></div></div><p>
+        Sockets which are encrypted using the Secure Sockets Layer
+        (SSL) or Transport Security Layer (TLS) can be created an
+        accepted as well.  This functionality can heavily depend on
+        the underlying support in the JVM, including security
+        settings, restrictions, installed certificates, etc.  For 
+        information on the Java Secure Socket Extension (JSSE) and its
+        setup, refer to the 
+        <a href="http://java.sun.com/products/jsse/reference/docs/index.html" target="_top">
+          <em class="citetitle">JSSE documentation</em>
+        </a> page at Sun.
+      </p><p>
+        The SSL functionality is built atop the sockets and server
+        sockets functionality as in TCP networking above.  A separate 
+        constructor for sockets (<code class="function">open-ssl-socket</code>)
+        and listening sockets (<code class="function">open-ssl-listener</code>)
+        exist, and produce sockets which are used identically to TCP
+        sockets as previously described.
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p><a name="func-open-ssl-socket"></a>
+            <a class="indexterm" name="id2573579"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-ssl-socket</span> <span class="methodparam"><span class="parameter">host</span></span> <span class="methodparam"><span class="parameter">port</span></span> [<span class="methodparam"><span class="parameter">auto-close</span></span>]) =&gt; <span class="type">socket</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Attempts to connect to the host at the given hostname or IP
+                address encoded as a string, at the given TCP port
+                specified as an integer, and establish an SSL
+                connection using the default cipher
+                suites and protocols available. 
+                An error is raised if the host cannot be found or the
+                connection fails.  
+                If successful, a socket is returned.
+              </p></blockquote></div><p>
+          </p><p><a name="func-open-tcp-listener"></a>
+            <a class="indexterm" name="id2573666"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-ssl-listener</span> <span class="methodparam"><span class="parameter">port</span></span> [<span class="methodparam"><span class="parameter">interface-address</span></span>]) =&gt; <span class="type">server-socket</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Creates an SSL TCP server socket, which may only be used with
+                accept-tcp-socket, or closed.  The server socket will listen
+                on the integer port specified.  If provided, the
+                interface-address, a string specifies the address of a
+                local interface to bind to.  If not provided, the port
+                is bound on all available interfaces.  An error is
+                raised if the socket cannot be bound and set
+                listening.
+              </p><p>
+                The cipher suites, protocols, and modes which this server
+                socket will accept are set with the following
+                functions.
+              </p></blockquote></div><p>
+          </p><p><a name="func-get-enabled-cipher-suites"></a>
+            <a class="indexterm" name="id2573747"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">get-enabled-cipher-suites</span> <span class="methodparam"><span class="parameter">ssl-server-socket</span></span>) =&gt; <span class="type">list</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>        
+                Returns a list of strings naming the cipher suites
+                which are enabled for this server socket. 
+              </p></blockquote></div><p>
+          </p><p><a name="func-set-enabled-cipher-suites"></a>
+            <a class="indexterm" name="id2573804"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">set-enabled-cipher-suites!</span> <span class="methodparam"><span class="parameter">ssl-server-socket</span></span> <span class="methodparam"><span class="parameter">suite-list</span></span>) =&gt; <span class="type">list</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>        
+                Accepts an ssl server socket and a list of strings
+                naming the cipher suites which should be available
+                for negotiation with the remote end.  The previous
+                list is returned.
+              </p></blockquote></div><p>
+          </p><p><a name="func-get-enabled-protocols"></a>
+            <a class="indexterm" name="id2573875"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">get-enabled-protocols</span> <span class="methodparam"><span class="parameter">ssl-server-socket</span></span>) =&gt; <span class="type">list</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>        
+                Returns a list of strings naming the security protocols
+                which are enabled for this server socket. 
+              </p></blockquote></div><p>
+          </p><p><a name="func-set-enabled-protocols"></a>
+            <a class="indexterm" name="id2573932"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">set-enabled-protocols!</span> <span class="methodparam"><span class="parameter">ssl-server-socket</span></span> <span class="methodparam"><span class="parameter">protocol-list</span></span>) =&gt; <span class="type">list</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>        
+                Accepts an ssl server socket and a list of strings
+                naming the protocols which should be available
+                for negotiation with the remote end.  The previous
+                list is returned.
+              </p></blockquote></div><p>
+          </p><p><a name="func-session-creation-permitted"></a>
+            <a class="indexterm" name="id2574003"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">session-creation-permitted?</span> <span class="methodparam"><span class="parameter">ssl-server-socket</span></span>) =&gt; <span class="type">boolean</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>        
+                Returns true if new SSL/TLS sessions can be created
+                by the sockets obtained from this server socket.
+              </p></blockquote></div><p>
+          </p><p><a name="func-set-session-creation-permitted"></a>
+            <a class="indexterm" name="id2574060"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">set-session-creation-permitted!</span> <span class="methodparam"><span class="parameter">ssl-server-socket</span></span> <span class="methodparam"><span class="parameter">boolean</span></span>) =&gt; <span class="type">boolean</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>        
+                Sets whether new SSL/TLS sessions can be created
+                by the sockets obtained from this server socket.
+                The previous value is returned.
+              </p></blockquote></div><p>
+          </p><p><a name="func-is-client-mode"></a>
+            <a class="indexterm" name="id2574129"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">is-client-mode?</span> <span class="methodparam"><span class="parameter">ssl-server-socket</span></span>) =&gt; <span class="type">boolean</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>        
+                Returns true if the SSL server socket will be in
+                the rare client mode after accepting the connection,
+                rather than the more common server mode.
+              </p></blockquote></div><p>
+          </p><p><a name="func-set-client-mode"></a>
+            <a class="indexterm" name="id2574186"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">set-client-mode!</span> <span class="methodparam"><span class="parameter">ssl-server-socket</span></span> <span class="methodparam"><span class="parameter">boolean</span></span>) =&gt; <span class="type">boolean</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>        
+                Sets whether the SSL server socket will be in
+                client mode when accepting new connections.  The 
+                previousvalue is returned.
+              </p></blockquote></div><p>
+          </p><p><a name="func-get-client-auth"></a>
+            <a class="indexterm" name="id2574256"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">get-client-auth</span> <span class="methodparam"><span class="parameter">ssl-server-socket</span></span>) =&gt; <span class="type">symbol or #f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>        
+                Returns the necessity of the remote client to
+                authenticate to this server socket.  The returned values
+                are either <code class="literal">needed</code>, indicating the
+                remote must authenticate, <code class="literal">wanted</code>,
+                indicating the remote will be requiested to authenticate
+                but is not required to, or
+                <code class="literal">#f</code>, indicating the remote will
+                not be requested to authenticate.
+              </p></blockquote></div><p>
+          </p><p><a name="func-set-client-auth"></a>
+            <a class="indexterm" name="id2574335"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">set-client-auth!</span> <span class="methodparam"><span class="parameter">ssl-server-socket</span></span> <span class="methodparam"><span class="parameter">client-auth-mode</span></span>) =&gt; <span class="type">symbol or #f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>        
+                Sets the client authentication requirements, as described
+                in <code class="function">get-client-auth</code> above.  One
+                of the above values must be specified.  The previous
+                value is returned.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="UDP"></a>UDP</h3></div></div></div><p>
+        UDP sockets can be obtained for both receive only and
+        send/receive sessions.
+      </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+          The behavior of the <code class="function">char-ready?</code>
+          function is somewhat more difficult to predict on a UDP
+          input port.  The function will return <code class="literal">#t</code>
+          only when a previous datagram contained more bytes than were
+          requested by the read operation that received it.
+        </p></div><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2574451"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-udp-listen-socket</span> <span class="methodparam"><span class="parameter">listen-port</span></span> [<span class="methodparam"><span class="parameter">interface-address</span></span>] [<span class="methodparam"><span class="parameter">datagram-size</span></span>]) =&gt; <span class="type">udp socket</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Opens a UDP socket that listens on
+                <em class="parameter"><code>listen-port</code></em> (optionally bound
+                to only the interface on
+                <em class="parameter"><code>interface-address</code></em>).  If
+                provided, <em class="parameter"><code>datagram-size</code></em>
+                specifies the buffer size (in bytes) for receiving UDP
+                datagrams.  Datagrams larger than
+                <em class="parameter"><code>datagram-size</code></em> are truncated to
+                that size.  If unspecified, the default datagram size
+                is 1500 bytes.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2574559"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-udp-socket</span> <span class="methodparam"><span class="parameter">remote-host</span></span> <span class="methodparam"><span class="parameter">remote-port</span></span>) =&gt; <span class="type">udp socket</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Opens a UDP socket for sending datagrams to
+                the Internet host specified by
+                <em class="parameter"><code>remote-host</code></em>, on port
+                <em class="parameter"><code>remote-port</code></em>.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        After obtaining a UDP socket, input and output ports can be
+        obtained in the usual manner.  It is an error to attempt to
+        obtain an output-port from a listening UDP socket, or an input
+        port from a sending UDP socket.
+      </p><p>
+        UDP input ports behave as
+        ordinary input ports.  When a datagram arrives as a result of
+        any read operation on the port, their entire contents are
+        stored in a buffer of length
+        <em class="parameter"><code>datagram-size</code></em> bytes.  Successive read
+        operations return data from that buffer until it is exhausted,
+        at which point a read operation will cause the UDP socket to
+        listen for another datagram.
+      </p><p>
+        UDP output ports should be treated with some care, however.
+        If a UDP output port was obtained in auto-flush mode, each
+        write operation to the output port will cause a new datagram
+        to be sent.  Control over the size of the datagram must be
+        maintained by using a port that does not auto-flush, writing
+        the desired data, and flushing once the amount of data that
+        the user wants to occupy a single UDP datagram is reached.
+        The behavior of constructing very large UDP packets is
+        undefined.  The packet may be silently dropped or (more
+        likely) fragmented at the IP layer.
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2574686"></a>Multicast UDP</h3></div></div></div><p>
+          <span class="emphasis"><em>SISC</em></span> provides support for IP multicast UDP datagrams as
+        well.  This allows a program to both send and receive to an IP
+        multicast group.  Multicast UDPs are an extension of ordinary
+        UDP.  Thus all I/O operations on a Multicast UDP socket are
+        subject to the same semantics as an ordinary UDP socket.
+      </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+          The Multicast UDP library requires that the underlying
+          operating system's IP networking stack support Multicast.
+          The functions described here may produce an error if the
+          operating system does not.
+        </p></div><p>
+        A program wishing to use multicast UDP sockets must first
+        obtain a multicast socket for either listening to a multicast
+        group, or for both listening and sending to such a group.
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2574728"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-multicast-socket</span> <span class="methodparam"><span class="parameter">listen-port</span></span> [<span class="methodparam"><span class="parameter">interface-address</span></span>] [<span class="methodparam"><span class="parameter">datagram-size</span></span>]) =&gt; <span class="type">multicast udp socket</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Opens a multicast UDP socket that listens on
+                <em class="parameter"><code>listen-port</code></em> (optionally bound
+                only to the interface addressed by
+                <em class="parameter"><code>interface-address</code></em>.  If
+                provided, <em class="parameter"><code>datagram-size</code></em> specifies the
+                buffer size (in bytes) for receiving UDP datagrams.
+                Datagrams larger than
+                <em class="parameter"><code>datagram-size</code></em> are truncated to
+                that size.  If unspecified, the default datagram size
+                is 1500 bytes.
+              </p></blockquote></div><p>
+          </p><p>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-multicast-socket</span> <span class="methodparam"><span class="parameter">group</span></span> <span class="methodparam"><span class="parameter">port</span></span> [<span class="methodparam"><span class="parameter">interface-address</span></span>] [<span class="methodparam"><span class="parameter">datagram-size</span></span>]) =&gt; <span class="type">multicast udp socket</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Opens a multicast UDP socket for sending datagrams
+                to the specified multicast
+                <em class="parameter"><code>group</code></em>, on the specified
+                <em class="parameter"><code>port</code></em>.  The returned socket will
+                also be capable of listening to that group on the same
+                port (and optionally bound only to the interface
+                addressed by <em class="parameter"><code>interface-address</code></em>),
+                though the socket will not initially be a member of
+                the group.  If provided,
+                <em class="parameter"><code>datagram-size</code></em> specifies the
+                buffer size (in bytes) for receiving UDP datagrams.
+                Datagrams larger than
+                <em class="parameter"><code>datagram-size</code></em> are truncated to
+                that size.  If unspecified, the default datagram size
+                is 1500 bytes.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        Once a sending socket has been obtained (the second form), an
+        output-port can be obtained in the usual manner, and datagrams
+        can be immediately sent to the multicast group.  To receive
+        datagrams, sockets returned from both forms must
+        <span class="emphasis"><em>join</em></span> a multicast group.
+      </p><p>
+        A multicast group is specified by a class D IP address and by a
+        standard UDP port number. Class D IP addresses are in the range
+        224.0.0.0 to 239.255.255.255, inclusive. The address 224.0.0.0 is
+        reserved and should not be used.
+      </p><p>
+        Groups are joined and left using the following functions:
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2574990"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">join-multicast-group</span> <span class="methodparam"><span class="parameter">multicast-socket</span></span> <span class="methodparam"><span class="parameter">group</span></span>) =&gt; <span class="type">undefined</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Causes the given multicast socket to join the group
+                specified by the Internet address in
+                <em class="parameter"><code>group</code></em>.  Once joined, read
+                operations on an obtained input-port will be able to
+                receive datagrams destined to that group.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2575064"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">leave-multicast-group</span> <span class="methodparam"><span class="parameter">multicast-socket</span></span> <span class="methodparam"><span class="parameter">group</span></span>) =&gt; <span class="type">undefined</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Causes the given multicast socket to leave the group
+                specified by the Internet address in
+                <em class="parameter"><code>group</code></em>.  Read operations on any
+                input ports obtained from this socket will no longer
+                receive datagrams from that group.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        A single multicast socket can simultaneously listen to more
+        than one multicast group.  A socket can only send to one
+        group, however: the group it was constructed with.
+      </p><p>
+        Multicast packets are limited in extent by their
+        time-to-live.  Each time a multicast packet crosses a router,
+        its ttl is decremented.  In this manner, one can send
+        datagrams only to local networks or subnetworks, as well as
+        more grand scopes.  The TTL of a socket is set using
+        <code class="function">set-multicast-ttl!</code>
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2575165"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">set-multicast-ttl!</span> <span class="methodparam"><span class="parameter">multicast-socket</span></span> <span class="methodparam"><span class="parameter">ttl</span></span>) =&gt; <span class="type">undefined</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Sets the multicast TTL of the given socket to
+                <em class="parameter"><code>ttl</code></em>, an integer.  All datagrams
+                sent after this call will have their TTL set to the
+                new value.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        Valid multicast TTLs are in the range 0 (restricted to the
+        same host) to 255 (unlimited in scope).
+      </p></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="UserDefinedPorts"></a>User Defined Ports</h2></div></div></div><p>
+        <span class="emphasis"><em>Requires: </em></span>
+      <span class="bold"><strong>
+        (import <span class="emphasis"><em>custom-io</em></span>)
+      </strong></span>
+    </p><p>
+      <span class="emphasis"><em>SISC</em></span> provides the ability to create new I/O port types from
+      within Scheme.  To add a new port type, one invokes a 
+      custom port constructors described below, passing 
+      procedures (Scheme or otherwise) which implement the operations
+      required by that port.  Each custom port constructor returns 
+      a Scheme port which may be used with any of the <span class="emphasis"><em>SISC</em></span> or R<sup>5</sup>RS
+      I/O functions.  Port implementors may also use an associated
+      <span class="emphasis"><em>port-local</em></span> value to coordinate state
+      for some specialized ports.
+    </p><p>
+      </p><div class="blockquote"><blockquote class="blockquote"><p>
+	  <a class="indexterm" name="id2575306"></a>
+	  <span class="emphasis"><em>procedure: </em></span> 
+	  <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">set-port-local!</span> <span class="methodparam"><span class="parameter">custom-port</span></span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">value</span></code>
+	  </p><div class="blockquote"><blockquote class="blockquote"><p>
+	      Sets the port-local value of the given custom port.
+	    </p></blockquote></div><p>
+	</p><p>
+	  <a class="indexterm" name="id2575369"></a>
+	  <span class="emphasis"><em>procedure: </em></span> 
+	  <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">port-local</span> <span class="methodparam"><span class="parameter">wrapper-stream</span></span>) =&gt; <span class="type">value</span></code>
+	  </p><div class="blockquote"><blockquote class="blockquote"><p>
+	      Gets the port-local value of the given custom port.
+	    </p></blockquote></div><p>
+	</p></blockquote></div><p>
+    </p><p>
+      </p><div class="blockquote"><blockquote class="blockquote"><p>
+	  <a class="indexterm" name="id2575426"></a>
+	  <span class="emphasis"><em>procedure: </em></span> 
+	  <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">make-custom-character-input-port</span> <span class="methodparam"><span class="parameter">read</span></span> <span class="methodparam"><span class="parameter">read-string</span></span> <span class="methodparam"><span class="parameter">ready?</span></span> <span class="methodparam"><span class="parameter">close</span></span>) =&gt; <span class="type">character-input-port</span></code>
+	  </p><div class="blockquote"><blockquote class="blockquote"><p>
+	      Creates a character-input-port whose functionality is
+	      implemented by the four provided fundamental procedures.
+	    </p><p>
+	      The fundamental procedures required are as follows:
+	    </p><code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">read</span> <span class="methodparam"><span class="parameter">port</span></span>) =&gt; <span class="type">integer</span></code><div class="blockquote"><blockquote class="blockquote"><p>
+		Return a character as an integer value, or -1 if the end of 
+		stream has been reached.  
+		<em class="parameter"><code>port</code></em> is a reference to the
+		custom Scheme port which contains the procedure.
+	      </p></blockquote></div><code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">read-string</span> <span class="methodparam"><span class="parameter">port</span></span> <span class="methodparam"><span class="parameter">mutable-string</span></span> <span class="methodparam"><span class="parameter">offset</span></span> <span class="methodparam"><span class="parameter">count</span></span>) =&gt; <span class="type">integer</span></code><div class="blockquote"><blockquote class="blockquote"><p>
+		Reads up to <em class="parameter"><code>count</code></em> characters 
+		into the given mutable string at position 
+		<em class="parameter"><code>offset</code></em>.  The number of
+		actual characters read are returned as an integer
+		value, or -1 if the end of stream has been reached.  
+		<em class="parameter"><code>port</code></em> is a reference to the
+		custom Scheme port which contains the procedure.
+	      </p></blockquote></div><code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">ready?</span> <span class="methodparam"><span class="parameter">port</span></span>) =&gt; <span class="type">boolean</span></code><div class="blockquote"><blockquote class="blockquote"><p>
+		Returns a non-false value if one or more characters
+		are available for reading, false otherwise.
+	      </p></blockquote></div><code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">close</span> <span class="methodparam"><span class="parameter">port</span></span>) =&gt; <span class="type">undefined</span></code><div class="blockquote"><blockquote class="blockquote"><p>
+		Closes the port.
+	      </p></blockquote></div></blockquote></div><p>
+	</p></blockquote></div><p>
+    </p><p>
+      </p><div class="blockquote"><blockquote class="blockquote"><p>
+	  <a class="indexterm" name="id2575732"></a>
+	  <span class="emphasis"><em>procedure: </em></span> 
+	  <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">make-custom-binary-input-port</span> <span class="methodparam"><span class="parameter">read</span></span> <span class="methodparam"><span class="parameter">read-block</span></span> <span class="methodparam"><span class="parameter">available</span></span> <span class="methodparam"><span class="parameter">close</span></span>) =&gt; <span class="type">binary-input-port</span></code>
+	  </p><div class="blockquote"><blockquote class="blockquote"><p>
+	      Creates a binary-input-port whose functionality is
+	      implemented by the four provided fundamental procedures.
+	    </p><p>
+	      The fundamental procedures required are as follows:
+	    </p><code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">read</span> <span class="methodparam"><span class="parameter">port</span></span>) =&gt; <span class="type">integer</span></code><div class="blockquote"><blockquote class="blockquote"><p>
+		Return a byte as an integer value, or -1 if the end of 
+		stream has been reached. 
+		<em class="parameter"><code>port</code></em> is a reference to the
+		custom Scheme port which contains the procedure.
+	      </p></blockquote></div><code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">read-block</span> <span class="methodparam"><span class="parameter">port</span></span> <span class="methodparam"><span class="parameter">buffer</span></span> <span class="methodparam"><span class="parameter">offset</span></span> <span class="methodparam"><span class="parameter">count</span></span>) =&gt; <span class="type">integer</span></code><div class="blockquote"><blockquote class="blockquote"><p>
+		Reads up to <em class="parameter"><code>count</code></em> bytes
+		into the given binary buffer at position 
+		<em class="parameter"><code>offset</code></em>.  The number of
+		actual bytes read are returned as an integer
+		value, or -1 if the end of stream has been reached.  
+		<em class="parameter"><code>port</code></em> is a reference to the
+		custom Scheme port which contains the procedure.
+	      </p></blockquote></div><code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">available</span> <span class="methodparam"><span class="parameter">port</span></span>) =&gt; <span class="type">integer</span></code><div class="blockquote"><blockquote class="blockquote"><p>
+		Returns a count of the number of bytes which
+		are available for reading.  This number need 
+		not be accurate.
+	      </p></blockquote></div><code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">close</span> <span class="methodparam"><span class="parameter">port</span></span>) =&gt; <span class="type">undefined</span></code><div class="blockquote"><blockquote class="blockquote"><p>
+		Closes the port.
+	      </p></blockquote></div></blockquote></div><p>
+	</p></blockquote></div><p>
+    </p><p>
+      </p><div class="blockquote"><blockquote class="blockquote"><p>
+	  <a class="indexterm" name="id2576038"></a>
+	  <span class="emphasis"><em>procedure: </em></span> 
+	  <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">make-custom-character-output-port</span> <span class="methodparam"><span class="parameter">write</span></span> <span class="methodparam"><span class="parameter">write-string</span></span> <span class="methodparam"><span class="parameter">flush</span></span> <span class="methodparam"><span class="parameter">close</span></span>) =&gt; <span class="type">character-output-port</span></code>
+	  </p><div class="blockquote"><blockquote class="blockquote"><p>
+	      Creates a character-output-port whose functionality is
+	      implemented by the four provided fundamental procedures.
+	    </p><p>
+	      The fundamental procedures required are as follows:
+	    </p><code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">write</span> <span class="methodparam"><span class="parameter">port</span></span> <span class="methodparam"><span class="parameter">byte</span></span>) =&gt; <span class="type">undefined</span></code><div class="blockquote"><blockquote class="blockquote"><p>
+		Writes a character represented as an integer value.
+		<em class="parameter"><code>port</code></em> is a reference to the
+		custom Scheme port which contains the procedure.
+	      </p></blockquote></div><code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">write-string</span> <span class="methodparam"><span class="parameter">port</span></span> <span class="methodparam"><span class="parameter">string</span></span> <span class="methodparam"><span class="parameter">offset</span></span> <span class="methodparam"><span class="parameter">count</span></span>) =&gt; <span class="type">void</span></code><div class="blockquote"><blockquote class="blockquote"><p>
+		Writes <em class="parameter"><code>count</code></em> characters 
+		from the given string at position 
+		<em class="parameter"><code>offset</code></em>. 
+		<em class="parameter"><code>port</code></em> is a reference to the
+		custom Scheme port which contains the procedure.
+	      </p></blockquote></div><code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">flush</span> <span class="methodparam"><span class="parameter">port</span></span>) =&gt; <span class="type">undefined</span></code><div class="blockquote"><blockquote class="blockquote"><p>
+		Flushes any unwritten characters to the stream.
+	      </p></blockquote></div><code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">close</span> <span class="methodparam"><span class="parameter">port</span></span>) =&gt; <span class="type">undefined</span></code><div class="blockquote"><blockquote class="blockquote"><p>
+		Closes the port.
+	      </p></blockquote></div></blockquote></div><p>
+	</p></blockquote></div><p>
+    </p><p>
+      </p><div class="blockquote"><blockquote class="blockquote"><p>
+	  <a class="indexterm" name="id2576354"></a>
+	  <span class="emphasis"><em>procedure: </em></span> 
+	  <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">make-custom-binary-output-port</span> <span class="methodparam"><span class="parameter">write</span></span> <span class="methodparam"><span class="parameter">write-block</span></span> <span class="methodparam"><span class="parameter">flush</span></span> <span class="methodparam"><span class="parameter">close</span></span>) =&gt; <span class="type">binary-output-port</span></code>
+	  </p><div class="blockquote"><blockquote class="blockquote"><p>
+	      Creates a binary-output-port whose functionality is
+	      implemented by the four provided fundamental procedures.
+	    </p><p>
+	      The fundamental procedures required are as follows:
+	    </p><p>
+	      The fundamental procedures required are as follows:
+	    </p><code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">write</span> <span class="methodparam"><span class="parameter">port</span></span> <span class="methodparam"><span class="parameter">byte</span></span>) =&gt; <span class="type">undefined</span></code><div class="blockquote"><blockquote class="blockquote"><p>
+		Writes a byte represented as an integer value.
+		<em class="parameter"><code>port</code></em> is a reference to the
+		custom Scheme port which contains the procedure.
+	      </p></blockquote></div><code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">write-block</span> <span class="methodparam"><span class="parameter">port</span></span> <span class="methodparam"><span class="parameter">buffer</span></span> <span class="methodparam"><span class="parameter">offset</span></span> <span class="methodparam"><span class="parameter">count</span></span>) =&gt; <span class="type">void</span></code><div class="blockquote"><blockquote class="blockquote"><p>
+		Writes <em class="parameter"><code>count</code></em> bytes
+		from the given binary buffer at position 
+		<em class="parameter"><code>offset</code></em>. 
+		<em class="parameter"><code>port</code></em> is a reference to the
+		custom Scheme port which contains the procedure.
+	      </p></blockquote></div><code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">flush</span> <span class="methodparam"><span class="parameter">port</span></span>) =&gt; <span class="type">undefined</span></code><div class="blockquote"><blockquote class="blockquote"><p>
+		Flushes any unwritten characters to the stream.
+	      </p></blockquote></div><code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">close</span> <span class="methodparam"><span class="parameter">port</span></span>) =&gt; <span class="type">undefined</span></code><div class="blockquote"><blockquote class="blockquote"><p>
+		Closes the port.
+	      </p></blockquote></div></blockquote></div><p>
+	</p></blockquote></div><p>
+    </p><p>
+      Finally, the underlying procedures which implement a custom port
+      can be retrieved with the following function:
+    </p><p>
+      </p><div class="blockquote"><blockquote class="blockquote"><p>
+	  <a class="indexterm" name="id2576680"></a>
+	  <span class="emphasis"><em>procedure: </em></span> 
+	  <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">custom-port-procedures</span> <span class="methodparam"><span class="parameter">custom-port</span></span>) =&gt; <span class="type">list</span></code>
+	  </p><div class="blockquote"><blockquote class="blockquote"><p>
+	      Returns the procedures which implement a custom port
+	      as a list.
+	    </p></blockquote></div><p>
+	</p></blockquote></div><p>
+    </p><p>
+      As an example, here are String Ports, implemented as user
+      defined ports:
+    </p><div class="example"><a name="id2576736"></a><p class="title"><b>Example 5.1. User defined string ports</b></p><div class="example-contents"><pre class="programlisting">
+(import custom-io)
+
+;; String Input Ports
+
+(define (sio/read port)
+  (let ([local (port-local port)])
+    (let ([ptr (vector-ref local 1)])
+      (if (= (vector-ref local 2) ptr)
+          -1
+          (let ([c (char-&gt;integer
+                    (string-ref (vector-ref local 0) ptr))])
+            (vector-set! local 1 (+ ptr 1))
+            c)))))
+
+(define (sio/read-string local buffer offset length)
+  (let ([local (port-local port)])
+    (let ([str (vector-ref local 0)]
+          [strlen (vector-ref local 2)])
+      (do ([i offset (+ i 1)]
+           [j (vector-ref local 1) (+ j 1)]
+           [c 0 (+ c 1)])
+          ((or (= i (+ offset length))
+               (= j strlen))
+           (vector-set! local 1 (+ ptr 1))
+           c)
+        (string-set! buffer i (string-ref str j))))))
+
+(define null (lambda args (void)))
+
+(define (open-input-string str)
+  (unless (string? str)
+    (error 'open-input-string "expected string, got '~a'.~%" str))
+  (let ([port (make-custom-character-input-port
+               sio/read sio/read-string null null)])
+    ; Use the port local value to store the string and a pointer
+    ; for the current position
+    (set-port-local! port (vector str 0 (string-length str)))
+    port))
+
+
+;; String Output Ports
+
+(define (sio/write port char)
+  (set-port-local! port
+    (cons char (port-local port))))
+
+(define (sio/write-string port string offset length)
+  (set-port-local! port
+   (append (reverse (string-&gt;list (substring string offset (+ length offset))))
+           (port-local port))))
+
+(define (open-output-string)
+  (let ([port
+         (make-custom-character-output-port
+          sio/write sio/write-string null null)])
+    (set-port-local! port '())
+    port))
+
+(define (get-output-string port)
+  (flush-output-port port)
+  (let ([str (apply string
+                    (reverse (port-local port)))])
+    (set-port-local! port '())
+    str))
+      </pre></div></div><br class="example-break"></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id2576800"></a>Miscellaneous</h2></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="PrettyPrinting"></a>Pretty-Printing</h3></div></div></div><p>
+          <span class="emphasis"><em>SISC</em></span> includes a pretty-printer, a function that behaves like
+        <code class="computeroutput">write</code>, but introduces
+        whitespace in order to make the output of data more readable
+        to humans.
+      </p><p><a name="func-pretty-print"></a>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2576842"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">pretty-print</span> <span class="methodparam"><span class="parameter">value</span></span> [<span class="methodparam"><span class="parameter">output-port</span></span>]) =&gt; <span class="type">unspecified</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Pretty-prints the specified value, either to the specified
+                output-port, or to the console if no output-port is
+                specified.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2576908"></a>Source Loading</h3></div></div></div><p>
+        The <code class="function">load</code> procedure accepts URLs as well
+        as ordinary file names. See <a href="ch05.html#urlfile" title="URLs">the section called &#8220;URLs&#8221;</a> for
+        details on what kinds of URLs are supported.
+      </p><p>
+        The file name passed to <code class="function">load</code> is resolved
+        relative to the <code class="function">current-url</code>
+        parameter. During the execution of <code class="function">load</code>,
+        <code class="function">current-url</code> is set to the loaded file, so
+        that any invocations of <code class="function">load</code> from the
+        loaded file resolve the given file name relative to the file
+        currently being loaded. For example, lets assume we have a web
+        site that serves the following files:
+        </p><pre class="programlisting">
+ ;;;contents of http://foo.com/bar/bar1.scm ;;;
+(load "bar2.scm")
+;;;contents of http://foo.com/bar/bar2.scm ;;;
+(load "/baz/baz1.scm")
+;;;contents of http://foo.com/baz/baz1.scm ;;;
+(load "../baz/baz2.scm")
+;;;contents of http://foo.com/baz/baz2.scm ;;;
+(display "Hello")
+        </pre><p>
+        Invoking
+        </p><pre class="programlisting">
+(load "http://foo.com/bar/bar1.scm")
+        </pre><p>
+        results in each file being loaded; with the last file in the chain,
+        <code class="filename">baz2.scm</code>, displaying
+        <code class="computeroutput">Hello</code>.
+      </p><p>
+        The <code class="function">load</code> function supports many types of
+        files which contain executable code.
+        <code class="function">load</code> will attempt to determine (primarily
+        by the file's extension) which type of file is being loaded to
+        load that file in the correct manner.  The file types
+        currently supported are those described in <a href="ch02.html#FileExtensions" title="Running Scheme Programs">the section called &#8220;Running Scheme Programs&#8221;</a>.
+      </p><p>
+        When a pure source file is loaded, each s-expression is evaluated
+        in sequence, exactly as if entered into the REPL one
+        s-expression at a time.
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2577037"></a>Location Tracking</h3></div></div></div><p>
+          <span class="emphasis"><em>SISC</em></span> allows the location of input, i.e. the file name, line
+        number, and column number, to be tracked when reading from an
+        input port.
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2577059"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">open-source-input-file</span> <span class="methodparam"><span class="parameter">url</span></span>) =&gt; <span class="type">input-port</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                This procedure behaves the same as
+                <code class="function">open-input-file</code>, except that it
+                also tracks the location of the input.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2577116"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">input-port-location</span> <span class="methodparam"><span class="parameter">input-port</span></span>) =&gt; <span class="type">list</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the current location information associated
+                with <em class="parameter"><code>input-port</code></em>. The return
+                value is an association list containing the following
+                keys: <code class="literal">source-file</code>,
+                <code class="literal">line-number</code>,
+                <code class="literal">column-number</code>. If no location
+                information is available, #f is returned.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="Resources"></a>Locating Resources</h3></div></div></div><p>
+          <span class="emphasis"><em>SISC</em></span> provides a mechanism for locating and subsequently
+          loading named resources, such as Scheme source files, Scheme
+          data files, property files. The resources are located using
+          the mechanism described in <a href="ch05.html#ClassLoading" title="Class Loading">the section called &#8220;Class Loading&#8221;</a>. This allows Scheme programs to
+          load resources in a portable, J2EE-compliant manner.
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2577230"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">find-resource</span> <span class="methodparam"><span class="parameter">string</span></span>) =&gt; <span class="type">url</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Locates the resource named by
+                <em class="parameter"><code>string</code></em> on the Java class
+                path. The resource location is returned as a URL
+                suitable for <span class="emphasis"><em>SISC</em></span> I/O operations. If the resource
+                cannot be found, #f is returned.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2577291"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">find-resources</span> <span class="methodparam"><span class="parameter">string</span></span>) =&gt; <span class="type">url-list</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Locates the resource named by
+                <em class="parameter"><code>string</code></em> on the Java class path.
+                The resource locations are returned as a list of URLs
+                suitable for <span class="emphasis"><em>SISC</em></span> I/O operations. If the resource
+                cannot be found, an empty list is returned.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="FileManipulation"></a>File Manipulation</h3></div></div></div><p>
+        <span class="emphasis"><em>Requires: </em></span>
+        <span class="bold"><strong>
+          (import <span class="emphasis"><em>file-manipulation</em></span>)
+        </strong></span>
+      </p><p>
+        The file-manipulation library provides access to a number of
+        functions for reading and manipulating files and their
+        attributes.  The file-manipulation library acts on filenames
+        in the same manner as other Scheme file related functions,
+        e.g. it accepts file and directory names as strings, which are
+        resolved relative to the current URL.
+      </p><p>
+        The following functions act on both files and directories.
+        With the exception of <code class="function">file-exists?</code> and
+        <code class="function">get-parent-url</code>, the  behavior when
+        applying these to non-existant files or directories is
+        undefined.
+      </p><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" name="id2577411"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">file-delete!</span> <span class="methodparam"><span class="parameter">filename</span></span>) =&gt; <span class="type">#t/#f</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Attempts to remove the given file or directory.  If
+              successful, <code class="literal">#t</code> is returned.
+            </p></blockquote></div><p>
+        </p><p>
+          <a class="indexterm" name="id2577467"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">file-exists?</span> <span class="methodparam"><span class="parameter">filename</span></span>) =&gt; <span class="type">#t/#f</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Returns true if the given file or directory exists.
+            </p></blockquote></div><p>
+        </p><p>
+          <a class="indexterm" name="id2577516"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">file-is-directory?</span> <span class="methodparam"><span class="parameter">filename</span></span>) =&gt; <span class="type">#t/#f</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Returns true if the given string names an existing
+              directory.
+            </p></blockquote></div><p>
+        </p><p>
+          <a class="indexterm" name="id2577565"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">file-is-file?</span> <span class="methodparam"><span class="parameter">filename</span></span>) =&gt; <span class="type">#t/#f</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Returns true if the given string names an existing
+              file.
+            </p></blockquote></div><p>
+        </p><p>
+          <a class="indexterm" name="id2577615"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">file-last-modified</span> <span class="methodparam"><span class="parameter">filename</span></span>) =&gt; <span class="type">integer</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Returns the number of milliseconds since the Unix
+              epoch (Jan 1, 1970) of the date the file or directory
+              was last modified.
+            </p></blockquote></div><p>
+        </p><p>
+          <a class="indexterm" name="id2577665"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">file-rename!</span> <span class="methodparam"><span class="parameter">source-filename</span></span> <span class="methodparam"><span class="parameter">dest-filename</span></span>) =&gt; <span class="type">#t/#f</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Renames the given source file or directory to the
+              destination.  This can be used both to rename a file
+              or directory or to move a file/directory in the same
+              filesystem.  If successful, <code class="literal">#t</code> is
+              returned.
+            </p></blockquote></div><p>
+        </p><p>
+          <a class="indexterm" name="id2577737"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">file-set-last-modified!</span> <span class="methodparam"><span class="parameter">filename</span></span> <span class="methodparam"><span class="parameter">unixtime</span></span>) =&gt; <span class="type">#t/#f</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Sets the last modified date of the given filename to
+              the given integer (in number of milliseconds since the
+              epoch).  Returns <code class="literal">#t</code> if successful.
+            </p></blockquote></div><p>
+        </p><p>
+          <a class="indexterm" name="id2577807"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">get-parent-url</span> <span class="methodparam"><span class="parameter">filename</span></span>) =&gt; <span class="type">string</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Given any URL, returns the URL of its parent.  For
+                filenames, as an example, the parent directory is
+                returned.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+        The following functions operate only on files.  Their behavior
+        when applied to directories or non-existant files is undefined.
+      </p><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" name="id2577867"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">file-is-readable?</span> <span class="methodparam"><span class="parameter">filename</span></span>) =&gt; <span class="type">#t/#f</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Returns <code class="literal">#t</code> if the file can be opened
+              for reading.
+            </p></blockquote></div><p>
+        </p><p>
+          <a class="indexterm" name="id2577922"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">file-is-writeable?</span> <span class="methodparam"><span class="parameter">filename</span></span>) =&gt; <span class="type">#t/#f</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Returns <code class="literal">#t</code> if the file can be opened
+              for writing.
+            </p></blockquote></div><p>
+        </p><p>
+          <a class="indexterm" name="id2577977"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">file-length</span> <span class="methodparam"><span class="parameter">filename</span></span>) =&gt; <span class="type">integer</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Returns the length, in bytes, of the given file.
+            </p></blockquote></div><p>
+        </p><p>
+          <a class="indexterm" name="id2578026"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">file-set-read-only!</span> <span class="methodparam"><span class="parameter">filename</span></span>) =&gt; <span class="type">#t/#f</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Sets the given file read-only.  Returns
+              <code class="literal">#t</code> if successful.
+            </p></blockquote></div><p>
+        </p></blockquote></div><p>
+        Finally, the following functions are specific to directories.
+        Their behavior on files is undefined.  The behavior of
+        <code class="function">directory-list</code> is undefined on
+        non-existant directories.
+      </p><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" name="id2578096"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">directory-list</span> <span class="methodparam"><span class="parameter">directory</span></span>) =&gt; <span class="type">list of strings</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Retrieves the children of the given directory, as a
+              list of strings.  Each string names one child, and is
+              a filename relative to the given directory.
+            </p></blockquote></div><p>
+        </p><p>
+	    <a class="indexterm" name="id2578148"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">make-directory!</span> <span class="methodparam"><span class="parameter">directoryname</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Attempts to creates the given directory.  Returns
+                <code class="literal">#t</code> if successful.
+              </p></blockquote></div><p>
+          </p><p>
+	    <a class="indexterm" name="id2578203"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">make-directories!</span> <span class="methodparam"><span class="parameter">directoryname</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Attempts to creates the given directory and all
+                non-existing parent directories.  Returns
+                <code class="literal">#t</code> if successful.
+              </p></blockquote></div><p>
+          </p></blockquote></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ClassLoading"></a>Class Loading</h3></div></div></div><p>
+        Some <span class="emphasis"><em>SISC</em></span> features require classes and other resources to be
+        loaded. By default, <span class="emphasis"><em>SISC</em></span> will use the current thread's class
+        loader, or, if none is present, the system class
+        loader. <span class="emphasis"><em>SISC</em></span> maintains a list of class path extensions onto
+        which class and resource loading falls back. This list can be
+        inspected and extended using the following functions:
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2578293"></a>
+            <span class="emphasis"><em>parameter: </em></span>
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">class-path-extension</span>) =&gt; <span class="type">string-list</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Retrieves the current class path extension. The class
+                path extension is a list of strings representing URLs,
+                typically pointing to jar files or directories. It is
+                used a fall back during class and resource loading.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2578333"></a>
+            <span class="emphasis"><em>parameter: </em></span>
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">class-path-extension-append!</span> <span class="methodparam"><span class="parameter">class-path</span></span>) =&gt; <span class="type">undefined</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Appends a list of URLs to the current class path
+                extension.
+              </p><p>
+                The elements of the <em class="parameter"><code>class-path</code></em>
+                list are normalized using the
+                <em class="parameter"><code>current-url</code></em> (see <a href="ch05.html#urlfile" title="URLs">the section called &#8220;URLs&#8221;</a>), thus permitting the usage of
+                relative URLs.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+        Note that the class path extension is part of the dynamic
+        environment,, so each thread has its own setting, initially
+        inherited from the parent thread. See <a href="ch06.html" title="Chapter 6. 
+    Threads and Concurrency
+  ">Chapter 6, <i>
+    Threads and Concurrency
+  </i></a> for more details on <span class="emphasis"><em>SISC</em></span>'s threading
+        semantics.
+      </p></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.id2566103" href="#id2566103">3</a>] </sup>
+            Handling of JAR files in URLS may be dependent on the
+            <span class="emphasis"><em>SISC</em></span> host language, as well as some uncommon protocols.
+            FILE, HTTP and FTP should be expected to work with any
+            host language.
+          </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch06.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 4. 
+    Debugging Facilities
+   </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 6. 
+    Threads and Concurrency
+  </td></tr></table></div></body></html>

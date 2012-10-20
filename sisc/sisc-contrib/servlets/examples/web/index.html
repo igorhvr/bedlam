@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>SISC Web Application Examples</title>
+  </head>
+
+  <body>
+    <h1>SISC Web Application Examples</h1>
+
+    <a href="calculator">a really, really simple calculator</a>. After
+    entering the number of operands you are prompted to enter each
+    operand in turn. The sum of the operands is displayed at the end.
+    <p>
+      The source for the calculator is <a
+      href="scheme/calculator.scm">here</a>. You will notice that the
+      core algorithm is completely independent of the means and timing
+      of the input and output operations, i.e. the same Scheme code
+      could be used to add numbers read from a file or returned from a
+      number generator procedure.
+    </p>
+    <p>
+      The calculator also shows off the <i>maintaining state in
+        continuations</i> approach - pressing the "back" and "forward"
+      buttons in your browser or cloning the page does the right
+      thing.
+    </p>
+    <p>
+      Finally, if you are running this example in a J2EE application
+      server that persists sessions, you can see that the calculator
+      sessions are persistent. For instance, in Tomcat 4.x you can
+      shut down the application server in the middle of entering the
+      sequence of operands. When you restart the application server
+      you can continue entering the operands where you left off.
+    </p>
+    <hr>
+    <address><a href="mailto:matthias@sorted.org">Matthias Radestock</a></address>
+<!-- Created: Tue Mar  5 18:38:24 GMT 2002 -->
+<!-- hhmts start -->
+Last modified: Mon Aug 26 21:53:28 BST 2002
+<!-- hhmts end -->
+  </body>
+</html>

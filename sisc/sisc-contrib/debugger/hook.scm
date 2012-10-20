@@ -1,0 +1,32 @@
+(define (debugger-hook uid k oexp lvars lvaccessor depth)
+  (when (let ([s (getprop 'step '*debug*)])
+          (or (eq? s 'into)
+              (and (number? s) (= depth s))
+              (and (breakpoint-set? uid) 
+                   (begin (display "{break}\n") #t))))
+    (if oexp
+        (let ([lineno (cdr (assq 'line-number oexp))]
+              [colno (cdr (assq 'column-number oexp))]
+              [file (cdr (assq 'source-file oexp))])
+          (show-line lineno colno file)))
+    (let loop ()
+      (putprop 'step '*debug* #f)
+      (for-each (lambda (lvar)
+                  (display (format "~a=~a " lvar (lvaccessor lvar))))
+                lvars)
+      (newline)
+      (write #\>)
+      (let ([opt (read)])
+        (case opt
+          ((d) (begin (display lvars) (newline) (loop)))
+          ((k) (k (read)))
+          ((c) (void))
+          ((stepi) (putprop 'step '*debug* 'into))
+          ((stepo) (putprop 'step '*debug* depth))
+          ((l) (begin (write (lvaccessor (read)))
+                      (newline)
+                      (loop)))
+          ((s) (let* ([var (read)]
+                      [val (read)])
+                 (lvaccessor var val)
+                 (loop))))))))

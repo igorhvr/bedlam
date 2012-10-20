@@ -1,0 +1,1531 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 7. Types and Objects</title><link rel="stylesheet" href="sss.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.71.0"><link rel="start" href="index.html" title="SISC for Seasoned Schemers"><link rel="up" href="index.html" title="SISC for Seasoned Schemers"><link rel="prev" href="ch06.html" title="Chapter 6.  Threads and Concurrency"><link rel="next" href="ch08.html" title="Chapter 8. Java Interaction"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 7. Types and Objects</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch06.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch08.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="TypesAndOO"></a>Chapter 7. Types and Objects</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch07.html#TypeSystem">Type System</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch07.html#id2597024">Core Procedures and Predicates</a></span></dt><dt><span class="sect2"><a href="ch07.html#id2597463">Derived Procedures and Predicates</a></span></dt><dt><span class="sect2"><a href="ch07.html#TypeSystemHooks">Hooks</a></span></dt><dt><span class="sect2"><a href="ch07.html#id2598113">Standard Types</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch07.html#GenericProcedures">Generic Procedures</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch07.html#genprocdef">Defining Generic Procedures</a></span></dt><dt><span class="sect2"><a href="ch07.html#id2598849">Defining Methods</a></span></dt><dt><span class="sect2"><a href="ch07.html#invokinggenerics">Invoking Generic Procedures</a></span></dt><dt><span class="sect2"><a href="ch07.html#id2600342">Procedures on Methods</a></span></dt><dt><span class="sect2"><a href="ch07.html#id2600786">Miscellaneous</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch07.html#ObjectSystem">Object System</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch07.html#id2601489">Classes</a></span></dt><dt><span class="sect2"><a href="ch07.html#OOSlots">Slots</a></span></dt><dt><span class="sect2"><a href="ch07.html#id2602785">Instantiation</a></span></dt><dt><span class="sect2"><a href="ch07.html#OOInheritance">Inheritance</a></span></dt></dl></dd></dl></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="TypeSystem"></a>Type System</h2></div></div></div><p>
+        <span class="emphasis"><em>Requires: </em></span> 
+      <span class="bold"><strong>
+        (import <span class="emphasis"><em>type-system</em></span>)
+      </strong></span>
+    </p><p>
+      <span class="emphasis"><em>SISC</em></span>'s extensible type system provides programmatic access to
+      the type information of values and provides a core set of type
+      testing and comparison procedures. The type system is extensible
+      in two ways. Firstly any new native types are recognised
+      automatically. Secondly, hooks are provided for Scheme-level
+      extensions of the type-system.
+    </p><p>
+      By convention, type names start with <code class="literal">&lt;</code> and
+      end with <code class="literal">&gt;</code>, with normal Scheme identifier
+      naming conventions applying for everything in-between, i.e. all
+      lower-case with words separated by dashes. For example,
+      <code class="literal">&lt;foo-bar-baz&gt;</code>. This convention helps to
+      visually distinguish type names from names of procedures and
+      top-level data bindings.
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2597024"></a>Core Procedures and Predicates</h3></div></div></div><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2597037"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">type-of</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">type</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the type of
+                <em class="parameter"><code>value</code></em>. There is no standard
+                representation for types, leaving type extensions free
+                to choose a representation that suits them most.
+              </p><p>
+                The procedure is equipped with an extension hook,
+                <code class="function">type-of-hook</code>. See <a href="ch07.html#TypeSystemHooks" title="Hooks">the section called &#8220;Hooks&#8221;</a> for more details on
+                hooks. The default implementation of the hook
+                <code class="function">type-of</code> returns a type based on
+                the Java type of the internal representation of
+                <em class="parameter"><code>value</code></em>.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(type-of 1)  ;=&gt; #&lt;scheme sisc.data.Quantity&gt;
+(type-of (lambda (x) x))  ;=&gt; #&lt;scheme sisc.data.Closure&gt;
+              </pre></div><p>
+          </p><p>
+            <a class="indexterm" name="id2597139"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">type&lt;=</span> <span class="methodparam"><span class="parameter">type1</span></span> <span class="methodparam"><span class="parameter">type2</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns #t if <em class="parameter"><code>type1</code></em> is a
+                sub-type of <em class="parameter"><code>type2</code></em>.
+              </p><p>
+                The predicate is equipped with an extension hook,
+                <code class="function">type&lt;=-hook</code>. See <a href="ch07.html#TypeSystemHooks" title="Hooks">the section called &#8220;Hooks&#8221;</a> for more details on
+                hooks. The default implementation of the hook
+                determines sub-typing based on the inheritance
+                relationship of the Java types representing native
+                types.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(type&lt;= (type-of 'a) (type-of 'b))  ;=&gt; #t
+(type&lt;= (type-of 'b) (type-of 'a))  ;=&gt; #t
+(type&lt;= (type-of 1) (type-of 'a))  ;=&gt; #f
+(type&lt;= (type-of 1) &lt;number&gt;)  ;=&gt; #t
+(type&lt;= (type-of 'a) &lt;symbol&gt;)  ;=&gt; #t
+(type&lt;= &lt;number;&gt; &lt;symbol&gt;)  ;=&gt; #f
+(type&lt;= &lt;symbol;&gt; &lt;number&gt;)  ;=&gt; #f
+(type&lt;= &lt;number&gt; &lt;value&gt;)  ;=&gt; #t
+(type&lt;= &lt;symbol&gt; &lt;value&gt;)  ;=&gt; #t
+              </pre></div><p>
+          </p><p>
+            <a class="indexterm" name="id2597251"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">compare-types</span> <span class="methodparam"><span class="parameter">type1</span></span> <span class="methodparam"><span class="parameter">type2</span></span> <span class="methodparam"><span class="parameter">type3</span></span>) =&gt; <span class="type">'equal,'more-specific,'less-specific</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Determines the relationship of
+                <em class="parameter"><code>type1</code></em> and
+                <em class="parameter"><code>type2</code></em> with respect to
+                <em class="parameter"><code>type3</code></em>. <em class="parameter"><code>type3</code></em>
+                must be a sub-type of <em class="parameter"><code>type1</code></em> and
+                <em class="parameter"><code>type2</code></em>. <em class="parameter"><code>type1</code></em>
+                and <em class="parameter"><code>type2</code></em> are first compared
+                using <code class="function">type&lt;=</code>. If that
+                comparison indicates that the types are disjoint
+                (i.e. <em class="parameter"><code>type1</code></em> is not sub-type of
+                <em class="parameter"><code>type2</code></em>,
+                <em class="parameter"><code>type2</code></em> is not a sub-type of
+                <em class="parameter"><code>type1</code></em> and the types are not
+                equal) then additional information from
+                <em class="parameter"><code>type3</code></em> is taken into account for
+                the comparison.
+              </p><p>
+                The predicate is equipped with an extension hook,
+                <code class="function">compare-types-hook</code> that is
+                invoked in the case the comparison of
+                <em class="parameter"><code>type1</code></em> with
+                <em class="parameter"><code>type2</code></em> using
+                <code class="function">type&lt;=</code> finds the two types to
+                be disjoint. See <a href="ch07.html#TypeSystemHooks" title="Hooks">the section called &#8220;Hooks&#8221;</a> for more details on
+                hooks. The default implementation of the hook returns
+                an error
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(compare-types &lt;number&gt; &lt;value&gt; &lt;number&gt;)
+  ;=&gt; 'more-specific
+(compare-types &lt;value&gt; &lt;number&gt; &lt;number&gt;)
+  ;=&gt; 'less-specific
+(compare-types &lt;number&gt; &lt;number&gt; &lt;number&gt;)
+  ;=&gt; 'equal
+              </pre></div><p>
+          </p></blockquote></div><p>
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2597463"></a>Derived Procedures and Predicates</h3></div></div></div><p>
+        The type system's derived procedures and predicates are
+        implemented in terms of the core procedures and predicates.
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2597481"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">instance-of?</span> <span class="methodparam"><span class="parameter">value</span></span> <span class="methodparam"><span class="parameter">type</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Determines whether <em class="parameter"><code>value</code></em> is an
+                instance of <em class="parameter"><code>type</code></em>. 
+              </p><p>
+                The predicate obtains <em class="parameter"><code>value</code></em>'s
+                type using <code class="function">type-of</code> and then
+                compares it to <em class="parameter"><code>type</code></em> using
+                <code class="function">type&lt;=</code>.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(instance-of? 1 &lt;number&gt;)  ;=&gt; #t
+(instance-of? 'a &lt;symbol&gt;)  ;=&gt; #t
+(instance-of? 1 &lt;symbol&gt;)  ;=&gt; #f
+(instance-of? 1 &lt;value&gt;)  ;=&gt; #t
+              </pre></div><p>
+          </p><p>
+            <a class="indexterm" name="id2597594"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">type=</span> <span class="methodparam"><span class="parameter">type1</span></span> <span class="methodparam"><span class="parameter">type2</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Determines whether two types are equal by comparing
+                them using <code class="function">type&lt;=</code>.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(type= (type-of 'a) (type-of 'b))  ;=&gt; #t
+(type= (type-of 1) (type-of 'a))  ;=&gt; #f
+(type= (type-of 1) &lt;number&gt;)  ;=&gt; #t
+(type= (type-of 'a) &lt;symbol&gt;)  ;=&gt; #t
+(type= &lt;number;&gt; &lt;symbol&gt;)  ;=&gt; #f
+              </pre></div><p>
+          </p><p>
+            <a class="indexterm" name="id2597667"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">types&lt;=</span> <span class="methodparam"><span class="parameter">type-list1</span></span> <span class="methodparam"><span class="parameter">type-list2</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Determines whether all of the types in
+                <em class="parameter"><code>type-list1</code></em> are sub-types of the
+                the corresponding (by position) types in
+                <em class="parameter"><code>type-list2</code></em>.
+              </p><p>
+                A pair-wise comparison of the elements in the two
+                lists using <code class="function">type&lt;=</code> is
+                performed until a test returns #f, in which case
+                #f is returned, or one (or both) of the lists has
+                been exhausted, in which case #t is returned.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(types&lt;= (list &lt;number&gt; &lt;symbol&gt;)
+         (list &lt;value&gt; &lt;value&gt;))  ;=&gt; #t
+(types&lt;= (list &lt;number&gt; &lt;symbol&gt;)
+         (list &lt;number&gt; &lt;number&gt;))  ;=&gt; #f
+              </pre></div><p>
+          </p><p>
+            <a class="indexterm" name="id2597766"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">instances-of?</span> <span class="methodparam"><span class="parameter">value-list</span></span> <span class="methodparam"><span class="parameter">type-list</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Determines whether all of the values in
+                <em class="parameter"><code>value-list</code></em> are instances of the
+                the corresponding (by position) types in
+                <em class="parameter"><code>type-list</code></em>.
+              </p><p>
+                A pair-wise comparison of the elements in the two
+                lists using <code class="function">instance-of?</code> is
+                performed until a test returns #f, in which case
+                #f is returned, or one (or both) of the lists has
+                been exhausted, in which case #t is returned.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(instances-of? (list 1 'a)
+               (list &lt;number&gt; &lt;symbol&gt;))  ;=&gt; #t
+(instances-of? (list 1 'a)
+               (list &lt;number&gt; &lt;number&gt;))  ;=&gt; #f
+              </pre></div><p>
+          </p><p>
+            <a class="indexterm" name="id2597863"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">types=</span> <span class="methodparam"><span class="parameter">type-list1</span></span> <span class="methodparam"><span class="parameter">type-list2</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Determines whether all of the types in
+                <em class="parameter"><code>type-list1</code></em> are equal to the
+                the corresponding (by position) types in
+                <em class="parameter"><code>type-list2</code></em>.
+              </p><p>
+                A pair-wise comparison of the elements in the two
+                lists using <code class="function">type=</code> is
+                performed until a difference is found, in which ase
+                #f is returned, or one (or both) of the lists has
+                been exhausted, in which case #t is returned.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(types= (list &lt;number&gt; &lt;symbol&gt;)
+        (list &lt;number&gt; &lt;symbol&gt;))  ;=&gt; #t
+(types= (list &lt;number&gt; &lt;symbol&gt;)
+        (list &lt;number&gt; &lt;number&gt;))  ;=&gt; #f
+              </pre></div><p>
+          </p></blockquote></div><p>
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="TypeSystemHooks"></a>Hooks</h3></div></div></div><a class="indexterm" name="id2597971"></a><a class="indexterm" name="id2597978"></a><a class="indexterm" name="id2597984"></a><p>
+        Hooks are the main mechanism by which Scheme code can extend
+        the default type system. The core type system procedures
+        <code class="function">type-of</code>, <code class="function">type&lt;=</code>
+        and <code class="function">compare-types</code> all provide such
+        hooks, called <code class="function">type-of-hook</code>,
+        <code class="function">type-&lt;=-hook</code>, and
+        <code class="function">compare-types-hook</code> respectively.
+      </p><p>
+        Extension takes place by installing labelled handler
+        procedures on the hook, which is done by invoking the hook
+        procedure. Installing a handler procedure with a label of an
+        already installed procedure replaces the latter with the
+        former.
+      </p><p>
+        The handler procedures are called with a
+        <em class="parameter"><code>next</code></em> procedure as the first argument
+        and all the arguments of the call to the hook-providing
+        procedures as the remaining arguments. Typically a handler
+        procedure first determines whether it is applicable, i.e. is
+        capable of performing the requested comparison etc. If not it
+        calls the <em class="parameter"><code>next</code></em> handler procedure, which
+        invokes the next hook or, if no further hooks exist, the
+        default implementation of the hooked procedure.
+      </p><div class="example"><a name="id2598066"></a><p class="title"><b>Example 7.1. Hook Installation</b></p><div class="example-contents"><p>
+          This example shows how <span class="emphasis"><em>SISC</em></span>'s record type module adds
+          record types to the type system by installing handler
+          procedure on <code class="function">type-of-hook</code> and
+          <code class="function">type&lt;=-hook</code>.
+        </p><pre class="programlisting">
+(type-of-hook 'record
+  (lambda (next o)
+    (if (record? o)
+        (record-type o)
+        (next o))))
+
+(type&lt;=-hook 'record
+  (lambda (next x y)
+    (cond [(record-type? x)
+           (if (record-type? y)
+               (eq? x y)
+               (type&lt;= &lt;record&gt; y))]
+          [(record-type? y) #f]
+          [else (next x y)])))
+        </pre></div></div><br class="example-break"></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2598113"></a>Standard Types</h3></div></div></div><a class="indexterm" name="id2598119"></a><a class="indexterm" name="id2598126"></a><a class="indexterm" name="id2598133"></a><a class="indexterm" name="id2598140"></a><a class="indexterm" name="id2598146"></a><a class="indexterm" name="id2598154"></a><a class="indexterm" name="id2598160"></a><a class="indexterm" name="id2598167"></a><a class="indexterm" name="id2598174"></a><a class="indexterm" name="id2598181"></a><a class="indexterm" name="id2598188"></a><a class="indexterm" name="id2598195"></a><p>
+        The type system pre-defines bindings for the native types
+        corresponding to all the data types defined in R5RS:
+        <code class="literal">&lt;eof&gt;</code>,
+        <code class="literal">&lt;symbol&gt;</code>,
+        <code class="literal">&lt;list&gt;</code>,
+        <code class="literal">&lt;procedure&gt;</code>,
+        <code class="literal">&lt;number&gt;</code>,
+        <code class="literal">&lt;boolean&gt;</code>,
+        <code class="literal">&lt;char&gt;</code>,
+        <code class="literal">&lt;string&gt;</code>,
+        <code class="literal">&lt;vector&gt;</code>,
+        <code class="literal">&lt;input-port&gt;</code>,
+        <code class="literal">&lt;output-port&gt;</code>. One notable exception
+        is that pairs and null are combined into a
+        <code class="literal">&lt;list&gt;</code> type.
+      </p><p>
+        The type system also defines a
+        <code class="literal">&lt;value&gt;</code> type that is the base type of
+        all <span class="emphasis"><em>SISC</em></span> values, i.e. all <span class="emphasis"><em>SISC</em></span> values are instances of
+        <code class="literal">&lt;value&gt;</code> and all types are sub-types
+        of <code class="literal">&lt;value&gt;</code>.
+      </p><p>
+        The representations of other native types can be obtained
+        using
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2598322"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">make-type</span> <span class="methodparam"><span class="parameter">symbol</span></span>) =&gt; <span class="type">type</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Constructs a type representing a built-in type. The
+                <em class="parameter"><code>symbol</code></em> must denote a Java class
+                that is a sub-class of <code class="classname">sisc.data.Value</code>, the base of the <span class="emphasis"><em>SISC</em></span> value type hierarchy.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(define &lt;record&gt; (make-type '|sisc.modules.record.Record|))
+(type&lt;= &lt;record&gt; &lt;value&gt;)  ;=&gt; #t
+              </pre></div><p>
+          </p></blockquote></div><p>
+      </p></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="GenericProcedures"></a>Generic Procedures</h2></div></div></div><p>
+        <span class="emphasis"><em>Requires: </em></span> 
+      <span class="bold"><strong>
+        (import <span class="emphasis"><em>generic-procedures</em></span>)
+      </strong></span>
+    </p><p>
+      Generic procedures are procedures that select and execute methods
+      based on the types of the arguments. Methods have a type
+      signature, which generic procedures use for method selection,
+      and contain a procedure which is invoked by generic procedures
+      when the method has been selected for execution.
+    </p><p>
+      Generic procedures have several advantages over ordinary
+      procedures:
+      </p><div class="itemizedlist"><ul type="disc"><li><p>
+            It is not necessary to come up with unique names for
+            procedures that perform the same operation on different
+            types of objects. This avoids cluttering the name
+            space. All these procedures can be defined separately
+            but yet be part of the same, single generic procedure.
+          </p></li><li><p>
+            The functionality of a generic procedure can be extended
+            incrementally through code located in different
+            places. This avoids "spaghetti code" where adding a new
+            type of objects requires changes to existing pieces of
+            code in several locations.
+          </p></li><li><p>
+            Code using generic procedures has a high degree of
+            polymorphism without having to resort to ugly and
+            hard-to-maintain test-type-and-dispatch branching.
+          </p></li></ul></div><p>
+    </p><p>
+      Generic procedures make extensive use of <span class="emphasis"><em>SISC</em></span>s type
+      system. See <a href="ch07.html#TypeSystem" title="Type System">the section called &#8220;Type System&#8221;</a>.
+    </p><p>
+      The use of generic procedures proceeds through three stages:
+      </p><div class="orderedlist"><ol type="1"><li><p>definition of the generic procedure</p></li><li><p>adding of methods to the generic procedure</p></li><li><p>adding of methods to the generic procedure</p></li></ol></div><p>
+      The adding of methods can be interleaved with invocation,
+      i.e. methods can be added to generic procedures while they are
+      in use.
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="genprocdef"></a>Defining Generic Procedures</h3></div></div></div><p>
+        There are one procedure and two special forms for defining
+        generic procedures. Typical usage will employ one of the
+        special forms.
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2598546"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">make-generic-procedure</span> <span class="methodparam"><span class="parameter">generic-procedure</span></span> ...) =&gt; <span class="type">generic-procedure</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Creates a generic procedure. If
+                <em class="parameter"><code>generic-procedure</code></em> parameters
+                are specified, then their method lists are merged,
+                in effect combining the generic procedures into
+                one. For more details on generic procedure
+                combination see <a href="ch07.html#GenericProcedureCombination" title="Generic Procedure Combination">the section called &#8220;Generic Procedure Combination&#8221;</a>.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(define pretty-print1 (make-generic-procedure))
+(define pretty-print2 (make-generic-procedure))
+;=&gt; &lt;procedure&gt;
+(define pretty-print (make-generic-procedure pretty-print1
+                                             pretty-print2))
+              </pre></div><p>
+          </p><p>
+            <a class="indexterm" name="id2598632"></a>
+            <span class="emphasis"><em>syntax: </em></span>
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">define-generic</span> <span class="methodparam"><span class="parameter">name</span></span> <span class="methodparam"><span class="parameter">generic-procedure</span></span> ...)</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Creates a binding for <em class="parameter"><code>name</code></em> to a
+                new generic procedure.
+              </p><p>
+                This form is equivalent to
+                <code class="literal">(define
+                </code><em class="parameter"><code>name</code></em><code class="literal">
+                  (make-generic-procedure
+                </code><em class="parameter"><code>generic-procedure</code></em><code class="literal"> ...))</code>.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(define-generic pretty-print1)
+(define-generic pretty-print2)
+(define-generic pretty-print pretty-print1 pretty-print2)
+              </pre></div><p>
+          </p><p>
+            <a class="indexterm" name="id2598734"></a>
+            <span class="emphasis"><em>syntax: </em></span>
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">define-generics</span> <span class="methodparam"><span class="parameter">form</span></span> ...)</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><table class="simplelist" border="0" summary="Simple list"><tr><td>
+                  where <em class="parameter"><code>form</code></em> is of
+                  the form <em class="parameter"><code>name</code></em> or
+                  <code class="literal">(</code><em class="parameter"><code>name</code></em>
+                  <em class="parameter"><code>generic-procedure</code></em>
+                  <code class="literal">...)</code>
+                </td></tr></table><p>
+                Creates bindings for several new generic procedures.
+              </p><p>
+                The form expands into several
+                <code class="function">define-generic</code> forms.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(define-generic pretty-print1)
+(define-generic pretty-print2)
+(define-generics
+  foo
+  (pretty-print pretty-print1 pretty-print2)
+  bar)
+              </pre></div><p>
+          </p></blockquote></div><p>
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2598849"></a>Defining Methods</h3></div></div></div><p>
+        Methods can be define and subsequently added to generic
+        procedures, or the two operations can be combined, which is
+        the typical usage.
+      </p><p>
+        There is one procedure and one special form to create methods:
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2598869"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">make-method</span> <span class="methodparam"><span class="parameter">procedure</span></span> <span class="methodparam"><span class="parameter">type-list</span></span> <span class="methodparam"><span class="parameter">rest?</span></span>) =&gt; <span class="type">method</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Creates a new method containing
+                <em class="parameter"><code>procedure</code></em> whose type signature
+                is <em class="parameter"><code>type-list</code></em>. If
+                <em class="parameter"><code>rest?</code></em> is #t then the procedure
+                can take rest arguments.
+              </p><p>
+                Generic procedures always invoke method procedures
+                with a special <em class="parameter"><code>next:</code></em> argument
+                as the first parameter (see <a href="ch07.html#GenericProcedureMethodSelection" title="Method Selection">the section called &#8220;Method Selection&#8221;</a>), followed
+                by all the arguments of the generic procedure
+                invocation. Hence <em class="parameter"><code>procedure</code></em>
+                needs to accept <code class="literal">(length
+                </code><em class="parameter"><code>type-list</code></em><code class="literal">)</code>+1
+                arguments.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(make-method (lambda (next x y) (next x y))
+             (list &lt;number&gt; &lt;number&gt;)
+             #f)
+  ;=&gt; &lt;method&gt;
+(make-method (lambda (next x . rest) (apply + x rest))
+             (list &lt;number&gt;)
+             #t)
+  ;=&gt; &lt;method&gt;
+              </pre></div><p>
+          </p><p>
+            <a class="indexterm" name="id2599018"></a>
+            <span class="emphasis"><em>syntax: </em></span>
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">method</span> <span class="methodparam"><span class="parameter">signature</span></span> <span class="methodparam"><span class="parameter">.</span></span> <span class="methodparam"><span class="parameter">body</span></span>) =&gt; <span class="type">method</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><table class="simplelist" border="0" summary="Simple list"><tr><td>
+                  where <em class="parameter"><code>signature</code></em> is of the
+                  form <code class="literal">(</code>[<code class="literal">(next:</code>
+                  <em class="parameter"><code>next</code></em><code class="literal">)</code>]
+                  <code class="literal">(</code><em class="parameter"><code>type</code></em>
+                  <em class="parameter"><code>param</code></em><code class="literal">)</code>
+                  ... [ <code class="literal">.</code>
+                  <em class="parameter"><code>rest</code></em>]<code class="literal">)</code>
+                </td></tr><tr><td>
+                  and <em class="parameter"><code>body</code></em> can contain anything
+                  that is valid inside the body of a
+                  <code class="function">lambda</code>.
+                </td></tr></table><p>
+                Creates a method.
+              </p><p>
+                This form is similar to a <code class="function">lambda</code>
+                form, except that all parameters must be typed. The
+                form expands into an invocation of the
+                <code class="function">make-method</code> procedure.
+              </p><p>
+                The first parameter name in the method's signature can
+                be the special <code class="literal">next:</code> parameter. See
+                <a href="ch07.html#GenericProcedureMethodSelection" title="Method Selection">the section called &#8220;Method Selection&#8221;</a>.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(method ((next: next)(&lt;number&gt; x)(&lt;number&gt; y)) (next x y))
+  ;=&gt; &lt;method&gt;
+(method ((&lt;number&gt; x) . rest) (apply + x rest))
+  ;=&gt; &lt;method&gt;
+              </pre></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        There are two procedures to add methods to a generic
+        procedure:
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2599237"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">add-method</span> <span class="methodparam"><span class="parameter">generic-procedure</span></span> <span class="methodparam"><span class="parameter">method</span></span>)</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Adds <em class="parameter"><code>method</code></em> to
+                <em class="parameter"><code>generic-procedure</code></em>. Any existing
+                method with the same signature as
+                <em class="parameter"><code>method</code></em> is removed.
+              </p><p>
+                Method addition is thread-safe.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(define-generic m)
+(add-method m (method ((next: next)(&lt;number&gt; x)(&lt;number&gt; y)) (next x y)))
+(add-method m (method ((&lt;number&gt; x) . rest) (apply + x rest)))
+              </pre></div><p>
+          </p><p>
+            <a class="indexterm" name="id2599330"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">add-methods</span> <span class="methodparam"><span class="parameter">generic-procedure</span></span> <span class="methodparam"><span class="parameter">method-list</span></span>)</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Adds all methods in <em class="parameter"><code>method-list</code></em>
+                to <em class="parameter"><code>generic-procedure</code></em>. Any
+                existing method with the same signature as one of the
+                methods in <em class="parameter"><code>method-list</code></em> is are
+                removed. When several methods in
+                <em class="parameter"><code>method-list</code></em> have the same
+                signature, only the last of these methods is added.
+              </p><p>
+                Method addition is thread-safe. Calling
+                <code class="function">add-methods</code> instead of
+                <code class="function">add-method</code> when adding several
+                methods to a generic procedure is more efficient.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(define-generic m)
+(add-methods m (list (method ((next: next)(&lt;number&gt; x)(&lt;number&gt; y)) (next x y))
+                     (method ((&lt;number&gt; x) . rest) (apply + x rest))))
+              </pre></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        The creation of methods and adding them to generic procedures
+        can be combined using one of two special forms:
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2599456"></a>
+            <span class="emphasis"><em>syntax: </em></span>
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">define-method</span> <span class="methodparam"><span class="parameter">(generic-procedure . signature)</span></span> <span class="methodparam"><span class="parameter">.</span></span> <span class="methodparam"><span class="parameter">body</span></span>)</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Creates a method and adds it to
+                <em class="parameter"><code>generic-procedure</code></em>.
+              </p><p>
+                This form is equivalent to
+                <code class="literal">(add-method</code>
+                <em class="parameter"><code>generic-procedure</code></em>
+                <code class="literal">(method</code>
+                <em class="parameter"><code>signature</code></em> <code class="literal">.</code>
+                <em class="parameter"><code>body</code></em><code class="literal">)</code>
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(define-generic m)
+(define-method (m (next: next)(&lt;number&gt; x)(&lt;number&gt; y)) (next x y)))
+(define-method (m (&lt;number&gt; x) . rest) (apply + x rest))
+              </pre></div><p>
+          </p><p>
+            <a class="indexterm" name="id2599585"></a>
+            <span class="emphasis"><em>syntax: </em></span>
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">define-methods</span> <span class="methodparam"><span class="parameter">generic-procedure</span></span> <span class="methodparam"><span class="parameter">(signature . body)</span></span> ...)</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Creates several methods and adds them to
+                <em class="parameter"><code>generic-procedure</code></em>.
+              </p><p>
+                This form is equivalent to
+                <code class="literal">(add-methods</code>
+                <em class="parameter"><code>generic-procedure</code></em>
+                <code class="literal">(list (method</code>
+                <em class="parameter"><code>signature</code></em> <code class="literal">.</code>
+                <em class="parameter"><code>body</code></em><code class="literal">) ...)</code>
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(define-generic m)
+(define-methods m
+  [((next: next)(&lt;number&gt; x)(&lt;number&gt; y)) (next x y)]
+  [((&lt;number&gt; x) . rest) (apply + x rest)])
+              </pre></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        The list of methods contained in a generic procedure
+        can be obtained as follows:
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2599713"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">generic-procedure-methods</span> <span class="methodparam"><span class="parameter">generic-procedure</span></span>) =&gt; <span class="type">method-list</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the list of methods currently associated with
+                <em class="parameter"><code>generic-procedure</code></em>.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(define-generic m)
+(define-methods m
+  [((next: next)(&lt;number&gt; x)(&lt;number&gt; y)) (next x y)]
+  [((&lt;number&gt; x) . rest) (apply + x rest)])
+(generic-procedure-methods m)  ;=&gt; (&lt;method&gt; &lt;method&gt;)
+              </pre></div><p>
+          </p></blockquote></div><p>
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="invokinggenerics"></a>Invoking Generic Procedures</h3></div></div></div><p>
+        Generic procedures are invoked like ordinary procedures. Upon
+        invocation, generic procedures compute a list of applicable
+        methods, ordered by their specificity, based on the types
+        of the parameters supplied in the invocation. If the resulting
+        list is empty an error is raised. Otherwise the first
+        (i.e. most specific) method is invoked. The remaining methods
+        come into play when a method invokes the "next best matching
+        method". See <a href="ch07.html#GenericProcedureMethodSelection" title="Method Selection">the section called &#8220;Method Selection&#8221;</a>
+        for details on the method selection algorithms.
+      </p><p>
+        The logic by which generic procedures select methods for
+        invocation is made accessible to the programmer through the
+        following procedures:
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2599822"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">applicable-methods</span> <span class="methodparam"><span class="parameter">generic-procedure</span></span> <span class="methodparam"><span class="parameter">type-list</span></span>) =&gt; <span class="type">method-list</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns all methods of
+                <em class="parameter"><code>generic-procedure</code></em> that are
+                applicable, as determined by
+                <code class="function">method-applicable?</code> to parameters
+                of the types specified in
+                <em class="parameter"><code>type-list</code></em>. The methods are
+                returned ordered by their specificity, determined
+                by pair-wise comparison using
+                <code class="function">compare-methods</code>.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(define-generic m)
+(define-methods m
+  [((next: next)(&lt;number&gt; x)(&lt;number&gt; y)) (next x y)]
+  [((&lt;number&gt; x) . rest) (apply + x rest)])
+(applicable-methods m (list &lt;number&gt; &lt;number&gt;))
+  ;=&gt; (&lt;method&gt; &lt;method&gt;)
+              </pre></div><p>
+          </p><p>
+            <a class="indexterm" name="id2599916"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">method-applicable?</span> <span class="methodparam"><span class="parameter">method</span></span> <span class="methodparam"><span class="parameter">type-list</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Determines whether <em class="parameter"><code>method</code></em> is
+                applicable to arguments of the types specified in
+                <em class="parameter"><code>type-list</code></em>.
+              </p><p>
+                The rules for determining method applicability are
+                defined in <a href="ch07.html#GenericProcedureMethodSelection" title="Method Selection">the section called &#8220;Method Selection&#8221;</a>.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(method-applicable? (method ((next: next)(&lt;number&gt; x)(&lt;number&gt; y)) (next x y))
+                    (list &lt;number&gt;))
+  ;=&gt; #f
+(method-applicable? (method ((&lt;number&gt; x) . rest) (apply + x rest))
+                    (list &lt;number&gt;))
+  ;=&gt; #t
+              </pre></div><p>
+          </p><p><a name="comparemethods"></a>
+            <a class="indexterm" name="id2600026"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">compare-methods</span> <span class="methodparam"><span class="parameter">method</span></span> <span class="methodparam"><span class="parameter">method</span></span> <span class="methodparam"><span class="parameter">type-list</span></span>) =&gt; <span class="type">'equal,'more-specific,'less-specific</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Determines the relationship of two methods by
+                comparing their type signatures against each other and
+                using the supplied <em class="parameter"><code>type-list</code></em>
+                for disambiguation. Both methods must be applicable to
+                <em class="parameter"><code>type-list</code></em>, as determined by
+                <code class="function">method-applicable?</code>.
+              </p><p>
+                The comparison algorithm is described in <a href="ch07.html#GenericProcedureMethodSelection" title="Method Selection">the section called &#8220;Method Selection&#8221;</a>.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(compare-methods (method ((next: next)(&lt;number&gt; x)(&lt;number&gt; y)) (next x y))
+                 (method ((&lt;number&gt; x) . rest) (apply + x rest))
+                 (list &lt;number&gt; &lt;number&gt;))
+                ;=&gt; 'more-specific
+              </pre></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        Calling a generic will dispatch on the argument types as
+        described above.  This dispatch can change if new methods are
+        added to a generic procedure.  On occasion the programmer may
+        wish to fix the dispatch of a particular generic function,
+        either to guarantee a specific function is called for a given
+        part of a Scheme program, or to improve performance by
+        avoiding the type dispatch at each call.  <span class="emphasis"><em>SISC</em></span> provides a
+        syntactic form which allows the programmer to bind/rebind a
+        generic procedure to a new lexical variable which is the
+        monomorphized variant of the function call.  
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2600164"></a>
+            <span class="emphasis"><em>syntax: </em></span>
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">let-monomorphic</span> <span class="methodparam"><span class="parameter">bindings</span></span> <span class="methodparam"><span class="parameter">expressions</span></span> ...)</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><table class="simplelist" border="0" summary="Simple list"><tr><td>
+                  where <em class="parameter"><code>bindings</code></em> are of the
+                  form <code class="literal">((<em class="parameter"><code>generic</code></em>
+                  <em class="parameter"><code>type</code></em>...) ...)
+                  </code>
+                </td></tr><tr><td>
+                  or <code class="literal">(((<em class="parameter"><code>binding</code></em>
+                    <em class="parameter"><code>generic</code></em>)
+                  <em class="parameter"><code>type</code></em>...) ...)</code>
+                </td></tr></table><p>
+                In the former binding form, the generic procedure
+                specified by <em class="parameter"><code>generic</code></em> is rebound
+                lexically with the same name, and monomorphized to the
+                method which is applicable for the given types.  In
+                the latter form, the generic is rebound lexically to
+                the new name specified by
+                <em class="parameter"><code>binding</code></em>.  Both forms may be
+                used in a given call to <code class="function">let-monomorphic</code>.
+              </p><p>
+                The bindings are made as if by
+                <code class="function">let</code>, i.e. no assumptions can be
+                made as to the order in which they are bound.  The
+                expressions are evaluated as in <code class="function">let</code>
+                as well, in order using an implicit
+                <code class="function">begin</code>.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(let-monomorphic ([foo-generic &lt;number&gt; &lt;string&gt;]
+                  [(bar bar-generic) &lt;char&gt;])
+  (foo-generic 3 "four")
+  (bar #\x))
+              </pre></div><p>
+          </p></blockquote></div><p>
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2600342"></a>Procedures on Methods</h3></div></div></div><a class="indexterm" name="id2600348"></a><p>
+        Methods are instances of the abstract data type
+        <code class="literal">&lt;method&gt;</code>, which has range of
+        procedures:
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2600370"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">method?</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns #t if <em class="parameter"><code>value</code></em> is a
+                method, #f otherwise.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(method? (method ((&lt;number&gt; x) . rest) (apply + x rest)))
+  ;=&gt; #t
+(method? (lambda (x) x))
+  ;=&gt; #f
+              </pre></div><p>
+          </p><p>
+            <a class="indexterm" name="id2600436"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">method-procedure</span> <span class="methodparam"><span class="parameter">method</span></span>) =&gt; <span class="type">procedure</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns <em class="parameter"><code>method</code></em>'s body as a
+                procedure. Note that a method's procedure always takes
+                a "next method" procedure as the first argument. See
+                <a href="ch07.html#GenericProcedureMethodSelection" title="Method Selection">the section called &#8220;Method Selection&#8221;</a>.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+((method-procedure (method ((&lt;number&gt; x) . rest) (apply + x rest)))
+ #f 1 2 3)
+  ;=&gt; 6
+              </pre></div><p>
+          </p><p>
+            <a class="indexterm" name="id2600507"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">method-types</span> <span class="methodparam"><span class="parameter">method</span></span>) =&gt; <span class="type">type-list</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns <em class="parameter"><code>method</code></em>'s type
+                signature, i.e. the types of the declared mandatory
+                parameters.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(method-types (method ((next: next)(&lt;number&gt; x)(&lt;number&gt; y) . rest) (next x y)))
+  ;=&gt; (&lt;number&gt; &lt;number&gt;)
+              </pre></div><p>
+          </p><p>
+            <a class="indexterm" name="id2600573"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">method-rest?</span> <span class="methodparam"><span class="parameter">method</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns #t if <em class="parameter"><code>method</code></em> has a
+                rest parameter, #f otherwise.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(method-rest? (method ((&lt;number&gt; x) . rest) (apply + x rest)))
+  ;=&gt; #t
+(method-rest? (method ((next: next)(&lt;number&gt; x)(&lt;number&gt; y) . rest) (next x y)))
+  ;=&gt; #f
+              </pre></div><p>
+          </p><p>
+            <a class="indexterm" name="id2600634"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">method-arity</span> <span class="methodparam"><span class="parameter">method</span></span>) =&gt; <span class="type">number</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the number of mandatory arguments of
+                <em class="parameter"><code>method</code></em>. Note that the special
+                <code class="literal">next:</code> parameter is not counted.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(method-arity (method ((&lt;number&gt; x) . rest) (apply + x rest)))
+  ;=&gt; 1
+(method-arity (method ((next: next)(&lt;number&gt; x)(&lt;number&gt; y) . rest) (next x y)))
+  ;=&gt; 2
+              </pre></div><p>
+          </p><p>
+            <a class="indexterm" name="id2600710"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">method=</span> <span class="methodparam"><span class="parameter">method</span></span> <span class="methodparam"><span class="parameter">method</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns #t if the two methods have identical
+                signatures, i.e. have equal parameter types (as
+                determined by <code class="function">types=</code>) and rest
+                parameter flag. #f is returned otherwise.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(method= (method ((next: next)(&lt;number&gt; x)(&lt;number&gt; y) . rest) (next x y))
+         (method ((&lt;number&gt; a)(&lt;number&gt; b) . rest) (+ x y)))
+  ;=&gt; #t
+(method= (method ((&lt;number&gt; x)(&lt;number&gt; y) . rest) (+ x y))
+         (method ((&lt;number&gt; a)(&lt;number&gt; b)) (+ x y)))
+  ;=&gt; #f
+(method= (method ((&lt;number&gt; x)(&lt;value&gt; y)) (+ x y))
+         (method ((&lt;number&gt; a)(&lt;number&gt; b)) (+ x y)))
+  ;=&gt; #f
+              </pre></div><p>
+          </p></blockquote></div><p>
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2600786"></a>Miscellaneous</h3></div></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="GenericProcedureCombination"></a>Generic Procedure Combination</h4></div></div></div><p>
+          Generic procedure combination merges the method lists of
+          multiple generic procedures. The typical scenario for using
+          this features is when several modules have defined generic
+          procedure (and procedures using these generic procedures)
+          that perform identical operations but on different data
+          types. Generic procedure combination extends to coverage of
+          the individual generic procedures and the dependent
+          procedures to the combined set of data types.  Furthermore,
+          the coverage of the dependent procedures is implicitly
+          extended to the combined set of data types.
+        </p><div class="informalexample"><p>
+            The following example illustrates how generic procedure
+            combination can be used to combine the functionality of
+            two <code class="function">p-append</code> procedures defined
+            independently by two modules. It also shows how generic
+            procedure combination implicitly extends the coverage of
+            the <code class="function">p-reverse-append</code> and
+            <code class="function">p-repeat</code> procedures defined by the
+            modules.
+          </p><pre class="programlisting">
+(import* misc compose)
+(module foo
+    (p-append p-reverse-append)
+  (define (p-reverse-append . args)
+    (apply p-append (reverse args)))
+  (define-generic p-append)
+  (define-methods p-append
+    [((&lt;list&gt; x) . rest)
+     (apply append x rest)]
+    [((&lt;vector&gt; x) . rest)
+     (list-&gt;vector (apply append
+                          (vector-&gt;list x)
+                          (map vector-&gt;list rest)))]))
+(module bar
+    (p-append p-repeat)
+  (define (p-repeat n x)
+    (let loop ([res '()]
+               [n   n])
+      (if (= n 0)
+          (apply p-append res)
+          (loop (cons x res) (- n 1)))))
+  (define-generic p-append)
+  (define-methods p-append
+    [((&lt;string&gt; x) . rest)
+     (apply string-append x rest)]
+    [((&lt;symbol&gt; x) . rest)
+     (string-&gt;symbol (apply string-append
+                            (symbol-&gt;string x)
+                            (map symbol-&gt;string rest)))]))
+
+(import* foo (p-append1 p-append) p-reverse-append)
+(import* bar (p-append2 p-append) p-repeat)
+(define-generic p-append p-append1 p-append2)
+(define-method (p-append (&lt;procedure&gt; x) . rest)
+  (apply compose x rest))
+
+(p-append '(a b))  ;=&gt; '(a b)
+(p-append '(a b) '(c d) '(e f))  ;=&gt; '(a b c d e f)
+(p-append '#(a b))  ;=&gt; '#(a b)
+(p-append '#(a b) '#(c d) '#(e f))  ;=&gt; '#(a b c d e f)
+(p-append "ab")  ;=&gt; "ab"
+(p-append "ab" "cd" "ef")  ;=&gt; "abcdef"
+(p-append 'ab)  ;=&gt; 'ab
+(p-append 'ab 'cd 'ef)  ;=&gt; 'abcdef
+((p-append car cdr cdr cdr) '(1 2 3 4))  ;=&gt; 4
+
+(p-reverse-append "ab" "cd" "ef")  ;=&gt; "efcdab"
+(p-repeat 3 '(a b))  ;=&gt; '(a b a b a b)
+((p-reverse-append cdr cdr cdr car) '(1 2 3 4))  ;=&gt; 4
+((p-repeat 3 cdr) '(1 2 3 4))  ;=&gt; (4)
+          </pre></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="GenericProcedureScoping"></a>Scoping Rules</h4></div></div></div><p>
+          Generic procedures are lexically scoped, but their methods
+          are not. Hence defining methods in a local scope is
+          generally a bad idea. One exception are module
+          definitions. It is perfectly safe for modules to define
+          private (i.e. not exported) generic procedures and add
+          methods to them without interfering with other
+          modules. However, care must be taken when generic procedures
+          are imported or exported - methods are added to generic
+          procedures when the module gets <span class="emphasis"><em>defined</em></span>
+          rather then when it gets imported.
+        </p><div class="informalexample"><p>
+            The following example illustrates the scoping rules.
+          </p><pre class="programlisting">
+(define-generic m)
+(define-method (m (&lt;value&gt; v)) v)
+(m 1)  ;=&gt; 1
+(let ([x 1])
+  (define-method (m (&lt;number&gt; v)) (+ x v))
+  (m 1))  ;=&gt; 2
+(m 1)  ;=&gt; 2
+
+(module foo
+    (m)
+  (define-generic m)
+  (define-method (m (&lt;value&gt; v)) v))
+(import foo)
+(m 1)  ;=&gt; 1
+(module bar
+    ()
+  (import foo)
+  (define-method (m (&lt;number&gt; v)) (+ 1 v)))
+(m 1)  ;=&gt; 2
+          </pre></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="GenericProcedureMethodSelection"></a>Method Selection</h4></div></div></div><p>
+          When generic procedures are invoked they select the most
+          specific applicable method and call it, with the remaining
+          applicable methods being made available to the invoked
+          method via the <em class="parameter"><code>next:</code></em>.
+        </p><p>
+          Method applicability is determined on the basis of the types
+          of the parameters passed in the invocation of the generic
+          procedure. A method is applicable to a list of parameter
+          types if and only if the following conditions are met:
+          </p><div class="itemizedlist"><ul type="disc" compact><li><p>
+                If the method accepts rest arguments then the length
+                of the list of parameter types must be equal or
+                greater than the method arity (as returned by
+                <code class="function">method-arity</code>).
+              </p></li><li><p>
+                If the method does not accepts rest arguments then the
+                length of the list of parameter types must be equal to
+                the method arity (as returned by
+                <code class="function">method-arity</code>).
+              </p></li><li><p>
+                All the types in the method's type signature (as
+                returned by <code class="function">method-types</code>) must be
+                super-types of the corresponding parameter types. This
+                comparison is performed using the
+                <code class="function">types&lt;=</code> procedure.
+              </p></li></ul></div><p>
+          This algorithm is encapsulated by the
+          <code class="function">method-applicable?</code> procedure.
+        </p><p>
+          Method specificity is an ordering relation on applicable
+          methods with respect to a specific list of parameter
+          types. Informally, the relative specificity of two methods
+          is determined by performing a left-to-right comparison of
+          the type signatures of the two methods and the parameter
+          types using <code class="function">compare-types</code>, returning
+          the result of the type comparison at the point of the first
+          discernable difference.
+        </p><p>
+          More formally, the relative specificity of two applicable
+          methods is computed by a triple-wise comparison on
+          successive elements of the method signatures (as returned by
+          <code class="function">method-types</code>) and actual parameter
+          types, using <code class="function">compare-types</code>, such that
+          </p><div class="itemizedlist"><ul type="disc"><li><p>
+                If we run out of elements in both method signatures
+                then
+                </p><div class="itemizedlist"><ul type="circle"><li><p>
+                      If both or neither method return rest arguments
+                      (as determined by
+                      <code class="function">method-rest?</code>) then the
+                      methods are of equal specificity.
+                    </p></li><li><p>
+                      If the first method takes rest arguments (as
+                      determined by <code class="function">method-rest?</code>)
+                      then the first method is less specific than the
+                      second.
+                    </p></li><li><p>
+                      If the second method takes rest arguments (as
+                      determined by <code class="function">method-rest?</code>)
+                      then the first method is more specific than the
+                      second.
+                    </p></li></ul></div><p>
+              </p></li><li><p>
+                If we run out of elements in the first method's
+                signature only then the first method is less specific
+                than the second.
+              </p></li><li><p>
+                If we run out of elements in the second method's
+                signature only then the first method is more specific
+                than the second.
+              </p></li><li><p>
+                If <code class="function">compare-types</code> returns
+                <code class="literal">'equal</code> we proceed to the next
+                triple.
+              </p></li><li><p>
+                If <code class="function">compare-types</code> returns
+                <code class="literal">'less-specific</code> then the first
+                method is less specific than the second.
+              </p></li><li><p>
+                If <code class="function">compare-types</code> returns
+                <code class="literal">'more-specific</code> then the first
+                method is more specific than the second.
+              </p></li></ul></div><p>
+          This algorithm is encapsulated by the
+          <code class="function">compare-methods</code> procedure.
+        </p><p>
+          The <code class="function">method</code> form and derived forms (i.e.
+          <code class="function">define-method</code> and
+          <code class="function">define-methods</code>) permit the
+          specification of a special first parameter to the method
+          invocation. When a generic procedure invokes a method, this
+          parameter is bound to a procedure that when called will
+          invoke the "next best matching" method. This is the next
+          method in the list of applicable methods returned by
+          <code class="function">applicable-methods</code> when it was called
+          by the generic procedure upon invocation.
+        </p><p>
+          If no "next best matching" method exists, i.e. the current
+          method is the last in the list, then the next parameter is
+          #f. This allows methods to invoke the next best matching
+          method selectively depending on whether it is present. This
+          is an important feature since the dynamic nature of method
+          selection makes it impossible to determine at the time of
+          writing the method whether there is going to be a next best
+          matching method.
+        </p><p>
+          The next best matching method must be invoked with arguments
+          to which the current method is applicable.
+        </p><div class="informalexample"><p>
+            The following example illustrates the method selection
+            algorithm, and use of the <code class="literal">next:</code>
+            parameter:
+          </p><pre class="programlisting">
+(define-generic m)
+(define-methods m
+  [((next: next) (&lt;number&gt; x) (&lt;value&gt; y) (&lt;number&gt; z) . rest)
+   (cons 'a (if next (apply next x y z rest) '()))]
+  [((next: next) (&lt;number&gt; x) (&lt;value&gt; y) (&lt;number&gt; z))
+   (cons 'b (if next (next x y z) '()))]
+  [((next: next) (&lt;number&gt; x) (&lt;number&gt; y) . rest)
+   (cons 'c (if next (apply next x y rest) '()))]
+  [((next: next) (&lt;number&gt; x) (&lt;number&gt; y) (&lt;value&gt; z))
+   (cons 'd (if next (next x y z) '()))])
+(m 1 1 1)  ;=&gt; '(d c b a)
+(m 1 1)  ;=&gt; '(c)
+(m 1 'x 2)  ;=&gt; '(b a)
+(m 1 1 'x)  ;=&gt; '(d c)
+(m 1 'x 'x)  ;=&gt; error
+          </pre></div></div></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ObjectSystem"></a>Object System</h2></div></div></div><p>
+        <span class="emphasis"><em>Requires: </em></span> 
+      <span class="bold"><strong>
+        (import <span class="emphasis"><em>oo</em></span>)
+      </strong></span>
+    </p><p>
+      Programming in the <span class="emphasis"><em>SISC</em></span> object system usually entailse the
+      definition of generic procedures, so typically one also has to
+      <span class="bold"><strong>
+        (import <span class="emphasis"><em>generic-procedures</em></span>)
+      </strong></span>.
+    </p><p>
+      The key features of the object system are:
+      </p><div class="itemizedlist"><ul type="disc"><li><p>
+            class-based, with a restricted form of multiple
+            inheritance
+          </p></li><li><p>
+            instance variables (aka <span class="emphasis"><em>slots</em></span>) are
+            accessed and modified via generic procedures
+          </p></li><li><p>
+            generic procedures implement all behaviour; there is no
+            separate notion of <span class="emphasis"><em>methods</em></span>
+          </p></li><li><p>
+            introspection API
+          </p></li><li><p>
+            complete integration into <span class="emphasis"><em>SISC</em></span>'s extensible type system
+          </p></li></ul></div><p>
+    </p><p>
+      The examples in this section follow a few naming conventions:
+      </p><table class="simplelist" border="0" summary="Simple list"><tr><td>
+            Classes are types in the <span class="emphasis"><em>SISC</em></span> type system and therefore
+            class names follow the naming convention for type names
+            (see
+            <a href="ch07.html#TypeSystem" title="Type System">the section called &#8220;Type System&#8221;</a>), for example
+            <code class="literal">&lt;foo-bar-baz&gt;</code>.
+        </td></tr><tr><td>
+            Generic procedures whose sole purpose it is to access
+            slots of objects have names starting with
+            <code class="literal">:</code> and otherwise follow the usual Scheme
+            identifier naming conventions, i.e. all lower-case with
+            dashes for separating words. For example
+            <code class="literal">:foo-bar-baz</code>. This helps to visually
+            distinguish slot access from ordinary procedure
+            invocations and avoids name clashes with other procedures.
+        </td></tr><tr><td>
+            Generic procedures whose sole purpose it is to modify
+            slots of objects, are named after the corresponding
+            accessor procedure (whether that exists or not) with a
+            <code class="literal">!</code> appended, thus following the usual
+            Scheme convention of denoting procedures that perform
+            mutations on their arguments. For example
+            <code class="literal">:foo-bar-baz!</code>.
+        </td></tr></table><p>
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2601489"></a>Classes</h3></div></div></div><a class="indexterm" name="id2601494"></a><a class="indexterm" name="id2601501"></a><p>
+        Classes have a name, a list of direct superclasses, and a list
+        of direct slot descriptions. All classes are instances of the
+        type &lt;class&gt; and are themselves types in <span class="emphasis"><em>SISC</em></span>'s
+        extensible type system. All classes are direct or indirect
+        sub-classes of the class &lt;object&gt;, except for
+        &lt;object&gt; itself, which has no super-classes.
+      </p><p>
+        Classes are created as follows:
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2601531"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">make-class</span> <span class="methodparam"><span class="parameter">symbol</span></span> <span class="methodparam"><span class="parameter">class-list</span></span> <span class="methodparam"><span class="parameter">slot-list</span></span> [<span class="methodparam"><span class="parameter">guid-symbol</span></span>]) =&gt; <span class="type">class</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Creates a class named <em class="parameter"><code>symbol</code></em>
+                with the classes in <em class="parameter"><code>class-list</code></em>
+                as its direct super-classes. See <a href="ch07.html#OOInheritance" title="Inheritance">the section called &#8220;Inheritance&#8221;</a> for restrictions on
+                super-classes. When no super-classes are specified, the
+                superclass is &lt;object&gt;.
+              </p><p>
+                <em class="parameter"><code>slot-list</code></em> is a list of slot
+                names (symbols).
+              </p><p>
+                Slots are inherited by sub-classes. For details on
+                slot inheritance see <a href="ch07.html#OOInheritance" title="Inheritance">the section called &#8220;Inheritance&#8221;</a>.
+              </p><p>
+                If <em class="parameter"><code>guid-symbol</code></em> is specified
+                then the new class is
+                <span class="emphasis"><em>non-generative</em></span>: if
+                <em class="parameter"><code>guid-symbol</code></em> is already bound to
+                a class then that class is modified, instead of a new
+                class being created. Non-generative classes are
+                serialised specially such that deserialising them also
+                performs this check. By contrast, deserialisation of
+                ordinary, generative classes and their instances
+                results in duplicate types being created, which is
+                usually not desirable.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(define-generics :x :y :y!)
+(define &lt;foo&gt; (make-class '&lt;foo&gt; '() '()))
+(define &lt;bar&gt; (make-class '&lt;bar&gt; '() '()))
+(define &lt;baz&gt; (make-class '&lt;baz&gt; (list &lt;foo&gt; &lt;bar&gt;)
+                          '(x y)))
+              </pre></div><p>
+          </p><p>
+            <a class="indexterm" name="id2601702"></a>
+            <span class="emphasis"><em>syntax: </em></span>
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">define-class</span> <span class="methodparam"><span class="parameter">name-and-supers</span></span> <span class="methodparam"><span class="parameter">slot-def</span></span> ...)</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><table class="simplelist" border="0" summary="Simple list"><tr><td>
+                  where <em class="parameter"><code>name-and-supers</code></em> is of the
+                  form
+                  <code class="literal">(</code><em class="parameter"><code>class-name</code></em> <em class="parameter"><code>super-class</code></em> <code class="literal">...)</code>
+                </td></tr><tr><td>
+                  and <em class="parameter"><code>slot-def</code></em> is of the form
+                  <code class="literal">(</code>
+                  <em class="parameter"><code>slot-name</code></em>
+                  [<em class="parameter"><code>accessor</code></em> [<em class="parameter"><code>modifier</code></em>]]
+                  <code class="literal">)</code>
+                </td></tr></table><p>
+                Binds <em class="parameter"><code>class-name</code></em> to a newly
+                created class.
+              </p><p>
+                This form expands into a definition with call to
+                <code class="function">make-class</code> on the right hand
+                side.
+              </p><p>
+                <em class="parameter"><code>slot-name</code></em> names a
+                slot. <em class="parameter"><code>accessor</code></em> must be a generic
+                procedure. An accessor method for the slot will be
+                added to it. <em class="parameter"><code>modifier</code></em> must be a
+                generic procedure. A modifier method for the slot will
+                be added to it.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(define-generics :x :y :y!)
+(define-class (&lt;foo&gt;))
+(define-class (&lt;bar&gt;))
+(define-class (&lt;baz&gt; &lt;foo&gt; &lt;bar&gt;)
+  (x :x)
+  (y :y :y!))
+              </pre></div><p>
+          </p><p>
+            <a class="indexterm" name="id2601890"></a>
+            <span class="emphasis"><em>syntax: </em></span>
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">define-nongenerative-class</span> <span class="methodparam"><span class="parameter">name-and-supers</span></span> <span class="methodparam"><span class="parameter">guid</span></span> <span class="methodparam"><span class="parameter">slot-def</span></span> ...)</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                This is the same as <code class="function">define-class</code>,
+                except that the resulting class is
+                <span class="emphasis"><em>non-generative</em></span> with
+                <em class="parameter"><code>guid</code></em>, a symbol, as the unique
+                identifier. The significance of this is explained in
+                <code class="function">make-class</code>.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        One can test whether a particular value is a class:
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2601990"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">class?</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns #t if <em class="parameter"><code>value</code></em> is a
+                class, #f otherwise.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(class? (make-class '&lt;foo&gt; '() '()))  ;=&gt; #t
+(class? (lambda (x) x))  ;=&gt; #f
+(define-class (&lt;foo&gt;))
+(class? &lt;foo&gt;)  ;=&gt; #t
+              </pre></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        The following procedures provide access to the various
+        elements of the &lt;class&gt; abstract data type:
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2602067"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">class-name</span> <span class="methodparam"><span class="parameter">class</span></span>) =&gt; <span class="type">symbol</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the name of the class
+                <em class="parameter"><code>class</code></em>.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(class-name (make-class '&lt;foo&gt; '() '()))  ;=&gt; '&lt;foo&gt;
+(define-class (&lt;foo&gt;))
+(class-name &lt;foo&gt;)  ;=&gt; '&lt;foo&gt;
+              </pre></div><p>
+          </p><p>
+            <a class="indexterm" name="id2602129"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">class-direct-superclasses</span> <span class="methodparam"><span class="parameter">class</span></span>) =&gt; <span class="type">class-list</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the list of direct super-classes of the class
+                <em class="parameter"><code>class</code></em>.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(define-class (&lt;foo&gt;))
+(define-class (&lt;bar&gt;))
+(define-class (&lt;baz&gt; &lt;foo&gt; &lt;bar&gt;))
+(map class-name (class-direct-super-classes &lt;foo&gt;)  ;=&gt; '())
+(map class-name (class-direct-super-classes &lt;baz&gt;)  ;=&gt; '(&lt;foo&gt; &lt;bar&gt;))
+              </pre></div><p>
+          </p><p>
+            <a class="indexterm" name="id2602190"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">class-direct-slots</span> <span class="methodparam"><span class="parameter">class</span></span>) =&gt; <span class="type">slot-list</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the list of descriptions of the direct slots
+                of the class <em class="parameter"><code>class</code></em>.
+              </p><p>
+                Slot descriptions are created by
+                <code class="function">make-class</code> for each slot
+                definitions. The procedures operating on slot
+                descriptions are documented in <a href="ch07.html#OOSlots" title="Slots">the section called &#8220;Slots&#8221;</a>.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(class-direct-slots (make-class '&lt;foo&gt; '() '()))  ;=&gt; '()
+(define-generics :x :y :y!)
+(define-class (&lt;baz&gt;)
+  (x :x)
+  (y :y :y!))
+(class-direct-slots &lt;baz&gt; ;=&gt; (&lt;slot&gt; &lt;slot&gt;))
+              </pre></div><p>
+          </p></blockquote></div><p>
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="OOSlots"></a>Slots</h3></div></div></div><a class="indexterm" name="id2602295"></a><p>
+        Slot descriptions are instances of the abstract data
+        type &lt;slot&gt;. They are created implicitly when classes
+        are created; it is not possible to create them directly.
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2602320"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">slot?</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns #t if <em class="parameter"><code>value</code></em> is a slot
+                description, #f otherwise.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(define-class (&lt;baz&gt;) (x) (y))
+(map slot? (class-direct-slots &lt;baz&gt;))  ;=&gt; '(#t #t)
+              </pre></div><p>
+          </p><p>
+            <a class="indexterm" name="id2602386"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">slot-name</span> <span class="methodparam"><span class="parameter">slot</span></span>) =&gt; <span class="type">symbol</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the name of the slot described by
+                <em class="parameter"><code>slot</code></em>. This is the name given to
+                the slot when its class was created.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(define-class (&lt;baz&gt;) (x) (y))
+(map slot-name (class-direct-slots &lt;baz&gt;))  ;=&gt; '(x y)
+              </pre></div><p>
+          </p><p>
+            <a class="indexterm" name="id2602452"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">slot-class</span> <span class="methodparam"><span class="parameter">slot</span></span>) =&gt; <span class="type">class</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the class to which the slot description
+                <em class="parameter"><code>slot</code></em> belongs.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(define-class (&lt;baz&gt;) (x) (y))
+(eq? (slot-class (car (class-direct-slots &lt;baz&gt;))) &lt;baz&gt;)  ;=&gt; #t
+              </pre></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        Slot definitions can produce procedures that allow access and
+        modification of slots. Since slots can be defined without
+        accessors and modifiers, this may be the only way to
+        access/modify a particular slot.
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2602525"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">slot-accessor</span> <span class="methodparam"><span class="parameter">slot</span></span>) =&gt; <span class="type">procedure</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns a procedure than when applied to an instance
+                of <em class="parameter"><code>slot</code></em>'s class, will return
+                the slot's value on that instance.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(define-class (&lt;baz&gt;) (x))
+(define baz (make &lt;baz&gt;))
+((slot-accessor (car (class-direct-slots &lt;baz&gt;))) baz) ;=&gt; 1
+              </pre></div><p>
+          </p><p>
+            <a class="indexterm" name="id2602590"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">slot-modifier</span> <span class="methodparam"><span class="parameter">slot</span></span>) =&gt; <span class="type">procedure</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns a procedure than when applied to an instance
+                of <em class="parameter"><code>slot</code></em>'s class and a value,
+                will set the slot's value on that instance to the
+                supplied value.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(define-generics :x :x!)
+(define-class (&lt;baz&gt;) (x :x))
+(define baz (make &lt;baz&gt;))
+(:x baz)  ;=&gt; 1
+((slot-modifier (car (class-direct-slots &lt;baz&gt;))) baz 2)
+(:x baz)  ;=&gt; 2
+              </pre></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        In addition to <span class="emphasis"><em>procedures</em></span> for slot access
+        and modification, slot definitions can also produce equivalent
+        <span class="emphasis"><em>methods</em></span>. These are suitable for adding to
+        generic procedures and can, for instance, be used to achieve
+        the same effect as specifying generic procedures for slot
+        access/modification at class creation time.
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2602675"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">slot-accessor-method</span> <span class="methodparam"><span class="parameter">slot</span></span>) =&gt; <span class="type">method</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                This is the same as
+                <code class="function">slot-accessor</code>, except it
+                returns a method instead of a procedure.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2602729"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">slot-modifier-method</span> <span class="methodparam"><span class="parameter">slot</span></span>) =&gt; <span class="type">method</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                This is the same as
+                <code class="function">slot-modifier</code>, except it
+                returns a method instead of a procedure.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2602785"></a>Instantiation</h3></div></div></div><a class="indexterm" name="id2602790"></a><p>
+        Class instantiation is a two-stage process. First a new object
+        is created whose type is that of the instantiated class. Then
+        the <code class="function">initialize</code> generic procedure is
+        called with the newly created instance and additional
+        arguments. <code class="function">initialize</code> serves the same
+        purpose as constructors in other object systems.
+      </p><p>
+        All the phases of class instantiation are carried out by a
+        single procedure:
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2602826"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">make</span> <span class="methodparam"><span class="parameter">class</span></span> <span class="methodparam"><span class="parameter">value</span></span> ...) =&gt; <span class="type">instance</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Creates a new object that is an instance of
+                <em class="parameter"><code>class</code></em>. The instance and
+                <em class="parameter"><code>value</code></em>s are then passed as
+                parameters to a call to the
+                <code class="function">initialize</code> generic procedure. The
+                result of calling <code class="function">make</code> is the
+                instance.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(define-generics :x :x!)
+(define-class (&lt;baz&gt;)
+  (x :x :x!))
+(define-method (initialize (&lt;baz&gt; b) (&lt;number&gt; x)) (:x! b x))
+(define baz (make &lt;baz&gt; 2))
+(:x baz)  ;=&gt; 2
+              </pre></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        By default the <code class="function">initialize</code> contains a
+        no-op method for initialising objects of type &lt;object&gt;
+        with no further arguments. Since all objects are instances of
+        &lt;object&gt; all classes can be instantiated by calling
+        <code class="literal">(make</code>
+        <em class="parameter"><code>class</code></em><code class="literal">)</code>.
+        </p><div class="informalexample"><pre class="programlisting">
+(define-generics :x :x!)
+(define-class (&lt;baz&gt;)
+  (x :x :x!))
+(define baz (make &lt;baz&gt;))
+(:x baz)  ;=&gt; #f
+          </pre></div><p>
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="OOInheritance"></a>Inheritance</h3></div></div></div><p>
+        Inheritance is a form of sub-typing. A class is a sub-type of
+        all its direct and indirect superclasses. Method selection in
+        generic procedures (and hence also slot access/modification)
+        is based on a relationship called <span class="emphasis"><em>class
+          precedence</em></span>; a total order of classes based on the
+        partial orders established by the direct super-classes:
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2602996"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">class-precedence-list</span> <span class="methodparam"><span class="parameter">class</span></span>) =&gt; <span class="type">class-list</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the total order of
+                <em class="parameter"><code>class</code></em> and all direct and
+                indirect super-classes, as determined by the partial
+                orders obtained from calling
+                <code class="function">class-direct-superclasses</code>.
+              </p><p>
+                The ordering of classes returned by
+                <code class="function">class-direct-superclasses</code> is
+                considered "weak" whereas the ordering of the class
+                itself to its direct super-classes is considered
+                strong. The significance of this is that when
+                computing the class precedence list weak orderings are
+                re-arranged if that is the only way to obtain a total
+                order. By contrast, strong orderings are never
+                rearranged.
+              </p></blockquote></div><p>
+            </p><div class="informalexample"><pre class="programlisting">
+(define-class (&lt;foo&gt;))
+(define-class (&lt;bar&gt; &lt;foo&gt;))
+(define-class (&lt;baz&gt; &lt;foo&gt;))
+(define-class (&lt;boo&gt; &lt;bar&gt; &lt;baz&gt;))
+(define-class (&lt;goo&gt;))
+(define-class (&lt;moo1&gt; &lt;bar&gt; &lt;baz&gt; &lt;goo&gt;))
+(map class-name (class-precedence-list &lt;moo1&gt;))
+  ;=&gt; (&lt;moo1&gt; &lt;bar&gt; &lt;baz&gt; &lt;goo&gt; &lt;foo&gt; &lt;object&gt;)
+(define-class (&lt;moo2&gt; &lt;bar&gt; &lt;baz&gt; &lt;foo&gt; &lt;goo&gt;))
+(map class-name (class-precedence-list &lt;moo2&gt;))
+  ;=&gt; (&lt;moo1&gt; &lt;bar&gt; &lt;baz&gt; &lt;foo&gt; &lt;goo&gt; &lt;object&gt;)
+(define-class (&lt;moo3&gt; &lt;baz&gt; &lt;bar&gt; &lt;boo&gt;))
+(map class-name (class-precedence-list &lt;moo3&gt;))
+  ;=&gt; (&lt;moo3&gt; &lt;boo&gt; &lt;baz&gt; &lt;bar&gt; &lt;foo&gt; &lt;object&gt;)
+              </pre></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        For any two classes in the class precedence list that have
+        direct slots, one must be a sub-class of the other.
+      </p><p>
+        In effect this enforces single inheritance of slots while
+        still giving control over the order of classes in the
+        class-precedence list.
+      </p><p>
+        Slots from a superclass are only ever inherited once,
+        regardless of the number of paths in the inheritance graph to
+        that class.
+      </p><p>
+        If a sub-class defines a slot with the same name as one of its
+        super-classes, instances of the resulting class ends up with
+        <span class="emphasis"><em>two</em></span> slots of the same name. If the slots
+        are define with different accessors and modifiers then this
+        does not cause any problems at all. If they are not then an
+        invocation of the accessor/modifier will acess/modify the slot
+        of the sub-class. Note that it is still possible to
+        access/modify the slot of the superclass by using
+        procedures/methods obtained from the slot descriptor. See
+        <a href="ch07.html#OOSlots" title="Slots">the section called &#8220;Slots&#8221;</a>.
+      </p><p>
+        The following example illustrates the rules governing slot
+        inheritance.
+        </p><div class="informalexample"><pre class="programlisting">
+;;ordinary slot access and modification
+(define-generics
+  :x :x! :y :y! :z :z!
+  :xb :xb! :yb :yb! :zb :zb!)
+(define-class (&lt;foo&gt;)
+  (x :x :x!)
+  (y :y :y!)
+  (z :z))
+(define f (make &lt;foo&gt;))
+(:x f)  ;=&gt; #f
+(:y f)  ;=&gt; #f
+(:z f)  ;=&gt; #f
+(:x! f 2)
+(:y! f 2)
+(:x f)  ;=&gt; 2
+(:y f)  ;=&gt; 2
+
+;;overloading slots in sub-class
+(define-class (&lt;bar&gt; &lt;foo&gt;)
+  (x :x :x!)
+  (y :yb :yb!)
+  (zb :zb :zb!))
+(define b (make &lt;bar&gt;))
+(:x b)  ;=&gt; #f
+(:y b)  ;=&gt; #f
+(:z b)  ;=&gt; #f
+(:yb b)  ;=&gt; #f
+(:zb b)  ;=&gt; #f
+(:y! b 3)
+(:yb! b 4)
+(:y b)  ;=&gt; 3
+(:yb b)  ;=&gt; 4
+
+;;accessing a fully shadowed slot
+(define :foo-x
+  (cdr (assq 'x (map (lambda (x)
+                       (cons (slot-name x) (slot-accessor x)))
+                     (class-direct-slots &lt;foo&gt;)))))
+(:foo-x b)  ;=&gt; 1
+
+;;inheritance restriction on slots
+(define-class (&lt;boo&gt; &lt;baz&gt;)
+  (yb :yb :yb!))
+(define-class (&lt;goo&gt;))
+(define-class (&lt;moo&gt; &lt;bar&gt; &lt;boo&gt; &lt;goo&gt;))  ;=&gt; error
+          </pre></div><p>
+      </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch06.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch08.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 6. 
+    Threads and Concurrency
+   </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 8. Java Interaction</td></tr></table></div></body></html>

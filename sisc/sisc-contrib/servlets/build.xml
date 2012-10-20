@@ -1,0 +1,82 @@
+<project name="sisc-servlets" default="all">
+
+  <property file="build.properties"/>    
+  <property environment="env"/>
+  <property name="sisc.home" value="${env.SISC_HOME}"/>
+  <property name="packagename" value="sisc.contrib.servlets"/>
+  <property name="srcdir" value="java"/>
+  <property name="classdir" value="classes"/>
+  <property name="libdir" value="lib"/>
+  <property name="schemedir" value="scheme"/>
+  <property name="docdir" value="docs"/>
+  <property name="jarfile" value="sisc-servlets.jar"/>
+  <property name="debugging" value="on"/>
+  <property name="optimization" value="off"/>
+
+  <path id="classpath">
+    <fileset dir="${libdir}">
+      <include name="*.jar"/>
+    </fileset>
+    <pathelement location="${sisc.home}/sisc.jar"/>
+    <pathelement location="${sisc.home}/sisc-opt.jar"/>
+  </path>
+
+  <target name="prepare">
+  </target>
+
+  <target name="clean" depends="prepare"
+          description="Remove generated sources, class files and jar files">
+    <delete dir="${classdir}"/>
+    <delete file="${jarfile}"/>
+    <ant dir="examples" target="clean"/>
+  </target> 
+
+  <target name="compile" depends="prepare">
+    <mkdir dir="${classdir}"/>
+    <javac srcdir="${srcdir}"
+           destdir="${classdir}"
+           debug="${debugging}"
+           optimize="${optimization}"
+           classpathref="classpath">
+    </javac>      
+  </target>
+  
+<!--
+  <target name="i18n" depends="prepare">
+    <copy todir="${classdir}">
+      <fileset dir="i18n" >
+        <include name="**/*.properties"/>
+      </fileset>                   
+    </copy>
+  </target> 
+-->
+
+  <target name="jars" depends="compile">
+    <jar jarfile="${jarfile}">
+      <fileset dir="${classdir}">
+        <include name="*/**"/>
+      </fileset>
+    </jar>
+  </target>
+  
+  <target name="javadocs" depends="prepare"
+          description="Generate javadocs">
+    <mkdir dir="${docdir}/javadoc"/>
+    <javadoc packagenames="${packagename}.*"
+             sourcepath="${srcdir}"
+             destdir="${docdir}/javadoc"
+             classpathref="classpath"/>
+  </target>
+
+  <target name="docs" depends="javadocs"
+          description="Generate Documentation"/>
+
+  <target name="examples" depends="jars"
+          description="Build Example Code">
+    <ant dir="examples" target="dist"/>
+  </target>
+
+  <target name="all" depends="jars,docs,examples"
+          description="Build everything">
+  </target>
+</project>

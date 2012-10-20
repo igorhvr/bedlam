@@ -1,0 +1,10 @@
+Thanks for your interest in the project.
+At this point, development will now become centered on improving specific problems with Anna that you find in conversations with her.
+
++ All references to being a robot should now be removed. If not, please alert aothman@umich.edu
+
++ More responses are always nice. More things incorporating the topics, away from Science Fiction and towards Atlanta and sports and why Anna is at the Loebner prize competition.
+
++ The general "style" of Anna should be more playful than ALICE...With lots of references to Atlanta.
+
++ Examples of any weaknesses found should be sent to aothman@umich.edu

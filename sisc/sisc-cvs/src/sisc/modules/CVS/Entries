@@ -1,0 +1,29 @@
+/Annotations.java/1.8/Tue Feb  6 18:45:32 2007//
+/Debugging.java/1.11/Tue Feb  6 18:45:32 2007//
+/Logical.java/1.4/Tue Feb  6 18:45:32 2007//
+/Messages.properties/1.4/Fri Apr 15 04:40:43 2005//
+/OptionalPrimitives.java/1.10/Tue Apr  3 23:18:37 2007//
+/Primitives.java/1.68/Wed Feb 14 21:58:18 2007//
+/R5RS.java/1.7/Tue Feb  6 18:45:32 2007//
+/Threads.java/1.10/Tue Feb  6 18:45:32 2007//
+/Types.java/1.7/Tue Feb  6 18:45:32 2007//
+/debug.scm/1.37/Tue Feb  6 18:45:32 2007//
+/libraries.scm/1.12/Tue Feb  6 18:45:32 2007//
+/match.ss/1.4/Mon Aug 23 17:50:32 2004//
+/misc.scm/1.9/Tue Feb  6 18:45:32 2007//
+/pp.scm/1.3/Tue Feb  6 18:45:32 2007//
+/procedure-properties.scm/1.4/Tue Feb  6 18:45:32 2007//
+/std-modules.scm/1.118/Tue Feb  6 18:45:32 2007//
+/sthread.scm/1.4/Tue Feb  6 18:45:32 2007//
+/thread-types.scm/1.3/Tue Feb  6 18:45:32 2007//
+/thread.scm/1.4/Tue Feb  6 18:45:32 2007//
+/type-system.scm/1.9/Wed Jul  5 22:07:43 2006//
+D/generic-procedures////
+D/hashtable////
+D/io////
+D/oo////
+D/optimizer////
+D/os////
+D/record////
+D/s2j////
+D/srfi////

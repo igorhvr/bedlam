@@ -1,0 +1,21 @@
+/Gui.java/1.4/Sun Oct  9 14:53:15 2005//
+/ai.scm/1.9/Tue Sep  3 19:35:12 2002//
+/astar.scm/1.6/Tue Sep  3 19:35:12 2002//
+/bid.scm/1.3/Mon Sep  2 17:43:45 2002//
+/bigloo.scm/1.1/Mon Sep  2 17:43:45 2002//
+/constants.scm/1.1/Sun Sep  1 22:15:42 2002//
+/gamestate.scm/1.7/Mon Sep  2 17:43:45 2002//
+/gui.scm/1.1/Sun Sep  1 22:15:42 2002//
+/init.scm/1.6/Mon Apr 21 07:55:52 2003//
+/io.scm/1.7/Mon Sep  2 17:43:45 2002//
+/mainloop.scm/1.9/Tue Sep  3 19:35:12 2002//
+/moves.scm/1.1/Sun Sep  1 22:15:42 2002//
+/mvlet.scm/1.1/Mon Sep  2 17:43:45 2002//
+/package.scm/1.7/Mon Sep  2 17:53:26 2002//
+/prioq.scm/1.2/Mon Sep  2 17:43:45 2002//
+/priorque.scm/1.1/Sun Sep  1 22:15:42 2002//
+/seen.scm/1.4/Tue Sep  3 19:35:12 2002//
+/sisc.scm/1.2/Tue Sep  3 19:35:12 2002//
+/weights.scm/1.10/Tue Sep  3 19:35:12 2002//
+/world.scm/1.3/Mon Sep  2 17:43:45 2002//
+D

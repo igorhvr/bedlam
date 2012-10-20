@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml>
+	<!-- test.aiml:  For testing by Kevin   -->
+	<!-- This should never make it into CVS -->
+<category>
+      <pattern>TESTKEVIN</pattern>
+            <template>okay  <think><set
+            name="topic">Austin Powers</set></think>
+</template>
+</category>
+
+
+
+<category>
+      <pattern>TESTKEVIN2</pattern>
+            <template>okay
+	    <br/>
+	    <set name="topic">Atlanta</set> 
+</template>
+</category>
+
+<category>
+      <pattern>TESTKEVIN3</pattern>
+            <template>okay
+	    <br/>
+	    <think><set name="topic">School</set></think>
+	    The topic is now <get name="topic"/>
+</template>
+</category>
+
+
+<category>
+      <pattern>1234</pattern>
+            <template>The value is now <get name="test4hello"/>
+</template>
+</category>
+
+<category>
+     <pattern>2345</pattern>
+     <template><set name="test4hello">false</set></template>
+</category>
+
+
+<topic name="_ ASIMOV">
+<category>
+    <pattern>*</pattern>
+   <template>well, I guess that worked, didn't it lorelleia?
+    </template>
+</category>
+</topic>
+
+<topic name="ASIMOV">
+<category>
+    <pattern>*</pattern>
+   <template>well, I guess that worked, didn't it lorelleia?
+    </template>
+</category>
+</topic>
+
+<category>
+<pattern>HOW DO YOU DO _</pattern>
+<template>Fuckhead!</template>
+</categroy>
+
+</aiml>
+<category>
+    <pattern>HELLO</pattern>
+    <template>
+    <condition>
+        <li name="hello" value="true">
+          <srai>HELLO18PERCENT</srai>
+	</li>
+	<li><think><set name="hello">true</set></think>
+	  Hi there!
+	</li>
+    </condition>
+    </template>
+</category>
+
+<!-- This will return a different response ~ 18% of the time, to make -->
+<!-- Anna seem a bit annoyed at the same question over and over -->
+<!-- The user has to have already said hello once -->
+<category>
+     <pattern>HELLO18PERCENT</pattern>
+     <template>
+     <random>
+     <li>Hello.</li>
+     <li>Hi there...</li>
+     <li>Hello already!</li>
+     <li>Hello.</li>
+     <li>Can't you say anything besides "hello?"</li>
+     <li>Hello.</li>
+     </random>
+</template>
+</category>

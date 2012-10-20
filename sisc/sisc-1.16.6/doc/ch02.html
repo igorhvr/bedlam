@@ -1,0 +1,490 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 2.  Installation and Invocation</title><link rel="stylesheet" href="sss.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.71.0"><link rel="start" href="index.html" title="SISC for Seasoned Schemers"><link rel="up" href="index.html" title="SISC for Seasoned Schemers"><link rel="prev" href="ch01.html" title="Chapter 1.  Introduction"><link rel="next" href="ch03.html" title="Chapter 3.  Scheme Language"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 2. 
+    Installation and Invocation
+  </th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch01.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch03.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="Installation"></a>Chapter 2. 
+    Installation and Invocation
+  </h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch02.html#RequiredEnv">
+      Required Environment
+    </a></span></dt><dt><span class="sect1"><a href="ch02.html#REPL">
+      The Read-Eval-Print-Loop
+    </a></span></dt><dt><span class="sect1"><a href="ch02.html#DisplayConventions"> 
+      Display Conventions
+    </a></span></dt><dt><span class="sect1"><a href="ch02.html#running-sisc">Running <span class="emphasis"><em>SISC</em></span></a></span></dt><dd><dl><dt><span class="sect2"><a href="ch02.html#commandline">Command-line Switches</a></span></dt><dt><span class="sect2"><a href="ch02.html#config-parameters">Configuration Parameters</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch02.html#FileExtensions">Running Scheme Programs</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch02.html#Loading">Loading</a></span></dt><dt><span class="sect2"><a href="ch02.html#SchemeScripts">Scheme Shell Scripts</a></span></dt></dl></dd></dl></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="RequiredEnv"></a>
+      Required Environment
+    </h2></div></div></div><p>
+      <span class="emphasis"><em>SISC</em></span> primarily targets the Java Virtual
+      Machine, and the Java v1.3 and higher class libraries.  The
+      1.2 libraries and VM are required due to a reliance on memory
+      reference functionality used to properly garbage collect
+      unused symbols while still maintaining pointer equality between
+      those that remain active, while the 1.3 libraries are needed for
+      the proxy functionality of the Java bridge library.
+    </p><p>
+      <span class="emphasis"><em>SISC</em></span> does not require any particular operating system, though
+      the official distribution currently provides launching
+      assistance for Windows and Unix based systems.  Theoretically
+      any machine that supports Java 1.3 or higher should be able to
+      run <span class="emphasis"><em>SISC</em></span>.
+    </p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="REPL"></a>
+      The Read-Eval-Print-Loop
+    </h2></div></div></div><p>
+      As in most Scheme systems, <span class="emphasis"><em>SISC</em></span>'ss primary human interface is a
+      REPL, or Read-Eval-Print-Loop.  <span class="emphasis"><em>SISC</em></span> presents the user with a
+      prompt ('<code class="computeroutput">#;&gt;</code>'), then reads an
+      s-expression from the console.  <span class="emphasis"><em>SISC</em></span> then evaluates the
+      s-expression, producing a value or error, which it then prints.
+      Finally the process begins again with a new prompt.
+    </p><p>
+      The process terminates with a forced kill of the JVM (with 
+      Control-C or similar), or when an end of file is detected on
+      the console.  Also, the <code class="function">exit</code> procedure may
+      be used to exit the current REPL.
+    </p><p>
+      </p><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" name="id2546455"></a>
+	  <span class="emphasis"><em>procedure: </em></span>  
+	  <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">exit</span> [<span class="methodparam"><span class="parameter">return-value</span></span>]) =&gt; <span class="type">does not return</span></code>
+	  </p><div class="blockquote"><blockquote class="blockquote"><p>
+	      Instructs the current REPL to exit.  If the optional 
+              return value is given, the value will be passed out of
+              the REPL to the calling code or environment.
+	    </p></blockquote></div><p>
+	</p></blockquote></div><p>
+    </p><p>
+      Evaluation may be prematurely interrupted on some platforms by
+      sending SIGQUIT (usually by pressing Control-C) to the <span class="emphasis"><em>SISC</em></span>
+      process.  If supported, this will cause an interrupted error to
+      be raised at whichever expression is currently being evaluated
+      in the REPL thread.  If not caught, this will cause the error to
+      be raised at the console and a new prompt will be displayed.
+      Issuing the signal twice will terminate <span class="emphasis"><em>SISC</em></span>.     
+    </p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="DisplayConventions"></a> 
+      Display Conventions
+    </h2></div></div></div><p>
+      Executing or loading code in the REPL ordinarily produces a value
+      result which is displayed during the Print phase.  However,
+      two other message types may be displayed.  First, if an error
+      is raised that is not handled by the running program, the
+      message will be described in one of several forms, depending on what
+      combinations of a location, a message, and a parent message the
+      error has:
+    </p><pre class="programlisting">
+Error.
+
+Error in &lt;error-location&gt;.
+
+Error: &lt;description&gt;
+      
+Error in &lt;error-location&gt;: &lt;description&gt;
+      
+Error in nested call.
+&lt;nested-error&gt;
+
+Error in nested call: &lt;description&gt;
+&lt;nested-error&gt;
+
+Error in nested call from &lt;error-location&gt;.
+&lt;nested-error&gt;
+
+Error in nested call from &lt;error-location&gt;: &lt;description&gt;
+&lt;nested-error&gt;
+    </pre><p>
+      The location of an error often refers to the name of a procedure,
+      syntax, or parameter.  Errors that do not contain a location often
+      originate in an anonymous function.  Nested errors occur when
+      one function makes a call to another function and the second raises an
+      error.  If the first function wishes, it may catch this error and
+      generate its own, with the second functions error as a parent.  Thus
+      a nested error consists of an error message on the first line,
+      and the nested error message or messages on following lines.
+    </p><p>
+      In addition to errors, it is possible for code to produce
+      warnings during compilation or run-time.  A warning is a
+      message to the user about a condition that is unusual but not
+      terminal to the program flow.  The compiler, for example, does
+      a minimal amount of sanity checking on code and may produce
+      warnings about code that has the potential to raise errors
+      during execution.  Warnings are always distinguished from
+      ordinary messages by surrounding braces ({}) and starting
+      with the word 'warning'.
+    </p><pre class="programlisting">
+{warning: &lt;description&gt;}
+    </pre></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="running-sisc"></a>Running <span class="emphasis"><em>SISC</em></span></h2></div></div></div><p>
+      <span class="emphasis"><em>SISC</em></span>'s official distribution provides a startup script for
+      Windows and Unix based hosts.  Simply executing this script
+      starts the <span class="emphasis"><em>SISC</em></span> REPL.  Zero or more Scheme source files can
+      also be specified on the command line after the script name,
+      which will be loaded in order before the REPL prompt is
+      displayed.
+    </p><p>
+      It may be desirable to pass options to the underlying JVM.  This
+      can be done by setting the <code class="literal">JAVAOPT</code>
+      environment variable to the options you wish to pass to the
+      JVM.  This includes switches for heap size, system properties,
+      etc.  <span class="emphasis"><em>SISC</em></span> itself has a number of properties that can affect
+      its operation.  See <a href="ch02.html#config-parameters" title="Configuration Parameters">the section called &#8220;Configuration Parameters&#8221;</a> 
+      for a list of these properties and their meanings.
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="commandline"></a>Command-line Switches</h3></div></div></div><p>
+        <span class="emphasis"><em>SISC</em></span> can, in addition to loading Scheme source programs,
+        also accept a few command-line switches to change its
+        behavior.  Any
+        non-switch argument is considered a Scheme source file to load
+        on startup, until the <span class="emphasis"><em>end of options</em></span>
+        characters  "--" are reached.  Any item
+        after those characters are considered arguments to the
+        function specified in the "call-with-args" switch.  
+      </p><p>
+        All command-line switches have both a short and long form.
+        These forms are equivalent in meaning.
+      </p><div class="table"><a name="commandline-switches"></a><p class="title"><b>Table 2.1. <span class="emphasis"><em>SISC</em></span> Command line Switches</b></p><div class="table-contents"><table summary="SISC Command line Switches" border="1"><colgroup><col align="left"><col align="left"><col align="left"></colgroup><thead><tr><th align="left">Long Switch</th><th align="left">Short Switch</th><th align="left">Switch meaning</th></tr></thead><tbody><tr><td align="left"><code class="literal">--call-with-args &lt;name&gt;</code></td><td align="left"><code class="literal">-c &lt;name&gt;</code></td><td align="left">
+                Call the top-level procedure <code class="literal">name</code> 
+                with the remaining command-line arguments after the
+                "--" sequence.
+              </td></tr><tr><td align="left"><code class="literal">--eval &lt;expression&gt;</code></td><td align="left"><code class="literal">-e &lt;expression&gt;</code></td><td align="left">
+                Evaluate the provided expression.
+              </td></tr><tr><td align="left"><code class="literal">--no-repl</code></td><td align="left"><code class="literal">-x</code></td><td align="left">
+                Exit after loading all the Scheme source files and
+                processing all command-line switches.
+              </td></tr><tr><td align="left"><code class="literal">--heap &lt;heap-file&gt;</code></td><td align="left"><code class="literal">-h &lt;heap-file&gt;</code></td><td align="left">
+                File containing pre-compiled code and data for a
+                complete Scheme top-level environment. This parameter
+                is mandatory if the heap cannot be located automatically.
+              </td></tr><tr><td align="left"><code class="literal">--properties &lt;config-file&gt;</code></td><td align="left"><code class="literal">-p &lt;config-file&gt;</code></td><td align="left">
+                Specifies a Java properties file that contains
+                application properties. Typically some of these
+                properties define defaults for configuration parameters (<a href="ch02.html#config-parameters" title="Configuration Parameters">the section called &#8220;Configuration Parameters&#8221;</a>. The file can be specified as a URL.
+              </td></tr><tr><td align="left"><code class="literal">--listen [&lt;host&gt;:]&lt;port&gt;</code></td><td align="left"><code class="literal">-l [&lt;host&gt;:]&lt;port&gt;</code></td><td align="left">
+                Listen on host/port for REPL connections,
+                i.e. connecting to the specified host/port will create
+                a new REPL.
+              </td></tr></tbody></table></div></div><br class="table-break"><p>
+        The order of processing the command line is as follows:
+      </p><div class="orderedlist"><ol type="1"><li><p>
+            Process the entire command line, noting the
+            settings of each switch and accumulating all Scheme source
+            files and arguments after the end of options sequence.
+          </p></li><li><p>
+            Load the heap file.
+          </p></li><li><p>
+            Load each Scheme source file found in the order they
+            occured on the command line.  Note whether any errors
+            occurred.   
+          </p></li><li><p>
+            If present, evaluate the expression in an
+            <code class="literal">--eval</code> switch.  Note its success 
+            or failure.
+          </p></li><li><p>
+            If present, apply the named function in a
+            <code class="literal">--call-with-args</code> switch to the
+            arguments after the end of options sequence.  Note its
+            return value.
+          </p></li><li><p>
+            If <code class="literal">--no-repl</code> was not specified, invoke
+            the REPL, otherwise exit.
+          </p></li><li><p>
+          	If the REPL was run if its return value is 
+          	an integer, return that integer as <span class="emphasis"><em>SISC</em></span>'s overall 
+          	return code.  If the REPL was not run, and any
+          	return code supporting step above was run, return
+          	the most recent return code.  If no return code step
+          	was performed, but a success/failure step was performed,
+          	return 1 if any failures occured, 0 otherwise.
+          </p></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="config-parameters"></a>Configuration Parameters</h3></div></div></div><p>
+        SISC's behaviour is affected by a number of configuration
+        parameters. These fall into two categories:
+        </p><div class="orderedlist"><ol type="1"><li><p>
+              Static configuration parameters that can only be specified
+              at system startup and apply across all <span class="emphasis"><em>SISC</em></span> applications
+              that use the same classloader.
+           </p></li><li><p>
+              Dynamic configuration parameters that can be altered on a
+              per-thread basis without impacting other threads. These
+              kind of parameters are also called "thread locals", or, in
+              Scheme terminology, dynamic parameters.
+            </p></li></ol></div><p>
+      </p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2547042"></a>Static Parameters</h4></div></div></div><p>
+          Static configuration parameters can be set using Java system
+          properties. Their value can be retrieved with a Scheme
+          function, but it is not possible to alter it. Static
+          configuration parameters default to pre-defined
+          system-internal settings if left unspecified.
+        </p><p>
+          <span class="emphasis"><em>SISC</em></span> has the following static configuration parameters:
+          </p><div class="informaltable"><table border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>
+                    Java property
+                    <sup>[<a name="config-props" href="#ftn.config-props">a</a>]</sup>
+                  </th><th>Scheme parameter</th><th>default</th><th>description</th></tr></thead><tbody><tr><td>
+                    <a class="indexterm" name="id2547123"></a>
+                    <code class="envar">permitInterrupts</code></td><td><code class="function">permit-interrupts</code></td><td>true</td><td>
+                    If set to <code class="literal">true</code>,
+                    <code class="function">thread/interrupt</code> is
+                    permitted to interrupt running Scheme code, in
+                    addition to sending an interrupt signal to the
+                    host language.
+                  </td></tr><tr><td>
+                    <a class="indexterm" name="id2547169"></a>
+                    <code class="envar">minFloatPrecision</code></td><td><code class="function">min-float-precision</code></td><td>16</td><td>
+                    Specifies the minimum precision, in decimal places,
+                    to be maintained by the Quantity lib if using
+                    arbitrary precision floats.
+                  </td></tr><tr><td>
+                    <a class="indexterm" name="id2547201"></a>
+                    <code class="envar">maxFloatPrecision</code></td><td><code class="function">max-float-precision</code></td><td>32</td><td>
+                    Specifies the maximum precision, in decimal
+                    places, to be maintained by the Quantity lib if
+                    using arbitrary precision floats.
+                  </td></tr></tbody><tbody class="footnotes"><tr><td colspan="4"><div class="footnote"><p><sup>[<a name="ftn.config-props" href="#config-props">a</a>] </sup>
+                        The names of all properties for configuration
+                        parameters must be prefixed with
+                        <code class="envar">sisc.</code>.
+                      </p></div></td></tr></tbody></table></div><p>
+        </p><p>
+          When static configuration parameters are retrieved with
+          their associated Scheme function, the value is of the type
+          specified for the parameter. See <a href="ch02.html#config-parameter-conversion" title="Value Conversion">the section called &#8220;Value Conversion&#8221;</a>.
+        </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2547249"></a>Dynamic Parameters</h4></div></div></div><p>
+          There are four ways to specify a configuration parameter, in
+          decreasing order of precedence:
+          </p><div class="orderedlist"><ol type="1"><li><p>
+                <span class="emphasis"><em>Invoking a scheme function</em></span>.
+                Dynamic configuration parameters are special Scheme
+                parameters (see <a href="ch03.html#Parameters" title="
+        Parameters
+      ">the section called &#8220;
+        Parameters
+      &#8221;</a>. Invoking
+                the parameter with a value sets the parameter for the
+                current thread without affecting other dynamic
+                contexts / threads.
+              </p></li><li><p>
+                <span class="emphasis"><em>Defining an application
+                property</em></span>. A single <span class="emphasis"><em>SISC</em></span> runtime can host
+                multiple applications simultaneously. Application
+                properties define default values for dynamic
+                configuration parameters across all dynamic contexts /
+                threads of an application. They can be specified at
+                application initialisation time. See <a href="ch08.html#JavaToScheme" title="Calling Scheme from Java">the section called &#8220;Calling Scheme from Java&#8221;</a>. When <span class="emphasis"><em>SISC</em></span> is started from
+                the command line, the location of a Java properties
+                file containing application properties can be
+                specified with a command line option. See <a href="ch02.html#commandline-switches" title="Table 2.1. SISC Command line Switches">Table 2.1, &#8220;<span class="emphasis"><em>SISC</em></span> Command line Switches&#8221;</a>.
+              </p></li><li><p>
+                <span class="emphasis"><em>Defining a Java system property</em></span>.
+                Java system properties define default values for
+                dynamic configuration parameters that apply across all
+                applications inside a single <span class="emphasis"><em>SISC</em></span> runtime.
+              </p></li><li><p>
+                <span class="emphasis"><em>System defaults</em></span>.
+                All dynamic configuration parameters have a reasonable
+                default value.
+              </p></li></ol></div><p>
+        </p><p>
+          <span class="emphasis"><em>SISC</em></span> has the following dynamic configuration parameters:
+          </p><div class="informaltable"><table border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>
+                    Java property
+                    <sup>[<a href="#ftn.config-props">a</a>]</sup>
+                  </th><th>Scheme parameter</th><th>default</th><th>description</th></tr></thead><tbody><tr><td>
+                    <a class="indexterm" name="id2547410"></a>
+                    <code class="envar">caseSensitive</code>
+                  </td><td><code class="function">case-sensitive</code></td><td>false</td><td>
+                    Determines whether symbols read via the Scheme
+                    reader are to be treated case sensitively.
+                  </td></tr><tr><td>
+                    <a class="indexterm" name="id2547444"></a>
+                    <code class="envar">characterSet</code>
+                  </td><td><code class="function">character-set</code></td><td>"UTF8"</td><td>
+                    Defines the default character set used by character
+                    ports (see <a href="ch05.html#charports" title="Character Ports">the section called &#8220;Character Ports&#8221;</a>) if no character
+                    set is otherwise specified.
+                  </td></tr><tr><td>
+                    <a class="indexterm" name="id2547484"></a>
+
+                    <code class="envar">emitAnnotations</code></td><td><code class="function">emit-annotations</code></td><td>true</td><td>
+                    If set to <code class="literal">true</code>, this parameter
+                    causes source files loaded with
+                    <code class="function">load</code> or
+                    <code class="function">import</code>, as well as source
+                    entered in the console, to be annotated by the
+                    Scheme reader. Annotations include source file
+                    location information, which simplifies debugging.
+                    See <a href="ch04.html#passive-debugging" title="
+      Passive Debugging
+    ">the section called &#8220;
+      Passive Debugging
+    &#8221;</a>.
+                  </td></tr><tr><td>
+                    <a class="indexterm" name="id2547545"></a>
+
+                    <code class="envar">emitDebuggingSymbols</code></td><td><code class="function">emit-debugging-symbols</code></td><td>true</td><td>
+                    If set to <code class="literal">true</code>, additional
+                    annotations useful for debugging, such as function
+                    and variable names, are produced by <span class="emphasis"><em>SISC</em></span>'s
+                    compiler. See <a href="ch04.html#passive-debugging" title="
+      Passive Debugging
+    ">the section called &#8220;
+      Passive Debugging
+    &#8221;</a>.
+                  </td></tr><tr><td>
+                    <a class="indexterm" name="id2547593"></a>
+                    <code class="envar">maxStackTraceDepth</code></td><td><code class="function">max-stack-trace-depth</code></td><td>0</td><td>
+                    Specifies the maximum depth of virtual call
+                    stacks, which are used to obtain proper stack
+                    traces even in the presence of tail recursion and
+                    continuation capture and invocation, while still
+                    preserving tail-call semantics and safe-for-space
+                    guarantees. See <a href="ch04.html" title="Chapter 4. 
+    Debugging Facilities
+  ">Chapter 4, <i>
+    Debugging Facilities
+  </i></a>. Collecting this information
+                    is computationally expensive, so this feature is
+                    turned off by default. A value of
+                    <code class="literal">16</code> is about right for debugging
+                    most applications. Large values allow collection
+                    of more information but carry a large performance
+                    penalty, small values result in some call
+                    information being lost.
+                  </td></tr><tr><td>
+                    <a class="indexterm" name="id2547649"></a>
+                    <code class="envar">permissiveParsing</code></td><td><code class="function">permissive-parsing</code></td><td>false</td><td>
+                    If set to <code class="literal">true</code>, the Scheme parser
+                    will warn rather than raise an error for various syntactic errors 
+                    such as unbalanced parentheses.  This allows one to
+                    continue parsing a syntactically invalid file, finding many errors
+                    at once.
+                  </td></tr><tr><td>
+                    <a class="indexterm" name="id2547689"></a>
+                    
+                    <code class="envar">printShared</code></td><td><code class="function">print-shared</code></td><td>true</td><td>
+                    If set to <code class="literal">true</code>,
+                    <code class="function">write</code> and the REPL detect
+                    shared structures in data and invoke a version of
+                    <code class="function">write</code> capable of emitting the
+                    shared structure's external representation of
+                    data. See <a href="ch03.html#Writing" title="Writing">the section called &#8220;Writing&#8221;</a>. The user may
+                    wish to set this parameter to
+                    <code class="literal">false</code> because of the overhead
+                    of both scanning all data, and constructing this
+                    representation when shared structures are
+                    detected.
+                  </td></tr><tr><td>
+                    <a class="indexterm" name="id2547758"></a>
+
+                    <code class="envar">replPrompt</code></td><td><code class="function">repl-prompt</code></td><td> </td><td>
+                    String to be displayed as part of <span class="emphasis"><em>SISC</em></span>'s REPL
+                    prompt.
+                  </td></tr><tr><td>
+                    <a class="indexterm" name="id2547791"></a>
+
+                    <code class="envar">stackTraceOnError</code></td><td><code class="function">stack-trace-on-error</code></td><td>true</td><td>
+                    If set to <code class="literal">true</code>, whenever an
+                    uncaught error is encountered a full stack trace
+                    is displayed automatically. See <a href="ch04.html#passive-debugging" title="
+      Passive Debugging
+    ">the section called &#8220;
+      Passive Debugging
+    &#8221;</a>.
+                  </td></tr><tr><td>
+                    <a class="indexterm" name="id2547836"></a>
+
+                    <code class="envar">strictR5RSCompliance</code></td><td><code class="function">strict-r5rs-compliance</code></td><td>false</td><td>
+                    If set to <code class="literal">true</code>,
+                    <span class="emphasis"><em>strict</em></span> R<sup>5</sup>RS syntax and
+                    semantics are followed.  This will cause SISC to
+                    raise errors in all situations described as "an
+                    error" in the Scheme standard.  This will override
+                    and invalidate all the interpretation liberties
+                    described in <a href="apb.html" title="Appendix B. R5RS Liberties and Violations">Appendix B, <i>R<sup>5</sup>RS Liberties and Violations</i></a>.
+                  </td></tr><tr><td>
+                    <a class="indexterm" name="id2547896"></a>
+
+                    <code class="envar">synopsisLength</code></td><td><code class="function">synopsis-length</code></td><td>30</td><td>
+                    Limit on the length (in characters) of the
+                    external representation of data structures in
+                    error messages and warnings. When the limit is
+                    reached, an ellipsis (<code class="literal">...</code>) is
+                    appended to the curtailed external representation.
+                  </td></tr><tr><td>
+                    <a class="indexterm" name="id2547937"></a>
+                    <code class="envar">vectorLengthPrefixing</code></td><td><code class="function">vector-length-prefixing</code></td><td>true</td><td>
+                    If set to <code class="literal">true</code>, this parameter
+                    will instruct the pretty-printer to emit length
+                    prefixed, trailing-duplicate-eliminated vectors in
+                    its output.  If <code class="literal">false</code>, ordinary
+                    full-length vectors without prefixes will be
+                    emitted. See <a href="ch03.html#Vectors" title="
+	Vectors
+      ">the section called &#8220;
+	Vectors
+      &#8221;</a>.
+                  </td></tr></tbody></table></div><p>
+        </p><p>
+          When dynamic configuration parameters are retrieved or set with
+          their associated Scheme function, the value is of the type
+          specified for the parameter. See <a href="ch02.html#config-parameter-conversion" title="Value Conversion">the section called &#8220;Value Conversion&#8221;</a>.
+        </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="config-parameter-conversion"></a>Value Conversion</h4></div></div></div><p>
+          When specifying configuration parameters via Java
+          properties, a Java-like notation is used, e.g. boolean
+          parameters are specified as <code class="literal">true</code> and
+          <code class="literal">false</code>. By contrast, when getting and
+          setting configuration parameters from Scheme, their values
+          are of the appropriate Scheme type, e.g. boolean parameters
+          are specified as <code class="literal">#t</code> and
+          <code class="literal">#f</code>. Strings and symbols undergo a
+          similiar conversion; they are specified without their
+          double/single quotes in the Java properties.
+        </p><p>
+          For parameter types other than boolean, string and symbol,
+          Java properties are read as Scheme values, i.e. Scheme
+          literal notation should be used in the properties.
+        </p></div></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="FileExtensions"></a>Running Scheme Programs</h2></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="Loading"></a>Loading</h3></div></div></div><p>
+        <span class="emphasis"><em>SISC</em></span> supports loading Scheme programs using the R<sup>5</sup>RS
+        optional procedure <code class="function">load</code>.  A number of
+        file types for loading Scheme code are supported.  The common
+        extensions are:
+      </p><div class="itemizedlist"><ul type="disc"><li><p>
+            <code class="literal">scm</code> - Scheme source code
+          </p></li><li><p>
+            <code class="literal">sce</code> - Scheme code expanded.  This type
+            of code has been processed by the syntax expander and
+            contains only core Scheme forms.
+          </p></li><li><p>
+            <code class="literal">scc</code> - <span class="emphasis"><em>SISC</em></span> Compiled Code.  This
+            contains expanded and compiled code in a <span class="emphasis"><em>SISC</em></span> specific
+            representation. The code gets executed when loaded.
+          </p></li></ul></div><p>
+        In addition to code loaded, <span class="emphasis"><em>SISC</em></span> requires a <span class="emphasis"><em>heap</em></span>,
+        which contains the default set of libraries and functions for the
+        initial environment.  <span class="emphasis"><em>SISC</em></span> will look for a heap file called <code class="literal">sisc.shp</code>
+        in the current directory, the directory referenced by the <code class="literal">SISC_HOME</code> 
+        environment variable, and as a resource paired with the <code class="classname">HeapAnchor</code>
+        class in the <code class="literal">sisc.boot</code> package of the classpath.  
+        The standard <span class="emphasis"><em>SISC</em></span> distribution contains <code class="literal">sisc.shp</code> in the 
+        same directory as the supporting <code class="literal">.jar</code> files.  
+      </p><p>
+        It isn't uncommon to want the heap to reside on the classpath, where it
+        can be more easily resolved in applets or in web applications.  This file,
+        usually called <code class="literal">sisc-heap.jar</code> can be added to the classpath
+        in any usual fashion, and the heap loading routines will discover it if
+        not found elsewhere.  To create a jar file containing the heap, create the 
+        following file structure in the
+        jar:
+      </p><pre class="programlisting">
+sisc/
+sisc/boot/
+sisc/boot/HeapAnchor.class
+sisc/boot/sisc.shp
+      </pre><p>
+        The <code class="literal">HeapAnchor.class</code> class file is distributed in the
+        <code class="literal">sisc-opt.jar</code> file of the full binary distribution.  
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="SchemeScripts"></a>Scheme Shell Scripts</h3></div></div></div><p>
+        On Unix or Unix-like systems, <span class="emphasis"><em>SISC</em></span> supports SRFI-22, a
+        mechanism for writing shell-like scripts that can be invoked
+        directly as executable programs.  The text of the SRFI, which
+        can be found at 
+        <a href="http://srfi.schemers.org/srfi-22/srfi-22.html" target="_top">
+          <em class="citetitle">http://srfi.schemers.org</em></a>, 
+        describes how such programs are written.  
+      </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch01.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 1. 
+    Introduction
+   </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 3. 
+    Scheme Language
+  </td></tr></table></div></body></html>

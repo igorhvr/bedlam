@@ -1,0 +1,134 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>SISC for Seasoned Schemers</title><link rel="stylesheet" href="sss.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.71.0"><link rel="start" href="index.html" title="SISC for Seasoned Schemers"><link rel="next" href="ch01.html" title="Chapter 1.  Introduction"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">
+      <span class="emphasis"><em>SISC</em></span> <span class="emphasis"><em>for Seasoned Schemers</em></span>
+    </th></tr><tr><td width="20%" align="left"> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch01.html">Next</a></td></tr></table><hr></div><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="id2497240"></a>
+      <span class="emphasis"><em>SISC</em></span> <span class="emphasis"><em>for Seasoned Schemers</em></span>
+    </h1></div><div><div class="authorgroup"><div class="author"><h3 class="author"><span class="firstname">Scott</span> <span class="othername">G.</span> <span class="surname">Miller</span></h3></div><div class="author"><h3 class="author"><span class="firstname">Matthias</span> <span class="surname">Radestock</span></h3></div></div></div><div><p class="copyright">Copyright © 2002-2007 Scott G. Miller,, Matthias Radestock</p></div><div><div class="legalnotice"><a name="id2536015"></a><p>
+      This documentation is free software; you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation; either version 2 of the License, or
+      (at your option) any later version.
+</p><p>
+      The source code refers to the DocBook XML source files.  The
+      object code refers to the generated HTML, PostScript, PDF, and
+      other forms.
+</p><p>
+
+      This documentation is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+</p><p>
+      You should have received a copy of the GNU General Public License (in 
+	<a href="ape.html" title="Appendix E. GNU General Public License">Appendix E, <i>GNU General Public License</i></a>)
+      along with this documentation; if not, write to the Free Software
+      Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="ch01.html">1. 
+    Introduction
+  </a></span></dt><dd><dl><dt><span class="sect1"><a href="ch01.html#Features">
+      Features
+    </a></span></dt><dt><span class="sect1"><a href="ch01.html#About">
+      About this document
+    </a></span></dt><dd><dl><dt><span class="sect2"><a href="ch01.html#AboutProcedures">
+	About procedure documentation
+      </a></span></dt></dl></dd><dt><span class="sect1"><a href="ch01.html#id2545672">Where to obtain this document</a></span></dt><dt><span class="sect1"><a href="ch01.html#Applicability">Version Applicability</a></span></dt></dl></dd><dt><span class="chapter"><a href="ch02.html">2. 
+    Installation and Invocation
+  </a></span></dt><dd><dl><dt><span class="sect1"><a href="ch02.html#RequiredEnv">
+      Required Environment
+    </a></span></dt><dt><span class="sect1"><a href="ch02.html#REPL">
+      The Read-Eval-Print-Loop
+    </a></span></dt><dt><span class="sect1"><a href="ch02.html#DisplayConventions"> 
+      Display Conventions
+    </a></span></dt><dt><span class="sect1"><a href="ch02.html#running-sisc">Running <span class="emphasis"><em>SISC</em></span></a></span></dt><dd><dl><dt><span class="sect2"><a href="ch02.html#commandline">Command-line Switches</a></span></dt><dt><span class="sect2"><a href="ch02.html#config-parameters">Configuration Parameters</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch02.html#FileExtensions">Running Scheme Programs</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch02.html#Loading">Loading</a></span></dt><dt><span class="sect2"><a href="ch02.html#SchemeScripts">Scheme Shell Scripts</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="ch03.html">3. 
+    Scheme Language
+  </a></span></dt><dd><dl><dt><span class="sect1"><a href="ch03.html#Types">
+      Types
+    </a></span></dt><dd><dl><dt><span class="sect2"><a href="ch03.html#Numbers">
+	Numbers
+      </a></span></dt><dt><span class="sect2"><a href="ch03.html#Characters">
+	Characters
+      </a></span></dt><dt><span class="sect2"><a href="ch03.html#Symbols">
+	Symbols
+      </a></span></dt><dt><span class="sect2"><a href="ch03.html#Strings">
+	Strings
+      </a></span></dt><dt><span class="sect2"><a href="ch03.html#Lists">
+        Pairs and Lists
+      </a></span></dt><dt><span class="sect2"><a href="ch03.html#Vectors">
+	Vectors
+      </a></span></dt><dt><span class="sect2"><a href="ch03.html#Boxing">
+	Boxes
+      </a></span></dt><dt><span class="sect2"><a href="ch03.html#Parameters">
+        Parameters
+      </a></span></dt><dt><span class="sect2"><a href="ch03.html#ImmutableTypes">
+	Immutable types
+      </a></span></dt></dl></dd><dt><span class="sect1"><a href="ch03.html#Equivalence">
+      Equivalence
+    </a></span></dt><dt><span class="sect1"><a href="ch03.html#syntax">
+      Syntax and Lexical Structure
+    </a></span></dt><dd><dl><dt><span class="sect2"><a href="ch03.html#comments">Comments</a></span></dt><dt><span class="sect2"><a href="ch03.html#SharedStructures">
+	Shared Structures
+      </a></span></dt><dt><span class="sect2"><a href="ch03.html#ControlFeatures">
+        Control Features
+      </a></span></dt><dt><span class="sect2"><a href="ch03.html#id2552521">
+        Syntactic Extension
+      </a></span></dt></dl></dd><dt><span class="sect1"><a href="ch03.html#ErrorHandling">Errors and Error Handling</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch03.html#FailureContinuations">Failure Continuations</a></span></dt><dt><span class="sect2"><a href="ch03.html#ErrorRecords">Error Records</a></span></dt><dt><span class="sect2"><a href="ch03.html#id2554839">Examples</a></span></dt><dt><span class="sect2"><a href="ch03.html#DynamicWind"><code class="function">dynamic-wind</code></a></span></dt></dl></dd><dt><span class="sect1"><a href="ch03.html#SymbolicEnvironments">
+      Symbolic Environments and Property Maps
+    </a></span></dt><dd><dl><dt><span class="sect2"><a href="ch03.html#AccessingSymbolicEnvironments">
+        Access Functions
+      </a></span></dt><dt><span class="sect2"><a href="ch03.html#ObtainingSymbolicEnvironments"> 
+        Obtaining and Naming
+      </a></span></dt><dt><span class="sect2"><a href="ch03.html#ChainedEnvironments">Chained Symbolic Environments</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch03.html#MiscellaneousFunctions">
+      Miscellaneous Functions
+    </a></span></dt></dl></dd><dt><span class="chapter"><a href="ch04.html">4. 
+    Debugging Facilities
+  </a></span></dt><dd><dl><dt><span class="sect1"><a href="ch04.html#passive-debugging">
+      Passive Debugging
+    </a></span></dt><dt><span class="sect1"><a href="ch04.html#ActiveDebugging">
+      Active Debugging
+    </a></span></dt><dd><dl><dt><span class="sect2"><a href="ch04.html#id2563452">
+        Runtime Tracing
+      </a></span></dt><dt><span class="sect2"><a href="ch04.html#id2563845">
+        Breakpoints
+      </a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="ch05.html">5. I/O</a></span></dt><dd><dl><dt><span class="sect1"><a href="ch05.html#id2565425">Ports</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch05.html#urlfile">URLs</a></span></dt><dt><span class="sect2"><a href="ch05.html#id2566388">Buffered I/O</a></span></dt><dt><span class="sect2"><a href="ch05.html#charports">Character Ports</a></span></dt><dt><span class="sect2"><a href="ch05.html#StringPorts">String Ports</a></span></dt><dt><span class="sect2"><a href="ch05.html#BinaryIO">Binary Ports and Block IO</a></span></dt><dt><span class="sect2"><a href="ch05.html#JavaPorts">Java Ports</a></span></dt><dt><span class="sect2"><a href="ch05.html#SerialIO">Serialization</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch05.html#netio">Networking</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch05.html#netutils">IP Addressing</a></span></dt><dt><span class="sect2"><a href="ch05.html#sockets">Socket Operations</a></span></dt><dt><span class="sect2"><a href="ch05.html#TCP">TCP</a></span></dt><dt><span class="sect2"><a href="ch05.html#SSL">TLS and SSL</a></span></dt><dt><span class="sect2"><a href="ch05.html#UDP">UDP</a></span></dt><dt><span class="sect2"><a href="ch05.html#id2574686">Multicast UDP</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch05.html#UserDefinedPorts">User Defined Ports</a></span></dt><dt><span class="sect1"><a href="ch05.html#id2576800">Miscellaneous</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch05.html#PrettyPrinting">Pretty-Printing</a></span></dt><dt><span class="sect2"><a href="ch05.html#id2576908">Source Loading</a></span></dt><dt><span class="sect2"><a href="ch05.html#id2577037">Location Tracking</a></span></dt><dt><span class="sect2"><a href="ch05.html#Resources">Locating Resources</a></span></dt><dt><span class="sect2"><a href="ch05.html#FileManipulation">File Manipulation</a></span></dt><dt><span class="sect2"><a href="ch05.html#ClassLoading">Class Loading</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="ch06.html">6. 
+    Threads and Concurrency
+  </a></span></dt><dd><dl><dt><span class="sect1"><a href="ch06.html#threadsemantics">
+      Scheme Thread Semantics
+    </a></span></dt><dt><span class="sect1"><a href="ch06.html#id2591864">
+      Basic Thread Operations
+    </a></span></dt><dt><span class="sect1"><a href="ch06.html#id2592773">
+      High-level Functions
+    </a></span></dt><dt><span class="sect1"><a href="ch06.html#id2591537">
+      Thread Scheduling
+    </a></span></dt><dt><span class="sect1"><a href="ch06.html#Synchronization">
+      Synchronization Primitives
+    </a></span></dt><dd><dl><dt><span class="sect2"><a href="ch06.html#id2593416">
+	Mutex Operations
+      </a></span></dt><dt><span class="sect2"><a href="ch06.html#id2593738">
+        Condition Variable Operations
+      </a></span></dt><dt><span class="sect2"><a href="ch06.html#highlevelconcurrency">
+	  High-level Concurrency
+	</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="ch07.html">7. Types and Objects</a></span></dt><dd><dl><dt><span class="sect1"><a href="ch07.html#TypeSystem">Type System</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch07.html#id2597024">Core Procedures and Predicates</a></span></dt><dt><span class="sect2"><a href="ch07.html#id2597463">Derived Procedures and Predicates</a></span></dt><dt><span class="sect2"><a href="ch07.html#TypeSystemHooks">Hooks</a></span></dt><dt><span class="sect2"><a href="ch07.html#id2598113">Standard Types</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch07.html#GenericProcedures">Generic Procedures</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch07.html#genprocdef">Defining Generic Procedures</a></span></dt><dt><span class="sect2"><a href="ch07.html#id2598849">Defining Methods</a></span></dt><dt><span class="sect2"><a href="ch07.html#invokinggenerics">Invoking Generic Procedures</a></span></dt><dt><span class="sect2"><a href="ch07.html#id2600342">Procedures on Methods</a></span></dt><dt><span class="sect2"><a href="ch07.html#id2600786">Miscellaneous</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch07.html#ObjectSystem">Object System</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch07.html#id2601489">Classes</a></span></dt><dt><span class="sect2"><a href="ch07.html#OOSlots">Slots</a></span></dt><dt><span class="sect2"><a href="ch07.html#id2602785">Instantiation</a></span></dt><dt><span class="sect2"><a href="ch07.html#OOInheritance">Inheritance</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="ch08.html">8. Java Interaction</a></span></dt><dd><dl><dt><span class="sect1"><a href="ch08.html#JavaToScheme">Calling Scheme from Java</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch08.html#appcontexts">Application Contexts</a></span></dt><dt><span class="sect2"><a href="ch08.html#id2609938">The <span class="emphasis"><em>SISC</em></span> Heap</a></span></dt><dt><span class="sect2"><a href="ch08.html#id2610324">The Dynamic Environment</a></span></dt><dt><span class="sect2"><a href="ch08.html#id2610367">The Interpreter</a></span></dt><dt><span class="sect2"><a href="ch08.html#id2611263">Miscellaneous Features</a></span></dt><dt><span class="sect2"><a href="ch08.html#id2611848">Quick Reference</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch08.html#SchemeToJava">Calling Java from Scheme</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch08.html#JavaClasses">Classes</a></span></dt><dt><span class="sect2"><a href="ch08.html#JavaMethods">Methods</a></span></dt><dt><span class="sect2"><a href="ch08.html#JavaFields">Fields</a></span></dt><dt><span class="sect2"><a href="ch08.html#JavaInstances">Instances</a></span></dt><dt><span class="sect2"><a href="ch08.html#JavaArrays">Arrays</a></span></dt><dt><span class="sect2"><a href="ch08.html#JavaProxies">Proxies</a></span></dt><dt><span class="sect2"><a href="ch08.html#JavaConversions">Types and Conversions</a></span></dt><dt><span class="sect2"><a href="ch08.html#JavaThreading">Multi-threading</a></span></dt><dt><span class="sect2"><a href="ch08.html#JavaExceptions">Exception Handling</a></span></dt><dt><span class="sect2"><a href="ch08.html#JavaPermissions">Access Permissions</a></span></dt><dt><span class="sect2"><a href="ch08.html#JavaUsage">Common Usage</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch08.html#SchemeToJavaReflection">Java Reflection Interface</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch08.html#id2617370">Classes</a></span></dt><dt><span class="sect2"><a href="ch08.html#id2618029">Constructors</a></span></dt><dt><span class="sect2"><a href="ch08.html#id2618411">Methods</a></span></dt><dt><span class="sect2"><a href="ch08.html#id2618794">Fields</a></span></dt><dt><span class="sect2"><a href="ch08.html#id2619257">Arrays</a></span></dt><dt><span class="sect2"><a href="ch08.html#id2619414">Proxies</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="ch09.html">9. 
+    Additional Libraries
+  </a></span></dt><dd><dl><dt><span class="sect1"><a href="ch09.html#SISCLibs">Optional <span class="emphasis"><em>SISC</em></span> Libraries</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch09.html#Definitions">Definitions</a></span></dt><dt><span class="sect2"><a href="ch09.html#BitwiseLogicalOperations">
+        Bitwise Logical Operations
+      </a></span></dt><dt><span class="sect2"><a href="ch09.html#Records">Records</a></span></dt><dt><span class="sect2"><a href="ch09.html#Hashtables">Hash Tables</a></span></dt><dt><span class="sect2"><a href="ch09.html#Buffers">Binary Buffers</a></span></dt><dt><span class="sect2"><a href="ch09.html#id2633905">Procedure Properties</a></span></dt><dt><span class="sect2"><a href="ch09.html#LibraryModule">Loadable Scheme Libraries</a></span></dt><dt><span class="sect2"><a href="ch09.html#OperatingSystemInterface">
+        Operating System Interface
+      </a></span></dt></dl></dd><dt><span class="sect1"><a href="ch09.html#ThirdPartyLibs">Third-Party Libraries</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch09.html#id2635315">SRFIs</a></span></dt><dt><span class="sect2"><a href="ch09.html#id2635927">SLIB</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch09.html#CreatingLibraries">Creating Libraries</a></span></dt></dl></dd><dt><span class="chapter"><a href="ch10.html">10. 
+    Modules and Libraries
+  </a></span></dt><dd><dl><dt><span class="sect1"><a href="ch10.html#SchemeModules">
+      Modules
+    </a></span></dt><dd><dl><dt><span class="sect2"><a href="ch10.html#ModuleOverview">Overview</a></span></dt><dt><span class="sect2"><a href="ch10.html#ModuleStyle">Style</a></span></dt><dt><span class="sect2"><a href="ch10.html#ModularizingCode">Modularizing Existing Code</a></span></dt><dt><span class="sect2"><a href="ch10.html#ModuleEvaluation">Evaluation</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch10.html#id2643873">Libraries</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch10.html#SRFI55"><code class="function">require-extension</code></a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="ch11.html">11. 
+    Extensibility
+  </a></span></dt><dd><dl><dt><span class="sect1"><a href="ch11.html#id2644279">Adding Types</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch11.html#id2644297">External Representation of Values</a></span></dt><dt><span class="sect2"><a href="ch11.html#id2645541">Equality</a></span></dt><dt><span class="sect2"><a href="ch11.html#id2645678">Serializable Values</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch11.html#id2645722">Adding Native Bindings</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch11.html#id2645899">Native Procedures</a></span></dt><dt><span class="sect2"><a href="ch11.html#id2646026">Fixable Native Procedures</a></span></dt><dt><span class="sect2"><a href="ch11.html#id2646371">Indexed Native Libraries</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch11.html#serialization">Serialization</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch11.html#id2646924">Deserializer methods</a></span></dt><dt><span class="sect2"><a href="ch11.html#id2647290">Serializer methods</a></span></dt></dl></dd></dl></dd><dt><span class="appendix"><a href="apa.html">A. Errata</a></span></dt><dt><span class="appendix"><a href="apb.html">B. R<sup>5</sup>RS Liberties and Violations</a></span></dt><dt><span class="appendix"><a href="apc.html">C. Troubleshooting</a></span></dt><dd><dl><dt><span class="sect1"><a href="apc.html#Kaffe">Kaffe</a></span></dt></dl></dd><dt><span class="appendix"><a href="apd.html">D. Backend Details</a></span></dt><dd><dl><dt><span class="sect1"><a href="apd.html#Limits">Limits</a></span></dt><dd><dl><dt><span class="sect2"><a href="apd.html#id2650782">Datastructure Limits</a></span></dt><dt><span class="sect2"><a href="apd.html#id2651074">Symbol Uniqueness</a></span></dt></dl></dd><dt><span class="sect1"><a href="apd.html#id2651139">Performance and Efficiency considerations</a></span></dt><dd><dl><dt><span class="sect2"><a href="apd.html#id2651145">Math</a></span></dt><dt><span class="sect2"><a href="apd.html#id2651224">Strings</a></span></dt><dt><span class="sect2"><a href="apd.html#id2651333">Interrupts</a></span></dt></dl></dd></dl></dd><dt><span class="appendix"><a href="ape.html">E. GNU General Public License</a></span></dt><dd><dl><dt><span class="sect1"><a href="ape.html#gpl-1">Preamble</a></span></dt><dt><span class="sect1"><a href="ape.html#gpl-2">TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION</a></span></dt><dd><dl><dt><span class="sect2"><a href="ape.html#gpl-2-0">Section 0</a></span></dt><dt><span class="sect2"><a href="ape.html#gpl-2-1">Section 1</a></span></dt><dt><span class="sect2"><a href="ape.html#gpl-2-2">Section 2</a></span></dt><dt><span class="sect2"><a href="ape.html#gpl-2-3">Section 3
+      </a></span></dt><dt><span class="sect2"><a href="ape.html#gpl-2-4">Section 4
+      </a></span></dt><dt><span class="sect2"><a href="ape.html#gpl-2-5">Section 5
+      </a></span></dt><dt><span class="sect2"><a href="ape.html#gpl-2-6">Section 6
+      </a></span></dt><dt><span class="sect2"><a href="ape.html#gpl-2-7">Section 7
+      </a></span></dt><dt><span class="sect2"><a href="ape.html#gpl-2-8">Section 8
+      </a></span></dt><dt><span class="sect2"><a href="ape.html#gpl-2-9">Section 9
+      </a></span></dt><dt><span class="sect2"><a href="ape.html#gpl-2-10">Section 10
+      </a></span></dt><dt><span class="sect2"><a href="ape.html#gpl-2-11">NO WARRANTY Section 11
+      </a></span></dt><dt><span class="sect2"><a href="ape.html#gpl-2-12">Section 12
+      </a></span></dt></dl></dd><dt><span class="sect1"><a href="ape.html#gpl-3">How to Apply These Terms to Your New Programs
+    </a></span></dt></dl></dd><dt><span class="index"><a href="ix01.html">Index of Functions, Parameters, and Syntax</a></span></dt></dl></div><div class="list-of-tables"><p><b>List of Tables</b></p><dl><dt>2.1. <a href="ch02.html#commandline-switches"><span class="emphasis"><em>SISC</em></span> Command line Switches</a></dt><dt>3.1. <a href="ch03.html#named-characters">Named character literals</a></dt><dt>3.2. <a href="ch03.html#string-escapes">String escape codes</a></dt><dt>8.1. <a href="ch08.html#id2611862">Typical Java to Scheme, External Calls</a></dt><dt>8.2. <a href="ch08.html#id2612079">Typical Java to Scheme, Internal Calls</a></dt><dt>8.3. <a href="ch08.html#id2616540">Common S2J Usage</a></dt><dt>D.1. <a href="apd.html#JVMLimits"><span class="emphasis"><em>SISC</em></span> Limits</a></dt></dl></div><div class="list-of-examples"><p><b>List of Examples</b></p><dl><dt>3.1. <a href="ch03.html#id2551027">Case sensitive Symbol literals</a></dt><dt>3.2. <a href="ch03.html#id2552175">Circular Structures</a></dt><dt>3.3. <a href="ch03.html#id2554862">Return a new value</a></dt><dt>3.4. <a href="ch03.html#id2554882">Restart with a different value</a></dt><dt>3.5. <a href="ch03.html#id2554898">Propagate the error</a></dt><dt>3.6. <a href="ch03.html#properror">Propagate a different error with the same error continuation</a></dt><dt>3.7. <a href="ch03.html#raisenewerror">Raise a new error</a></dt><dt>3.8. <a href="ch03.html#id2555054">Errors and <code class="function">dynamic-wind</code></a></dt><dt>5.1. <a href="ch05.html#id2576736">User defined string ports</a></dt><dt>7.1. <a href="ch07.html#id2598066">Hook Installation</a></dt><dt>10.1. <a href="ch10.html#id2644077">Loading and importing with <code class="function">require-extension</code></a></dt></dl></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch01.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"> </td><td width="20%" align="center"> </td><td width="40%" align="right" valign="top"> Chapter 1. 
+    Introduction
+  </td></tr></table></div></body></html>

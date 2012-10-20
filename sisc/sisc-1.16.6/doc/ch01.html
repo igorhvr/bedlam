@@ -1,0 +1,161 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 1.  Introduction</title><link rel="stylesheet" href="sss.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.71.0"><link rel="start" href="index.html" title="SISC for Seasoned Schemers"><link rel="up" href="index.html" title="SISC for Seasoned Schemers"><link rel="prev" href="index.html" title="SISC for Seasoned Schemers"><link rel="next" href="ch02.html" title="Chapter 2.  Installation and Invocation"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 1. 
+    Introduction
+  </th></tr><tr><td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch02.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="id2497380"></a>Chapter 1. 
+    Introduction
+  </h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch01.html#Features">
+      Features
+    </a></span></dt><dt><span class="sect1"><a href="ch01.html#About">
+      About this document
+    </a></span></dt><dd><dl><dt><span class="sect2"><a href="ch01.html#AboutProcedures">
+	About procedure documentation
+      </a></span></dt></dl></dd><dt><span class="sect1"><a href="ch01.html#id2545672">Where to obtain this document</a></span></dt><dt><span class="sect1"><a href="ch01.html#Applicability">Version Applicability</a></span></dt></dl></div><p>
+    <span class="emphasis"><em>SISC</em></span>
+    <sup>[<a name="id2497403" href="#ftn.id2497403">1</a>]</sup>
+    is a lightweight, platform independent
+    Scheme system whose primary goals are rapid execution of the
+    complete R<sup>5</sup>RS and future Scheme
+    standards, plus a useful superset for real-world application
+    development. 
+  </p><p>
+    <span class="emphasis"><em>SISC</em></span>'s development progresses in two
+    directions, to improve the core interpreter to be simpler,
+    more elegant, and more efficient; and to add necessary
+    functionality through extensions that do not complicate the
+    core.
+  </p><p>
+    <span class="emphasis"><em>SISC</em></span> as a project began as the successor to the Lightweight
+    Interpreter of Scheme Code (<span class="emphasis"><em>LISC</em></span>).
+    <span class="emphasis"><em>LISC</em></span> was a small, stack-based almost R4RS compliant Scheme.
+    <span class="emphasis"><em>SISC</em></span> was born out of the desire to create an interpreter that
+    was of a similar footprint to <span class="emphasis"><em>LISC</em></span>, but which
+    executed Scheme code much faster, complied fully to the R<sup>5</sup>RS
+    standard, and which wasn't limited by the stack-based model.
+    <span class="emphasis"><em>SISC</em></span> met these goals very quickly, and has since progressed in
+    active development to be a competitive Scheme system.  As a
+    successor to <span class="emphasis"><em>LISC</em></span> the interpreter was named the Second
+    Interpreter of Scheme Code. 
+  </p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Features"></a>
+      Features
+    </h2></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
+	  Full R<sup>5</sup>RS compliance
+	</p></li><li><p>
+	  Efficient number tower, with support for integers, floating-point numbers, rationals, and complex numbers of arbitrary precision
+	</p></li><li><p>
+	  Lightweight Scheme engine, implementing all R<sup>5</sup>RS functionality
+	  in approximately 10,000 lines of native code plus
+	  approximately 5,000 lines of Scheme code.
+	</p></li><li><p>
+	  Flexible runtime extensibility through a scopeable module
+	  system, which may add arbitrary bindings and new first-class types.
+	</p></li></ul></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="About"></a>
+      About this document
+    </h2></div></div></div><p>
+      This document explains the <span class="emphasis"><em>SISC</em></span> Scheme system. It assumes
+      knowledge of the Scheme language. As such, when discussing the
+      Scheme language, we will focus primarily on differences
+      between the Scheme standard and the language implemented by
+      <span class="emphasis"><em>SISC</em></span>.
+    </p><p>
+      Secondly, <span class="emphasis"><em>SISC</em></span> implements the R<sup>5</sup>RS standard. As such, any
+      code written to that standard should run without reading any
+      further.
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="AboutProcedures"></a>
+	About procedure documentation
+      </h3></div></div></div><p>
+	Throughout this document, procedures will be defined using
+	the following syntax:
+      </p><p>
+	</p><div class="blockquote"><blockquote class="blockquote"><p>
+	    <span class="emphasis"><em>procedure: </em></span>  
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">function-name</span> <span class="methodparam"><span class="parameter">required-argument</span></span> [<span class="methodparam"><span class="parameter">optional-argument</span></span>] [<span class="methodparam"><span class="parameter">rest-argument</span></span>] ...) =&gt; <span class="type">return value</span></code>
+	    </p><div class="blockquote"><blockquote class="blockquote"><p>
+		Description of the procedure's semantics.
+	      </p></blockquote></div><p>
+	  </p></blockquote></div><p>
+	A procedure is any function that takes zero or more arguments
+	and returns a value.
+      </p><p>
+	</p><div class="blockquote"><blockquote class="blockquote"><p>
+	    <span class="emphasis"><em>parameter: </em></span> <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">parameter-name</span> [<span class="methodparam"><span class="parameter">new-parameter-value</span></span>])</code>
+	    </p><div class="blockquote"><blockquote class="blockquote"><p>
+		Description of the parameter. 
+	      </p></blockquote></div><p>
+	  </p></blockquote></div><p>
+	A Parameter is a special function that is used to store a
+	value in the dynamic-environment.  When given no arguments, a
+	parameter will return its current value.  When provided an
+	argument, the value of the parameter is set to the value of
+	that argument.
+      </p><p>
+	</p><div class="blockquote"><blockquote class="blockquote"><p>
+	    <span class="emphasis"><em>syntax: </em></span> <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">syntactic-keyword</span> <span class="methodparam"><span class="parameter">structure</span></span> ...)</code>
+	    </p><div class="blockquote"><blockquote class="blockquote"><p>
+		Description of the syntactic transform.
+	      </p></blockquote></div><p>
+	  </p></blockquote></div><p>
+	Syntax refers to a syntactic keyword that when 
+	compiled will be transformed into some expression composed
+	only of basic Scheme forms.  <code class="function">let</code>,
+	<code class="function">cond</code>, and <code class="function">or</code> are all
+	examples of syntactic forms.
+      </p><p>
+	Procedures, parameters, and syntax may take one or more
+	arguments.  The name of an argument in a description summarizes
+        the semantics of the expected argument.  The type of an argument, 
+        when not clear, should be described in the procedure summary
+	paragraph that follows the prototype.  If the argument is
+	enclosed in square brackets ([]), that argument is optional,
+	and may be omitted.  If an argument is optional and is followed by 
+	ellipses (...), then the argument is a
+	<span class="emphasis"><em>rest</em></span> argument, and may be satisfied by
+	zero or more values.
+      </p><p>
+	Finally, some of the functions described in this document are
+	encapsulated in <span class="emphasis"><em>modules</em></span> (see <a href="ch10.html" title="Chapter 10. 
+    Modules and Libraries
+  ">Chapter 10, <i>
+    Modules and Libraries
+  </i></a>).  Sections that describe functions in
+	modules will have a <span class="emphasis"><em>requires</em></span> statement
+	indicating the expression that must be evaluated to make those
+	functions available in the Scheme environment.  The requires
+	statement will appear as follows:
+      </p><p>
+	<span class="emphasis"><em>Requires: </em></span> 
+	<span class="bold"><strong>
+	  (import <span class="emphasis"><em>module-name</em></span>)
+	</strong></span>
+      </p><p>
+	<span class="emphasis"><em>module-name</em></span> is will be a name uniquely
+	identifying the name of the module that contains the
+	functions.
+      </p></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id2545672"></a>Where to obtain this document</h2></div></div></div><p>
+      This document is produced from DocBook sources and is made available in
+      HTML, Adobe Acrobat (PDF), and PostScript forms.  Other formats, and
+      up-to-date versions of this document should be available from the
+      <span class="emphasis"><em>SISC</em></span> website, 
+      <a href="http://sisc.sourceforge.net" target="_top">
+	<em class="citetitle">http://sisc.sourceforge.net</em>
+      </a>.
+    </p><p>
+      The DocBook sources are available from the same site, packaged in 
+      the source distribution of <span class="emphasis"><em>SISC</em></span>, and available from the project's CVS
+      tree.  Details for accessing both are linked off the project site.
+    </p><p>
+      Starting with <span class="emphasis"><em>SISC</em></span> version 1.8.4, the HTML render of this
+      manual is included in the full binary distributions of <span class="emphasis"><em>SISC</em></span>.
+    </p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Applicability"></a>Version Applicability</h2></div></div></div><p>
+  This document describes functionality present in <span class="emphasis"><em>SISC</em></span> version
+  1.16.4.  Some of the document may apply to previous and future 
+  versions.  When in doubt, the source of this document can be found
+  in the <span class="emphasis"><em>SISC</em></span> CVS repository, or in the packaged source distribution
+  that should be available wherever the binary distribution was obtained.
+</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.id2497403" href="#id2497403">1</a>] </sup>
+	The pronunciation is written as <code class="literal">sIsk</code> in
+	the International Phonetic Alphabet.  This is similar to the
+	English word 'whisk'.
+      </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch02.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">
+      <span class="emphasis"><em>SISC</em></span> <span class="emphasis"><em>for Seasoned Schemers</em></span>
+     </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 2. 
+    Installation and Invocation
+  </td></tr></table></div></body></html>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN" "http://java.sun.com/j2ee/dtds/web-app_2_2.dtd">
+
+<web-app>
+
+  <display-name>SISC Servlet Examples</display-name>
+  <description>SISC Servlet Examples</description>
+  <distributable/>
+
+  <context-param>
+    <param-name>repl-port</param-name>
+    <param-value>7077</param-value>
+  </context-param>
+  <context-param>
+    <param-name>repl-host</param-name>
+    <param-value>localhost</param-value>
+  </context-param>
+
+  <servlet>
+    <servlet-name>SchemeApp</servlet-name>
+    <description>initializes Scheme App</description>
+    <servlet-class>sisc.contrib.servlets.SchemeAppServlet</servlet-class>
+    <init-param>
+      <param-name>heap-file</param-name>
+      <param-value>WEB-INF/sisc.shp</param-value>
+    </init-param>
+    <init-param>
+      <param-name>base-dir</param-name>
+      <param-value>scheme</param-value>
+    </init-param>
+    <init-param>
+      <param-name>init-expr</param-name>
+      <param-value>(load "scheme/template-util.scm") (define app (void)) (lambda (x) (set! app x))</param-value>
+    </init-param>
+    <init-param>
+      <param-name>destroy-expr</param-name>
+      <param-value>(lambda (x) (void))</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet>
+    <servlet-name>Calculator</servlet-name>
+    <description>Calculator</description>
+    <servlet-class>sisc.contrib.servlets.SchemeServlet</servlet-class>
+    <init-param>
+      <param-name>init-expr</param-name>
+      <param-value>(load "scheme/calculator.scm") calculator</param-value>
+    </init-param>
+    <init-param>
+      <param-name>destroy-expr</param-name>
+      <param-value>(lambda (x) (void))</param-value>
+    </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>SchemeApp</servlet-name>
+    <url-pattern>/admin/schemeapp</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>Calculator</servlet-name>
+    <url-pattern>/calculator/*</url-pattern>
+  </servlet-mapping>
+
+</web-app>

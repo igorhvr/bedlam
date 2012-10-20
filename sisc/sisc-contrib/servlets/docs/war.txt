@@ -1,0 +1,85 @@
+Building, Deploying and Managing Web Applications with SISC
+===========================================================
+
+Structure of a SISC web application
+===================================
+SISC web applications are standard J2EE web applications that, like
+all J2EE applications, can be deployed "flat" or packaged as a war
+file.
+
+One SISC web application can contain at most one Scheme
+applications. A Scheme application consists of an application servlet
+and one or more Scheme servlets.
+
+The application servlet is an instance of
+sisc.contrib.servlets.SchemeAppServlet that is normally loaded on
+start up of the enclosing web application. This is accomplished by a
+suitable load-on-startup declaration in web.xml. The application
+servlet executes application-specific initialisation code, obtained
+from its init-expr parameter. It also starts a REPL listener on a port
+(see below) if so configured.
+
+Scheme servlets are the interface for all user interactions with a
+SISC web application. They are instances of the class
+sisc.contrib.servlets.SchemeServlet. The reasons for separating
+application servlets from Scheme servlets, rather than just having one
+servlet per Scheme application, are:
+
+- SISC web applications can take advantage of standard J2EE url
+mapping for selecting different execution paths and access controls
+for incoming requests.
+
+- fine degree of control via web application management consoles that
+are shipped with many J2EE web application servers.
+
+- clear separation of application initialisation and management from
+main application functionality
+
+
+Initialisation
+==============
+The Scheme application servlet loads the SISC heap from a resource
+sisc.shp sitting alongside the sisc.boot.HeapAnchor class on the web
+application class path. See the "Running Scheme Programs" section of
+the SISC manual for instructions on how to correctly package a heap.
+
+After the heap file has been loaded, the Scheme application servlet
+evaluates the Scheme expression(s) supplied via the init-expr
+initialisation parameter. The expression must yield a one-argument
+procedure which is then invoked with the Scheme application servlet as
+the parameter.
+
+The code in init-expr typically does one of the following
+
+- nothing - if all application code is part of the heap file
+
+- load file(s) with LOAD - all file loading is performed relative the
+servlet context root.
+
+- load libraries with REQUIRE-LIBRARY - this will use the current Java
+classpath to locate and load files.
+
+
+Redeployment
+============
+Redeploying a SISC web application war should correctly reload the
+application, if the servlet contain is configured appropriately. There
+is a known problem with some versions of Tomcat on some operating
+systems where Tomcat will not release resources located in jar files
+upon application reload, resulting in the old resources being used. To
+avoid this, add the attribute antiJARLocking="true" to the <Context>
+element.
+
+Access control
+==============
+Access to application servlets and scheme servlets can be guarded with
+standard J2EE access control.
+
+
+Application Management
+======================
+<to be completed>
+
+Session State
+=============
+<to be completed>

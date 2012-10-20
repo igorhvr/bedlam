@@ -1,0 +1,38 @@
+./logs/startup.log[2011-11-21 10:59:00] Starting Alicebot Program D version 4.1.5
+./logs/startup.log[2011-11-21 10:59:00] Using Java VM 20.0-b11 from Sun Microsystems Inc.
+./logs/startup.log[2011-11-21 10:59:00] On Linux version 3.0.0-12-generic (amd64)
+./logs/startup.log[2011-11-21 10:59:00] Predicates with no values defined will return: "it".
+./logs/startup.log[2011-11-21 10:59:00] Initializing Multiplexor.
+./logs/startup.log[2011-11-21 10:59:00] Loading Graphmaster.
+./logs/startup.log[2011-11-21 10:59:00] Starting up with "/home/igorhvr/idm/sisc-contrib/irc/scheme/sarah/anna/conf/startup.xml".
+./logs/startup.log[2011-11-21 10:59:00] Configuring bot "Sarah".
+./logs/startup.log[2011-11-21 10:59:00] Loaded 291 input substitutions.
+./logs/startup.log[2011-11-21 10:59:00] Loaded 19 gender substitutions.
+./logs/startup.log[2011-11-21 10:59:00] Loaded 9 person substitutions.
+./logs/startup.log[2011-11-21 10:59:00] Loaded 48 person2 substitutions.
+./logs/startup.log[2011-11-21 10:59:00] Loaded 4 sentence-splitters.
+./logs/startup.log[2011-11-21 10:59:02] 1 bots thinking with 22533 categories.
+./logs/startup.log[2011-11-21 10:59:02] Alicebot Program D version 4.1.5 Build [00]
+./logs/startup.log[2011-11-21 10:59:02] 22533 categories loaded in 2.082 seconds.
+./logs/startup.log[2011-11-21 10:59:02] The AIML Watcher is not active.
+./logs/startup.log[2011-11-21 10:59:02] HTTP server listening at http://igorhvr-Vostro-3500:2001
+./logs/startup.log[2011-11-21 10:59:02] Interactive shell disabled.  Awaiting interrupt to shut down.
+./logs/startup.log[2011-11-21 11:00:47] Starting Alicebot Program D version 4.1.5
+./logs/startup.log[2011-11-21 11:00:47] Using Java VM 20.0-b11 from Sun Microsystems Inc.
+./logs/startup.log[2011-11-21 11:00:47] On Linux version 3.0.0-12-generic (amd64)
+./logs/startup.log[2011-11-21 11:00:47] Predicates with no values defined will return: "it".
+./logs/startup.log[2011-11-21 11:00:47] Initializing Multiplexor.
+./logs/startup.log[2011-11-21 11:00:47] Loading Graphmaster.
+./logs/startup.log[2011-11-21 11:00:47] Starting up with "/home/igorhvr/idm/sisc-contrib/irc/scheme/sarah/anna/conf/startup.xml".
+./logs/startup.log[2011-11-21 11:00:47] Configuring bot "Sarah".
+./logs/startup.log[2011-11-21 11:00:47] Loaded 291 input substitutions.
+./logs/startup.log[2011-11-21 11:00:47] Loaded 19 gender substitutions.
+./logs/startup.log[2011-11-21 11:00:47] Loaded 9 person substitutions.
+./logs/startup.log[2011-11-21 11:00:47] Loaded 48 person2 substitutions.
+./logs/startup.log[2011-11-21 11:00:47] Loaded 4 sentence-splitters.
+./logs/startup.log[2011-11-21 11:00:49] 1 bots thinking with 22533 categories.
+./logs/startup.log[2011-11-21 11:00:49] Alicebot Program D version 4.1.5 Build [00]
+./logs/startup.log[2011-11-21 11:00:49] 22533 categories loaded in 1.308 seconds.
+./logs/startup.log[2011-11-21 11:00:49] The AIML Watcher is not active.
+./logs/startup.log[2011-11-21 11:00:49] HTTP server listening at http://igorhvr-Vostro-3500:2001
+./logs/startup.log[2011-11-21 11:00:49] Interactive shell disabled.  Awaiting interrupt to shut down.

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ALLOW_HTML_ENTITIES [ <!ENTITY % HTMLlat1 PUBLIC "-//W3C//ENTITIES Latin1//EN//HTML"   "../resources/DTD/xhtml-lat1.ent"> %HTMLlat1; <!ENTITY % HTMLsymbol PUBLIC   "-//W3C//ENTITIES Symbols//EN//HTML"   "../resources/DTD/xhtml-symbol.ent"> %HTMLsymbol; <!ENTITY % HTMLspecial PUBLIC   "-//W3C//ENTITIES Special//EN//HTML"   "../resources/DTD/xhtml-special.ent"> %HTMLspecial; ]>
+<targets>
+</targets>

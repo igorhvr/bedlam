@@ -1,0 +1,1179 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 9.  Additional Libraries</title><link rel="stylesheet" href="sss.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.71.0"><link rel="start" href="index.html" title="SISC for Seasoned Schemers"><link rel="up" href="index.html" title="SISC for Seasoned Schemers"><link rel="prev" href="ch08.html" title="Chapter 8. Java Interaction"><link rel="next" href="ch10.html" title="Chapter 10.  Modules and Libraries"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 9. 
+    Additional Libraries
+  </th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch08.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch10.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="LibraryFunctions"></a>Chapter 9. 
+    Additional Libraries
+  </h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch09.html#SISCLibs">Optional <span class="emphasis"><em>SISC</em></span> Libraries</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch09.html#Definitions">Definitions</a></span></dt><dt><span class="sect2"><a href="ch09.html#BitwiseLogicalOperations">
+        Bitwise Logical Operations
+      </a></span></dt><dt><span class="sect2"><a href="ch09.html#Records">Records</a></span></dt><dt><span class="sect2"><a href="ch09.html#Hashtables">Hash Tables</a></span></dt><dt><span class="sect2"><a href="ch09.html#Buffers">Binary Buffers</a></span></dt><dt><span class="sect2"><a href="ch09.html#id2633905">Procedure Properties</a></span></dt><dt><span class="sect2"><a href="ch09.html#LibraryModule">Loadable Scheme Libraries</a></span></dt><dt><span class="sect2"><a href="ch09.html#OperatingSystemInterface">
+        Operating System Interface
+      </a></span></dt></dl></dd><dt><span class="sect1"><a href="ch09.html#ThirdPartyLibs">Third-Party Libraries</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch09.html#id2635315">SRFIs</a></span></dt><dt><span class="sect2"><a href="ch09.html#id2635927">SLIB</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch09.html#CreatingLibraries">Creating Libraries</a></span></dt></dl></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SISCLibs"></a>Optional <span class="emphasis"><em>SISC</em></span> Libraries</h2></div></div></div><p>
+      The optional <span class="emphasis"><em>SISC</em></span> libraries are
+      <a href="ch10.html" title="Chapter 10.  Modules and Libraries">modules</a>
+      whose definition is included in the full <span class="emphasis"><em>SISC</em></span> distribution,
+      but not the lite distribution.
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="Definitions"></a>Definitions</h3></div></div></div><p>
+        <span class="emphasis"><em>Requires: </em></span> 
+        <span class="bold"><strong>
+          (import <span class="emphasis"><em>misc</em></span>)
+        </strong></span>
+      </p><p>
+        In addition to the standard R<sup>5</sup>RS definition syntaxes, <span class="emphasis"><em>SISC</em></span>
+        provides an additional value definition and syntax definition form.
+      </p><p>
+        First, <code class="function">define-values</code>, which allows
+        more than one binding to be created at once, given the
+        multiple-value return of its body.
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2630164"></a>
+            <span class="emphasis"><em>syntax: </em></span>
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">define-values</span> <span class="methodparam"><span class="parameter">(binding</span></span> <span class="methodparam"><span class="parameter">binding</span></span> ... <span class="methodparam"><span class="parameter">)</span></span> <span class="methodparam"><span class="parameter">expression</span></span>) =&gt; <span class="type">undefined</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Evaluates the expression in the body, which
+                must return the same number of values as
+                there are binding names.  Each value is then
+                bound (in an undefined order) to each binding
+                name.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        <code class="function">define-values</code> behaves like
+        <code class="function">define</code> in terms of which environment the
+        bindings are created.  If the <code class="function">define-values</code>
+        statement is at the top-level then bindings are created in the
+        top-level environment.  If the statement is in a lexical
+        environment, then it behaves just as an internal define.
+      </p><p>
+        Second, <code class="function">define-simple-syntax</code> provides a
+        shorthand for syntax definition when the syntactic form's
+        appearance is similar to a function.
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2630304"></a>
+            <span class="emphasis"><em>syntax: </em></span>
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">define-simple-syntax</span> <span class="methodparam"><span class="parameter">(name</span></span> <span class="methodparam"><span class="parameter">vars</span></span> ... <span class="methodparam"><span class="parameter">)</span></span> <span class="methodparam"><span class="parameter">body</span></span>) =&gt; <span class="type">undefined</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Creates a syntactic form with the given name, 
+                and any number of listed syntactic variables, which
+                expands to the given body (with instances of the
+                syntactic variables hygienically expanded).
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>        
+      </p><p>
+        Here is an example usage of
+        <code class="function">define-simple-syntax</code> to define the
+        <code class="function">when</code> macro:
+      </p><pre class="programlisting">
+(define-simple-syntax (when condition body ...)
+  (if condition
+      (begin body ...)))
+      </pre></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="BitwiseLogicalOperations"></a>
+        Bitwise Logical Operations
+      </h3></div></div></div><p>
+        <span class="emphasis"><em>Requires: </em></span> 
+        <span class="bold"><strong>
+          (import <span class="emphasis"><em>logicops</em></span>)
+        </strong></span>
+      </p><p>
+        In addition to the R<sup>5</sup>RS set of procedures that deal with
+        numbers, <span class="emphasis"><em>SISC</em></span> provides operators for performing bitwise
+        logic operations on exact integers.
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2630475"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">logand</span> <span class="methodparam"><span class="parameter">integer</span></span> [<span class="methodparam"><span class="parameter">integer</span></span>] ...) =&gt; <span class="type">integer</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Performs the logical AND of all the provided arguments.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2630538"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">logor</span> <span class="methodparam"><span class="parameter">integer</span></span> [<span class="methodparam"><span class="parameter">integer</span></span>] ...) =&gt; <span class="type">integer</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Performs the logical OR of all the provided arguments.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2630600"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">logxor</span> <span class="methodparam"><span class="parameter">integer</span></span> [<span class="methodparam"><span class="parameter">integer</span></span>] ...) =&gt; <span class="type">integer</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Performs the logical exclusive-OR of all the provided arguments.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2630662"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">lognot</span> <span class="methodparam"><span class="parameter">integer</span></span>) =&gt; <span class="type">integer</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Performs the logical NOT of the provided integer.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2630711"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">logcount</span> <span class="methodparam"><span class="parameter">integer</span></span>) =&gt; <span class="type">integer</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the count of the number of 1 bits in the
+                representation of a given positive integer, or 0 bits
+                in a negative integer.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        In addition, two operators are provided to perform arithmetic
+        shifts on any integer (these operators do not have the range
+        limitation the previous logical functions do).  The shift
+        operators return a newly generated number formed by shifting
+        the provided number left or right by the given number of bits.
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2630778"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">ashl</span> <span class="methodparam"><span class="parameter">integer</span></span> <span class="methodparam"><span class="parameter">bits</span></span>) =&gt; <span class="type">integer</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Arithmetically shifts <em class="parameter"><code>integer</code></em>
+                left by <em class="parameter"><code>bits</code></em> bits.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2630848"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">ashr</span> <span class="methodparam"><span class="parameter">integer</span></span> <span class="methodparam"><span class="parameter">bits</span></span>) =&gt; <span class="type">integer</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Arithmetically shifts <em class="parameter"><code>integer</code></em>
+                right by <em class="parameter"><code>bits</code></em> bits.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        Mathematically, if r is the number, and s is the number of
+        bits, ashl calculates:
+        
+        </p><pre class="programlisting">
+r x 2<sup>s</sup>
+        </pre><p>
+        while ashr calculates
+        </p><pre class="programlisting">
+r / 2<sup>s</sup>
+        </pre><p>
+        in the integer domain.  Both ashl and ashr operate on exact
+        integers and produce only exact integers.  
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="Records"></a>Records</h3></div></div></div><p>
+          <span class="emphasis"><em>Requires: </em></span> 
+        <span class="bold"><strong>
+          (import <span class="emphasis"><em>record</em></span>)
+        </strong></span>
+      </p><p>
+        <span class="emphasis"><em>SISC</em></span> provides a native implementation of record types as
+        defined in SRFI-9. See <a href="http://srfi.schemers.org/srfi-9/" target="_top">http://srfi.schemers.org/srfi-9/</a> for details. In
+        addition to the <code class="function">define-record-type</code> syntax
+        provided by SRFI-9, a more compact (but less flexible)
+        <code class="function">define-struct</code> syntax is offered.
+      </p><p>
+        <a class="indexterm" name="id2631003"></a>
+        <span class="emphasis"><em>syntax: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">define-struct</span> <span class="methodparam"><span class="parameter">name</span></span> <span class="methodparam"><span class="parameter">(field ...)</span></span>)</code>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            Defines a SRFI-9 record type as follows:
+</p><pre class="programlisting">
+(define-record-type (make-<em class="parameter"><code>name</code></em> <em class="parameter"><code>field</code></em> ...)
+  <em class="parameter"><code>name</code></em>?
+  (<em class="parameter"><code>field</code></em> <em class="parameter"><code>name</code></em>-<em class="parameter"><code>field</code></em> set-<em class="parameter"><code>name</code></em>-<em class="parameter"><code>field</code></em>!)
+  ...)
+</pre><p>
+            i.e. naming conventions are used to determine the names of
+            the record type constructor, predicate, field access and
+            field modifier procedures.
+          </p></blockquote></div><p>
+      </p><p>
+        Records are <code class="function">eq?</code> and
+        <code class="function">eqv?</code> if and only if they are
+        identical. Records are <code class="function">equal?</code> if and only
+        if they are instances of the same record type and all their
+        fields are <code class="function">equal?</code>.
+      </p><p>
+        It is also possible to define
+        <span class="emphasis"><em>non-generative</em></span> record types, using
+        <code class="function">define-nongenerative-record-type</code> and
+        <code class="function">define-nongenerative-struct</code>. Non-generative
+        record types are associated with a user-specified guid. If an
+        attempt is made to define a record type with a guid that is
+        already bound to an existing record type then the existing
+        record type is modified, instead of a new record type being
+        created. Non-generative record types are serialised specially
+        such that deserialising them also performs this check. By
+        contract, deserialisation of ordinary, generative record types
+        and their instances results in duplicate types being created,
+        which is usually not desirable.
+      </p><p>
+        <a class="indexterm" name="id2631176"></a>
+        <span class="emphasis"><em>syntax: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">define-nongenerative-record-type</span> <span class="methodparam"><span class="parameter">name</span></span> <span class="methodparam"><span class="parameter">guid</span></span> <span class="methodparam"><span class="parameter">(constructor-name field ...)</span></span> <span class="methodparam"><span class="parameter">(predicate ...)</span></span> <span class="methodparam"><span class="parameter">(field-spec ...)</span></span>)</code>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            This is the same as <code class="function">define-record-type</code>,
+            except that the resulting record type is
+            <span class="emphasis"><em>non-generative</em></span> with
+            <em class="parameter"><code>guid</code></em>, a symbol, as the unique
+            identifier.
+          </p></blockquote></div><p>
+      </p><p>
+        <a class="indexterm" name="id2631284"></a>
+        <span class="emphasis"><em>syntax: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">define-nongenerative-struct</span> <span class="methodparam"><span class="parameter">name</span></span> <span class="methodparam"><span class="parameter">guid</span></span> <span class="methodparam"><span class="parameter">(field ...)</span></span>)</code>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            This is the same as <code class="function">define-struct</code>,
+            except that the resulting struct is
+            <span class="emphasis"><em>non-generative</em></span> with
+            <em class="parameter"><code>guid</code></em>, a symbol, as the unique
+            identifier.
+          </p></blockquote></div><p>
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="Hashtables"></a>Hash Tables</h3></div></div></div><p>
+          <span class="emphasis"><em>Requires: </em></span> 
+        <span class="bold"><strong>
+          (import <span class="emphasis"><em>hashtable</em></span>)
+        </strong></span>
+      </p><p>
+        Hash tables store mappings of keys to values. Hence they are
+        similar to association lists, except that hash tables allow
+        retrieval, addition and modification in constant time whereas
+        association lists typically perform these operations in linear
+        time based on the number of elements.
+      </p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="hashtablecreation"></a>Creation and Introspection</h4></div></div></div><p>
+          Hash tables are a distinct data type. They can be created
+          empty or filled with the contents of an association list. The
+          converse, creating an association list from a hash table, is
+          also supported.
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2631423"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">make-hashtable</span> [<span class="methodparam"><span class="parameter">equivalence-predicate</span></span>] [<span class="methodparam"><span class="parameter">hash-function</span></span>] [<span class="methodparam"><span class="parameter">thread-safe?</span></span>] [<span class="methodparam"><span class="parameter">weak?</span></span>]) =&gt; <span class="type">hashtable</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Creates a hash table. The first optional argument
+                supplies the equivalence test procedure that the
+                hashtable should use for comparison of keys. This must
+                be a function accepting two arguments and returning a
+                boolean. It defaults to
+                <code class="function">equal?</code>.
+              </p><p>
+                The second optional argument supplies the hash
+                function, which must accept one argument and return a
+                numeric value. For the equivalence predicates
+                <code class="function">eq?</code>, <code class="function">eqv?</code>,
+                <code class="function">equal?</code>,
+                <code class="function">string=?</code>,
+                <code class="function">string-ci=?</code> it defaults to
+                <code class="function">hash-by-eq</code>,
+                <code class="function">hash-by-eqv</code>,
+                <code class="function">hash-by-equal</code>,
+                <code class="function">hash-by-string=</code>,
+                <code class="function">hash-by-string-ci=?</code> respectively,
+                and <code class="function">hash-by-equal</code> otherwise.
+              </p><p>
+                The third optional argument determines whether
+                operations on the hash table should be made
+                thread-safe. The default is #t. Thread
+                synchronization (see <a href="ch06.html" title="Chapter 6. 
+    Threads and Concurrency
+  ">Chapter 6, <i>
+    Threads and Concurrency
+  </i></a>) is
+                required if there are potentially several threads
+                operating concurrently on the hash table and one of
+                these threads performs a structural modification
+                (i.e. adds or removes an entry; merely changing the
+                value of an entry is not a structural
+                modification). Failure to enforce proper thread
+                synchronization has unpredicatable results.
+              </p><p>
+                The fourth optional argument determines whether the
+                keys in the hash table are held with weak references,
+                allowing them to be garbage collected, and
+                automatically removed from the hashtable when they are
+                not referenced from elsewhere. The default is #t.
+              </p><p>
+                For reasons of disambiguation, the hash function
+                argument can only be supplied if the preceeding
+                equivalence predicate was also supplied, and the
+                weakness argument can only be supplied if the
+                preceeding thread-safety argument was also supplied.
+              </p><p>
+                The equivalence and hash function must produce
+                stable results for the keys in a hash table.
+              </p><p>
+                The effects of invoking an escaping continuation
+                inside the equivalence predicate or hash function, or
+                invoking a continuation captured inside the
+                equivalence predicate or hash function after that
+                function has returned, are unspecified.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2631652"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">alist-&gt;hashtable</span> <span class="methodparam"><span class="parameter">alist</span></span> [<span class="methodparam"><span class="parameter">equivalence-predicate</span></span>] [<span class="methodparam"><span class="parameter">hash-function</span></span>] [<span class="methodparam"><span class="parameter">thread-safe?</span></span>] [<span class="methodparam"><span class="parameter">weak?</span></span>]) =&gt; <span class="type">hashtable</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Creates a hashtable and initializes it with the keys
+                and values found in
+                <em class="parameter"><code>alist</code></em>. <em class="parameter"><code>alist</code></em>
+                must be a list of pairs, with the
+                <code class="function">car</code> of each pair representing a
+                key and the <code class="function">cdr</code> representing its
+                associated value. The optional arguments are the same
+                as for <code class="function">make-hashtable</code>.
+              </p><p>
+                If there are multiple pairs which contain the same key
+                (with respect to chosen equivalence test) then the
+                resulting hash table will associate the key with the
+                value of the last such pair.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2631795"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hashtable?</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns #t if <em class="parameter"><code>value</code></em> is a hash
+                table, #f otherwise.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2631851"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hashtable/equivalence-function</span> <span class="methodparam"><span class="parameter">hashtable</span></span>) =&gt; <span class="type">procedure</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the equivalence predicate of
+                <em class="parameter"><code>hashtable</code></em>.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2631904"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hashtable/hash-function</span> <span class="methodparam"><span class="parameter">hashtable</span></span>) =&gt; <span class="type">procedure</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the hash function of
+                <em class="parameter"><code>hashtable</code></em>.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2631958"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hashtable/thread-safe?</span> <span class="methodparam"><span class="parameter">hashtable</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns #t if <em class="parameter"><code>hashtable</code></em> is
+                thread safe, #f otherwise.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2632014"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hashtable/weak?</span> <span class="methodparam"><span class="parameter">hashtable</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns #t if the keys in
+                <em class="parameter"><code>hashtable</code></em> are held by weak
+                references, #f otherwise.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2632070"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hashtable/size</span> <span class="methodparam"><span class="parameter">hashtable</span></span>) =&gt; <span class="type">number</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the number of key/value pairs stored in
+                <em class="parameter"><code>hashtable</code></em>.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2632123"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hashtable-&gt;alist</span> <span class="methodparam"><span class="parameter">hashtable</span></span>) =&gt; <span class="type">alist</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns an association list comprising the elements of
+                <em class="parameter"><code>hashtable</code></em>. The list contains
+                pairs whose <code class="function">car</code>s are they keys
+                found in <em class="parameter"><code>hashtable</code></em> and whose
+                <code class="function">cdr</code>s contain the associated
+                values.
+              </p></blockquote></div><p>
+          </p></blockquote></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2632197"></a>Hash Functions</h4></div></div></div><p>
+          Several hash functions that return results consistent with
+          common equivalence predicates are predefined.
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2632212"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hash-by-eq</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">number</span></code>
+          </p><p>
+            <a class="indexterm" name="id2632251"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hash-by-eqv</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">number</span></code>
+          </p><p>
+            <a class="indexterm" name="id2632290"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hash-by-equal</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">number</span></code>
+          </p><p>
+            <a class="indexterm" name="id2632329"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hash-by-string=</span> <span class="methodparam"><span class="parameter">string</span></span>) =&gt; <span class="type">number</span></code>
+          </p><p>
+            <a class="indexterm" name="id2632369"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hash-by-string-ci=</span> <span class="methodparam"><span class="parameter">string</span></span>) =&gt; <span class="type">number</span></code>
+          </p><p>
+            These procedures return a hash code of their argument that
+            is consistent with <code class="function">eq?</code>,
+            <code class="function">eqv?</code>, <code class="function">equal?</code>,
+            <code class="function">string=?</code>,
+            <code class="function">string-ci=?</code>, respectively.
+          </p></blockquote></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2632443"></a>Access and Modification</h4></div></div></div><p>
+          All hash table access operations follow a similar
+          pattern. They return the value that was associated with the
+          the given key at the time the operation was invoked. If no
+          binding for the key existed, an optionally supplied value is
+          returned that defaults to #f. This allows the programmer
+          to associate keys with #f values and distinguish this case
+          from not having any association for a key.
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2632466"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hashtable/put!</span> <span class="methodparam"><span class="parameter">hashtable</span></span> <span class="methodparam"><span class="parameter">key</span></span> <span class="methodparam"><span class="parameter">val</span></span> [<span class="methodparam"><span class="parameter">nobinding</span></span>]) =&gt; <span class="type">value</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Associates <em class="parameter"><code>key</code></em> with
+                <em class="parameter"><code>val</code></em> in
+                <em class="parameter"><code>hashtable</code></em>. Returns the previous
+                association of <em class="parameter"><code>key</code></em> or
+                <em class="parameter"><code>nobinding</code></em>, which defaults to
+                #f, if <em class="parameter"><code>key</code></em> has no previous
+                association.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2632585"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hashtable/get</span> <span class="methodparam"><span class="parameter">hashtable</span></span> <span class="methodparam"><span class="parameter">key</span></span> [<span class="methodparam"><span class="parameter">nobinding</span></span>]) =&gt; <span class="type">value</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the value associated with
+                <em class="parameter"><code>key</code></em> in
+                <em class="parameter"><code>hashtable</code></em>, or
+                <em class="parameter"><code>nobinding</code></em>, which defaults to
+                #f, if <em class="parameter"><code>key</code></em> has no
+                association.
+              </p></blockquote></div><p>
+          </p><p>    
+            <a class="indexterm" name="id2632682"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hashtable/get!</span> <span class="methodparam"><span class="parameter">hashtable</span></span> <span class="methodparam"><span class="parameter">key</span></span> <span class="methodparam"><span class="parameter">thunk</span></span> [<span class="methodparam"><span class="parameter">unsafe?</span></span>]) =&gt; <span class="type">value</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the value associated with
+                <em class="parameter"><code>key</code></em> in
+                <em class="parameter"><code>hashtable</code></em>. If
+                <em class="parameter"><code>key</code></em> has no association then
+                <em class="parameter"><code>thunk</code></em> is called and the
+                result is associated with <em class="parameter"><code>key</code></em>
+                in <em class="parameter"><code>hashtable</code></em> and also returned.
+                The <em class="parameter"><code>unsafe?</code></em>, which defaults to
+                #t, indicates whether <em class="parameter"><code>thunk</code></em>
+                may invoke escaping continuations or raise errors.
+                Setting <em class="parameter"><code>unsafe?</code></em> to #f
+                results in more efficient execution but may cause
+                deadlocks if <em class="parameter"><code>thunk</code></em> is unsafe.
+                See also <code class="function">mutex/synchronize-unsafe</code> in 
+                <a href="ch06.html#highlevelconcurrency" title="
+	  High-level Concurrency
+	">the section called &#8220;
+	  High-level Concurrency
+	&#8221;</a>.
+              </p><p>
+                When <em class="parameter"><code>hashtable</code></em> is
+                thread-safe this operation is atomic.
+              </p></blockquote></div><p>
+          </p><p>    
+            <a class="indexterm" name="id2632856"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hashtable/contains?</span> <span class="methodparam"><span class="parameter">hashtable</span></span> <span class="methodparam"><span class="parameter">key</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the #t if <em class="parameter"><code>hashtable</code></em>
+                contains an entry for <em class="parameter"><code>key</code></em>,
+                #f otherwise.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2632928"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hashtable/remove!</span> <span class="methodparam"><span class="parameter">hashtable</span></span> <span class="methodparam"><span class="parameter">key</span></span> [<span class="methodparam"><span class="parameter">nobinding</span></span>]) =&gt; <span class="type">value</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Removes the association of <em class="parameter"><code>key</code></em> in
+                <em class="parameter"><code>hashtable</code></em>. Returns the associated
+                value of <em class="parameter"><code>key</code></em> or
+                <em class="parameter"><code>nobinding</code></em>, which defaults to
+                #f, if <em class="parameter"><code>key</code></em> has no
+                association.
+              </p></blockquote></div><p>
+          </p></blockquote></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2633031"></a>Bulk Operations</h4></div></div></div><p>
+          Bulk operations are operations that apply to all elements of a
+          hash table.
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2633046"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hashtable/clear!</span> <span class="methodparam"><span class="parameter">hashtable</span></span>)</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Removes all elements from <em class="parameter"><code>hashtable</code></em>.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2633099"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hashtable/keys</span> <span class="methodparam"><span class="parameter">hashtable</span></span>) =&gt; <span class="type">list</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the keys contained in <em class="parameter"><code>hashtable</code></em>.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2633152"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hashtable/for-each</span> <span class="methodparam"><span class="parameter">proc</span></span> <span class="methodparam"><span class="parameter">hashtable</span></span>)</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Applies <em class="parameter"><code>proc</code></em> to each element of
+                <em class="parameter"><code>hashtable</code></em>. <em class="parameter"><code>proc</code></em>
+                is called with two parameters - the key and the value
+                of the element.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2633230"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hashtable/map</span> <span class="methodparam"><span class="parameter">proc</span></span> <span class="methodparam"><span class="parameter">hashtable</span></span>) =&gt; <span class="type">list</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Applies <em class="parameter"><code>proc</code></em> to each element of
+                <em class="parameter"><code>hashtable</code></em>. <em class="parameter"><code>proc</code></em>
+                is called with two parameters - the key and the value
+                of the element. The results of calling
+                <em class="parameter"><code>proc</code></em> are returned as a list.
+              </p></blockquote></div><p>
+          </p></blockquote></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="Buffers"></a>Binary Buffers</h3></div></div></div><p>
+          <span class="emphasis"><em>Requires: </em></span> 
+        <span class="bold"><strong>
+          (import <span class="emphasis"><em>buffers</em></span>)
+        </strong></span>
+      </p><p>
+        Binary buffers provide an opaque container for a fixed amount
+        of binary data.  The binary buffer library provides a number 
+        of functions for creating and accessing those buffers.  
+        The buffer is very similar to a vector, in
+        that it is a randomly accessable, zero-based structure.  But as
+        a tradeoff for space efficiency, binary 
+        buffers are only capable of storing bytes.  The bytes are stored
+        as 8-bit, unsigned fixed integers (of the range 0-255).
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2633361"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">buffer?</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns true if and only if the provided argument is a
+                binary buffer.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2633409"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">make-buffer</span> <span class="methodparam"><span class="parameter">size</span></span> [<span class="methodparam"><span class="parameter">fill-value</span></span>]) =&gt; <span class="type">buffer</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Creates a new buffer capable of storing
+                <em class="parameter"><code>size</code></em> bytes.
+                <em class="parameter"><code>size</code></em> must be a fixed
+                non-negative integer.  If provided, the value of all
+                bytes in the buffer is initialized to
+                <em class="parameter"><code>fill-value</code></em>.  If not provided,
+                the contents of the buffer is unspecified.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2633491"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">buffer</span> [<span class="methodparam"><span class="parameter">value</span></span>] ...) =&gt; <span class="type">buffer</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Creates a new buffer whose size is equal to
+                the number of arguments given and whose contents are
+                the bytes given as arguments.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2633543"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">buffer-length</span> <span class="methodparam"><span class="parameter">buffer</span></span>) =&gt; <span class="type">fixed integer</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the capacity of the given buffer.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2633592"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">buffer-ref</span> <span class="methodparam"><span class="parameter">buffer</span></span> <span class="methodparam"><span class="parameter">index</span></span>) =&gt; <span class="type">fixed integer</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the byte at offset
+                <em class="parameter"><code>index</code></em> in the specified buffer.
+                It is an error if <em class="parameter"><code>index</code></em> is out
+                of range.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2633666"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">buffer-set!</span> <span class="methodparam"><span class="parameter">buffer</span></span> <span class="methodparam"><span class="parameter">index</span></span> <span class="methodparam"><span class="parameter">new-value</span></span>) =&gt; <span class="type">undefined</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Sets the byte at offset <em class="parameter"><code>index</code></em>
+                of the specified buffer to the given fixed integer
+                <em class="parameter"><code>new-value</code></em>.
+                It is an error if <em class="parameter"><code>index</code></em> is out
+                of range.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2633758"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">buffer-copy!</span> <span class="methodparam"><span class="parameter">source-buffer</span></span> <span class="methodparam"><span class="parameter">source-offset</span></span> <span class="methodparam"><span class="parameter">dest-buffer</span></span> <span class="methodparam"><span class="parameter">dest-offset</span></span> [<span class="methodparam"><span class="parameter">count</span></span>]) =&gt; <span class="type">undefined</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Copies <em class="parameter"><code>count</code></em> bytes starting from index
+                <em class="parameter"><code>source-offset</code></em> in the source
+                buffer to successive bytes starting at index
+                <em class="parameter"><code>dest-offset</code></em> in the destination
+                buffer.  If <em class="parameter"><code>count</code></em> is
+                unspecified, it is assumed to be the length of the
+                source buffer.
+                It is an error to copy more bytes from the source
+                buffer than are available, or to copy more bytes into
+                the destination buffer than its capacity allows.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        Buffers are serializable (can exist in loadable libraries or
+        a <span class="emphasis"><em>SISC</em></span> heap), but are not representable in an s-expression.  
+        For this reason, they bear the printed representation of
+        <code class="literal">#&lt;buffer&gt;</code>.
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2633905"></a>Procedure Properties</h3></div></div></div><p>
+          <span class="emphasis"><em>Requires: </em></span> 
+        <span class="bold"><strong>
+          (import <span class="emphasis"><em>procedure-properties</em></span>)
+        </strong></span>
+      </p><p>
+          <span class="emphasis"><em>SISC</em></span> allows key/value bindings to be associated with
+        procedures. This has a number of applications. For instance,
+        <a href="ch07.html#GenericProcedures" title="Generic Procedures">generic procedures</a>
+        store their methods in a procedure property.
+      </p><p>
+        Keys must be symbols. Values are any valid Scheme value. 
+        All operations are thread-safe.
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2633957"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">procedure-property</span> <span class="methodparam"><span class="parameter">proc</span></span> <span class="methodparam"><span class="parameter">symbol</span></span> [<span class="methodparam"><span class="parameter">nobinding</span></span>]) =&gt; <span class="type">value</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the value associated with the property
+                <em class="parameter"><code>symbol</code></em> of procedure
+                <em class="parameter"><code>proc</code></em>, or
+                <em class="parameter"><code>nobinding</code></em>, which defaults to
+                #f, if the property is not set.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2634054"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">set-procedure-property!</span> <span class="methodparam"><span class="parameter">proc</span></span> <span class="methodparam"><span class="parameter">symbol</span></span> <span class="methodparam"><span class="parameter">val</span></span> [<span class="methodparam"><span class="parameter">nobinding</span></span>]) =&gt; <span class="type">value</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Sets the property <em class="parameter"><code>symbol</code></em> of procedure
+                <em class="parameter"><code>proc</code></em> to the value
+                <em class="parameter"><code>val</code></em>. Returns the previous value
+                of the property or <em class="parameter"><code>nobinding</code></em>,
+                which defaults to #f, if the property was unset.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2634167"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">procedure-property!</span> <span class="methodparam"><span class="parameter">proc</span></span> <span class="methodparam"><span class="parameter">symbol</span></span> <span class="methodparam"><span class="parameter">thunk</span></span> [<span class="methodparam"><span class="parameter">unsafe?</span></span>]) =&gt; <span class="type">value</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the value associated with the property
+                <em class="parameter"><code>symbol</code></em> of procedure
+                <em class="parameter"><code>proc</code></em>. If the property is unset
+                then <em class="parameter"><code>thunk</code></em> is called and the
+                property is set to the result, which is also returned.
+                The <em class="parameter"><code>unsafe?</code></em>, which defaults to
+                #t, indicates whether <em class="parameter"><code>thunk</code></em>
+                may invoke escaping continuations or raise errors.
+                Setting <em class="parameter"><code>unsafe?</code></em> to #f
+                results in more efficient execution but may cause
+                deadlocks if <em class="parameter"><code>thunk</code></em> is unsafe.
+                See also <code class="function">mutex/synchronize-unsafe</code> in 
+                <a href="ch06.html#highlevelconcurrency" title="
+	  High-level Concurrency
+	">the section called &#8220;
+	  High-level Concurrency
+	&#8221;</a>.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="LibraryModule"></a>Loadable Scheme Libraries</h3></div></div></div><p>
+          <span class="emphasis"><em>Requires: </em></span> 
+        <span class="bold"><strong>
+          (import <span class="emphasis"><em>libraries</em></span>)
+          <sup>[<a name="id2634337" href="#ftn.id2634337">4</a>]</sup>
+        </strong></span>
+      </p><p>
+        Scheme code can be packaged into libraries that can have
+        dependencies on other libraries and can be loaded as
+        required. Libraries are identified by a name that follows Java
+        package file naming conventions, i.e. using path-style names
+        typically containing domain, organisation name, project name and
+        library name. For instance, if company Foo produces a library
+        Baz for project Bar and that library contains three files, the
+        file structure might look as follows:
+</p><pre class="programlisting">
+com/foo/bar/baz.scm
+com/foo/bar/baz/baz1.scm
+com/foo/bar/baz/baz2.scm
+com/foo/bar/baz/baz3.scm
+</pre><p>
+        This library can be made accessible from <span class="emphasis"><em>SISC</em></span> by adding the
+        base directory or a jar file containing these files to the
+        Java class path. Libraries are loaded by the following
+        procedure.
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2634380"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">require-library</span> <span class="methodparam"><span class="parameter">name</span></span>) =&gt; <span class="type">undefined</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Checks whether the library identified by
+                <em class="parameter"><code>name</code></em> (a string), has already
+                been loaded and, if not, loads it. An error is raised
+                if the library cannot be found.
+              </p><p>
+                Libraries are loaded using the
+                <code class="function">load</code> procedure from a resource
+                located by the <a href="ch05.html#Resources" title="Locating Resources"><code class="function">find-resource</code>
+                procedure</a>.  The name of the resource is derived
+                from the name of the library by appending ".scc",
+                ".sce" and, if that does not succeed, ".scm".
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        Note that <code class="function">require-library</code> only loads a
+        single file. The definition of dependencies on other libraries
+        and the loading of other files therefore needs to happen
+        within that file. For instance, the file
+        <code class="filename">com/foo/bar/baz.scm</code> from the above
+        example might contain the following:
+        </p><pre class="programlisting">
+(require-library 'com/foo/bar/boo)
+(load "baz/baz1.scm")
+(load "baz/baz2.scm")
+(load "baz/baz3.scm")
+        </pre><p>
+      </p><p>
+        It is possible to programmatically check whether a particular
+        library exists and whether it has been loaded:
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2634506"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">library-exists?</span> <span class="methodparam"><span class="parameter">name</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns #t if the library identified by
+                <em class="parameter"><code>name</code></em> (a string) exists, #f
+                otherwise.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2634562"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">library-loaded?</span> <span class="methodparam"><span class="parameter">name</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns #t if the library identified by
+                <em class="parameter"><code>name</code></em> (a string) 
+                has been loaded, #f otherwise.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="OperatingSystemInterface"></a>
+        Operating System Interface
+      </h3></div></div></div><p>
+        <span class="emphasis"><em>Requires: </em></span> 
+        <span class="bold"><strong>
+          (import <span class="emphasis"><em>os</em></span>)
+        </strong></span>
+      </p><p>
+        The operating system interface currently contains functions
+        for spawning external processes on the host operating system,
+        obtaining input/output ports to the resulting process, and
+        monitoring their status.  
+      </p><p> 
+        Two procedures exist for spawning processes:
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2634661"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">spawn-process</span> <span class="methodparam"><span class="parameter">program/commandline</span></span> [<span class="methodparam"><span class="parameter">arglist</span></span>]) =&gt; <span class="type">process</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Spawns a process, returning a process handle.  If the
+                optional argument list is provided, then the first
+                argument is the binary to run with those arguments.
+                If omitted, the first argument is tokenized as a
+                commandline and used to spawn the process.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2634726"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">spawn-process-with-environment</span> <span class="methodparam"><span class="parameter">program</span></span> <span class="methodparam"><span class="parameter">arglist</span></span> <span class="methodparam"><span class="parameter">environment</span></span> [<span class="methodparam"><span class="parameter">working-directory</span></span>]) =&gt; <span class="type">process</span></code>
+          </p><p>
+            <a class="indexterm" name="id2634800"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">spawn-process/env</span> <span class="methodparam"><span class="parameter">program</span></span> <span class="methodparam"><span class="parameter">arglist</span></span> <span class="methodparam"><span class="parameter">environment</span></span> [<span class="methodparam"><span class="parameter">working-directory</span></span>]) =&gt; <span class="type">process</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Spawns a process named by
+                <em class="parameter"><code>program</code></em> with the arguments
+                given in <em class="parameter"><code>arglist</code></em>, in the given
+                <em class="parameter"><code>environment</code></em>.  The environment
+                is an association list of strings to strings.  The key
+                in the association list is an environment variable
+                name, and the corresponding value is the value to
+                assign to that environment variable.  If the
+                environment parameter is <code class="literal">#f</code>,
+                the environment variables of the current <span class="emphasis"><em>SISC</em></span>
+                instance are used.  
+              </p><p>
+                The optional parameter
+                <em class="parameter"><code>working-directory</code></em> specifies the
+                directory which will be set as the current directory
+                when the process is spawned.  If ommited, the value of
+                the <code class="function">current-directory</code> parameter
+                (i.e. the current directory of the running Scheme
+                program) is used instead.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2634939"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">process?</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">#t/#f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns <code class="literal">#t</code> if the given value 
+                is a process handle.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        Once started, a process will run in parallel to the current
+        Scheme program according to the usual scheduling of the host
+        platform.  The process handle obtained can be used to obtain
+        the input, output, and error streams of the process using the
+        following functions:
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2635007"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">get-process-stdout</span> <span class="methodparam"><span class="parameter">process</span></span>) =&gt; <span class="type">binary-input-port</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns a binary input port which will read bytes which the
+                given process has written to its standard output stream.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2635058"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">get-process-stderr</span> <span class="methodparam"><span class="parameter">process</span></span>) =&gt; <span class="type">binary-input-port</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns a binary input port which will read bytes which the
+                given process has written to its standard error stream.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2635109"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">get-process-stdin</span> <span class="methodparam"><span class="parameter">process</span></span>) =&gt; <span class="type">binary-output-port</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns a binary output port which when written to will send
+                bytes to the given process' standard input stream.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        Finally, functions are provided to check the status of a
+        spawned process, and to wait for a process to complete:
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2635172"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">process-terminated?</span> <span class="methodparam"><span class="parameter">process</span></span>) =&gt; <span class="type">integer or #f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Checks to see if the given process has terminated, and
+                returns the process' return code if so.  If the
+                process is still running, <code class="literal">#f</code> is returned.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2635229"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">wait-for-process</span> <span class="methodparam"><span class="parameter">process</span></span>) =&gt; <span class="type">integer or #f</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Waits for the given process to terminate, and
+                returns the process' return code if so.  The wait
+                operation may be interrupted by other code, in which
+                <code class="literal">#f</code> is returned.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ThirdPartyLibs"></a>Third-Party Libraries</h2></div></div></div><p>
+        <span class="emphasis"><em>SISC</em></span> provides hooks for accessing a number of third-party
+      Scheme libraries.
+    </p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3><p>
+        This functionality has not undergone much testing.
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2635315"></a>SRFIs</h3></div></div></div><p>
+        The Scheme Requests For Implementation (SRFI) process aims to
+        coordinate libraries and other additions to the Scheme
+        language between different Scheme implementations. For details
+        see <a href="http://srfi.schemers.org/" target="_top">http://srfi.schemers.org/</a> which describes
+        the process and contains a list of all available SRFIs.
+      </p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2635334"></a>SRFI Modules</h4></div></div></div><p>
+          In <span class="emphasis"><em>SISC</em></span> each SRFI is encapsulated in a module. See <a href="ch10.html" title="Chapter 10. 
+    Modules and Libraries
+  ">Chapter 10, <i>
+    Modules and Libraries
+  </i></a> for details of <span class="emphasis"><em>SISC</em></span>'s module system.
+          The definitions for SRFI modules are not included in the
+          standard <span class="emphasis"><em>SISC</em></span> heap build and hence must be loaded
+          separately from various compiled library files in the
+          <code class="filename">sisc-lib.jar</code> jar file in the root
+          directory of the <span class="emphasis"><em>SISC</em></span> binary distribution. As long as this
+          jar file is on the classpath, which is the case by default,
+          any SRFI's module definition may be loaded with the expression
+          <code class="literal">(require-library
+          'sisc/libs/srfi/srfi-<em class="parameter"><code>n</code></em>)</code>, where 
+          <em class="parameter"><code>n</code></em> is the SRFI's number.  For example:
+          </p><pre class="programlisting">
+(require-library 'sisc/libs/srfi/srfi-9)
+          </pre><p>
+          All SRFI's may be loaded at once by requiring
+          <code class="literal">sisc/libs/srfi</code>.
+        </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2635411"></a>Using SRFIs</h4></div></div></div><p>
+            <span class="emphasis"><em>SISC</em></span> currently supports SRFIs
+          0, 1, 2, 5, 6, 7, 8, 9, 11, 13, 14, 16, 18, 19, 22, 23, 
+          25, 26, 27, 28, 29, 30, 31, 34, 35, 37, 38, 39, 40, 42, 43, 
+          45, 48, 51, 54, 55, 59, 60, 61, 62, 66, 67, 69 and 78.
+          Once the SRFI module definitions have been loaded as
+          described above, a SRFI <em class="parameter"><code>n</code></em> can be
+          imported using
+          </p><pre class="programlisting">
+(import srfi-<em class="parameter"><code>n</code></em>)
+          </pre><p>
+          e.g.
+          </p><pre class="programlisting">
+(import srfi-1)
+(xcons 1 2) ;=&gt; (2 . 1)
+          </pre><p>
+        </p><p>
+          SRFI modules, like all modules in <span class="emphasis"><em>SISC</em></span>, can be
+          imported/used by other modules. Doing so does not pollute
+          the top-level environment with the definitions exported by
+          the module, i.e. any code outside the importing module
+          remains unaffected.
+        </p><p>
+          If, however, an SRFI is to be imported into the top-level,
+          one can use the <code class="function">require-extension</code>
+          mechanism (see <a href="ch10.html#SRFI55" title="require-extension">the section called &#8220;<code class="function">require-extension</code>&#8221;</a>).
+        </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2635485"></a>SRFI Extensions</h4></div></div></div><p>
+          Some SRFIs have built-in extension points that Scheme
+          implementations can use to augment a SRFI's
+          functionality. It is also the case that some SRFIs would
+          benefit from slightly extended APIs.
+        </p><p>
+          This section documents the SRFI extensions implemented by
+          <span class="emphasis"><em>SISC</em></span>.
+        </p><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="id2635506"></a>SRFI 69 (Basic hash tables)</h5></div></div></div><p>
+            The <code class="function">make-hash-table</code> function takes
+            two additional optional arguments:
+            <em class="parameter"><code>thread-safe?</code></em> and
+            <em class="parameter"><code>weak?</code></em>. See <code class="function">make-hashtable</code>
+            in <a href="ch09.html#hashtablecreation" title="Creation and Introspection">the section called &#8220;Creation and Introspection&#8221;</a> for details.
+          </p><p>
+            The basic hash table API is extended in a separate
+            module:
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                <span class="emphasis"><em>Requires: </em></span> 
+                <span class="bold"><strong>
+                  (import <span class="emphasis"><em>srfi-69-ext</em></span>)
+                </strong></span>
+              </p><p>
+                <a class="indexterm" name="id2635573"></a>
+                <span class="emphasis"><em>procedure: </em></span> 
+                <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hash-table-thread-safe?</span> <span class="methodparam"><span class="parameter">hashtable</span></span>) =&gt; <span class="type">#t/#f</span></code>
+                </p><div class="blockquote"><blockquote class="blockquote"><p>
+                    Returns #t if <em class="parameter"><code>hashtable</code></em> is
+                    thread safe, #f otherwise.
+                  </p></blockquote></div><p>
+              </p><p>
+                <a class="indexterm" name="id2635630"></a>
+                <span class="emphasis"><em>procedure: </em></span> 
+                <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hash-table-weak?</span> <span class="methodparam"><span class="parameter">hashtable</span></span>) =&gt; <span class="type">#t/#f</span></code>
+                </p><div class="blockquote"><blockquote class="blockquote"><p>
+                    Returns #t if the keys in
+                    <em class="parameter"><code>hashtable</code></em> are held by weak
+                    references, #f otherwise.
+                  </p></blockquote></div><p>
+              </p><p>    
+                <a class="indexterm" name="id2635687"></a>
+                <span class="emphasis"><em>procedure: </em></span> 
+                <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hash-table-ref!</span> <span class="methodparam"><span class="parameter">hashtable</span></span> <span class="methodparam"><span class="parameter">key</span></span> <span class="methodparam"><span class="parameter">thunk</span></span>) =&gt; <span class="type">value</span></code>
+                </p><div class="blockquote"><blockquote class="blockquote"><p>
+                    Returns the value associated with
+                    <em class="parameter"><code>key</code></em> in
+                    <em class="parameter"><code>hashtable</code></em>. If
+                    <em class="parameter"><code>key</code></em> has no association then
+                    <em class="parameter"><code>thunk</code></em> is called and the
+                    result is associated with
+                    <em class="parameter"><code>key</code></em> in
+                    <em class="parameter"><code>hashtable</code></em> and also
+                    returned.
+                  </p><p>
+                    When <em class="parameter"><code>hashtable</code></em> is
+                    thread-safe this operation is atomic.
+                  </p></blockquote></div><p>
+              </p><p>    
+                <a class="indexterm" name="id2635806"></a>
+                <span class="emphasis"><em>procedure: </em></span> 
+                <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">hash-table-ref!</span> <span class="methodparam"><span class="parameter">hashtable</span></span> <span class="methodparam"><span class="parameter">key</span></span> <span class="methodparam"><span class="parameter">default</span></span>) =&gt; <span class="type">value</span></code>
+                </p><div class="blockquote"><blockquote class="blockquote"><p>
+                    Returns the value associated with
+                    <em class="parameter"><code>key</code></em> in
+                    <em class="parameter"><code>hashtable</code></em>. If
+                    <em class="parameter"><code>key</code></em> has no association then
+                    <em class="parameter"><code>default</code></em> is associated with
+                    <em class="parameter"><code>key</code></em> in
+                    <em class="parameter"><code>hashtable</code></em> and also
+                    returned.
+                  </p><p>
+                    When <em class="parameter"><code>hashtable</code></em> is
+                    thread-safe this operation is atomic.
+                  </p></blockquote></div><p>
+              </p></blockquote></div><p>
+          </p></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2635927"></a>SLIB</h3></div></div></div><p>
+        The <span class="application">SLIB</span> portable scheme library
+        provides compatibility and utility functions for standard
+        Scheme implementations. It is supported by many Schemes,
+        including <span class="emphasis"><em>SISC</em></span>.
+      </p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2635949"></a>Downloading and Installation</h4></div></div></div><p>
+          The latest version of <span class="application">SLIB</span> is
+          available from <a href="http://swissnet.ai.mit.edu/~jaffer/SLIB.html" target="_top">http://swissnet.ai.mit.edu/~jaffer/SLIB.html</a> as both
+          a zip file and RPM. The site also hosts an online version of
+          the <span class="application">SLIB</span> manual.
+        </p><p>
+          Download <span class="application">SLIB</span> and install it in a
+          convenient location. The RPM will by default be installed
+          in <code class="filename">/usr/share/slib/</code>. Do not worry when
+          you see some errors about missing programs such as
+          <span class="application">mzscheme</span> and
+          <span class="application">scheme48</span> when installing the RPM
+          - these happen because <span class="application">SLIB</span> tries
+          to auto-configure itself for various Schemes that you may
+          not have installed on your system.
+        </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2636019"></a>Environment</h4></div></div></div><p>
+          Using <span class="application">SLIB</span> in <span class="emphasis"><em>SISC</em></span> requires two
+          Java system properties to be set:
+          </p><div class="itemizedlist"><ul type="disc"><li><p><b><code class="envar">sisc.home</code>. </b>
+                  This should (but does not actually
+                  <span class="emphasis"><em>have</em></span> to) point to the location
+                  where you have installed <span class="emphasis"><em>SISC</em></span>. If you are using
+                  one of the scripts from the binary <span class="emphasis"><em>SISC</em></span>
+                  distribution in order to run <span class="emphasis"><em>SISC</em></span> then this
+                  property will automatically be set to the value of
+                  the <code class="envar">SISC_HOME</code> environment variable.
+                </p></li><li><p><b><code class="envar">sisc.slib</code>. </b>
+                  This must point to the location where you installed
+                  <span class="application">SLIB</span>. Other Schemes
+                  supporting <span class="application">SLIB</span> tend to
+                  use an environment variable
+                  <code class="envar">SCHEME_LIBRARY_PATH</code>, so it is
+                  advisable to define that (if it is not already
+                  defined) and run Java with a
+                  <code class="computeroutput">-Dsisc.slib=...</code>
+                  option based on the environment variable. If you are
+                  using the scripts from the binary $SISC;
+                  distribution in order to run <span class="emphasis"><em>SISC</em></span> then you can set
+                  the property by adding the
+                  <code class="computeroutput">-Dsisc.slib=...</code> to
+                  the <code class="envar">JAVAOPT</code> environment variable.
+                </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+                  Note that the value of this property should be a
+                  fully qualified url,
+                  e.g. <code class="computeroutput">file:///usr/share/slib</code>
+                </p></div></li></ul></div><p>
+          You need to ensure that all potential users of
+          <span class="application">SLIB</span> have
+          <span class="emphasis"><em>read</em></span> permissions to files in the
+          directories referred to by the above system properties.
+        </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2636170"></a>Building the Catalog</h4></div></div></div><p>
+          Make sure that the above system properties are set and
+          that you have <span class="emphasis"><em>write</em></span> permissions to the
+          <code class="envar">sisc.home</code> directory; often this means you
+          need to be logged in as a privileged user.
+        </p><p>
+          Start <span class="emphasis"><em>SISC</em></span> as you normally would. At the prompt type
+          </p><pre class="programlisting">
+(require-library 'sisc/libs/slib)
+(require 'new-catalog)
+(exit)
+          </pre><p>
+        </p><p>
+          The above should create a file <code class="filename">slibcat</code>
+          in the <code class="envar">sisc.home</code> directory. It is a good idea
+          to check that this has indeed happened.
+        </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2636221"></a>Using <span class="application">SLIB</span></h4></div></div></div><p>
+          Make sure the above system properties are set. Start
+            <span class="emphasis"><em>SISC</em></span> as you normally would. At the prompt load the
+          <span class="emphasis"><em>SISC</em></span> <span class="application">SLIB</span> as described above, i.e.
+          </p><pre class="programlisting">
+(require-library 'sisc/libs/slib)
+          </pre><p>
+          You can now load <span class="application">SLIB</span> modules
+          using <code class="function">require</code>, e.g.
+          </p><pre class="programlisting">
+(require 'tsort)
+(tsort '((shirt tie belt)
+         (tie jacket)
+         (belt jacket)
+         (watch)
+         (pants shoes belt)
+         (undershorts pants shoes)
+         (socks shoes))
+       eq?)
+          </pre><p>
+          loads the topological sorting module and invokes one of the
+          procedures defined by it.
+        </p><p>
+          Please refer to the <span class="application">SLIB</span> manual
+          for further details of what modules are available. Note
+          however that, as with most other Schemes supported by
+          <span class="application">SLIB</span>, there will be some modules
+          that are not available or do not work in <span class="emphasis"><em>SISC</em></span>.
+        </p></div></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="CreatingLibraries"></a>Creating Libraries</h2></div></div></div><p>
+      <span class="emphasis"><em>Requires: </em></span> 
+      <span class="bold"><strong>
+        (import <span class="emphasis"><em>libraries</em></span>)
+      </strong></span>
+    </p><p>
+      <span class="emphasis"><em>SISC</em></span> allows the creation of <span class="emphasis"><em>compiled libraries</em></span> 
+      which contain compiled scheme code.  These
+      libraries can then be executed into a running <span class="emphasis"><em>SISC</em></span> session in
+      order to extend the functionality without processing or
+      possessing the original source.  Such libraries can be loaded
+      using <code class="function">load</code> as would any ordinary Scheme
+      source file.
+    </p><p>
+      Compiled code files (<code class="literal">.scc</code>) are created using
+      the <code class="function">compile-file</code> function, which takes a
+      Scheme source file and a target output file, and processes the
+      Scheme source through the various expansion and compilation
+      phases, and then serializes the resulting <span class="emphasis"><em>SISC</em></span>
+      microexpressions to the given target file.  The resulting file
+      may then be loaded with <code class="function">load</code> as any
+      ordinary Scheme file would, or can be placed in the library path
+      and resolved using <code class="function">require-library</code>.
+    </p><p>
+      </p><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" name="id2636405"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">compile-file</span> <span class="methodparam"><span class="parameter">source-file</span></span> <span class="methodparam"><span class="parameter">target-file</span></span>) =&gt; <span class="type">undefined</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Compiles the Scheme source present in
+              <em class="parameter"><code>source-file</code></em>, writing the
+              resulting micro-expressions into
+              <em class="parameter"><code>target-file</code></em>, suitable for
+              loading.
+            </p><p>
+              As a side effect, the micro-expressions are also
+              evaluated, i.e. in effect
+              <code class="function">compile-file</code> compiles <span class="emphasis"><em>and
+                evaluates</em></span> the
+              <em class="parameter"><code>source-file</code></em>. The latter is
+              necessary because the compilation of an expression may
+              depend on the results of evaluating a previous
+              expression, e.g. as is typically the case for libraries
+              that depend on other libraries.
+            </p></blockquote></div><p>
+        </p></blockquote></div><p>
+    </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title"><code class="literal">.sll</code> Deprecation</h3><p>
+        Scheme Loadable Libraries (<code class="literal">.sll</code> files) were
+        deprecated in version 1.9.
+        This was due to unresolvable incompatibilities in the engine's
+        closure representation and the <code class="literal">.sll</code>
+        functionality.
+      </p></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.id2634337" href="#id2634337">4</a>] </sup>
+              This module gets imported by default.
+            </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch08.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch10.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 8. Java Interaction </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 10. 
+    Modules and Libraries
+  </td></tr></table></div></body></html>

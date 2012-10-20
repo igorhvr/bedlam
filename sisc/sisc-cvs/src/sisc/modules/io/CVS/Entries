@@ -1,0 +1,23 @@
+/BinaryIO.java/1.21/Fri Apr 27 16:16:53 2007//
+/Buffer.java/1.5/Tue Feb  6 18:45:34 2007//
+/BufferIO.java/1.8/Tue Feb  6 18:45:34 2007//
+/CustomIO.java/1.4/Tue Feb  6 18:45:33 2007//
+/FileManipulation.java/1.11/Tue Feb  6 18:45:33 2007//
+/IO.java/1.58/Thu Nov  8 14:17:55 2007//
+/Messages.properties/1.10/Tue Aug 22 20:41:25 2006//
+/Networking.java/1.14/Thu Nov  8 14:17:55 2007//
+/SerialIO.java/1.14/Tue Feb  6 18:45:34 2007//
+/StringIO.java/1.12/Tue Feb  6 18:45:34 2007//
+/binary-io.scm/1.7/Tue Feb  6 18:45:33 2007//
+/buffer-io.scm/1.7/Tue Feb  6 18:45:34 2007//
+/buffer.scm/1.5/Tue Feb  6 18:45:33 2007//
+/char-io.scm/1.1/Tue Aug 22 20:33:32 2006//
+/custom-io.scm/1.4/Tue Feb  6 18:45:33 2007//
+/custom-printing.scm/1.2/Fri Sep  1 18:05:46 2006/-kb/
+/custom-writer.scm/1.1/Thu Sep 14 15:04:53 2006/-kb/
+/functor-io.scm/1.2/Wed Jul  5 22:07:43 2006//
+/java-io.scm/1.7/Tue Feb  6 18:45:34 2007//
+/networking.scm/1.9/Tue Feb  6 18:45:33 2007//
+/serial-io.scm/1.13/Tue Feb  6 18:45:34 2007//
+/string-io.scm/1.8/Tue Feb  6 18:45:34 2007/-kb/
+D

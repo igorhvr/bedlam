@@ -1,0 +1,243 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 10.  Modules and Libraries</title><link rel="stylesheet" href="sss.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.71.0"><link rel="start" href="index.html" title="SISC for Seasoned Schemers"><link rel="up" href="index.html" title="SISC for Seasoned Schemers"><link rel="prev" href="ch09.html" title="Chapter 9.  Additional Libraries"><link rel="next" href="ch11.html" title="Chapter 11.  Extensibility"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 10. 
+    Modules and Libraries
+  </th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch09.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch11.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="Modules"></a>Chapter 10. 
+    Modules and Libraries
+  </h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch10.html#SchemeModules">
+      Modules
+    </a></span></dt><dd><dl><dt><span class="sect2"><a href="ch10.html#ModuleOverview">Overview</a></span></dt><dt><span class="sect2"><a href="ch10.html#ModuleStyle">Style</a></span></dt><dt><span class="sect2"><a href="ch10.html#ModularizingCode">Modularizing Existing Code</a></span></dt><dt><span class="sect2"><a href="ch10.html#ModuleEvaluation">Evaluation</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch10.html#id2643873">Libraries</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch10.html#SRFI55"><code class="function">require-extension</code></a></span></dt></dl></dd></dl></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SchemeModules"></a>
+      Modules
+    </h2></div></div></div><p>
+      Modules provide an additional level of scoping control, allowing
+      symbolic and syntactic bindings to be bundled in a named or
+      anonymous package.  The package can then be imported into any
+      scope, making the bindings contained in the module visible in
+      only that scope.
+    </p><p>
+      <span class="emphasis"><em>SISC</em></span>'s modules are provided by the portable syntax-case macro
+      expander by R. Kent Dybvig and Oscar Waddell.  A comprehensive
+      explanation of the provided module system is best found in the
+      <a href="http://www.scheme.com/csug.html" target="_top">
+        <em class="citetitle">Chez Scheme Users Guide</em>
+      </a>, specifically 
+      <a href="http://www.scheme.com/csug/syntax.html#g2187" target="_top">
+        <em class="citetitle">Section 9.3, Modules</em>
+      </a>.  What follows is an informal introduction to that module 
+      system.
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ModuleOverview"></a>Overview</h3></div></div></div><p>
+        The basic unit of modularization in <span class="emphasis"><em>SISC</em></span> is a module.
+        A typical module definition has this appearance:
+      </p><a name="typicalmodule"></a><pre class="programlisting">
+(module foo
+    (bar baz)
+  (import boo1)
+  (import boo2)
+  (include "file.scm")
+  (define (bar x) ...)
+  (define-syntax baz ...)
+  (define (something-else ...) ...)
+  (do-something)
+  (do-something-else))
+        </pre><p>
+        A module definition consists of a name
+        (<code class="literal">foo</code>), a list of exports
+        (<code class="literal">bar</code> and <code class="literal">baz</code>) and a
+        body.
+        Expressions which can appear in the body of a module are the
+        same as those which can appear in a
+        <code class="function">lambda</code> body.  The
+        <code class="function">import</code> form imports bindings from a named
+        module (in this case <code class="literal">boo1</code> and
+        <code class="literal">boo2</code>) into the current lexical scope.  The
+        <code class="function">include</code> form performs a textual inclusion
+        of the source code found in the named file
+        (<code class="literal">file.scm</code>).  In other words, it works as if
+        the contents of the file had appeared literally in place of
+        the <code class="function">include</code> statement.
+     </p><p>
+       All identifiers appearing in the export list must be
+       <code class="function">define</code>d or
+       <code class="function">define-syntax</code>ed in the body of the module,
+       or <code class="function">import</code>ed from another module.
+     </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ModuleStyle"></a>Style</h3></div></div></div><p>
+        It is recommended to clearly separate modularization from
+        actual code.  The best way to accomplish this is to
+        </p><div class="itemizedlist"><ul type="disc"><li><p>List all imports in the module body rather than in
+            included files</p></li><li><p>Include all files directly from the module body,
+            avoiding nested includes</p></li><li><p>Place all definitions and expressions in included
+            files, avoiding them in the module body</p></li></ul></div><p>
+      </p><p>
+        There are several reasons for this.  First, it makes
+        refactoring easier, as one can move relevant code from module
+        to module merely by rewriting the module definitions, leaving
+        the implementation code unchanged.  Second, it makes debugging
+        easier, as one can load the implementation code directly into
+        the Scheme system to have access to all bindings, or load the
+        module definition to view the finished, encapsulated
+        exports. Finally, it stylistically separates interface (the
+        modules) from implementation (the included Scheme source).
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ModularizingCode"></a>Modularizing Existing Code</h3></div></div></div><p>
+        Since module bodies are treated like the bodies of
+        <code class="function">lambda</code>s, the R<sup>5</sup>RS rules of how internal
+        definitions are treated apply to all the definitions in the
+        module body (both ordinary and syntax), including all code
+        <code class="function">include</code>d from files.  This is often a source
+        of errors when moving code from the top-level into a module
+        because:
+      </p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>All</em></span> definitions must
+        appear <span class="emphasis"><em>before all</em></span> expressions,</p></li><li><p>The list of definitions is translated into
+          <code class="function">letrec</code>/<code class="function">letrec-syntax</code>,
+          which means it must be possible to evaluate each right-hand
+          side without assigning or referring to the value of any of
+          the variables being defined.</p></li></ul></div><p>
+      </p><p>
+        This often necessitates re-arranging the code and the
+        introduction of <code class="function">set!</code> expressions.  Here
+        is an example of a sequence of top-level
+        definitions/expressions and how they need to be rewritten so
+        that they may appear in a module body: 
+      </p><pre class="programlisting">
+(define (foo) 1)
+(define bar (foo))
+(do-some-stuff)
+(define (baz) (bar))
+==&gt;
+(define (foo) 1)
+(define bar)
+(define (baz) (bar))
+(set! bar (foo))
+(do-some-stuff)
+        </pre><p>
+       The general strategy is to go through the list of
+       expressions/definitions from top to bottom and build two lists
+       - one of definitions and one of expressions - as follows:
+      </p><div class="itemizedlist"><ul type="disc"><li><p>If a non-definition is encountered, append it
+        to the expression list</p></li><li><p>If a "naked" definition (i.e. a definition
+          whose right-hand side is not a function) that refers to a
+          binding defined within the module is encountered, append an
+          empty definition to the definition list and append a
+          <code class="function">set!</code> with the right-hand side
+          expression to the expression list</p></li><li><p>Otherwise, i.e. for an ordinary definition,
+          append it to the definition list</p></li></ul></div><p>
+      </p><p>
+        The concatenation of the resulting definition list with the
+        expression list makes a suitable module body.
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ModuleEvaluation"></a>Evaluation</h3></div></div></div><p>
+        Modules are lexically scoped.  It is possible to define
+        modules inside <code class="function">lambda</code>s and inside other
+        modules and to export modules from modules.  Example:
+      </p><pre class="programlisting">
+(define (f c)
+  (module foo
+      (bar)
+    (module bar
+        (baz)
+      (define (baz x y) (- x y))
+      (display "defining baz\n")))
+  (if (&gt; c 0)
+      (let ((a 1))
+         (import foo)
+         (let loop ((b c))
+            (import bar)
+            (if (&gt; b 0) (loop (baz b a)) (f (- c 1)))))))
+      </pre><p>
+        The expressions in a module body get executed at the time and
+        in the context of module definition. So, in the above example,
+        the body of bar containing the display statement is executed
+        once for every call to <code class="function">f</code> rather than once
+        for every iteration of the inner loop containing the import of
+        the <code class="literal">bar</code> module.
+      </p><p>
+        There are quite a few more things you can do with modules. For
+        instance one can define anonymous modules, which are a short
+        cut for defining a named module and then importing it, import
+        selected bindings from a module and renaming them rather then
+        importing all bindings as is etc etc. For more details again
+        refer to the Chez Scheme user manual.
+      </p></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id2643873"></a>Libraries</h2></div></div></div><p>
+      Libraries provide a means of encapsulating code that can be
+      shared by many, independently developed applications.
+    </p><p>
+      Libraries are simply bundles of Scheme code, usually precompiled, which
+      are packaged so that they may be resolved relative to a library path.
+      Libraries are typically compiled using the meachanism from <a href="ch09.html#CreatingLibraries" title="Creating Libraries">the section called &#8220;Creating Libraries&#8221;</a>.
+     Loading the resulting library makes the library available 
+     to the loading code.  To create a compiled library from a module,
+      compile a source file which contains any necessary
+      <code class="function">require-library</code> calls, followed by the
+      module definition.  When loaded, this will cause the necessary
+      libraries to be loaded, and then define the module
+      into the environment.  For example, the source file may resemble:
+    </p><pre class="programlisting">
+(require-library 'sisc/libs/srfi/srfi-1)
+(require-library 'com/foo/lib2)
+
+(module lib3
+    (a-function)
+  (import srfi-1)
+  (import com/foo/lib2)
+  (define (a-function) 
+    (do-something (another-function)))
+  (define (another-function) 
+    (something-else))
+    </pre><p>
+     Libraries should not depend on any top-level definitions outside
+     the standard <span class="emphasis"><em>SISC</em></span> top-level, except the definition of other library
+     modules. Otherwise it is not possible to use the libraries portably.
+    </p><p>
+     Libraries can be packaged with supporting code (e.g. ordinary Java
+     code and native modules) and other libraries into jar files. A typical
+     structure for such a jar file would be
+    </p><pre class="programlisting">
+com/foo/lib1.scc
+com/foo/lib1/Class1.class
+com/foo/lib1/Class2.class
+com/foo/lib2.scc
+com/foo/lib2/Class1.class
+com/foo/lib2/Class2.class
+com/foo/lib3.scc
+com/foo/lib3/Class1.class
+com/foo/lib3/Class2.class
+    </pre><p>
+     It is usually a good idea to name a module after the
+     path names in the jar, for example
+     <code class="literal">com/foo/lib{1,2,3}</code> in the above example.
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="SRFI55"></a><code class="function">require-extension</code></h3></div></div></div><a class="indexterm" name="id2643972"></a><p>          
+       	<span class="emphasis"><em>SISC</em></span> supports <a href="http://srfi.schemers.org/srfi-55/srfi-55.html" target="_top">SRFI-55</a> for loading libraries and extensions as well.
+      	SRFI-55 provides <code class="function">require-extension</code>, which in <span class="emphasis"><em>SISC</em></span> 
+      	simultaneously loads a library, then imports its module definition into the
+      	current interaction environment.  This may be more convenient than the
+      	combination of <code class="function">require-library</code> and <code class="function">import</code>,
+      	when one is loading dependent top-level libraries for a program.  
+      	It is less flexible, though, since you cannot import into a lexical scope.
+     </p><p>
+       SRFI-55 is supported in the initial <span class="emphasis"><em>SISC</em></span> environment, no
+       <code class="function">require-library</code> or
+       <code class="function">import</code> is needed to use
+       <code class="function">require-extension</code>.
+     </p><p>
+       At the time of this writing, <span class="emphasis"><em>SISC</em></span> supports two extension
+       identifier schemes, the <code class="literal">srfi</code> scheme as
+       required by SRFI-55 itself, and a <span class="emphasis"><em>SISC</em></span> specific
+       <code class="literal">lib</code> scheme for loading a <span class="emphasis"><em>SISC</em></span> library.
+       Some examples:
+     </p><div class="example"><a name="id2644077"></a><p class="title"><b>Example 10.1. Loading and importing with <code class="function">require-extension</code></b></p><div class="example-contents"><pre class="programlisting">
+; Load and import SRFI 1
+(require-extension (srfi 1))
+
+; Load and import SISC library com/foo/lib1
+(require-extension (lib com/foo/lib1))
+
+; Load and import SRFIs 13 and 14,
+; and SISC libraries com/foo/lib2 and com/foo/lib3
+(require-extension (srfi 13 14) (lib com/foo/lib2 com/foo/lib3))
+       </pre></div></div><br class="example-break"><p>
+       <span class="emphasis"><em>SISC</em></span> modules loaded using the <code class="literal">lib</code>
+       extension scheme must use the full path and file as the module
+       name. For example, in the above example,
+       <code class="literal">com/foo/lib1</code>'s module name must be
+       <code class="literal">com/foo/lib1</code>.
+     </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch09.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch11.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 9. 
+    Additional Libraries
+   </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 11. 
+    Extensibility
+  </td></tr></table></div></body></html>

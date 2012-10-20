@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE taglib
+  PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
+  "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
+
+<taglib>
+  <tlib-version>1.0</tlib-version>
+  <jsp-version>1.2</jsp-version>
+  <short-name>sisc</short-name>
+  <description>
+        SISC Scheme tag library
+  </description>
+  <tag>
+   <name>context</name>
+   <tag-class>sisc.contrib.stl.SchemeContextTag</tag-class>
+    <body-content>JSP</body-content>
+    <description>Initializes the page to use Scheme, with a given
+    context name</description>
+   <attribute>
+    <name>name</name>
+    <required>true</required>
+   </attribute>
+  </tag>
+  <tag>
+   <name>eval</name>
+   <tag-class>sisc.contrib.stl.SchemeTag</tag-class>
+   <body-content>JSP</body-content>
+  </tag>   
+</taglib>

@@ -1,0 +1,646 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 6.  Threads and Concurrency</title><link rel="stylesheet" href="sss.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.71.0"><link rel="start" href="index.html" title="SISC for Seasoned Schemers"><link rel="up" href="index.html" title="SISC for Seasoned Schemers"><link rel="prev" href="ch05.html" title="Chapter 5. I/O"><link rel="next" href="ch07.html" title="Chapter 7. Types and Objects"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 6. 
+    Threads and Concurrency
+  </th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch05.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch07.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="Threads"></a>Chapter 6. 
+    Threads and Concurrency
+  </h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch06.html#threadsemantics">
+      Scheme Thread Semantics
+    </a></span></dt><dt><span class="sect1"><a href="ch06.html#id2591864">
+      Basic Thread Operations
+    </a></span></dt><dt><span class="sect1"><a href="ch06.html#id2592773">
+      High-level Functions
+    </a></span></dt><dt><span class="sect1"><a href="ch06.html#id2591537">
+      Thread Scheduling
+    </a></span></dt><dt><span class="sect1"><a href="ch06.html#Synchronization">
+      Synchronization Primitives
+    </a></span></dt><dd><dl><dt><span class="sect2"><a href="ch06.html#id2593416">
+	Mutex Operations
+      </a></span></dt><dt><span class="sect2"><a href="ch06.html#id2593738">
+        Condition Variable Operations
+      </a></span></dt><dt><span class="sect2"><a href="ch06.html#highlevelconcurrency">
+	  High-level Concurrency
+	</a></span></dt></dl></dd></dl></div><p>
+    <span class="emphasis"><em>Requires: </em></span> 
+    <span class="bold"><strong>
+      (import <span class="emphasis"><em>threading</em></span>)
+    </strong></span>
+  </p><p>
+    <span class="emphasis"><em>SISC</em></span> provides a comprehensive library for executing Scheme
+    code in parallel in multiple concurrent threads.  This allows
+    code for simple code for handling blocking I/O sources (such as
+    network servers) or for the ability to do parallel computation
+    across multiple processors.
+  </p><p>
+    In addition, functions are provided to ensure mutually exclusive
+    access to data (mutexes), to assign priorities to Scheme
+    threads, and for inter-thread signaling and synchronization.
+  </p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="threadsemantics"></a>
+      Scheme Thread Semantics
+    </h2></div></div></div><p>
+      Care has been taken to ensure that Scheme code executing
+      concurrently in two or more threads does not result in
+      unpredictable behavior.  Assuming the executing threads do not
+      share data, executing code in multiple threads should behave
+      just as executing the code in a single thread.  
+    </p><p>
+      All threads executing in the system share some resources.  The
+      top-level and symbolic environments are shared by all
+      threads.  If a thread makes a change to these environments,
+      the change will be visible in all other threads.  
+      Unless changed by the thread, all threads share the same
+      console input and output ports.  As threads originate from a
+      thunk created in the primordial thread or a child thread, the
+      lexical environment captured by the thunk may include some
+      lexical variables from the parent thread.  These variables
+      will be visible by both the parent and child threads.  The
+      lexical environments created in an executing thread are
+      visible by that thread only (unless that thread spawns a child
+      thread whose thunk binds its parent's lexicals).  
+    </p><p>
+      Some resources can be shared but may also be distinct from
+      thread to thread.  These resources are inherited from the
+      parent thread, but may be changed by the child or parent
+      without affecting the other.  The dynamic environment 
+      (including the console input and output port, parameters, etc.)
+      are inherited from the parent, as is the dynamic-wind
+      stack.  
+    </p><p>
+      When a thread begins, it is considered to be isolated from its
+      parent in terms of the dynamic-wind stack.  If a parent spawns
+      a thread in the <span class="emphasis"><em>during</em></span> section of a
+      dynamic-wind call, the spawned thread
+      <span class="emphasis"><em>escapes</em></span> the restrictions of the
+      dynamic-wind call.  This is logical, as the parent thread may
+      then exit from the dynamic extent even as the child thread
+      executes, or may remain there waiting for the child thread to
+      finish, in which case the parent has not left the
+      dynamic extent of the call.  In short, the dynamic-wind is
+      protecting only the parent thread. 
+    </p><p>
+      It is possible for more than one thread to access the same
+      memory location (be it a lexical variable or a named variable
+      in the top-level or another symbolic environment), it is also
+      possible that interactions on shared variables can have
+      unpredictable results.  As in any multi-threaded language,
+      unprotected access to shared variables can result in race
+      conditions and other concurrency mishaps.  If the programmer
+      anticipates concurrent access to a shared variable and if
+      any thread is to write to the variable, sections of code that
+      access the variable should use a protection mechanism from
+      <a href="ch06.html#Synchronization" title="
+      Synchronization Primitives
+    ">the section called &#8220;
+      Synchronization Primitives
+    &#8221;</a>.
+    </p><p>
+      A thread can complete in one of two ways.  If the thunk
+      that contains the thread's code exits, the thread will
+      terminate and the thread handle will contain the return value
+      of the thunk.  This completion condition is called a
+      <span class="emphasis"><em>clean</em></span> exit.  If during the execution of
+      the thunk's body an error is raised and is not subsequently
+      caught, the thread will terminate and the thread handle will 
+      trap the error.  The error will be raised to any caller that
+      attempts to retrieve the return value of the thread. 
+    </p><p>
+      It is perfectly legal for a thunk to both capture and invoke
+      continuations, even continuations created by other threads.
+      When applying a continuation captured outside of the thread,
+      the resources of the executing thread are used, though the
+      thread may be accessing lexical environments created by other
+      threads.  
+    </p><p>
+      Once created, a thread can be in one of four states:
+      <span class="emphasis"><em>ready</em></span>, <span class="emphasis"><em>running</em></span>, 
+      <span class="emphasis"><em>finished</em></span>, or
+      <span class="emphasis"><em>finished-with-error</em></span>.  The first two
+      states indicate a newly created thread and a running thread,
+      repectively.  The last two represent the end stages of a thread,
+      <span class="emphasis"><em>finished</em></span> indicating a thread that has
+      exited cleanly, and <span class="emphasis"><em>finished-with-error</em></span>
+      indicating exit with an error.
+    </p><p>
+      There are no guarantees that a Scheme thread will ever exit.
+      It is perfectly valid for a thread to execute indefinitely.
+      Furthermore, the <span class="emphasis"><em>SISC</em></span> environment will not exit until all threads
+      have completed, either cleanly or with a failure, unless all
+      remaining threads are so-called <span class="emphasis"><em>daemon</em></span>
+      threads.  Daemon threads are threads that may run indefinitely
+      but will be forcibly terminated if no non-daemon threads (of
+      which the primordial thread is one) are still running.
+      Termination of a daemon thread when no non-daemon threads
+      exist is the <span class="emphasis"><em>only</em></span> instance where a thread
+      can be forcibly terminated.  <span class="bold"><strong>There is no
+      guaranteed thread stop or destroy operation.</strong></span>
+    </p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id2591864"></a>
+      Basic Thread Operations
+    </h2></div></div></div><p>
+      This section describes the basic, low-level operations on
+      threads, including how to create a thread, how to start it,
+      how to wait for it to terminate, and how to retrieve its
+      result.  A thread is managed in Scheme by its <span class="emphasis"><em>thread
+	handle</em></span>, an opaque value that is used to identify
+      the thread.  A thread handle is present as an argument to most
+      of the thread library functions.
+    </p><p>
+      Threads are created with
+      <code class="function">thread/new</code>.  This function
+      takes as its sole argument a thunk.  The body of the thunk is
+      the code that the thread will execute when started.  
+    </p><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" name="id2591901"></a>
+        <span class="emphasis"><em>procedure: </em></span> 
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">thread?</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">#t/#f</span></code>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            Returns true if and only if the provided value is a thread handle.
+          </p></blockquote></div><p>
+      </p><p><a name="func-thread-new"></a>
+        <a class="indexterm" name="id2591954"></a>
+        <span class="emphasis"><em>procedure: </em></span> 
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">thread/new</span> <span class="methodparam"><span class="parameter">thunk</span></span>) =&gt; <span class="type">thread-handle</span></code>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            Creates a new thread handle whose code is defined in the
+            provided <em class="parameter"><code>thunk</code></em>.
+          </p></blockquote></div><p>
+      </p></blockquote></div><p>
+      Once a thread-handle is created, the thread is in the ready
+      state, and can be started at any time by calling
+      <code class="function">thread/start</code>.  At this point one can also
+      set various thread parameters, such as thread priority and
+      daemon status.
+    </p><div class="blockquote"><blockquote class="blockquote"><p><a name="func-thread-start"></a>
+        <a class="indexterm" name="id2592032"></a>
+        <span class="emphasis"><em>procedure: </em></span> 
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">thread/start</span> <span class="methodparam"><span class="parameter">thread-handle</span></span>) =&gt; <span class="type">undefined</span></code>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            Starts the thread identified by
+            <em class="parameter"><code>thread-handle</code></em>.  The thread must be
+            in the ready state.  It is an error to start a thread in
+            any other state.
+          </p></blockquote></div><p>
+      </p><p>
+        <a class="indexterm" name="id2592089"></a>
+        <span class="emphasis"><em>procedure: </em></span> 
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">thread/daemon!</span> <span class="methodparam"><span class="parameter">thread-handle</span></span> <span class="methodparam"><span class="parameter">boolean</span></span>) =&gt; <span class="type">undefined</span></code>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            Sets the daemon status of a thread.  It is an error to
+            change the status of a thread that is not in the
+            <code class="literal">'ready</code> state.
+          </p></blockquote></div><p>
+      </p><p>
+        <a class="indexterm" name="id2592160"></a>
+        <span class="emphasis"><em>procedure: </em></span> 
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">thread/daemon?</span> <span class="methodparam"><span class="parameter">thread-handle</span></span>) =&gt; <span class="type">#t/#f</span></code>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            Returns <code class="literal">#t</code> if the given thread is a
+            daemon thread.
+          </p></blockquote></div><p>
+      </p></blockquote></div><p>
+      It is common pattern to create a thread and immediately start
+      it. The convenience method <code class="function">thread/spawn</code>
+      encapsulates this operation.
+    </p><div class="blockquote"><blockquote class="blockquote"><p><a name="func-thread-spawn"></a>
+        <a class="indexterm" name="id2592236"></a>
+        <span class="emphasis"><em>procedure: </em></span> 
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">thread/spawn</span> <span class="methodparam"><span class="parameter">thunk</span></span>) =&gt; <span class="type">thread-handle</span></code>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            Creates a new thread handle whose code is defined in the
+            provided <em class="parameter"><code>thunk</code></em>, and starts the
+            thread.
+          </p></blockquote></div><p>
+      </p></blockquote></div><p>
+      Once started, the thread will be in the running state.  The
+      body of the thunk is now being evaluated in parallel to the
+      parent thread.  The thread will remain in the running state
+      until it completes and enters one of the two finished states.
+      The state can be read using <code class="function">thread/state</code>.
+    </p><div class="blockquote"><blockquote class="blockquote"><p><a name="func-thread-state"></a>
+        <a class="indexterm" name="id2592315"></a>
+        <span class="emphasis"><em>procedure: </em></span> 
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">thread/state</span> <span class="methodparam"><span class="parameter">thread-handle</span></span>) =&gt; <span class="type">symbol</span></code>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the state of the thread identified by 
+            <em class="parameter"><code>thread-handle</code></em>.  The state is one of
+            <code class="literal">'ready</code>, <code class="literal">'running</code>, 
+            <code class="literal">'finished</code>, or
+            <code class="literal">'finished-with-error</code>.
+          </p></blockquote></div><p>
+      </p></blockquote></div><p>
+      The parent thread may continue executing its own code, or may
+      attempt to <span class="emphasis"><em>join</em></span> the child thread.
+      To join another thread is to wait until the other thread has
+      completed.  The parent thread can join a child using
+      <code class="function">thread/join</code>.  The parent can
+      wait indefinitely or may specify a timeout, after which the
+      <code class="function">thread/join</code> command will
+      return with <code class="literal">#f</code>.
+    </p><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" name="id2592429"></a>
+        <span class="emphasis"><em>procedure: </em></span> 
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">thread/join</span> <span class="methodparam"><span class="parameter">thread-handle</span></span> [<span class="methodparam"><span class="parameter">timeout</span></span>]) =&gt; <span class="type">boolean</span></code>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            Attempts to join with the indicated thread.  If the thread
+            terminates, thread/join will return
+            a non-false value.  If a timeout is specified
+            thread/join will only wait <em class="parameter"><code>timeout</code></em>
+            milliseconds for the thread to complete.  If the thread
+            does not terminate before the timeout,
+            <code class="literal">#f</code> will be returned.
+          </p></blockquote></div><p>
+      </p></blockquote></div><p>
+      It is possible to join on an already completed thread.  In
+      such a case the join will immediately return #t.
+      The behavior of a join on a thread in the ready state is
+      unspecified, and may cause an error.  Finally, it is possible
+      that a join may return <code class="literal">#f</code>, even if no timeout is
+      specified.  Though unlikely, programmers who wish to wait
+      indefinitely for a thread to complete should check the return
+      value of <code class="function">thread/join</code> and
+      repeat the join until <code class="literal">#t</code> is returned.
+    </p><p>
+      If enabled (using the <code class="envar">permitInterrupts</code>
+      configuration parameter, see <a href="ch02.html#config-parameters" title="Configuration Parameters">the section called &#8220;Configuration Parameters&#8221;</a>), running threads may be
+      interrupted at both the host language level and when executing
+      Scheme code with the <code class="function">thread/interrupt</code>
+      function.  If disabled (the default), only a host-language
+      interrupt signal can be sent.
+    </p><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" name="id2592566"></a>
+        <span class="emphasis"><em>procedure: </em></span> 
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">thread/interrupt</span> <span class="methodparam"><span class="parameter">thread-handle</span></span>) =&gt; <span class="type">undefined</span></code>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            Sends an interrupt signal to the given thread.  This will 
+            cause an error to be raised from Scheme code, and a thread
+            interrupt in the host language.  
+          </p></blockquote></div><p>
+      </p></blockquote></div><p>
+      When invoked, a signal is sent to the running thread which will
+      cause an error to be raised from some point in its execution.
+      If not caught, the thread will terminate in the
+      <span class="emphasis"><em>finished-with-error</em></span> state, and the
+      raised error will be rethrown if
+      <code class="function">thread/result</code> is called.  The error-continuation
+      of the error thrown inside the thread, when invoked with no arguments,
+      will restart the computation exactly where it left off.  A thread may 
+      not properly resume if its code calls back into Scheme using any of the
+      mechanisms described in <a href="ch08.html#JavaToScheme" title="Calling Scheme from Java">the section called &#8220;Calling Scheme from Java&#8221;</a>.
+    </p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Final Continuation of a Thread</h3><p>
+        If a thread is interrupted and later its computation is
+        resumed by calling the error-continuation, the thread that
+        hosts the resumed computation will exit when the computation
+        terminates. As a consequence, if a computation that ran in a
+        separate thread is resumed in the primordial thread (that
+        usually hosts the REPL), the primordial thread will terminate
+        as soon as the computation completes. This will circumvent the
+        REPL entirely and cause <span class="emphasis"><em>SISC</em></span> to exit if no non-daemon
+        threads remain. In general, interrupted threads should be
+        resumed in a newly created thread to avoid this scenario.
+      </p></div><p>
+      It is important to note that
+      <code class="function">thread/interrupt</code> does
+      <span class="emphasis"><em>not</em></span> guarantee the termination of a thread.
+      A thread may still capture the error at the scheme level with a
+      <code class="function">with/fc</code>, or catch the interrupt signal if
+      executing in the host language.  In either case, the running
+      code is not required to rethrow the error.
+    </p><p>
+      Once a thread has completed, the parent thread may wish to
+      retrieve the result of the thread's thunk, be it an error or a
+      valid result.  This can be done with the
+      <code class="function">thread/result</code> function.  
+    </p><div class="blockquote"><blockquote class="blockquote"><p><a name="func-thread-result"></a>
+        <a class="indexterm" name="id2592716"></a>
+        <span class="emphasis"><em>procedure: </em></span> 
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">thread/result</span> <span class="methodparam"><span class="parameter">thread-handle</span></span>) =&gt; <span class="type">value</span></code>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the return value from a completed thread.  If the
+            thread completed with error, that error is raised from this
+            call.
+          </p></blockquote></div><p>
+      </p></blockquote></div><p>
+      An error will be raised if an attempt is made to retrieve the
+      result of a thread before that thread has completed.  
+    </p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id2592773"></a>
+      High-level Functions
+    </h2></div></div></div><p>
+      In addition to the basic thread operations, some high level
+      syntax is provided to simplify some general case thread use.
+    </p><div class="blockquote"><blockquote class="blockquote"><p><a name="func-parallel"></a>
+        <a class="indexterm" name="id2592794"></a>
+        <span class="emphasis"><em>procedure: </em></span> 
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">parallel</span> <span class="methodparam"><span class="parameter">thunk1</span></span> <span class="methodparam"><span class="parameter">thunk2</span></span> [<span class="methodparam"><span class="parameter">thunks</span></span>] ...) =&gt; <span class="type">multiple values</span></code>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            Executes each thunk in its own thread in parallel.  The call
+            to parallel blocks until all the threads have finished.  
+            If all threads completed without error, the results of each
+            thunk are returned as multiple values.  If any thread raised
+            an error, that error is raised from the call to parallel.  The
+            error is raised only after all other thunks have also
+            completed.  If more than one thunk raises an error, it is
+            undefined which error will be raised to the caller.
+          </p></blockquote></div><p>
+      </p></blockquote></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id2591537"></a>
+      Thread Scheduling
+    </h2></div></div></div><p>
+      All Scheme threads created in <span class="emphasis"><em>SISC</em></span> are preemptive and
+      managed by a scheduler.  It is possible for a program to
+      manage the priorities of threads in order to give execution
+      preference to higher priority threads.  It is also possible
+      for threads to give up their execution time to other blocked
+      threads.
+    </p><p>
+      The priority of a thread is represented by an integer.  The
+      range of priorities and the default priority of a thread is
+      unspecified and may be platform specific.  Larger integers
+      represent higher priorities then smaller integers.  If a higher 
+      or lower priority thread is desired, the recommended procedure
+      is to get the current priority of a thread and increment or
+      decrement it.  Though unspecified, it is possible that an
+      error will be raised if a priority level outside the platform
+      specific range is selected.
+    </p><p>
+      Though not guaranteed, the behavior of the scheduler when two 
+      threads, one with higher priority than another are both
+      runnable but only one processor is available to run a thread,
+      is that the higher priority thread will be selected.  If only equal
+      priority threads are available to be run, the scheduler can choose any
+      thread to run.  No guarantees are made about latency or fairness.
+    </p><p>
+      Thread priorities can be set by the parent thread or the
+      thread itself.  The behavior of a child thread attempting to
+      set the parent's priority, or a sibling's priority is
+      undefined.
+    </p><div class="blockquote"><blockquote class="blockquote"><p><a name="func-thread-priority"></a>
+        <a class="indexterm" name="id2591595"></a>
+        <span class="emphasis"><em>procedure: </em></span> 
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">thread/priority</span> <span class="methodparam"><span class="parameter">thread-handle</span></span>) =&gt; <span class="type">integer</span></code>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            Retrieves the current priority of the given thread.
+          </p></blockquote></div><p>
+      </p><p><a name="func-thread-priority-bang"></a>
+        <a class="indexterm" name="id2591650"></a>
+        <span class="emphasis"><em>procedure: </em></span> 
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">thread/priority!</span> <span class="methodparam"><span class="parameter">thread-handle</span></span> <span class="methodparam"><span class="parameter">new-priority</span></span>) =&gt; <span class="type">undefined</span></code>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            Attempts to set the given thread's priority to the integer
+           <em class="parameter"><code>new-priority</code></em>.
+          </p></blockquote></div><p>
+      </p></blockquote></div><p>
+      In addition to setting priority levels, a program may wish to
+      yield its execution time temporarily to other threads.
+      Performing a yield allows the scheduler to select a thread to
+      run on the processor of the thread that just yielded control.
+      It is possible that the yielding thread may be selected again,
+      or another thread may be chosen.
+    </p><div class="blockquote"><blockquote class="blockquote"><p><a name="func-thread-yield"></a>
+        <a class="indexterm" name="id2593214"></a>
+        <span class="emphasis"><em>procedure: </em></span> 
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">thread/yield</span>) =&gt; <span class="type">undefined</span></code>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            Causes the currently executing thread to yield to other
+            threads.
+          </p></blockquote></div><p>
+      </p></blockquote></div><p>
+      Finally, a thread (including the main thread) may sleep for
+      a specified amount of time, allowing other threads to 
+      execute in the mean time.  If no other threads are running, 
+      sleeping effectively pauses the program for the given time period.
+    </p><div class="blockquote"><blockquote class="blockquote"><p><a name="func-sleep"></a>
+        <a class="indexterm" name="id2593268"></a>
+        <span class="emphasis"><em>procedure: </em></span> 
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">sleep</span> <span class="methodparam"><span class="parameter">milliseconds</span></span>) =&gt; <span class="type">undefined</span></code>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            Causes the currently executing thread to sleep for the
+            given number of milliseconds, specified as an exact integer.
+          </p></blockquote></div><p>
+      </p></blockquote></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Synchronization"></a>
+      Synchronization Primitives
+    </h2></div></div></div><p>
+      <span class="emphasis"><em>SISC</em></span> provides an implementation of mutexes and condition variables
+      designed to support a wide range of synchronization models, including the
+      monitor paradigm previously found in <span class="emphasis"><em>SISC</em></span>.  The implementation provides
+      both a <span class="emphasis"><em>mutex</em></span> and
+      <span class="emphasis"><em>condition-variable</em></span> first-class value for
+      concurrency protection and inter-thread communication.
+      Mutexes provide mutual exclusion locking, while condition
+      variables faciliate synchronization of threads with the change
+      in state of monitored data.  
+      <span class="emphasis"><em>SISC</em></span>'s mutexes are reentrant, that is, if a thread locks a
+      mutex and then attempts to lock it again, the lock is granted
+      immediately- it does not block.  Correspondingly, the mutex is
+      not unlocked until the same number of unlock operations as
+      previous lock operations are performed by the owning thread.
+    </p><p>
+      <span class="emphasis"><em>SISC</em></span>'s synchronization primitives map very closely to SRFI-18,
+      which is supported by <span class="emphasis"><em>SISC</em></span>.  In fact, it is recommended that
+      programmers write to SRFI-18 if at all possible, as they will
+      gain maximum portability with little or no loss in efficiency on
+      <span class="emphasis"><em>SISC</em></span>.
+    </p><p>
+      Throughout the following sections, a thread is often said to
+      <span class="emphasis"><em>block</em></span> because of some circumstance.
+      While a thread is blocked on some resource, other threads are
+      allowed to execute freely, at the discretion of the scheduler.
+    </p><p>
+      Several functions exist for performing low level operations 
+      such as creating mutexes and condition variables.  All require
+      the mutex or condition variable as the first parameter.
+      Mutexes are represented in Scheme as opaque values displayed as
+      <code class="literal">#&lt;mutex&gt;</code> while condition variables
+      are represented as
+      <code class="literal">#&lt;condition-variable&gt;</code>.  
+      It is important to understand that all the synchronization 
+      operations depend on the same mutex and/or condition variable 
+      being shared between any threads using the functionality.
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2593416"></a>
+	Mutex Operations
+      </h3></div></div></div><p>
+	In order to protect a segment of Scheme code from concurrent
+	access, one can create a mutex that is shared by all
+	threads that may access the segment.  When entering the
+	contested region of code (the <span class="emphasis"><em>critical
+	  section</em></span>), a thread would call
+	<code class="function">mutex/lock</code>.  Upon exiting
+	the region, <code class="function">mutex/unlock</code>
+	is called.
+      </p><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" name="id2593450"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">mutex?</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">#t/#f</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Returns true if and only if the provided value is a mutex.
+            </p></blockquote></div><p>
+        </p><p><a name="func-mutex-new"></a>
+          <a class="indexterm" name="id2593503"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">mutex/new</span>) =&gt; <span class="type">mutex</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Creates and returns a new mutex object.
+            </p></blockquote></div><p>
+        </p><p>
+          <a class="indexterm" name="id2593541"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">mutex-of</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">mutex</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Returns a mutex that is uniquely associated to the given
+              value.  Subsequent (or concurrent) calls to this function
+              are guaranteed to return the same mutex if given the
+              same value.
+            </p></blockquote></div><p>
+        </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p><a name="func-mutex-lock"></a>
+          <a class="indexterm" name="id2593600"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">mutex/lock!</span> <span class="methodparam"><span class="parameter">mutex</span></span>) =&gt; <span class="type">undefined</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Attempts to acquire the lock on the given mutex.  Returns
+              only when the lock has been successfully acquired.
+            </p></blockquote></div><p>
+        </p><p><a name="func-mutex-unlock"></a>
+          <a class="indexterm" name="id2593656"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">mutex/unlock!</span> <span class="methodparam"><span class="parameter">mutex</span></span>) =&gt; <span class="type">undefined</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Releases the lock on the given mutex.  The behavior when
+              unlocking a mutex when the running thread does not have
+              the lock is undefined, and may raise an error.
+            </p></blockquote></div><p>
+        </p></blockquote></div><p> 
+	The semantics of
+	<code class="function">mutex/lock!</code> ensure that
+	only one thread can execute beyond the lock call at any one
+	time.  The first thread that reaches the call
+	<span class="emphasis"><em>acquires</em></span> the lock on the mutex.  Any
+        later threads will block at the call to
+        <code class="function">mutex/lock!</code> until the
+        thread that owns the lock releases the lock with
+        <code class="function">mutex/unlock!</code>.  
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2593738"></a>
+        Condition Variable Operations
+      </h3></div></div></div><p>
+        A condition variable allows one thread
+        to sleep until another wakes it.  A common situation is for
+        one thread to check the status of a variable, and sleep if
+        the <span class="emphasis"><em>condition</em></span> is not met.  While the
+        thread sleeps, one or more separate threads may execute and
+        satisfy the condition (by changing the state of the
+        variable) and then <span class="emphasis"><em>notify</em></span> the sleeping
+        thread via the condition variable.  
+        The thread then awakes, checks the state variable, and
+        proceeds if the condition is met.  If not, it sleeps again.  
+        This construct allows for cooperation between multiple threads
+        on a computation.
+      </p><p>
+        To wait on a condition variable, the
+        <code class="function">mutex/unlock!</code> function is again used with 
+        a condition variable as an additional argument.
+        applied to a monitor.  This will cause the thread to unlock 
+        the given mutex, then block until notified by another thread.  
+        When it is notified, or the provided timeout expires, the lock
+        is <span class="emphasis"><em>not</em></span> reacquired.
+      </p><div class="blockquote"><blockquote class="blockquote"><p><a name="condvarq"></a>
+          <a class="indexterm" name="id2593793"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">condvar?</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">#t/#f</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+		      Returns true if the provided value is a condition variable.
+            </p></blockquote></div><p>
+        </p><p><a name="condvar-new"></a>
+          <a class="indexterm" name="id2593846"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">condvar/new</span>) =&gt; <span class="type">condition variable</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+	          Creates a new condition variable.
+            </p></blockquote></div><p>
+        </p><p><a name="func-mutex-wait"></a>
+          <a class="indexterm" name="id2593889"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">mutex/unlock!</span> <span class="methodparam"><span class="parameter">mutex</span></span> <span class="methodparam"><span class="parameter">condvar</span></span> [<span class="methodparam"><span class="parameter">timeout</span></span>]) =&gt; <span class="type">#t/#f</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Causes the thread to sleep until notified on the
+              provided condition variable by another
+              thread.  This call will not return until notified, unless
+              the optional timeout is specified and
+              <em class="parameter"><code>timeout</code></em> milliseconds have elapsed
+              without a notification.  Before blocking, the lock on
+              <em class="parameter"><code>mutex</code></em> is released.
+              If the timeout is reached
+              before notification, <code class="literal">#f</code> is
+              returned, otherwise <code class="literal">#t</code> is returned.
+            </p></blockquote></div><p>
+        </p></blockquote></div><p>
+        Another thread may wake a single waiting thread with the
+        <code class="function">condvar/notify</code> operation.
+        When called, one thread waiting on the condition variable is
+        woken.  If no threads are waiting this call has no effect.
+        If more than one thread is waiting, exactly one will
+        be woken.  Which is woken is unspecified.  If a thread
+        wishes to wake <span class="emphasis"><em>all</em></span> threads waiting on a
+        given monitor, it may use the
+        <code class="function">condvar/notify-all</code> function.
+      </p><div class="blockquote"><blockquote class="blockquote"><p><a name="func-condvar-notify"></a>
+          <a class="indexterm" name="id2594030"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">condvar/notify</span> <span class="methodparam"><span class="parameter">condvar</span></span>) =&gt; <span class="type">undefined</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Wakes exactly one thread waiting on the condition variable, if any such
+              threads exist.  If the notifying thread holds the lock
+              on <em class="parameter"><code>condvar</code></em>, the waiting thread
+              will not proceed until the notifying thread releases the lock.
+            </p></blockquote></div><p>
+        </p><p><a name="func-condvar-notify-all"></a>
+          <a class="indexterm" name="id2594094"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">condvar/notify-all</span> <span class="methodparam"><span class="parameter">condvar</span></span>) =&gt; <span class="type">undefined</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>	  
+              Wakes all threads waiting on the condition variable, if any waiting
+              threads exist.  If the notifying thread holds the lock
+              on <em class="parameter"><code>condvar</code></em>, the waiting thread
+              will not procede until the notifying thread releases the lock.
+            </p></blockquote></div><p>
+        </p></blockquote></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="highlevelconcurrency"></a>
+	  High-level Concurrency
+	</h3></div></div></div><p>
+	  In addition to the low-level operations on mutexes and
+	  condition variables, two
+	  library functions are provided to greatly ease the
+	  construction and readability of thread-safe code.
+	</p><div class="blockquote"><blockquote class="blockquote"><p><a name="func-mutex-synchronize"></a>
+          <a class="indexterm" name="id2594179"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">mutex/synchronize</span> <span class="methodparam"><span class="parameter">mutex</span></span> <span class="methodparam"><span class="parameter">thunk</span></span>) =&gt; <span class="type">value</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Protects execution of thunk as a critical section by holding the
+              mutex's lock during evaluation of the thunk.  The
+              result of the thunk's evaluation becomes the result of
+              the <code class="function">mutex/synchronize</code> expression.
+            </p></blockquote></div><p>
+        </p><p><a name="func-mutex-synchronize-unsafe"></a>
+          <a class="indexterm" name="id2594257"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">mutex/synchronize-unsafe</span> <span class="methodparam"><span class="parameter">mutex</span></span> <span class="methodparam"><span class="parameter">thunk</span></span>) =&gt; <span class="type">value</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Behaves exactly as mutex/synchronize without automatic
+              unlocking when an error is raised or a continuation escapes when
+              executing thunk.
+            </p></blockquote></div><p>
+        </p></blockquote></div><p>
+        <code class="function">mutex/synchronize</code> locks
+        the mutex while the thunk provided is being
+        executed.  The lock is automatically released when the
+        expression has completed.  Also, if an error is raised or a
+        continuation is invoked that escapes the call to
+        <code class="function">mutex/synchronize</code>, the
+        lock is automatically released.
+      </p><p>
+        The added safety provided by 
+        <code class="function">mutex/synchronize</code> may
+        slow the execution of code that repeatedly calls a critical
+        section.  If the programmer is absolutely sure that no error
+        can be raised and that no continuations will be applied to
+        escape the call,
+        <code class="function">mutex/synchronize-unsafe</code>
+        may be used.  It provides no safety guarantees in those
+        situations.  If an error is raised or an escaping
+        continuation invoked, the mutex will remain locked which
+        could cause a deadlock if another thread attempts to acquire
+        the lock.  
+      </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch05.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch07.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 5. I/O </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 7. Types and Objects</td></tr></table></div></body></html>

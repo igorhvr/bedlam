@@ -1,0 +1,137 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Appendix D. Backend Details</title><link rel="stylesheet" href="sss.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.71.0"><link rel="start" href="index.html" title="SISC for Seasoned Schemers"><link rel="up" href="index.html" title="SISC for Seasoned Schemers"><link rel="prev" href="apc.html" title="Appendix C. Troubleshooting"><link rel="next" href="ape.html" title="Appendix E. GNU General Public License"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Appendix D. Backend Details</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="apc.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ape.html">Next</a></td></tr></table><hr></div><div class="appendix" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="id2650730"></a>Appendix D. Backend Details</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="apd.html#Limits">Limits</a></span></dt><dd><dl><dt><span class="sect2"><a href="apd.html#id2650782">Datastructure Limits</a></span></dt><dt><span class="sect2"><a href="apd.html#id2651074">Symbol Uniqueness</a></span></dt></dl></dd><dt><span class="sect1"><a href="apd.html#id2651139">Performance and Efficiency considerations</a></span></dt><dd><dl><dt><span class="sect2"><a href="apd.html#id2651145">Math</a></span></dt><dt><span class="sect2"><a href="apd.html#id2651224">Strings</a></span></dt><dt><span class="sect2"><a href="apd.html#id2651333">Interrupts</a></span></dt></dl></dd></dl></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+        This appendix is under development
+      </p></div><p>
+      This appendix describes details of <span class="emphasis"><em>SISC</em></span> on particular
+      backends.  This is not intended to guide programming.  The
+      programmer should code according to the main body of this
+      document.  However, this section still describes useful
+      performance tips and limitations of <span class="emphasis"><em>SISC</em></span>'s operation.
+    </p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Limits"></a>Limits</h2></div></div></div><p>
+        This appendix lays out the various limits in <span class="emphasis"><em>SISC</em></span> running on a
+        JVM backend.  These limits are <span class="emphasis"><em>not</em></span>
+        specifications for an expected set of limits on all platforms,
+        but serve as a real-world guide.
+      </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2650782"></a>Datastructure Limits</h3></div></div></div><p>
+          </p><div class="table"><a name="JVMLimits"></a><p class="title"><b>Table D.1. <span class="emphasis"><em>SISC</em></span> Limits</b></p><div class="table-contents"><table summary="SISC Limits" border="1"><colgroup><col align="left"><col align="left"></colgroup><thead><tr><th align="left">Description</th><th align="left">Limit</th></tr></thead><tbody><tr><td align="left">Fixed-point Exact Integers</td><td align="left">-2<sup>31</sup> &lt; n &lt;
+                    +2<sup>31</sup>-1</td></tr><tr><td align="left">AP Exact Integers</td><td align="left">
+                    -2<sup>(2<sup>32</sup>-1)</sup>
+                    &lt; x &lt;
+                    +2<sup>(2<sup>32</sup>-1)</sup>-1.
+                  </td></tr><tr><td align="left">Inexacts (<code class="literal">32Float</code>)</td><td align="left">See IEEE 754-1985 Floating Point Standard</td></tr><tr><td align="left">Inexacts (<code class="literal">64Float</code>)</td><td align="left">See IEEE 754-1985 Floating Point Standard</td></tr><tr><td align="left">Inexact Mantissa (<code class="literal">APFloat</code>)</td><td align="left">same as AP Exact Integers</td></tr><tr><td align="left">Inexact Exponent
+                    (<code class="literal">APFloat</code>)</td><td align="left">same as fixed-point exact integer</td></tr><tr><td align="left">Max vector elements</td><td align="left">Same as max fixed-point integer</td></tr><tr><td align="left">Max string elements</td><td align="left">Same as max fixed-point integer (?)</td></tr><tr><td align="left">Representable characters</td><td align="left">see <a href="ch03.html#Characters" title="
+	Characters
+      ">the section called &#8220;
+	Characters
+      &#8221;</a></td></tr><tr><td align="left">Maximum formal parameters</td><td align="left">Same as max fixed-point integer</td></tr><tr><td align="left">Maximum lexical depth</td><td align="left">Same as max fixed-point integer</td></tr><tr><td align="left">Maximum symbolic-environment bindings</td><td align="left">Same as max fixed-point integer (?)</td></tr><tr><td align="left">Addressable file size</td><td align="left">min of 2<sup>64</sup>-1 and
+                    operating system limit</td></tr></tbody></table></div></div><p><br class="table-break">
+        </p><p>
+          Arbitrary precision integers aren't quite arbitrary precision.
+          <span class="emphasis"><em>SISC</em></span> has a hard limit to the number of bits in an exact
+          integer and thus to the range of representable numbers.  Exact
+          integers are stored as two's complement signed integers, with
+          a bit limit (including the sign bit) of
+          2<sup>32</sup>.  This limits the range of
+          representable exact integers to the numbers quoted above.
+        </p><p>
+          Likewise, arbitrary precision inexact numbers (when present)
+          have a similar hard limit.  The arbitrary precision inexact is
+          constructed with an arbitrary precision exact number with the
+          limits described above as the number's mantissa, and
+          an exponent whose range is equivalent to that of a  
+          fixed-point exact integer.
+          The inexact is then then
+          <code class="literal">mantissa*10<sup>exponent</sup></code>.
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2651074"></a>Symbol Uniqueness</h3></div></div></div><p>
+          In order to support compilation in multiple threads, on
+          multiple machines, or in multiple times, generated symbols
+          for module bindings, lexical variables, etc. must be
+          <span class="emphasis"><em>4d-unique</em></span>, that is they must be unique
+          across space and time.  <span class="emphasis"><em>SISC</em></span> attempts to balance this
+          requirement with the space inefficiency of generating
+          symbols with very long names. 
+        </p><p> 
+          <span class="emphasis"><em>SISC</em></span>'s unique symbols are generated by creating a number
+          of the form
+          <code class="literal">current-time + (random-16-bit-natural*311040000000)
+            + (counter*155520000000)</code>.  The current time
+          variable is only updated when the value of counter reaches
+          65536.  In this manner, two entities that generate the same
+          symbol will only generate a colliding symbol if they
+          generate the symbol on the same system millisecond, 
+          with the same counter value, and the same random number,
+          <span class="emphasis"><em>or</em></span>, if one entity happens to generate
+          the symbol with the same millisecond and does so
+          (counter-1)*50 years, (counter-2)*100 years... in the
+          future, and with the same random or 
+          (random-1)*100 years, (random-2)*200 years, etc
+          in the future.  Only if all of these factors align will 
+          a colliding symbol be generated.  This is not as unlikely
+          as say a Microsoft GUID or Java VMID number, but it should
+          be sufficiently unlikely.  The advantage over other GUID 
+          algorithms is that the value produced by <span class="emphasis"><em>SISC</em></span>'s is
+          significantly smaller (and thus does not bloat expanded
+          code).
+        </p></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id2651139"></a>Performance and Efficiency considerations</h2></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2651145"></a>Math</h3></div></div></div><p>
+          The <span class="emphasis"><em>SISC</em></span> numeric library is most efficient when operating
+          on fixed bitlength numbers.  Exact numbers are in their
+          fixed bitlength mode if they are in the representable range
+          for fixed exact integers, as described in <a href="apd.html#JVMLimits" title="Table D.1. SISC Limits">Table D.1, &#8220;<span class="emphasis"><em>SISC</em></span> Limits&#8221;</a>.  Fixed bitlength inexact numbers are
+          only available in the <code class="literal">64Float</code> and
+          <code class="literal">32Float</code> libraries.  For <span class="emphasis"><em>SISC</em></span> on Java on
+          the x86 32-bit architecture, the <code class="literal">64Float</code>
+          library is generally more efficient than the
+          <code class="literal">32Float</code> library, while both are more
+          efficient than the <code class="literal">APFloat</code> library.
+        </p><p>
+          Fixed bitlength exact integers are only used for whole
+          numbers.  Rational numbers use arbitrary precision
+          components and thus are less efficient than whole fixed
+          integers.
+        </p><p>
+          Arbitrary precision inexact numbers are progressively slower
+          as the bitlength of the mantissa and the scale of the
+          exponent increase.  Using the precision constraints can
+          prevent an unbounded increase in the scale of arbitrary
+          precision inexacts which will very rapidly slow
+          calculations.
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2651224"></a>Strings</h3></div></div></div><p>
+          At the time of this writing, the Scheme string type can be
+          represented either as a character array, a native string, 
+          or simultaneously as both.  The character array
+          representation allows efficient, constant time modification
+          of a mutable string (using <code class="function">string-set!</code>
+          for example). The native string representation allows
+          efficient output to ports, string comparison, and substring
+          operations.  
+        </p><p>
+          By default, <span class="emphasis"><em>SISC</em></span> allows the Scheme string to contain both
+          representations simultaneously, ensuring that there is not a 
+          costly representation conversion necessary to perform
+          certain operations.  However, in this default mode, strings
+          may occupy twice the memory as a string in a single
+          representation.  If a program uses many strings or several
+          very large strings, the programmer may wish to create 
+          strings that may only be in one representation at any given 
+          time.  <span class="emphasis"><em>SISC</em></span> provides a parameter to control this behavior.
+        </p><p>
+	  </p><div class="blockquote"><blockquote class="blockquote"><p>
+              <a class="indexterm" name="id2651273"></a>
+	      <span class="emphasis"><em>parameter: </em></span>
+	      <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">compact-string-rep</span> [<span class="methodparam"><span class="parameter">boolean</span></span>]) =&gt; <span class="type">#t/#f</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  This parameter, if set <code class="literal">#t</code>,
+                  will force strings to be represented either as a
+                  character array, or as a native string, but never
+                  both.  If false, simultaneous representations are 
+                  possible.
+                </p></blockquote></div><p>
+            </p></blockquote></div><p>
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2651333"></a>Interrupts</h3></div></div></div><p>
+          Interrupts allow running Scheme code to be forcibly broken 
+          from another thread, causing the Scheme code to raise an
+          error.  The interrupt signal handling code does add an
+          appreciable overhead (usually between 1-5% depending on the
+          JVM) to execution.  It can disabled using the 
+          <code class="envar">sisc.permitInterrupts</code>
+          system property.
+        </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="apc.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ape.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Appendix C. Troubleshooting </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Appendix E. GNU General Public License</td></tr></table></div></body></html>

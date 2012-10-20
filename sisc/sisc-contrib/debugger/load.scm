@@ -1,0 +1,7 @@
+(load "/home/scgmille/java/sisc/src/sisc/modules/srfi/srfi-11.scm")
+  (include "ipoints.scm")
+  (include "file.scm")
+  (include "breakpoints.scm")
+  (include "rdbg.scm")
+  (include "instr.scm")
+  (include "main.scm")

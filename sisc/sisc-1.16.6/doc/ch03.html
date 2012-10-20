@@ -1,0 +1,1283 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Chapter 3.  Scheme Language</title><link rel="stylesheet" href="sss.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.71.0"><link rel="start" href="index.html" title="SISC for Seasoned Schemers"><link rel="up" href="index.html" title="SISC for Seasoned Schemers"><link rel="prev" href="ch02.html" title="Chapter 2.  Installation and Invocation"><link rel="next" href="ch04.html" title="Chapter 4.  Debugging Facilities"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 3. 
+    Scheme Language
+  </th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch04.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="SchemeLanguage"></a>Chapter 3. 
+    Scheme Language
+  </h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="ch03.html#Types">
+      Types
+    </a></span></dt><dd><dl><dt><span class="sect2"><a href="ch03.html#Numbers">
+	Numbers
+      </a></span></dt><dt><span class="sect2"><a href="ch03.html#Characters">
+	Characters
+      </a></span></dt><dt><span class="sect2"><a href="ch03.html#Symbols">
+	Symbols
+      </a></span></dt><dt><span class="sect2"><a href="ch03.html#Strings">
+	Strings
+      </a></span></dt><dt><span class="sect2"><a href="ch03.html#Lists">
+        Pairs and Lists
+      </a></span></dt><dt><span class="sect2"><a href="ch03.html#Vectors">
+	Vectors
+      </a></span></dt><dt><span class="sect2"><a href="ch03.html#Boxing">
+	Boxes
+      </a></span></dt><dt><span class="sect2"><a href="ch03.html#Parameters">
+        Parameters
+      </a></span></dt><dt><span class="sect2"><a href="ch03.html#ImmutableTypes">
+	Immutable types
+      </a></span></dt></dl></dd><dt><span class="sect1"><a href="ch03.html#Equivalence">
+      Equivalence
+    </a></span></dt><dt><span class="sect1"><a href="ch03.html#syntax">
+      Syntax and Lexical Structure
+    </a></span></dt><dd><dl><dt><span class="sect2"><a href="ch03.html#comments">Comments</a></span></dt><dt><span class="sect2"><a href="ch03.html#SharedStructures">
+	Shared Structures
+      </a></span></dt><dt><span class="sect2"><a href="ch03.html#ControlFeatures">
+        Control Features
+      </a></span></dt><dt><span class="sect2"><a href="ch03.html#id2552521">
+        Syntactic Extension
+      </a></span></dt></dl></dd><dt><span class="sect1"><a href="ch03.html#ErrorHandling">Errors and Error Handling</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch03.html#FailureContinuations">Failure Continuations</a></span></dt><dt><span class="sect2"><a href="ch03.html#ErrorRecords">Error Records</a></span></dt><dt><span class="sect2"><a href="ch03.html#id2554839">Examples</a></span></dt><dt><span class="sect2"><a href="ch03.html#DynamicWind"><code class="function">dynamic-wind</code></a></span></dt></dl></dd><dt><span class="sect1"><a href="ch03.html#SymbolicEnvironments">
+      Symbolic Environments and Property Maps
+    </a></span></dt><dd><dl><dt><span class="sect2"><a href="ch03.html#AccessingSymbolicEnvironments">
+        Access Functions
+      </a></span></dt><dt><span class="sect2"><a href="ch03.html#ObtainingSymbolicEnvironments"> 
+        Obtaining and Naming
+      </a></span></dt><dt><span class="sect2"><a href="ch03.html#ChainedEnvironments">Chained Symbolic Environments</a></span></dt></dl></dd><dt><span class="sect1"><a href="ch03.html#MiscellaneousFunctions">
+      Miscellaneous Functions
+    </a></span></dt></dl></div><p>
+    In this chapter we will examine the language that <span class="emphasis"><em>SISC</em></span>
+    interprets, which is a superset of the
+    R<sup>5</sup>RS Scheme Standard.
+  </p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Types"></a>
+      Types
+    </h2></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="Numbers"></a>
+	Numbers
+      </h3></div></div></div><p>
+	The full Scheme number tower is supported:
+      </p><div class="itemizedlist"><ul type="disc"><li><p>
+	    Integers
+	  </p></li><li><p>
+	    Floating Point numbers 
+	  </p></li><li><p>
+	    Rational numbers
+	  </p></li><li><p>
+	    Complex numbers
+	  </p></li></ul></div><p>
+	Depending on the numeric library compiled into <span class="emphasis"><em>SISC</em></span>,
+	floating point numbers have either 32 or 64 bit IEEE
+	precision, or arbitrary
+        <sup>[<a name="id2550394" href="#ftn.id2550394">2</a>]</sup>
+        precision. Regardless, <span class="emphasis"><em>SISC</em></span>'s
+	complex numbers have floating point components of the same
+	precision as the reals. Integers have arbitrary precision in
+	all numeric libraries, and rational numbers are built with
+	arbitrary precision components.
+      </p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="NumericConstants"></a>
+	  Numeric constants
+	</h4></div></div></div><p>
+	  The precision specifying exponents (<code class="computeroutput">S, F, L,
+	  </code>and <code class="computeroutput">D</code>) are
+	  ignored in <span class="emphasis"><em>SISC</em></span>, all inexact numbers are kept in the precision
+	  of the numeric library. The exponents are read and used to scale
+	  the real number as expected.  In the case of arbitrary precision
+	  floats, specific precision constraints are maintained to prevent
+	  a runaway increase of precision. The constraints can be set by
+	  <code class="envar">minFloatPrecision</code> and
+	  <code class="envar">maxFloatPrecision</code> configuration parameters on
+	  startup. See <a href="ch02.html#config-parameters" title="Configuration Parameters">the section called &#8220;Configuration Parameters&#8221;</a>.
+	</p><p>
+	  All four base specifiers (<code class="computeroutput">#x, #o,
+	    #d, #b</code>) are supported for
+	  integers and rationals. Only decimal 
+	  (<code class="computeroutput">#d</code>), the
+	  default, is supported for floating point and complex
+	  numbers.
+	</p><p>
+          <span class="emphasis"><em>SISC</em></span> will produce infinite or not-a-number quantities from
+          some operations.  Those quantities are represented and
+          can be used in Scheme programs as 
+          <code class="literal">#!+inf</code> (positive infinity),
+          <code class="literal">#!-inf</code> (negative infinity), and
+          <code class="literal">#!nan</code> (not-a-number).
+        </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="Exactness"></a>
+	  Exactness
+	</h4></div></div></div><p>
+	  Exactness and inexactness contagion behaves as
+	  expected. Rational's are made inexact through
+	  division. Floats are made exact by conversion to a
+	  rational number. <span class="emphasis"><em>SISC</em></span> attempts as accurate a conversion as
+	  possible, by converting the decimal portion of the number
+	  to a ratio with a denominator of the form 10^n, where n is
+	  the scale of the floating point number. Then the fraction
+	  is reduced as usual.
+	</p><p>
+	  Since complex numbers must have floating point components
+	  currently, conversion to an exact merely rounds the
+	  components to integers. 
+	</p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="Characters"></a>
+	Characters
+      </h3></div></div></div><p>
+	<span class="emphasis"><em>SISC</em></span>'s characters are double-byte wide.  This means that they
+	are capable of representing the full range of unicode characters. 
+        Unicode characters can be created with
+	<code class="function">number-&gt;character</code>;
+	<code class="literal">#\nnnnnn</code>, where
+	<code class="literal">nnnnnn</code> is an octal number in the range
+	000000 -&gt; 177777; or <code class="literal">#\uxxxx</code>,
+	where <code class="literal">xxxx</code> is a hexadecimal number in the
+	range 0000 -&gt; ffff.  At least two zeros must be specified
+	to distinguish from the '0' character when using an octal
+	character literal.  At least one zero must be specified to
+	distinguish a hexadecimal character from the 'u' character.  
+      </p><p>
+        <span class="emphasis"><em>SISC</em></span> also provides additional named characters, to add to
+        the Scheme standard's <code class="literal">space</code> and
+        <code class="literal">newline</code>:
+      </p><div class="table"><a name="named-characters"></a><p class="title"><b>Table 3.1. Named character literals</b></p><div class="table-contents"><table summary="Named character literals" border="1"><colgroup><col align="left"><col align="left"></colgroup><thead><tr><th align="left">Character Name</th><th align="left">Unicode Value (hex)</th></tr></thead><tbody><tr><td align="left"><code class="literal">backspace</code></td><td align="left"><code class="literal">0008</code></td></tr><tr><td align="left"><code class="literal">newline</code></td><td align="left"><code class="literal">000a</code></td></tr><tr><td align="left"><code class="literal">nul</code></td><td align="left"><code class="literal">0000</code></td></tr><tr><td align="left"><code class="literal">page</code></td><td align="left"><code class="literal">000c</code></td></tr><tr><td align="left"><code class="literal">return</code></td><td align="left"><code class="literal">000d</code></td></tr><tr><td align="left"><code class="literal">rubout</code></td><td align="left"><code class="literal">007f</code></td></tr><tr><td align="left"><code class="literal">space</code></td><td align="left"><code class="literal">0020</code></td></tr><tr><td align="left"><code class="literal">tab</code></td><td align="left"><code class="literal">0009</code></td></tr></tbody></table></div></div><br class="table-break"><p>
+        Formally, <span class="emphasis"><em>SISC</em></span>'s lexer modifies the R<sup>5</sup>RS grammar with the
+        following productions for character literals:
+      </p><pre class="programlisting">
+&lt;character&gt; --&gt; #\ &lt;any character&gt; 
+     | #\u &lt;uinteger 16&gt; 
+     | #\ &lt;uinteger 8&gt;
+     | #\ &lt;character name&gt;
+&lt;character name&gt; --&gt; backspace | newline | nul 
+     | page | return | rubout | space | tab
+      </pre><p>
+	Characters are <span class="emphasis"><em>not</em></span> compared with respect to the
+        locale of the running system.  Character comparison is equivalent
+        to numeric comparison of the character value as returned by
+        <code class="function">char-&gt;integer</code>.
+      </p><p>
+        There are a number of reasons why a full Unicode system is
+        non-trivial, especially within the framework of the R<sup>5</sup>RS
+        string and character functions.  Such a discussion is outside
+        the scope of this document.  Unicode compliant processing
+        may be made available in the future as a library, however.
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="Symbols"></a>
+	Symbols
+      </h3></div></div></div><p>
+	<span class="emphasis"><em>SISC</em></span>'s symbols are ordinarily case-insensitive. <span class="emphasis"><em>SISC</em></span>
+	maintains true pointer equality between symbols with like
+	contents, unless the symbol is created
+	<span class="emphasis"><em>uninterned</em></span>. An uninterned symbol is one
+	which is guaranteed to be pointer distinct from any other
+	symbol in the Scheme system, even another with the same
+	contents. Uninterned symbols can be generated with:
+      </p><p>
+	</p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2550913"></a>
+	    <span class="emphasis"><em>procedure: </em></span> 
+	    <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">string-&gt;uninterned-symbol</span> <span class="methodparam"><span class="parameter">string</span></span>) =&gt; <span class="type">symbol</span></code>
+	    </p><div class="blockquote"><blockquote class="blockquote"><p>
+		Converts the provided string into an uninterned, pointer
+		distinct symbol.
+	      </p></blockquote></div><p>
+	  </p></blockquote></div><p>
+      </p><p>
+        Uninterned symbols, while always pointer-distinct, may still
+        be <code class="function">equal?</code> to another symbol if its
+        representation matches another.
+      </p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2550981"></a>Case Sensitivity</h4></div></div></div><p>
+          <span class="emphasis"><em>SISC</em></span> also allows symbols to be created that
+          <span class="emphasis"><em>are</em></span> case-sensitive. This can be done
+          one of two ways. The first is by setting the
+          <code class="envar">caseSensitive</code> configuration parameter (see
+          <a href="ch02.html#config-parameters" title="Configuration Parameters">the section called &#8220;Configuration Parameters&#8221;</a>. The second method is
+          via a non-standard symbol syntax. If a symbol is enclosed in
+          pipe ('|') characters, the reader will treat that individual
+          symbol as cased.  The syntax extends the R<sup>5</sup>RS grammar with
+          the following production:
+        </p><pre class="programlisting">
+&lt;cased symbol&gt; --&gt; |&lt;identifier&gt;|
+        </pre><div class="example"><a name="id2551027"></a><p class="title"><b>Example 3.1. Case sensitive Symbol literals</b></p><div class="example-contents"><pre class="programlisting">
+(eq? 'a '|A|) ; =&gt; #f
+(eq? 'a '|a|) ; =&gt; #t
+(eq? '|A| '|a|) ; =&gt; #f
+          </pre></div></div><br class="example-break"></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2551042"></a>Printed Representation</h4></div></div></div><p>
+          Symbols may contain characters that are disallowed by R<sup>5</sup>RS
+          using <code class="function">symbol-&gt;string</code>.  In such a case, 
+          the printed representation of that symbol will contain those
+          characters, prefaced with the escape ('\') character.
+          Likewise, such symbols may be created without
+          <code class="function">symbol-&gt;string</code> by escaping non-standard
+          characters.
+        </p><p>
+          Symbols which contain characters that could only be present
+          in a case-sensitive environment will be printed in one of
+          two ways, depending on the value of the
+          <code class="function">case-sensitive</code> parameter.  If true, the
+          symbols will be printed as is, containing the upper and
+          lower case letters.  If false, the symbol will be printed
+          surrounded by pipe characters.  
+        </p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="Strings"></a>
+	Strings
+      </h3></div></div></div><p>
+	Strings are built from Unicode characters, and are compared
+        lexicographically in a manner derived from character
+        comparison.  In addition to using backslash to escape the
+        double-quote (") character and the backspace character itself,
+        <span class="emphasis"><em>SISC</em></span> provides several escape codes to ease string literal
+        construction.
+      </p><div class="table"><a name="string-escapes"></a><p class="title"><b>Table 3.2. String escape codes</b></p><div class="table-contents"><table summary="String escape codes" border="1"><colgroup><col align="left"><col align="left"></colgroup><thead><tr><th align="left">Escape</th><th align="left">Value</th></tr></thead><tbody><tr><td align="left"><code class="literal">\f</code></td><td align="left">Inserts the formfeed character (unicode 000c)</td></tr><tr><td align="left"><code class="literal">\n</code></td><td align="left">Inserts the newline character (unicode 000a)</td></tr><tr><td align="left"><code class="literal">\r</code></td><td align="left">Inserts the rubout character (unicode 007f)</td></tr><tr><td align="left"><code class="literal">\t</code></td><td align="left">Inserts the tab character (unicode 0009)</td></tr><tr><td align="left"><code class="literal">\uxxxx</code></td><td align="left">Inserts the unicode character described by the
+              hex number 'xxxx'.  All four hex digits must be specified.
+              </td></tr><tr><td align="left"><code class="literal">\\</code></td><td align="left">Inserts the backslash ('\')
+              character</td></tr><tr><td align="left"><code class="literal">\"</code></td><td align="left">Inserts the double quote ('"')
+              character</td></tr></tbody></table></div></div><br class="table-break"></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="Lists"></a>
+        Pairs and Lists
+      </h3></div></div></div><p>
+	A function is provided to determine if a given pair is a <span class="emphasis"><em>proper list</em></span>.
+      </p><p>
+	</p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2551286"></a>
+	    <span class="emphasis"><em>procedure: </em></span> 
+	    <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">proper-list?</span> <span class="methodparam"><span class="parameter">datum</span></span>) =&gt; <span class="type">#t/#f</span></code>
+	    </p><div class="blockquote"><blockquote class="blockquote"><p>        
+                Returns <code class="literal">#t</code> if the given argument is
+                a <span class="emphasis"><em>proper-list</em></span>.  That is, if the
+                argument is a pair, whose <code class="literal">cdr</code> is
+                either the empty-list or also a proper-list, and which
+                contains no references to itself (is not circular).
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="Vectors"></a>
+	Vectors
+      </h3></div></div></div><p>
+	<span class="emphasis"><em>SISC</em></span> supports the length prefix method of creating Vector
+	constants. For example, '<code class="literal">#5(x)</code>
+	creates a vector constant containing five identical
+	symbols.  In addition, the length-prefix form is used when
+	printing vectors, and if elements repeat at the end of a
+	Vector, only the last unique element is printed.  This form
+	is referred to as the <span class="emphasis"><em>compact</em></span> vector 
+	representation.  The unprefixed form with all elements
+	displayed is called the <span class="emphasis"><em>verbose</em></span> representation.
+      </p><p>
+	Vectors are displayed differently depending on the call
+	used.  When called with
+	<code class="function">display</code>, in addition to the
+	ordinary R<sup>5</sup>RS rules regarding the output of values
+	displayed with <code class="function">display</code>,
+	the verbose representation is displayed. Using 
+	<code class="function">write</code>, on the other hand
+	produces the compact representation.
+      </p><p>
+        Displaying a vector with <code class="function">pretty-print</code> may
+        output either the verbose or compact representation of a
+        vector.  The behavior in this regard is controlled by the
+        <code class="envar">vectorLengthPrefixing</code> configuration parameter
+        (see <a href="ch02.html#config-parameters" title="Configuration Parameters">the section called &#8220;Configuration Parameters&#8221;</a>).  If set to #t,
+        <code class="function">pretty-print</code> will emit the compact
+        representation. If #f, the verbose representation is
+        produced.
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="Boxing"></a>
+	Boxes
+      </h3></div></div></div><p>
+	<span class="emphasis"><em>SISC</em></span> supports boxes, a container for a
+	Scheme value. Boxing is often used to implement
+	call-by-reference semantics. Boxes are created and accessed
+	using the following three functions:
+      </p><p>
+	</p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2551485"></a>
+	    <span class="emphasis"><em>procedure: </em></span> 
+	    <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">box</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">box</span></code>
+	    </p><div class="blockquote"><blockquote class="blockquote"><p>
+		Creates a box filled with the given value.
+	      </p></blockquote></div><p>
+	  </p><p>
+            <a class="indexterm" name="id2551537"></a>
+	    <span class="emphasis"><em>procedure: </em></span> 
+	    <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">unbox</span> <span class="methodparam"><span class="parameter">box</span></span>) =&gt; <span class="type">value</span></code>
+	    </p><div class="blockquote"><blockquote class="blockquote"><p>
+		Returns the value contained in the given box.
+	      </p></blockquote></div><p>
+	  </p><p>
+            <a class="indexterm" name="id2551590"></a>
+	    <span class="emphasis"><em>procedure: </em></span> 
+	    <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">set-box!</span> <span class="methodparam"><span class="parameter">box</span></span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">undefined</span></code>
+	    </p><div class="blockquote"><blockquote class="blockquote"><p>
+		Replaces the value contained in the given box with the
+		value provided.
+	      </p></blockquote></div><p>
+	  </p></blockquote></div><p>
+      </p><p>
+	In addition to the <code class="function">box</code> function for
+	creating boxes, <span class="emphasis"><em>SISC</em></span> provides an external representation for
+	boxes and boxed values. It extends the R<sup>5</sup>RS grammar with the 
+	following:
+      </p><pre class="programlisting">
+&lt;boxed value&gt; --&gt; #&amp;&lt;datum&gt;
+      </pre><p>
+	This syntax denotes a boxed value, with
+	<code class="literal">&lt;datum&gt;</code> as the contained
+	value.
+      </p><p>
+	Boxes are a distinct first class type.  The
+	<code class="function">box?</code> predicate tests a value to see if is
+	a box.
+      </p><p>
+	</p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2551713"></a>
+	    <span class="emphasis"><em>procedure: </em></span> 
+	    <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">box?</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">#t/#f</span></code>
+	    </p><div class="blockquote"><blockquote class="blockquote"><p>
+		Returns <code class="literal">#t</code> only if the given value
+		is a box.
+	      </p></blockquote></div><p>
+	  </p></blockquote></div><p>
+      </p><p>
+        Boxes, like pairs, are only equal in the sense of
+        <code class="function">eq?</code> and <code class="function">eqv?</code> when a
+        box is compared with itself.  A box is equal to another in the
+        sense of <code class="function">equal?</code> if the value contained
+        within the box is <code class="function">equal?</code> to the value
+        contained in the other.
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="Parameters"></a>
+        Parameters
+      </h3></div></div></div><p>
+        A parameter is a named dynamic variable that is accessed through
+        a function.  The function, when given no arguments, returns
+        the current value of the parameter.  When given an argument,
+        the value of the parameter is set to the provided value.  
+      </p><p>
+        <span class="emphasis"><em>SISC</em></span>'s parameters are fully compatible with those specified 
+	by SRFI-39.  Consult the SRFI-39 specification at 
+	<a href="http://srfi.schemers.org" target="_top">srfi.schemers.org</a> 
+	for documentation on how to construct and use parameters.
+	SRFI-39 does not specify the semantics for parameters in the
+	presence of threads.  SISC's parameters bind into the dynamic
+	environment, which means their semantics are defined based on the
+	semantics of dynamic environments' interactions with threads,
+	specified in <a href="ch06.html#threadsemantics" title="
+      Scheme Thread Semantics
+    ">the section called &#8220;
+      Scheme Thread Semantics
+    &#8221;</a>.
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ImmutableTypes"></a>
+	Immutable types
+      </h3></div></div></div><p>
+	<span class="emphasis"><em>SISC</em></span> follows the R<sup>5</sup>RS
+	recommendation of immutable list, string, and vector
+	constants. Quoted lists and vectors are
+	immutable. Attempting to modify elements in these constants
+	will raise an error. String constants are immutable as well
+	when created with
+	<code class="function">symbol-&gt;string</code>.
+      </p></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Equivalence"></a>
+      Equivalence
+    </h2></div></div></div><p>
+      <span class="emphasis"><em>SISC</em></span>'s storage model maintains true pointer equality between
+      symbols, booleans, the end-of-file object, void, and the empty
+      list.  Thus two instances of any of those types is guaranteed to
+      return <code class="literal">#t</code> from <code class="function">eq?</code> if they
+      would have produced <code class="literal">#t</code> from
+      <code class="function">equal?</code>.  
+    </p><p>
+      Numbers and characters are not pointer equal ordinarily (unless actually
+      occupying the same storage).  <span class="emphasis"><em>SISC</em></span> will return 
+      <code class="literal">#t</code> from <code class="function">eqv?</code>
+      if two numbers are both exact, or both 
+      inexact, and are numerically equal.  Two characters are
+      equivalent from <code class="function">eqv?</code> if they occupy the
+      same code-point in the unicode character set.  This is the behavior
+      specified by R<sup>5</sup>RS.  
+    </p><p>
+      Strings, vectors, lists, and boxes are containers for other
+      Scheme types.  As such they are not pointer equal unless they
+      are referenced by two variables that point to the same storage
+      location (i.e. they are actually pointer equal).  <span class="emphasis"><em>SISC</em></span> holds
+      that only <code class="function">equal?</code> will return
+      <code class="literal">#t</code> if two objects are the
+      same type and their contents contain equivalent values with respect to
+      <code class="function">equal?</code>.  
+    </p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="syntax"></a>
+      Syntax and Lexical Structure
+    </h2></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="comments"></a>Comments</h3></div></div></div><p>
+        In addition to the single line comments of the Scheme
+        standard, <span class="emphasis"><em>SISC</em></span> supports both <span class="emphasis"><em>s-expression
+        commenting</em></span> and <span class="emphasis"><em>nested, multiline comments</em></span>.  An s-expression comment is used to
+        comment out an entire s-expression.  To do this, the sharp
+        sequence <code class="literal">#;</code> is used.  It extends the R<sup>5</sup>RS
+        grammar with the following production:
+        </p><pre class="programlisting">
+&lt;expression-comment&gt; --&gt; #;&lt;datum&gt;
+        </pre><p>
+      </p><p>
+        The reader, upon encountering this sharp sequence, will read
+        and discard the next datum.  The expression commented out must still
+        be a valid s-expression, however.
+      </p><p>
+        Nested, multiline comments are as defined in SRFI-30.
+        Briefly, a multiline comment begins with the sharp sequence
+        <code class="literal">#|</code> and ends with the sequence
+        <code class="literal">|#</code>.  The comment may contain nested
+        comments as well.  Unfortunately, this extension cannot be
+        represented in a stateless grammar for the lexical structure.
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="SharedStructures"></a>
+	Shared Structures
+      </h3></div></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="ReaderSyntax"></a>
+          Reader Syntax
+        </h4></div></div></div><p>
+          <span class="emphasis"><em>SISC</em></span> provides a parse-time syntax for 
+          creating data (primarily vectors and lists) that contain
+          references to themselves or data which contains several 
+          pointer-equal elements.  This can be useful to create streams,
+          graphs, and other self-referencing structures while
+          maintaining readability and avoiding complex construction
+          code.
+        </p><p> 
+          The reader syntax has two parts, defining a pointer, and
+          later referencing the pointer to create the circular
+          reference.
+        </p><p>
+          Below is an additional production in the R<sup>5</sup>RS
+          formal syntax (specifically section 7.1.2, external
+          representations) to support circular structures:
+        </p><pre class="programlisting">
+&lt;pointer definition&gt; --&gt; #&lt;uinteger 10&gt;=&lt;datum&gt;
+&lt;pointer reference&gt; --&gt; #&lt;uinteger 10&gt;#
+        </pre><p>
+          The first form instructs the reader to create a pointer
+          identified by the specified integer, which maps to the datum
+          that follows, and is active during the reading of the datum
+          on the right-hand side of the definition.  
+        </p><p>
+          If a second definition occurs during the reading of the
+          datum with the same integral identifier, the previous
+          definition is overwritten for the duration of the read.  The
+          definitions are <span class="emphasis"><em>not</em></span> scoped in any way.
+          The pointer identifiers should be kept unique by the
+          programmer to prevent any unintended effects of identifier
+          collisions. 
+        </p><p>
+          The second form references a previously created pointer 
+          definition.  It is an error to reference an undefined
+          pointer.  The reader will handle a valid reference by
+          placing a pointer at the current read position back to the
+          location of the definition. 
+        </p><p>
+          At this point some examples might be helpful:
+        </p><div class="example"><a name="id2552175"></a><p class="title"><b>Example 3.2. Circular Structures</b></p><div class="example-contents"><pre class="programlisting">
+(define x '#0=(1 2 . #0#))
+(caddr x)        ; =&gt; 1
+(list-ref x 15)  ; =&gt; 2
+
+(define y '(1 2 #1=#(3 4) . #1#))
+(eq? (caddr y) (cdddr y)) ; =&gt; #t
+          </pre></div></div><br class="example-break"></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="Writing"></a>Writing</h4></div></div></div><p>
+          Ordinarily, the display of cyclical data would cause a
+          problem for a Read-Eval-Print-Loop.  For this reason, the
+          REPL will attempt to check the structure it is about to
+          print for circularities before printing.  If a cycle is
+          found in the structure, the REPL will refuse to print if the
+          <code class="envar">printShared</code> configuration parameter,
+          described below, is <code class="literal">false</code>.  In that case
+          the REPL will issue a warning to the user that the structure
+          contains a cycle.  If a circular structure is printed with
+          <code class="function">display</code>, <code class="function">write</code>,
+          etc, and the <code class="envar">printShared</code> parameter is set to
+          <code class="literal">false</code>, the environment may enter an
+          infinite loop which may or may not cause the Scheme system
+          to exit with an error.
+        </p><p>
+          The <code class="envar">printShared</code> configuration parameter (see
+          <a href="ch02.html#config-parameters" title="Configuration Parameters">the section called &#8220;Configuration Parameters&#8221;</a>), if set to
+          <code class="literal">true</code> enables <span class="emphasis"><em>SISC</em></span> to scan data for
+          circularity and data sharing before writing values. If such
+          sharing is found, an alternate printer is invoked which will
+          emit a representation compatible with the circular structure
+          representation described in the previous section.
+        </p><p>
+          Alternately, <span class="emphasis"><em>SISC</em></span> also supports SRFI-38, which describes
+          the functions <code class="function">write-showing-shared</code> and
+          <code class="function">read-with-shared-structure</code>.  
+        </p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ControlFeatures"></a>
+        Control Features
+      </h3></div></div></div><p>
+        In addition to the R<sup>5</sup>RS standard control features, two
+        additional forms, 
+        <code class="function">when</code> and <code class="function">unless</code>, are
+        supported by <span class="emphasis"><em>SISC</em></span>.
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2552345"></a>
+            <span class="emphasis"><em>syntax: </em></span>
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">when</span> <span class="methodparam"><span class="parameter">condition</span></span> <span class="methodparam"><span class="parameter">expression</span></span> [<span class="methodparam"><span class="parameter">expressions</span></span>] ...) =&gt; <span class="type">value</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Evaluates <em class="parameter"><code>condition</code></em>, an
+                expression.  If true, the expressions that follow are
+                evaluated, in order, the value of the last being
+                returned.  If not true, the result is unspecified.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2552432"></a>
+            <span class="emphasis"><em>syntax: </em></span>
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">unless</span> <span class="methodparam"><span class="parameter">condition</span></span> <span class="methodparam"><span class="parameter">expression</span></span> [<span class="methodparam"><span class="parameter">expressions</span></span>] ...) =&gt; <span class="type">value</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Evaluates <em class="parameter"><code>condition</code></em>, an
+                expression.  If false, the expressions that follow are
+                evaluated, in order, the value of the last being
+                returned.  If true, the result is unspecified.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2552521"></a>
+        Syntactic Extension
+      </h3></div></div></div><p>
+        <span class="emphasis"><em>SISC</em></span> provides a hygienic macro system that fully conforms to
+        the R<sup>5</sup>RS standard.  The macro system is provided by the
+        portable syntax-case macro expander.  In addition to R<sup>5</sup>RS
+        macros, the expander provides a more flexible 
+        macro definition tool called
+        <code class="function">syntax-case</code>.  A full description of the
+        capabilities of the expander is best found in the 
+        <a href="http://www.scheme.com/csug.html" target="_top">
+  	<em class="citetitle">Chez Scheme Users Guide</em>
+        </a>, specifically 
+        <a href="http://www.scheme.com/csug/syntax.html#g2154" target="_top">
+  	<em class="citetitle">Section 9.2, Syntax-Case</em>
+        </a>.  
+      </p><p>
+        In addition, <span class="emphasis"><em>SISC</em></span> supports non-hygienic, legacy macro support
+        in two forms; <code class="function">define-macro</code> and 
+        <code class="function">defmacro</code>.  These forms, found in older
+        Scheme code written for R<sup>4</sup>RS
+        compliant Scheme systems, should be used only
+        for executing legacy code which relies on it.  New code should
+        use the safer and more flexible <code class="function">syntax-case</code>
+        or the standard <code class="function">syntax-rules</code> macros.
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2552626"></a>
+            <span class="emphasis"><em>syntax: </em></span>
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">define-macro</span> <span class="methodparam"><span class="parameter">(name . args)</span></span> <span class="methodparam"><span class="parameter">body</span></span> ...)</code>
+          </p><p>
+            <span class="emphasis"><em>syntax: </em></span>
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">define-macro</span> <span class="methodparam"><span class="parameter">name</span></span> <span class="methodparam"><span class="parameter">transformer</span></span>)</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                In the first form, <code class="function">define-macro</code>
+                creates a macro transformer bound to
+                <em class="parameter"><code>name</code></em>, which when applied will
+                have raw s-expressions bound to one or more parameters
+                (<em class="parameter"><code>args</code></em>).  The <code class="literal">(name
+                . args)</code> name and formal parameter form is
+                identical to the short form for procedure definition
+                with <code class="function">define</code>.
+              </p><p>
+                The transformer's body will then, using the s-expressions bound
+                to its arguments, return a new s-expression that is the
+                result of the macro transformation.
+              </p><p>
+                The second form binds an arbitrary procedure to the
+                syntactic keyword <code class="literal">name</code>, using that
+                procedure to transform occurences of that named syntax
+                during future evaluations.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2552788"></a>
+            <span class="emphasis"><em>syntax: </em></span>
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">defmacro</span> <span class="methodparam"><span class="parameter">name</span></span> <span class="methodparam"><span class="parameter">args</span></span> <span class="methodparam"><span class="parameter">body</span></span> ...)</code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                <code class="function">defmacro</code> is another macro
+                definition form supported by some Scheme systems.  Its
+                semantics are equivalent to:
+                </p><pre class="programlisting">
+(define-macro (name . args) body ...)
+                </pre><p>
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ErrorHandling"></a>Errors and Error Handling</h2></div></div></div><p>
+      Errors can be raised by primitives in libraries and Scheme-level
+      code. <span class="emphasis"><em>SISC</em></span> provides a sophisticated mechanism for handling
+      these errors when they occur during program execution.
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="FailureContinuations"></a>Failure Continuations</h3></div></div></div><p>
+        During the execution of any program, there is always a
+        continuation that represents the <span class="emphasis"><em>rest</em></span> of
+        a computation.  In addition, one can imagine all the
+        activities that will occur as a result of an error.  This
+        sequence of actions is explicitly represented in <span class="emphasis"><em>SISC</em></span> as a
+        <span class="emphasis"><em>failure continuation</em></span>.
+      </p><p>
+        Two values must be applied to a failure continuation.  The
+        first is an error record, a datastructure which describes the
+        error (and may contain information about the name of the
+        function that generated the error, a descriptive message about
+        the error, etc.).  The second is the continuation of the
+        expression that raised the error.  All errors raised in <span class="emphasis"><em>SISC</em></span>
+        automatically and implicitly obtain and apply these values to
+        the active failure continuation.  Applying the error record
+        and error continuation to the failure continuation will not
+        return to the continuation of the application, unless that
+        continuation was captured and later invoked in a non-local
+        entrance.
+      </p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2552945"></a>Creation</h4></div></div></div><p>
+          A programmer may wish to augment current failure
+          continuation, choosing a different set of actions to occur
+          for a body of code if it raises an error.  To facilitate
+          this, <span class="emphasis"><em>SISC</em></span> provides the
+          <code class="function">with-failure-continuation</code> procedure.
+        </p><p>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              <a class="indexterm" name="id2552974"></a>
+                <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">with-failure-continuation</span> <span class="methodparam"><span class="parameter">handler</span></span> <span class="methodparam"><span class="parameter">thunk</span></span>) =&gt; <span class="type">value</span></code>
+            </p><p>
+              <a class="indexterm" name="id2553037"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">with/fc</span> <span class="methodparam"><span class="parameter">handler</span></span> <span class="methodparam"><span class="parameter">thunk</span></span>) =&gt; <span class="type">value</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  <code class="function">with-failure-continuation</code>
+                  takes as arguments a thunk (a zero-argument procedure) to
+                  be evaluated.  The thunk will be evaluated in the
+                  continuation of the <code class="function">with/fc</code>
+                  function, and with a failure continuation defined by
+                  the provided error handler.  If during the
+                  evaluation of the thunk an error is raised, the first,
+                  two argument procedure is called with values describing
+                  the error and its context.  If no error occurs, 
+                  value of the thunk is applied to the continuation of
+                  the <code class="function">with/fc</code> expression.
+                </p></blockquote></div><p>
+            </p></blockquote></div><p>
+        </p><p>
+          The error handler required as an argument to
+          <code class="function">with-failure-continuation</code> must accept
+          two values.  The first is a value containing information
+          about the error that occurred.  This is often an association
+          list containing a number of attributes of the error.  The
+          second is a procedure encapsulating the continuation that
+          was in place at the site of the error.  This continuation is
+          referred to as the <span class="emphasis"><em>error continuation</em></span>
+        </p><p>
+          When an error occurs, the error handler may choose one of
+          three courses in dealing with the error.  First, the handler
+          may choose to return an alternate value to be applied to the
+          continuation of the <code class="function">with/fc</code> expression.
+          Second, the handler may restart the computation from the
+          error site by invoking the error continuation with a value
+          that should be returned in place of the expression that
+          caused the error.  Finally, the handler may choose to
+          propagate the error (or a new error) to the failure
+          continuation of the <code class="function">with/fc</code> expression.
+          This can be done with the <code class="function">throw</code>
+          function described in <a href="ch03.html#RaisingErrors" title="Raising Errors">the section called &#8220;Raising Errors&#8221;</a>.
+        </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2553192"></a>Capture</h4></div></div></div><p>
+          The currently active failure continuation may be obtained
+          explicitly using the
+          <code class="function">call-with-failure-continuation</code>
+          procedure.  This continuation may be applied to appropriate
+          values at any time in the future.
+        </p><p>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              <a class="indexterm" name="id2553218"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">call-with-failure-continuation</span> <span class="methodparam"><span class="parameter">procedure</span></span>) =&gt; <span class="type">value</span></code>
+            </p><p>
+              <a class="indexterm" name="id2553264"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">call/fc</span> <span class="methodparam"><span class="parameter">procedure</span></span>) =&gt; <span class="type">value</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Calls the given one-argument procedure with the
+                  currently active failure continuation.
+                </p></blockquote></div><p>
+            </p></blockquote></div><p>
+        </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2553319"></a>Interaction with Ordinary Continuations</h4></div></div></div><p>
+          Failure continuations exist as an attribute of the ordinary
+          continuations of Scheme expressions.  Because of this, the
+          invocation of a continuation may cause a different failure
+          continuation to become active in the region of the captured
+          continuation.  Specifically, the failure continuation in place
+          at the <code class="function">call/cc</code> expression will be
+          reinstated when that continuation is later invoked.
+        </p><p>
+          Similarly, invoking a continuation that escapes a region of
+          code will cause any created failure continuations to be
+          abandoned, unless the region is itself captured in a
+          continuation and later invoked.
+        </p><p>
+          See also <a href="ch03.html#DynamicWind" title="dynamic-wind">the section called &#8220;<code class="function">dynamic-wind</code>&#8221;</a>.
+        </p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ErrorRecords"></a>Error Records</h3></div></div></div><p>
+        An error record is the value usually propagated with an error
+        in <span class="emphasis"><em>SISC</em></span>. It is a datastructure containing such information as
+        the location of the error, a descriptive message about the
+        error, and possibly other error metadata.  
+      </p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2553383"></a>Creating Error Records</h4></div></div></div><p>
+          Error records can be created in advance of actually 
+          raising an error with the <code class="function">make-error</code> function.  
+          The function allows the programmer to create error records that 
+          contain a location and a message or value.  No field of an
+          error record is required.
+        </p><p>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              <a class="indexterm" name="id2553409"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">make-error</span> [<span class="methodparam"><span class="parameter">location</span></span>] [<span class="methodparam"><span class="parameter">message</span></span>] [<span class="methodparam"><span class="parameter">arguments</span></span>] ...) =&gt; <span class="type">error-record</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Constructs an error record.  If present, a symbol,
+                  and not <code class="literal">#f</code>, the first argument
+                  is the location of the error, which may be a symbol
+                  equivalent to a function identifier.
+                  If present, the message is a format-string processed
+                  with the optional arguments that follow as by
+                  <code class="function">format</code> in SRFI-28.  The
+                  remaining arguments must only be present if the
+                  format-string is present as the message.
+                </p></blockquote></div><p>
+            </p><p>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">make-error</span> [<span class="methodparam"><span class="parameter">location</span></span>] <span class="methodparam"><span class="parameter">error-value</span></span>) =&gt; <span class="type">error-record</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Constructs an error record.  If present, a symbol,
+                  and not <code class="literal">#f</code>, the first argument is
+                  the location of the error. The second argument is an
+                  arbitrary Scheme value that will be the error value.
+                  This value will be accessible with the
+                  <code class="function">error-message</code> function.
+                </p></blockquote></div><p>
+            </p></blockquote></div><p>
+        </p><p>
+          None of the fields of an error-record are required.  One may
+          create an error record with no information, an error record
+          with only a location, or an error record with only a message
+          or value.  Below are some examples (for an explanation of
+          the <code class="function">throw</code> procedure see <a href="ch03.html#RaisingErrors" title="Raising Errors">the section called &#8220;Raising Errors&#8221;</a>).
+        </p><div class="informalexample"><pre class="programlisting">
+(throw (make-error))
+; =&gt; Error.
+
+(throw (make-error 'foo))
+; =&gt; Error in foo.
+
+(throw (make-error "something ~a happened" 'bad))
+; =&gt; Error: something bad happened
+
+(throw (make-error 3))
+; =&gt; Error: 3
+
+(throw (make-error #f 'foo))
+; =&gt; Error: foo
+
+(throw (make-error 'foo "something ~a happened" 'bad))
+; =&gt; Error in foo: something bad happened
+          </pre></div><p>
+          In addition, an error record may be created that adds
+          additional information to an error record that was already
+          created.  This is useful when an error was caught in an
+          error handler, and one wishes to raise an error from the
+          handler that contains additional information about the local
+          location or error message as well as the error that was
+          caught.
+        </p><p>
+          </p><div class="blockquote"><blockquote class="blockquote"><a class="indexterm" name="id2553632"></a><p>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">make-nested-error</span> <span class="methodparam"><span class="parameter">local-error</span></span> <span class="methodparam"><span class="parameter">parent-error</span></span> <span class="methodparam"><span class="parameter">parent-error-continuation</span></span>) =&gt; <span class="type">error-record</span></code>
+            </p><p>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">make-nested-error</span> <span class="methodparam"><span class="parameter">local-error</span></span> <span class="methodparam"><span class="parameter">exception</span></span>) =&gt; <span class="type">error-record</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  The first version creates an error record which has
+                  <em class="parameter"><code>parent-error</code></em> (and its
+                  associated
+                  <em class="parameter"><code>parent-error-continuation</code></em>) as
+                  the root cause of an error-record passed as
+                  <em class="parameter"><code>local-error</code></em>.
+                </p><p>
+                  The second version creates an error record which has
+                  <em class="parameter"><code>exception</code></em> (see <a href="ch03.html#Exceptions" title="Exceptions">the section called &#8220;Exceptions&#8221;</a>) as the root cause of an error
+                  passed as <em class="parameter"><code>local-error</code></em>.
+                </p></blockquote></div><p>
+            </p></blockquote></div><p>
+        </p><p> 
+          An example of the creating, throwing, and display of a
+          nested error follows.
+        </p><div class="informalexample"><pre class="programlisting">
+(with-failure-continuation
+  (lambda (m e)
+    (throw (make-nested-error 
+            (make-error 'foo "could not call bar.") m e)))
+  (lambda ()
+    (error 'bar "something went wrong.")))
+;=&gt; Error in foo: could not call bar.
+;   Caused by Error in bar: something went wrong.
+          </pre></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2553829"></a>Accessors</h4></div></div></div><p>
+          An error record contains several useful
+          pieces of information.  The following functions allow the
+          programmer to access that information.
+        </p><p>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              <a class="indexterm" name="id2553847"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">error-location</span> <span class="methodparam"><span class="parameter">error-record</span></span>) =&gt; <span class="type">symbol</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Obtains the location of the error, a symbol which
+                  may be a function identifier.  If there is no
+                  location specified, <code class="literal">#f</code> is
+                  returned.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2553909"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">error-message</span> <span class="methodparam"><span class="parameter">error-record</span></span>) =&gt; <span class="type">value</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Obtains the message of the error, which may
+                  be a string which is a descriptive message of the
+                  error, or an arbitrary value (as created by the
+                  second form of <code class="function">make-error</code>).
+                  If there is no message specified, 
+                  <code class="literal">#f</code> is returned.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2553979"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">error-parent-error</span> <span class="methodparam"><span class="parameter">error-record</span></span>) =&gt; <span class="type">error-record</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Obtains the parent error of the error.
+                  This is the value of the second argument to
+                  the <code class="function">make-nested-error</code> function.
+                  If there is no parent specified, <code class="literal">#f</code> is
+                  returned.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2554048"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">error-parent-continuation</span> <span class="methodparam"><span class="parameter">error-record</span></span>) =&gt; <span class="type">error-continuation</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Obtains the parent error continuation of the
+                  error. This is the value of the third argument to
+                  the <code class="function">make-nested-error</code> function.
+                  If there is no parent specified,
+                  <code class="literal">#f</code> is returned.
+                </p></blockquote></div><p>
+            </p></blockquote></div><p>
+        </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="RaisingErrors"></a>Raising Errors</h4></div></div></div><p>
+          The fundamental mechanism for raising an error in
+          application code is provided by  the <code class="function">throw</code> procedure.
+        </p><p>
+          </p><div class="blockquote"><blockquote class="blockquote"><a class="indexterm" name="id2554144"></a><p>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">throw</span> <span class="methodparam"><span class="parameter">error-record</span></span> [<span class="methodparam"><span class="parameter">error-continuation</span></span>]) =&gt; <span class="type">does not return</span></code>
+            </p><p>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">throw</span> <span class="methodparam"><span class="parameter">exception</span></span>) =&gt; <span class="type">does not return</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  The first verison applies the given error record to
+                  the current failure continuation.  If provided, the
+                  error continuation is designated by the optional
+                  parameter.  If not, the continuation of the throw
+                  expression is used.
+                </p><p>
+                  The second form applies the current failure
+                  continuation to the error record and error
+                  continuation extracted from the supplied
+                  <em class="parameter"><code>exception</code></em> (see <a href="ch03.html#Exceptions" title="Exceptions">the section called &#8220;Exceptions&#8221;</a>).
+                </p></blockquote></div><p>
+            </p></blockquote></div><p>
+        </p><p>
+          If invoked from an error-handler with the values of the handler's 
+          formal parameters, throw has the effect of
+          propagating the error in a manner that is equivalent to the
+          absence of the modified failure-continuation. 
+        </p><p>
+          <code class="function">throw</code> could be defined in terms of
+          <code class="function">call-with-failure-continuation</code>
+          as:
+          </p><pre class="programlisting">
+(define (throw error . args)
+  (call-with-failure-continuation
+     (lambda (fk)
+       (if (null? args)
+           (call-with-current-continuation (lambda (k) (fk error k)))
+           (fk error (car args))))))
+          </pre><p>
+        </p><p>
+          For convenience and compatibility with SRFI-23, the function
+          <code class="function">error</code> is provided.  Its syntax is
+          identical to <code class="function">make-error</code>, but it
+          immediately applies the resulting error record to the
+          current failure continuation with the current continuation
+          as the error continuation.
+        </p><p>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              <a class="indexterm" name="id2554329"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">error</span> [<span class="methodparam"><span class="parameter">location</span></span>] [<span class="methodparam"><span class="parameter">message</span></span>] [<span class="methodparam"><span class="parameter">arguments</span></span>] ...) =&gt; <span class="type">does not return</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Raises an error record whose location, if provided, is
+                  <em class="parameter"><code>location</code></em>, a symbol; and whose error
+                  message, if present, is <em class="parameter"><code>message</code></em>.
+                  If provided, the error message is a format-string that
+                  is processed, with the optional
+                  <em class="parameter"><code>argument</code></em>s, as with the
+                  <code class="function">format</code> function in SRFI 28.
+                </p></blockquote></div><p>
+            </p><p>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">error</span> [<span class="methodparam"><span class="parameter">location</span></span>] <span class="methodparam"><span class="parameter">error-value</span></span>) =&gt; <span class="type">does not return</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Raises an error record whose location, if present, is the
+                  symbol <em class="parameter"><code>location</code></em>, and 
+                  and whose error-value is any arbitrary Scheme value.
+                </p></blockquote></div><p>
+            </p></blockquote></div><p>
+        </p><p>
+          <code class="function">error</code> can be implemented in terms of
+          <code class="function">throw</code> and <code class="function">make-error</code>:
+          </p><pre class="programlisting">
+(define (error . args)
+  (throw (apply make-error args)))
+          </pre><p>
+        </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="Exceptions"></a>Exceptions</h4></div></div></div><p>
+          Exceptions in <span class="emphasis"><em>SISC</em></span> are a simple wrapper around an error
+          record and an associated error continuation.
+        </p><p>
+          Exceptions are created with
+        </p><p>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              <a class="indexterm" name="id2554559"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">make-exception</span> <span class="methodparam"><span class="parameter">error-record</span></span> <span class="methodparam"><span class="parameter">error-continuation</span></span>) =&gt; <span class="type">exception</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Constructs an exception from an
+                  <em class="parameter"><code>error-record</code></em> and an
+                  <em class="parameter"><code>error-continuation</code></em>, e.g. as
+                  obtained from the arguments of a handler procedure
+                  passed to <code class="function">with-fc</code>.
+                </p></blockquote></div><p>
+            </p></blockquote></div><p>
+        </p><p>
+          Accessors and a type-test are provided by the following
+          procedures:
+        </p><p>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              <a class="indexterm" name="id2554659"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">exception-error</span> <span class="methodparam"><span class="parameter">exception</span></span>) =&gt; <span class="type">error-record</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Returns the <em class="parameter"><code>exception</code></em>'s error
+                  record.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2554719"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">exception-continuation</span> <span class="methodparam"><span class="parameter">exception</span></span>) =&gt; <span class="type">error-continuation</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Returns the <em class="parameter"><code>exception</code></em>'s error
+                  continuation.
+                </p></blockquote></div><p>
+            </p><p>
+              <a class="indexterm" name="id2554779"></a>
+              <span class="emphasis"><em>procedure: </em></span> 
+              <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">exception?</span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">#t/#f</span></code>
+              </p><div class="blockquote"><blockquote class="blockquote"><p>
+                  Returns #t if <em class="parameter"><code>value</code></em> is an
+                  exception object, #f otherwise.
+                </p></blockquote></div><p>
+            </p></blockquote></div><p>
+        </p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2554839"></a>Examples</h3></div></div></div><p>
+	At this point, a few examples may be helpful:
+      </p><div class="informalexample"><pre class="programlisting">
+(+ 1 (/ 1 0) 3)
+; =&gt; <span class="emphasis"><em>A divide by zero error is raised</em></span>
+	</pre></div><div class="example"><a name="id2554862"></a><p class="title"><b>Example 3.3. Return a new value</b></p><div class="example-contents"><pre class="programlisting">
+(with-failure-continuation
+    (lambda (error-record error-k)
+      'error)
+  (lambda () (+ 1 (/ 1 0) 3)))
+; =&gt; <span class="emphasis"><em>The symbol</em></span> 'error
+	</pre></div></div><br class="example-break"><div class="example"><a name="id2554882"></a><p class="title"><b>Example 3.4. Restart with a different value</b></p><div class="example-contents"><pre class="programlisting">
+(with-failure-continuation
+    (lambda (error-record error-k)
+      (error-k 2))
+  (lambda () (+ 1 (/ 1 0) 3)))
+; =&gt; 6
+	</pre></div></div><br class="example-break"><div class="example"><a name="id2554898"></a><p class="title"><b>Example 3.5. Propagate the error</b></p><div class="example-contents"><pre class="programlisting">
+(with-failure-continuation
+    (lambda (error-record error-k)
+      (throw error-record error-k))
+  (lambda () (+ 1 (/ 1 0) 3)))
+; =&gt; <span class="emphasis"><em>A divide by zero error is raised</em></span>
+	</pre></div></div><br class="example-break"><div class="example"><a name="properror"></a><p class="title"><b>Example 3.6. Propagate a different error with the same error continuation</b></p><div class="example-contents"><pre class="programlisting">
+(with-failure-continuation
+    (lambda (error-record error-k)
+      (throw (make-error '/ "could not perform the division.") error-k))
+  (lambda () (+ 1 (/ 1 0) 3)))
+; =&gt; <span class="emphasis"><em>An error is raised: Error in /: could not perform the division.</em></span>
+	</pre></div></div><br class="example-break"><div class="example"><a name="raisenewerror"></a><p class="title"><b>Example 3.7. Raise a new error</b></p><div class="example-contents"><pre class="programlisting">
+(with-failure-continuation
+    (lambda (error-record error-k)
+      (error 'example-function "could not evaluate the expression."))
+  (lambda () (+ 1 (/ 1 0) 3)))
+; =&gt; <span class="emphasis"><em>An error is raised: Error in example-function: could not evaluate the expression.</em></span>
+	</pre></div></div><br class="example-break"><p>
+        Note that the difference between <a href="ch03.html#properror" title="Example 3.6. Propagate a different error with the same error continuation">Example 3.6, &#8220;Propagate a different error with the same error continuation&#8221;</a> and 
+        <a href="ch03.html#raisenewerror" title="Example 3.7. Raise a new error">Example 3.7, &#8220;Raise a new error&#8221;</a> is that in the former,
+        the computation can still be restarted from the second
+        argument of the addition if an outside handler catches the
+        newly raised exception and applies the continuation.  This is
+        not true in the last example, as its a new error whose
+        continuation is the same as the
+        <code class="function">with-failure-continuation</code> expression.
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="DynamicWind"></a><code class="function">dynamic-wind</code></h3></div></div></div><p>
+        R<sup>5</sup>RS does not specify the behavior of
+        <code class="function">dynamic-wind</code> in the case
+        where an error is raised while evaluating the 
+        <span class="emphasis"><em>during</em></span> thunk.  <span class="emphasis"><em>SISC</em></span> chooses to view
+        an error raised in that section as an instance of the
+        dynamic extent being exited.  In other words, if an error is
+        raised in the dynamic extent of a dynamic-wind expression,
+        <span class="emphasis"><em>SISC</em></span> will ensure that the <span class="emphasis"><em>after</em></span> thunk
+        is evaluated before the error is propagated to the
+        failure-continuation of the dynamic-wind expression.
+      </p><div class="example"><a name="id2555054"></a><p class="title"><b>Example 3.8. Errors and <code class="function">dynamic-wind</code></b></p><div class="example-contents"><pre class="programlisting">
+(define x 0)
+(dynamic-wind (lambda () (set! x (+ x 1)))
+              (lambda () (/ 1 0))
+              (lambda () (set! x (+ x 1))))
+
+; =&gt; A divide by zero error is raised, and the value of x is 2
+        </pre></div></div><br class="example-break"><p>
+        If an error is raised in either the
+        <span class="emphasis"><em>before</em></span> or <span class="emphasis"><em>after</em></span>
+        thunks, no additional measures are taken.  The error is
+        propagated to the failure-continuation of the dynamic-wind
+        as if the dynamic-wind call was an ordinary function
+        application.  Explicitly, if an error is raised from
+        <span class="emphasis"><em>before</em></span>, neither
+        <span class="emphasis"><em>during</em></span> nor <span class="emphasis"><em>after</em></span>
+        will be executed.  If an error is raised in
+        <span class="emphasis"><em>after</em></span>, the results of evaluating
+        <span class="emphasis"><em>before</em></span> and <span class="emphasis"><em>during</em></span>
+        remain valid.  
+      </p><p>
+        Also noteworthy is what happens if a continuation is invoked
+        that exits from either the <span class="emphasis"><em>before</em></span> or
+        <span class="emphasis"><em>after</em></span> thunks.  Such a case is treated
+        just as if a continuation was invoked during the evaluation
+        of an operand to an application.  This is to say that no
+        additional steps will be taken by <span class="emphasis"><em>SISC</em></span>.  If
+        <span class="emphasis"><em>before</em></span> is escaped by a continuation invocation,
+        neither <span class="emphasis"><em>during</em></span> nor <span class="emphasis"><em>after</em></span>
+        will be executed.  If <span class="emphasis"><em>after</em></span> is escaped,
+        the results of <span class="emphasis"><em>before</em></span> and
+        <span class="emphasis"><em>during</em></span> remain valid.
+      </p><p>
+        In summary, extraordinary evaluation is only possible during
+        the evaluation of the <span class="emphasis"><em>during</em></span> thunk. The
+        <span class="emphasis"><em>before</em></span> and <span class="emphasis"><em>after</em></span>
+        thunks are evaluated with the dynamic environment and
+        dynamic-wind stack of the call to dynamic-wind itself.
+      </p></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="SymbolicEnvironments"></a>
+      Symbolic Environments and Property Maps
+    </h2></div></div></div><p>
+      Symbolic environments and property maps 
+      provide additional named global environments useful for storing 
+      program specific data without exposing it to the general
+      purpose top-level environment.
+    </p><p>
+      A property map is dictionary structure tied
+      to the interaction environment which maps symbolic
+      names to Scheme values.  First-class symbolic environments provide
+      a similar mapping, but can be used
+      as first class values (including as an argument to <code class="function">eval</code>).
+      Symbolic environments are used to implement <span class="emphasis"><em>SISC</em></span>'s global (top level)and
+      report environments.
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="AccessingSymbolicEnvironments"></a>
+        Access Functions
+      </h3></div></div></div><p>
+        Access to symbolic environments is performed through the
+        <code class="function">getprop</code> and <code class="function">putprop</code>
+        functions.  All symbolic environment operations are thread
+        safe.
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2555252"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">getprop</span> <span class="methodparam"><span class="parameter">binding-name</span></span> <span class="methodparam"><span class="parameter">plist-name</span></span> [<span class="methodparam"><span class="parameter">default-value</span></span>]) =&gt; <span class="type">value</span></code>
+          </p><p>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">getprop</span> <span class="methodparam"><span class="parameter">binding-name</span></span> <span class="methodparam"><span class="parameter">environment</span></span> [<span class="methodparam"><span class="parameter">default-value</span></span>]) =&gt; <span class="type">value</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Attempts a lookup of <em class="parameter"><code>binding-name</code></em>
+                in an environment.
+              </p><p>
+                In the first form, the the binding is resolved in
+                the interaction-environment's property list named
+                <em class="parameter"><code>plist-name</code></em>, a symbol.  If the
+                environment is not found or the binding doesn't exist,
+                <em class="parameter"><code>default-value</code></em> is returned if
+                provided, otherwise <code class="literal">#f</code> is
+                returned.
+              </p><p>
+                In the second form, the binding is resolved in a first-class
+                symbolic environment.
+              </p></blockquote></div><p>
+          </p><p>
+            <a class="indexterm" name="id2555432"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">putprop</span> <span class="methodparam"><span class="parameter">binding-name</span></span> <span class="methodparam"><span class="parameter">plist-name</span></span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">undefined</span></code>
+          </p><p>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">putprop</span> <span class="methodparam"><span class="parameter">binding-name</span></span> <span class="methodparam"><span class="parameter">environment</span></span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">undefined</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Sets the value of a binding named with the 
+                symbol <em class="parameter"><code>binding-name</code></em> in a
+                property list or first class symbolic environment.
+              </p><p>
+                In the first form, the binding is resolved using a 
+                symbolic name
+                (<em class="parameter"><code>plist-name</code></em>) in the interaction
+                environment's property lists. If the
+                map does not yet exist, it is created as an 
+                empty map.
+              </p><p>
+                In the second form, the binding is resolved in the
+                provided first class symbolic environment.
+                If the binding does not yet exist in the given
+                environment, it is created.  If a binding previously
+                existed, its previous value is discarded.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ObtainingSymbolicEnvironments"></a> 
+        Obtaining and Naming
+      </h3></div></div></div><p>
+        Symbolic environments are a first class datatype in <span class="emphasis"><em>SISC</em></span>.  The
+        top-level environment itself is merely a special cased symbolic
+        environment.  To obtain the top-level environment as a first
+        class value, one can use the 
+        <code class="function">interaction-environment</code> function that is an
+        optional procedure in R<sup>5</sup>RS.  Another useful environment is the
+        R<sup>5</sup>RS report environment available by calling:
+        </p><pre class="programlisting">
+(scheme-report-environment 5)
+        </pre><p>
+        Each call to <code class="function">scheme-report-environment</code>
+        returns a new environment that contains only the bindings
+        available in the Scheme report.  Finally, the initial
+        environment available to the programmer when <span class="emphasis"><em>SISC</em></span> starts can
+        be retrieved using the
+        <code class="function">sisc-initial-environment</code> function:
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2555682"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">sisc-initial-environment</span>) =&gt; <span class="type">environment</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Returns the initial <span class="emphasis"><em>SISC</em></span> interaction environment.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        Like <code class="function">scheme-report-environment</code>, each call
+        to <code class="function">sisc-initial-environment</code> returns a
+        distinct environment which contains only the bindings initially
+        available when <span class="emphasis"><em>SISC</em></span> starts.  An interesting use of this would
+        be to define one or more distinct initial-environments, bound to
+        toplevel variables.  One could then define Scheme code and data
+        in each environment that can use the full <span class="emphasis"><em>SISC</em></span> language but
+        cannot see any bindings in other environments.
+      </p><p>
+        Finally, R<sup>5</sup>RS states that it is an error to modify the
+        contents of a top-level variable that has not yet been created.
+        <span class="emphasis"><em>SISC</em></span> adheres to the standard, and raises an error when any
+        unbound variable in a symbolic environment (including the top-level)
+        is modified using <code class="function">set!</code>.  This
+        differs from some Scheme systems that will silently create the
+        binding and set it to the new value.
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ChainedEnvironments"></a>Chained Symbolic Environments</h3></div></div></div><p>
+        <span class="emphasis"><em>SISC</em></span> contains a mechanism for creating a symbolic environment
+        which is <span class="emphasis"><em>chained</em></span> to another environment, such
+        that new and modified bindings are created in the new, child environment, 
+        but bindings may also be resolved from the parent if not present in the
+        child.  <span class="emphasis"><em>SISC</em></span> uses this functionality to protect the contents of the
+        R<sup>5</sup>RS and <span class="emphasis"><em>SISC</em></span> initial environments from modification.  One can
+        use it in a similar way, protecting the bindings in the parent for
+        sandboxing or other purposes.  
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2555836"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">make-child-environment</span> <span class="methodparam"><span class="parameter">parent-environment</span></span>) =&gt; <span class="type">environment</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Creates a new environment, initially empty of its own bindings,
+                but which chains to the provided <em class="parameter"><code>parent-environment</code></em>
+                when resolving a binding.  
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p><p>
+        </p><div class="blockquote"><blockquote class="blockquote"><p>
+            <a class="indexterm" name="id2555904"></a>
+            <span class="emphasis"><em>procedure: </em></span> 
+            <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">parent-environment</span> <span class="methodparam"><span class="parameter">environment</span></span>) =&gt; <span class="type">environment</span></code>
+            </p><div class="blockquote"><blockquote class="blockquote"><p>
+                Obtains the parent environment of a symbolic environment.
+                If the given environment has no parent (e.g. is not chained),
+                <code class="literal">#f</code> is returned.
+              </p></blockquote></div><p>
+          </p></blockquote></div><p>
+      </p></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="MiscellaneousFunctions"></a>
+      Miscellaneous Functions
+    </h2></div></div></div><p>
+      The remaining functions in this chapter are not easily classified, but 
+      nevertheless are useful and worth describing.
+    </p><p>
+      </p><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" name="id2555992"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">circular?</span> <span class="methodparam"><span class="parameter">datum</span></span>) =&gt; <span class="type">#t/#f</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Returns <code class="literal">#t</code> if the given datum
+              is circular.  A datum is circular if it is a compound
+              datum (lists or vectors for example), and one of its
+              elements is a reference to itself, or a reference to a
+              sub-element which creates a cycle.
+            </p></blockquote></div><p>
+        </p><p>
+          <a class="indexterm" name="id2556054"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">compose</span> [<span class="methodparam"><span class="parameter">function</span></span>] ...) =&gt; <span class="type">procedure</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              <code class="function">compose</code> takes zero or more
+              functions of one argument and returns a new function of
+              one argument that will apply to that argument to the
+              selected functions in reverse order.  If no
+              functions are provided, the identity function is
+              returned.
+            </p><p>
+              For example, the function <code class="function">caddr</code>
+              could be simply defined as:
+            </p><pre class="programlisting">
+(define caddr (compose car cdr cdr))
+            </pre></blockquote></div><p>
+        </p><p>
+          <a class="indexterm" name="id2556135"></a>
+          <span class="emphasis"><em>procedure: </em></span> 
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">iota</span> <span class="methodparam"><span class="parameter">n</span></span>) =&gt; <span class="type">pair</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              The <code class="function">iota</code> function produces a list
+              whose elements are the integers 0 to
+              <em class="parameter"><code>n</code></em>-1 inclusive.
+            </p></blockquote></div><p>
+        </p><p>
+          <a class="indexterm" name="id2556200"></a>
+          <span class="emphasis"><em>syntax: </em></span>
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">time</span> [<span class="methodparam"><span class="parameter">iterations</span></span>] <span class="methodparam"><span class="parameter">expression</span></span>) =&gt; <span class="type">list</span></code>
+          </p><div class="blockquote"><blockquote class="blockquote"><p>
+              Evaluates the given expression
+              <em class="parameter"><code>iterations</code></em> times, or if
+              <em class="parameter"><code>iterations</code></em> is not provided, only
+              once.  When complete, a list is returned of the
+              following form:
+              </p><pre class="programlisting">
+(<span class="emphasis"><em>result</em></span> (<span class="emphasis"><em>n</em></span> ms))
+              </pre><p>
+              where <span class="emphasis"><em>result</em></span> is the Scheme value
+              that resulted from the last evaluation of the
+              expression, and <span class="emphasis"><em>n</em></span> is the number of
+              milliseconds taken to evaluate the expression.  If more
+              than one iteration occurred, then the average number of
+              milliseconds elapsed during each iteration is returned.
+            </p></blockquote></div><p>
+        </p></blockquote></div><p>
+    </p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.id2550394" href="#id2550394">2</a>] </sup>
+            Essentially arbitrary, see <a href="apd.html#Limits" title="Limits">the section called &#8220;Limits&#8221;</a> for a
+            discussion of the physical limits of number representation
+          </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 2. 
+    Installation and Invocation
+   </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 4. 
+    Debugging Facilities
+  </td></tr></table></div></body></html>

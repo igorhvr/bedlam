@@ -1,0 +1,4 @@
+The example directory contains a sample SISC web application. The
+"all" target in the main ant build file will produce a sisc.war file
+in examples/dist. You should be able to deploy that war file in any
+J2EE app server.

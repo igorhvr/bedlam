@@ -1,0 +1,58 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Appendix B. R5RS Liberties and Violations</title><link rel="stylesheet" href="sss.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.71.0"><link rel="start" href="index.html" title="SISC for Seasoned Schemers"><link rel="up" href="index.html" title="SISC for Seasoned Schemers"><link rel="prev" href="apa.html" title="Appendix A. Errata"><link rel="next" href="apc.html" title="Appendix C. Troubleshooting"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Appendix B. R<sup>5</sup>RS Liberties and Violations</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="apa.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="apc.html">Next</a></td></tr></table><hr></div><div class="appendix" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="R5RSViolations"></a>Appendix B. R<sup>5</sup>RS Liberties and Violations</h2></div></div></div><p>
+      This section lists all ways in which <span class="emphasis"><em>SISC</em></span> interprets the
+      R<sup>5</sup>RS specification, where the standard is not particular clear.
+      Such interpretations may allow non-portable code to be written
+      and executed on <span class="emphasis"><em>SISC</em></span>. Additionally, all known R<sup>5</sup>RS violations
+      are listed.  Actual violations are considered <span class="emphasis"><em>SISC</em></span> bugs, and
+      have a high priority for being fixed.  Violations of the
+      standard are written in <span class="bold"><strong>bold text</strong></span>.
+    </p><p>
+      </p><div class="orderedlist"><ol type="1"><li><p>2.3 - 
+	  <span class="emphasis"><em>SISC</em></span> allows identifiers to start with
+	    '+', '-', or '.' if they cannot be read as numbers.
+	  </p></li><li><p>2.3 - 
+	    <span class="emphasis"><em>SISC</em></span> uses the reserved characters '[' and ']' as
+	    synonyms for '(' and ')' respectively.
+	  </p></li><li><p>2.3 - 
+	    <span class="emphasis"><em>SISC</em></span> does not raise any warning or error when
+	    encountering the reserved characters "[]{}|", and allows
+	    "{}|" to appear in identifiers.
+	  </p></li><li><p>4.1.3 - 
+	    <span class="emphasis"><em>SISC</em></span> does not distinguish between () and the quoted
+	    empty list '().  
+	  </p></li><li><p>6.2.3 - 
+	    The standard desires that that operations such as
+	    <code class="function">sqrt</code> try to provide exact results
+	    when given exact arguments.  While <span class="emphasis"><em>SISC</em></span> meets the requirement
+for <code class="function">sqrt</code>, it is not clear what other mathematical
+	    functions should have this behavior.  <span class="emphasis"><em>SISC</em></span> takes no
+	    heroic efforts to meet this requirement.
+	  </p></li><li><p>6.2.6 - 
+	    <span class="emphasis"><em>SISC</em></span> allows radixes other than those specified in the
+	    contract for <code class="function">number-&gt;string</code> and
+	    <code class="function">string-&gt;number</code>.  In particular,
+	    any radix up to 36 is allowed, and any unsupported value
+	    causes <span class="emphasis"><em>SISC</em></span> to revert to base 10.
+	  </p></li><li><p><span class="bold"><strong>6.5 - <span class="emphasis"><em>SISC</em></span> currently returns
+          an environment from the <code class="function">scheme-report-environment
+          </code> which contains 
+          four bindings not specified in R<sup>5</sup>RS, bindings which
+          are needed by R<sup>5</sup>RS syntactic keywords.
+         </strong></span></p></li><li><p><span class="bold"><strong>6.6.2 - <span class="emphasis"><em>SISC</em></span> currently only
+	    warns when end-of-file is reached in
+	    <code class="function">read</code>, rather than signaling an
+	    error.  The unterminated datum is discarded.
+            </strong></span>
+	  </p></li></ol></div><p>
+    </p><p>
+      All of the liberties described above are implemented for the
+      convenience of the programmer. If desired,
+      <span class="emphasis"><em>strict</em></span> R<sup>5</sup>RS syntax and semantics may be
+      enabled with the <code class="envar">strictR5RSCompliance</code>
+      configuration parameter (see <a href="ch02.html#config-parameters" title="Configuration Parameters">the section called &#8220;Configuration Parameters&#8221;</a>), causing <span class="emphasis"><em>SISC</em></span> to raise errors
+      in all R<sup>5</sup>RS situations that result in "an error", as well as
+      respect the lexical syntax's reserved characters. When in
+      <span class="emphasis"><em>strict</em></span> compliance mode, the above mentioned
+      deviations no longer apply and <span class="emphasis"><em>SISC</em></span> is entirely R<sup>5</sup>RS
+      compliant.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="apa.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="apc.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Appendix A. Errata </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Appendix C. Troubleshooting</td></tr></table></div></body></html>

@@ -1,0 +1,57 @@
+<project default="compile" basedir=".">
+
+  <property file="build.properties"/>
+  <property environment="env"/>
+  <property name="deploy.home" value="${env.CATALINA_HOME}/webapps"/>
+  <property name="sisc.home"      value="${env.SISC_HOME}"/>
+  <property name="dist.home"      value="dist"/>
+  <property name="deploy.name"    value="sisc"/>
+
+<!-- ==================== All Target ==================================== -->
+  <target name="all"
+          depends="clean,dist"
+          description="Clean build and dist, then rebuild"/>
+
+<!-- ==================== Clean Target ==================================== -->
+  <target name="clean"
+      description="Delete old build, dist and deploy directories">
+
+    <delete dir="${dist.home}"/>
+  </target>
+
+<!-- ==================== Dist Target ===================================== -->
+
+  <target name="dist"
+          description="Build war file">
+     <mkdir dir="${dist.home}"/>
+     <copy todir="${dist.home}/${deploy.name}">
+       <fileset dir="web"/>
+     </copy>
+     <mkdir dir="${dist.home}/${deploy.name}/WEB-INF/lib"/>
+     <copy todir="${dist.home}/${deploy.name}/WEB-INF/lib"
+           file="${sisc.home}/sisc.jar"/>
+     <copy todir="${dist.home}/${deploy.name}/WEB-INF/lib"
+           file="${sisc.home}/sisc-opt.jar"/>
+     <copy todir="${dist.home}/${deploy.name}/WEB-INF/lib"
+           file="${sisc.home}/sisc-heap.jar"/>
+     <copy todir="${dist.home}/${deploy.name}/WEB-INF/lib"
+           file="../sisc-servlets.jar"/>
+     <copy todir="${dist.home}/${deploy.name}/WEB-INF/lib"
+           file="${sisc.home}/sisc-lib.jar"/>
+     <copy todir="${dist.home}/${deploy.name}/scheme">
+       <fileset dir="../scheme" includes="*.scm"/>
+     </copy>
+     <jar jarfile="${dist.home}/${deploy.name}.war"
+        basedir="${dist.home}/${deploy.name}"/>
+  </target>
+
+<!-- ==================== Deploy Target =================================== -->
+
+  <target name="deploy"
+          depends="dist">
+    <copy todir="${deploy.home}">
+      <fileset dir="${dist.home}" includes="*.war"/>
+    </copy>
+  </target>
+
+</project>

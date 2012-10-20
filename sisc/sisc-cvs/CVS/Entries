@@ -1,0 +1,24 @@
+/.classpath/1.3/Fri Feb 23 13:42:01 2007//
+/.cvsignore/1.6/Wed Jul  2 23:59:40 2003//
+/.project/1.1/Sat May 31 18:04:53 2003//
+/COPYING/1.1/Fri Aug  1 21:44:00 2003//
+/ChangeLog/1.272/Thu Nov  8 14:30:23 2007//
+/GOALS/1.1/Fri Aug  1 21:44:00 2003//
+/LICENSE.txt/1.3/Tue Feb  6 18:45:36 2007//
+/README/1.5/Tue Feb  6 18:45:36 2007//
+/TODO/1.6/Tue May 25 19:16:40 2004//
+/build.xml/1.239/Sat Jan 20 18:33:49 2007//
+/install-srfi22.sh/1.3/Sun Aug 13 12:19:19 2006//
+/maven.xml/1.2/Sun Jan 16 15:56:08 2005//
+/project.properties/1.1/Sun Jan 16 15:56:08 2005//
+/project.xml/1.2/Sun Jan 16 15:56:08 2005//
+/sisc.bat/1.2/Tue Sep  7 13:21:34 2004//
+/sisc.sh/1.10/Tue Feb 21 15:49:14 2006//
+/test.scm/1.1/Thu Sep 14 15:04:54 2006/-kb/
+D/.settings////
+D/debian////
+D/dist////
+D/doc////
+D/lib////
+D/src////
+D/tests////

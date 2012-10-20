@@ -1,0 +1,4 @@
+./logs/error.log[2011-11-21 10:59:02] Unexpected </aiml>; rest of file ignored.
+./logs/error.log[2011-11-21 10:59:02]   (Line 65, "/home/igorhvr/idm/sisc-contrib/irc/scheme/sarah/anna/conf/../anna_brain//test.aiml")
+./logs/error.log[2011-11-21 11:00:48] Unexpected </aiml>; rest of file ignored.
+./logs/error.log[2011-11-21 11:00:48]   (Line 65, "/home/igorhvr/idm/sisc-contrib/irc/scheme/sarah/anna/conf/../anna_brain//test.aiml")
