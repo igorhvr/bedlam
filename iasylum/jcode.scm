@@ -132,6 +132,8 @@
      jnull
      initialize-s2j-exception-handling
      display-java-stack-trace
+     key-value->jmap
+     key-jvalue->jmap
    )
   (import s2j)
   (include "jcode-code.scm"))

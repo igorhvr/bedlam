@@ -13,6 +13,7 @@
 
 
 (define-generic-java-method |eval|)
+
 (define-generic-java-method |set|)
 
 (define-java-class |iu.ThreadLocalVariableManager|)
@@ -134,6 +135,36 @@
        (else  (java-wrap v)) ; Ok. I give up.
        )))
 
+(define-java-classes <java.util.concurrent.concurrent-hash-map>)
+
+;; spec: (j "new java.util.concurrent.ConcurrentHashMap();")
+(define-syntax create-concurrent-hash-map
+  (syntax-rules ()
+    ((_)           (java-new <java.util.concurrent.concurrent-hash-map>))
+    ((_ capacity)  (java-new <java.util.concurrent.concurrent-hash-map> (->jint capacity)))))
+
+(define-generic-java-method |put|)
+
+(define (key-value->jmap m)
+  (let ((result (create-concurrent-hash-map)))
+    (for-each
+     (match-lambda ((key value)
+               ;; (j "map.put(key, value);" `((map ,result) (key ,(->jstring key)) (value ,(->jobject value))))
+               (put result (->jstring key) (->jobject value))
+               ))
+     m)
+    result))
+
+(define (key-jvalue->jmap m)
+  (let ((result (create-concurrent-hash-map)))
+    (for-each
+     (match-lambda ((key value)
+               ;; (j "map.put(key, value);" `((map ,result) (key ,(->jstring key)) (value ,(->jobject value))))
+               (put result (->jstring key) value)
+               ))
+     m)
+    result))
+
 (define j)
 
 (define (startup-interpreter tint)
@@ -189,7 +220,6 @@
 
                                 vars))))                                           
                  (|eval| tint (->jstring str)))))
-
 
 ; TODO: Understand why (integer? 32833333333333333333333.222222233) = #t
 
