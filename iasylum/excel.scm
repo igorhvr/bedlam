@@ -149,7 +149,7 @@
 
 ;;       (load-excel-sheet-data (get-excel-sheet-by-index (get-excel-workbook (j "new java.io.FileInputStream(fname);" `((fname ,(->jstring fname))))
 
-  (define excel-spreadsheet->list
+  (define (excel-spreadsheet->list fname)
     (map
      (lambda (idx) 
        (load-excel-sheet-data (get-excel-sheet-by-index (get-excel-workbook (j "new java.io.FileInputStream(fname);" `((fname ,(->jstring fname)))) ) idx)))
