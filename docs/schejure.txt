@@ -9,7 +9,7 @@ java -DsocksProxyHost=localhost -DsocksProxyPort=8888 -Xmx1G clojure.main
 (sisc.REPL/main (into-array [""]))
 (begin (define iasylum-bedlam-location "/home/igorhvr/idm/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")))
 ;; or (load "/home/igorhvr/idm/i/i.scm")
-# This will open 3 repls, at 6000 (clojure), at 3000 (sisc) and at 3001 (beanshell).
+;; This will open 3 repls, at 6000 (clojure), at 3000 (sisc) and at 3001 (beanshell).
 (require-extension (lib iasylum/clojure))
 (d "Clojure: " (clojure/repl-start 6000) "\n")
 (j "iu.M.i();")
