@@ -77,7 +77,6 @@
                                                   `((vname ,name)
                                                     (vvalue ,vvalue)))
                                                (let ((clj-cmd (string-append " (def " sname " (.get iu.M/d \"" sname "\")) ")))
-                                                 (d "\nAbout to clj: " clj-cmd)
                                                  (clj clj-cmd))))))
 
                               
