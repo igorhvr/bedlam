@@ -134,6 +134,7 @@
      display-java-stack-trace
      key-value->jmap
      key-jvalue->jmap
+     map-jarray
    )
   (import s2j)
   (include "jcode-code.scm"))

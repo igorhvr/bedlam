@@ -165,6 +165,14 @@
      m)
     result))
 
+;; Usage: (map-jarray (lambda (v) (->scm-object v)) (j "new int[]{1,2,3}")) === Returns ===> (1 2 3)
+(define (map-jarray proc v)
+  (let ((size (java-array-length v)))
+    (let r ((i 0))
+      (if (< i size)
+          (cons (proc (java-array-ref v i)) (r (+ i 1)))
+          '()))))
+
 (define j)
 
 (define (startup-interpreter tint)

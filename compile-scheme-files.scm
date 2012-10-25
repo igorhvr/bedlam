@@ -34,3 +34,4 @@
 (smart-compile "/home/igorhvr/idm/bedlam/iasylum/srfi-88-code.scm")
 (smart-compile "/home/igorhvr/idm/bedlam/iasylum/srfi-89-code.scm")
 (smart-compile "/home/igorhvr/idm/bedlam/iasylum/jcode-code.scm")
+(smart-compile "/home/igorhvr/idm/bedlam/iasylum/jcode.scm")
