@@ -33,6 +33,7 @@
    get-streams-in-zipfile
    get-streams-in-rarfile
    for-each-row-in-a-spreadsheet-in-a-zipfile
+   concurrent-semaphore
    )
   (import hashtable)
   (import file-manipulation)  ;; rglob uses this.
@@ -426,9 +427,24 @@
       }
       result;"
      `((fname ,(->jstring fname))))))
+
+  (define-generic-java-method release)
+  (define-generic-java-method available-permits)
   
   (define d)
   (define w)
+
+  (define concurrent-semaphore
+    (lambda* ((initialPermits 0))
+        (let ((inner-semaphore (j "new java.util.concurrent.Semaphore(ip);" `((ip ,(->jint initialPermits))))))
+          (match-lambda*                              
+           [('inc)
+            (release inner-semaphore)
+            (void)]
+           [('inner-semaphore)
+            inner-semaphore]
+           [()
+            (->number (available-permits inner-semaphore)])))))
   
   (set! d (let ((m (mutex/new))) (lambda p (mutex/lock! m) (for-each display p) (mutex/unlock! m) (void))))
   (set! w (let ((m (mutex/new))) (lambda p (mutex/lock! m) (for-each write p) (mutex/unlock! m) (void))))
