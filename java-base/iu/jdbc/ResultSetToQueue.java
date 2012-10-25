@@ -33,7 +33,7 @@ public class ResultSetToQueue {
 		    rowData[i]=triple;
 		}
 
-		b.put(rowData);
+		b.put(new sisc.modules.s2j.JavaObject(rowData));
 	    } while(rs.next());
 	}
     }
