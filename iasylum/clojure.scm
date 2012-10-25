@@ -5,6 +5,6 @@
 (require-extension (lib iasylum/jcode))
 
 (module iasylum/clojure
-  (clojure/run clojure/repl-start)
+  (clojure/run clojure/repl-start clj)
   
   (include "clojure-code.scm"))
