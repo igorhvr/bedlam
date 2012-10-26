@@ -426,10 +426,7 @@
           result.add(res);
       }
       result;"
-     `((fname ,(->jstring fname))))))
-
-  (define-generic-java-method release)
-  (define-generic-java-method available-permits)
+     `((fname ,(->jstring fname)))))) 
   
   (define d)
   (define w)
@@ -445,6 +442,9 @@
             inner-semaphore]
            [()
             (->number (available-permits inner-semaphore)])))))
+
+  (define-generic-java-method release)
+  (define-generic-java-method available-permits)
   
   (set! d (let ((m (mutex/new))) (lambda p (mutex/lock! m) (for-each display p) (mutex/unlock! m) (void))))
   (set! w (let ((m (mutex/new))) (lambda p (mutex/lock! m) (for-each write p) (mutex/unlock! m) (void))))
