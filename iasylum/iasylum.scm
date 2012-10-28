@@ -382,51 +382,50 @@
                ))
     (log-debug table-name "for-each-row-in-a-spreadsheet-in-a-zipfile" "END" fname))
 
-  ;; Return a stream for each file inside a rarfile.
-  ;; This is not thread safe - files have to be read in order.
+  ;; Return a stream for each file inside a rarfile. A thread will be launched for each stream and die once it is consumed.
   (define (get-streams-in-rarfile fname)
     (iterable->list
      (j
-     "import java.io.IOException;
-      import java.io.InputStream;
-      import java.util.Enumeration;
-      import java.util.LinkedList;
-      import java.util.zip.ZipEntry;
-      import java.util.zip.ZipFile;
-      import com.github.junrar.Archive;
+     "result = new java.util.concurrent.ConcurrentLinkedQueue();
+      archive = new com.github.junrar.Archive(new java.io.File(fname));
 
-      LinkedList result = new LinkedList();
-      Archive archive = new Archive(new java.io.File(fname));
-
-      extractor(currE, pout, archive, previousT) {
+      extractor(fname, pout, localPosition) {
           run() {
-              if(previousT!=null) previousT.join();
+              com.github.junrar.Archive extractorArchive = new com.github.junrar.Archive(new java.io.File(fname));
+              Iterator extractorE = extractorArchive.getFileHeaders().iterator();
 
-              archive.extractFile(currE, pout);
+              com.github.junrar.rarfile.FileHeader extractorHd=null;
+
+              int i=0;
+              do {
+                  extractorHd = extractorE.next();
+              } while (i++<localPosition);              
+
+              extractorArchive.extractFile(extractorHd, pout);
           }
           return this;
       }
 
-      Iterator e = archive.getFileHeaders().iterator();
+      e = archive.getFileHeaders().iterator();
+      position=0;
 
-      previousT = null;
       while(e.hasNext()){
           com.github.junrar.rarfile.FileHeader currE = e.next();
 
           pinp = new java.io.PipedInputStream();
           pout = new java.io.PipedOutputStream(pinp);
 
-          thread = new Thread( extractor(currE, pout, archive, previousT) );
+          thread = new Thread( extractor(fname, pout, position) );
           thread.start();
-          previousT = thread;
 
           Object[] res=new Object[2];
           res[0]=pinp;
           res[1]=currE.getFileNameString();
           result.add(res);
+          position++;
       }
       result;"
-     `((fname ,(->jstring fname)))))) 
+     `((fname ,(->jstring fname))))))
   
   (define d)
   (define w)
