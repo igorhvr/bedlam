@@ -12,8 +12,8 @@
    to-string
    display-string
    iasylum-write-string
-   d
-   w
+   d reset-d
+   w reset-w
    beanshell-server
    first-n-or-less
    assert
@@ -443,13 +443,19 @@
            [()
             (->number (available-permits inner-semaphore)])))))
 
+  (define (reset-d)
+    (set! d (let ((m (mutex/new))) (lambda p (mutex/lock! m) (for-each display p) (mutex/unlock! m) (void)))))
+
+  (define (reset-w)
+    (set! w (let ((m (mutex/new))) (lambda p (mutex/lock! m) (for-each write p) (mutex/unlock! m) (void)))))
+
   (define (uuid-string) (->string (j "new com.eaio.uuid.UUID().toString();")))
   
   (define-generic-java-method release)
   (define-generic-java-method available-permits)
   
-  (set! d (let ((m (mutex/new))) (lambda p (mutex/lock! m) (for-each display p) (mutex/unlock! m) (void))))
-  (set! w (let ((m (mutex/new))) (lambda p (mutex/lock! m) (for-each write p) (mutex/unlock! m) (void))))
+  (reset-d)
+  (reset-w)
   
   ;; (define d (lambda p (for-each display p)))
 )
