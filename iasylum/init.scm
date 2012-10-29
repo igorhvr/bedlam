@@ -214,3 +214,7 @@
 
 
 (add-lib "jdbc/jtds-1.2.5.jar")
+
+;; com.eaio.uuid.UUID u = new com.eaio.uuid.UUID();
+;; From http://johannburkard.de/software/uuid/
+(add-lib "u/uuid-3.3.jar")

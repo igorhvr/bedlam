@@ -34,6 +34,7 @@
    get-streams-in-rarfile
    for-each-row-in-a-spreadsheet-in-a-zipfile
    concurrent-semaphore
+   uuid-string
    )
   (import hashtable)
   (import file-manipulation)  ;; rglob uses this.
@@ -442,6 +443,8 @@
            [()
             (->number (available-permits inner-semaphore)])))))
 
+  (define (uuid-string) (->string (j "new com.eaio.uuid.UUID().toString();")))
+  
   (define-generic-java-method release)
   (define-generic-java-method available-permits)
   
