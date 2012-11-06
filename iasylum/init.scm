@@ -218,3 +218,10 @@
 ;; com.eaio.uuid.UUID u = new com.eaio.uuid.UUID();
 ;; From http://johannburkard.de/software/uuid/
 (add-lib "u/uuid-3.3.jar")
+
+(require-extension (lib iasylum/clojure))
+
+(define (nrepls)
+  (d "\nStarting repls at 3000 (SISC), 3001 (beanshell httpd), 3002 (beanshell), 6000 (clojure)...")
+  (d "\nClojure: " (clojure/repl-start 6000) " - started at port 6000\n")
+  (j "iu.M.i();"))
