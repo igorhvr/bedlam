@@ -225,3 +225,7 @@
   (d "\nStarting repls at 3000 (SISC), 3001 (beanshell httpd), 3002 (beanshell), 6000 (clojure)...")
   (d "\nClojure: " (clojure/repl-start 6000) " - started at port 6000\n")
   (j "iu.M.i();"))
+
+;; and-let*. e.g.:
+;; (and-let* ((v (assoc  "subscription_id" '(("subscription_id" ":db/unique    :db.unique/identity")) ))) (cdr v))
+(require-extension (srfi 2))
