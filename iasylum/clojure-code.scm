@@ -53,7 +53,7 @@
 
 (set! clj
       (lambda* (str (vars #f))
-               (create-runner-memoized)
+               (create-runner)
                (let ((result #f))
                  (cond ( (eqv? vars #t) ; This is not a mistake. It could be a list too - and we should not enter this code.
                          (begin
