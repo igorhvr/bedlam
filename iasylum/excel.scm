@@ -7,18 +7,18 @@
   (list->spreadsheet list->spreadsheet-file make-workbook make-sheet add-row add-cell set-cell-value save-wb save-wb-file excel-row->scheme load-excel-sheet-data for-each-excel-sheet-data excel-numeric-date-to-jdate excel-numeric-date-to-date get-excel-workbook get-excel-sheet-by-name get-excel-sheet-by-index
   get-workbook-number-of-sheets excel-spreadsheet->list)
 
-  (define (list->spreadsheet-file l fn)
+  (define* (list->spreadsheet-file l fn (sheet-name "data"))
     (let ((file-stream
            (j "import java.io.*;
                FileOutputStream fileOut = new FileOutputStream(filename);
            fileOut;" `((filename ,(->jstring fn))))))
-      (list->spreadsheet l file-stream)
+      (list->spreadsheet l file-stream sheet-name)
       (j "fileOut.close();" `((fileOut ,file-stream)))))
 
   
-  (define (list->spreadsheet l stream)
+  (define* (list->spreadsheet l stream (sheet-name "data"))
     (let* ((wb (make-workbook))
-           (sheet (make-sheet wb)))
+           (sheet (make-sheet wb sheet-name)))
       (map
        (lambda (v)
          (define row (add-row sheet))
@@ -31,7 +31,10 @@
       (save-wb wb stream)))
   
   (define (make-workbook) (j "import org.apache.poi.hssf.usermodel.*; HSSFWorkbook wb = new HSSFWorkbook(); wb;"))
-  (define (make-sheet wb) (j "import org.apache.poi.hssf.usermodel.*; HSSFSheet sheet = wb.createSheet(\"data\"); sheet" `((wb ,wb))))
+  
+  (define* (make-sheet wb (sheet-name "data"))
+    (j "import org.apache.poi.hssf.usermodel.*; HSSFSheet sheet = wb.createSheet(sheetname); sheet" `((wb ,wb) (sheetname ,(->jstring sheet-name)))))
+  
   (define (add-row sheet)
     (j
      "import org.apache.poi.hssf.usermodel.*;
