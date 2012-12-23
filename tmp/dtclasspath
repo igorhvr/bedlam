@@ -1,5 +1,8 @@
 export CLASSPATH=""
 
+export CLASSPATH=$CLASSPATH:/home/igorhvr/idm/bedlam/jars/clojure/clojure-1.4.0.jar
+export CLASSPATH=$CLASSPATH:/home/igorhvr/idm/bedlam/jars/clojure/tools.nrepl-0.2.0-SNAPSHOT.jar
+
 export CLASSPATH=$CLASSPATH:/home/igorhvr/datomic/bin:/home/igorhvr/idm/xmpp/www.igniterealtime.org/bin/smack_3_2_2/smack.jar:/home/igorhvr/idm/xmpp/www.igniterealtime.org/bin/smack_3_2_2/smackx.jar:/home/igorhvr/idm/xmpp/www.igniterealtime.org/bin/smack_3_2_2/smackx-jingle.jar:/home/igorhvr/idm/xmpp/www.igniterealtime.org/bin/smack_3_2_2/smackx-debug.jar:/home/igorhvr/squirrel-sql/lib/jtds-1.2.5.jar
 
 export CLASSPATH=$CLASSPATH:/home/igorhvr/datomic/bin
