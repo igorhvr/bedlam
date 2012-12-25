@@ -404,6 +404,7 @@
               } while (i++<localPosition);              
 
               extractorArchive.extractFile(extractorHd, pout);
+              pout.flush();
               pout.close();
           }
           return this;
