@@ -336,16 +336,17 @@
      (rglob location)))
   
   (define (get-streams-in-zipfile fname)
-    (j
+    (iterable->list 
+     (j
      "  import java.io.IOException;
       import java.io.InputStream;
       import java.util.Enumeration;
       import java.util.LinkedList;
       import java.util.zip.ZipEntry;
       import java.util.zip.ZipFile;
-      LinkedList result = new LinkedList();
-      ZipFile f=new ZipFile(fname);
-      Enumeration e = f.entries();
+      Object result = new LinkedList();
+      Object f=new ZipFile(fname);
+      Object e = f.entries();
       while(e.hasMoreElements()){
           ZipEntry currE = e.nextElement();
           InputStream is = f.getInputStream(currE);
@@ -355,7 +356,7 @@
           result.add(res);
       }
       result;"
-     `((fname ,(->jstring fname)))))
+     `((fname ,(->jstring fname))))))
   
   
   (define (for-each-row-in-a-spreadsheet-in-a-zipfile table-name proc fname)
@@ -378,7 +379,7 @@
                                   (lambda (v) (proc v fname ss-name))
                                   (get-excel-sheet-by-index (get-excel-workbook (_0_ cstream+name))  0))))
                       (log-debug table-name "Spreadsheet processing" "END" ss-name)))
-                  (iterable->list streams+names)))
+                  streams+names))
                (file-delete! fname)
                ))
     (log-debug table-name "for-each-row-in-a-spreadsheet-in-a-zipfile" "END" fname))
