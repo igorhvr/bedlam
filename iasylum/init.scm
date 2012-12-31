@@ -164,7 +164,7 @@
 (begin
 ;; Jackcess and required libraries.
 (add-lib "microsoft_access/commons-lang-2.5.jar")
-(add-lib "microsoft_access/jackcess-1.1.21.jar")
+(add-lib "microsoft_access/jackcess-1.2.9.jar")
 )
 
 (add-lib "u/junrar-0.7-SNAPSHOT.jar")
