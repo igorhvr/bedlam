@@ -6,3 +6,7 @@ There are only a few changes, really. Unless you have some reason to do
 otherwise (e.g.: you use SISCWeb with PostgreSQL - there are a few changes that
 are useful with it that I was not yet able to get in upstream) I recommend you stick
 to the official distribution.
+
+The siscweb-history-before-merging-repositories tag has the full history / all
+commits before I decided to merge the siscweb repository inside the full bedlam
+repository.
