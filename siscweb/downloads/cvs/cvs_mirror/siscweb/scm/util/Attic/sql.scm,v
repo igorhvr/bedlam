@@ -1,0 +1,884 @@
+head	1.1;
+access;
+symbols
+	rel-0-2-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2005.04.18.02.35.51;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.04.18.02.35.51;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.04.23.00.46.52;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2005.04.25.23.45.34;	author acolomba;	state Exp;
+branches;
+next	1.1.2.4;
+
+1.1.2.4
+date	2005.05.17.02.19.51;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5;
+
+1.1.2.5
+date	2005.05.22.20.14.56;	author acolomba;	state Exp;
+branches;
+next	1.1.2.6;
+
+1.1.2.6
+date	2005.05.30.22.50.43;	author acolomba;	state Exp;
+branches;
+next	1.1.2.7;
+
+1.1.2.7
+date	2005.06.07.03.00.45;	author acolomba;	state Exp;
+branches;
+next	1.1.2.8;
+
+1.1.2.8
+date	2005.06.07.03.26.03;	author acolomba;	state Exp;
+branches;
+next	1.1.2.9;
+
+1.1.2.9
+date	2005.06.07.03.47.36;	author acolomba;	state Exp;
+branches;
+next	1.1.2.10;
+
+1.1.2.10
+date	2005.06.10.01.37.29;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@file sql.scm was initially added on branch rel-0-2-dev.
+@
+text
+@@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 138
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+
+(require-library 'sisc/libs/srfi/srfi-19) ; time data types and procedures
+(require-library 'sisc/libs/srfi/srfi-45) ; Primitives for expressing iterative lazy algorithms
+
+(module util/sql
+  (call-with-connection close get-connection execute execute-query execute-update load-jdbc-driver s->j)
+
+  (import s2j)
+  (import generic-procedures)
+  (import hashtable)
+
+  (import srfi-19)
+  (import srfi-45)
+
+  (define-java-classes
+    (<class> |java.lang.Class|)
+    (<connection> |java.sql.Connection|)
+    (<date> |java.util.Date|)
+    (<driver-manager> |java.sql.DriverManager|)
+    (<prepared-statement> |java.sql.PreparedStatement|)
+    (<result-set> |java.sql.ResultSet|))
+
+
+  (define-generic-java-methods close (jget-connection |getConnection|) for-name get-column-count get-column-name get-meta-data get-object (jexecute |execute|) (jexecute-query |executeQuery|) (jexecute-update |executeUpdate|) next prepare-statement set-object to-lower-case)
+
+  (define (load-jdbc-driver name)
+    (with/fc (lambda (m e) #f)
+             (lambda ()
+               (for-name (java-null <class>) (->jstring name))
+               #t)))
+
+
+
+  (define (get-connection url username password)
+    (jget-connection (java-null <driver-manager>)
+                     (->jstring url)
+                     (->jstring username)
+                     (->jstring password)))
+
+
+  (define (call-with-connection conn proc)
+    (with/fc
+     (lambda (m e)
+       (close conn)
+       (throw m e))
+     (lambda ()
+       (let ((result (proc conn)))
+         (close conn)
+         result))))
+
+  (define (execute conn sql)
+    (let ((pstmt (prepare-statement conn (->jstring sql))))
+      (jexecute pstmt)))
+
+
+  (define (prepare-and-bind-statement conn sql bindings)
+    (let ((pstmt (prepare-statement conn (->jstring sql))))
+      (let loop ((n 1)
+                 (bindings bindings))
+        (when (not (null? bindings))
+          (set-object pstmt (->jint n) (s->j (car bindings)))
+          (loop (+ n 1) (cdr bindings))))
+      pstmt))
+
+
+  (define (execute-query conn sql . bindings)
+    (let* ((pstmt (prepare-and-bind-statement conn sql bindings))
+           (rs (jexecute-query pstmt)))
+      (let loop ((rs rs))
+        (lazy
+         (if (not (->boolean (next rs)))
+             (delay '())
+             (delay (cons (get-row rs)
+                          (loop rs))))))))
+
+  (define (get-row rs)
+    (let ((n (->number (get-column-count (get-meta-data rs))))
+          (md (get-meta-data rs)))
+      (do ((row (make-hashtable eqv? #f))
+           (i 1 (+ 1 i)))
+          ((> i n) row)
+        (hashtable/put! row
+                        (->symbol (to-lower-case (get-column-name md (->jint i))))
+                        (get-object rs (->jint i))))))
+
+
+
+  (define (execute-update conn sql . bindings)
+    (->number (jexecute-update (prepare-and-bind-statement conn sql bindings))))
+
+
+  (define (s->j value)
+    (cond ((boolean? value) (->jboolean value))
+          ((or (string? value)
+              (symbol? value))
+           (->jstring value))
+          ((char? value) (->jchar value))
+          ((vector? value) (java-wrap value)) ;; FIXME
+          ((procedure? value) (java-wrap value))
+          ((pair? value) (java-wrap value)) ;; FIXME
+          ((number? value) (->jdouble value)) ;; WORKS?
+          ((date? value)
+           (let ((t (date->time-utc value)))
+             (java-new <date> (->jlong (* 1000 (time-second t))))))
+          ((else value))))
+
+  )@
+
+
+1.1.2.2
+log
+@cleaned up code using comprehensions; added conversions to/from native
+types; renamed functions a bit
+@
+text
+@d34 1
+a34 2
+(require-library 'sisc/libs/srfi/srfi-42) ; eager comprehensions
+(require-library 'sisc/libs/srfi/srfi-45) ; primitives for expressing iterative lazy algorithms
+d37 1
+a37 3
+  (jdbc/call-with-connection jdbc/call/conn jdbc/close-connection
+   jdbc/open-connection sql/execute sql/execute-query sql/execute-update
+   jdbc/load-driver s->j j->s)
+a41 1
+  (import type-system)
+a43 1
+  (import srfi-42)
+a46 3
+    (<big-decimal> |java.math.BigDecimal|)
+    (<big-integer> |java.math.BigInteger|)
+    (<byte> |java.lang.Byte|)
+a47 1
+    (<closure> |sisc.data.Closure|)
+a50 3
+    (<double> |java.lang.Double|)
+    (<integer> |java.lang.Integer|)
+    (<long> |java.lang.Long|)
+a51 4
+    (<short> |java.lang.Short|)
+    (<jstring> |java.lang.String|)
+    (<time> |java.sql.Time|)
+    (<timestamp> |java.sql.Timestamp|)
+a53 5
+  (define-generic-java-methods
+    close get-connection for-name get-column-count get-column-name
+    get-meta-data get-nanos get-object get-result-set get-time
+    get-update-count execute execute-query execute-update next
+    prepare-statement set-object to-lower-case)
+d55 1
+d57 1
+a57 1
+  (define (jdbc/load-driver name)
+d60 1
+a60 2
+               (for-name (java-null <class>)
+                         (->jstring name))
+d65 5
+a69 5
+  (define (jdbc/open-connection url username password)
+    (get-connection (java-null <driver-manager>)
+                    (->jstring url)
+                    (->jstring username)
+                    (->jstring password)))
+a70 2
+  (define (jdbc/close-connection conn)
+    (close conn))
+d72 1
+a72 1
+  (define (jdbc/call-with-connection conn proc)
+d75 1
+a75 1
+       (jdbc/close-connection conn)
+d79 1
+a79 1
+         (jdbc/close-connection conn)
+d82 3
+a84 10
+  (define jdbc/call/conn jdbc/call-with-connection)
+
+
+  ;; TODO: should implement the more results method
+  (define (sql/execute conn sql . bindings)
+    (let* ((pstmt (prepare-and-bind-statement conn sql bindings))
+           (rs? (execute pstmt)))
+      (if rs?
+          (make-cursor (get-result-set pstmt))
+          (->number (get-update-count pstmt)))))
+d89 5
+a93 3
+      (do-ec (:parallel (:range i 1 (+ 1 (length bindings)))
+                        (:list value bindings))
+          (set-object pstmt (->jint i) (s->j value)))
+d97 1
+a97 1
+  (define (sql/execute-query conn sql . bindings)
+d99 17
+a115 2
+           (rs (execute-query pstmt)))
+      (make-cursor rs)))
+a116 6
+  (define (make-cursor rs)
+    (lazy
+     (if (not (->boolean (next rs)))
+         (delay '())
+         (delay (cons (get-row rs)
+                      (make-cursor rs))))))
+a117 3
+  (define (get-row rs)
+    (define (get-column-symbol md i)
+      (->symbol (to-lower-case (get-column-name md (->jint i)))))
+d119 2
+a120 2
+    (define (get-column-value i)
+      (j->s (get-object rs (->jint i))))
+a121 40
+    (let ((row (make-hashtable eqv? #f))
+          (md (get-meta-data rs)))
+      (do-ec (:range i 1 (+ 1 (->number (get-column-count md))))
+        (hashtable/put! row
+                        (get-column-symbol md i)
+                        (get-column-value i)))
+      row))
+
+
+  (define (sql/execute-update conn sql . bindings)
+    (->number (execute-update (prepare-and-bind-statement conn sql bindings))))
+
+
+  (define (j->s value)
+    (cond ((java-null? value)
+           '())
+          ((or (instance-of? value <jint>)
+               (instance-of? value <integer>)
+               (instance-of? value <big-integer>)
+               (instance-of? value <jdouble>)
+               (instance-of? value <double>)
+               (instance-of? value <big-decimal>)
+               (instance-of? value <jbyte>)
+               (instance-of? value <byte>)
+               (instance-of? value <jshort>)
+               (instance-of? value <short>))
+           (->number value))
+          ((instance-of? value <jstring>)
+           (->string value))
+          ((or (instance-of? value <date>)
+               (instance-of? value <time>))
+           (let ((ms (->number (get-time value))))
+                         (make-time 'time-monotonic 0 (* 1000 ms))))
+      ((instance-of? value <timestamp>)
+       (let ((ms (->number (get-time value)))
+             (ns (->number (get-nanos value))))
+         (make-time 'time-monotonic ns (* 1000 ms))))
+      ((instance-of? value <closure>)
+       (java-unwrap value))
+      (else value)))
+d132 1
+a132 10
+          ((procedure? value) (java-wrap value))
+          ((and (number? value)
+                (integer? value))
+           (java-new <integer> (->jint value)))
+          ((and (number? value)
+                (real? value))
+           (java-new <double> (->jdouble value)))
+          ((and (number? value)
+                (rational? value))
+           ((java-new <double> (->jdouble value))))
+a135 2
+          ((time? value)
+           (java-new <timestamp> (->jlong (* 1000 (time-second value)))))
+@
+
+
+1.1.2.3
+log
+@added long and Long datatype conversion
+@
+text
+@a161 2
+               (instance-of? value <jlong>)
+               (instance-of? value <long>)
+@
+
+
+1.1.2.4
+log
+@added support for sql NULLs in preparedstatements
+@
+text
+@d32 1
+a62 1
+    (<object> |java.lang.Object|)
+d74 1
+a74 1
+    prepare-statement set-null set-object to-lower-case)
+d121 1
+a121 1
+        (set-object pstmt (->jint i) (s->j value)))
+d188 1
+a188 2
+    (cond ((null? value) (java-null <object>))
+          ((boolean? value) (->jboolean value))
+@
+
+
+1.1.2.5
+log
+@now uses cl-ish typecase macro defined in renamed util/misc module;
+minor changes to date type handling in provision for other databases
+@
+text
+@d1 1
+a1 1
+';;; The contents of this file are subject to the Mozilla Public License Version
+a35 2
+(require-library 'util/misc)
+
+a45 2
+  (import util/misc)
+
+d57 1
+a57 1
+    (<date> |java.sql.Date|)
+d158 14
+a171 4
+    (if (java-null? value)
+        '()
+        (typecase value
+          ((<jint> <integer>  <jlong> <long> <big-integer> <jdouble> <double> <big-decimal> <jbyte> <byte> <jshort> <short>)
+d173 4
+a176 2
+          ((<jstring>) (->string value))
+          ((<date> <time>)
+d178 8
+a185 7
+             (make-time 'time-monotonic 0 (* 1000 ms))))
+          ((<timestamp>)
+           (let ((ms (->number (get-time value)))
+                 (ns (->number (get-nanos value))))
+             (make-time 'time-monotonic ns (* 1000 ms))))
+          ((<closure>) (java-unwrap value))
+          (else value))))
+@
+
+
+1.1.2.6
+log
+@sql datatype conversion from db to scheme now uses java.sql.Types;
+additionally, a custom converter is created for each resultset instead
+of checking types for each row for each value
+@
+text
+@d1 1
+a1 1
+;;; The contents of this file are subject to the Mozilla Public License Version
+a37 202
+
+(module util/sql-types
+  (<sql-array> <sql-bigint> <sql-binary> <sql-bit> <sql-blob> <sql-boolean> <sql-char> <sql-clob> <sql-datalink> <sql-date> <sql-decimal> <sql-distinct> <sql-double> <sql-float> <sql-integer> <sql-java-object> <sql-longvarbinary> <sql-longvarchar> <sql-null> <sql-numeric> <sql-other> <sql-real> <sql-ref> <sql-smallint> <sql-struct> <sql-time> <sql-timestamp> <sql-tinyint> <sql-varbinary> <sql-varchar>)
+
+  (import s2j)
+
+  (define-java-classes
+    (<sql-types> |java.sql.Types|))
+
+
+  (define (static class name)
+    ((generic-java-field-accessor name) (java-null class)))
+
+  (define <sql-array>)
+  (define <sql-bigint>)
+  (define <sql-binary>)
+  (define <sql-bit>)
+  (define <sql-blob>)
+  (define <sql-boolean>)
+  (define <sql-char>)
+  (define <sql-clob>)
+  (define <sql-datalink>)
+  (define <sql-date>)
+  (define <sql-decimal>)
+  (define <sql-distinct>)
+  (define <sql-double>)
+  (define <sql-float>)
+  (define <sql-integer>)
+  (define <sql-java-object>)
+  (define <sql-longvarbinary>)
+  (define <sql-longvarchar>)
+  (define <sql-null>)
+  (define <sql-numeric>)
+  (define <sql-other>)
+  (define <sql-real>)
+  (define <sql-ref>)
+  (define <sql-smallint>)
+  (define <sql-struct>)
+  (define <sql-time>)
+  (define <sql-timestamp>)
+  (define <sql-tinyint>)
+  (define <sql-varbinary>)
+  (define <sql-varchar>)
+
+  (set! <sql-array> (static <sql-types> '|ARRAY|))
+  (set! <sql-bigint> (static <sql-types> '|BIGINT|))
+  (set! <sql-binary> (static <sql-types> '|BINARY|))
+  (set! <sql-bit> (static <sql-types> '|BIT|))
+  (set! <sql-blob> (static <sql-types> '|BLOB|))
+  (set! <sql-boolean> (static <sql-types> '|BOOLEAN|))
+  (set! <sql-char> (static <sql-types> '|CHAR|))
+  (set! <sql-clob> (static <sql-types> '|CLOB|))
+  (set! <sql-datalink> (static <sql-types> '|DATALINK|))
+  (set! <sql-date> (static <sql-types> '|DATE|))
+  (set! <sql-decimal> (static <sql-types> '|DECIMAL|))
+  (set! <sql-distinct> (static <sql-types> '|DISTINCT|))
+  (set! <sql-double> (static <sql-types> '|DOUBLE|))
+  (set! <sql-float> (static <sql-types> '|FLOAT|))
+  (set! <sql-integer> (static <sql-types> '|INTEGER|))
+  (set! <sql-java-object> (static <sql-types> '|JAVA_OBJECT|))
+  (set! <sql-longvarbinary> (static <sql-types> '|LONGVARBINARY|))
+  (set! <sql-longvarchar> (static <sql-types> '|LONGVARCHAR|))
+  (set! <sql-null> (static <sql-types> '|NULL|))
+  (set! <sql-numeric> (static <sql-types> '|NUMERIC|))
+  (set! <sql-other> (static <sql-types> '|OTHER|))
+  (set! <sql-real> (static <sql-types> '|REAL|))
+  (set! <sql-ref> (static <sql-types> '|REF|))
+  (set! <sql-smallint> (static <sql-types> '|SMALLINT|))
+  (set! <sql-struct> (static <sql-types> '|STRUCT|))
+  (set! <sql-time> (static <sql-types> '|TIME|))
+  (set! <sql-timestamp> (static <sql-types> '|TIMESTAMP|))
+  (set! <sql-tinyint> (static <sql-types> '|TINYINT|))
+  (set! <sql-varbinary> (static <sql-types> '|VARBINARY|))
+  (set! <sql-varchar> (static <sql-types> '|VARCHAR|))
+
+  )
+
+(module util/sql-rs
+  (make-rs-accessor get-column-names)
+
+  (import s2j)
+  (import hashtable)
+  (import type-system)
+
+  (import srfi-19)
+  (import srfi-42)
+
+  (import util/sql-types)
+
+  (define-generic-java-methods get-column-count get-column-name get-column-type get-column-type-name get-meta-data get-object get-scale next prepare-statement to-lower-case)
+
+
+  (define (get-column-names rs)
+    (define md (get-meta-data rs))
+
+    (list-ec (:range i 1 (+ 1 (->number (get-column-count md))))
+      (->symbol (to-lower-case (get-column-name md (->jint i))))))
+
+  (define (make-rs-accessor rs )
+    (define md (get-meta-data rs))
+
+    (define (make-field-accessor convert-proc ji)
+      (lambda ()
+        (convert-proc (get-object rs ji) md ji)))
+
+    (define (make-accessor-table)
+      (let* ((n (->number (get-column-count md)))
+             (at (make-hashtable eq? #f)))
+        (do-ec (:range i 1 (+ 1 n))
+          (let* ((ji (->jint i))
+                 (name (->symbol
+                        (to-lower-case
+                         (get-column-name md ji))))
+                 (type (get-column-type md ji))
+                 (convert-proc (get-convert-proc type)))
+            (hashtable/put! at name (make-field-accessor convert-proc ji))))
+        at))
+
+    (let ((at (make-accessor-table)))
+      (lambda (symbol)
+        ((hashtable/get at symbol)))))
+
+
+  ;; datatype conversion functions
+  (define (sql->time obj rsmd ji)
+    (let ((ms (->number (get-time obj))))
+      (make-time 'time-monotonic 0 (* 1000 ms))))
+
+  (define (sql->date obj rsmd ji)
+    (let ((ms (->number (get-time obj))))
+      (make-time 'time-monotonic 0 (* 1000 ms))))
+
+  (define (sql->timestamp obj rsmd ji)
+    (let ((ms (->number (get-time value)))
+          (ns (->number (get-nanos value))))
+      (make-time 'time-monotonic ns (* 1000 ms))))
+
+  (define (sql->null obj rsmd ji)
+    '())
+
+  (define (sql->number obj rsmd ji)
+    (if (= 0 (->number (get-scale rsmd ji)))
+        (inexact->exact (->number obj))
+        (->number obj)))
+
+  (define (sql->object obj rsmd ji)
+    (if (instance-of? obj <value>)
+        (java-unwrap obj)
+        obj))
+
+  (define (sql->string obj rsmd ji)
+    (->string obj))
+
+
+  (define (unimplemented obj rsmd ji)
+    (error (string-append "unimplemented type conversion from "
+                          (->string (get-column-type-name rsmd ji)))))
+
+
+  (define base-conversion-table #f) ; see assignment below
+
+  (define (get-convert-proc sql-type)
+    (hashtable/get base-conversion-table sql-type))
+
+
+  (set! base-conversion-table
+    (alist->hashtable
+     `((,<sql-array> . ,unimplemented)
+       (,<sql-bigint> . ,sql->number)
+       (,<sql-binary> . ,unimplemented)
+       (,<sql-bit> . ,unimplemented)
+       (,<sql-blob> . ,unimplemented)
+       (,<sql-boolean> . ,unimplemented)
+       (,<sql-char> . ,sql->string)
+       (,<sql-clob> . ,unimplemented)
+       (,<sql-datalink> . ,unimplemented)
+       (,<sql-date> . ,sql->date)
+       (,<sql-decimal> . ,sql->number)
+       (,<sql-distinct> . ,unimplemented)
+       (,<sql-double> . ,sql->number)
+       (,<sql-float> . ,sql->number)
+       (,<sql-integer> . ,sql->number)
+       (,<sql-java-object> . ,sql->object)
+       (,<sql-longvarbinary> . ,unimplemented)
+       (,<sql-longvarchar> . ,unimplemented)
+       (,<sql-null> . ,sql->null)
+       (,<sql-numeric> . ,sql->number)
+       (,<sql-other> . ,sql->object)
+       (,<sql-real> . ,sql->number)
+       (,<sql-ref> . ,unimplemented)
+       (,<sql-smallint> . ,sql->number)
+       (,<sql-struct> . ,unimplemented)
+       (,<sql-time> . ,sql->time)
+       (,<sql-timestamp> . ,sql->timestamp)
+       (,<sql-tinyint> . ,sql->number)
+       (,<sql-varbinary> . ,unimplemented)
+       (,<sql-varchar> . ,sql->string))
+     eqv?
+     #f))
+  )
+
+
+d41 1
+a41 1
+   jdbc/load-driver s->j)
+a48 1
+  (import util/sql-rs)
+a134 8
+    (define :rs (make-rs-accessor rs))
+
+    (define (get-row)
+      (let ((row (make-hashtable eqv? #f)))
+        (do-ec (:list name (get-column-names rs))
+          (hashtable/put! row name (:rs name)))
+        row))
+
+d138 1
+a138 1
+         (delay (cons (get-row)
+d141 15
+d161 16
+@
+
+
+1.1.2.7
+log
+@moved type conversion code to separate module
+@
+text
+@a43 1
+
+d112 1
+d115 2
+a116 3
+
+(module util/sql-type-conversion
+  (get-sql->scheme-converter)
+d123 1
+d127 28
+d156 3
+a158 1
+  (define-generic-java-methods get-nanos get-scale get-time)
+d161 1
+d199 1
+a199 1
+  (define (get-sql->scheme-converter sql-type)
+a236 47
+)
+
+
+(module util/sql-rs
+  (make-rs-accessor get-column-names)
+
+  (import s2j)
+  (import hashtable)
+
+  (import srfi-42)
+
+  (import util/sql-type-conversion)
+
+  (define-generic-java-methods get-column-count get-column-name get-column-type get-column-type-name get-meta-data get-object get-scale next prepare-statement to-lower-case)
+
+
+  (define (get-column-names rs)
+    (define md (get-meta-data rs))
+
+    (list-ec (:range i 1 (+ 1 (->number (get-column-count md))))
+      (->symbol (to-lower-case (get-column-name md (->jint i))))))
+
+  (define (make-rs-accessor rs)
+    (define md (get-meta-data rs))
+
+    (define (make-field-accessor convert-proc ji)
+      (lambda ()
+        (convert-proc (get-object rs ji) md ji)))
+
+    (define (make-accessor-table)
+      (let* ((n (->number (get-column-count md)))
+             (at (make-hashtable eq? #f)))
+        (do-ec (:range i 1 (+ 1 n))
+          (let* ((ji (->jint i))
+                 (name (->symbol
+                        (to-lower-case
+                         (get-column-name md ji))))
+                 (type (get-column-type md ji))
+                 (sql->scheme (get-sql->scheme-converter type)))
+            (hashtable/put! at name (make-field-accessor sql->scheme ji))))
+        at))
+
+    (let ((at (make-accessor-table)))
+      (lambda (symbol)
+        ((hashtable/get at symbol)))))
+
+
+@
+
+
+1.1.2.8
+log
+@moved s->j function in sql-type-conversion module; cleaned up s2j type
+imports
+@
+text
+@d44 1
+d117 1
+a117 1
+  (get-sql->scheme-converter scheme->java)
+a126 9
+  (define-java-classes
+    (<big-decimal> |java.math.BigDecimal|)
+    (<big-integer> |java.math.BigInteger|)
+    (<date> |java.sql.Date|)
+    (<double> |java.lang.Double|)
+    (<integer> |java.lang.Integer|)
+    (<object> |java.lang.Object|)
+    (<time> |java.sql.Time|)
+    (<timestamp> |java.sql.Timestamp|))
+a171 28
+  (define (scheme->java value)
+    (cond ((null? value) (java-null <object>))
+          ((boolean? value) (->jboolean value))
+          ((or (string? value)
+              (symbol? value))
+           (->jstring value))
+          ((char? value) (->jchar value))
+          ((vector? value) (java-wrap value)) ;; FIXME
+          ((procedure? value) (java-wrap value))
+          ((pair? value) (java-wrap value)) ;; FIXME
+          ((procedure? value) (java-wrap value))
+          ((and (number? value)
+                (integer? value))
+           (java-new <integer> (->jint value))) ;; FIXME
+          ((and (number? value)
+                (real? value))
+           (java-new <big-decimal> (->jdouble value))) ;; FIXME
+          ((and (number? value)
+                (rational? value))
+           ((java-new <double> (->jdouble value)))) ;; FIXME
+          ((date? value)
+           (let ((t (date->time-utc value)))
+             (java-new <date> (->jlong (* 1000 (time-second t))))))
+          ((time? value)
+           (java-new <timestamp> (->jlong (* 1000 (time-second value)))))
+          ((else value))))
+
+
+d259 1
+a259 1
+   jdbc/load-driver)
+a267 1
+  (import util/sql-type-conversion)
+d274 3
+d278 1
+d280 1
+d282 4
+d287 4
+d344 1
+a344 1
+        (set-object pstmt (->jint i) (scheme->java value)))
+d371 30
+@
+
+
+1.1.2.9
+log
+@more cleanup; now uses dynamic-wind in jdbc/call/conn
+@
+text
+@d300 1
+d306 1
+d318 2
+a319 3
+    close get-connection for-name
+    get-column-name
+    get-result-set
+d343 8
+a350 6
+    (dynamic-wind
+        (lambda () #f)
+        (lambda ()
+          (proc conn))
+        (lambda ()
+          (jdbc/close-connection conn))))
+d354 2
+a362 9
+  (define (sql/execute-query conn sql . bindings)
+    (let* ((pstmt (prepare-and-bind-statement conn sql bindings))
+           (rs (execute-query pstmt)))
+      (make-cursor rs)))
+
+  (define (sql/execute-update conn sql . bindings)
+    (->number
+     (execute-update (prepare-and-bind-statement conn sql bindings))))
+
+d371 6
+d391 5
+a395 1
+  )
+@
+
+
+1.1.2.10
+log
+@moved content of util/sql.scm to sql/hsqldb.scm, sql/jdbc.scm,
+sql/query.scm, sql/result-set.scm, sql/type-conversion.scm,
+sql/types.scm; also introduced some support for vendor-dependent
+sql->scheme type conversions; fixed make-rs-cursor to be more
+efficient
+@
+text
+@@
+
+

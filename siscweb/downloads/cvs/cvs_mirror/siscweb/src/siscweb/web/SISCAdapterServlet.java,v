@@ -1,0 +1,2024 @@
+head	1.6;
+access;
+symbols
+	rel-0-6-dev:1.6.0.4
+	rel-0-5-fix:1.6.0.2
+	rel-0-5:1.6
+	rel-0-5-dev-safe-frames:1.5.4.4.0.2
+	Root_rel-0-5-dev-safe-frames:1.5.4.4
+	rel-0-4-fix-0:1.5
+	rel-0-5-dev:1.5.0.4
+	rel-0-4-fix:1.5.0.2
+	rel-0-3-fix-3:1.4.2.2
+	rel-0-3-fix-2:1.4.2.1
+	rel-0-4-dev-sisc-1-11:1.4.4.1
+	rel-0-3-fix-1:1.4
+	rel-0-4-dev:1.4.0.4
+	rel-0-3-fix:1.4.0.2
+	rel-0-3:1.4
+	rel-0-3-dev-1:1.3.4.1
+	rel-0-2-fix-2:1.3.2.1
+	rel-0-2-fix-1:1.3
+	rel-0-2-fix:1.3.0.2
+	rel-0-3-dev:1.3.0.4
+	rel-0-2:1.3
+	rel-0-1-fix-1:1.2
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	start:1.1.1.1
+	rel-0-1-dev:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2007.04.12.03.51.20;	author acolomba;	state Exp;
+branches
+	1.6.2.1
+	1.6.4.1;
+next	1.5;
+
+1.5
+date	2006.09.03.01.42.22;	author acolomba;	state Exp;
+branches
+	1.5.2.1
+	1.5.4.1;
+next	1.4;
+
+1.4
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.4.2.1
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2005.06.19.03.03.51;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.52;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches;
+next	1.1.1.2;
+
+1.1.1.2
+date	2005.03.02.03.28.58;	author acolomba;	state Exp;
+branches;
+next	1.1.1.3;
+
+1.1.1.3
+date	2005.03.14.03.10.36;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.04.10.17.41.19;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.04.10.21.56.53;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2005.04.23.00.47.50;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2005.05.22.20.15.28;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2005.07.31.20.04.02;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2005.07.27.02.58.26;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2;
+
+1.3.4.2
+date	2005.10.24.03.26.54;	author acolomba;	state Exp;
+branches;
+next	1.3.4.3;
+
+1.3.4.3
+date	2005.11.19.16.15.58;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.2.1
+date	2006.02.25.17.12.00;	author acolomba;	state Exp;
+branches;
+next	1.4.2.2;
+
+1.4.2.2
+date	2006.04.15.15.55.23;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2006.01.22.04.03.47;	author acolomba;	state Exp;
+branches;
+next	1.4.4.2;
+
+1.4.4.2
+date	2006.02.22.04.10.28;	author acolomba;	state Exp;
+branches;
+next	1.4.4.3;
+
+1.4.4.3
+date	2006.02.22.04.47.20;	author acolomba;	state Exp;
+branches;
+next	1.4.4.4;
+
+1.4.4.4
+date	2006.03.28.23.23.35;	author acolomba;	state Exp;
+branches;
+next	1.4.4.5;
+
+1.4.4.5
+date	2006.06.25.21.01.33;	author acolomba;	state Exp;
+branches;
+next	1.4.4.6;
+
+1.4.4.6
+date	2006.07.08.02.33.13;	author acolomba;	state Exp;
+branches;
+next	1.4.4.7;
+
+1.4.4.7
+date	2006.07.08.21.40.12;	author acolomba;	state Exp;
+branches;
+next	1.4.4.8;
+
+1.4.4.8
+date	2006.08.17.01.59.56;	author acolomba;	state Exp;
+branches;
+next	1.4.4.9;
+
+1.4.4.9
+date	2006.08.28.02.27.12;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.5.2.1
+date	2006.09.20.02.31.24;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.5.4.1
+date	2006.09.19.02.31.46;	author acolomba;	state Exp;
+branches;
+next	1.5.4.2;
+
+1.5.4.2
+date	2007.01.08.03.47.11;	author acolomba;	state Exp;
+branches;
+next	1.5.4.3;
+
+1.5.4.3
+date	2007.01.20.17.15.53;	author acolomba;	state Exp;
+branches;
+next	1.5.4.4;
+
+1.5.4.4
+date	2007.03.01.03.50.16;	author acolomba;	state Exp;
+branches
+	1.5.4.4.2.1;
+next	1.5.4.5;
+
+1.5.4.5
+date	2007.04.01.23.55.25;	author acolomba;	state Exp;
+branches;
+next	1.5.4.6;
+
+1.5.4.6
+date	2007.04.07.04.21.06;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.5.4.4.2.1
+date	2007.03.25.03.38.52;	author acolomba;	state Exp;
+branches;
+next	1.5.4.4.2.2;
+
+1.5.4.4.2.2
+date	2007.04.01.20.35.10;	author acolomba;	state Exp;
+branches;
+next	1.5.4.4.2.3;
+
+1.5.4.4.2.3
+date	2007.04.01.22.54.06;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.6.2.1
+date	2007.09.09.01.59.54;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.6.4.1
+date	2007.10.13.18.49.32;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@merged from rel-0-5-dev
+@
+text
+@/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005-2007
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ * Dan Muresan
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+package siscweb.web;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import sisc.data.Procedure;
+import sisc.data.Symbol;
+import sisc.data.Value;
+import sisc.interpreter.AppContext;
+import sisc.interpreter.Context;
+import sisc.interpreter.Interpreter;
+import sisc.interpreter.SchemeCaller;
+import sisc.interpreter.SchemeException;
+import siscweb.contcentric.AppContextLocator;
+import siscweb.util.Logger;
+import siscweb.util.MiscUtil;
+
+
+/**
+ * This class adapts SISCweb's <code>sisclet</code> function to the
+ * J2EE HttpServlet interface. Two parameters, "on-init-sexp" and
+ * "on-destroy-sexp" are looked up (from the servlet declaration in
+ * web.xml) respectively upon init() and destroy() and evaluated as
+ * scheme code in the SISC context. The code in the two on-*-sexp should be used to
+ * setup and tear-down resources, publish functions, etc.  More than
+ * one SISCAdapterServlet can be used in a given context-name in order
+ * to provide multiple base url patterns to scheme code.  Note that
+ * the <code>sisclet</code> function should have been setup by
+ * specifying an instance of SISCApplicationServlet in the web.xml.
+ *
+ * @@see siscweb.web.SISCApplicationServlet
+ *
+ */
+public class SISCAdapterServlet extends HttpServlet
+{
+    private static final long serialVersionUID = 7683553386599453481L;
+
+    protected String contextName;
+    protected URL contextRoot;
+
+    public void init()
+        throws ServletException
+    {
+        try {
+            this.contextRoot = this.getServletContext().getResource("/");
+
+            final String servletName = this.getServletName();
+
+            if(Logger.logger.isLoggable(Level.FINER)) {
+                Logger.logger.finer("Servlet " + servletName +
+                        " being initialized.");
+            }
+
+            final String sexp = this.getInitParameter("on-init-sexp");
+
+            if(Logger.logger.isLoggable(Level.INFO)) {
+                Logger.logger.info("Evaluating on-init-sexp for servlet : " + servletName);
+            }
+
+            this.eval(sexp);
+        }
+        catch(final MalformedURLException mue) {
+            if(Logger.logger.isLoggable(Level.SEVERE)) {
+                Logger.logger.severe(mue.getMessage());
+            }
+
+            throw new ServletException(mue);
+        }
+        catch(final SchemeException se) {
+            if(Logger.logger.isLoggable(Level.SEVERE)) {
+                Logger.logger.severe(se.getMessage());
+            }
+
+            throw new ServletException(se);
+        }
+    }
+
+    public void destroy()
+    {
+        try {
+            this.contextRoot = null;
+
+            final String servletName = this.getServletName();
+
+            if(Logger.logger.isLoggable(Level.FINER)) {
+                Logger.logger.finer("Servlet " + servletName +
+                        " being destroyed.");
+            }
+
+            final String sexp = this.getInitParameter("on-destroy-sexp");
+
+            if(Logger.logger.isLoggable(Level.INFO)) {
+                Logger.logger.info("Evaluating on-destroy-sexp for servlet : " + servletName);
+            }
+
+            this.eval(sexp);
+        }
+        catch(final MalformedURLException mue) {
+            if(Logger.logger.isLoggable(Level.SEVERE)) {
+                Logger.logger.severe(mue.getMessage());
+            }
+        }
+        catch(final SchemeException se) {
+            if(Logger.logger.isLoggable(Level.SEVERE)) {
+                Logger.logger.severe(se.getMessage());
+            }
+        }
+    }
+
+
+    public void doGet(final HttpServletRequest request,
+                      final HttpServletResponse response)
+        throws ServletException
+    {
+        final String servletName = this.getServletName();
+
+        try {
+            RequestScope.setRequest(new SISCHttpServletRequest(request));
+            RequestScope.setResponse(response);
+
+            final ServletContext servletContext = this.getServletContext ();
+            final AppContext appContext = AppContextLocator.lookup(servletContext);
+
+            Context.execute(appContext, new SchemeCaller() {
+                public Object execute(Interpreter r)
+                    throws SchemeException
+                {
+                  Procedure sisclet = (Procedure) r.eval(Symbol.get("sisclet"));
+
+                  return r.eval(sisclet, new Value[] {});
+                } });
+        }
+        catch(final SchemeException e) {
+            throw new ServletException(
+                this.contextName + ": sisclet call failed in servlet " + servletName + ".",
+                sisc.modules.s2j.Util.javaException(e));
+        }
+        finally {
+            RequestScope.setRequest(null);
+            RequestScope.setResponse(null);
+        }
+    }
+
+
+    public void doPost(final HttpServletRequest request,
+                       final HttpServletResponse response)
+        throws ServletException
+    {
+        doGet(request, response);
+    }
+
+    public void doPut(final HttpServletRequest request,
+            final HttpServletResponse response)
+    throws ServletException
+    {
+        doGet(request, response);
+    }
+
+    public void doDelete(final HttpServletRequest request,
+            final HttpServletResponse response)
+    throws ServletException
+    {
+        doGet(request, response);
+    }
+
+    protected void eval(String sexp)
+        throws SchemeException, MalformedURLException
+    {
+        final ServletContext servletContext = this.getServletContext ();
+        final AppContext appContext = AppContextLocator.lookup(servletContext);
+
+        MiscUtil.eval(sexp, this.contextRoot, appContext, this.getServletName());
+    }
+
+
+    String extractContinuationId(HttpServletRequest request)
+    {
+        if(request.getRequestURI().contains("k-hash")) {
+            Pattern p = Pattern.compile("(\\A.*)(;k-hash=)(\\p{Alnum}+)([;/].*\\z|.*\\z)");
+            Matcher m = p.matcher(request.getRequestURI());
+            return m.replaceAll("$3");
+        }
+        else {
+            return null;
+        }
+    }
+}
+@
+
+
+1.6.4.1
+log
+@merged from rel-0-5-fix
+@
+text
+@d173 1
+a173 1
+                  final Procedure sisclet = (Procedure) r.eval(Symbol.get("sisclet"));
+d211 1
+a211 1
+    protected void eval(final String sexp)
+d221 1
+a221 1
+    String extractContinuationId(final HttpServletRequest request)
+d224 3
+a226 4
+            final Pattern pattern = Pattern.compile("(\\A.*)(;k-hash=)(\\p{Alnum}+)([;/].*\\z|.*\\z)");
+            final Matcher matcher = pattern.matcher(request.getRequestURI());
+
+            return matcher.replaceAll("$3");
+@
+
+
+1.6.2.1
+log
+@minor syntactical cleanup
+@
+text
+@d173 1
+a173 1
+                  final Procedure sisclet = (Procedure) r.eval(Symbol.get("sisclet"));
+d211 1
+a211 1
+    protected void eval(final String sexp)
+d221 1
+a221 1
+    String extractContinuationId(final HttpServletRequest request)
+d224 3
+a226 4
+            final Pattern pattern = Pattern.compile("(\\A.*)(;k-hash=)(\\p{Alnum}+)([;/].*\\z|.*\\z)");
+            final Matcher matcher = pattern.matcher(request.getRequestURI());
+
+            return matcher.replaceAll("$3");
+@
+
+
+1.5
+log
+@merged from rel-0-4-dev
+@
+text
+@d17 1
+a17 1
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005
+d21 1
+d39 2
+d42 2
+d45 1
+d54 1
+d59 1
+d84 1
+a84 1
+
+d90 2
+d105 8
+a112 1
+            MiscUtil.eval(sexp, this.getServletContext().getRealPath("/"), this.getServletName());
+d118 2
+d126 2
+d138 1
+a138 1
+                Logger.logger.info("Evaluating on-init-sexp for servlet : " + servletName);
+d141 6
+a146 1
+            MiscUtil.eval(sexp, this.getServletContext().getRealPath("/"), this.getServletName());
+a155 3
+    private static final ThreadLocal request = new ThreadLocal();
+    private static final ThreadLocal response = new ThreadLocal();
+
+d163 2
+a164 2
+            SISCAdapterServlet.request.set(request);
+            SISCAdapterServlet.response.set(response);
+d166 4
+a169 1
+            Context.execute(new SchemeCaller() {
+d184 2
+a185 2
+            SISCAdapterServlet.request.set(null);
+            SISCAdapterServlet.response.set(null);
+d200 1
+a200 1
+    {   
+d207 1
+a207 1
+    {   
+d211 2
+a212 1
+    public static HttpServletRequest getRequest()
+d214 4
+a217 1
+        return (HttpServletRequest) SISCAdapterServlet.request.get();
+d220 2
+a221 1
+    public static HttpServletResponse getResponse()
+d223 8
+a230 1
+        return (HttpServletResponse) SISCAdapterServlet.response.get();
+@
+
+
+1.5.2.1
+log
+@merged from rel-0-5-dev
+@
+text
+@a37 1
+import java.net.MalformedURLException;
+d95 1
+a95 6
+            MiscUtil.eval(sexp, this.getServletContext().getResource("/"), this.getServletName());
+        }
+        catch(final MalformedURLException mue) {
+            if(Logger.logger.isLoggable(Level.SEVERE)) {
+                Logger.logger.severe(mue.getMessage());
+            }
+d117 1
+a117 1
+                Logger.logger.info("Evaluating on-destroy-sexp for servlet : " + servletName);
+d120 1
+a120 6
+            MiscUtil.eval(sexp, this.getServletContext().getResource("/"), this.getServletName());
+        }
+        catch(final MalformedURLException mue) {
+            if(Logger.logger.isLoggable(Level.SEVERE)) {
+                Logger.logger.severe(mue.getMessage());
+            }
+d174 1
+a174 1
+    {
+d181 1
+a181 1
+    {
+@
+
+
+1.5.4.1
+log
+@MiscUtil.eval() now uses current-url instead of current-directory,
+thus fixing issues when running as a non-exploded WAR
+@
+text
+@a37 1
+import java.net.MalformedURLException;
+d95 1
+a95 6
+            MiscUtil.eval(sexp, this.getServletContext().getResource("/"), this.getServletName());
+        }
+        catch(final MalformedURLException mue) {
+            if(Logger.logger.isLoggable(Level.SEVERE)) {
+                Logger.logger.severe(mue.getMessage());
+            }
+d117 1
+a117 1
+                Logger.logger.info("Evaluating on-destroy-sexp for servlet : " + servletName);
+d120 1
+a120 6
+            MiscUtil.eval(sexp, this.getServletContext().getResource("/"), this.getServletName());
+        }
+        catch(final MalformedURLException mue) {
+            if(Logger.logger.isLoggable(Level.SEVERE)) {
+                Logger.logger.severe(mue.getMessage());
+            }
+d174 1
+a174 1
+    {
+d181 1
+a181 1
+    {
+@
+
+
+1.5.4.2
+log
+@sisc appcontext is now local to the servlet context instead of
+the static scope
+@
+text
+@d17 1
+a17 1
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005-2006
+a20 1
+ * Dan Muresan
+a41 1
+import javax.servlet.ServletContext;
+a48 1
+import sisc.interpreter.AppContext;
+a52 1
+import siscweb.contcentric.AppContextLocator;
+d96 1
+a96 1
+            this.eval(sexp);
+d126 1
+a126 1
+            this.eval(sexp);
+d154 1
+a154 4
+            final ServletContext servletContext = this.getServletContext ();
+            final AppContext appContext = AppContextLocator.lookup(servletContext);
+
+            Context.execute(appContext, new SchemeCaller() {
+a204 10
+
+
+    protected void eval(String sexp)
+        throws SchemeException, MalformedURLException
+    {
+        final ServletContext servletContext = this.getServletContext ();
+        final AppContext appContext = AppContextLocator.lookup(servletContext);
+
+        MiscUtil.eval(sexp, servletContext.getResource("/"), appContext, this.getServletName());
+    }
+@
+
+
+1.5.4.3
+log
+@now uses RequestScope to read/write request/response objects
+@
+text
+@a39 1
+import java.net.URL;
+d42 1
+a43 1
+import javax.servlet.ServletException;
+d81 1
+a81 1
+    protected URL contextRoot;
+a86 2
+            this.contextRoot = this.getServletContext().getResource("/");
+
+a105 2
+
+            throw new ServletException(mue);
+a110 2
+
+            throw new ServletException(se);
+a116 2
+            this.contextRoot = null;
+
+d145 3
+d155 2
+a156 2
+            RequestScope.setRequest(request);
+            RequestScope.setResponse(response);
+d176 2
+a177 2
+            RequestScope.setRequest(null);
+            RequestScope.setResponse(null);
+d203 11
+d220 1
+a220 1
+        MiscUtil.eval(sexp, this.contextRoot, appContext, this.getServletName());
+@
+
+
+1.5.4.4
+log
+@wraps initial request in siscweb request
+@
+text
+@d161 1
+a161 1
+            RequestScope.setRequest(new SISCHttpServletRequest(request));
+@
+
+
+1.5.4.5
+log
+@merged from rel-0-5-dev-safe-frames
+@
+text
+@d17 1
+a17 1
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005-2007
+a41 2
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+a60 2
+import com.sun.jndi.toolkit.ctx.Continuation;
+
+a216 13
+
+
+    String extractContinuationId(HttpServletRequest request)
+    {
+        if(request.getRequestURI().contains("k-hash")) {
+            Pattern p = Pattern.compile("(\\A.*)(;k-hash=)(\\p{Alnum}+)([;/].*\\z|.*\\z)");
+            Matcher m = p.matcher(request.getRequestURI());
+            return m.replaceAll("$3");
+        }
+        else {
+            return null;
+        }
+    }
+@
+
+
+1.5.4.6
+log
+@removed wrong import
+@
+text
+@d63 2
+@
+
+
+1.5.4.4.2.1
+log
+@allocates a new frame before invoking scheme
+@
+text
+@a41 2
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+a57 2
+import siscweb.contcentric.ContinuationStoreLocator;
+import siscweb.contcentric.Frame;
+a60 2
+import com.sun.jndi.toolkit.ctx.Continuation;
+
+a163 10
+            String cId = extractContinuationId(request);
+            if(cId != null && cId.trim().length() > 0) {
+                Frame f = ContinuationStoreLocator.lookup(this.getServletContext()).getFrame(request.getSession(), cId);
+
+                RequestScope.setFrame(new Frame(1, f));
+            }
+            else {
+                RequestScope.setFrame(new Frame(0));
+            }
+
+a183 1
+            RequestScope.setFrame(null);
+a216 13
+
+
+    String extractContinuationId(HttpServletRequest request)
+    {
+        if(request.getRequestURI().contains("k-hash")) {
+            Pattern p = Pattern.compile("(\\A.*)(;k-hash=)(\\p{Alnum}+)([;/].*\\z|.*\\z)");
+            Matcher m = p.matcher(request.getRequestURI());
+            return m.replaceAll("$3");
+        }
+        else {
+            return null;
+        }
+    }
+@
+
+
+1.5.4.4.2.2
+log
+@de-hacked ContinuationGroup
+@
+text
+@d174 1
+a174 1
+                RequestScope.setFrame(new Frame("1", f));
+d177 1
+a177 1
+                RequestScope.setFrame(new Frame("0"));
+@
+
+
+1.5.4.4.2.3
+log
+@moved frame management from java to scheme code
+@
+text
+@d17 1
+a17 1
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005-2007
+d60 2
+d170 10
+d200 1
+@
+
+
+1.4
+log
+@merged from rel-0-3-dev
+@
+text
+@d38 1
+a38 1
+import java.io.IOException;
+d46 1
+d50 1
+d52 1
+a52 1
+
+d61 1
+a61 2
+ * scheme code in the SISC context name specified by
+ * "context-name". The code in the two on-*-sexp should be used to
+d82 1
+a82 1
+            this.contextName = getServletContext().getServletContextName();
+d84 4
+a87 1
+            final Interpreter r = Context.enter(this.contextName);
+d89 1
+a89 1
+            final String onInitSExp = getInitParameter("on-init-sexp");
+d91 3
+a93 2
+            if(onInitSExp != null) {
+                MiscUtil.changeDirectory(r, getServletContext().getRealPath("/"));
+d95 5
+a99 1
+                r.eval(onInitSExp);
+a101 14
+        catch(final IOException e) {
+            throw new ServletException(
+                this.contextName + " : unable to retrieve on-init-sexp (WARNING)");
+        }
+        catch(final SchemeException e) {
+            throw new ServletException(
+                    this.contextName +
+                    " : error evaluating on-init-sexp for servlet " +
+                    this.getServletName(),
+                    sisc.modules.s2j.Util.javaException(e));
+        }
+        finally {
+            Context.exit();
+        }
+d106 2
+a107 1
+        final Interpreter r = Context.enter(this.contextName);
+d109 4
+a112 1
+        final String onDestroySExp = getInitParameter("on-destroy-sexp");
+d114 1
+a114 3
+        try {
+            if(onDestroySExp != null) {
+                MiscUtil.changeDirectory(r, getServletContext().getRealPath("/"));
+d116 2
+a117 1
+                r.eval(onDestroySExp);
+d119 2
+d122 4
+a125 15
+        catch(final IOException e) {
+            throw new RuntimeException(
+                this.contextName +
+                " : error evaluating on-destroy-sexp for servlet " +
+                this.getServletName(), e);
+        }
+        catch(final SchemeException e) {
+            throw new RuntimeException(
+                this.contextName +
+                " : error evaluating on-destroy-sexp for servlet " +
+                this.getServletName(),
+                sisc.modules.s2j.Util.javaException(e));
+        }
+        finally {
+            Context.exit();
+d130 6
+a135 3
+    public void doGet(HttpServletRequest request,
+                      HttpServletResponse response)
+        throws IOException, ServletException
+d137 2
+d140 2
+a141 1
+            Interpreter r = Context.enter(this.contextName);
+d143 5
+a147 1
+            Procedure sisclet = (Procedure)r.eval("sisclet");
+d149 2
+a150 6
+            r.eval(sisclet,
+                   new Value[] {
+                       sisc.modules.s2j.Util.makeJObj(
+                           request, HttpServletRequest.class),
+                       sisc.modules.s2j.Util.makeJObj(
+                           response, HttpServletResponse.class) });
+d154 1
+a154 3
+                this.contextName +
+                " : sisclet call failed in servlet " +
+                this.getServletName(),
+d158 2
+a159 1
+            Context.exit();
+d164 3
+a166 3
+    public void doPost(HttpServletRequest request,
+                       HttpServletResponse response)
+        throws IOException, ServletException
+d170 24
+@
+
+
+1.4.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@a45 1
+import sisc.data.Symbol;
+d50 1
+a50 1
+import sisc.util.Util;
+d85 18
+a102 1
+            evalInitParameter(r, "on-init-sexp");
+d113 2
+d116 18
+a133 1
+            evalInitParameter(r, "on-destroy-sexp");
+d159 3
+a161 1
+                this.contextName + " : sisclet call failed in servlet " + this.getServletName() + ".",
+a175 41
+
+
+
+
+    private void evalInitParameter(final Interpreter r, final String name)
+        throws RuntimeException
+    {
+        final String servletName = this.getServletName();
+
+        try {
+            final String sexp = this.getInitParameter(name);
+
+            if(sexp != null) {
+                try {
+                    MiscUtil.changeDirectory(r, getServletContext().getRealPath("/"));
+
+                    r.eval(sexp);
+                }
+                catch(SchemeException e) {
+                    System.err.println(
+                            this.contextName + " : error evaluating parameter " + name + " for servlet " + servletName + ". Scheme stack trace:");
+
+                    Procedure printError = (Procedure) r.lookup(Symbol.get("print-error"), Util.TOPLEVEL);
+                    r.eval(printError, new Value[] {e.m, e.e});
+
+                    throw new RuntimeException(
+                            this.contextName + " : error evaluating parameter " + name + " for servlet " + servletName + ".",
+                            sisc.modules.s2j.Util.javaException(e));
+                }
+            }
+        }
+        catch(final IOException e) {
+            throw new RuntimeException(
+                    this.contextName + " : error evaluating parameter " + name + " for servlet " + servletName + ".", e);
+        }
+        catch(SchemeException e) {
+            throw new RuntimeException(
+                    this.contextName + " : error printing scheme stack trace during evaluation of parameter " + name + " for servlet " + servletName + ".",
+                    sisc.modules.s2j.Util.javaException(e));
+        }
+    }
+@
+
+
+1.4.2.2
+log
+@merged from rel-0-4-dev
+@
+text
+@a45 1
+import sisc.data.SchemeString;
+a49 1
+import sisc.interpreter.SchemeCaller;
+d52 1
+d81 4
+a84 1
+        this.contextName = getServletContext().getServletContextName();
+d86 5
+a90 1
+        this.evalInitParameter("on-init-sexp");
+d95 8
+a102 1
+        this.evalInitParameter("on-destroy-sexp");
+d106 3
+a108 7
+
+    private static final ThreadLocal request = new ThreadLocal();
+    private static final ThreadLocal response = new ThreadLocal();
+
+    public void doGet(final HttpServletRequest request,
+                      final HttpServletResponse response)
+        throws ServletException
+a109 2
+        final String servletName = this.getServletName();
+
+d111 1
+a111 2
+            SISCAdapterServlet.request.set(request);
+            SISCAdapterServlet.response.set(response);
+d113 1
+a113 5
+            Context.execute(new SchemeCaller() {
+                public Object execute(Interpreter r)
+                    throws SchemeException
+                {
+                  Procedure sisclet = (Procedure) r.eval(Symbol.get("sisclet"));
+d115 6
+a120 2
+                  return r.eval(sisclet, new Value[] {});
+                } });
+d124 1
+a124 1
+                this.contextName + ": sisclet call failed in servlet " + servletName + ".",
+d128 1
+a128 2
+            SISCAdapterServlet.request.set(null);
+            SISCAdapterServlet.response.set(null);
+d133 3
+a135 3
+    public void doPost(final HttpServletRequest request,
+                       final HttpServletResponse response)
+        throws ServletException
+d143 1
+a143 1
+    private void evalInitParameter(final String name)
+d146 1
+a146 1
+        final String sexp = this.getInitParameter(name);
+d148 2
+a149 24
+        if(sexp != null) {
+            final String servletName = this.getServletName();
+
+            try {
+                Context.execute(new SchemeCaller() {
+                    public Object execute(Interpreter r)
+                        throws SchemeException
+                    {
+                        try {
+                            Procedure currentDirectory = (Procedure)r.lookup(Symbol.get("current-directory"), Util.TOPLEVEL);
+
+                            r.eval(currentDirectory, new Value[] { new SchemeString(getServletContext().getRealPath("/")) });
+
+                            return r.eval(sexp);
+                        }
+                        catch(final IOException e) {
+                            throw new RuntimeException(
+                                    servletName + " : error evaluating context parameter " + name + ".", e);
+                        }
+                    } });
+            }
+            catch(final SchemeException e) {
+                System.err.println(
+                        contextName + " : error evaluating parameter '" + name + "' in servlet '" + this.getServletName() + "'. Scheme stack trace follows:");
+d151 1
+d153 1
+a153 5
+                    Context.execute(new SchemeCaller() {
+                        public Object execute(Interpreter r)
+                            throws SchemeException
+                        {
+                            final Procedure printError = (Procedure) r.lookup(Symbol.get("print-error"), Util.TOPLEVEL);
+d155 1
+a155 2
+                            return r.eval(printError, new Value[] {e.m, e.e});
+                        } });
+d157 7
+a163 1
+                catch(SchemeException f) {
+d165 2
+a166 2
+                            contextName + " : error printing scheme stack trace during evaluation of parameter '" + name + "' in servlet '" + this.getServletName() + ".",
+                            sisc.modules.s2j.Util.javaException(f));
+a168 1
+
+d170 9
+a178 10
+    }
+
+    public static HttpServletRequest getRequest()
+    {
+        return (HttpServletRequest) SISCAdapterServlet.request.get();
+    }
+
+    public static HttpServletResponse getResponse()
+    {
+        return (HttpServletResponse) SISCAdapterServlet.response.get();
+@
+
+
+1.4.4.1
+log
+@prints scheme stacktrace if code in init/destroy params produces
+errors
+@
+text
+@a45 1
+import sisc.data.Symbol;
+d50 1
+a50 1
+import sisc.util.Util;
+d85 18
+a102 1
+            evalInitParameter(r, "on-init-sexp");
+d113 2
+d116 18
+a133 1
+            evalInitParameter(r, "on-destroy-sexp");
+d159 3
+a161 1
+                this.contextName + " : sisclet call failed in servlet " + this.getServletName() + ".",
+a175 41
+
+
+
+
+    private void evalInitParameter(final Interpreter r, final String name)
+        throws RuntimeException
+    {
+        final String servletName = this.getServletName();
+
+        try {
+            final String sexp = this.getInitParameter(name);
+
+            if(sexp != null) {
+                try {
+                    MiscUtil.changeDirectory(r, getServletContext().getRealPath("/"));
+
+                    r.eval(sexp);
+                }
+                catch(SchemeException e) {
+                    System.err.println(
+                            this.contextName + " : error evaluating parameter " + name + " for servlet " + servletName + ". Scheme stack trace:");
+
+                    Procedure printError = (Procedure) r.lookup(Symbol.get("print-error"), Util.TOPLEVEL);
+                    r.eval(printError, new Value[] {e.m, e.e});
+
+                    throw new RuntimeException(
+                            this.contextName + " : error evaluating parameter " + name + " for servlet " + servletName + ".",
+                            sisc.modules.s2j.Util.javaException(e));
+                }
+            }
+        }
+        catch(final IOException e) {
+            throw new RuntimeException(
+                    this.contextName + " : error evaluating parameter " + name + " for servlet " + servletName + ".", e);
+        }
+        catch(SchemeException e) {
+            throw new RuntimeException(
+                    this.contextName + " : error printing scheme stack trace during evaluation of parameter " + name + " for servlet " + servletName + ".",
+                    sisc.modules.s2j.Util.javaException(e));
+        }
+    }
+@
+
+
+1.4.4.2
+log
+@request/response are not passed to sisclet, and are instead accessible
+as threadlocal variables; adapted to SISC 1.12 Context/Interpreter API
+@
+text
+@a45 1
+import sisc.data.SchemeString;
+a49 1
+import sisc.interpreter.SchemeCaller;
+d52 1
+d81 4
+a84 1
+        this.contextName = getServletContext().getServletContextName();
+d86 5
+a90 1
+        this.evalInitParameter("on-init-sexp");
+d95 8
+a102 1
+        this.evalInitParameter("on-destroy-sexp");
+d106 2
+a107 6
+
+    private static final ThreadLocal request = new ThreadLocal();
+    private static final ThreadLocal response = new ThreadLocal();
+
+    public void doGet(final HttpServletRequest request,
+                      final HttpServletResponse response)
+d110 2
+a111 1
+        final String servletName = this.getServletName();
+d113 1
+a113 3
+        try {
+            SISCAdapterServlet.request.set(request);
+            SISCAdapterServlet.response.set(response);
+d115 6
+a120 15
+            Context.execute(new SchemeCaller() {
+                public Object execute(Interpreter r)
+                    throws SchemeException
+                {
+                    try {
+//                        Procedure sisclet = (Procedure) r.lookup(Symbol.get("sisclet"), Symbol.get("sisclet"));
+                        Procedure sisclet = (Procedure) r.eval("sisclet");
+
+                        return r.eval(sisclet, new Value[] {});
+                    }
+                    catch(final IOException e) {
+                        throw new RuntimeException(
+                                servletName + " : error looking up sisclet entry point.", e);
+                    }
+                } });
+d123 2
+a124 2
+            throw new RuntimeException(
+                this.contextName + ": sisclet call failed in servlet " + servletName + ".",
+d128 1
+a128 2
+            SISCAdapterServlet.request.set(null);
+            SISCAdapterServlet.response.set(null);
+d133 2
+a134 2
+    public void doPost(final HttpServletRequest request,
+                       final HttpServletResponse response)
+d143 1
+a143 1
+    private void evalInitParameter(final String name)
+d146 1
+a146 1
+        final String sexp = this.getInitParameter(name);
+d148 2
+a149 24
+        if(sexp != null) {
+            final String servletName = this.getServletName();
+
+            try {
+                Context.execute(new SchemeCaller() {
+                    public Object execute(Interpreter r)
+                        throws SchemeException
+                    {
+                        try {
+                            Procedure currentDirectory = (Procedure)r.lookup(Symbol.get("current-directory"), Util.TOPLEVEL);
+
+                            r.eval(currentDirectory, new Value[] { new SchemeString(getServletContext().getRealPath("/")) });
+
+                            return r.eval(sexp);
+                        }
+                        catch(final IOException e) {
+                            throw new RuntimeException(
+                                    servletName + " : error evaluating context parameter " + name + ".", e);
+                        }
+                    } });
+            }
+            catch(final SchemeException e) {
+                System.err.println(
+                        contextName + " : error evaluating parameter '" + name + "' in servlet '" + this.getServletName() + "'. Scheme stack trace follows:");
+d151 1
+d153 1
+a153 5
+                Context.execute(new SchemeCaller() {
+                    public Object execute(Interpreter r)
+                        throws SchemeException
+                    {
+                        final Procedure printError = (Procedure) r.lookup(Symbol.get("print-error"), Util.TOPLEVEL);
+d155 1
+a155 2
+                        return r.eval(printError, new Value[] {e.m, e.e});
+                    } });
+d157 7
+a163 1
+                catch(SchemeException f) {
+d165 2
+a166 2
+                            contextName + " : error printing scheme stack trace during evaluation of parameter '" + name + "' in servlet '" + this.getServletName() + ".",
+                            sisc.modules.s2j.Util.javaException(f));
+a168 1
+
+d170 9
+a178 10
+    }
+
+    public static HttpServletRequest getRequest()
+    {
+        return (HttpServletRequest) SISCAdapterServlet.request.get();
+    }
+
+    public static HttpServletResponse getResponse()
+    {
+        return (HttpServletResponse) SISCAdapterServlet.response.get();
+@
+
+
+1.4.4.3
+log
+@eval(sisclet) now uses a symbol, so no need to catch ioexception
+@
+text
+@d111 10
+a120 3
+                  Procedure sisclet = (Procedure) r.eval(Symbol.get("sisclet"));
+
+                  return r.eval(sisclet, new Value[] {});
+@
+
+
+1.4.4.4
+log
+@was doGet/Post were throwing RuntimeExceptions instead of
+SchemeExceptions; minor formatting fixes
+@
+text
+@d99 1
+a99 1
+        throws ServletException
+d117 1
+a117 1
+            throw new ServletException(
+d130 1
+a130 1
+        throws ServletException
+d169 5
+a173 5
+                    Context.execute(new SchemeCaller() {
+                        public Object execute(Interpreter r)
+                            throws SchemeException
+                        {
+                            final Procedure printError = (Procedure) r.lookup(Symbol.get("print-error"), Util.TOPLEVEL);
+d175 2
+a176 2
+                            return r.eval(printError, new Value[] {e.m, e.e});
+                        } });
+@
+
+
+1.4.4.5
+log
+@removed evalInitParameter code to use MiscUtil's; added logging
+@
+text
+@a38 1
+import java.util.logging.Level;
+a53 2
+import siscweb.util.Loggers;
+import siscweb.util.MiscUtil;
+d61 2
+a62 1
+ * scheme code in the SISC context. The code in the two on-*-sexp should be used to
+d82 1
+a82 15
+        final String servletName = this.getServletName();
+
+        if(Loggers.configuration.isLoggable(Level.FINEST)) {
+            Loggers.configuration.finest("Servlet " + servletName +
+                    " being initialized.");
+        }
+
+        // eval on-init-sexp; we don't fail in case of errors,
+        // as they can be fixed in the REPL
+        try {
+            final String sexp = this.getInitParameter("on-init-sexp");
+
+            if(Loggers.configuration.isLoggable(Level.FINEST)) {
+                Loggers.configuration.finest("Reading siscweb.on-init-sexp.");
+            }
+d84 1
+a84 7
+            MiscUtil.eval(sexp, this.getServletContext().getRealPath("/"), this.getServletName());
+        }
+        catch(SchemeException se) {
+            if(Loggers.configuration.isLoggable(Level.SEVERE)) {
+                Loggers.configuration.severe("Error evaluating parameter on-init-sexp.");
+            }
+        }
+d89 1
+a89 16
+        final String servletName = this.getServletName();
+
+        if(Loggers.configuration.isLoggable(Level.FINEST)) {
+            Loggers.configuration.finest("Servlet " + servletName +
+                    " being destroyed.");
+        }
+
+        try {
+            final String sexp = this.getInitParameter("on-destroy-sexp");
+            MiscUtil.eval(sexp, this.getServletContext().getRealPath("/"), this.getServletName());
+        }
+        catch(SchemeException se) {
+            if(Loggers.configuration.isLoggable(Level.SEVERE)) {
+                Loggers.configuration.severe("Error evaluating parameter on-destroy-sexp.");
+            }
+        }
+d136 52
+@
+
+
+1.4.4.6
+log
+@modified in accordance to Loggers -> Logger changes
+@
+text
+@d55 1
+a55 1
+import siscweb.util.Logger;
+d86 2
+a87 2
+        if(Logger.logger.isLoggable(Level.FINEST)) {
+            Logger.logger.finest("Servlet " + servletName +
+d96 2
+a97 2
+            if(Logger.logger.isLoggable(Level.FINEST)) {
+                Logger.logger.finest("Reading siscweb.on-init-sexp.");
+d103 2
+a104 2
+            if(Logger.logger.isLoggable(Level.SEVERE)) {
+                Logger.logger.severe("Error evaluating parameter on-init-sexp.");
+d113 2
+a114 2
+        if(Logger.logger.isLoggable(Level.FINEST)) {
+            Logger.logger.finest("Servlet " + servletName +
+d123 2
+a124 2
+            if(Logger.logger.isLoggable(Level.SEVERE)) {
+                Logger.logger.severe("Error evaluating parameter on-destroy-sexp.");
+@
+
+
+1.4.4.7
+log
+@simplified error logging
+@
+text
+@d84 1
+a84 2
+        try {
+            final String servletName = this.getServletName();
+d86 4
+a89 4
+            if(Logger.logger.isLoggable(Level.FINER)) {
+                Logger.logger.finer("Servlet " + servletName +
+                        " being initialized.");
+            }
+d91 3
+d96 2
+a97 2
+            if(Logger.logger.isLoggable(Level.INFO)) {
+                Logger.logger.info("Evaluating on-init-sexp for servlet : " + servletName);
+d102 1
+a102 1
+        catch(final SchemeException se) {
+d104 1
+a104 1
+                Logger.logger.severe(se.getMessage());
+d111 1
+a111 2
+        try {
+            final String servletName = this.getServletName();
+d113 4
+a116 4
+            if(Logger.logger.isLoggable(Level.FINER)) {
+                Logger.logger.finer("Servlet " + servletName +
+                        " being destroyed.");
+            }
+d118 1
+a119 5
+
+            if(Logger.logger.isLoggable(Level.INFO)) {
+                Logger.logger.info("Evaluating on-init-sexp for servlet : " + servletName);
+            }
+
+d122 1
+a122 1
+        catch(final SchemeException se) {
+d124 1
+a124 1
+                Logger.logger.severe(se.getMessage());
+@
+
+
+1.4.4.8
+log
+@added wrappers for PUT and DELETE verbs
+@
+text
+@d133 1
+a174 13
+    public void doPut(final HttpServletRequest request,
+            final HttpServletResponse response)
+    throws ServletException
+    {   
+        doGet(request, response);
+    }
+
+    public void doDelete(final HttpServletRequest request,
+            final HttpServletResponse response)
+    throws ServletException
+    {   
+        doGet(request, response);
+    }
+@
+
+
+1.4.4.9
+log
+@minor cleanups in import section
+@
+text
+@d38 1
+d47 1
+d54 1
+@
+
+
+1.3
+log
+@merged from rel-0-2-dev
+@
+text
+@d81 1
+a81 3
+            this.contextName = MiscUtil.qualifyName(
+                getServletContext().getServletContextName(),
+                getInitParameter("context-name"));
+a84 2
+            MiscUtil.changeDirectory(r, getServletContext().getRealPath("/"));
+
+d88 2
+d111 2
+d115 3
+a117 3
+        if(onDestroySExp != null) {
+            try {
+                final Interpreter r = Context.enter(this.contextName);
+d121 16
+a136 29
+            catch(final NullPointerException e) {
+                // this most likely means that the SISC Context was
+                // already destroyed by SISCApplicationServlet. No
+                // biggie.  Note: we could simply do a lookup on the
+                // context before using it, but then we still could
+                // have a NPE in a race condition.
+            }
+            catch(final IOException e) {
+                throw new RuntimeException(
+                    this.contextName +
+                    " : error evaluating on-destroy-sexp for servlet " +
+                    this.getServletName(), e);
+            }
+            catch(final SchemeException e) {
+                throw new RuntimeException(
+                    this.contextName +
+                    " : error evaluating on-destroy-sexp for servlet " +
+                    this.getServletName(),
+                    sisc.modules.s2j.Util.javaException(e));
+            }
+            finally {
+                try {
+                    // if ServletApplication has been destroyed already,
+                    // the context has been unregistered and this will
+                    // throw an exception
+                    Context.exit();
+                }
+                catch(Exception e) { }
+            }
+a147 1
+            // TODO: lookup sisclet once in production code
+@
+
+
+1.3.2.1
+log
+@merged from rel-0-3-dev
+@
+text
+@d161 1
+@
+
+
+1.3.4.1
+log
+@removed TODO
+@
+text
+@d161 1
+@
+
+
+1.3.4.2
+log
+@now picks up application name from context; misc fixes to init
+sequence
+@
+text
+@d83 1
+a83 1
+                getServletContext().getInitParameter("context-name"));
+d87 2
+a91 2
+                MiscUtil.changeDirectory(r, getServletContext().getRealPath("/"));
+
+a112 2
+        final Interpreter r = Context.enter(this.contextName);
+
+d115 3
+a117 3
+        try {
+            if(onDestroySExp != null) {
+                MiscUtil.changeDirectory(r, getServletContext().getRealPath("/"));
+d121 29
+a149 16
+        }
+        catch(final IOException e) {
+            throw new RuntimeException(
+                this.contextName +
+                " : error evaluating on-destroy-sexp for servlet " +
+                this.getServletName(), e);
+        }
+        catch(final SchemeException e) {
+            throw new RuntimeException(
+                this.contextName +
+                " : error evaluating on-destroy-sexp for servlet " +
+                this.getServletName(),
+                sisc.modules.s2j.Util.javaException(e));
+        }
+        finally {
+            Context.exit();
+@
+
+
+1.3.4.3
+log
+@SISC context name is now based just on ServletContext name
+@
+text
+@d81 3
+a83 1
+            this.contextName = getServletContext().getServletContextName();
+@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@d54 16
+d85 1
+a85 1
+            Interpreter r = Context.enter(this.contextName);
+d89 5
+a93 1
+            r.eval(getInitParameter("on-init-sexp"));
+d95 1
+a95 1
+        catch(IOException e) {
+d97 1
+a97 2
+                    this.contextName + " : unable to retrieve on-init-sexp");
+
+d99 1
+a99 1
+        catch(SchemeException e) {
+d101 4
+a104 1
+                this.contextName + " : error on init()", e);
+d113 1
+a113 4
+        try {
+            Interpreter r = Context.enter(this.contextName);
+
+            r.eval(getInitParameter("on-destroy-sexp"));
+d115 35
+a149 11
+        }
+        catch(IOException e) {
+            throw new RuntimeException(
+                this.contextName + " : I/O error in destroy-sexp", e);
+        }
+        catch (SchemeException e) {
+            throw new RuntimeException(
+                this.contextName + " : scheme error in destroy sexp (WARNING)", e);
+        }
+        finally {
+            Context.exit();
+a153 1
+
+d161 4
+a164 2
+            // TODO: lookup sisclet once
+            r.eval((Procedure)r.eval("sisclet"),
+d171 1
+a171 1
+        catch (SchemeException e) {
+d173 3
+a175 1
+                this.contextName + " : sisclet call failed",
+a190 1
+
+@
+
+
+1.2.4.1
+log
+@added javadocs; fixed a couple of potential npe; polished exception handling
+@
+text
+@a53 15
+/**
+ * This class adapts SISCweb's <code>sisclet</code> function to the J2EE
+ * HttpServlet interface. Two parameters, "on-init-sexp" and "on-destroy-sexp"
+ * are looked up (from the servlet declaration in web.xml) respectively upon
+ * init() and destroy() and evaluated as scheme code in the SISC context name
+ * specified by "context-name". The code in the two on-*-sexp should be used to
+ * setup and tear-down resources, publish functions, etc.
+ * More than one SISCAdapterServlet can be used in a given context-name in order
+ * to provide multiple base url patterns to scheme code.
+ * Note that the <code>sisclet</code> function should have been setup by specifying
+ * an instance of SISCApplicationServlet in the web.xml.
+ *
+ * @@see siscweb.web.SISCApplicationServlet
+ *
+ */
+d73 1
+a73 5
+            String onInitSExp = getInitParameter("on-init-sexp");
+
+            if(onInitSExp != null) {
+                r.eval(onInitSExp);
+            }
+d75 1
+a75 1
+        catch(final IOException e) {
+d77 2
+a78 3
+                    this.contextName +
+                    " : error evaluating on-init-sexp for servlet " +
+                    this.getServletName(), e);
+d80 1
+a80 1
+        catch(final SchemeException e) {
+d82 1
+a82 4
+                    this.contextName +
+                    " : error evaluating on-init-sexp for servlet " +
+                    this.getServletName(),
+                    sisc.modules.s2j.Util.javaException(e));
+d94 1
+a94 1
+            String onDestroySExp = getInitParameter("on-destroy-sexp");
+a95 3
+            if(onDestroySExp != null) {
+                r.eval(onDestroySExp);
+            }
+d97 1
+a97 1
+        catch(final IOException e) {
+d99 1
+a99 3
+                    this.contextName +
+                    " : error evaluating on-destroy-sexp for servlet " +
+                    this.getServletName(), e);
+d101 1
+a101 1
+        catch(final SchemeException e) {
+d103 1
+a103 4
+                    this.contextName +
+                    " : error evaluating on-destroy-sexp for servlet " +
+                    this.getServletName(),
+                    sisc.modules.s2j.Util.javaException(e));
+d111 1
+d119 2
+a120 4
+            // TODO: lookup sisclet once in production code
+            Procedure sisclet = (Procedure)r.eval("sisclet");
+
+            r.eval(sisclet,
+d127 1
+a127 1
+        catch(final SchemeException e) {
+d129 1
+a129 3
+                this.contextName +
+                " : sisclet call failed in servlet " +
+                this.getServletName(),
+d145 1
+@
+
+
+1.2.4.2
+log
+@sprinkled a few finals around
+@
+text
+@d84 1
+a84 1
+            final Interpreter r = Context.enter(this.contextName);
+d88 1
+a88 1
+            final String onInitSExp = getInitParameter("on-init-sexp");
+d115 1
+a115 1
+            final Interpreter r = Context.enter(this.contextName);
+d117 1
+a117 1
+            final String onDestroySExp = getInitParameter("on-destroy-sexp");
+@
+
+
+1.2.4.3
+log
+@made destroy() more fault-tolerant
+@
+text
+@d55 10
+a64 11
+ * This class adapts SISCweb's <code>sisclet</code> function to the
+ * J2EE HttpServlet interface. Two parameters, "on-init-sexp" and
+ * "on-destroy-sexp" are looked up (from the servlet declaration in
+ * web.xml) respectively upon init() and destroy() and evaluated as
+ * scheme code in the SISC context name specified by
+ * "context-name". The code in the two on-*-sexp should be used to
+ * setup and tear-down resources, publish functions, etc.  More than
+ * one SISCAdapterServlet can be used in a given context-name in order
+ * to provide multiple base url patterns to scheme code.  Note that
+ * the <code>sisclet</code> function should have been setup by
+ * specifying an instance of SISCApplicationServlet in the web.xml.
+d114 2
+a115 1
+        final String onDestroySExp = getInitParameter("on-destroy-sexp");
+d117 1
+a117 3
+        if(onDestroySExp != null) {
+            try {
+                final Interpreter r = Context.enter(this.contextName);
+d119 1
+d122 3
+a124 9
+            catch(final NullPointerException e) {
+                // this most likely means that the SISC Context was
+                // already destroyed by SISCApplicationServlet. No
+                // biggie.  Note: we could simply do a lookup on the
+                // context before using it, but then we still could
+                // have a NPE in a race condition.
+            }
+            catch(final IOException e) {
+                throw new RuntimeException(
+d128 3
+a130 3
+            }
+            catch(final SchemeException e) {
+                throw new RuntimeException(
+d135 3
+a137 10
+            }
+            finally {
+                try {
+                    // if ServletApplication has been destroyed already,
+                    // the context has been unregistered and this will
+                    // throw an exception
+                    Context.exit();
+                }
+                catch(Exception e) { }
+            }
+@
+
+
+1.2.4.4
+log
+@minor stylistic changes
+@
+text
+@d97 3
+a99 1
+                this.contextName + " : unable to retrieve on-init-sexp (WARNING)");
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d67 1
+a67 1
+                getInitParameter("contextName"));
+d76 1
+a76 1
+            throw new RuntimeException(
+d81 1
+a81 1
+            throw new RuntimeException(
+@
+
+
+1.1.1.1
+log
+@initial import
+@
+text
+@@
+
+
+1.1.1.2
+log
+@now correctly looks up "context-name" servlet parameter instead of "contextName"
+@
+text
+@a50 1
+import siscweb.contcentric.ContinuationManager;
+d67 1
+a67 1
+                getInitParameter("context-name"));
+d76 1
+a76 1
+            throw new ServletException(
+d81 1
+a81 1
+            throw new ServletException(
+@
+
+
+1.1.1.3
+log
+@removed bogus import of ContinuationManager
+@
+text
+@d51 1
+@
+
+

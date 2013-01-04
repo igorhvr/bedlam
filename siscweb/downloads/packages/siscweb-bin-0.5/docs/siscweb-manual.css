@@ -1,0 +1,38 @@
+.methodname { font-weight: bold }
+.parameter { font-style: italic }
+.type { }
+
+a:active { color: #ff0000; }
+a:hover { color: #000000; }
+a:link { text-decoration: none; color: #0000ff; }
+a:unvisited { text-decoration: none; color: #0000ff; }
+a:visited { text-decoration: none; color: #0000ff; }
+
+html {
+  font-size: 100.01%;
+}
+
+body {
+  background-color: #ffffff;
+  color: #333333;
+  font-size: 1em;
+  line-height: 1.4em;
+  padding-left: 3%;
+  padding-right: 3%;
+}
+
+
+h1, h2 { color: #009966; }
+
+h3, h4, h5 { color: #003399; }
+
+
+ul { list-style-type: square; }
+
+.programlisting {
+  background-color: #fafafa;
+  border-style: dashed;
+  border-width: 1px;
+#  font-family: monospace;
+  padding: 1%;
+}

@@ -1,0 +1,96 @@
+head	1.1;
+branch	1.1.1;
+access;
+symbols
+	start:1.1.1.1 rel-0-1-dev:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches;
+next	1.1.1.2;
+
+1.1.1.2
+date	2005.03.20.14.42.46;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@(current-class-path '("/home/acolomba/src/siscweb/scm/"))
+
+(require-library 'siscweb/publish)
+(import siscweb/publish)
+
+(require-library 'siscweb/bindings)
+(import siscweb/bindings)
+
+(require-library 'siscweb/html)
+(import siscweb/html)
+
+
+(define (page-a)
+  (lambda (k-url)
+    `(html
+      (head (title "page-a"))
+      (body (a (@@ (href ,k-url)) "next" )))))
+
+
+(define (page-b)
+  (lambda (k-url)
+    `(html
+      (head (title "page-b"))
+      (body
+       (a (@@ (href ,k-url)) "next" )
+       (url-dispatch ,page-c "cool")
+       (url-bindings ((link "3")) "ubercool")))))
+
+
+(define (page-c request)
+  (send-html/suspend
+   (lambda (k-url)
+     `(html
+       (head (title "page-c"))
+       (body (url-dispatch ,page-c "same"))))))
+
+(define (dispy request)
+  (send-html/suspend (page-a))
+  (let-bindings ((link "link"))
+                (get-bindings (send-html/suspend (page-b)))
+    (send-html/finish `(html (body "a" ,link)))))
+
+(publish "/dispy" dispy)
+@
+
+
+1.1.1.1
+log
+@initial import
+@
+text
+@@
+
+
+1.1.1.2
+log
+@removed experimental file
+@
+text
+@@
+

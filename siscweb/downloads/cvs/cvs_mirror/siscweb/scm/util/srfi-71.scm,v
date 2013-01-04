@@ -1,0 +1,109 @@
+head	1.2;
+access;
+symbols
+	rel-0-6-dev:1.2.0.4
+	rel-0-5-fix:1.2.0.2
+	rel-0-5:1.2
+	rel-0-5-dev-safe-frames:1.1.2.1.0.2
+	Root_rel-0-5-dev-safe-frames:1.1.2.1
+	rel-0-5-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2007.04.12.03.51.19;	author acolomba;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2007.01.30.03.55.05;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2007.01.30.03.55.05;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@merged from rel-0-5-dev
+@
+text
+@(module util/srfi-71
+  ((srfi-let i:let i:named-let i:undefined r5rs-let r5rs-let* r5rs-letrec)
+   (srfi-let* i:let i:named-let i:undefined r5rs-let r5rs-let* r5rs-letrec)
+   (srfi-letrec i:let i:named-let i:undefined r5rs-let r5rs-let* r5rs-letrec)
+   uncons unlist unvector values->list values->vector)
+
+  (define-syntax r5rs-let
+    (syntax-rules ()
+      ((r5rs-let ((v x) ...) body1 body ...)
+       (let ((v x) ...) body1 body ...))
+      ((r5rs-let tag ((v x) ...) body1 body ...)
+       (let tag ((v x) ...) body1 body ...))))
+
+  (define-syntax r5rs-let*
+    (syntax-rules ()
+      ((r5rs-let* ((v x) ...) body1 body ...)
+       (let* ((v x) ...) body1 body ...))))
+
+  (define-syntax r5rs-letrec
+    (syntax-rules ()
+      ((r5rs-letrec ((v x) ...) body1 body ...)
+       (letrec ((v x) ...) body1 body ...))))
+
+  (include "letvalues.scm")
+  )
+@
+
+
+1.1
+log
+@file srfi-71.scm was initially added on branch rel-0-5-dev.
+@
+text
+@d1 25
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 25
+(module util/srfi-71
+  ((srfi-let i:let i:named-let i:undefined r5rs-let r5rs-let* r5rs-letrec)
+   (srfi-let* i:let i:named-let i:undefined r5rs-let r5rs-let* r5rs-letrec)
+   (srfi-letrec i:let i:named-let i:undefined r5rs-let r5rs-let* r5rs-letrec)
+   uncons unlist unvector values->list values->vector)
+
+  (define-syntax r5rs-let
+    (syntax-rules ()
+      ((r5rs-let ((v x) ...) body1 body ...)
+       (let ((v x) ...) body1 body ...))
+      ((r5rs-let tag ((v x) ...) body1 body ...)
+       (let tag ((v x) ...) body1 body ...))))
+
+  (define-syntax r5rs-let*
+    (syntax-rules ()
+      ((r5rs-let* ((v x) ...) body1 body ...)
+       (let* ((v x) ...) body1 body ...))))
+
+  (define-syntax r5rs-letrec
+    (syntax-rules ()
+      ((r5rs-letrec ((v x) ...) body1 body ...)
+       (letrec ((v x) ...) body1 body ...))))
+
+  (include "letvalues.scm")
+  )
+@
+

@@ -1,0 +1,1856 @@
+head	1.6;
+access;
+symbols
+	rel-0-6-dev:1.6.0.4
+	rel-0-5-fix:1.6.0.2
+	rel-0-5:1.6
+	rel-0-5-dev-safe-frames:1.5.4.1.0.2
+	Root_rel-0-5-dev-safe-frames:1.5.4.1
+	rel-0-4-fix-0:1.5
+	rel-0-5-dev:1.5.0.4
+	rel-0-4-fix:1.5.0.2
+	rel-0-3-fix-3:1.4.2.2
+	rel-0-3-fix-2:1.4.2.1
+	rel-0-4-dev-sisc-1-11:1.4.4.4
+	rel-0-3-fix-1:1.4
+	rel-0-4-dev:1.4.0.4
+	rel-0-3-fix:1.4.0.2
+	rel-0-3:1.4
+	rel-0-3-dev-1:1.3.4.1
+	rel-0-2-fix-2:1.3.2.1
+	rel-0-2-fix-1:1.3
+	rel-0-2-fix:1.3.0.2
+	rel-0-3-dev:1.3.0.4
+	rel-0-2:1.3
+	rel-0-1-fix-1:1.2
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	rel-0-1-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2007.04.12.03.51.18;	author acolomba;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2006.09.03.01.42.22;	author acolomba;	state Exp;
+branches
+	1.5.4.1;
+next	1.4;
+
+1.4
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.4.2.1
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2005.06.19.03.03.51;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.52;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.03.26.00.33.00;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.03.26.00.33.00;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.04.17.23.38.13;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.04.23.00.45.09;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2005.04.23.15.37.37;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2005.05.07.03.21.23;	author acolomba;	state Exp;
+branches;
+next	1.2.4.5;
+
+1.2.4.5
+date	2005.05.08.17.27.54;	author acolomba;	state Exp;
+branches;
+next	1.2.4.6;
+
+1.2.4.6
+date	2005.05.14.13.24.46;	author acolomba;	state Exp;
+branches;
+next	1.2.4.7;
+
+1.2.4.7
+date	2005.05.22.20.12.49;	author acolomba;	state Exp;
+branches;
+next	1.2.4.8;
+
+1.2.4.8
+date	2005.05.30.22.52.32;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2005.07.31.20.04.03;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2005.07.19.03.05.04;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.2.1
+date	2006.02.25.17.12.02;	author acolomba;	state Exp;
+branches;
+next	1.4.2.2;
+
+1.4.2.2
+date	2006.04.15.15.55.23;	author acolomba;	state Exp;
+branches;
+next	1.4.2.3;
+
+1.4.2.3
+date	2006.06.12.03.09.09;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2006.01.31.04.15.32;	author acolomba;	state Exp;
+branches;
+next	1.4.4.2;
+
+1.4.4.2
+date	2006.02.12.20.57.20;	author acolomba;	state Exp;
+branches;
+next	1.4.4.3;
+
+1.4.4.3
+date	2006.02.12.23.25.02;	author acolomba;	state Exp;
+branches;
+next	1.4.4.4;
+
+1.4.4.4
+date	2006.02.12.23.54.34;	author acolomba;	state Exp;
+branches;
+next	1.4.4.5;
+
+1.4.4.5
+date	2006.02.22.04.16.19;	author acolomba;	state Exp;
+branches;
+next	1.4.4.6;
+
+1.4.4.6
+date	2006.03.11.17.50.19;	author acolomba;	state Exp;
+branches;
+next	1.4.4.7;
+
+1.4.4.7
+date	2006.03.12.00.53.45;	author acolomba;	state Exp;
+branches;
+next	1.4.4.8;
+
+1.4.4.8
+date	2006.03.12.02.57.03;	author acolomba;	state Exp;
+branches;
+next	1.4.4.9;
+
+1.4.4.9
+date	2006.03.12.14.38.26;	author acolomba;	state Exp;
+branches;
+next	1.4.4.10;
+
+1.4.4.10
+date	2006.03.14.03.43.50;	author acolomba;	state Exp;
+branches;
+next	1.4.4.11;
+
+1.4.4.11
+date	2006.03.21.01.16.20;	author acolomba;	state Exp;
+branches;
+next	1.4.4.12;
+
+1.4.4.12
+date	2006.03.27.22.48.18;	author acolomba;	state Exp;
+branches;
+next	1.4.4.13;
+
+1.4.4.13
+date	2006.04.09.16.27.07;	author acolomba;	state Exp;
+branches;
+next	1.4.4.14;
+
+1.4.4.14
+date	2006.04.09.17.17.03;	author acolomba;	state Exp;
+branches;
+next	1.4.4.15;
+
+1.4.4.15
+date	2006.04.09.18.18.49;	author acolomba;	state Exp;
+branches;
+next	1.4.4.16;
+
+1.4.4.16
+date	2006.04.12.02.51.41;	author acolomba;	state Exp;
+branches;
+next	1.4.4.17;
+
+1.4.4.17
+date	2006.04.13.00.33.46;	author acolomba;	state Exp;
+branches;
+next	1.4.4.18;
+
+1.4.4.18
+date	2006.06.12.03.10.56;	author acolomba;	state Exp;
+branches;
+next	1.4.4.19;
+
+1.4.4.19
+date	2006.08.11.03.34.32;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.5.4.1
+date	2007.01.20.17.15.54;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@merged from rel-0-5-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2007
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+(require-library 'sisc/libs/srfi/srfi-19) ; time data types and procedures
+
+(require-library 'util/misc)
+
+(module siscweb/response
+  (current-response
+   response/add-cookie! response/add-header! response/add-headers!
+   response/commit! response/committed? response/contains-header?
+   response/encode-redirect-url response/encode-url
+   response/get-buffer-size response/get-character-encoding
+   response/get-locale response/open-binary-output-port
+   response/open-output-port response/reset!  response/reset-buffer!
+   response/send-error response/send-redirect
+   response/set-buffer-size! response/set-content-length!
+   response/set-content-type! response/set-header!
+   response/set-locale! response/set-status!)
+
+  (import s2j)
+  (import java-io)
+
+  (import srfi-16)
+  (import srfi-19)
+
+  (import util/misc)
+
+  (define-generic-java-methods
+    (jadd-cookie |addCookie|)
+    (jadd-date-header |addDateHeader|)
+    (jadd-header |addHeader|)
+    (jadd-int-header |addIntHeader|)
+    (jcontains-header |containsHeader|)
+    (jencode-redirect-url |encodeRedirectURL|)
+    (jencode-url |encodeURL|)
+    (jflush-buffer |flushBuffer|)
+    (jget-buffer-size |getBufferSize|)
+    (jget-character-encoding |getCharacterEncoding|)
+    (jget-locale |getLocale|)
+    (jget-output-stream |getOutputStream|)
+    (jget-response |getResponse|)
+    (jget-writer |getWriter|)
+    (jis-committed |isCommitted|)
+    (jreset |reset|)
+    (jreset-buffer |resetBuffer|)
+    (jsend-error |sendError|)
+    (jsend-redirect |sendRedirect|)
+    (jset-buffer-size |setBufferSize|)
+    (jset-content-length |setContentLength|)
+    (jset-content-type |setContentType|)
+    (jset-date-header |setDateHeader|)
+    (jset-header |setHeader|)
+    (jset-int-header |setIntHeader|)
+    (jset-locale |setLocale|)
+    (jset-status |setStatus|))
+
+
+  (define (current-response)
+    (jget-response (java-null (java-class '|siscweb.web.RequestScope|))))
+
+  (define (response/add-cookie! cookie)
+    (jadd-cookie (current-response) cookie)
+    (void))
+
+  (define (response/add-header! key value)
+    (cond ((number? value)
+           (jadd-int-header (current-response) (->jstring key) (->jint value)))
+          ((date? value)
+           (response/add-header! key (date->time-utc value)))
+          ((time? value)
+           (jadd-date-header (current-response) (->jstring key)
+                            (->jlong (* 1000 (time-second value)))))
+          (else
+           (jadd-header (current-response) (->jstring key) (->jstring value))))
+    (void))
+
+  (define (response/add-headers! alst)
+    (for-each
+     (lambda (pair)
+       (let ((key (car pair))
+             (value (cadr pair)))
+         (if (equal? key "Content-Type")
+             (response/set-content-type! value)
+             (response/add-header! key value))))
+     alst)
+    (void))
+
+  (define (response/contains-header? key)
+    (->boolean (jcontains-header (current-response) (->jstring key))))
+
+  (define (response/encode-redirect-url url)
+    (->string (jencode-redirect-url (current-response) (->jstring url))))
+
+  (define (response/encode-url url)
+    (->string (jencode-url (current-response) (->jstring url))))
+
+  (define (response/commit!)
+    (jflush-buffer (current-response))
+    (void))
+
+  (define (response/get-buffer-size)
+    (->number (jget-buffer-size (current-response))))
+
+  (define (response/get-character-encoding)
+    (->string (jget-character-encoding (current-response))))
+
+  (define (response/get-locale)
+    (jget-locale (current-response)))
+
+  ;; TODO: rename to response/open-*-output-port
+  (define (response/open-binary-output-port)
+    (->binary-output-port (jget-output-stream (current-response)) #f))
+
+  (define (response/open-output-port)
+    (->character-output-port (jget-writer (current-response)) #f))
+
+  (define (response/committed?)
+    (->boolean (jis-committed (current-response))))
+
+  (define (response/reset!)
+    (jreset (current-response)))
+
+  (define (response/reset-buffer!)
+    (jreset-buffer (current-response)))
+
+  (define response/send-error
+    (case-lambda
+      ((sc)
+       (jsend-error (current-response) (->jint sc))
+       (void))
+      ((sc msg)
+       (jsend-error (current-response) (->jint sc) (->jstring msg))
+       (void))))
+
+
+  (define (response/send-redirect url)
+    (jsend-redirect (current-response) (->jstring url))
+    (void))
+
+  (define (response/set-buffer-size! size)
+    (jset-buffer-size (current-response) (->jint size))
+    (void))
+
+  (define (response/set-content-length! len)
+    (jset-content-length (current-response) (->jint len)))
+
+  (define (response/set-content-type! mime-type)
+    (jset-content-type (current-response) (->jstring mime-type))
+    (void))
+
+  (define (response/set-header! key value)
+    (cond ((number? value)
+           (jset-int-header (current-response) (->jstring key) (->jint value)))
+          ((date? value)
+           (response/set-header! key (date->time-utc value)))
+          ((time? value)
+           (jset-date-header (current-response) (->jstring key) (->jlong (* 1000 (time-second value)))))
+          (else
+           (jset-header (current-response) (->jstring key) (->jstring value))))
+    (void))
+
+  (define (response/set-locale! loc)
+    (jset-locale (current-response) loc)
+    (void))
+
+  (define (response/set-status! sc)
+    (jset-status (current-response) (->jint sc)))
+
+  )
+@
+
+
+1.5
+log
+@merged from rel-0-4-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+a56 3
+  (define-java-classes
+    (<sisc-adapter-servlet> |siscweb.web.SISCAdapterServlet|))
+
+d88 1
+a88 1
+    (jget-response (java-null <sisc-adapter-servlet>)))
+@
+
+
+1.5.4.1
+log
+@now uses RequestScope to read/write request/response objects
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2007
+d57 3
+d91 1
+a91 1
+    (jget-response (java-null (java-class '|siscweb.web.RequestScope|))))
+@
+
+
+1.4
+log
+@merged from rel-0-3-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+d31 3
+a33 1
+(require-library 'siscweb/contcentric)
+d37 11
+a47 1
+  (send/suspend send/finish send/forward send/back)
+d50 5
+a54 1
+  (import siscweb/contcentric)
+d57 143
+a199 28
+  ;; sends a response and suspends
+  (define (send/suspend send-proc)
+    (let/cc resume-k
+      (let ((k-url (store/k! resume-k)))
+        (send-proc (current-request) (current-response) k-url resume-k)
+        ((current-suspend-k) #f))))
+
+
+  ;; sends a response and stops; all continuations prior to this one
+  ;; are cleared
+  (define (send/finish send-proc)
+    (clear/k!)
+    (send-proc (current-request) (current-response))
+    ((current-suspend-k) #f))
+
+
+  ;; sends a response and suspends, but clears the continuation table
+  ;; first
+  (define (send/forward send-proc)
+    (clear/k!)
+    (send/suspend send-proc))
+
+
+  ;; sends a response and stops; unlike send/finish, the continuation
+  ;; table is not touched
+  (define (send/back send-proc)
+    (send-proc (current-request) (current-response))
+    ((current-suspend-k) #f))
+@
+
+
+1.4.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@a30 3
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+(require-library 'sisc/libs/srfi/srfi-19) ; time data types and procedures
+
+d35 1
+a35 4
+  (send/suspend send/finish send/forward send/back
+   response/set-content-type! response/write response/reset
+   response/add-header! response/add-headers!
+   response/contains-header? response/redirect)
+a37 4
+
+  (import srfi-16)
+  (import srfi-19)
+
+a40 13
+  (define-generic-java-methods
+    add-date-header
+    add-header
+    add-int-header
+    get-writer
+    (jreset reset)
+    set-date-header
+    set-header
+    set-int-header
+    send-redirect
+    set-content-type
+    (jwrite write))
+
+d42 5
+a46 10
+  (define send/suspend
+    (case-lambda
+      ((header-alst send-proc)
+       (response/add-headers! header-alst)
+       (send/suspend send-proc))
+      ((send-proc)
+       (let/cc resume-k
+               (let ((k-url (store/k! resume-k)))
+                 (send-proc (current-request) (current-response) k-url resume-k)
+                 ((current-suspend-k) #f))))))
+d51 4
+a54 9
+  (define send/finish
+    (case-lambda
+      ((header-alst send-proc)
+       (response/add-headers! header-alst)
+       (send/finish send-proc))
+      ((send-proc)
+       (clear/k!)
+       (send-proc (current-request) (current-response))
+       ((current-suspend-k) #f))))
+d59 3
+a61 8
+  (define send/forward
+    (case-lambda
+      ((header-alst send-proc)
+       (response/add-headers! header-alst)
+       (send/forward send-proc))
+      ((send-proc)
+       (clear/k!)
+       (send/suspend send-proc))))
+d66 4
+a69 61
+  (define send/back
+    (case-lambda
+      ((header-alst send-proc)
+       (response/add-headers! header-alst)
+       (send/back send-proc))
+      ((send-proc)
+       (send-proc (current-request) (current-response))
+       ((current-suspend-k) #f))))
+
+
+  ;; sets the response content type
+  (define (response/set-content-type! mime-type)
+    (set-content-type (current-response) (->jstring mime-type)))
+
+  ;; resets the response
+  (define (response/reset)
+    (jreset (current-response)))
+
+  ;; writes content to the response outputstream
+  (define (response/write str)
+    (jwrite (get-writer (current-response))
+           (->jstring str)))
+
+  (define (response/contains-header? key)
+    (->boolean (contains-header (current-response) (->jstring key))))
+
+  (define (response/add-header! key value)
+    (cond ((number? value)
+           (add-int-header (current-response) (->jstring key) (->jint value)))
+          ((date? value)
+           (response/add-header! key (date->time-utc value)))
+          ((time? value)
+           (add-date-header (current-response) (->jstring key)
+                            (->jlong (* 1000 (time-second value)))))
+          (else
+           (add-header (current-response) (->jstring-key) (->jstring value)))))
+
+  (define (response/set-header! key value)
+    (cond ((number? value)
+           (set-int-header (current-response) (->jstring key) (->jint value)))
+          ((date? value)
+           (response/add-header! key (date->time-utc value)))
+          ((time? value)
+           (set-date-header (current-response) (->jstring key) (->jlong (* 1000 (time-second value)))))
+          (else
+           (set-header (current-response) (->jstring-key) (->jstring value)))))
+
+  ;; adds headers to the response
+  (define (response/add-headers! alst)
+    (for-each
+     (lambda (pair)
+       (let ((key (car pair))
+             (value (cadr pair)))
+         (if (equal? key "Content-Type")
+             (response/set-content-type! value)
+             (response/add-header! key value))))
+     alst))
+
+  ;; sends a redirect
+  (define (response/redirect url)
+    (send-redirect (current-response) (->jstring url)))
+@
+
+
+1.4.2.2
+log
+@merged from rel-0-4-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+d34 1
+a34 1
+(require-library 'util/s2j-io)
+d38 4
+a41 11
+  (current-response
+   response/add-cookie! response/add-header! response/add-headers!
+   response/commit! response/committed? response/contains-header?
+   response/encode-redirect-url response/encode-url
+   response/get-buffer-size response/get-character-encoding
+   response/get-locale response/open-binary-output-port
+   response/open-output-port response/reset!  response/reset-buffer!
+   response/send-error response/send-redirect
+   response/set-buffer-size! response/set-content-length!
+   response/set-content-type! response/set-header!
+   response/set-locale! response/set-status!)
+d48 1
+a48 1
+  (import util/s2j-io)
+a50 3
+  (define-java-classes
+    (<sisc-adapter-servlet> |siscweb.web.SISCAdapterServlet|))
+
+d52 11
+a62 35
+    (jadd-cookie |addCookie|)
+    (jadd-date-header |addDateHeader|)
+    (jadd-header |addHeader|)
+    (jadd-int-header |addIntHeader|)
+    (jcontains-header |containsHeader|)
+    (jencode-redirect-url |encodeRedirectURL|)
+    (jencode-url |encodeURL|)
+    (jflush-buffer |flushBuffer|)
+    (jget-buffer-size |getBufferSize|)
+    (jget-character-encoding |getCharacterEncoding|)
+    (jget-locale |getLocale|)
+    (jget-output-stream |getOutputStream|)
+    (jget-response |getResponse|)
+    (jget-writer |getWriter|)
+    (jis-committed |isCommitted|)
+    (jreset |reset|)
+    (jreset-buffer |resetBuffer|)
+    (jsend-error |sendError|)
+    (jsend-redirect |sendRedirect|)
+    (jset-buffer-size |setBufferSize|)
+    (jset-content-length |setContentLength|)
+    (jset-content-type |setContentType|)
+    (jset-date-header |setDateHeader|)
+    (jset-header |setHeader|)
+    (jset-int-header |setIntHeader|)
+    (jset-locale |setLocale|)
+    (jset-status |setStatus|))
+
+
+  (define (current-response)
+    (jget-response (java-null <sisc-adapter-servlet>)))
+
+  (define (response/add-cookie! cookie)
+    (jadd-cookie (current-response) cookie)
+    (void))
+d64 11
+a74 11
+  (define (response/add-header! key value)
+    (cond ((number? value)
+           (jadd-int-header (current-response) (->jstring key) (->jint value)))
+          ((date? value)
+           (response/add-header! key (date->time-utc value)))
+          ((time? value)
+           (jadd-date-header (current-response) (->jstring key)
+                            (->jlong (* 1000 (time-second value)))))
+          (else
+           (jadd-header (current-response) (->jstring-key) (->jstring value))))
+    (void))
+a75 10
+  (define (response/add-headers! alst)
+    (for-each
+     (lambda (pair)
+       (let ((key (car pair))
+             (value (cadr pair)))
+         (if (equal? key "Content-Type")
+             (response/set-content-type! value)
+             (response/add-header! key value))))
+     alst)
+    (void))
+d77 11
+a87 2
+  (define (response/contains-header? key)
+    (->boolean (jcontains-header (current-response) (->jstring key))))
+a88 2
+  (define (response/encode-redirect-url url)
+    (->string (jencode-redirect-url (current-response) (->jstring url))))
+d90 10
+a99 2
+  (define (response/encode-url url)
+    (->string (jencode-url (current-response) (->jstring url))))
+a100 3
+  (define (response/commit!)
+    (jflush-buffer (current-response))
+    (void))
+d102 10
+a111 2
+  (define (response/get-buffer-size)
+    (->number (jget-buffer-size (current-response))))
+a112 2
+  (define (response/get-character-encoding)
+    (->string (jget-character-encoding (current-response))))
+d114 3
+a116 6
+  (define (response/get-locale)
+    (jget-locale (current-response)))
+
+  ;; TODO: rename to response/open-*-output-port
+  (define (response/open-binary-output-port)
+    (->binary-output-port (jget-output-stream (current-response)) #f))
+d118 2
+a119 7
+  (define (response/open-output-port)
+    (->character-output-port (jget-writer (current-response)) #f))
+
+  (define (response/committed?)
+    (->boolean (jis-committed (current-response))))
+
+  (define (response/reset!)
+d122 4
+a125 2
+  (define (response/reset-buffer!)
+    (jreset-buffer (current-response)))
+d127 2
+a128 17
+  (define response/send-error
+    (case-lambda
+      ((sc)
+       (jsend-error (current-response) (->jint sc))
+       (void))
+      ((sc msg)
+       (jsend-error (current-response) (->jint sc) (->jstring msg))
+       (void))))
+
+
+  (define (response/send-redirect url)
+    (jsend-redirect (current-response) (->jstring url))
+    (void))
+
+  (define (response/set-buffer-size! size)
+    (jset-buffer-size (current-response) (->jint size))
+    (void))
+d130 10
+a139 6
+  (define (response/set-content-length! len)
+    (jset-content-length (current-response) (->jint len)))
+
+  (define (response/set-content-type! mime-type)
+    (jset-content-type (current-response) (->jstring mime-type))
+    (void))
+d143 1
+a143 1
+           (jset-int-header (current-response) (->jstring key) (->jint value)))
+d145 1
+a145 1
+           (response/set-header! key (date->time-utc value)))
+d147 1
+a147 1
+           (jset-date-header (current-response) (->jstring key) (->jlong (* 1000 (time-second value)))))
+d149 1
+a149 2
+           (jset-header (current-response) (->jstring key) (->jstring value))))
+    (void))
+d151 10
+a160 6
+  (define (response/set-locale! loc)
+    (jset-locale (current-response) loc)
+    (void))
+
+  (define (response/set-status! sc)
+    (jset-status (current-response) (->jint sc)))
+d162 3
+@
+
+
+1.4.2.3
+log
+@fixed typo
+@
+text
+@d107 1
+a107 1
+           (jadd-header (current-response) (->jstring key) (->jstring value))))
+@
+
+
+1.4.4.1
+log
+@added response/[set-content-type!|reset|write] functions
+@
+text
+@d35 1
+a35 2
+  (send/suspend send/finish send/forward send/back
+   response/set-content-type! response/write response/reset)
+a37 1
+
+a40 6
+  (define-generic-java-methods
+    get-writer
+    (jreset reset)
+    set-content-type
+    (jwrite write))
+
+a69 13
+
+  ;; sets the response content type
+  (define (response/set-content-type! mime-type)
+    (set-content-type (current-response) (->jstring mime-type)))
+
+  ;; resets the response
+  (define (response/reset)
+    (jreset (current-response)))
+
+  ;; writes content to the response outputstream
+  (define (response/write str)
+    (jwrite (get-writer (current-response))
+           (->jstring str)))
+@
+
+
+1.4.4.2
+log
+@added header functions
+@
+text
+@a30 3
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+(require-library 'sisc/libs/srfi/srfi-19) ; time data types and procedures
+
+d36 1
+a36 3
+   response/set-content-type! response/write response/reset
+   response/add-header! response/add-headers!
+   response/contains-header? response/redirect)
+a39 3
+  (import srfi-16)
+  (import srfi-19)
+
+a43 3
+    add-date-header
+    add-header
+    add-int-header
+a45 4
+    set-date-header
+    set-header
+    set-int-header
+    send-redirect
+a90 30
+
+  (define (response/contains-header? key)
+    (->boolean (contains-header (current-response) (->jstring key))))
+
+  (define (response/add-header! key value)
+    (cond ((number? value)
+           (add-int-header response (->jstring key) (->jint value)))
+          ((date? value)
+           (add-date-header response (->jstring key) (->jlong (* 1000 (time-second t)))))
+          (else
+           (add-header response (->jstring-key) (->jstring value)))))
+
+  (define (response/set-header! key value)
+    (cond ((number? value)
+           (set-int-header response (->jstring key) (->jint value)))
+          ((date? value)
+           (set-date-header response (->jstring key) (->jlong (* 1000 (time-second t)))))
+          (else
+           (set-header response (->jstring-key) (->jstring value)))))
+
+  ;; adds headers to the response
+  (define (response/add-headers! alst)
+    (for-each
+     (lambda (pair)
+       (response/add-header! (car pair) (cadr pair)))
+     alst))
+
+  ;; sends a redirect
+  (define (response/redirect url)
+    (send-redirect (current-response) (->jstring url)))
+@
+
+
+1.4.4.3
+log
+@send/* functions now accept an assoc list of HTTP headers;
+response/add-headers! now behaves specially for Content-Type; fixed
+handling of date/time headers
+@
+text
+@d65 5
+a69 10
+  (define send/suspend
+    (case-lambda
+      ((header-alst send-proc)
+       (response/add-headers! header-alst)
+       (send/suspend send-proc))
+      ((send-proc)
+       (let/cc resume-k
+               (let ((k-url (store/k! resume-k)))
+                 (send-proc (current-request) (current-response) k-url resume-k)
+                 ((current-suspend-k) #f))))))
+d74 4
+a77 9
+  (define send/finish
+    (case-lambda
+      ((header-alst send-proc)
+       (response/add-headers! header-alst)
+       (send/finish send-proc))
+      ((send-proc)
+       (clear/k!)
+       (send-proc (current-request) (current-response))
+       ((current-suspend-k) #f))))
+d82 3
+a84 8
+  (define send/forward
+    (case-lambda
+      ((header-alst send-proc)
+       (response/add-headers! header-alst)
+       (send/forward send-proc))
+      ((send-proc)
+       (clear/k!)
+       (send/suspend send-proc))))
+d90 2
+a91 7
+    (case-lambda
+      ((header-alst send-proc)
+       (response/add-headers! header-alst)
+       (send/back send-proc))
+      ((send-proc)
+       (send-proc (current-request) (current-response))
+       ((current-suspend-k) #f))))
+d112 1
+a112 1
+           (add-int-header (current-response) (->jstring key) (->jint value)))
+d114 1
+a114 4
+           (response/add-header! key (date->time-utc value)))
+          ((time? value)
+           (add-date-header (current-response) (->jstring key)
+                            (->jlong (* 1000 (time-second value)))))
+d116 1
+a116 1
+           (add-header (current-response) (->jstring-key) (->jstring value)))))
+d120 1
+a120 1
+           (set-int-header (current-response) (->jstring key) (->jint value)))
+d122 1
+a122 3
+           (response/add-header! key (date->time-utc value)))
+          ((time? value)
+           (set-date-header (current-response) (->jstring key) (->jlong (* 1000 (time-second value)))))
+d124 1
+a124 1
+           (set-header (current-response) (->jstring-key) (->jstring value)))))
+d130 1
+a130 5
+       (let ((key (car pair))
+             (value (cadr pair)))
+         (if (equal? key "Content-Type")
+             (response/set-content-type! value)
+             (response/add-header! key value))))
+@
+
+
+1.4.4.4
+log
+@fixed send/back signature
+@
+text
+@d104 1
+a104 1
+  (define send/back
+@
+
+
+1.4.4.5
+log
+@now the procedure passed to send/* functions does not need to be
+passed a request/response pair
+@
+text
+@d72 3
+a74 3
+         (let ((k-url (store/k! resume-k)))
+           (send-proc k-url resume-k)
+           ((current-suspend-k) #f))))))
+d86 1
+a86 1
+       (send-proc)
+d110 1
+a110 1
+       (send-proc)
+@
+
+
+1.4.4.6
+log
+@added get-output-port procedure
+@
+text
+@d41 1
+a41 2
+   response/contains-header? response/redirect
+   response/get-output-port)
+a50 3
+  (define-java-classes
+    (<stream-output-port> |sisc.io.StreamOutputPort|))
+
+a54 1
+    get-output-stream
+a164 8
+
+
+  ;; returns the outputportstream as an outputport
+  (define (response/get-output-port)
+    (java-unwrap
+     (java-new <stream-output-port>
+               (get-output-stream (current-response))
+               (->jboolean #f))))
+@
+
+
+1.4.4.7
+log
+@added response/get-binary-output-stream procedure; now uses
+util/s2j-io module
+@
+text
+@a34 1
+(require-library 'util/s2j-io)
+d42 1
+a42 1
+   response/get-output-port response/get-binary-output-port)
+a49 1
+  (import util/s2j-io)
+d52 3
+a172 3
+  (define (response/get-binary-output-port)
+    (->binary-output-port (get-output-stream (current-response)) #f))
+
+d174 4
+a177 1
+    (->output-port (get-writer (current-response))))
+@
+
+
+1.4.4.8
+log
+@response/write now uses response/get-output-port; fixed
+response/get-output-port
+@
+text
+@d65 2
+a66 1
+    set-content-type)
+d128 2
+a129 1
+    (display str (response/get-output-port)))
+d176 1
+a176 1
+    (->output-port (get-writer (current-response)) #f))
+@
+
+
+1.4.4.9
+log
+@removed response/write
+@
+text
+@d40 1
+a40 1
+   response/set-content-type! response/reset
+d125 4
+@
+
+
+1.4.4.10
+log
+@fitted response/get-output-port to new s2j-io api
+@
+text
+@d170 1
+a170 1
+    (->character-output-port (get-writer (current-response)) #f))
+@
+
+
+1.4.4.11
+log
+@now uses SISC's java-io instead of util/s2j-io
+@
+text
+@d35 1
+a45 1
+  (import java-io)
+d51 1
+@
+
+
+1.4.4.12
+log
+@re-enabled util/s2j-io b/c java-io is not yet released in SISC
+@
+text
+@a34 1
+(require-library 'util/s2j-io)
+d45 1
+a50 1
+  (import util/s2j-io)
+@
+
+
+1.4.4.13
+log
+@implemented all remaining wrapper functions over the request object
+@
+text
+@d40 4
+a43 10
+   response/add-cookie! response/add-header!
+   response/add-headers! response/contains-header?
+   response/encode-redirect-url response/encode-url
+   response/commit! response/get-buffer-size
+   response/get-character-encoding response/get-locale
+   response/get-binary-output-port response/get-output-port
+   response/committed? response/reset! response/reset-buffer!
+   response/send-error response/send-redirect
+   response/set-buffer-size! response/set-content-length!
+   response/set-header! response/set-locale! response/set-status!)
+a53 1
+  ;; ports, header, char enc
+d55 11
+a65 27
+    (jadd-cookie |addCookie|)
+    (jadd-date-header |addDateHeader|)
+    (jadd-header |addHeader|)
+    (jadd-int-header |addIntHeader|)
+    (jcontains-header |containsHeader|)
+    (jencode-redirect-url |encodeRedirectURL|)
+    (jencode-url |encodeURL|)
+    (jflush-buffer |flushBuffer|)
+    (jget-buffer-size |getBufferSize|)
+    (jget-character-encoding |getCharacterEncoding|)
+    (jget-locale |getLocale|)
+    (jget-output-stream |getOutputStream|)
+    (jget-writer |getWriter|)
+    (jis-committed |isCommitted|)
+    (jreset |reset|)
+    (jreset-buffer |resetBuffer|)
+    (jsend-error |sendError|)
+    (jsend-redirect |sendRedirect|)
+    (jset-buffer-size |setBufferSize|)
+    (jset-content-length |setContentLength|)
+    (jset-content-type |setContentType|)
+    (jset-date-header |setDateHeader|)
+    (jset-header |setHeader|)
+    (jset-int-header |setIntHeader|)
+    (jset-locale |setLocale|)
+    (jset-status |setStatus|))
+
+d117 10
+a126 3
+  (define (response/add-cookie! cookie)
+    (jadd-cookie (current-response) cookie)
+    (void))
+d130 1
+a130 1
+           (jadd-int-header (current-response) (->jstring key) (->jint value)))
+d134 1
+a134 1
+           (jadd-date-header (current-response) (->jstring key)
+d137 1
+a137 2
+           (jadd-header (current-response) (->jstring-key) (->jstring value))))
+    (void))
+d139 11
+d158 1
+a158 18
+     alst)
+    (void))
+
+  (define (response/contains-header? key)
+    (->boolean (jcontains-header (current-response) (->jstring key))))
+
+  (define (response/encode-redirect-url url)
+    (->string (jencode-redirect-url (current-response) (->jstring url))))
+
+  (define (response/encode-url url)
+    (->string (jencode-url (current-response) (->jstring url))))
+
+  (define (response/commit!)
+    (jflush-buffer (current-response))
+    (void))
+
+  (define (response/get-buffer-size)
+    (->number (jget-buffer-size (current-response))))
+d160 3
+a162 2
+  (define (response/get-character-encoding)
+    (->string (jget-character-encoding (current-response))))
+a163 2
+  (define (response/get-locale)
+    (jget-locale (current-response)))
+d165 1
+a165 1
+  ;; TODO: rename to response/open-*-output-port
+d167 1
+a167 1
+    (->binary-output-port (jget-output-stream (current-response)) #f))
+d170 1
+a170 54
+    (->character-output-port (jget-writer (current-response)) #f))
+
+  (define (response/committed?)
+    (->boolean (jis-committed (current-response))))
+
+  (define (response/reset!)
+    (jreset (current-response)))
+
+  (define (response/reset-buffer!)
+    (jreset-buffer (current-response)))
+
+  (define response/send-error
+    (case-lambda
+      ((sc)
+       (jsend-error (current-response) (->jint sc))
+       (void))
+      ((sc msg)
+       (jsend-error (current-response) (->jint sc) (->jstring msg))
+       (void))))
+
+
+  (define (response/send-redirect url)
+    (jsend-redirect (current-response) (->jstring url))
+    (void))
+
+  (define (response/set-buffer-size! size)
+    (jset-buffer-size (current-response) (->jint size))
+    (void))
+
+  (define (response/set-content-length! len)
+    (jset-content-length (current-response) (->jint len)))
+
+  (define (response/set-content-type! mime-type)
+    (jset-content-type (current-response) (->jstring mime-type))
+    (void))
+
+  (define (response/set-header! key value)
+    (cond ((number? value)
+           (jset-int-header (current-response) (->jstring key) (->jint value)))
+          ((date? value)
+           (response/add-header! key (date->time-utc value)))
+          ((time? value)
+           (jset-date-header (current-response) (->jstring key) (->jlong (* 1000 (time-second value)))))
+          (else
+           (jset-header (current-response) (->jstring key) (->jstring value))))
+    (void))
+
+  (define (response/set-locale! loc)
+    (jset-locale (current-response) loc)
+    (void))
+
+  (define (response/set-status! sc)
+    (jset-status (current-response) (->jint sc)))
+
+@
+
+
+1.4.4.14
+log
+@renamed response/get-*-output-port to response/open-*-output-port
+@
+text
+@d45 1
+a45 1
+   response/open-binary-output-port response/open-output-port
+d190 1
+a190 1
+  (define (response/open-binary-output-port)
+d193 1
+a193 1
+  (define (response/open-output-port)
+@
+
+
+1.4.4.15
+log
+@added missing add-header! export; reformatted exports
+@
+text
+@d39 3
+a41 3
+  (send/back send/finish send/forward send/suspend
+   response/add-cookie! response/add-header! response/add-headers!
+   response/commit! response/committed? response/contains-header?
+d43 4
+a46 3
+   response/get-buffer-size response/get-character-encoding
+   response/get-locale response/open-binary-output-port
+   response/open-output-port response/reset!  response/reset-buffer!
+d49 1
+a49 2
+   response/set-content-type! response/set-header!
+   response/set-locale! response/set-status!)
+@
+
+
+1.4.4.16
+log
+@minor fix to set-header!
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+d234 1
+a234 1
+           (response/set-header! key (date->time-utc value)))
+@
+
+
+1.4.4.17
+log
+@refactoring: request/response are now just wrappers, with send/*
+functions now in contcentric; moved many s2j calls to
+request/response/session objects
+@
+text
+@d34 1
+d39 1
+a39 1
+  (current-response
+d56 1
+d60 1
+a60 3
+  (define-java-classes
+    (<sisc-adapter-servlet> |siscweb.web.SISCAdapterServlet|))
+
+a73 1
+    (jget-response |getResponse|)
+d90 49
+a138 2
+  (define (current-response)
+    (jget-response (java-null <sisc-adapter-servlet>)))
+@
+
+
+1.4.4.18
+log
+@merged from rel-0-3-fix
+@
+text
+@d107 1
+a107 1
+           (jadd-header (current-response) (->jstring key) (->jstring value))))
+@
+
+
+1.4.4.19
+log
+@switched from using util/s2j-io to using SISC's java-io library (same code really)
+@
+text
+@d34 1
+a50 1
+  (import java-io)
+d55 1
+@
+
+
+1.3
+log
+@merged from rel-0-2-dev
+@
+text
+@a31 1
+(require-library 'siscweb/k-hash)
+a38 1
+  (import siscweb/k-hash)
+d44 2
+a45 2
+      (let ((k-hash (store/k! resume-k)))
+        (send-proc (current-request) (current-response) k-hash resume-k)
+@
+
+
+1.3.2.1
+log
+@merged from rel-0-3-dev
+@
+text
+@d32 1
+d40 1
+d46 2
+a47 2
+      (let ((k-url (store/k! resume-k)))
+        (send-proc (current-request) (current-response) k-url resume-k)
+@
+
+
+1.3.4.1
+log
+@now passes k-url to send-proc instead of k-hash, since that is what
+store/k! now returns
+@
+text
+@d32 1
+d40 1
+d46 2
+a47 2
+      (let ((k-url (store/k! resume-k)))
+        (send-proc (current-request) (current-response) k-url resume-k)
+@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@d32 2
+a33 1
+(require-library 'siscweb/util)
+d38 1
+d40 2
+a41 1
+  (import siscweb/util)
+d44 1
+a44 5
+  ;; send-proc takes a response object and
+  ;; whichever content is generated by
+  ;; calling (page-proc k-url resume-k
+  ;; (see html::send-html/suspend for an example)
+  (define (send/suspend send-proc page-proc)
+d46 2
+a47 2
+      (let ((k-url (store/k! resume-k)))
+        (send-proc (current-response) (page-proc k-url resume-k))
+d51 3
+a53 6
+  ;; sends a response and stops
+  ;; all continuations prior to this one are cleared
+  ;; send-proc is a procedure that takes
+  ;; a response object and the page argument
+  ;; (see html::send-html/finish for an example)
+  (define (send/finish send-proc page)
+d55 2
+a56 1
+    (send-proc (current-response) page))
+d59 3
+a61 7
+  ;; sends a response and suspends, but clears
+  ;; the continuation table first
+  ;; send-proc takes a response object and
+  ;; whichever content is generated by
+  ;; calling (page-proc k-url resume-k)
+  ;; (see html::send-html/forward for an example
+  (define (send/forward send-proc page-proc)
+d63 1
+a63 1
+    (send/suspend send-proc page-proc))
+d66 5
+a70 7
+  ;; sends a response and stops; unlike send/finish,
+  ;; the continuation table is not touched
+  ;; send-proc is a procedure that takes
+  ;; a response object and the page argument
+  ;; (see html::send-html/finish for an example)
+  (define (send/back send-proc page)
+    (send-proc (current-response) page))
+d72 1
+a72 1
+  )@
+
+
+1.2.4.1
+log
+@now passes session/session-id to continuation manager (work in
+progress)
+@
+text
+@a31 1
+(require-library 'siscweb/k-hash)
+a36 1
+  (import s2j)
+a37 1
+  (import siscweb/k-hash)
+a39 5
+  (define-generic-java-methods
+    (encode-url |encodeURL|)
+    (get-request-uri |getRequestURI|)
+    get-session)
+
+d47 1
+a47 2
+      (let* ((k-hash (store/k! (current-session) resume-k (current-k-ttl)))
+             (k-url (make-k-url (->string (encode-url (current-response) (->jstring (remove-k-hash (->string (get-request-uri (current-request))))))) k-hash)))
+d58 1
+a58 1
+    (clear/k! (current-session-id))
+d69 1
+a69 1
+    (clear/k! (current-session-id))
+@
+
+
+1.2.4.2
+log
+@moved creation of the k-url to a separate, exported function
+@
+text
+@d36 1
+a36 1
+  (send/suspend send/finish send/forward send/back make-k-url)
+d48 5
+a52 3
+  ;; sends a response and suspends; send-proc takes a response object
+  ;; and whichever content is generated by calling (page-proc k-url
+  ;; resume-k) (see html::send-html/suspend for an example)
+d55 2
+a56 3
+      (let* ((k-hash (get-random-hash))
+             (k-url (make-k-url k-hash)))
+        (store/k! (current-session-id) k-hash resume-k (current-k-ttl))
+d60 6
+a65 10
+  (define (make-k-url k-hash)
+    (->string
+     (encode-url (current-response)
+                 (->jstring (append-url-hash
+                             (->string (get-request-uri (current-request)))
+                             k-hash)))))
+
+  ;; sends a response and stops all continuations prior to this one
+  ;; are cleared send-proc is a procedure that takes a response object
+  ;; and the page argument (see html::send-html/finish for an example)
+d86 1
+a86 1
+  ;; (see html::send-html/back for an example)
+@
+
+
+1.2.4.3
+log
+@modified to match simplified contcentric's clear/k, store/k! calls
+@
+text
+@d53 4
+a56 2
+      (let ((k-hash (store/k! resume-k)))
+        (send-proc (current-response) (page-proc (make-k-url k-hash) resume-k))
+d70 1
+a70 1
+    (clear/k!)
+d81 1
+a81 1
+    (clear/k!)
+@
+
+
+1.2.4.4
+log
+@modified to support more generic send/* operations, e.g. forwards;
+added temporary forward code
+@
+text
+@d36 1
+a36 2
+  (send/suspend send/finish send/forward send/back
+                forward)
+a44 3
+    (jforward |forward|)
+    get-request-dispatcher
+    get-servlet-context
+d51 1
+a51 1
+  (define (send/suspend send-proc)
+d54 1
+a54 1
+        (send-proc (current-request) (current-response) k-hash resume-k)
+d57 6
+d67 1
+a67 1
+  (define (send/finish send-proc)
+d69 1
+a69 1
+    (send-proc (current-request) (current-response)))
+d78 1
+a78 1
+  (define (send/forward send-proc)
+d80 1
+a80 1
+    (send/suspend send-proc))
+d88 2
+a89 2
+  (define (send/back send-proc)
+    (send-proc (current-request) (current-response)))
+d91 1
+a91 11
+
+  (define (forward url)
+    (let* ((servlet-context (get-servlet-context
+                             (current-session)))
+           (request-dispatcher (get-request-dispatcher
+                                servlet-context
+                                (->jstring url))))
+      (jforward request-dispatcher
+               (current-request)
+               (current-response))))
+  )
+@
+
+
+1.2.4.5
+log
+@removed forward function definition
+@
+text
+@d36 2
+a37 1
+  (send/suspend send/finish send/forward send/back)
+d44 8
+d89 10
+@
+
+
+1.2.4.6
+log
+@send/finish and send/back were not calling the suspend continuation
+@
+text
+@d58 1
+a58 2
+    (send-proc (current-request) (current-response))
+    ((current-suspend-k) #f))
+d78 1
+a78 2
+    (send-proc (current-request) (current-response))
+    ((current-suspend-k) #f))
+@
+
+
+1.2.4.7
+log
+@now uses renamed util/misc module
+@
+text
+@d33 1
+a33 1
+(require-library 'util/misc)
+d41 1
+a41 1
+  (import util/misc)
+@
+
+
+1.2.4.8
+log
+@slimmed comments
+@
+text
+@d43 3
+a45 1
+  ;; sends a response and suspends
+d53 3
+a55 2
+  ;; sends a response and stops; all continuations prior to this one
+  ;; are cleared
+d62 6
+a67 2
+  ;; sends a response and suspends, but clears the continuation table
+  ;; first
+d73 5
+a77 2
+  ;; sends a response and stops; unlike send/finish, the continuation
+  ;; table is not touched
+@
+
+
+1.1
+log
+@file response.scm was initially added on branch rel-0-1-dev.
+@
+text
+@d1 81
+@
+
+
+1.1.2.1
+log
+@spread functions from contcentric.scm onto sisclet.scm and response.scm
+@
+text
+@a0 81
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+(require-library 'siscweb/contcentric)
+(require-library 'siscweb/util)
+
+(module siscweb/response
+  (send/suspend send/finish send/forward send/back)
+
+  (import siscweb/contcentric)
+  (import siscweb/util)
+
+  ;; sends a response and suspends
+  ;; send-proc takes a response object and
+  ;; whichever content is generated by
+  ;; calling (page-proc k-url resume-k
+  ;; (see html::send-html/suspend for an example)
+  (define (send/suspend send-proc page-proc)
+    (let/cc resume-k
+      (let ((k-url (store/k! resume-k)))
+        (send-proc (current-response) (page-proc k-url resume-k))
+        ((current-suspend-k) #f))))
+
+
+  ;; sends a response and stops
+  ;; all continuations prior to this one are cleared
+  ;; send-proc is a procedure that takes
+  ;; a response object and the page argument
+  ;; (see html::send-html/finish for an example)
+  (define (send/finish send-proc page)
+    (clear/k!)
+    (send-proc (current-response) page))
+
+
+  ;; sends a response and suspends, but clears
+  ;; the continuation table first
+  ;; send-proc takes a response object and
+  ;; whichever content is generated by
+  ;; calling (page-proc k-url resume-k)
+  ;; (see html::send-html/forward for an example
+  (define (send/forward send-proc page-proc)
+    (clear/k!)
+    (send/suspend send-proc page-proc))
+
+
+  ;; sends a response and stops; unlike send/finish,
+  ;; the continuation table is not touched
+  ;; send-proc is a procedure that takes
+  ;; a response object and the page argument
+  ;; (see html::send-html/finish for an example)
+  (define (send/back send-proc page)
+    (send-proc (current-response) page))
+
+  )@
+
+

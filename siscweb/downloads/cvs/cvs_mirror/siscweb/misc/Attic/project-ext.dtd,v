@@ -1,0 +1,152 @@
+head	1.1;
+access;
+symbols
+	rel-0-3-fix-3:1.1.4.2
+	rel-0-3-fix:1.1.0.4
+	rel-0-4-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2006.02.19.01.33.15;	author acolomba;	state dead;
+branches
+	1.1.2.1
+	1.1.4.1;
+next	;
+
+1.1.2.1
+date	2006.02.19.01.33.15;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2006.09.03.00.24.38;	author acolomba;	state dead;
+branches;
+next	;
+
+1.1.4.1
+date	2006.02.19.01.33.15;	author acolomba;	state dead;
+branches;
+next	1.1.4.2;
+
+1.1.4.2
+date	2006.04.15.15.55.28;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@file project-ext.dtd was initially added on branch rel-0-4-dev.
+@
+text
+@@
+
+
+1.1.4.1
+log
+@file project-ext.dtd was added on branch rel-0-3-fix on 2006-04-15 15:55:28 +0000
+@
+text
+@@
+
+
+1.1.4.2
+log
+@merged from rel-0-4-dev
+@
+text
+@a0 34
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+ Copyright (c) 2000 Michel CASABIANCA.  All Rights Reserved.
+
+ Permission to use, copy, modify, and distribute this software and its
+ documentation for any purpose and without fee or royalty is hereby
+ granted, provided that both the above copyright notice and this
+ permission notice appear in all copies of the software and
+ documentation or portions thereof, including modifications, that you
+ make.
+
+ THIS SOFTWARE IS PROVIDED "AS IS," AND COPYRIGHT HOLDERS MAKE NO
+ REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED. BY WAY OF EXAMPLE,
+ BUT NOT LIMITATION, COPYRIGHT HOLDERS MAKE NO REPRESENTATIONS OR
+ WARRANTIES OF MERCHANTABILITY OR FITNESS FOR ANY PARTICULAR PURPOSE OR
+ THAT THE USE OF THE SOFTWARE OR DOCUMENTATION WILL NOT INFRINGE ANY
+ THIRD PARTY PATENTS, COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS.
+ COPYRIGHT HOLDERS WILL BEAR NO LIABILITY FOR ANY USE OF THIS SOFTWARE
+ OR DOCUMENTATION.
+-->
+
+<!-- project ext DTD for Ant -->
+<!-- 2000-04-03 -->
+
+<!ENTITY % ext "| xt">
+
+<!ELEMENT xt EMPTY>
+<!ATTLIST xt
+          xml CDATA #REQUIRED
+          xsl CDATA #REQUIRED
+          out CDATA #REQUIRED>
+
+
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 34
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+ Copyright (c) 2000 Michel CASABIANCA.  All Rights Reserved.
+
+ Permission to use, copy, modify, and distribute this software and its
+ documentation for any purpose and without fee or royalty is hereby
+ granted, provided that both the above copyright notice and this
+ permission notice appear in all copies of the software and
+ documentation or portions thereof, including modifications, that you
+ make.
+
+ THIS SOFTWARE IS PROVIDED "AS IS," AND COPYRIGHT HOLDERS MAKE NO
+ REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED. BY WAY OF EXAMPLE,
+ BUT NOT LIMITATION, COPYRIGHT HOLDERS MAKE NO REPRESENTATIONS OR
+ WARRANTIES OF MERCHANTABILITY OR FITNESS FOR ANY PARTICULAR PURPOSE OR
+ THAT THE USE OF THE SOFTWARE OR DOCUMENTATION WILL NOT INFRINGE ANY
+ THIRD PARTY PATENTS, COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS.
+ COPYRIGHT HOLDERS WILL BEAR NO LIABILITY FOR ANY USE OF THIS SOFTWARE
+ OR DOCUMENTATION.
+-->
+
+<!-- project ext DTD for Ant -->
+<!-- 2000-04-03 -->
+
+<!ENTITY % ext "| xt">
+
+<!ELEMENT xt EMPTY>
+<!ATTLIST xt
+          xml CDATA #REQUIRED
+          xsl CDATA #REQUIRED
+          out CDATA #REQUIRED>
+
+
+@
+
+
+1.1.2.2
+log
+@not useful
+@
+text
+@@
+
+

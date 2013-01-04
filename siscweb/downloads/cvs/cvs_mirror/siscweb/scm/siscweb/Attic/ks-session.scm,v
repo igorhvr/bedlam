@@ -1,0 +1,424 @@
+head	1.3;
+access;
+symbols
+	rel-0-3-dev-1:1.2.4.1
+	rel-0-2-fix-2:1.2
+	rel-0-2-fix-1:1.2
+	rel-0-2-fix:1.2.0.2
+	rel-0-3-dev:1.2.0.4
+	rel-0-2:1.2
+	rel-0-2-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2005.11.25.20.46.38;	author acolomba;	state dead;
+branches;
+next	1.2;
+
+1.2
+date	2005.06.19.03.03.51;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.05.08.18.40.29;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.05.08.18.40.29;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.05.14.23.09.17;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2005.05.22.20.11.27;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.08.28.14.37.02;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.10.24.03.47.27;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2005.10.31.02.51.11;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@merged from rel-0-3-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'util/misc)
+
+(module siscweb/k-store
+  (ks/clear! ks/get ks/put!
+   ks/setup ks/teardown
+   ks/open ks/close
+   ks/purge-expired!)
+
+  (import s2j)
+
+  (import util/misc)
+
+  (define-java-classes
+    (<continuation-manager> |siscweb.contcentric.ContinuationManager|)
+    (<continuation-table> |siscweb.contcentric.ContinuationTable|))
+
+  (define-generic-java-methods
+    clear get-attribute fetch-continuation get-continuation-table
+    get-instance purge-expired-continuations remove-instance
+    set-attribute start store-continuation terminate)
+
+
+  (define k-manager #f)
+
+  (define (ks/open servlet-context)
+    (set! k-manager
+          (get-instance (java-null <continuation-manager>)
+                        servlet-context)))
+
+  (define (ks/close servlet-context)
+    (remove-instance (java-null <continuation-manager>) servlet-context)
+    (set! k-manager #f))
+
+  (define (ks/setup)
+    #t)
+
+  (define (ks/teardown)
+    #t)
+
+
+  ;; stores the given continuation and
+  ;; returns a k-url made of the current
+  ;; request url with the k-id added/substituted
+  (define (ks/put! session-id hash k ttl parent-hash)
+    (store-continuation (get-continuation-table k-manager (->jstring session-id))
+                        (->jstring hash)
+                        (java-wrap k)
+                        (->jlong ttl)))
+
+  ;; fetches the continuation identified by k-hash from the repository
+  ;; in the session
+  (define (ks/get session-id k-hash)
+    (if k-hash
+        (let ((k-wrap (fetch-continuation (get-continuation-table k-manager (->jstring session-id))
+                                          (->jstring k-hash))))
+          (if (not (java-null? k-wrap))
+              (java-unwrap k-wrap)
+              #f))
+        #f))
+
+  ;; clears the continuation table
+  (define (ks/clear! session-id)
+    (clear (get-continuation-table k-manager (->jstring session-id))))
+
+
+  (define (ks/purge-expired!)
+    (->number (purge-expired-continuations k-manager)))
+  )
+@
+
+
+1.2
+log
+@merged from rel-0-2-dev
+@
+text
+@@
+
+
+1.2.4.1
+log
+@now conforms to contcentric module, which requires ks/put! to accept a
+group hash; the group hash is ignored
+@
+text
+@d75 1
+a75 1
+  (define (ks/put! session-id k-hash g-hash k ttl current-k-hash)
+d77 1
+a77 1
+                        (->jstring k-hash)
+@
+
+
+1.2.4.2
+log
+@renamed module name to match file name; more changes are upcoming
+@
+text
+@d56 1
+a56 1
+  (define (ks/open)
+d59 1
+a59 1
+                        *SERVLET-CONTEXT*)))
+d61 2
+a62 2
+  (define (ks/close)
+    (remove-instance (java-null <continuation-manager>) *SERVLET-CONTEXT*)
+a76 2
+                        (->jstring session-id)
+                        (->jstring g-hash)
+@
+
+
+1.2.4.3
+log
+@functionality replaced by SessionContinuationStore
+@
+text
+@@
+
+
+1.1
+log
+@file ks-session.scm was initially added on branch rel-0-2-dev.
+@
+text
+@d1 99
+@
+
+
+1.1.2.1
+log
+@rename from k-session.scm to ks-session.scm
+@
+text
+@a0 98
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+(require-library 'siscweb/util)
+
+(module siscweb/k-session
+  (clear/k! fetch/k store/k! start-k-manager stop-k-manager)
+
+  (import s2j)
+
+  (import siscweb/util)
+
+  (define-java-classes
+    (<continuation-manager> |siscweb.contcentric.ContinuationManager|)
+    (<continuation-manager-thread> |siscweb.contcentric.ContinuationManagerThread|)
+    (<continuation-table> |siscweb.contcentric.ContinuationTable|))
+
+  (define-generic-java-methods
+    clear get-attribute fetch-continuation get-instance purge-expired
+    set-attribute start store-continuation terminate)
+
+
+  (define k-manager-thread #f)
+
+  (define (start-k-manager servlet-context)
+    (set! k-manager-thread
+          (java-new <continuation-manager-thread>
+                    (get-instance (java-null <continuation-manager>)
+                                  servlet-context)))
+    (start k-manager-thread))
+
+  (define (stop-k-manager servlet-context)
+    (if k-manager-thread
+        (terminate k-manager-thread)
+        (set! k-manager-thread #f)))
+
+
+  ;; fetches the continuation identified by k-hash from the repository
+  ;; in the session
+  (define (fetch/k session k-hash)
+    (if k-hash
+        (let ((k-wrap (fetch-continuation (get-continuation-table session)
+                                          (->jstring k-hash))))
+          (display k-wrap)
+          (if (not (java-null? k-wrap))
+              (java-unwrap k-wrap)
+              #f))
+        #f))
+
+
+  ;; fetches the continuation-table
+  (define (get-continuation-table session)
+     (get-instance (java-null <continuation-table>) session))
+
+  ;; stores the given continuation and
+  ;; returns a k-url made of the current
+  ;; request url with the k-id added/substituted
+  (define (store/k! session hash k ttl)
+    (store-continuation (get-continuation-table session)
+                        (->jstring hash)
+                        (java-wrap k)
+                        (->jlong ttl)))
+
+
+
+  ;; clears the continuation table
+  (define (clear/k! session)
+    (clear (get-continuation-table session)))
+
+
+  )
+@
+
+
+1.1.2.2
+log
+@reworked to fit same interface as ks-hsqldb
+@
+text
+@a30 1
+
+d33 2
+a34 5
+(module siscweb/k-store
+  (ks/clear! ks/get ks/put!
+   ks/setup ks/teardown
+   ks/open ks/close
+   ks/purge-expired!)
+d42 1
+d46 1
+a46 2
+    clear get-attribute fetch-continuation get-continuation-table
+    get-instance purge-expired-continuations
+d50 13
+a62 1
+  (define k-manager #f)
+a63 8
+  (define (ks/open servlet-context)
+    (set! k-manager
+          (get-instance (java-null <continuation-manager>)
+                        servlet-context)))
+
+  (define (ks/close servlet-context)
+    (remove-instance (java-null <continuation-manager>) servlet-context)
+    (set! k-manager #f))
+d65 11
+a75 2
+  (define (ks/setup)
+    #t)
+a76 2
+  (define (ks/teardown)
+    #t)
+d78 3
+d85 2
+a86 2
+  (define (ks/put! session-id hash k ttl parent-hash)
+    (store-continuation (get-continuation-table k-manager (->jstring session-id))
+d91 1
+a91 10
+  ;; fetches the continuation identified by k-hash from the repository
+  ;; in the session
+  (define (ks/get session-id k-hash)
+    (if k-hash
+        (let ((k-wrap (fetch-continuation (get-continuation-table k-manager (->jstring session-id))
+                                          (->jstring k-hash))))
+          (if (not (java-null? k-wrap))
+              (java-unwrap k-wrap)
+              #f))
+        #f))
+d94 2
+a95 2
+  (define (ks/clear! session-id)
+    (clear (get-continuation-table k-manager (->jstring session-id))))
+a97 2
+  (define (ks/purge-expired!)
+    (->number (purge-expired-continuations k-manager)))
+@
+
+
+1.1.2.3
+log
+@bugfix, remove-instance java method was not defined; now uses renamed
+util/misc module
+@
+text
+@d32 1
+a32 1
+(require-library 'util/misc)
+d42 1
+a42 1
+  (import util/misc)
+d50 1
+a50 1
+    get-instance purge-expired-continuations remove-instance
+@
+
+

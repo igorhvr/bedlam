@@ -1,0 +1,304 @@
+<chapter id="publishing">
+  <title>Publishing Procedures</title>
+
+  <para>
+    Procedures can be published to virtual paths of an application
+    server within the hierarchy of a siscweb application. Publishing
+    can be done both interactively at the server-side REPL during
+    development, and in the web.xml file at deployment time. (See
+    <xref linkend="adapter-servlet"/>.)
+  </para>
+
+  <section id="html">
+    <title>Publishing Procedures</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>siscweb/publish</emphasis>)
+      </emphasis>
+      <sbr/>
+      &locatedin;
+      <emphasis role="bold">
+        siscweb.jar
+      </emphasis>
+    </para>
+
+    <para>
+      This module provides simple procedures to publish procedures to
+      URL patterns. Patterns can be expressed either as wildcards or
+      regular expressions.
+    </para>
+
+    <para>
+      Published procedures accept a single parameter in the form of
+      a request object.
+    </para>
+
+    <warning>
+      <para>
+        Since the Java HttpServletRequest object is not serializable,
+        it is a good practice to clear any reference to it as soon as
+        possible.
+      </para>
+    </warning>
+
+    <para>
+      Wildcard patterns can use wildcards and double-wildcards between slashes,
+      such as in "/hello/*" or "/hello/**/world". The first pattern
+      matches requests such as "/hello/there", "/hello/", or even
+      "/hello"; the second pattern matches "/hello/world" as well as
+      "hello/what/a/wonderful/world/".
+    </para>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>publish/wildcard</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>undefined</type>
+          <methodname>publish/wildcard</methodname>
+          <methodparam>
+            <parameter>url-wildcard-pattern</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>(lambda (request) ...)</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <sbr/>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>undefined</type>
+          <methodname>publish/wildcard</methodname>
+          <methodparam>
+            <parameter>url-wildcard-pattern</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>symbol</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Publishes the given procedure <parameter>proc</parameter>
+            or <parameter>symbol</parameter> at
+            <parameter>url-wildcard-pattern</parameter>. The
+            <parameter>symbol</parameter> will be looked up at run
+            time every time. This is especially useful during
+            development, since it allows one to redefine the procedure
+            associated to <parameter>symbol</parameter> without having
+            to republish.
+          </para>
+          <para>
+            When a request is received, the path-info section of the
+            request URL is matched against each published pattern. If
+            a match is found, the corresponding procedure is
+            invoked. The procedure will receive the HTTP request as
+            its only argument.
+          </para>
+        </blockquote>
+      </para>
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+(publish/wildcard
+  "/hello-world/*"
+  (lambda (request)
+    (set! request #f)
+    (send-html/back
+    `(html
+      (head (title "Hello, world!"))
+      (body (p "Hello, world!"))))))
+]]>
+        </programlisting>
+      </informalexample>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>publish/regexp</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>undefined</type>
+          <methodname>publish/regexp</methodname>
+          <methodparam>
+            <parameter>url-regexp-pattern</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>(lambda (request) ...)</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <sbr/>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>undefined</type>
+          <methodname>publish/regexp</methodname>
+          <methodparam>
+            <parameter>url-regexp-pattern</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>symbol</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            This function is equivalent to
+            <function>publish/wildcard</function>, save for the fact
+            that it accepts a regular expression as a pattern.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>publish</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>undefined</type>
+          <methodname>publish</methodname>
+          <methodparam>
+            <parameter>url-wildcard-pattern</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>(lambda (request) ...)</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <sbr/>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>undefined</type>
+          <methodname>publish</methodname>
+          <methodparam>
+            <parameter>url-wildcard-pattern</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>symbol</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            This function is equivalent to
+            <function>publish/wildcard</function>, and is present both
+            for backwards compatibility and to offer a convenient
+            shorthand.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>unpublish</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>undefined</type>
+          <methodname>unpublish</methodname>
+          <methodparam>
+            <parameter>url-pattern</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Removes a previously published procedure at the given
+            pattern. The <parameter>url-pattern</parameter> passed to
+            <function>unpublish</function> must be identical to the
+            one used to publish.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>get-published</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>procedure/&f;</type>
+          <methodname>get-published</methodname>
+          <methodparam>
+            <parameter>url-pattern</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the procedure published at the given
+            <parameter>url-pattern</parameter> or &f; if none is
+            found.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>get-all-published</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>alist</type>
+          <methodname>get-all-published</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns an association list made of
+            (<parameter>pattern</parameter>
+            <parameter>procedure</parameter>
+            <parameter>notation</parameter>) elements or '() if no
+            procedures are published.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>publish-bulk</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>undefined</type>
+          <methodname>publish-bulk</methodname>
+          <methodparam>
+            <parameter>((url-pattern [procedure|symbol] notation) ...)</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Given an association list of (<parameter>url-pattern</parameter>
+            <parameter>procedure</parameter>
+            <parameter>notation</parameter>), publishes all the
+            given procedures or symbols to the provided patterns.
+          </para>
+
+          <para>
+            Depending on whether <parameter>notation</parameter> is
+            the symbol <literal>&apos;wildcard</literal> or
+            <literal>&apos;regexp</literal>, the given
+            <parameter>url-pattern</parameter> should be either a
+            wildcard or regular expression pattern.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+  </section>
+</chapter>

@@ -1,0 +1,1477 @@
+head	1.5;
+access;
+symbols
+	rel-0-6-dev:1.5.0.4
+	rel-0-5-fix:1.5.0.2
+	rel-0-5:1.5
+	rel-0-5-dev-safe-frames:1.4.0.6
+	Root_rel-0-5-dev-safe-frames:1.4
+	rel-0-4-fix-0:1.4
+	rel-0-5-dev:1.4.0.4
+	rel-0-4-fix:1.4.0.2
+	rel-0-3-fix-3:1.3.2.3
+	rel-0-3-fix-2:1.3.2.2
+	rel-0-4-dev-sisc-1-11:1.3
+	rel-0-3-fix-1:1.3.2.1
+	rel-0-4-dev:1.3.0.4
+	rel-0-3-fix:1.3.0.2
+	rel-0-3:1.3
+	rel-0-3-dev-1:1.2.4.1
+	rel-0-2-fix-2:1.2.2.2
+	rel-0-2-fix-1:1.2.2.1
+	rel-0-2-fix:1.2.0.2
+	rel-0-3-dev:1.2.0.4
+	rel-0-2:1.2
+	rel-0-2-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.5
+date	2007.04.12.03.51.15;	author acolomba;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2006.09.03.01.42.25;	author acolomba;	state Exp;
+branches
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2005.11.25.20.43.31;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.06.19.04.53.02;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.06.17.03.01.23;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.06.17.03.01.23;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.06.19.02.51.51;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2005.07.10.20.07.45;	author acolomba;	state Exp;
+branches;
+next	1.2.2.2;
+
+1.2.2.2
+date	2005.08.02.02.08.27;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.07.27.03.06.30;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.11.20.02.36.50;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2005.11.25.20.30.26;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2005.11.29.01.21.48;	author acolomba;	state Exp;
+branches;
+next	1.3.2.2;
+
+1.3.2.2
+date	2006.02.25.19.14.04;	author acolomba;	state Exp;
+branches;
+next	1.3.2.3;
+
+1.3.2.3
+date	2006.04.15.15.55.29;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2006.09.03.00.47.59;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2007.04.02.01.46.27;	author acolomba;	state Exp;
+branches;
+next	1.4.4.2;
+
+1.4.4.2
+date	2007.04.11.02.47.39;	author acolomba;	state Exp;
+branches;
+next	1.4.4.3;
+
+1.4.4.3
+date	2007.04.12.03.41.02;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.5
+log
+@merged from rel-0-5-dev
+@
+text
+@2007-04-11: v0.5
+
+This release adds a space-safe implementation of Web Cells,
+consolidates the interface from Scheme to JSP/Servlets, and provides
+some incremental features and fixes.
+
+
+FEATURES
+
+- An implementation of web cells, as as described in the paper
+  "Interaction-Safe State for the Web"
+  (http://www.cs.brown.edu/~sk/Publications/Papers/Published/mk-int-safe-state-web/). New
+  examples now help compare web cells, SRFI-39 parameters,
+  state-passing-style and session attributes with respect to scope,
+  backtracking and cloning.
+
+- Much improved interface from SISCweb to JSPs and other standard
+  J2EE components:
+        - Bindings can now be explicitely single-valued or
+          multi-valued, as in:
+
+              `((a . 1) (b 2 3)).
+
+        - The send-forward/* functions pass bindings to the dispatcher
+          as request attributes for easy access via the JSTL and the
+          like. Multi-valued bindings are passed as collection
+          objects.
+
+        - Vice-versa, attributes in a request forwarded to a Scheme
+          program are now included in the bindings structure returned
+          by get-bindings.
+
+        - The SISCHttpServletRequest.getBinding*() methods are
+          deprecated, and will disappear in the next release.
+
+- Added publish/regexp to publish procedures using regular
+  expressions. Sub-expressions can be optionally mapped to procedure
+  parameters.
+
+- The SISC libraries (sisc.jar, etc.) can now be shared across servlet
+  contexts.
+
+- Miscellanea:
+    * better compliance of plain HTML output via send-html/*;
+    * added siscweb/text module for generating plain text;
+    * added sql/mssql module from LShift's Icing [*];
+    * logging rotation;
+    * further internal refactoring and compatibility fixes.
+
+
+FIXES
+
+After a context restart, continuation tables persisted within sessions
+were not being purged of expired continuations. This was partially
+fixed in v0.4 by limiting the number of continuations per user, but is
+now completely resolved.
+
+
+LOOKING AHEAD
+
+Objectives for the next SISCweb releases are:
+
+- Faster SXML generation, precompiled if possible.
+
+- Further work on including features from the  Icing framework.
+
+- Performance improvements, possibly including clustering.
+
+
+THANKS
+
+Special thanks for this release go to Dan Muresan for his
+contributions, and Ben Simon for bug reports.
+
+
+[*] Icing: http://www.lshift.net/icing
+The complete Icing db layer is included in a "dormant" state. It is
+mainly intended as a baseline for further hacking.
+
+
+
+2006-09-02: v0.4
+
+This release introduces improvements in continuation management,
+better performance under load, and logging.
+
+
+NOTES
+
+This release requires at least SISC 1.15, but SISC 1.16 is recommended
+because of radical improvements in I/O performance. This is also the
+first SISCweb release to work with SISC 1.16.
+
+
+FEATURES
+
+- The configuration entries required in the web.xml file are now
+  fewer, and are documented in the manual. Only one Listener and the
+  adapter servlet are mandatory. Most configuration parameters are now
+  optional and represented as environment entries.
+
+- Values of environment entries, normally accessible through the
+  application server's administrative interface, are picked up within
+  a minute (provided that the application server allows changing them
+  without a context restart.)
+
+- Configurable resource-bounding limits the number of continuation
+  groups per user, how frequently continuations can be created, how
+  often expired continuations are removed, and how many are
+  persisted. This makes SISCweb more resilient to load.
+
+- SISCweb applications now respond to DELETE and PUT in addition to
+  the usual GET and POST. (Continuations and REST can actually work
+  well together, as explained by Anton Van Strateen at
+  http://ll4.csail.mit.edu/slides/rest-slides.pdf)
+
+- Continuation storage via Hibernate is no more. Storing individual
+  continuations was overall more expensive than serializing the whole
+  continuation table, and altered the semantics of programs. Since
+  application servers offer a variety of session storage mechanisms,
+  including database persistence, the Hibernate option had no reason
+  to be.
+
+- The file WEB-INF/sisc.properties is picked up and used to initialize
+  the SISC interpreter.
+
+- SISCweb now logs most of its operations at various logging levels.
+
+- Miscellaneous internal refactorings.
+
+
+FIXES/BUGS
+
+After a context restart, continuation tables persisted within sessions
+were not being purged of expired continuations.
+
+Unfortunately this is still an open issue for some application
+servers, e.g. Tomcat (but not others, e.g. Resin.) Since the number of
+continuation groups per user is limited anyway, this is not a
+showstopper.
+
+
+LOOKING AHEAD
+
+Objectives for the next SISCweb releases are:
+
+- Faster SXML generation, precompiled if possible.
+
+- Inclusion of some features from the Icing framework.
+
+- Improvements in the interface between SISCweb and JSPs.
+
+- Performance improvements, possibly including clustering.
+
+
+THANKS
+
+Special thanks for this release go to Ben Simon and Dan Muresan.
+
+
+
+2006-04-15: v0.33
+
+This is a compatibility release with SISC 1.13, and adds some features
+from the 0.4 development branch.
+
+NOTES
+
+This release is ONLY compatible with SISC 1.13 and up. If
+compatibility with SISC 1.11 is desired, SISCweb 0.32 should be used
+instead.
+
+
+FEATURES
+
+- A new module siscweb/image provides procedures to send images from
+  java.awt.image.RenderedImage objects or from files.
+
+- A new API wraps and "scheme-ifies" all methods on the Request,
+  Response, Session and ServletContext objects. This makes it easier
+  to access POST data through a scheme input port, or to set the
+  response buffer size, or set Java or Scheme session attributes, for
+  example.
+
+- A new procedure forward/dynenv/store! can be used in place of the
+  @@href-p attributes or plain forward/store! when one desires to
+  capture the dynamic environment of a closure, e.g. SRFI-39
+  parameters. Because SISC 1.13 solves a few serialization bugs, it is
+  now possible to use SRFI-39 parameters in place of session
+  attributes for tracking state. This is particularly useful in
+  event-based programming (e.g. AJAX). See the Counter example code
+  (no pun intended).
+
+- Improvements to response writing improve performance for markup,
+  graphviz, images.
+
+- Improvements to XML/XHTML output.
+
+- A new (backwards-compatible) API for siscweb/config.
+
+- Updated documentation throughout.
+
+- Some internal refactoring.
+
+
+FIXES
+
+- Compatible with SISC 1.13.
+
+- Some XML/XHTML fixes.
+
+
+
+2006-02-25: v0.32
+
+This release fixes a bug and adds some features from the 0.4
+development branch.
+
+FEATURES
+
+- Added modules to generate XHTML and XML responses through a port of
+  the WebIt! XML library. A little cross-pollination between the WebIt!
+  port and the current HTML library make XHTML and HTML modules mostly
+  interchangeable.
+
+- Added the siscweb/session module for operations on the session
+  object.
+
+- Added support for response headers in the send-*/* functions. Added
+  the ability to specify a character encoding in the get-bindings
+  function.
+
+- Added @@anchor attribute to [a|form|iframe|object] to add #anchors to
+  system-generated URLs.
+
+- The examples now output compliant XHTML.
+
+- Improved server-side error reporting.
+
+- Some internal optimizations.
+
+- Updated manual.
+
+
+BUG FIXES
+
+- Patched (for the last time) a weird bug that seems to occur in
+  Tomcat, sometimes causing sessions to be "lost" (not destroyed) after
+  a server restart.
+
+Thanks to Dan Muresan and Denys Rtveliashvili for their suggestions and feedback.
+
+
+2005-10-28: v0.31
+
+This is a fix release:
+
+BUG FIXES
+
+1. A missing import renders the sql/execute-query function
+   unusable. The bug can also be addressed in v0.3 by issuing in the
+   toplevel:
+
+        (require-extension (srfi 45))
+
+2. Minor bug fixes to the build process.
+
+Thanks again to Dan Muresan for spotting these bugs.
+
+
+
+2005-10-25: v0.3
+
+This releases introduces internal changes, a less monolithical
+packaging, and a few bug fixes.
+
+Features:
+
+- SISCweb is now divided in a core library and three ancilliary
+  libraries for generating content, accessing databases, and persisting
+  continuations through Hibernate. This is to allow these libraries to
+  evolve with a higher degree of freedom outside of SISCweb releases,
+  and to avoid encumbering SISCweb with external dependencies.
+  (Hibernate being the point in case.)
+
+- Scheme files are now compiled at build time, resulting in a much faster
+  startup time. Dan Muresan also backported this to the 0.2 branch.
+
+- Continuations are now grouped and expired per page. Since
+  continuations are given "rejuvinated" when they are resumed, it was
+  possible for older pages to have part of their dispatchers (@@href-p)
+  expired.
+
+- A new context initialization sequence obsoletes the old web.xml
+  files, but is simpler to configure.
+
+- The old Scheme-based DB continuation persistence mechanism is now
+  replaced by Hibernate. Hibernate is easier to adapt to different
+  database vendors, and offers interesting caching options.
+
+- The tic-tac-toe example now plays against the user with rules
+  written in Schelog. This was done to demostrate the ease of meshing
+  SISCweb with non-traditional programming.
+
+- The webrepl now keeps a history. Thanks to Dan Muresan for his
+  contribution.
+
+- Added a few SXML tags: *COMMENT* for XML comments; *TOP* as an
+  optional, but ignored top-level element; *VERBATIM* as a non-standard
+  element to produce a string without escaping it.
+
+
+Bug fixes:
+
+- Fixed a leak in the sql/execute[-query] function.
+
+- Fixed an incompatibility with Resin and possibly other application
+  servers.
+
+- Removed some possible pitfalls from the build process.
+
+Thanks Anton van Straaten, Dan Muresan and Felix Klock for spotting
+these bugs.
+
+
+
+2005-08-01: v0.22
+
+This release fixes a couple of bugs and completes the basic feature
+set introduced in the previous release.
+
+Features:
+
+- Added minimalistic shopping cart example to show a clean, stateful
+  approach to the typical MVC pattern.
+
+- SXML additions:
+
+    * Deprecated @@dispatch and @@[href|src|action|data]-ce SXML
+      attributes. The former is replaced by @@href-p, and the latter
+      are not needed because @@[href|src|action|data]-c already encode the
+      generated URL.
+    * The @@bindings attribute can now be combined with
+      @@[href|src|action|data]-[p|c]; when left on its own, it will pass the
+      specified bindings to the suspended continuation.
+    * Added *COMMENT* tag to SXML, converted to XML comments (<!-- -->)
+
+  The first two items make the extensions to the HTML markup complete
+  in respect to basic flow control.
+
+- Request forwarding functions can now pass along URLs to stored
+  closures as bindings. This allows Servlet/JSPs to emulate some
+  features more naturally available in SXML via the
+  @@[href|src|action|data]-[p|c] attributes.
+
+- It is now possible to specify a global error handler that one can
+  use to display the stack trace, etc.
+
+- Initial support for PostgreSQL contributed by Ben Simon. Thank you!
+
+
+Bug fixes:
+
+- Bindings can now be used as objects across suspended continuations.
+
+- Date/time conversion bug between SQL and Scheme types.
+
+Thanks to Ben Simon for spotting these two bugs and providing a fix to
+the latter.
+
+
+
+2005-07-10: v0.21
+
+This release fixes a few bugs and adds some features from the 0.3
+development branch.
+
+Features:
+
+- Fixed various bugs and omissions in the href-* attributes of the
+  extended HTML.
+
+- Patched a weird bug that seems to occur in Tomcat, sometimes
+  causing sessions to be "lost" (not destroyed) after a server
+  restart.
+
+- Added [href|src|action|data]-p HTML attributes to generate links to
+  arbitrary closures. This extends and replaces the "dispatch"
+  attribute, which will be deprecated in v0.3.
+
+- The value #f for HTML elements or attributes values is now
+  ignored. This is handy when generating content dynamically.
+
+- Added Graphviz support through dot/neato/etc. executables and the
+  DotML notation (see http://www.martin-loetzsch.de/DOTML/).
+
+- DotML can also be embedded in a special HTML object element. The
+  framework will either generate a GIF/JPG/PNG image or embed an
+  SVG/etc. object. If the graph contains hyperlinks, an image map will
+  also be generated. Hyperlinks can be specified as href-[p|c|e|ce] and
+  even use the k-url.
+
+- Added Graphpad to siscweb-examples.war, a simple program to play
+  with Graphviz.
+
+- Updated the online documentation to reflect the new features in
+  v0.21.
+
+Known bugs:
+
+- Locking problems with file-based HSQLDB when the appserver restarts
+  the context. For now this can be circumvented by stopping and starting
+  the context in separate steps.
+
+
+
+2005-06-19: v0.2
+This release extends SISCweb in several directions:
+
+- New and old extensions to the SXML-based HTML are now implemented as
+  new attributes of standard HTML tags.
+
+- Added preliminary support for using JSPs or other traditional Java
+  techniques instead of SXML for presentation.
+
+- Continuations can now be stored in an HSQL or Oracle DB in addition
+  to the session object. This approach is slower in small setups, but
+  in time it should afford better scalability.
+
+- Added unified interface to continuation persistence, so that
+  other databases may be supported.
+
+- A manual in progress can be found at:
+      http://siscweb.sf.net/swm/swm.html
+
+- Two new examples:
+    * a tic-tac-toe example written by Scott Miller, and
+    * a server-side, browser-based simple REPL that allows
+      one to immediately send pages to the browser.
+
+- Solved v0.1 bugs, as long as SISC v1.11 or later is used.
+
+- Removed AspectJ requirement.
+
+- Created home page: http://siscweb.sf.net/
+
+Known bugs:
+
+- Locking problems with file-based HSQLDB when the appserver restarts
+  the context. For now this can be circumvented by stopping and starting
+  the context in separate steps.
+
+
+2005-04-06: v0.1, initial release
+Features:
+- Stateful web programming
+- Server-side REPL
+- SXML-based page generation
+- Basic continuation storage in session
+
+Known bugs:
+
+- REPL doesn't quit if a user is connected when webserver stops,
+  leaving the appserver process running
+- Serialization problems when url-dispatch is used
+@
+
+
+1.4
+log
+@merged from rel-0-4-dev
+@
+text
+@d1 81
+@
+
+
+1.4.4.1
+log
+@updated
+@
+text
+@a0 78
+2007-04-??: v0.5
+
+This new release adds an implementation of Web Cells, consolidates the interface from Scheme to JSP/Servlets, and provides some incremental features and fixes.
+
+
+FEATURES
+
+- An implementation of web cells, as as described in the paper
+  "Interaction-Safe State for the Web"
+  (http://www.cs.brown.edu/~sk/Publications/Papers/Published/mk-int-safe-state-web/). New
+  examples now help compare web cells, SRFI-39 parameters,
+  state-passing-style and session attributes with respect to scope,
+  backtracking and cloning.
+
+- Much improved interface from SISCweb to JSPs and other standard
+  J2EE components:
+        - Bindings can now be explicitely single-valued or
+          multi-valued, as in:
+
+              `((a . 1) (b 2 3)).
+
+        - The send-forward/* functions pass bindings to the dispatcher
+          as request attributes for easy access via the JSTL and the
+          like. Multi-valued bindings are passed as collection
+          objects.
+
+        - Vice-versa, attributes in a request forwarded to a Scheme
+          program are now included in the bindings structure returned
+          by get-bindings.
+
+        - The SISCHttpServletRequest.getBinding*() methods are
+          deprecated, and will disappear in the next release.
+
+- Added publish/regexp to publish procedures using regular
+  expressions. Sub-expressions can be optionally mapped to procedure
+  parameters.
+
+- The SISC libraries (sisc.jar, etc.) can now be shared across servlet
+  contexts.
+
+- Miscellaneous:
+    * better compliance of plain HTML output via send-html/*;
+    * added siscweb/text module for generating plain text;
+    * added sql/mssql module from LShift's Icing [*];
+    * logging rotation;
+    * further internal refactoring and fixes.
+
+
+FIXES
+
+After a context restart, continuation tables persisted within sessions
+were not being purged of expired continuations. This was partially
+fixed in v0.4 by limiting the number of continuations per user, but is
+now completely fixed.
+
+
+LOOKING AHEAD
+
+Objectives for the next SISCweb releases are:
+
+- Faster SXML generation, precompiled if possible.
+
+- Further work on including features from the  Icing framework.
+
+- Performance improvements, possibly including clustering.
+
+
+THANKS
+
+Special thanks for this release go to Dan Muresan for his
+contributions. and Ben Simon for bug reports.
+
+[*] Icing: http://www.lshift.net/icing
+The complete Icing db layer is included in a "dormant" state. It is
+mainly intended as a baseline for further hacking.
+
+
+
+@
+
+
+1.4.4.2
+log
+@updated
+@
+text
+@d1 1
+a1 1
+2007-04-11: v0.5
+d3 1
+a3 3
+This new release adds a space-safe implementation of Web Cells,
+consolidates the interface from Scheme to JSP/Servlets, and provides
+some incremental features and fixes.
+d46 1
+a46 1
+    * further internal refactoring and compatibility fixes.
+d54 1
+a54 1
+now completely resolved.
+d71 1
+a71 2
+contributions, and Ben Simon for bug reports.
+
+@
+
+
+1.4.4.3
+log
+@updated for release 0.5
+@
+text
+@d3 1
+a3 1
+This release adds a space-safe implementation of Web Cells,
+d43 1
+a43 1
+- Miscellanea:
+@
+
+
+1.3
+log
+@merged from rel-0-3-dev
+@
+text
+@d1 190
+@
+
+
+1.3.4.1
+log
+@updated
+@
+text
+@a0 190
+2006-09-02: v0.4
+
+This release introduces improvements in continuation management,
+better performance under load, and logging.
+
+
+NOTES
+
+This release requires at least SISC 1.15, but SISC 1.16 is recommended
+because of radical improvements in I/O performance. This is also the
+first SISCweb release to work with SISC 1.16.
+
+
+FEATURES
+
+- The configuration entries required in the web.xml file are now
+  fewer, and are documented in the manual. Only one Listener and the
+  adapter servlet are mandatory. Most configuration parameters are now
+  optional and represented as environment entries.
+
+- Values of environment entries, normally accessible through the
+  application server's administrative interface, are picked up within
+  a minute (provided that the application server allows changing them
+  without a context restart.)
+
+- Configurable resource-bounding limits the number of continuation
+  groups per user, how frequently continuations can be created, how
+  often expired continuations are removed, and how many are
+  persisted. This makes SISCweb more resilient to load.
+
+- SISCweb applications now respond to DELETE and PUT in addition to
+  the usual GET and POST. (Continuations and REST can actually work
+  well together, as explained by Anton Van Strateen at
+  http://ll4.csail.mit.edu/slides/rest-slides.pdf)
+
+- Continuation storage via Hibernate is no more. Storing individual
+  continuations was overall more expensive than serializing the whole
+  continuation table, and altered the semantics of programs. Since
+  application servers offer a variety of session storage mechanisms,
+  including database persistence, the Hibernate option had no reason
+  to be.
+
+- The file WEB-INF/sisc.properties is picked up and used to initialize
+  the SISC interpreter.
+
+- SISCweb now logs most of its operations at various logging levels.
+
+- Miscellaneous internal refactorings.
+
+
+FIXES/BUGS
+
+After a context restart, continuation tables persisted within sessions
+were not being purged of expired continuations.
+
+Unfortunately this is still an open issue for some application
+servers, e.g. Tomcat (but not others, e.g. Resin.) Since the number of
+continuation groups per user is limited anyway, this is not a
+showstopper.
+
+
+LOOKING AHEAD
+
+Objectives for the next SISCweb releases are:
+
+- Faster SXML generation, precompiled if possible.
+
+- Inclusion of some features from the Icing framework.
+
+- Improvements in the interface between SISCweb and JSPs.
+
+- Performance improvements, possibly including clustering.
+
+
+THANKS
+
+Special thanks for this release go to Ben Simon and Dan Muresan.
+
+
+
+2006-04-15: v0.33
+
+This is a compatibility release with SISC 1.13, and adds some features
+from the 0.4 development branch.
+
+NOTES
+
+This release is ONLY compatible with SISC 1.13 and up. If
+compatibility with SISC 1.11 is desired, SISCweb 0.32 should be used
+instead.
+
+
+FEATURES
+
+- A new module siscweb/image provides procedures to send images from
+  java.awt.image.RenderedImage objects or from files.
+
+- A new API wraps and "scheme-ifies" all methods on the Request,
+  Response, Session and ServletContext objects. This makes it easier
+  to access POST data through a scheme input port, or to set the
+  response buffer size, or set Java or Scheme session attributes, for
+  example.
+
+- A new procedure forward/dynenv/store! can be used in place of the
+  @@href-p attributes or plain forward/store! when one desires to
+  capture the dynamic environment of a closure, e.g. SRFI-39
+  parameters. Because SISC 1.13 solves a few serialization bugs, it is
+  now possible to use SRFI-39 parameters in place of session
+  attributes for tracking state. This is particularly useful in
+  event-based programming (e.g. AJAX). See the Counter example code
+  (no pun intended).
+
+- Improvements to response writing improve performance for markup,
+  graphviz, images.
+
+- Improvements to XML/XHTML output.
+
+- A new (backwards-compatible) API for siscweb/config.
+
+- Updated documentation throughout.
+
+- Some internal refactoring.
+
+
+FIXES
+
+- Compatible with SISC 1.13.
+
+- Some XML/XHTML fixes.
+
+
+
+2006-02-25: v0.32
+
+This release fixes a bug and adds some features from the 0.4
+development branch.
+
+FEATURES
+
+- Added modules to generate XHTML and XML responses through a port of
+  the WebIt! XML library. A little cross-pollination between the WebIt!
+  port and the current HTML library make XHTML and HTML modules mostly
+  interchangeable.
+
+- Added the siscweb/session module for operations on the session
+  object.
+
+- Added support for response headers in the send-*/* functions. Added
+  the ability to specify a character encoding in the get-bindings
+  function.
+
+- Added @@anchor attribute to [a|form|iframe|object] to add #anchors to
+  system-generated URLs.
+
+- The examples now output compliant XHTML.
+
+- Improved server-side error reporting.
+
+- Some internal optimizations.
+
+- Updated manual.
+
+
+BUG FIXES
+
+- Patched (for the last time) a weird bug that seems to occur in
+  Tomcat, sometimes causing sessions to be "lost" (not destroyed) after
+  a server restart.
+
+Thanks to Dan Muresan and Denys Rtveliashvili for their suggestions and feedback.
+
+
+2005-10-28: v0.31
+
+This is a fix release:
+
+BUG FIXES
+
+1. A missing import renders the sql/execute-query function
+   unusable. The bug can also be addressed in v0.3 by issuing in the
+   toplevel:
+
+        (require-extension (srfi 45))
+
+2. Minor bug fixes to the build process.
+
+Thanks again to Dan Muresan for spotting these bugs.
+
+
+
+@
+
+
+1.3.2.1
+log
+@updated
+@
+text
+@a0 18
+2005-10-28: v0.31
+
+This is a fix release:
+
+BUG FIXES
+
+1. A missing import renders the sql/execute-query function
+   unusable. The bug can also be addressed in v0.3 by issuing in the
+   toplevel:
+
+        (require-extension (srfi 45))
+
+2. Minor bug fixes to the build process.
+
+Thanks again to Dan Muresan for spotting these bugs.
+
+
+
+@
+
+
+1.3.2.2
+log
+@updated for 0.32 release
+@
+text
+@a0 40
+2005-02-25: v0.32
+
+This release fixes a bug and adds some features from the 0.4
+development branch.
+
+FEATURES
+
+- Added modules to generate XHTML and XML responses through a port of
+  the WebIt! XML library. A little cross-pollination between the WebIt!
+  port and the current HTML library make XHTML and HTML modules mostly
+  interchangeable.
+
+- Added the siscweb/session module for operations on the session
+  object.
+
+- Added support for response headers in the send-*/* functions. Added
+  the ability to specify a character encoding in the get-bindings
+  function.
+
+- Added @@anchor attribute to [a|form|iframe|object] to add #anchors to
+  system-generated URLs.
+
+- The examples now output compliant XHTML.
+
+- Improved server-side error reporting.
+
+- Some internal optimizations.
+
+- Updated manual.
+
+
+BUG FIXES
+
+- Patched (for the last time) a weird bug that seems to occur in
+  Tomcat, sometimes causing sessions to be "lost" (not destroyed) after
+  a server restart.
+
+Thanks to Dan Muresan and Denys Rtveliashvili for their suggestions and feedback.
+
+
+@
+
+
+1.3.2.3
+log
+@merged from rel-0-4-dev
+@
+text
+@d1 1
+a1 53
+2006-04-15: v0.33
+
+This is a compatibility release with SISC 1.13, and adds some features
+from the 0.4 development branch.
+
+NOTES
+
+This release is ONLY compatible with SISC 1.13 and up. If
+compatibility with SISC 1.11 is desired, SISCweb 0.32 should be used
+instead.
+
+
+FEATURES
+
+- A new module siscweb/image provides procedures to send images from
+  java.awt.image.RenderedImage objects or from files.
+
+- A new API wraps and "scheme-ifies" all methods on the Request,
+  Response, Session and ServletContext objects. This makes it easier
+  to access POST data through a scheme input port, or to set the
+  response buffer size, or set Java or Scheme session attributes, for
+  example.
+
+- A new procedure forward/dynenv/store! can be used in place of the
+  @@href-p attributes or plain forward/store! when one desires to
+  capture the dynamic environment of a closure, e.g. SRFI-39
+  parameters. Because SISC 1.13 solves a few serialization bugs, it is
+  now possible to use SRFI-39 parameters in place of session
+  attributes for tracking state. This is particularly useful in
+  event-based programming (e.g. AJAX). See the Counter example code
+  (no pun intended).
+
+- Improvements to response writing improve performance for markup,
+  graphviz, images.
+
+- Improvements to XML/XHTML output.
+
+- A new (backwards-compatible) API for siscweb/config.
+
+- Updated documentation throughout.
+
+- Some internal refactoring.
+
+
+FIXES
+
+- Compatible with SISC 1.13.
+
+- Some XML/XHTML fixes.
+
+
+
+2006-02-25: v0.32
+@
+
+
+1.2
+log
+@merged from rel-0-2-dev
+@
+text
+@d1 145
+@
+
+
+1.2.4.1
+log
+@merged from rel-0-2-fix-1
+@
+text
+@a0 44
+2005-07-10: v0.21
+
+This release fixes a few bugs and adds some features from the 0.3
+development branch.
+
+Features:
+
+- Fixed various bugs and omissions in the href-* attributes of the
+  extended HTML.
+
+- Patched a weird bug that seems to occur in Tomcat, sometimes
+  causing sessions to be "lost" (not destroyed) after a server
+  restart.
+
+- Added [href|src|action|data]-p HTML attributes to generate links to
+  arbitrary closures. This extends and replaces the "dispatch"
+  attribute, which will be deprecated in v0.3.
+
+- The value #f for HTML elements or attributes values is now
+  ignored. This is handy when generating content dynamically.
+
+- Added Graphviz support through dot/neato/etc. executables and the
+  DotML notation (see http://www.martin-loetzsch.de/DOTML/).
+
+- DotML can also be embedded in a special HTML object element. The
+  framework will either generate a GIF/JPG/PNG image or embed an
+  SVG/etc. object. If the graph contains hyperlinks, an image map will
+  also be generated. Hyperlinks can be specified as href-[p|c|e|ce] and
+  even use the k-url.
+
+- Added Graphpad to siscweb-examples.war, a simple program to play
+  with Graphviz.
+
+- Updated the online documentation to reflect the new features in
+  v0.21.
+
+Known bugs:
+
+- Locking problems with file-based HSQLDB when the appserver restarts
+  the context. For now this can be circumvented by stopping and starting
+  the context in separate steps.
+
+
+
+@
+
+
+1.2.4.2
+log
+@merged from rel-0-2-fix
+@
+text
+@a0 45
+2005-08-01: v0.22
+
+This release fixes a couple of bugs and completes the basic feature
+set introduced in the previous release.
+
+Features:
+
+- Added minimalistic shopping cart example to show a clean, stateful
+  approach to the typical MVC pattern.
+
+- SXML additions:
+
+    * Deprecated @@dispatch and @@[href|src|action|data]-ce SXML
+      attributes. The former is replaced by @@href-p, and the latter
+      are not needed because @@[href|src|action|data]-c already encode the
+      generated URL.
+    * The @@bindings attribute can now be combined with
+      @@[href|src|action|data]-[p|c]; when left on its own, it will pass the
+      specified bindings to the suspended continuation.
+    * Added *COMMENT* tag to SXML, converted to XML comments (<!-- -->)
+
+  The first two items make the extensions to the HTML markup complete
+  in respect to basic flow control.
+
+- Request forwarding functions can now pass along URLs to stored
+  closures as bindings. This allows Servlet/JSPs to emulate some
+  features more naturally available in SXML via the
+  @@[href|src|action|data]-[p|c] attributes.
+
+- It is now possible to specify a global error handler that one can
+  use to display the stack trace, etc.
+
+- Initial support for PostgreSQL contributed by Ben Simon. Thank you!
+
+
+Bug fixes:
+
+- Bindings can now be used as objects across suspended continuations.
+
+- Date/time conversion bug between SQL and Scheme types.
+
+Thanks to Ben Simon for spotting these two bugs and providing a fix to
+the latter.
+
+
+d44 1
+@
+
+
+1.2.4.3
+log
+@added v0.3
+@
+text
+@a0 55
+2005-10-25: v0.3
+
+This releases introduces internal changes, a less monolithical
+packaging, and a few bug fixes.
+
+Features:
+
+- SISCweb is now divided in a core library and three ancilliary
+  libraries for generating content, accessing databases, and persisting
+  continuations through Hibernate. This is to allow these libraries to
+  evolve with a higher degree of freedom outside of SISCweb releases,
+  and to avoid encumbering SISCweb with external dependencies.
+  (Hibernate being the point in case.)
+
+- Scheme files are now compiled at build time, resulting in a much faster
+  startup time. Dan Muresan also backported this to the 0.2 branch.
+
+- Continuations are now grouped and expired per page. Since
+  continuations are given "rejuvinated" when they are resumed, it was
+  possible for older pages to have part of their dispatchers (@@href-p)
+  expired.
+
+- A new context initialization sequence obsoletes the old web.xml
+  files, but is simpler to configure.
+
+- The old Scheme-based DB continuation persistence mechanism is now
+  replaced by Hibernate. Hibernate is easier to adapt to different
+  database vendors, and offers interesting caching options.
+
+- The tic-tac-toe example now plays against the user with rules
+  written in Schelog. This was done to demostrate the ease of meshing
+  SISCweb with non-traditional programming.
+
+- The webrepl now keeps a history. Thanks to Dan Muresan for his
+  contribution.
+
+- Added a few SXML tags: *COMMENT* for XML comments; *TOP* as an
+  optional, but ignored top-level element; *VERBATIM* as a non-standard
+  element to produce a string without escaping it.
+
+
+Bug fixes:
+
+- Fixed a leak in the sql/execute[-query] function.
+
+- Fixed an incompatibility with Resin and possibly other application
+  servers.
+
+- Removed some possible pitfalls from the build process.
+
+Thanks Anton van Straaten, Dan Muresan and Felix Klock for spotting
+these bugs.
+
+
+
+a45 1
+
+a88 1
+
+@
+
+
+1.2.2.1
+log
+@updated
+@
+text
+@a0 44
+2005-07-10: v0.21
+
+This release fixes a few bugs and adds some features from the 0.3
+development branch.
+
+Features:
+
+- Fixed various bugs and omissions in the href-* attributes of the
+  extended HTML.
+
+- Patched a weird bug that seems to occur in Tomcat, sometimes
+  causing sessions to be "lost" (not destroyed) after a server
+  restart.
+
+- Added [href|src|action|data]-p HTML attributes to generate links to
+  arbitrary closures. This extends and replaces the "dispatch"
+  attribute, which will be deprecated in v0.3.
+
+- The value #f for HTML elements or attributes values is now
+  ignored. This is handy when generating content dynamically.
+
+- Added Graphviz support through dot/neato/etc. executables and the
+  DotML notation (see http://www.martin-loetzsch.de/DOTML/).
+
+- DotML can also be embedded in a special HTML object element. The
+  framework will either generate a GIF/JPG/PNG image or embed an
+  SVG/etc. object. If the graph contains hyperlinks, an image map will
+  also be generated. Hyperlinks can be specified as href-[p|c|e|ce] and
+  even use the k-url.
+
+- Added Graphpad to siscweb-examples.war, a simple program to play
+  with Graphviz.
+
+- Updated the online documentation to reflect the new features in
+  v0.21.
+
+Known bugs:
+
+- Locking problems with file-based HSQLDB when the appserver restarts
+  the context. For now this can be circumvented by stopping and starting
+  the context in separate steps.
+
+
+
+@
+
+
+1.2.2.2
+log
+@updated
+@
+text
+@a0 45
+2005-08-01: v0.22
+
+This release fixes a couple of bugs and completes the basic feature
+set introduced in the previous release.
+
+Features:
+
+- Added minimalistic shopping cart example to show a clean, stateful
+  approach to the typical MVC pattern.
+
+- SXML additions:
+
+    * Deprecated @@dispatch and @@[href|src|action|data]-ce SXML
+      attributes. The former is replaced by @@href-p, and the latter
+      are not needed because @@[href|src|action|data]-c already encode the
+      generated URL.
+    * The @@bindings attribute can now be combined with
+      @@[href|src|action|data]-[p|c]; when left on its own, it will pass the
+      specified bindings to the suspended continuation.
+    * Added *COMMENT* tag to SXML, converted to XML comments (<!-- -->)
+
+  The first two items make the extensions to the HTML markup complete
+  in respect to basic flow control.
+
+- Request forwarding functions can now pass along URLs to stored
+  closures as bindings. This allows Servlet/JSPs to emulate some
+  features more naturally available in SXML via the
+  @@[href|src|action|data]-[p|c] attributes.
+
+- It is now possible to specify a global error handler that one can
+  use to display the stack trace, etc.
+
+- Initial support for PostgreSQL contributed by Ben Simon. Thank you!
+
+
+Bug fixes:
+
+- Bindings can now be used as objects across suspended continuations.
+
+- Date/time conversion bug between SQL and Scheme types.
+
+Thanks to Ben Simon for spotting these two bugs and providing a fix to
+the latter.
+
+
+@
+
+
+1.1
+log
+@file CHANGES was initially added on branch rel-0-2-dev.
+@
+text
+@d1 49
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 46
+2005-06-15: v0.2
+This release extends SISCweb in several directions:
+
+- New features in SXML-based HTML are now implemented as new
+  attributes of normal HTML tags.
+
+- Added preliminary support for using JSPs or other traditional Java
+  techniques instead of SXML for presentation.
+
+- Continuations can now be stored in an HSQL or Oracle DB in addition
+  to the session object. This approach is slower in small setups, but
+  in time it should afford more scalability.
+
+- Added unified interface to continuation persistence, so that
+  other databases may be supported.
+
+- A manual in progress can be found at:
+      http://siscweb.sf.net/swm/swm.html
+
+- New tic-tac-toe example written by Scott Miller. Also, misc
+  improvements to the sillywiki code.
+
+- Solved v0.1 bugs, as long as SISC v1.11 or later is used.
+
+- Removed AspectJ requirement.
+
+- Created home page: http://siscweb.sf.net/
+
+Known bugs:
+- Locking problems with file-based HSQLDB when the appserver
+  redeploys. For now this can be circumvented by undeploying
+  and redeploying in separate steps.
+
+
+2005-04-06: v0.1, initial release
+Features:
+- Stateful web programming
+- Server-side REPL
+- SXML-based page generation
+- Basic continuation storage in session
+
+Known bugs:
+
+- REPL doesn't quit if a user is connected when webserver stops,
+  leaving the appserver process running
+- Serialization problems when url-dispatch is used
+@
+
+
+1.1.2.2
+log
+@updated
+@
+text
+@d1 1
+a1 1
+2005-06-19: v0.2
+d4 2
+a5 2
+- New and old extensions to the SXML-based HTML are now implemented as
+  new attributes of standard HTML tags.
+d12 1
+a12 1
+  in time it should afford better scalability.
+d20 2
+a21 4
+- Two new examples:
+    * a tic-tac-toe example written by Scott Miller, and
+    * a server-side, browser-based simple REPL that allows
+      one to immediately send pages to the browser.
+d30 3
+a32 4
+
+- Locking problems with file-based HSQLDB when the appserver restarts
+  the context. For now this can be circumvented by stopping and starting
+  the context in separate steps.
+@
+
+

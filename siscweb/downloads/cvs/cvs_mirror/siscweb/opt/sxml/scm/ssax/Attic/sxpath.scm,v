@@ -1,0 +1,135 @@
+head	1.3;
+access;
+symbols
+	rel-0-4-fix-0:1.2
+	rel-0-5-dev:1.2.0.4
+	rel-0-4-fix:1.2.0.2
+	rel-0-3-fix-3:1.1.4.2
+	rel-0-3-fix:1.1.0.4
+	rel-0-4-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2007.04.12.03.51.18;	author acolomba;	state dead;
+branches;
+next	1.2;
+
+1.2
+date	2006.09.03.01.42.23;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2006.03.01.01.53.53;	author acolomba;	state dead;
+branches
+	1.1.2.1
+	1.1.4.1;
+next	;
+
+1.1.2.1
+date	2006.03.01.01.53.53;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.1.4.1
+date	2006.03.01.01.53.53;	author acolomba;	state dead;
+branches;
+next	1.1.4.2;
+
+1.1.4.2
+date	2006.04.15.15.55.24;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2006.09.20.04.28.56;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@merged from rel-0-5-dev
+@
+text
+@(module ssax/sxpath
+  (sxpath)
+
+  ;; there's a naked lhr in the code, but it doesn't seem to break
+  ;; anything
+  (include "SXPath-code.scm")
+  )
+@
+
+
+1.2
+log
+@merged from rel-0-4-dev
+@
+text
+@@
+
+
+1.2.4.1
+log
+@moved from ssax/sxpath to sxpath/*
+@
+text
+@@
+
+
+1.1
+log
+@file sxpath.scm was initially added on branch rel-0-4-dev.
+@
+text
+@d1 7
+@
+
+
+1.1.4.1
+log
+@file sxpath.scm was added on branch rel-0-3-fix on 2006-04-15 15:55:24 +0000
+@
+text
+@@
+
+
+1.1.4.2
+log
+@merged from rel-0-4-dev
+@
+text
+@a0 7
+(module ssax/sxpath
+  (sxpath)
+
+  ;; there's a naked lhr in the code, but it doesn't seem to break
+  ;; anything
+  (include "SXPath-code.scm")
+  )
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 7
+(module ssax/sxpath
+  (sxpath)
+
+  ;; there's a naked lhr in the code, but it doesn't seem to break
+  ;; anything
+  (include "SXPath-code.scm")
+  )
+@
+

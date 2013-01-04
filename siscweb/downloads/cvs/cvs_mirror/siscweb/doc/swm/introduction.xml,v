@@ -1,0 +1,1133 @@
+head	1.5;
+access;
+symbols
+	rel-0-6-dev:1.5.0.4
+	rel-0-5-fix:1.5.0.2
+	rel-0-5:1.5
+	rel-0-5-dev-safe-frames:1.4.0.6
+	Root_rel-0-5-dev-safe-frames:1.4
+	rel-0-4-fix-0:1.4
+	rel-0-5-dev:1.4.0.4
+	rel-0-4-fix:1.4.0.2
+	rel-0-3-fix-3:1.3.2.1
+	rel-0-3-fix-2:1.3.2.1
+	rel-0-4-dev-sisc-1-11:1.3.4.2
+	rel-0-3-fix-1:1.3
+	rel-0-4-dev:1.3.0.4
+	rel-0-3-fix:1.3.0.2
+	rel-0-3:1.3
+	rel-0-3-dev-1:1.2
+	rel-0-2-fix-2:1.2
+	rel-0-2-fix-1:1.2
+	rel-0-2-fix:1.2.0.2
+	rel-0-3-dev:1.2.0.4
+	rel-0-2:1.2
+	rel-0-2-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.5
+date	2007.04.12.03.51.15;	author acolomba;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2006.09.03.01.42.25;	author acolomba;	state Exp;
+branches
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2005.11.25.20.43.32;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.06.19.04.53.02;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.06.05.18.07.58;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.06.05.18.07.58;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.06.05.19.54.06;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2005.06.05.20.57.15;	author acolomba;	state Exp;
+branches;
+next	1.1.2.4;
+
+1.1.2.4
+date	2005.06.18.02.23.17;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5;
+
+1.1.2.5
+date	2005.06.19.02.05.13;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.11.25.20.11.11;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.11.25.20.29.18;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2006.02.25.17.12.07;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2005.12.15.05.07.40;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2;
+
+1.3.4.2
+date	2006.02.25.15.26.41;	author acolomba;	state Exp;
+branches;
+next	1.3.4.3;
+
+1.3.4.3
+date	2006.08.15.00.51.11;	author acolomba;	state Exp;
+branches;
+next	1.3.4.4;
+
+1.3.4.4
+date	2006.08.18.02.57.50;	author acolomba;	state Exp;
+branches;
+next	1.3.4.5;
+
+1.3.4.5
+date	2006.08.31.02.50.30;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2007.04.08.14.37.53;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.5
+log
+@merged from rel-0-5-dev
+@
+text
+@<chapter id="introduction">
+  <title>Introduction</title>
+
+  <para>
+    &SISCweb; is a framework to facilitate writing stateful
+    Scheme web applications in J2EE environments.
+  </para>
+
+  <section id="features">
+    <title>Features</title>
+
+    <para>
+      &SISCweb; sports an interactive, REPL-based web application
+      development style. Developers can write applications
+      interactively, without ever restarting the context, and, insofar as
+      it is desirable, without ever losing application state. (In
+      fact, save for the Java portion, &SISCweb; itself is developed
+      interactively in its own REPL.)
+    </para>
+    <para>
+      Through the use of continuations, &SISCweb; does away with the
+      page-centric execution model typical of web applications (see
+
+      <footnote>
+        <para>
+          Christian Queinnec. &quot;Inverting back the inversion of
+          control or, continuations versus page-centric
+          programming&quot;. Technical Report 7, LIP6. May
+          2001. (<ulink
+          url="http://www-spi.lip6.fr/~queinnec/Papers/www.ps.gz">
+          http://www-spi.lip6.fr/~queinnec/Papers/www.ps.gz </ulink>)
+        </para>
+      </footnote>.)
+
+      Every time a response is sent to the browser, the program
+      execution flow is suspended, to be then resumed from that exact
+      point when the browser submits a request. Some consequences of
+      this approach are:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        Programs are more easily structured around their problem
+        domain rather than their presentation.
+      </listitem>
+      <listitem>
+        Developers are mostly freed from having to manually manage the
+        lifecycle of objects in the session. The need to to store
+        objects in the session is greatly reduced because when the
+        browser submits a request, and the program's execution flow is
+        resumed, all the language-level variables that were in scope
+        are again available.
+      </listitem>
+      <listitem>
+        Thanks to &SISC;'s serializable continuations, accumulated
+        program state is transparent to server restarts.
+      </listitem>
+      <listitem>
+        Programs can be made resilient to page reloads and browser
+        window cloning with much less effort.
+      </listitem>
+      <listitem>
+        An extra security layer is added because URLs (which now
+        encode a reference to program state) cannot easily be
+        manipulated, hidden form variables are not needed anymore, and
+        in general the automatic state management in &SISCweb; should
+        be more difficult to hack than the ad-hoc solutions developers
+        are forced to implement in traditional web frameworks.
+        </listitem>
+      </itemizedlist>
+
+      <note>
+        This document is a work-in-progress. Readers not familiar with
+        other Scheme web frameworks might want to also read through
+        the documentation of more mature implementations:
+
+        <itemizedlist>
+          <listitem>
+            PLT web server:
+            <ulink url="http://docs.plt-scheme.org/web-server/web-server.html"/>
+          </listitem>
+          <listitem>
+            SUrflet server:
+            <ulink url="http://www.scsh.net/resources/sunet-manual/man-Z-H-8.html#node_chap_6"/>
+          </listitem>
+        </itemizedlist>
+      </note>
+  </section>
+
+  <section id="license">
+    <title>License</title>
+
+    <para>
+      &SISCweb; is open-source software licensed under the <ulink
+      url="http://www.mozilla.org/MPL/MPL-1.1.html">MPL</ulink>, the
+      <ulink url="http://www.gnu.org/copyleft/gpl.html">GPL</ulink>,
+      and the <ulink
+      url="http://www.gnu.org/copyleft/lgpl.html">LGPL</ulink>.
+    </para>
+  </section>
+
+  <section id="credits">
+    <title>Credits</title>
+
+    <para>
+      &SISCweb; is based on &SISC; (<ulink
+      url="http://sisc.sourceforge.net/"/>), a Scheme interpreter for
+      the JVM with full continuations, and is heavily influenced by
+      other Lisp web frameworks:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        The PLT web server collection:
+        <ulink url="http://download.plt-scheme.org/scheme/docs/html/web-server/"/>
+      </listitem>
+      <listitem>
+        SUnet:
+        <ulink url="http://www.scsh.net/resources/sunet.html"/>
+      </listitem>
+      <listitem>
+        AllegroServe:
+        <ulink url="http://allegroserve.sourceforge.net"/>
+      </listitem>
+    </itemizedlist>
+
+    <para>
+      A couple of initial design decisions were also lifted from
+      Matthias Radestock's servlet code in the contrib section of the
+      SISC CVS tree.
+    </para>
+
+    <para>
+      Also special thanks to Anton van Straaten, Dominique Boucher,
+      Ben Simon, Dan Muresan, Felix Klock and Tony Garnock-Jones for
+      bug reports, suggestions, and/or work in support of &SISCweb;.
+    </para>
+  </section>
+
+  <section id="contact">
+    <title>Contact Information</title>
+
+    <para>
+      Comments, ideas, and bug reports are welcome at:
+      <email>acolomba@@users.sourceforge.net</email>
+    </para>
+  </section>
+</chapter>
+@
+
+
+1.4
+log
+@merged from rel-0-4-dev
+@
+text
+@d135 2
+a136 2
+      Ben Simon, Dan Muresan and Felix Klock for bug reports,
+      suggestions, and/or work in support of &SISCweb;.
+@
+
+
+1.4.4.1
+log
+@example formatting; nesting; clarifications
+@
+text
+@d135 2
+a136 2
+      Ben Simon, Dan Muresan, Felix Klock and Tony Garnock-Jones for
+      bug reports, suggestions, and/or work in support of &SISCweb;.
+@
+
+
+1.3
+log
+@merged from rel-0-3-dev
+@
+text
+@d5 1
+a5 1
+    &SISCweb; is a framework aimed to facilitate writing stateful
+d15 1
+a15 1
+      interactively, without ever bouncing the server, and, insofar as
+d18 1
+a18 1
+      interactively in a REPL.)
+d47 6
+a52 6
+        Developers are freed from having to manually manage the
+        lifecycle of objects in the session. In fact, there is hardly
+        any need to store objects in the session; when the browser
+        submits a request and the program's execution flow is resumed,
+        all the language-level variables that were in scope are again
+        available.
+d59 2
+a60 2
+        Programs can be made resilient to page reloads and cloning
+        with much less effort.
+d68 1
+a68 1
+        are forced to implement in traditional web applications.
+d80 1
+a80 3
+            <ulink url="http://docs.plt-scheme.org/web-server/web-server.html">
+              http://docs.plt-scheme.org/web-server/web-server.html
+            </ulink>
+d84 1
+a84 3
+            <ulink url="http://www.scsh.net/resources/sunet-manual/man-Z-H-8.html#node_chap_6">
+              http://www.scsh.net/resources/sunet-manual/man-Z-H-8.html#node_chap_6
+            </ulink>
+a101 65
+  <section id="requirements">
+    <title>Requirements</title>
+
+    <para>
+      &SISCweb; requires a J2EE 1.3 application server (Servlet
+      spec. 2.3), Java 1.4 or later, and &SISC; version 1.11.
+    </para>
+  </section>
+
+  <section id="installation">
+    <title>Installation</title>
+
+    <para>
+      Starting from release 0.3, &SISCweb; is broken down into
+      different components:
+
+      <itemizedlist>
+        <listitem>
+          siscweb.jar - The &SISCweb; core library manages
+          continuations and provides functions to forward requests to
+          other J2EE component.
+        </listitem>
+        <listitem>
+          siscweb-sxml.jar - An add-on library to produce HTML pages
+          and Graphviz graphs from SXML notation. (In the future it
+          will also provide &quot;recommended&quot; SXML packages.)
+        </listitem>
+        <listitem>
+          siscweb-sql.jar - An add-on library providing a Scheme
+          interface over JDBC. It supports a few database vendors, and
+          more can be easily added through Scheme modules.
+        </listitem>
+        <listitem>
+          siscweb-hibernate.jar - An add-on library to persist
+          continuations using <ulink
+          url="http://www.hibernate.org">Hibernate</ulink>. This
+          library requires the standard hibernate.jar and its
+          dependencies to work.
+        </listitem>
+      </itemizedlist>
+
+      An application wishing to use &SISCweb; needs only to include
+      the core library and the desired add-ons in its WEB-INF/lib/
+      folder, and merge the provided web.xml file with its own.
+    </para>
+
+    <para>
+      As to the examples, the archive siscweb-examples-[v].war (where
+      [v] is the version number) can be deployed by simply dropping it
+      into the deployment folder of a J2EE appserver.  The examples
+      can then be reached at:
+      http://&lt;yourhost&gt;:&lt;yourport&gt;/siscweb-examples-[v]/
+    </para>
+
+    <warning>
+      While the server-side REPL is disabled in the
+      siscweb-examples-[v].war available from sourceforge.net, if you
+      build your own WAR file, a REPL will be bound to the
+      localhost:5156 socket. <emphasis>This is a security
+      vulnerability.</emphasis> You should make sure to disable this
+      feature if you are concerned about other people on the same host
+      gaining access to a full-fledged REPL.
+    </warning>
+  </section>
+
+d107 3
+a109 3
+      url="http://sisc.sourceforge.net/">sisc.sourceforge.net</ulink>),
+      a Scheme interpreter for the JVM with full continuations, and is
+      heavily influenced by other Lisp web frameworks:
+d115 1
+a115 3
+        <ulink url="http://download.plt-scheme.org/scheme/docs/html/web-server/">
+          http://download.plt-scheme.org/scheme/docs/html/web-server/
+        </ulink>
+d119 1
+a119 3
+        <ulink url="http://www.scsh.net/resources/sunet.html">
+          http://www.scsh.net/resources/sunet.html
+        </ulink>
+d123 1
+a123 3
+        <ulink url="http://allegroserve.sourceforge.net">
+          http://www.scsh.net/resources/sunet.html
+        </ulink>
+@
+
+
+1.3.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@d5 1
+a5 1
+    &SISCweb; is a framework to facilitate writing stateful
+d15 1
+a15 1
+      interactively, without ever restarting the context, and, insofar as
+d18 1
+a18 1
+      interactively in its own REPL.)
+d47 6
+a52 6
+        Developers are mostly freed from having to manually manage the
+        lifecycle of objects in the session. The need to to store
+        objects in the session is greatly reduced because when the
+        browser submits a request, and the program's execution flow is
+        resumed, all the language-level variables that were in scope
+        are again available.
+d59 2
+a60 2
+        Programs can be made resilient to page reloads and browser
+        window cloning with much less effort.
+d68 1
+a68 1
+        are forced to implement in traditional web frameworks.
+d80 3
+a82 1
+            <ulink url="http://docs.plt-scheme.org/web-server/web-server.html"/>
+d86 3
+a88 1
+            <ulink url="http://www.scsh.net/resources/sunet-manual/man-Z-H-8.html#node_chap_6"/>
+d119 2
+a120 1
+      &SISCweb; is broken down into different components:
+d124 3
+a126 3
+          <emphasis>siscweb.jar</emphasis>: The &SISCweb; core library
+          manages continuations and provides functions to forward
+          requests to other J2EE component.
+d129 3
+a131 4
+          <emphasis>siscweb-sxml.jar</emphasis>: An add-on library to
+          produce HTML pages and Graphviz graphs from SXML
+          notation. (In the future it will also provide
+          &quot;recommended&quot; SXML packages.)
+d134 3
+a136 4
+          <emphasis>siscweb-sql.jar</emphasis>: An add-on library
+          providing a Scheme interface over JDBC. It supports a few
+          database vendors, and more can be easily added through
+          Scheme modules.
+d139 2
+a140 2
+          <emphasis>siscweb-hibernate.jar</emphasis>: An add-on
+          library to persist continuations using <ulink
+d147 3
+a149 4
+      An application wishing to use &SISCweb; only needs to include
+      the core library, the desired add-ons and the sisc jars
+      (including sisc-heap.jar) in its WEB-INF/lib/ folder, and merge
+      the provided web.xml file with its own.
+d153 5
+a157 3
+      The example war archive (siscweb-examples-[v].war) can be
+      deployed by simply dropping it into the deployment folder of a
+      J2EE appserver.
+d161 7
+a167 7
+      While the server-side REPL is disabled in the &SISCweb; examples
+      war archive available from sourceforge.net, if you build your
+      own WAR file, a REPL will be bound to the localhost:5156
+      socket. <emphasis>This is a security vulnerability.</emphasis>
+      You should make sure to disable this feature if you are
+      concerned about other people on the same host gaining access to
+      a full-fledged REPL.
+d176 3
+a178 3
+      url="http://sisc.sourceforge.net/"/>), a Scheme interpreter for
+      the JVM with full continuations, and is heavily influenced by
+      other Lisp web frameworks:
+d184 3
+a186 1
+        <ulink url="http://download.plt-scheme.org/scheme/docs/html/web-server/"/>
+d190 3
+a192 1
+        <ulink url="http://www.scsh.net/resources/sunet.html"/>
+d196 3
+a198 1
+        <ulink url="http://allegroserve.sourceforge.net"/>
+@
+
+
+1.3.4.1
+log
+@minor text revisions
+@
+text
+@d18 1
+a18 1
+      interactively in its own REPL.)
+d47 6
+a52 6
+        Developers are mostly freed from having to manually manage the
+        lifecycle of objects in the session. The need to to store
+        objects in the session is greatly reduced because when the
+        browser submits a request, and the program's execution flow is
+        resumed, all the language-level variables that were in scope
+        are again available.
+d59 2
+a60 2
+        Programs can be made resilient to page reloads and browser
+        window cloning with much less effort.
+@
+
+
+1.3.4.2
+log
+@fixes to mechanics
+@
+text
+@d5 1
+a5 1
+    &SISCweb; is a framework to facilitate writing stateful
+d15 1
+a15 1
+      interactively, without ever restarting the context, and, insofar as
+d68 1
+a68 1
+        are forced to implement in traditional web frameworks.
+d80 3
+a82 1
+            <ulink url="http://docs.plt-scheme.org/web-server/web-server.html"/>
+d86 3
+a88 1
+            <ulink url="http://www.scsh.net/resources/sunet-manual/man-Z-H-8.html#node_chap_6"/>
+d119 2
+a120 1
+      &SISCweb; is broken down into different components:
+d124 3
+a126 3
+          <emphasis>siscweb.jar</emphasis>: The &SISCweb; core library
+          manages continuations and provides functions to forward
+          requests to other J2EE component.
+d129 3
+a131 4
+          <emphasis>siscweb-sxml.jar</emphasis>: An add-on library to
+          produce HTML pages and Graphviz graphs from SXML
+          notation. (In the future it will also provide
+          &quot;recommended&quot; SXML packages.)
+d134 3
+a136 4
+          <emphasis>siscweb-sql.jar</emphasis>: An add-on library
+          providing a Scheme interface over JDBC. It supports a few
+          database vendors, and more can be easily added through
+          Scheme modules.
+d139 2
+a140 2
+          <emphasis>siscweb-hibernate.jar</emphasis>: An add-on
+          library to persist continuations using <ulink
+d147 3
+a149 4
+      An application wishing to use &SISCweb; only needs to include
+      the core library, the desired add-ons and the sisc jars
+      (including sisc-heap.jar) in its WEB-INF/lib/ folder, and merge
+      the provided web.xml file with its own.
+d153 5
+a157 3
+      The example war archive (siscweb-examples-[v].war) can be
+      deployed by simply dropping it into the deployment folder of a
+      J2EE appserver.
+d161 7
+a167 7
+      While the server-side REPL is disabled in the &SISCweb; examples
+      war archive available from sourceforge.net, if you build your
+      own WAR file, a REPL will be bound to the localhost:5156
+      socket. <emphasis>This is a security vulnerability.</emphasis>
+      You should make sure to disable this feature if you are
+      concerned about other people on the same host gaining access to
+      a full-fledged REPL.
+d176 3
+a178 3
+      url="http://sisc.sourceforge.net/"/>), a Scheme interpreter for
+      the JVM with full continuations, and is heavily influenced by
+      other Lisp web frameworks:
+d184 3
+a186 1
+        <ulink url="http://download.plt-scheme.org/scheme/docs/html/web-server/"/>
+d190 3
+a192 1
+        <ulink url="http://www.scsh.net/resources/sunet.html"/>
+d196 3
+a198 1
+        <ulink url="http://allegroserve.sourceforge.net"/>
+@
+
+
+1.3.4.3
+log
+@moved install section from introduction.xml to install.xml; also expanded
+@
+text
+@d111 56
+@
+
+
+1.3.4.4
+log
+@updated required SISC version
+@
+text
+@d107 1
+a107 1
+      spec. 2.3), Java 1.4 or later, and &SISC; version 1.13.6 or later.
+@
+
+
+1.3.4.5
+log
+@moved requirement section from introduction.xml to install.xml
+@
+text
+@d102 9
+@
+
+
+1.2
+log
+@merged from rel-0-2-dev
+@
+text
+@d5 2
+a6 2
+    &SISCweb; is a framework to facilitate writing stateful Scheme web
+    applications in J2EE environments.
+d17 1
+a17 1
+      fact, save the Java portion, &SISCweb; itself is developed
+d21 2
+a22 2
+      Through the use of continuations, &SISCweb; does away with the page-centric execution model
+      typical of web applications (see
+d33 1
+a33 1
+      </footnote>
+d35 4
+a38 4
+      .)  Every time a response is sent to
+      the browser, the program execution flow is suspended, to be then
+      resumed from that exact point when the browser submits a
+      request. Some consequences of this approach are:
+d56 1
+a56 2
+        program state is transparent to server restarts and
+        clustering.
+d110 2
+a111 4
+      &SISCweb; requires a J2EE 1.3 application server and a JDK 1.4
+      or later. Also, &SISC; version 1.11 is highly recommended;
+      previous versions contain glitches that negatively affect
+      &SISCweb;.
+d119 31
+a149 4
+      To use &SISCweb;, an application need only include siscweb.jar,
+      and specify some configuration directives in its web.xml. The
+      web.xml file in the examples/WEB-INF/ folder is a good starting
+      point.
+d153 5
+a157 4
+      As to the examples, siscweb-examples.war can be deployed by
+      simply dropping it into the appropriate area of a J2EE
+      appserver.  The examples can then be reached at:
+      http://&lt;yourhost&gt;:&lt;yourport&gt;/siscweb-examples/
+d162 6
+a167 6
+      siscweb-examples.war available from sourceforge.net, if you
+      build your own .war, a REPL will be bound to the localhost:5156
+      socket. <emphasis>This is a security vulnerability.</emphasis>
+      You should make sure to disable this feature if you are
+      concerned about other people on the same host gaining access to
+      a full-fledged REPL.
+d207 6
+a221 1
+
+@
+
+
+1.2.4.1
+log
+@edits; added locations
+@
+text
+@d5 2
+a6 2
+    &SISCweb; is a framework aimed to facilitate writing stateful
+    Scheme web applications in J2EE environments.
+d17 1
+a17 1
+      fact, save for the Java portion, &SISCweb; itself is developed
+d21 2
+a22 2
+      Through the use of continuations, &SISCweb; does away with the
+      page-centric execution model typical of web applications (see
+d33 1
+a33 1
+      </footnote>.)
+d35 4
+a38 4
+      Every time a response is sent to the browser, the program
+      execution flow is suspended, to be then resumed from that exact
+      point when the browser submits a request. Some consequences of
+      this approach are:
+d56 2
+a57 1
+        program state is transparent to server restarts.
+d111 4
+a114 2
+      &SISCweb; requires a J2EE 1.3 application server (Servlet
+      spec. 2.3), Java 1.4 or later, and &SISC; version 1.11.
+d122 4
+a125 31
+      Starting from release 0.3, &SISCweb; is broken down into
+      different components:
+
+      <itemizedlist>
+        <listitem>
+          siscweb.jar - The &SISCweb; core library manages
+          continuations and provides functions to forward requests to
+          other J2EE component.
+        </listitem>
+        <listitem>
+          siscweb-sxml.jar - An add-on library to produce HTML pages
+          and Graphviz graphs from SXML notation. (In the future it
+          will also provide &quot;recommended&quot; SXML packages.)
+        </listitem>
+        <listitem>
+          siscweb-sql.jar - An add-on library providing a Scheme
+          interface over JDBC. It supports a few database vendors, and
+          more can be easily added through Scheme modules.
+        </listitem>
+        <listitem>
+          siscweb-hibernate.jar - An add-on library to persist
+          continuations using <ulink
+          url="http://www.hibernate.org">Hibernate</ulink>. This
+          library requires the standard hibernate.jar and its
+          dependencies to work.
+        </listitem>
+      </itemizedlist>
+
+      An application wishing to use &SISCweb; need only include the
+      core library and the desired add-ons in its WEB-INF/lib/ folder,
+      and merge the provided web.xml file with its own.
+d129 4
+a132 5
+      As to the examples, the archive siscweb-examples-[v].war (where
+      [v] is the version number) can be deployed by simply dropping it
+      into the deployment folder of a J2EE appserver.  The examples
+      can then be reached at:
+      http://&lt;yourhost&gt;:&lt;yourport&gt;/siscweb-examples-[v]/
+d137 6
+a142 6
+      siscweb-examples-[v].war available from sourceforge.net, if you
+      build your own WAR file, a REPL will be bound to the
+      localhost:5156 socket. <emphasis>This is a security
+      vulnerability.</emphasis> You should make sure to disable this
+      feature if you are concerned about other people on the same host
+      gaining access to a full-fledged REPL.
+a181 6
+
+    <para>
+      Also special thanks to Anton van Straaten, Dominique Boucher,
+      Ben Simon, Dan Muresan and Felix Klock for bug reports,
+      suggestions, and/or work in support of &SISCweb;.
+    </para>
+d191 1
+@
+
+
+1.2.4.2
+log
+@fixed typo
+@
+text
+@d147 3
+a149 3
+      An application wishing to use &SISCweb; needs only to include
+      the core library and the desired add-ons in its WEB-INF/lib/
+      folder, and merge the provided web.xml file with its own.
+@
+
+
+1.1
+log
+@file introduction.xml was initially added on branch rel-0-2-dev.
+@
+text
+@d1 193
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 181
+<chapter id="introduction">
+  <title>Introduction</title>
+
+  <para>
+    &SISCweb; is a framework to facilitate writing stateful Scheme web
+    applications in J2EE environments.
+  </para>
+
+  <section id="features">
+    <title>Features</title>
+
+    <para>
+      &SISCweb; sports an interactive, REPL-based web application
+      development style. Developers can write applications
+      interactively, without ever bouncing the server, and, insofar as
+      it is desirable, without ever losing application state. (In
+      fact, save for the Java portion, &SISCweb; itself is developed
+      interactively in a REPL.)
+    </para>
+    <para>
+      Through the use of continuations, &SISCweb; does away with the page-centric execution model
+      typical of web applications (see
+
+      <footnote>
+        <para>
+          Christian Queinnec. &quot;Inverting back the inversion of
+          control or, continuations versus page-centric
+          programming&quot;. Technical Report 7, LIP6. May
+          2001. (<ulink
+          url="http://www-spi.lip6.fr/~queinnec/Papers/www.ps.gz">
+          http://www-spi.lip6.fr/~queinnec/Papers/www.ps.gz </ulink>)
+        </para>
+      </footnote>
+
+      .)  Every time a response is sent to
+      the browser, the program execution flow is suspended, to be then
+      resumed from that exact point when the browser submits a
+      request. Some consequences of this approach are:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        Programs are more easily structured around their problem
+        domain rather than their presentation.
+      </listitem>
+      <listitem>
+        Developers are freed from having to manually manage the
+        lifecycle of objects in the session. In fact, there is hardly
+        any need to store objects in the session; when the browser
+        submits a request and the program's execution flow is resumed,
+        all the language-level variables the were in scope are again
+        available.
+      </listitem>
+      <listitem>
+        Thanks to &SISC;'s serializable continuations, accumulated
+        program state is transparent to server restarts and
+        clustering.
+      </listitem>
+      <listitem>
+        Programs can be made resilient to page reloads and cloning
+        with much less effort.
+      </listitem>
+      <listitem>
+        An extra security layer is added because URLs (which now
+        encode a reference to program state) cannot quite be
+        manipulated, hidden form variables are not needed anymore, and
+        in general the automatic state management in &SISCweb; should
+        be more difficult to hack than the ad-hoc solutions developers
+        are forced to implement in traditional web applications.
+        </listitem>
+      </itemizedlist>
+
+      <note>
+        This document is work-in-progress. The reader not familiar
+        with any other Scheme web frameworks might want to also read
+        through the documentation of more mature frameworks:
+
+        <itemizedlist>
+          <listitem>
+            PLT web server:
+            <ulink url="http://docs.plt-scheme.org/web-server/web-server.html">
+              http://docs.plt-scheme.org/web-server/web-server.html
+            </ulink>
+          </listitem>
+          <listitem>
+            SUrflet server:
+            <ulink url="http://www.scsh.net/resources/sunet-manual/man-Z-H-8.html#node_chap_6">
+              http://www.scsh.net/resources/sunet-manual/man-Z-H-8.html#node_chap_6
+            </ulink>
+          </listitem>
+        </itemizedlist>
+      </note>
+  </section>
+
+  <section id="requirements">
+    <title>Requirements</title>
+
+    <para>
+      SISCweb requires a J2EE 1.3 application server and a JDK 1.4 or
+      later. Also, &SISC; version 1.11 is highly recommended; previous
+      versions contain glitches that negatively affect &SISCweb;.
+    </para>
+  </section>
+
+  <section id="installation">
+    <title>Installation</title>
+
+    <para>
+      An application intending to use SISCweb needs only include
+      siscweb.jar and perform some configuration in its web.xml. The
+      web.xml file in the examples/WEB-INF/ folder is a good starting
+      point.
+    </para>
+
+    <para>
+      As to the examples, siscweb-examples.war can be deployed by
+      simply dropping it into the appropriate area of a J2EE appserver
+      to be deployed.  The examples can then be reached at:
+    </para>
+
+    <para>
+        http://&lt;yourhost&gt;:&lt;yourport&gt;/siscweb-examples/
+    </para>
+
+    <warning>
+      While the server-side REPL is disabled in the pre-made
+      siscweb-examples.war available from sourceforge.net, if you
+      build your own .war a REPL will be bound to the localhost:5156
+      address. <emphasis>This is a security vulnerability.</emphasis>
+      You should make sure to disable this feature if you are
+      concerned about other people on the same host gaining access to
+      a full-fledged REPL.
+    </warning>
+  </section>
+
+  <section id="credits">
+    <title>Credits</title>
+
+    <para>
+      SISCweb is based on SISC (sisc.sf.net), a Scheme interpreter for
+      the JVM, and is heavily influenced by other Lisp web frameworks:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        The PLT web server collection:
+        <ulink url="http://download.plt-scheme.org/scheme/docs/html/web-server/">
+          http://download.plt-scheme.org/scheme/docs/html/web-server/
+        </ulink>
+      </listitem>
+      <listitem>
+        SUnet:
+        <ulink url="http://www.scsh.net/resources/sunet.html">
+          http://www.scsh.net/resources/sunet.html
+        </ulink>
+      </listitem>
+      <listitem>
+        AllegroServe:
+        <ulink url="http://allegroserve.sourceforge.net">
+          http://www.scsh.net/resources/sunet.html
+        </ulink>
+      </listitem>
+    </itemizedlist>
+
+    <para>
+      A couple of initial design decisions were also lifted from
+      Matthias Radestock's servlet code in the contrib section of the
+      SISC CVS tree.
+    </para>
+  </section>
+
+  <section id="contact">
+    <title>Contact Information</title>
+
+    <para>
+      Comments, ideas, and bug reports are welcome at:
+      <email>acolomba@@users.sourceforge.net</email>
+    </para>
+
+  </section>
+</chapter>
+@
+
+
+1.1.2.2
+log
+@added license section
+@
+text
+@a94 12
+  <section id="license">
+    <title>License</title>
+
+    <para>
+      SISCweb is open-source, and licensed under the <ulink
+      url="http://www.mozilla.org/MPL/MPL-1.1.html">MPL</ulink>, the
+      <ulink url="http://www.gnu.org/copyleft/gpl.html">GPL</ulink>,
+      and the <ulink
+      url="http://www.gnu.org/copyleft/lgpl.html">LGPL</ulink>.
+    </para>
+  </section>
+
+@
+
+
+1.1.2.3
+log
+@minor fixes
+@
+text
+@d99 1
+a99 1
+      &SISCweb; is open-source software licensed under the <ulink
+d111 3
+a113 4
+      &SISCweb; requires a J2EE 1.3 application server and a JDK 1.4
+      or later. Also, &SISC; version 1.11 is highly recommended;
+      previous versions contain glitches that negatively affect
+      &SISCweb;.
+d131 4
+a134 1
+      http://&lt;yourhost&gt;:&lt;yourport&gt;/siscweb-examples/
+d152 2
+a153 4
+      &SISCweb; is based on &SISC; (<ulink
+      url="http://sisc.sourceforge.net/">)sisc.sourceforge.net</ulink>),
+      a Scheme interpreter for the JVM with full continuations, and is
+      heavily influenced by other Lisp web frameworks:
+@
+
+
+1.1.2.4
+log
+@minor fixes
+@
+text
+@d76 1
+a76 1
+        through the documentation of more mature implementations:
+d151 1
+a151 1
+      url="http://sisc.sourceforge.net/">sisc.sourceforge.net</ulink>),
+@
+
+
+1.1.2.5
+log
+@corrected typos and mechanics
+@
+text
+@d17 1
+a17 1
+      fact, save the Java portion, &SISCweb; itself is developed
+d51 1
+a51 1
+        all the language-level variables that were in scope are again
+d65 1
+a65 1
+        encode a reference to program state) cannot easily be
+d74 3
+a76 3
+        This document is a work-in-progress. Readers not familiar with
+        other Scheme web frameworks might want to also read through
+        the documentation of more mature implementations:
+d122 2
+a123 2
+      To use &SISCweb;, an application need only include siscweb.jar,
+      and specify some configuration directives in its web.xml. The
+d130 2
+a131 2
+      simply dropping it into the appropriate area of a J2EE
+      appserver.  The examples can then be reached at:
+d136 1
+a136 1
+      While the server-side REPL is disabled in the
+d138 2
+a139 2
+      build your own .war, a REPL will be bound to the localhost:5156
+      socket. <emphasis>This is a security vulnerability.</emphasis>
+@
+
+

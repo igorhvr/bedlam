@@ -1,0 +1,718 @@
+head	1.4;
+access;
+symbols
+	rel-0-6-dev:1.4.0.4
+	rel-0-5-fix:1.4.0.2
+	rel-0-5:1.4
+	rel-0-5-dev-safe-frames:1.3.4.3.0.2
+	Root_rel-0-5-dev-safe-frames:1.3.4.3
+	rel-0-4-fix-0:1.3
+	rel-0-5-dev:1.3.0.4
+	rel-0-4-fix:1.3.0.2
+	rel-0-3-fix-3:1.2
+	rel-0-3-fix-2:1.2
+	rel-0-4-dev-sisc-1-11:1.2
+	rel-0-3-fix-1:1.2
+	rel-0-4-dev:1.2.0.4
+	rel-0-3-fix:1.2.0.2
+	rel-0-3:1.2
+	rel-0-3-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2007.04.12.03.51.17;	author acolomba;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2006.09.03.01.42.23;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.11.17.02.49.39;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.11.17.02.49.39;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2006.09.02.02.06.01;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2006.11.08.00.47.30;	author acolomba;	state Exp;
+branches;
+next	1.3.2.2;
+
+1.3.2.2
+date	2006.12.15.23.39.53;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2006.11.08.00.46.13;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2;
+
+1.3.4.2
+date	2006.12.16.00.06.45;	author acolomba;	state Exp;
+branches;
+next	1.3.4.3;
+
+1.3.4.3
+date	2007.01.08.00.29.04;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@merged from rel-0-5-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;; Ben Simon
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'sisc/libs/srfi/srfi-19) ; time data types and procedures
+
+(require-library 'util/misc)
+
+(require-library 'sql/jdbc)
+(require-library 'sql/types)
+(require-library 'sql/type-conversion)
+
+
+(module sql/postgresql
+  ()
+
+  (import s2j)
+  (import hashtable)
+  (import java-io)
+  (import oo)
+  (import serial-io)
+  (import type-system)
+
+  (import srfi-19)
+
+  (import util/misc)
+
+  (import sql/jdbc)
+  (import sql/types)
+  (import sql/type-conversion)
+
+
+  (define-java-classes
+    (<big-decimal> |java.math.BigDecimal|)
+    (<big-integer> |java.math.BigInteger|)
+    (<byte-array-input-stream> |java.io.ByteArrayInputStream|)
+    (<byte-array-output-stream> |java.io.ByteArrayOutputStream|)
+    (<character> |java.lang.Character|)
+    (<date> |java.sql.Date|)
+    (<double> |java.lang.Double|)
+    (<integer> |java.lang.Integer|)
+    (<jcharacter> |java.lang.Character|)
+    (<jobject> |java.lang.Object|)
+    (<time> |java.sql.Time|)
+    (<timestamp> |java.sql.Timestamp|))
+
+  (define-generic-java-methods
+    get-column-type-name get-nanos get-scale get-time
+    to-byte-array (jflush |flush|))
+
+
+  (define (any->jbyte-array any)
+    (let* ((jbyte-array (java-new <byte-array-output-stream>)))
+      (call-with-serial-output-port (->binary-output-port jbyte-array)
+        (lambda (port)
+          (serialize any port)))
+      (jflush jbyte-array)
+      (to-byte-array jbyte-array)))
+
+
+  (define (jbyte-array->any bytes)
+    (let* ((jbyte-array (java-new <byte-array-input-stream> bytes)))
+      (call-with-serial-input-port (->binary-input-port jbyte-array)
+        (lambda (port)
+          (deserialize port)))))
+
+
+  (define VENDOR '|postgresql|)
+
+  (define (sql->time obj rsmd ji)
+    (let ((ms (->number (get-time obj))))
+      (make-time 'time-monotonic 0 (quotient ms 1000))))
+
+  (define (sql->date obj rsmd ji)
+    (let ((ms (->number (get-time obj))))
+      (make-time 'time-monotonic 0 (quotient ms 1000))))
+
+  (define (sql->timestamp obj rsmd ji)
+    (let ((ms (->number (get-time obj)))
+          (ns (->number (get-nanos obj))))
+      (make-time 'time-monotonic 0 (quotient ms 1000))))
+
+  (define (sql->null obj rsmd ji)
+    '())
+
+  (define (sql->number obj rsmd ji)
+    (if (= 0 (->number (get-scale rsmd ji)))
+        (inexact->exact (->number obj))
+        (->number obj)))
+
+  (define (sql->object obj rsmd ji)
+    (if (instance-of? obj <value>)
+        (jbyte-array->any obj)
+        obj))
+
+  (define (sql->string obj rsmd ji)
+    (->string obj))
+
+  (define (sql->boolean obj rsmid ji)
+    (->boolean obj))
+
+  (define (unimplemented obj rsmd ji)
+    (error (string-append "unimplemented type conversion from "
+                          (->string (get-column-type-name rsmd ji)))))
+
+
+  (add-sql->scheme-table
+   VENDOR
+   `((,<sql-array> . ,unimplemented)
+     (,<sql-bigint> . ,sql->number)
+     (,<sql-binary> . ,sql->object)
+     (,<sql-bit> . ,sql->boolean)
+     (,<sql-blob> . ,unimplemented)
+     (,<sql-boolean> . ,sql->boolean)
+     (,<sql-char> . ,sql->string)
+     (,<sql-clob> . ,unimplemented)
+     (,<sql-datalink> . ,unimplemented)
+     (,<sql-date> . ,sql->date)
+     (,<sql-decimal> . ,sql->number)
+     (,<sql-distinct> . ,unimplemented)
+     (,<sql-double> . ,sql->number)
+     (,<sql-float> . ,sql->number)
+     (,<sql-integer> . ,sql->number)
+     (,<sql-java-object> . ,unimplemented)
+     (,<sql-longvarbinary> . ,unimplemented)
+     (,<sql-longvarchar> . ,unimplemented)
+     (,<sql-null> . ,sql->null)
+     (,<sql-numeric> . ,sql->number)
+     (,<sql-other> . ,sql->object)
+     (,<sql-real> . ,sql->number)
+     (,<sql-ref> . ,unimplemented)
+     (,<sql-smallint> . ,sql->number)
+     (,<sql-struct> . ,unimplemented)
+     (,<sql-time> . ,sql->time)
+     (,<sql-timestamp> . ,sql->timestamp)
+     (,<sql-tinyint> . ,sql->number)
+     (,<sql-varbinary> . ,unimplemented)
+     (,<sql-varchar> . ,sql->string)))
+
+  (add-scheme->sql-proc
+   VENDOR
+   (lambda (value)
+     (cond ((null? value) (java-null <jobject>))
+           ((boolean? value) (->jbool value))
+           ((or (string? value)
+                (symbol? value))
+            (->jstring value))
+           ((char? value) (java-new <jcharacter> (->jchar value)))
+           ;; vectors, pairs and procs are just wrapped
+           ((vector? value) (any->jbyte-array value))
+           ((procedure? value) (any->jbyte-array value))
+           ((pair? value) (any->jbyte-array value))
+           ((and (number? value)
+                 (integer? value))
+            (java-new <integer> (->jstring (number->string value))))
+           ((and (number? value)
+                 (real? value))
+            (java-new <big-decimal> (->jstring (number->string value))))
+           ((and (number? value)
+                 (rational? value))
+            ((java-new <big-decimal> (->jstring (number->string (exact->inexact value))))))
+           ((date? value)
+            (let ((t (date->time-utc value)))
+              (java-new <date> (->jlong (* 1000 (time-second t))))))
+           ((time? value)
+            (java-new <timestamp> (->jlong (* 1000 (time-second value)))))
+           (else value))))
+
+
+  (jdbc/load-driver "org.postgresql.Driver")
+  )
+@
+
+
+1.3
+log
+@merged from rel-0-4-dev
+@
+text
+@d35 2
+d54 2
+d171 2
+a172 2
+     (cond ((null? value) (java-null <object>))
+           ((boolean? value) (java-new <jboolean> (->jboolean value)))
+@
+
+
+1.3.2.1
+log
+@fixed typo
+@
+text
+@d167 1
+a167 1
+     (cond ((null? value) (java-null <jobject>))
+@
+
+
+1.3.2.2
+log
+@fixed scheme bool -> sql java bool conversion
+@
+text
+@a65 1
+    (<jbool> |java.lang.Boolean|)
+d168 1
+a168 1
+           ((boolean? value) (java-new <jbool> (->jboolean value)))
+@
+
+
+1.3.4.1
+log
+@fixed typo
+@
+text
+@d167 1
+a167 1
+     (cond ((null? value) (java-null <jobject>))
+@
+
+
+1.3.4.2
+log
+@merged from rel-0-4-fix
+@
+text
+@a65 1
+    (<jbool> |java.lang.Boolean|)
+d168 1
+a168 1
+           ((boolean? value) (java-new <jbool> (->jboolean value)))
+@
+
+
+1.3.4.3
+log
+@uses -jbool function from util/misc to convert booleans
+@
+text
+@a34 2
+(require-library 'util/misc)
+
+a51 2
+  (import util/misc)
+
+d66 1
+d169 1
+a169 1
+           ((boolean? value) (->jbool value))
+@
+
+
+1.2
+log
+@merged from rel-0-3-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+d45 3
+d49 1
+a49 2
+  (import serial-io)
+  (import oo)
+d56 1
+a59 2
+    (<buffered-input-stream> |java.io.BufferedInputStream|)
+    (<buffered-output-stream> |java.io.BufferedOutputStream|)
+a62 1
+    (<context> |sisc.interpreter.Context|)
+a63 1
+    (<deserializer-port> |sisc.io.DeserializerPort|)
+a67 3
+    (<object-input-stream> |java.io.ObjectInputStream|)
+    (<object-output-stream> |java.io.ObjectOutputStream|)
+    (<serializer-port> |sisc.io.SerializerPort|)
+d71 3
+a73 3
+  (define-generic-java-methods get-column-type-name get-nanos get-scale get-time
+    to-byte-array (sisc-current-interpreter |currentInterpreter|)
+    (sisc-get-ctx |getCtx|))
+d77 7
+a83 14
+    (let* ((output-stream (java-new <byte-array-output-stream>))
+           (buffer (java-new <buffered-output-stream>
+                             output-stream))
+           (port (make <native-output-port>
+                   (java-unwrap
+                    (java-new <serializer-port>
+                              (sisc-get-ctx
+                               (sisc-current-interpreter
+                                (java-null <context>)))
+                              buffer
+                              (->jboolean #f))))))
+      (serialize any  port)
+      (close-output-port port)
+      (to-byte-array output-stream)))
+d86 4
+a89 15
+    (let* ((input-stream (java-new <byte-array-input-stream>
+                                   bytes))
+           (buffer (java-new <buffered-input-stream>
+                             input-stream))
+           (port (make <native-input-port>
+                   (java-unwrap
+                    (java-new <deserializer-port>
+                              (sisc-get-ctx
+                               (sisc-current-interpreter (java-null
+                                                          <context>)))
+                              buffer)))))
+      (let ((result (deserialize port)))
+        (close-input-port  port)
+        result)))
+
+@
+
+
+1.2.4.1
+log
+@updated to use java-io
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+d45 2
+a46 1
+  (import java-io)
+a47 3
+  (import serial-io)
+  (import type-system)
+
+a53 1
+
+d57 2
+d62 1
+d64 1
+d69 3
+d75 3
+a77 3
+  (define-generic-java-methods
+    get-column-type-name get-nanos get-scale get-time
+    to-byte-array (jflush |flush|))
+d81 14
+a94 6
+    (let* ((jbyte-array (java-new <byte-array-output-stream>)))
+      (call-with-serial-output-port (->binary-output-port jbyte-array)
+        (lambda (port)
+          (serialize any port)))
+      (jflush jbyte-array)
+      (to-byte-array jbyte-array)))
+d96 15
+a111 5
+  (define (jbyte-array->any bytes)
+    (let* ((jbyte-array (java-new <byte-array-input-stream> bytes)))
+      (call-with-serial-input-port (->binary-input-port jbyte-array)
+        (lambda (port)
+          (deserialize port)))))
+@
+
+
+1.1
+log
+@file postgresql.scm was initially added on branch rel-0-3-dev.
+@
+text
+@d1 217
+@
+
+
+1.1.2.1
+log
+@moved from project root to opt/sql/
+@
+text
+@a0 217
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;; Ben Simon
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'sisc/libs/srfi/srfi-19) ; time data types and procedures
+
+(require-library 'sql/jdbc)
+(require-library 'sql/types)
+(require-library 'sql/type-conversion)
+
+
+(module sql/postgresql
+  ()
+
+  (import s2j)
+  (import hashtable)
+  (import type-system)
+  (import serial-io)
+  (import oo)
+  (import srfi-19)
+
+  (import sql/jdbc)
+  (import sql/types)
+  (import sql/type-conversion)
+
+  (define-java-classes
+    (<big-decimal> |java.math.BigDecimal|)
+    (<big-integer> |java.math.BigInteger|)
+    (<buffered-input-stream> |java.io.BufferedInputStream|)
+    (<buffered-output-stream> |java.io.BufferedOutputStream|)
+    (<byte-array-input-stream> |java.io.ByteArrayInputStream|)
+    (<byte-array-output-stream> |java.io.ByteArrayOutputStream|)
+    (<character> |java.lang.Character|)
+    (<context> |sisc.interpreter.Context|)
+    (<date> |java.sql.Date|)
+    (<deserializer-port> |sisc.io.DeserializerPort|)
+    (<double> |java.lang.Double|)
+    (<integer> |java.lang.Integer|)
+    (<jcharacter> |java.lang.Character|)
+    (<jobject> |java.lang.Object|)
+    (<object-input-stream> |java.io.ObjectInputStream|)
+    (<object-output-stream> |java.io.ObjectOutputStream|)
+    (<serializer-port> |sisc.io.SerializerPort|)
+    (<time> |java.sql.Time|)
+    (<timestamp> |java.sql.Timestamp|))
+
+  (define-generic-java-methods get-column-type-name get-nanos get-scale get-time
+    to-byte-array (sisc-current-interpreter |currentInterpreter|)
+    (sisc-get-ctx |getCtx|))
+
+
+  (define (any->jbyte-array any)
+    (let* ((output-stream (java-new <byte-array-output-stream>))
+           (buffer (java-new <buffered-output-stream>
+                             output-stream))
+           (port (make <native-output-port>
+                   (java-unwrap
+                    (java-new <serializer-port>
+                              (sisc-get-ctx
+                               (sisc-current-interpreter
+                                (java-null <context>)))
+                              buffer
+                              (->jboolean #f))))))
+      (serialize any  port)
+      (close-output-port port)
+      (to-byte-array output-stream)))
+
+  (define (jbyte-array->any bytes)
+    (let* ((input-stream (java-new <byte-array-input-stream>
+                                   bytes))
+           (buffer (java-new <buffered-input-stream>
+                             input-stream))
+           (port (make <native-input-port>
+                   (java-unwrap
+                    (java-new <deserializer-port>
+                              (sisc-get-ctx
+                               (sisc-current-interpreter (java-null
+                                                          <context>)))
+                              buffer)))))
+      (let ((result (deserialize port)))
+        (close-input-port  port)
+        result)))
+
+
+
+  (define VENDOR '|postgresql|)
+
+  (define (sql->time obj rsmd ji)
+    (let ((ms (->number (get-time obj))))
+      (make-time 'time-monotonic 0 (quotient ms 1000))))
+
+  (define (sql->date obj rsmd ji)
+    (let ((ms (->number (get-time obj))))
+      (make-time 'time-monotonic 0 (quotient ms 1000))))
+
+  (define (sql->timestamp obj rsmd ji)
+    (let ((ms (->number (get-time obj)))
+          (ns (->number (get-nanos obj))))
+      (make-time 'time-monotonic 0 (quotient ms 1000))))
+
+  (define (sql->null obj rsmd ji)
+    '())
+
+  (define (sql->number obj rsmd ji)
+    (if (= 0 (->number (get-scale rsmd ji)))
+        (inexact->exact (->number obj))
+        (->number obj)))
+
+  (define (sql->object obj rsmd ji)
+    (if (instance-of? obj <value>)
+        (jbyte-array->any obj)
+        obj))
+
+  (define (sql->string obj rsmd ji)
+    (->string obj))
+
+  (define (sql->boolean obj rsmid ji)
+    (->boolean obj))
+
+  (define (unimplemented obj rsmd ji)
+    (error (string-append "unimplemented type conversion from "
+                          (->string (get-column-type-name rsmd ji)))))
+
+
+  (add-sql->scheme-table
+   VENDOR
+   `((,<sql-array> . ,unimplemented)
+     (,<sql-bigint> . ,sql->number)
+     (,<sql-binary> . ,sql->object)
+     (,<sql-bit> . ,sql->boolean)
+     (,<sql-blob> . ,unimplemented)
+     (,<sql-boolean> . ,sql->boolean)
+     (,<sql-char> . ,sql->string)
+     (,<sql-clob> . ,unimplemented)
+     (,<sql-datalink> . ,unimplemented)
+     (,<sql-date> . ,sql->date)
+     (,<sql-decimal> . ,sql->number)
+     (,<sql-distinct> . ,unimplemented)
+     (,<sql-double> . ,sql->number)
+     (,<sql-float> . ,sql->number)
+     (,<sql-integer> . ,sql->number)
+     (,<sql-java-object> . ,unimplemented)
+     (,<sql-longvarbinary> . ,unimplemented)
+     (,<sql-longvarchar> . ,unimplemented)
+     (,<sql-null> . ,sql->null)
+     (,<sql-numeric> . ,sql->number)
+     (,<sql-other> . ,sql->object)
+     (,<sql-real> . ,sql->number)
+     (,<sql-ref> . ,unimplemented)
+     (,<sql-smallint> . ,sql->number)
+     (,<sql-struct> . ,unimplemented)
+     (,<sql-time> . ,sql->time)
+     (,<sql-timestamp> . ,sql->timestamp)
+     (,<sql-tinyint> . ,sql->number)
+     (,<sql-varbinary> . ,unimplemented)
+     (,<sql-varchar> . ,sql->string)))
+
+  (add-scheme->sql-proc
+   VENDOR
+   (lambda (value)
+     (cond ((null? value) (java-null <object>))
+           ((boolean? value) (java-new <jboolean> (->jboolean value)))
+           ((or (string? value)
+                (symbol? value))
+            (->jstring value))
+           ((char? value) (java-new <jcharacter> (->jchar value)))
+           ;; vectors, pairs and procs are just wrapped
+           ((vector? value) (any->jbyte-array value))
+           ((procedure? value) (any->jbyte-array value))
+           ((pair? value) (any->jbyte-array value))
+           ((and (number? value)
+                 (integer? value))
+            (java-new <integer> (->jstring (number->string value))))
+           ((and (number? value)
+                 (real? value))
+            (java-new <big-decimal> (->jstring (number->string value))))
+           ((and (number? value)
+                 (rational? value))
+            ((java-new <big-decimal> (->jstring (number->string (exact->inexact value))))))
+           ((date? value)
+            (let ((t (date->time-utc value)))
+              (java-new <date> (->jlong (* 1000 (time-second t))))))
+           ((time? value)
+            (java-new <timestamp> (->jlong (* 1000 (time-second value)))))
+           (else value))))
+
+
+  (jdbc/load-driver "org.postgresql.Driver")
+  )
+@
+

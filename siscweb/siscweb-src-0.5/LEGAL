@@ -1,0 +1,38 @@
+The SISCweb distribution includes other works:
+
+SISC, the Second Intepreter of Scheme Code is licensed under the MPL
+or GPL and is here included in executable form. No change was made to
+its source code, which remains available at http://sisc.sf.net/.
+
+The lshift/* scheme modules are covered by the MIT license, and are
+here included in their source form with minor modifications to fit in
+SISCweb. They originate from the Icing framework:
+http://www.lshift.net/blog/2006/07/21/icing-snapshot-20060721
+
+SXML-to-HTML.scm and SXML-tree-trans.scm are in the public domain.
+They are here included in their original form, and can be found at
+http://okmij.org/ftp/Scheme/xml.html.
+
+xxexpr.scm is covered by the LGPL and is included here in its original
+form from the Icing framework.
+
+html.xsl is covered by the MPL and GPL. It is part of the SISC source
+distribution (sisc.sf.net), and is included here in its original form.
+
+sxml-match is released under the MIT license, and is included here
+in its original form.
+
+webit/keyword and webit/xml-core are part of the WebIt! framework, and
+are covered by the MIT license. The versions here included are ports
+to SISC scheme.
+
+siscweb/webcells.scm is a port of PLT's web-cells.ss library included
+in the DrScheme distribution, which is covered by the LGPL.
+
+schelog.scm is "Copyright (c) 1993-2001, Dorai Sitaram. All rights
+reserved. Permission to distribute and use this work for any purpose
+is hereby granted provided this copyright notice is included in the
+copy. This work is provided as is, with no warranty of any kind." The
+included version incorporates changes by Matthias Radestock found in
+the contrib area of the SISC CVS archive, as well as some additional,
+very minor changes.

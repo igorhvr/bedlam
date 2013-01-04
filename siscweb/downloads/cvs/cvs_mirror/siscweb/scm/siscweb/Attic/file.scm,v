@@ -1,0 +1,205 @@
+head	1.1;
+access;
+symbols
+	rel-0-6-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2007.09.22.15.55.18;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2007.09.22.15.55.19;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@file file.scm was initially added on branch rel-0-6-dev.
+@
+text
+@@
+
+
+1.1.2.1
+log
+@added siscweb/file
+@
+text
+@a0 165
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2007
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+
+(require-library 'siscweb/contcentric)
+(require-library 'siscweb/response)
+
+
+(module siscweb/file
+  (send-file/back send-file/finish
+   send-file-range/back send-file-range/finish)
+
+  (import s2j)
+  (import binary-io)
+  (import custom-io)
+  (import java-io)
+  (import file-manipulation)
+
+  (import srfi-16)
+
+  (import siscweb/contcentric)
+  (import siscweb/response)
+
+
+  (define-java-classes
+   (<random-access-file> |java.io.RandomAccessFile|))
+
+  (define-generic-java-methods
+   (jread |read|)
+   (jseek |seek|)
+   (jclose |close|))
+
+  (define-generic-java-field-accessors
+   (:buf |buf|))
+
+
+  (define send-file/back
+    (case-lambda
+      ((mime-type url)
+       (send-file/back '() mime-type url))
+      ((header-alst mime-type url)
+       (send/back
+        (lambda ()
+          (send-file header-alst mime-type url))))))
+
+  (define send-file/finish
+    (case-lambda
+      ((mime-type url)
+       (send-file/finish '() mime-type url))
+      ((header-alst mime-type url)
+       (send/finish
+        (lambda ()
+          (send-file header-alst mime-type url))))))
+
+  (define send-file-range/back
+    (case-lambda
+      ((mime-type url start end)
+       (send-file-range/back '() mime-type url start end))
+      ((header-alst mime-type url start end)
+       (send/back
+        (lambda ()
+          (send-file-range header-alst mime-type url start end))))))
+
+  (define send-file-range/finish
+    (case-lambda
+      ((mime-type url start end)
+       (send-file-range/finish '() mime-type url start end))
+      ((header-alst mime-type url start end)
+       (send/finish
+        (lambda ()
+          (send-file-range header-alst mime-type url start end))))))
+
+  (define (send-file header-alst mime-type url)
+    (when (not (assoc "Content-Type" header-alst))
+      (response/set-content-type! mime-type))
+    (when (not (assoc "Content-Length" header-alst))
+      (response/set-content-length! (file-length url)))
+    (call-with-binary-input-file
+     url
+     (lambda (in-port)
+       (copy-binary in-port (response/open-binary-output-port) (response/get-buffer-size)))))
+
+  (define (send-file-range header-alst mime-type url start end)
+    (when (not (assoc "Content-Type" header-alst))
+      (response/set-content-type! mime-type))
+    (let ((length (+ 1 (- end start))))
+      (when (not (assoc "Content-Length" header-alst))
+        (response/set-content-length! length))
+      (when (not (assoc "Content-Range" header-alst))
+        (let ((size (file-length url)))
+          (response/set-header! "Content-Range" (format "bytes ~a-~a/~a" start end size)))))
+    (response/set-status! 206)
+    (display "status set\n")
+    (call-with-binary-input-file-range
+     url start end
+     (lambda (in-port)
+       (copy-binary in-port (response/open-binary-output-port) (response/get-buffer-size)))))
+
+  (define (copy-binary in out bufsize)
+    (define (C buf)
+      (define (CB)
+        (let ((cnt (read-block buf 0 bufsize in)))
+          (when (not (eof-object? cnt))
+            (write-block buf 0 cnt out)
+            (CB))))
+      (CB))
+    (C (make-buffer bufsize)))
+
+
+  (define (call-with-binary-input-file-range filename start end proc)
+    (call-with-input-port&close (open-binary-input-file-range filename start end) proc))
+
+
+  (define (open-binary-input-file-range filename start end)
+    (let ((f (java-new <random-access-file> (->jstring filename) (->jstring "r"))))
+      (jseek f (->jlong start))
+      (let ((my-read (lambda (port)
+                       (cond ((> start end)
+                              -1)
+                             (else
+                              (set! start (+ 1 start)) ; prone to race condition
+                              (->number (jread f))))))
+            (my-read-block (lambda (port buffer offset count)
+                             (cond ((> start end)
+                                    -1)
+                                   (else
+                                    (let ((read-count (min count (+ 1 (- end start))))
+                                          (jbuffer (:buf (java-wrap buffer))))
+                                      (jread f jbuffer (->jint offset) (->jint read-count))
+                                      (set! start (+ read-count start))
+                                      read-count)))))
+            (my-available (lambda (port)
+                            (+ 1 (- end start))))
+            (my-close (lambda (port)
+                        (jclose f))))
+        (make-custom-binary-input-port my-read my-read-block my-available my-close))))
+  )
+@
+

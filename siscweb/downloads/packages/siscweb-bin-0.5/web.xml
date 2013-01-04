@@ -1,0 +1,290 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+  <!-- *** APPLICATION NAME *** -->
+  <!-- this also doubles as SISC context name -->
+  <display-name>SISCweb Examples</display-name>
+  <description>
+    Examples of continuation-centric web development in SISCweb
+  </description>
+
+
+
+  <!-- ** ON CONTEXT INIT/DESTROY ** -->
+
+  <!-- * INIT * -->
+  <context-param>
+    <param-name>siscweb.on-init-sexp</param-name>
+    <param-value>
+      <![CDATA[
+        (class-path-extension-append! '("WEB-INF/scm/"))
+
+        ;; configuration
+        (require-extension (lib siscweb/config))
+
+        ;; output xml/html comments?
+        ;; (config/set-sxml-output-comments! #t)
+
+        ;; output formatted xml/html?
+        ;; (config/set-sxml-formatted-output! #f)
+
+        ;; error handling
+        (require-extension (lib examples/fc-handler))
+        (config/set-fc-hook! fc-handler)
+
+        ;; MANDATORY: install sisclet handler
+        (require-extension (lib siscweb/sisclet))
+      ]]>
+    </param-value>
+  </context-param>
+
+  <!-- * DESTROY * -->
+  <context-param>
+    <param-name>siscweb.on-destroy-sexp</param-name>
+    <param-value>
+      <![CDATA[
+        ;; nothing to do
+      ]]>
+    </param-value>
+  </context-param>
+
+
+
+  <!-- *** LISTENERS *** -->
+
+  <!-- ** SISCWEB ** -->
+
+  <!-- * SISCWEB INITIALIZER * -->
+  <listener>
+    <listener-class>siscweb.web.SISCInitializer</listener-class>
+  </listener>
+
+
+  <!-- *** SERVLETS *** -->
+
+  <!-- ** SISCWEB SERVLET ADAPTERS ** -->
+
+  <!-- * EXAMPLES SERVLET * -->
+  <servlet>
+    <servlet-name>examples</servlet-name>
+    <description>siscweb examples</description>
+    <servlet-class>siscweb.web.SISCAdapterServlet</servlet-class>
+    <init-param>
+      <param-name>on-init-sexp</param-name>
+      <param-value>
+        <![CDATA[
+          ;; NOTE: This code could well be stored under WEB-INF and
+          ;; just called from here; It is shown here for clarity.
+          ;; The same is true for the location of the scheme files
+          ;; being loaded: they should be placed under WEB-INF.
+
+          (class-path-extension-append! '("scm/" "WEB-INF/scm/"))
+
+          (require-extension (lib siscweb/publish))
+
+          (require-extension (lib examples/hello-world))
+          (publish "/hello/*" 'hello-world)
+
+          (require-extension (lib examples/counter-sps))
+          (publish "/counter-sps/*" 'counter-sps)
+
+          (require-extension (lib examples/counter-webcells))
+          (publish "/counter-webcells/*" 'counter-webcells)
+
+          (require-extension (lib examples/counter-parameter))
+          (publish "/counter-parameter/*" 'counter-parameter)
+
+          (require-extension (lib examples/counter-session))
+          (publish "/counter-session/*" 'counter-session)
+
+          (require-extension (lib examples/counter-ajax-webcells))
+          (publish "/counter-ajax-webcells/*" 'counter-ajax-webcells)
+
+          (require-extension (lib examples/counter-ajax-parameter))
+          (publish "/counter-ajax-parameter/*" 'counter-ajax-parameter)
+
+          (require-extension (lib examples/shopping))
+          (publish "/shopping/*" 'shopping)
+
+          (require-extension (lib examples/tic-tac-toe))
+          (publish "/tic-tac-toe/*" 'tic-tac-toe)
+
+          (require-extension (lib examples/rpn))
+          (publish "/rpn/*" 'rpn)
+
+          (require-extension (lib examples/sillywiki))
+          (publish "/sillywiki/*" 'sillywiki)
+
+          (require-extension (lib examples/graphpad))
+          (publish "/graphpad/*" 'graphpad)
+
+          (require-extension (lib examples/webrepl))
+          (publish "/webrepl/*" 'webrepl-not-published)
+        ]]>
+      </param-value>
+    </init-param>
+    <init-param>
+      <param-name>on-destroy-sexp</param-name>
+      <param-value>
+        <![CDATA[
+          ;; NOTE: it is not strict necessary to unpublish when
+          ;; the context is destroyed; this is for illustrative
+          ;; purposes only
+
+          (require-extension (lib siscweb/publish))
+          (unpublish-all)
+        ]]>
+      </param-value>
+    </init-param>
+
+    <!-- optional, but recommended -->
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+
+
+  <!-- *** SERVLET MAPPINGS *** -->
+
+  <!-- ** SISCWEB SERVLET MAPPINGS ** -->
+
+  <!-- * EXAMPLE SERVLET MAPPING * -->
+  <servlet-mapping>
+    <servlet-name>examples</servlet-name>
+    <url-pattern>/sisclets/*</url-pattern>
+  </servlet-mapping>
+
+
+
+  <!-- *** SESSION CONFIG *** -->
+  <session-config>
+    <session-timeout>60</session-timeout>
+  </session-config>
+
+
+
+  <!-- *** ENVIRONMENT VARIABLES *** -->
+  <!-- None of these environment entries is mandatory, since
+       reasonable default values, the same as those shown here, are
+       provided.  The values indicated to be static are read only when
+       the context is initialized; the dynamic values are re-read
+       every minute, allowing for their modification through the
+       application server's administrative interface.
+    -->
+
+  <!-- ** REPL ** -->
+
+  <!-- * REPL? * -->
+  <env-entry>
+    <description>Launch REPL? (static)</description>
+    <env-entry-name>siscweb/repl-p</env-entry-name>
+    <env-entry-value>true</env-entry-value>
+    <env-entry-type>java.lang.Boolean</env-entry-type>
+  </env-entry>
+
+
+  <!-- * REPL HOST * -->
+  <env-entry>
+    <description>REPL host (static)</description>
+    <env-entry-name>siscweb/repl-host</env-entry-name>
+    <env-entry-value>localhost</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>
+  </env-entry>
+
+  <!-- * REPL PORT * -->
+  <env-entry>
+    <description>REPL port (static)</description>
+    <env-entry-name>siscweb/repl-port</env-entry-name>
+    <env-entry-value>5156</env-entry-value>
+    <env-entry-type>java.lang.Integer</env-entry-type>
+  </env-entry>
+
+
+  <!-- ** LOGGING ** -->
+
+  <!-- * LOGGING LEVEL * -->
+  <env-entry>
+    <description>Logging level (static)</description>
+    <env-entry-name>siscweb/logging-level</env-entry-name>
+    <env-entry-value>INFO</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>
+  </env-entry>
+
+  <!-- * LOGGING FILE * -->
+  <!-- If a logging file is specified, SISCweb logging messages are
+       routed there away from the application server default logger
+    -->
+  <env-entry>
+    <description>Logging file path; default is console (static)</description>
+    <env-entry-name>siscweb/logging-file</env-entry-name>
+    <env-entry-value><!-- %t/siscweb-%g.log --></env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>
+  </env-entry>
+
+  <!-- * LOGGING LIMIT * -->
+  <!-- The maximum number of bytes written to the file specified above -->
+  <env-entry>
+    <description>Logging limit (static)</description>
+    <env-entry-name>siscweb/logging-limit</env-entry-name>
+    <env-entry-value>5000000</env-entry-value>
+    <env-entry-type>java.lang.Integer</env-entry-type>
+  </env-entry>
+
+  <!-- * LOGGING COUNT * -->
+  <!-- The number of log files to use in the rotation -->
+  <env-entry>
+    <description>Logging count (static)</description>
+    <env-entry-name>siscweb/logging-count</env-entry-name>
+    <env-entry-value>1</env-entry-value>
+    <env-entry-type>java.lang.Integer</env-entry-type>
+  </env-entry>
+
+
+  <!-- ** CONTINUATION MANAGEMENT ** -->
+
+  <!-- * CONTINUATION DEFAULT TIME TO LIVE * -->
+  <env-entry>
+    <description>Continuation time to live in ms (dynamic)</description>
+    <env-entry-name>siscweb/continuation-ttl</env-entry-name>
+    <env-entry-value>1200</env-entry-value>
+    <env-entry-type>java.lang.Long</env-entry-type>
+  </env-entry>
+
+  <!-- * CONTINUATION CLEANUP INTERVAL * -->
+  <env-entry>
+    <description>Continuation cleanup interval in ms (dynamic)</description>
+    <env-entry-name>siscweb/continuation-cleanup-interval</env-entry-name>
+    <env-entry-value>30000</env-entry-value>
+    <env-entry-type>java.lang.Long</env-entry-type>
+  </env-entry>
+
+  <!-- * CONTINUATION CREATE INTERVAL * -->
+  <env-entry>
+    <description>
+      Minimum time interval between creations of continuation groups
+      in milliseconds (dynamic)
+    </description>
+    <env-entry-name>siscweb/continuation-group-creation-interval</env-entry-name>
+    <env-entry-value>500</env-entry-value>
+    <env-entry-type>java.lang.Long</env-entry-type>
+  </env-entry>
+
+  <!-- * USER HISTORY SIZE * -->
+  <env-entry>
+    <description>Max history size per user (dynamic)</description>
+    <env-entry-name>siscweb/user-history-size</env-entry-name>
+    <env-entry-value>50</env-entry-value>
+    <env-entry-type>java.lang.Integer</env-entry-type>
+  </env-entry>
+
+  <!-- * USER HISTORY SIZE SERIALIZED * -->
+  <env-entry>
+    <description>Max history size serialized at session passivation</description>
+    <env-entry-name>siscweb/user-history-size-serialized</env-entry-name>
+    <env-entry-value>10</env-entry-value>
+    <env-entry-type>java.lang.Integer</env-entry-type>
+  </env-entry>
+</web-app>

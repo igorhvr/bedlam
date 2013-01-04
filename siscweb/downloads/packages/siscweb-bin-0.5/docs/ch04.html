@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Chapter 4. Managing Program State</title><link href="siscweb-manual.css" rel="stylesheet" type="text/css" /><meta content="DocBook XSL Stylesheets V1.70.1" name="generator" /><link rel="start" href="index.html" title="SISCweb Manual" /><link rel="up" href="index.html" title="SISCweb Manual" /><link rel="prev" href="ch03.html" title="Chapter 3. Generating content" /><link rel="next" href="ch05.html" title="Chapter 5. Publishing Procedures" /></head><body><div class="navheader"><table summary="Navigation header" width="100%"><tr><th align="center" colspan="3">Chapter 4. Managing Program State</th></tr><tr><td align="left" width="20%"><a accesskey="p" href="ch03.html">Prev</a> </td><th align="center" width="60%"> </th><td align="right" width="20%"> <a accesskey="n" href="ch05.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="state" />Chapter 4. Managing Program State</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ch04.html#stateful">Introduction to Statefulness</a></span></dt><dd><dl><dt><span class="section"><a href="ch04.html#state-traditional">State in Traditional Web Applications</a></span></dt><dt><span class="section"><a href="ch04.html#state-continuation">Continuations and State</a></span></dt><dt><span class="section"><a href="ch04.html#state-finer">Finer Statefulness</a></span></dt></dl></dd><dt><span class="section"><a href="ch04.html#parameters">State with SRFI-39 Parameter Objects</a></span></dt><dt><span class="section"><a href="ch04.html#webcells">State with Web Cells</a></span></dt><dt><span class="section"><a href="ch04.html#session-parameters">State with the Session Object</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="stateful" />Introduction to Statefulness</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="state-traditional" />State in Traditional Web Applications</h3></div></div></div><p>
+        Introductions to web programming often mention the
+        statelessness of the HTTP protocol, to then describe how cookies
+        and sessions solve the problem. This is not a complete solution
+        however: being "sessionful" is not the same as being
+        "stateful."
+      </p><p>
+        Cookies and sessions are mechanisms laid on top of the HTTP
+        protocol respectively to: a) allow an application to recognize
+        two requests coming from the same browser as such, and b) to
+        store data common to such requests.
+      </p><p>
+        Neither cookies nor sessions completely address the issue of
+        statelesness because, while programs have the means to
+        associate two requests to a given user (as they contain the
+        same cookie), they have no means by which to associate two
+        requests as being part of the same navigation flow. It is in
+        fact possible to manually place requests out of sync with
+        program state, and often trigger incorrect
+        behavior. Traditional web applications are thus less like a
+        program with a GUI interface and more like an API open to the
+        world. Forced browsing, or even using the back button, can
+        cause an application to misbehave in ways that are not easily
+        foreseeable as application complexity increases.
+      </p><p>
+        Aside from state, the Session object is common to all requests
+        from the same browser, so simply using a web application from
+        two windows can produce concurrency problems such as loss of
+        consistency or race conditions. Moreover, since the session is
+        a global scope for the application, in fact the only scope
+        that traditionally persists from request to request,
+        developers are unable to take advantage of the finer scoping
+        mechanisms available in modern programming languages.
+      </p><p>
+        One last major issue with traditional web applications is that
+        they are made of short-lived code snippets which, after
+        parsing the request in the context of the session, generate a
+        response and exit. Because their state is lost, it is
+        impossible to use structured programming techniques in code
+        spanning multiple requests. Even the simplest for-loop must be
+        expressed in terms of a (global) session variable increment
+        and a GOTO (HREF).
+      </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="state-continuation" />Continuations and State</h3></div></div></div><p>
+        Continuations afford a truly stateful approach. When a program
+        generates a response, it suspends its execution instead of
+        exiting. This suspended state is a continuation, and it
+        includes stack and variables in scope.  When the execution is
+        resumed by the subsequent request, stack and variables are as
+        they were left -- no manual storage in the session is
+        needed.
+      </p><p>
+        <span class="application">SISCweb</span>, like other similar frameworks, is able to determine
+        which requests are associated with which continuations by
+        branding each request and its corresponding continuation with
+        a unique, cryptographically strong hash.
+      </p><p>
+        Branding reduces the issue of the back button because any
+        request originating from a page in the browser history is
+        associated with a unique continuation. Re-submitting the same
+        request results in the same code being run, with the same
+        local variables and stack it had at the time it was
+        suspended. A program written in functional style (i.e. with no
+        side effects) will be completely immune to the back button.
+      </p><p>
+        Saving the local state means that a for-loop can be written at
+        the language level. (The <a href="http://cvs.sourceforge.net/viewcvs.py/siscweb/siscweb/examples/scm/examples/hello-world.scm?view=markup" target="_top">Polyglot
+        Hello World</a> example included with <span class="application">SISCweb</span>
+        demonstrates this feature.)  Saving the stack also means that
+        an entire navigation flow can be represented as a subroutine
+        returning a value, rather than as a sequence of code snippets
+        connected by GOTOs (HREFs) finally depositing a value in the
+        global scope.
+      </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="state-finer" />Finer Statefulness</h3></div></div></div><p>
+        Most complex applications will require a finer amount of
+        control over state. For instance, a shopping cart should
+        reflect the most recent operations even if the user were to
+        backtrack by a few pages and resume shopping from a point in
+        the navigation history. SRFI-39 or plain session variables can
+        be used in such cases.
+      </p><p>
+        In other cases state is more closely dependent to the specific
+        page, such as in the case of sorting a table in the
+        browser. The sorting order should behave consistently in the
+        presence of backtracking, cloning, and concurrent requests.
+      </p><p>
+        A possible solution for these cases is state-passing style,
+        where a structure is passed from continuation to continuation
+        and updated non-destructively. This can be somewhat
+        inconvenient though, so instead <span class="application">SISCweb</span> implements Web
+        Cells, a dynamic scoping mechanism that follows the page flow
+        and branches with backtracking and cloning.
+      </p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="parameters" />State with SRFI-39 Parameter Objects</h2></div></div></div><p>
+      <span class="emphasis"><em>Requires:</em></span>
+      <span class="bold"><strong>
+        (import <span class="emphasis"><em>srfi-39</em></span>)
+      </strong></span>
+    </p><p>
+      A complete treatment of parameters is available in <a href="http://srfi.schemers.org/srfi-39/" target="_top">SRFI-39</a>. This
+      section is concerned with the use of the dynamic environment to
+      maintain state shared by all requests for the same user in the
+      same execution flow.
+    </p><p>
+      SRFI-39 parameters are essentially dynamically-scoped
+      variables. They can be defined in the global or the module scope
+      and then bound to the dynamic scope -- the scope of the
+      execution flow -- in the application entry point through the
+      <code class="function">parameterize</code> form.
+    </p><p>
+      When using <code class="function">send-*/[suspend|forward]</code>, the
+      parameters, being part of the dynamic environment, are captured
+      in the suspended state -- the suspension of the program
+      execution is transparent to parameter bindings.
+    </p><p>
+      However procedures stored with
+      <code class="function">@href-p</code>-style attributes or the
+      <code class="function">forward/store!</code> procedure will run in the
+      base dynamic environment, and thus will see fresh values of the
+      parameters. In those cases on can use
+      <code class="function">forward/dynenv/store!</code>, which instead
+      preserves the dynamic environment.
+    </p><p>
+      The <a href="http://cvs.sourceforge.net/viewcvs.py/siscweb/siscweb/examples/scm/examples/counter-parameter.scm?view=markup" target="_top">Counter
+      with SRFI-39 Parameters</a> example demonstrates this
+      technique.
+    </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="webcells" />State with Web Cells</h2></div></div></div><p>
+      <span class="emphasis"><em>Requires:</em></span>
+      <span class="bold"><strong>
+        (import <span class="emphasis"><em>siscweb/webcells</em></span>)
+      </strong></span>
+    </p><p>
+      Web Cells are a way to track program state according to the
+      navigation flow. They are described in full in the paper <a href="http://library.readscheme.org/servlets/cite.ss?pattern=McCarthySK-Scheme2006" target="_top">Interaction-Safe
+      State for the Web</a>.
+    </p><p>
+      In essence, cells establish a dynamic scope over the navigation
+      path of a user. Successive pages can overshadow values of
+      bindings set in previous pages, but do not destroy them.
+    </p><p>
+      If a user backtracks the browser window, previous values are
+      again visible. If the user clones the window and proceeds
+      through two different navigation branches, each branch sees the
+      values it overshadows.
+    </p><p>
+      The <a href="http://cvs.sourceforge.net/viewcvs.py/siscweb/siscweb/examples/scm/examples/counter-webcells.scm?view=markup" target="_top">Counter
+      with Webcells</a> example demonstrates this technique.
+    </p><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N10CB8" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">webcell/make</span> [<span class="methodparam"><span class="parameter">name</span></span>] <span class="methodparam"><span class="parameter">default-value</span></span>) =&gt; <span class="type">&lt;cell&gt;</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Creates a cell with the given
+            <em class="parameter"><code>default-value</code></em> with the specified
+            name. Please note that <code class="literal">webcell/make</code>
+            is a macro, so <em class="parameter"><code>name</code></em> is an
+            identifier, not a symbol.
+          </p><p>
+            If <em class="parameter"><code>name</code></em> is omitted, a random name
+            is generated. Omitting a specific name is useful to avoid
+            name collisions (since cells are dynamically, not
+            lexically, scoped). However if it is expected that
+            sessions be serialized across context or server restarts,
+            it may be important to guarantee that cells defined in the
+            toplevel or int the module scope carry the same name.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N10CEC" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">webcell/make-parameter</span> [<span class="methodparam"><span class="parameter">name</span></span>] <span class="methodparam"><span class="parameter">default-value</span></span>) =&gt; <span class="type">cell-parameter-proc</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Creates a parameter procedure in the sense of SRFI-39. As
+            in the case of <code class="function">webcell/make</code>, the
+            <em class="parameter"><code>name</code></em> parameter is optional, but
+            recommended if maintaining the same name across context or
+            server restarts is important.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N10D16" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">webcell/set!</span> <span class="methodparam"><span class="parameter">cell</span></span> <span class="methodparam"><span class="parameter">value</span></span>) =&gt; <span class="type">undefined</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Sets the content of the given <em class="parameter"><code>cell</code></em>
+            to the specified <em class="parameter"><code>value</code></em>.
+          </p><p>
+            Of course the specified value is only accessible to the
+            current and successive request.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N10D42" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">webcell/ref</span> <span class="methodparam"><span class="parameter">cell</span></span>) =&gt; <span class="type">value</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the value of the specified <em class="parameter"><code>cell</code></em>
+            in the context of the current request.
+          </p><p>
+            If the current request did not set a value already, the
+            value will be looked up from the previous request (leading
+            to the current), and then the previous again.
+          </p><p>
+            If no value can be found through the history of requests,
+            then the cell's default value is returned.
+          </p></blockquote></div>
+      </p></blockquote></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="session-parameters" />State with the Session Object</h2></div></div></div><p>
+      <span class="emphasis"><em>Requires:</em></span>
+      <span class="bold"><strong>
+        (import <span class="emphasis"><em>siscweb/session</em></span>)
+      </strong></span>
+      <br />
+      <span class="emphasis"><em>Located in:</em></span>
+      <span class="bold"><strong>
+        siscweb.jar
+      </strong></span>
+    </p><p>
+      In some situations a global, per-user scope may be
+      desirable. This approach is more prone to concurrency
+      problems, but its semantics is very straightforward.
+    </p><p>
+      The Session object can be accessed via a syntax similar to that
+      of <a href="http://srfi.schemers.org/srfi-39/" target="_top">SRFI-39</a>
+      parameters, or via Scheme wrappers around the
+      <code class="function">Session.get/setAttribute()</code> calls. While the
+      former is appropriate for storing Scheme values, the latter is
+      provided as a means to store and retrieve Java objects (or
+      <code class="function">java-wrap</code>ped Scheme values.)
+    </p><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N10D8F" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">session/make-parameter</span> <span class="methodparam"><span class="parameter">name</span></span>) =&gt; <span class="type">proc</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a procedure <code class="function">proc</code> that, when
+            invoked, sets or retrieves a Scheme value to/from the a
+            Session attribute named <em class="parameter"><code>name</code></em>,
+            depending on whether a value is passed or not to
+            <div class="procedure"><ol type="1" /></div>.  If <code class="function">proc</code>
+            is passed the #f value, the attribute is removed from the
+            Session object altogether.
+          </p></blockquote></div>
+      </p><div class="informalexample"><pre class="programlisting">
+          
+(module security
+  (define auth-token (session/make-parameter "auth-key"))
+
+  ;; sets an auth token in the session object
+  (define (login usr pwd)
+    (auth-token (make-token usr pwd))))
+          
+        </pre></div></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N10DBE" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">session/get-java-attribute</span> <span class="methodparam"><span class="parameter">name</span></span>) =&gt; <span class="type">jobject</span></code>
+        <br />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">session/get-java-attribute-names</span>) =&gt; <span class="type">list</span></code>
+        <br />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">session/set-java-attribute!</span> <span class="methodparam"><span class="parameter">name</span></span> <span class="methodparam"><span class="parameter">jobject</span></span>) =&gt; <span class="type">#!void</span></code>
+        <br />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">session/set-java-attribute!</span> <span class="methodparam"><span class="parameter">name</span></span> <span class="methodparam"><span class="parameter">jobject</span></span>) =&gt; <span class="type">#!void</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            These functions access Java attributes as session
+            objects. Complete descriptions are given in <a href="ch08.html#session" title="Session Procedures">the section called “Session Procedures”</a>.
+          </p></blockquote></div>
+      </p></blockquote></div></div></div><div class="navfooter"><hr /><table summary="Navigation footer" width="100%"><tr><td align="left" width="40%"><a accesskey="p" href="ch03.html">Prev</a> </td><td align="center" width="20%"> </td><td align="right" width="40%"> <a accesskey="n" href="ch05.html">Next</a></td></tr><tr><td valign="top" align="left" width="40%">Chapter 3. Generating content </td><td align="center" width="20%"><a accesskey="h" href="index.html">Home</a></td><td valign="top" align="right" width="40%"> Chapter 5. Publishing Procedures</td></tr></table></div></body></html>

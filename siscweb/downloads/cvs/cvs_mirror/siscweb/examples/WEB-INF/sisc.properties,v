@@ -1,0 +1,260 @@
+head	1.3;
+access;
+symbols
+	rel-0-6-dev:1.3.0.4
+	rel-0-5-fix:1.3.0.2
+	rel-0-5:1.3
+	rel-0-5-dev-safe-frames:1.2.4.1.0.2
+	Root_rel-0-5-dev-safe-frames:1.2.4.1
+	rel-0-4-fix-0:1.2
+	rel-0-5-dev:1.2.0.4
+	rel-0-4-fix:1.2.0.2
+	rel-0-3-fix:1.1.0.4
+	rel-0-4-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2007.04.12.03.51.15;	author acolomba;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2006.09.03.01.42.24;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2006.08.12.01.08.48;	author acolomba;	state dead;
+branches
+	1.1.2.1
+	1.1.4.1;
+next	;
+
+1.1.2.1
+date	2006.08.12.01.08.48;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2006.08.27.02.05.31;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2006.08.27.02.33.59;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.1.4.1
+date	2006.08.12.01.08.48;	author acolomba;	state dead;
+branches;
+next	1.1.4.2;
+
+1.1.4.2
+date	2006.08.12.02.00.51;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2007.03.04.14.41.13;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2007.04.04.22.10.23;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@merged from rel-0-5-dev
+@
+text
+@# SISC properties
+# For more details see:
+#   http://sisc.sourceforge.net/manual/html/ch02.html#config-parameters
+
+
+# STATIC PARAMETERS
+# These parameters can only be set at startup
+
+#sisc.permitInterrupts = true
+#sisc.minFloatPrecision = 16
+#sisc.maxFloatPrecision = 32
+sisc.maxStackTraceDepth = 16
+
+# DYNAMIC PARAMETERS
+# The parameters can be set via Scheme parameters as well
+
+#sisc.caseSensitive = false # WARNING! Libraries will not work if set to true!
+#sisc.characterSet = "UTF8"
+#sisc.emitAnnotations = true
+#sisc.emitDebuggingSymbols = true
+#sisc.permissiveParsing = false
+#sisc.printShared = true
+sisc.replPrompt = "W;> "
+sisc.stackTraceOnError = true
+#sisc.strictR5RSCompliance = false
+#sisc.synopsisLength = 30
+#sisc.vectorLengthPrefixing = true
+@
+
+
+1.2
+log
+@merged from rel-0-4-dev
+@
+text
+@d17 1
+a17 1
+#sisc.caseSensitive = false
+d23 1
+a23 1
+sisc.replPrompt = "W;>"
+@
+
+
+1.2.4.1
+log
+@added space to repl prompt
+@
+text
+@d23 1
+a23 1
+sisc.replPrompt = "W;> "
+@
+
+
+1.2.4.2
+log
+@added warning
+@
+text
+@d17 1
+a17 1
+#sisc.caseSensitive = false # WARNING! Libraries will not work if set to true!
+@
+
+
+1.1
+log
+@file sisc.properties was initially added on branch rel-0-4-dev.
+@
+text
+@d1 27
+@
+
+
+1.1.4.1
+log
+@file sisc.properties was added on branch rel-0-3-fix on 2006-08-12 02:00:51 +0000
+@
+text
+@@
+
+
+1.1.4.2
+log
+@merged from rel-0-4-dev
+@
+text
+@a0 29
+# SISC properties
+# For more details see:
+#   http://sisc.sourceforge.net/manual/html/ch02.html#config-parameters
+
+
+# STATIC PARAMETERS
+# These parameters can only be set at startup
+
+#sisc.permitInterrupts = true
+#sisc.minFloatPrecision = 16
+#sisc.maxFloatPrecision = 32
+#sisc.maxStackTraceDepth = 0
+
+sisc.maxStackTraceDepth = 16
+
+# DYNAMIC PARAMETERS
+# The parameters can be set via Scheme parameters as well
+
+#sisc.caseSensitive = false
+#sisc.characterSet = "UTF8"
+#sisc.emitAnnotations = true
+#sisc.emitDebuggingSymbols = true
+#sisc.permissiveParsing = false
+#sisc.printShared = true
+#sisc.replPrompt = "#;>"
+#sisc.stackTraceOnError = true
+#sisc.strictR5RSCompliance = false
+#sisc.synopsisLength = 30
+#sisc.vectorLengthPrefixing = true
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 29
+# SISC properties
+# For more details see:
+#   http://sisc.sourceforge.net/manual/html/ch02.html#config-parameters
+
+
+# STATIC PARAMETERS
+# These parameters can only be set at startup
+
+#sisc.permitInterrupts = true
+#sisc.minFloatPrecision = 16
+#sisc.maxFloatPrecision = 32
+#sisc.maxStackTraceDepth = 0
+
+sisc.maxStackTraceDepth = 16
+
+# DYNAMIC PARAMETERS
+# The parameters can be set via Scheme parameters as well
+
+#sisc.caseSensitive = false
+#sisc.characterSet = "UTF8"
+#sisc.emitAnnotations = true
+#sisc.emitDebuggingSymbols = true
+#sisc.permissiveParsing = false
+#sisc.printShared = true
+#sisc.replPrompt = "#;>"
+#sisc.stackTraceOnError = true
+#sisc.strictR5RSCompliance = false
+#sisc.synopsisLength = 30
+#sisc.vectorLengthPrefixing = true
+@
+
+
+1.1.2.2
+log
+@minor clean-up
+@
+text
+@d12 2
+@
+
+
+1.1.2.3
+log
+@minor changes
+@
+text
+@d23 2
+a24 2
+sisc.replPrompt = "W;>"
+sisc.stackTraceOnError = true
+@
+
+

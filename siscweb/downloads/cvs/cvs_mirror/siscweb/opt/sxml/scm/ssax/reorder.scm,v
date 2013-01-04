@@ -1,0 +1,254 @@
+head	1.2;
+access;
+symbols
+	rel-0-6-dev:1.2.0.10
+	rel-0-5-fix:1.2.0.8
+	rel-0-5:1.2
+	rel-0-5-dev-safe-frames:1.2.0.6
+	Root_rel-0-5-dev-safe-frames:1.2
+	rel-0-4-fix-0:1.2
+	rel-0-5-dev:1.2.0.4
+	rel-0-4-fix:1.2.0.2
+	rel-0-3-fix-3:1.1.4.2
+	rel-0-3-fix:1.1.0.4
+	rel-0-4-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2006.09.03.01.42.23;	author acolomba;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.02.28.01.38.58;	author acolomba;	state dead;
+branches
+	1.1.2.1
+	1.1.4.1;
+next	;
+
+1.1.2.1
+date	2006.02.28.01.38.58;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.1.4.1
+date	2006.02.28.01.38.58;	author acolomba;	state dead;
+branches;
+next	1.1.4.2;
+
+1.1.4.2
+date	2006.04.15.15.55.24;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@merged from rel-0-4-dev
+@
+text
+@;; Reorders top-level s-expressions in a file to obey
+;; module rules of SISC and other scheme environments:
+;; pure definitions go first, all expressions go after
+;; Arguments: input and output file names
+;; Test case (save to a file, perhaps pasting to
+;; "cut -c4- >test.scm")
+;; (define (f x) x)
+;; (define g (f 3))
+;; (define-macro (m 1) 1)
+;; (set! g (f 4))
+;; g
+;; (define (u x) 0)
+
+(define (module-order iname oname)
+  (let ((output (lambda (x o)
+                  (write x o) (newline o))))
+    (call-with-output-file oname
+      (lambda (o)
+        (call-with-input-file iname
+          (lambda (i)
+            (let loop ((expr-list '()))
+              (let ((x (read i)))
+                (if (eof-object? x)
+                    (map
+                     (lambda (expr) (output expr o))
+                     (reverse expr-list))
+                    (let ((stays? #t) (naked-def? #f))
+                      (if (not (list? x))
+                          (set! stays? #f)
+                          (let ((first (car x)))
+                            (if (eqv? first 'define)
+                                (if
+                                 (not (list? (cadr
+                                              x)))
+                                 (begin
+                                   (set! stays? #f)
+                                   (set! naked-def?
+                                         #t)))
+                                (set! stays? (memv
+                                              first '(define-syntax define-macro defmacro))))))
+                      (if naked-def?
+                          (output
+                           `(define ,(cadr x)) o))
+                      (if stays? (output x o))
+                      (loop
+                       (if stays?
+                           expr-list
+                           (cons
+                            (if naked-def?
+                                `(set! ,@@(cdr x))
+                                x)
+                            expr-list))))))))))))
+  #t)
+
+@
+
+
+1.1
+log
+@file reorder.scm was initially added on branch rel-0-4-dev.
+@
+text
+@d1 54
+@
+
+
+1.1.4.1
+log
+@file reorder.scm was added on branch rel-0-3-fix on 2006-04-15 15:55:24 +0000
+@
+text
+@@
+
+
+1.1.4.2
+log
+@merged from rel-0-4-dev
+@
+text
+@a0 54
+;; Reorders top-level s-expressions in a file to obey
+;; module rules of SISC and other scheme environments:
+;; pure definitions go first, all expressions go after
+;; Arguments: input and output file names
+;; Test case (save to a file, perhaps pasting to
+;; "cut -c4- >test.scm")
+;; (define (f x) x)
+;; (define g (f 3))
+;; (define-macro (m 1) 1)
+;; (set! g (f 4))
+;; g
+;; (define (u x) 0)
+
+(define (module-order iname oname)
+  (let ((output (lambda (x o)
+                  (write x o) (newline o))))
+    (call-with-output-file oname
+      (lambda (o)
+        (call-with-input-file iname
+          (lambda (i)
+            (let loop ((expr-list '()))
+              (let ((x (read i)))
+                (if (eof-object? x)
+                    (map
+                     (lambda (expr) (output expr o))
+                     (reverse expr-list))
+                    (let ((stays? #t) (naked-def? #f))
+                      (if (not (list? x))
+                          (set! stays? #f)
+                          (let ((first (car x)))
+                            (if (eqv? first 'define)
+                                (if
+                                 (not (list? (cadr
+                                              x)))
+                                 (begin
+                                   (set! stays? #f)
+                                   (set! naked-def?
+                                         #t)))
+                                (set! stays? (memv
+                                              first '(define-syntax define-macro defmacro))))))
+                      (if naked-def?
+                          (output
+                           `(define ,(cadr x)) o))
+                      (if stays? (output x o))
+                      (loop
+                       (if stays?
+                           expr-list
+                           (cons
+                            (if naked-def?
+                                `(set! ,@@(cdr x))
+                                x)
+                            expr-list))))))))))))
+  #t)
+
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 54
+;; Reorders top-level s-expressions in a file to obey
+;; module rules of SISC and other scheme environments:
+;; pure definitions go first, all expressions go after
+;; Arguments: input and output file names
+;; Test case (save to a file, perhaps pasting to
+;; "cut -c4- >test.scm")
+;; (define (f x) x)
+;; (define g (f 3))
+;; (define-macro (m 1) 1)
+;; (set! g (f 4))
+;; g
+;; (define (u x) 0)
+
+(define (module-order iname oname)
+  (let ((output (lambda (x o)
+                  (write x o) (newline o))))
+    (call-with-output-file oname
+      (lambda (o)
+        (call-with-input-file iname
+          (lambda (i)
+            (let loop ((expr-list '()))
+              (let ((x (read i)))
+                (if (eof-object? x)
+                    (map
+                     (lambda (expr) (output expr o))
+                     (reverse expr-list))
+                    (let ((stays? #t) (naked-def? #f))
+                      (if (not (list? x))
+                          (set! stays? #f)
+                          (let ((first (car x)))
+                            (if (eqv? first 'define)
+                                (if
+                                 (not (list? (cadr
+                                              x)))
+                                 (begin
+                                   (set! stays? #f)
+                                   (set! naked-def?
+                                         #t)))
+                                (set! stays? (memv
+                                              first '(define-syntax define-macro defmacro))))))
+                      (if naked-def?
+                          (output
+                           `(define ,(cadr x)) o))
+                      (if stays? (output x o))
+                      (loop
+                       (if stays?
+                           expr-list
+                           (cons
+                            (if naked-def?
+                                `(set! ,@@(cdr x))
+                                x)
+                            expr-list))))))))))))
+  #t)
+
+@
+

@@ -1,0 +1,826 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Chapter 3. Generating content</title><link href="siscweb-manual.css" rel="stylesheet" type="text/css" /><meta content="DocBook XSL Stylesheets V1.70.1" name="generator" /><link rel="start" href="index.html" title="SISCweb Manual" /><link rel="up" href="index.html" title="SISCweb Manual" /><link rel="prev" href="ch02.html" title="Chapter 2. Installation" /><link rel="next" href="ch04.html" title="Chapter 4. Managing Program State" /></head><body><div class="navheader"><table summary="Navigation header" width="100%"><tr><th align="center" colspan="3">Chapter 3. Generating content</th></tr><tr><td align="left" width="20%"><a accesskey="p" href="ch02.html">Prev</a> </td><th align="center" width="60%"> </th><td align="right" width="20%"> <a accesskey="n" href="ch04.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="pages" />Chapter 3. Generating content</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ch03.html#markup">Markup</a></span></dt><dd><dl><dt><span class="section"><a href="ch03.html#send-html">(X)HTML Core Procedures</a></span></dt><dt><span class="section"><a href="ch03.html#send-xml">XML Core Procedures</a></span></dt><dt><span class="section"><a href="ch03.html#sxml">Extended SXML</a></span></dt><dt><span class="section"><a href="ch03.html#ehtml">Extended HTML markup</a></span></dt></dl></dd><dt><span class="section"><a href="ch03.html#send-text">Plain Text</a></span></dt><dt><span class="section"><a href="ch03.html#forward">Forwarding Requests</a></span></dt><dt><span class="section"><a href="ch03.html#image">Images</a></span></dt><dt><span class="section"><a href="ch03.html#graphviz">GraphViz Graphs</a></span></dt><dd><dl><dt><span class="section"><a href="ch03.html#send-graphviz">Graphviz Procedures</a></span></dt><dt><span class="section"><a href="ch03.html#dotml">DotML</a></span></dt></dl></dd><dt><span class="section"><a href="ch03.html#errors">HTTP errors</a></span></dt></dl></div><p>
+    <span class="application">SISCweb</span> programs can generate HTTP responses of a variety of
+    data types -- HTML/XML/XHTML represented in SXML notation, images
+    --, or they can forward requests to standard JSPs/Servlet
+    components.  Procedures to generate HTTP errors are also
+    available. Other response types can be easily plugged on top of a
+    basic set of response procedures.
+  </p><p>
+    The procedures that produce HTTP responses are in the form
+    <code class="function">send-*/*</code>, with the first pattern indicating
+    the type of response, and the latter determining whether or not to
+    save the execution state, and whether or not to clear previously
+    saved states.
+  </p><p>
+    All the procedures accept an optional association list of HTTP
+    response headers as the first, optional argument. The association
+    list is in the form <em class="parameter"><code>((name value)
+    ...)</code></em>. This can be used to override the default
+    Content-Type, to set caching options, etc.
+  </p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="markup" />Markup</h2></div></div></div><p>
+      <span class="application">SISCweb</span> provides a number of modules with an uniform API to
+      produce HTML, XHTML and XML markup. Their procedures accept
+      documents in SXML syntax, and in the case of HTML and XHTML, a
+      few extra elements and attributes are used to assist with
+      continuation-based programming (see <a href="ch03.html#ehtml" title="Extended HTML markup">the section called “Extended HTML markup”</a>.)
+    </p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="send-html" />(X)HTML Core Procedures</h3></div></div></div><p>
+        <span class="emphasis"><em>Requires:</em></span>
+        <span class="bold"><strong>
+          (import <span class="emphasis"><em>siscweb/html</em></span>)
+        </strong></span>
+        <br />
+        <span class="emphasis"><em>Requires:</em></span>
+        <span class="bold"><strong>
+          (import <span class="emphasis"><em>siscweb/xhtml</em></span>)
+        </strong></span>
+        <br />
+        <span class="emphasis"><em>Located in:</em></span>
+        <span class="bold"><strong>
+          siscweb-sxml.jar
+        </strong></span>
+      </p><p>
+        The core procedures to send (X)HTML content follow the basic
+        <code class="function">send-html/*</code> and
+        <code class="function">send-xhtml/*</code> patterns. They differ in
+        whether or not they clear the continuation table, and whether
+        or not they return after the user interacts with the page.
+      </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+          The XHTML and HTML modules serialize SXML differently, with
+          the former producing pure XML, and the latter producing
+          markup tweaked to display properly in known browsers. When
+          producing XHTML for common user agents, it is advisable to
+          keep the <a href="">HTML
+          Compatibility Guidelines</a> in mind.
+        </p><p>
+          Also, while the XHTML module implements the complete SXML
+          specification, the HTML module is more limited in that only
+          understands DTD declarations,
+          <code class="function">*VERBATIM*</code> and
+          <code class="function">*COMMENT*</code> elements besides the basic
+          element+attribute syntax. Also, while the XHTML module
+          considers the <code class="function">*TOP*</code> element functional,
+          the HTML module silently ignores it.
+        </p></div><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" id="N10387" />
+          <span class="emphasis"><em>procedure: </em></span>
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-html/suspend</span> [<span class="methodparam"><span class="parameter">header-alist</span></span>] <span class="methodparam"><span class="parameter">(lambda (k-url) &lt;sxml&gt;)</span></span>) =&gt; <span class="type">request</span></code>
+          <br />
+          <a class="indexterm" id="N103A4" />
+          <span class="emphasis"><em>procedure: </em></span>
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-xhtml/suspend</span> [<span class="methodparam"><span class="parameter">header-alist</span></span>] <span class="methodparam"><span class="parameter">(lambda (k-url) &lt;sxml&gt;)</span></span>) =&gt; <span class="type">request</span></code>
+
+          <div class="blockquote"><blockquote class="blockquote"><p>
+              Sends the given SXML to the browser in the form of
+              (X)HTML and suspends the execution flow. The
+              <em class="parameter"><code>k-url</code></em> will contain a hash used to
+              resume the program's execution, and should therefore be
+              used in forms and links as needed. When the browser
+              submits a request to the <em class="parameter"><code>k-url</code></em>,
+              said request will become the return value of the
+              procedure.
+            </p></blockquote></div>
+        </p></blockquote></div><div class="informalexample"><pre class="programlisting">
+          
+(let loop ((n 0))
+  (send-html/suspend
+    (lambda (k-url)
+      `(html
+         (body
+           (a (@ (href ,k-url)) ,n)))))
+  (loop (+ n 1)))
+          
+        </pre></div><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" id="N103D2" />
+          <span class="emphasis"><em>procedure: </em></span>
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-html/forward</span> [<span class="methodparam"><span class="parameter">header-alist</span></span>] <span class="methodparam"><span class="parameter">(lambda (k-url) &lt;sxml&gt;)</span></span>) =&gt; <span class="type">request</span></code>
+          <br />
+          <a class="indexterm" id="N103EF" />
+          <span class="emphasis"><em>procedure: </em></span>
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-xhtml/forward</span> [<span class="methodparam"><span class="parameter">header-alist</span></span>] <span class="methodparam"><span class="parameter">(lambda (k-url) &lt;sxml&gt;)</span></span>) =&gt; <span class="type">request</span></code>
+
+
+          <div class="blockquote"><blockquote class="blockquote"><p>
+              These procedures behave like
+              <code class="function">send-html/suspend</code> and
+              <code class="function">send-xhtml/suspend</code>, except that
+              they clear the continuation table first. This will
+              prevent the client from using the back button to resume
+              the program flow from earlier points.
+            </p></blockquote></div>
+        </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" id="N10419" />
+          <span class="emphasis"><em>procedure: </em></span>
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-html/back</span> [<span class="methodparam"><span class="parameter">header-alist</span></span>] <span class="methodparam"><span class="parameter">&lt;sxml&gt;</span></span>) =&gt; <span class="type">does not return</span></code>
+          <br />
+          <a class="indexterm" id="N10436" />
+          <span class="emphasis"><em>procedure: </em></span>
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-xhtml/back</span> [<span class="methodparam"><span class="parameter">header-alist</span></span>] <span class="methodparam"><span class="parameter">&lt;sxml&gt;</span></span>) =&gt; <span class="type">does not return</span></code>
+
+          <div class="blockquote"><blockquote class="blockquote"><p>
+              These procedures send the provided SXML to the browser and stop.
+            </p></blockquote></div>
+        </p></blockquote></div><div class="informalexample"><pre class="programlisting">
+(send-html/back
+  `(html
+    (body
+      (a (@ (href "http://www.w3.org")) "w3c"))))
+        </pre></div><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" id="N1045C" />
+          <span class="emphasis"><em>procedure: </em></span>
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-html/finish</span> [<span class="methodparam"><span class="parameter">header-alist</span></span>] <span class="methodparam"><span class="parameter">&lt;sxml&gt;</span></span>) =&gt; <span class="type">does not return</span></code>
+          <br />
+          <a class="indexterm" id="N10479" />
+          <span class="emphasis"><em>procedure: </em></span>
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-xhtml/finish</span> [<span class="methodparam"><span class="parameter">header-alist</span></span>] <span class="methodparam"><span class="parameter">&lt;sxml&gt;</span></span>) =&gt; <span class="type">does not return</span></code>
+
+          <div class="blockquote"><blockquote class="blockquote"><p>
+              Like <code class="function">send-html/back</code> and
+              <code class="function">send-html/back</code>, these procedures
+              send the provided SXML to the browser and stop, but
+              clear the continuation table first.
+            </p></blockquote></div>
+        </p></blockquote></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="send-xml" />XML Core Procedures</h3></div></div></div><p>
+        <span class="emphasis"><em>Requires:</em></span>
+        <span class="bold"><strong>
+          (import <span class="emphasis"><em>siscweb/xml</em></span>)
+        </strong></span>
+        <br />
+        <span class="emphasis"><em>Located in:</em></span>
+        <span class="bold"><strong>
+          siscweb-sxml.jar
+        </strong></span>
+      </p><p>
+        This module provides functions to send XML responses with the
+        same features as those in the HTML and XHTML modules. This
+        enables clients to conduct a stateful conversation with the
+        server. The same features available through the extended
+        (X)HTML can be reproduced in any XML element by using the
+        <code class="function">store/forward!</code> procedure described in
+        <a href="ch03.html#forward" title="Forwarding Requests">the section called “Forwarding Requests”</a>.
+      </p><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" id="N104C5" />
+          <span class="emphasis"><em>procedure: </em></span>
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-xml/suspend</span> [<span class="methodparam"><span class="parameter">header-alist</span></span>] <span class="methodparam"><span class="parameter">(lambda (k-url) &lt;sxml&gt;)</span></span>) =&gt; <span class="type">request</span></code>
+          <br />
+          <a class="indexterm" id="N104E2" />
+          <span class="emphasis"><em>procedure: </em></span>
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-xml/forward</span> [<span class="methodparam"><span class="parameter">header-alist</span></span>] <span class="methodparam"><span class="parameter">(lambda (k-url) &lt;sxml&gt;)</span></span>) =&gt; <span class="type">request</span></code>
+          <br />
+          <a class="indexterm" id="N104FF" />
+          <span class="emphasis"><em>procedure: </em></span>
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-xml/back</span> [<span class="methodparam"><span class="parameter">header-alist</span></span>] <span class="methodparam"><span class="parameter">&lt;sxml&gt;</span></span>) =&gt; <span class="type">does not return</span></code>
+          <br />
+          <a class="indexterm" id="N1051C" />
+          <span class="emphasis"><em>procedure: </em></span>
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-xml/finish</span> [<span class="methodparam"><span class="parameter">header-alist</span></span>] <span class="methodparam"><span class="parameter">&lt;sxml&gt;</span></span>) =&gt; <span class="type">does not return</span></code>
+
+          <div class="blockquote"><blockquote class="blockquote"><p>
+              These functions are analogous to those in the HTML and
+              XHTML modules.
+            </p></blockquote></div>
+        </p></blockquote></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="sxml" />Extended SXML</h3></div></div></div><p>
+        SISCweb's <code class="function">send-[html/xhtml/xml]/*</code>
+        procedures accept a slightly extended version of the SXML
+        syntax.
+      </p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3><p>
+          The <code class="function">send-html/*</code> procedures transform
+          symbols in the markup into entities. This usage is now
+          deprecated, and the form <code class="function">(&amp; name)</code>
+          should be used instead for HTML, XHTML and XML.
+        </p></div><div class="informalexample"><pre class="programlisting">
+          
+(send-html/back
+  `(html
+    (body
+     (p "Can't" (&amp; nbsp) "wrap" (&amp; nbsp) "me.")
+     (p "Nor" (&amp; |#160|) "me."))))
+          
+        </pre></div><p>
+        Numbers in attributes and text nodes are automatically
+        converted to strings using <code class="function">pretty-print</code>.
+      </p><div class="informalexample"><pre class="programlisting">
+(send-html/back
+  `(html
+    (body
+     (table (@ (width 42))
+       (tr (td 42))))))
+        </pre></div><p>
+        The value #f as an element or attribute value is
+        ignored. This comes handy when generating dynamic content.
+      </p><div class="informalexample"><pre class="programlisting">
+;; equivalent to (html (body (p)))
+(send-html/back
+  `(html
+    (body
+     (p (@ (align #f))
+      ,(hashtable/get ht 'para)))))
+        </pre></div><p>
+        The element *VERBATIM* can be used to produce non-escaped text.
+      </p><div class="informalexample"><pre class="programlisting">
+          
+(send-html/back
+  `(*VERBATIM*
+    "&lt;html&gt;&lt;body&gt;&lt;p&gt;Hello, &amp;quot;world&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;))
+          
+        </pre></div><p>
+        The elements *DTD-INFO* and *DTD-INFO/PUBLIC* can be used to
+        generate DTD declarations. For XML/XHTML only, the *PI*
+        element should be used to generate the XML declaration.
+      </p><div class="informalexample"><pre class="programlisting">
+          
+(send-xhtml/back
+ `(*TOP*
+   (*PI* xml "version=\"1.0\"")
+   (*DTD-INFO/PUBLIC* "html"
+                      "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+   (html (@ (xmlns "http://www.w3.org/1999/xhtml")
+            (xml:lang "en") (lang "en"))
+    (head
+     (title "Hello"))
+    (body
+     (p "Hello")))))
+          
+        </pre></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="ehtml" />Extended HTML markup</h3></div></div></div><p>
+        The HTML and XHTML modules support a number of extra
+        attributes to support continuation-centric programming and
+        interaction with the J2EE environment.
+      </p><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" id="N10579" />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(a (@ (bindings ,binding-alist [(anchor name)]...) ...)</code>
+          <br />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(form (@ (bindings ,binding-alist) [(anchor name)] ...) ...)</code>
+          <br />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(iframe (@ (bindings ,binding-alist) [(anchor name)] ...) ...)</code>
+          <br />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(img (@ (bindings ,binding-alist) ...) ...)</code>
+          <br />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(link (@ (bindings ,binding-alist) ...) ...)</code>
+          <br />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(object (@ (bindings ,binding-alist) [(anchor name)] ...) ...)</code>
+          <br />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(script (@ (bindings ,binding-alist) ...) ...)</code>
+          <div class="blockquote"><blockquote class="blockquote"><p>
+              This syntax is only usable from the
+              <code class="function">*/suspend</code> and
+              <code class="function">*/forward</code> procedures. It will
+              produce a link that, when followed, will bind the given
+              bindings to the request object returned by these two
+              functions. The <em class="parameter"><code>binding-alist</code></em> is
+              in the format specified in <a href="ch06.html" title="Chapter 6. Request Bindings">Chapter 6, <i>Request Bindings</i></a>.
+            </p><p>
+              The optional <em class="parameter"><code>anchor</code></em> attribute allowed by some
+              of the elements is made part of the generated URL.
+            </p></blockquote></div>
+        </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" id="N105D7" />
+          <a class="indexterm" id="N105DC" />
+          <a class="indexterm" id="N105E1" />
+          <a class="indexterm" id="N105E6" />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(a (@ (href-p ,proc) [(bindings ,binding-alist)] [(anchor ,name)] ...) ...)</code>
+          <br />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(form (@ (action-p ,proc) [(bindings ,binding-alist)] [(anchor ,name)] ...) ...)</code>
+          <br />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(iframe (@ (src-p ,proc) [(bindings ,binding-alist)] [(anchor ,name)] ...) ...)</code>
+          <br />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(img (@ (src-p ,proc) [(bindings ,binding-alist)] ...))</code>
+          <br />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(link (@ (href-p ,proc) [(bindings ,binding-alist)] ...))</code>
+          <br />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(object (@ (data-p ,proc) [(bindings ,binding-alist)] [(anchor ,name) ...) ...)</code>
+          <br />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(script (@ (src-p ,proc) [(bindings ,binding-alist)] ...) ...)</code>
+          <div class="blockquote"><blockquote class="blockquote"><p>
+              These attributes produce links that invoke the given
+              procedure <em class="parameter"><code>proc</code></em> when followed. The
+              HTTP request object will be passed as the only parameter
+              to the procedure, and will contain the bindings
+              specified in <em class="parameter"><code>binding-alist</code></em>, if
+              present.
+            </p><p>
+              In the case of <code class="function">@action-p</code>, the form
+              field values and the specified bindings will be merged,
+              with the latter taking precedence over the former.
+            </p><p>
+              The optional <em class="parameter"><code>anchor</code></em> attribute
+              allowed by some of the elements is made part of the
+              generated URL.
+            </p></blockquote></div>
+        </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" id="N10643" />
+          <a class="indexterm" id="N10648" />
+          <a class="indexterm" id="N1064D" />
+          <a class="indexterm" id="N10652" />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(a (@ (href-c ,c-url) [(bindings ,binding-alist)] ...) ...)</code>
+          <br />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(form (@ (action-c ,c-url) [(bindings ,binding-alist)] ...) ...)</code>
+          <br />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(iframe (@ (src-c ,c-url) [(bindings ,binding-alist)] ...))</code>
+          <br />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(img (@ (src-c ,c-url) [(bindings ,binding-alist)] ...))</code>
+          <br />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(link (@ (href-c ,c-url) [(bindings ,binding-alist)] ...))</code>
+          <br />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(object (@ (data-c ,c-url) [(bindings ,binding-alist)] ...) ...)</code>
+          <br />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(script (@ (src-c ,c-url) [(bindings ,binding-alist)] ...) ...)</code>
+          <div class="blockquote"><blockquote class="blockquote"><p>
+              These attributes allow specifying URLs relative to the
+              context in which the <span class="application">SISCweb</span> application is
+              running. They are useful to reference plain HTML files
+              or JSPs that co-exist in the same context. If any
+              bindings are specified, they will
+              be included in the request associated to the
+              <em class="parameter"><code>c-url</code></em>.
+            </p><p>
+              The <em class="parameter"><code>anchor</code></em> attribute is not
+              allowed, as it can be directly specified in the
+              <em class="parameter"><code>c-url</code></em> parameter.
+            </p></blockquote></div>
+        </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" id="N106AD" />
+          <a class="indexterm" id="N106B2" />
+          <a class="indexterm" id="N106B7" />
+          <a class="indexterm" id="N106BC" />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(a (@ (href-e ,url) ...) ...)</code>
+          <br />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(form (@ (action-e ,url) ...) ...)</code>
+          <br />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(iframe (@ (src-e ,url) ...))</code>
+          <br />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(img (@ (src-e ,url) ...))</code>
+          <br />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(link (@ (href-e ,url) ...))</code>
+          <br />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(object (@ (data-e ,url) ...) ...)</code>
+          <br />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(script (@ (src-e ,url) ...) ...)</code>
+          <div class="blockquote"><blockquote class="blockquote"><p>
+              These attributes encode the given
+              <em class="parameter"><code>url</code></em> as per the the Java
+              <code class="function">HttpServletResponse.encodeURL()</code>
+              method. This is useful to support cookie-less
+              interaction, as it will encode the session ID in the
+              <em class="parameter"><code>url</code></em> as needed.
+            </p><p>
+              The <em class="parameter"><code>anchor</code></em> attribute is not
+              allowed, as it can be directly specified in the
+              <span class="ERROR">&lt;attribute&gt;c-url&lt;/attribute&gt;</span>.
+            </p></blockquote></div>
+        </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" id="N1071A" />
+          <span class="emphasis"><em>attribute: </em></span>
+          <code class="literal">`(object (@ (type "graphviz") (layout ,layout) (format ,format) ...)
+          (graph (@ (id ,id) ...))</code>
+          <div class="blockquote"><blockquote class="blockquote"><p>
+              If the attribute <em class="parameter"><code>type "graphviz"</code></em>
+              is specified for the <code class="function">object</code>
+              element, a Graphviz graph will be embedded in the
+              document.
+            </p><p>
+              The <em class="parameter"><code>layout</code></em> and
+              <em class="parameter"><code>format</code></em> attributes are analogous
+              to the omonymous parameters to the
+              <code class="function">send-graphviz/*</code> functions (see
+              <a href="ch03.html#send-graphviz" title="Graphviz Procedures">the section called “Graphviz Procedures”</a>.) However, the value of
+              <em class="parameter"><code>format</code></em> determines how the content
+              is included:
+            </p><div class="itemizedlist"><ul type="disc"><li><em class="parameter"><code>gif, jpg, png</code></em>: The graph is
+                embedded as an <code class="function">img</code> tag, and a
+                corresponding image map is generated. Links associated
+                to nodes, edges and records will be mapped
+                appropriately. Just as for other document elements,
+                the <code class="function">@href[-[p|c|e]]</code> and
+                <code class="function">@bindings</code> attributes are
+                available, and behave as described in <a href="ch03.html#ehtml" title="Extended HTML markup">the section called “Extended HTML markup”</a>.
+              </li><li><em class="parameter"><code>ps, svg, etc.</code></em>: The graph is
+                embedded as an <code class="function">object</code> tag. The
+                appropriate mime type is automatically set, and needs
+                not be specified explicitely.
+              </li></ul></div><p>
+              In both cases, any attribute specified for the
+              <code class="function">object</code> tag will be applied toward
+              the generated <code class="function">object</code> or
+              <code class="function">img</code> tag.
+            </p></blockquote></div>
+        </p></blockquote></div><div class="informalexample"><pre class="programlisting">
+(send-html/suspend
+ (lambda (k-url)
+  `(html
+    (head
+     (title "Embedded Graphviz")
+    (body
+    (h3 "Embedded Graphviz")
+
+    (object (@ (type "graphviz")
+               (layout dot) (format png))
+      (graph (@ (id "G"))
+        (node (@ (id "c") (label "scissors") (href "http://www.google.com/search?q=scissors")))
+        (node (@ (id "p") (label "paper") (href "http://www.google.com/search?q=paper")))
+        (node (@ (id "s") (label "stone") (href "http://www.google.com/search?q=stone")))
+        (edge (@ (from "c") (to "p") (label "cut") (href-p ,cut)))
+        (edge (@ (from "p") (to "s") (label "wraps") (href-c "/")))
+        (edge (@ (from "s") (to "c") (label "breaks") (href-e ,k-url))))))))))
+        </pre></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="send-text" />Plain Text</h2></div></div></div><p>
+      <span class="emphasis"><em>Requires:</em></span>
+      <span class="bold"><strong>
+        (import <span class="emphasis"><em>siscweb/text</em></span>)
+      </strong></span>
+      <br />
+      <span class="emphasis"><em>Located in:</em></span>
+      <span class="bold"><strong>
+        siscweb.jar
+      </strong></span>
+    </p><p>
+      This module provides functions to send plain text responses.
+    </p><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N10795" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-text/suspend</span> [<span class="methodparam"><span class="parameter">header-alist</span></span>] <span class="methodparam"><span class="parameter">(lambda (k-url) &lt;text&gt;)</span></span>) =&gt; <span class="type">request</span></code>
+        <br />
+        <a class="indexterm" id="N107B2" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-text/forward</span> [<span class="methodparam"><span class="parameter">header-alist</span></span>] <span class="methodparam"><span class="parameter">(lambda (k-url) &lt;text&gt;)</span></span>) =&gt; <span class="type">request</span></code>
+        <br />
+        <a class="indexterm" id="N107CF" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-text/back</span> [<span class="methodparam"><span class="parameter">header-alist</span></span>] <span class="methodparam"><span class="parameter">&lt;text&gt;</span></span>) =&gt; <span class="type">does not return</span></code>
+        <br />
+        <a class="indexterm" id="N107EC" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-text/finish</span> [<span class="methodparam"><span class="parameter">header-alist</span></span>] <span class="methodparam"><span class="parameter">&lt;text&gt;</span></span>) =&gt; <span class="type">does not return</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            These functions are analogous to those in the HTML and
+            XHTML modules.
+          </p></blockquote></div>
+      </p></blockquote></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="forward" />Forwarding Requests</h2></div></div></div><p>
+      <span class="emphasis"><em>Requires:</em></span>
+      <span class="bold"><strong>
+        (import <span class="emphasis"><em>siscweb/forward</em></span>)
+      </strong></span>
+      <br />
+      <span class="emphasis"><em>Located in:</em></span>
+      <span class="bold"><strong>
+        siscweb.jar
+      </strong></span>
+    </p><p>
+      Since <span class="application">SISCweb</span> lives in a J2EE environment, it is sometimes
+      convenient to generate content using traditional techniques such
+      as JSPs and servlets rather than SXML.
+    </p><p>
+      The <code class="function">send-forward/*</code> procedures dispatch the
+      request to the indicated context-relative URL. Bindings can be
+      attached in the form of &lt;bindings&gt; objects or a-lists. The
+      <code class="function">forward/store!</code> function can also be used to
+      pass URLs mapped to closures in the style of the
+      <code class="function">@[action|data|href|src]-p</code> tags. Coupled
+      with the URL corresponding to the current-continuation being set
+      in the <em class="parameter"><code>siscweb.kURL</code></em> request attribute,
+      this enables one to use <span class="application">SISCweb</span> for control and JSP/Servlets
+      for presentation without losing too many features.
+    </p><p>
+      See <a href="ch06.html#bindings-java" title="Extracting Bindings from Java">the section called “Extracting Bindings from Java”</a> for details on how to access
+      bindings from Java.
+    </p><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N10848" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-forward/suspend</span> <span class="methodparam"><span class="parameter">context-url</span></span> [<span class="methodparam"><span class="parameter">bindings</span></span>]) =&gt; <span class="type">request</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Forwards the current request and suspends. The
+            <em class="parameter"><code>context-url</code></em> is relative to the
+            context in which the <span class="application">SISCweb</span> application is running.
+            The optional <em class="parameter"><code>bindings</code></em> parameter is
+            either a &lt;bindings&gt; object or an a-list as
+            specified in <a href="ch06.html" title="Chapter 6. Request Bindings">Chapter 6, <i>Request Bindings</i></a>. The continuation
+            URL will be set in the <em class="parameter"><code>siscweb.kURL</code></em>
+            request attribute.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N1087D" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-forward/forward</span> <span class="methodparam"><span class="parameter">context-url</span></span> [<span class="methodparam"><span class="parameter">bindings</span></span>]) =&gt; <span class="type">request</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            This function behaves like
+            <code class="function">send-forward/suspend</code>, except that it
+            clears the continuation table first. This will prevent the
+            client from using the back button and resume the program
+            flow from earlier points.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N108A3" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-forward/back</span> <span class="methodparam"><span class="parameter">context-url</span></span> [<span class="methodparam"><span class="parameter">bindings</span></span>]) =&gt; <span class="type">does not return</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Forwards the current request to the provided
+            <em class="parameter"><code>context-url</code></em> and stops.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N108C9" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-forward/finish</span> <span class="methodparam"><span class="parameter">context-url</span></span> [<span class="methodparam"><span class="parameter">bindings</span></span>]) =&gt; <span class="type">does not return</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Like <code class="function">send-forward/back</code>, this function
+            forwards the current request to the provided
+            <em class="parameter"><code>context-url</code></em> and stops, but clears
+            the continuation table first.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N108F3" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">forward/store!</span> <span class="methodparam"><span class="parameter">proc</span></span> [<span class="methodparam"><span class="parameter">bindings</span></span>]) =&gt; <span class="type">k-url</span></code>
+        <br />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">forward/store!</span> <span class="methodparam"><span class="parameter">c-url</span></span> [<span class="methodparam"><span class="parameter">bindings</span></span>]) =&gt; <span class="type">k-url</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            In the first form, stores a closure
+            <em class="parameter"><code>proc</code></em> in the continuation table, and
+            returns the url that will invoke it.  The
+            <em class="parameter"><code>proc</code></em> procedure should accept a
+            request object as its only argument.  If
+            <em class="parameter"><code>bindings</code></em> are specified, either as
+            an a-list or a &lt;bindings&gt; object,
+            <div class="procedure"><ol type="1" /></div> will see them as bindings in
+            its request.
+          </p><p>
+            In the second form <code class="function">forward/store!</code>
+            stores a closure that forwards the request to the given
+            context-relative <em class="parameter"><code>c-url</code></em>, including
+            any specified bindings, if any.
+          </p><p>
+            This function is especially useful when passing bindings
+            through the <code class="function">send-forward/*</code> functions,
+            as it allows to embed links to closures in JSPs and the
+            such, and can thus be used to implement the same style of
+            page navigation afforded by the tags
+            <code class="function">@*-c</code>+<code class="function">@bindings</code>
+            and
+            <code class="function">@*-c</code>+<code class="function">@bindings</code>
+            in the extended (X)HTML described in <a href="ch03.html#ehtml" title="Extended HTML markup">the section called “Extended HTML markup”</a> Notably missing is the equivalent of the
+            plain <code class="function">@bindings</code>.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N10963" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">forward/store!</span> <span class="methodparam"><span class="parameter">proc</span></span> [<span class="methodparam"><span class="parameter">bindings</span></span>]) =&gt; <span class="type">k-url</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            This procedure is similar to the first form of
+            <code class="function">forward/store!</code>, except that when
+            <code class="function">proc</code> is executed, it will run in the
+            dynamic context in effect when
+            <code class="function">forward/dynenv/store!</code> is invoked.
+          </p><p>
+            The main reason to use this procedure is that
+            <code class="function">proc</code> will see the same SRFI-39
+            parameter bindings established at the time
+            <code class="function">forward/dynenv/store!</code> was called.
+          </p></blockquote></div>
+      </p></blockquote></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="image" />Images</h2></div></div></div><p>
+      <span class="emphasis"><em>Requires:</em></span>
+      <span class="bold"><strong>
+        (import <span class="emphasis"><em>siscweb/image</em></span>)
+      </strong></span>
+      <br />
+      <span class="emphasis"><em>Located in:</em></span>
+      <span class="bold"><strong>
+        siscweb.jar
+      </strong></span>
+    </p><p>
+      This module provides procedures to send images from
+      <code class="function">java.awt.image.RenderedImage</code> or files.
+    </p><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N109BA" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-image/back</span> [<span class="methodparam"><span class="parameter">header-alist</span></span>] <span class="methodparam"><span class="parameter">format</span></span> <span class="methodparam"><span class="parameter">java.awt.image.RenderedImage</span></span>) =&gt; <span class="type">does not return</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Sends the given image to the browser in the specified
+            <em class="parameter"><code>format</code></em>.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N109E6" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-image/finish</span> [<span class="methodparam"><span class="parameter">header-alist</span></span>] <span class="methodparam"><span class="parameter">format</span></span> <span class="methodparam"><span class="parameter">java.awt.image.RenderedImage</span></span>) =&gt; <span class="type">does not return</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            This procedure behaves like
+            <code class="function">send-image/back</code>, except that it
+            clears the continuation table. This will prevent the user
+            from using the back button to resume the program flow from
+            earlier points.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N10A12" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-image-file/back</span> [<span class="methodparam"><span class="parameter">header-alist</span></span>] <span class="methodparam"><span class="parameter">format</span></span> <span class="methodparam"><span class="parameter">filename</span></span>) =&gt; <span class="type">does not return</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Sends the image contained in the specified
+            <em class="parameter"><code>filename</code></em> to the browser in the
+            specified <em class="parameter"><code>format</code></em>.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N10A42" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-image-file/finish</span> [<span class="methodparam"><span class="parameter">header-alist</span></span>] <span class="methodparam"><span class="parameter">format</span></span> <span class="methodparam"><span class="parameter">filename</span></span>) =&gt; <span class="type">does not return</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            This procedure behaves like
+            <code class="function">send-image-file/back</code>, except that it
+            clears the continuation table. This will prevent the user
+            from using the back button to resume the program flow from
+            earlier points.
+          </p></blockquote></div>
+      </p></blockquote></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="graphviz" />GraphViz Graphs</h2></div></div></div><p>
+      <span class="emphasis"><em>Requires:</em></span>
+      <span class="bold"><strong>
+        (import <span class="emphasis"><em>siscweb/graphviz</em></span>)
+      </strong></span>
+      <br />
+      <span class="emphasis"><em>Located in:</em></span>
+      <span class="bold"><strong>
+        siscweb-sxml.jar
+      </strong></span>
+    </p><p>
+      This module provides procedures to send graphs in various
+      formats as generated by Graphviz (<a href="http://www.graphviz.org" target="_top">http://www.graphviz.org</a>). Most of the functions accept a
+      markup representation of DOT, the GraphViz language, in the form
+      of DotML (see <a href="ch03.html#dotml" title="DotML">the section called “DotML”</a>.)
+    </p><p>
+      The GraphViz programs (dot, neato, etc.) should be installed
+      somewhere in the system path. This is usually the case in
+      UNIX. Alternatively, it is possible to set the absolute paths to
+      the GraphViz programs by using the
+      <code class="function">graphiz/put-layout-command!</code> function.
+    </p><p>
+      Graphs can be generated either using the
+      <code class="function">send-graphviz/*</code> functions, or by embedding
+      the <em class="parameter"><code>@type="graphviz"</code></em> attribute
+      in the (X)HTML <code class="function">object</code> tag (see <a href="ch03.html#ehtml" title="Extended HTML markup">the section called “Extended HTML markup”</a>.)
+    </p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="send-graphviz" />Graphviz Procedures</h3></div></div></div><p>
+        Both <code class="function">send-graphviz/*</code> procedures accept
+        the same three parameters:
+      </p><div class="itemizedlist"><ul type="disc"><li><em class="parameter"><code>layout</code></em>: This is a string specifying
+          which Graphviz layout engine to use. The current choices are
+          dot, neato, twopi, circo, and fdp.
+        </li><li><em class="parameter"><code>format</code></em>: This is a string specifying
+          the output format. The most useful choices currently are
+          gif, jpg, 'png, 'ps, and 'svg.
+        </li><li><em class="parameter"><code>&lt;dotml&gt;</code></em>: This is an sxml
+          representation of the DotML language. See <a href="ch03.html#dotml" title="DotML">the section called “DotML”</a>.
+        </li></ul></div><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" id="N10AC4" />
+          <span class="emphasis"><em>procedure: </em></span>
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-graphviz/back</span> <span class="methodparam"><span class="parameter">layout</span></span> <span class="methodparam"><span class="parameter">format</span></span> <span class="methodparam"><span class="parameter">&lt;dotml&gt;</span></span>) =&gt; <span class="type">does not return</span></code>
+
+          <div class="blockquote"><blockquote class="blockquote"><p>
+              Sends the given <em class="parameter"><code>dotml</code></em> graph in
+              the specified <em class="parameter"><code>format</code></em> to the
+              browser after laying the graph out using the indicated
+              <em class="parameter"><code>layout</code></em> engine.
+            </p></blockquote></div>
+        </p></blockquote></div><div class="informalexample"><pre class="programlisting">
+          
+(send-graphviz/back
+  'dot 'png
+  `(graph (@ (id "G"))
+    (node (@ (id "c") (label "scissors")))
+    (node (@ (id "p") (label "paper")))
+    (node (@ (id "s") (label "stone")))
+    (edge (@ (from "c") (to "p") (label "cut")))
+    (edge (@ (from "p") (to "s") (label "wraps")))
+    (edge (@ (from "s") (to "c") (label "breaks")))))
+          
+        </pre></div><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" id="N10AFC" />
+          <span class="emphasis"><em>procedure: </em></span>
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-graphviz/finish</span> <span class="methodparam"><span class="parameter">layout</span></span> <span class="methodparam"><span class="parameter">format</span></span> <span class="methodparam"><span class="parameter">&lt;dotml&gt;</span></span>) =&gt; <span class="type">does not return</span></code>
+
+          <div class="blockquote"><blockquote class="blockquote"><p>
+              This procedure behaves like
+              <code class="function">send-graphviz/back</code>, except that it
+              clears the continuation table. This will prevent the
+              user from using the back button to resume the program
+              flow from earlier points.
+            </p></blockquote></div>
+        </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" id="N10B28" />
+          <span class="emphasis"><em>procedure: </em></span>
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">graphviz/put-layout-command!</span> <span class="methodparam"><span class="parameter">layout</span><span class="parameter">command</span></span>) =&gt; <span class="type">undefined</span></code>
+
+          <div class="blockquote"><blockquote class="blockquote"><p>
+              Associates a given <em class="parameter"><code>layout</code></em> to the
+              specified <em class="parameter"><code>command</code></em>.  This function
+              can be used to add Graphviz layout engines, or to
+              specify absolute paths for existing engines. The latter
+              is likely to be an issue in Windows.
+            </p></blockquote></div>
+        </p></blockquote></div><div class="informalexample"><pre class="programlisting">
+          
+(graphviz/put-layout-command "dot" "d:/bin/dot.exe")
+          
+        </pre></div><div class="blockquote"><blockquote class="blockquote"><p>
+          <a class="indexterm" id="N10B53" />
+          <span class="emphasis"><em>procedure: </em></span>
+          <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">graphviz/get-layout-command</span> <span class="methodparam"><span class="parameter">layout</span></span>) =&gt; <span class="type">command/#f</span></code>
+
+          <div class="blockquote"><blockquote class="blockquote"><p>
+              Retrieves the <em class="parameter"><code>command</code></em> associated
+              to the given <em class="parameter"><code>layout</code></em>, or #f if no
+              association is present.
+            </p></blockquote></div>
+        </p></blockquote></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="dotml" />DotML</h3></div></div></div><p>
+        The <code class="function">send-graphviz/*</code> procedures accept a
+        graph description expressed in DotML. DotML was created by
+        Martin Loetzsch, and an exhaustive description rich with
+        excellent examples is at <a href="http://www.martin-loetzsch.de/DOTML" target="_top">http://www.martin-loetzsch.de/DOTML</a>.
+      </p><p>
+        SISCweb does not use code from the DotML project, but it
+        implements the same markup syntax in sxml form. There are a
+        few differences between SISCweb's implementation and the
+        original:
+      </p><div class="itemizedlist"><ul type="disc"><li>
+          The generated DOT code (which is then fed into GraphViz) is somewhat different.
+        </li><li>
+          The <code class="function">graph</code>,
+          <code class="function">sub-graph</code>, <code class="function">cluster</code>
+          and <code class="function">node</code> elements must always specify
+          an <em class="parameter"><code>id</code></em> attribute.
+        </li><li>
+          The <em class="parameter"><code>id</code></em> attribute values at the moment
+          are limited to strings of alphanumeric characters and
+          underscore.
+        </li><li>
+          The enclosing <code class="function">record</code> elements must
+          specify an <em class="parameter"><code>id</code></em> attribute, but nested
+          <code class="function">record</code> and <code class="function">node</code>
+          elements do not have to.
+        </li></ul></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="errors" />HTTP errors</h2></div></div></div><p>
+      <span class="emphasis"><em>Requires:</em></span>
+      <span class="bold"><strong>
+        (import <span class="emphasis"><em>siscweb/error</em></span>)
+      </strong></span>
+      <br />
+      <span class="emphasis"><em>Located in:</em></span>
+      <span class="bold"><strong>
+        siscweb.jar
+      </strong></span>
+    </p><p>
+      HTTP error responses can be generated using two functions, which
+      differ in how the affect the continuation table. Neither
+      function returns. The error codes should abide to the <a href="http://www.faqs.org/rfcs/rfc2616.html" target="_top">RFC2616</a>
+      specifications.
+    </p><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N10BD6" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-error/back</span> <span class="methodparam"><span class="parameter">code</span></span> <span class="methodparam"><span class="parameter">message</span></span>) =&gt; <span class="type">does not return</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Sends the specified HTTP error <em class="parameter"><code>code</code></em>
+            and <em class="parameter"><code>message</code></em>.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N10C00" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">send-error/finish</span> <span class="methodparam"><span class="parameter">code</span></span> <span class="methodparam"><span class="parameter">message</span></span>) =&gt; <span class="type">does not return</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Like <code class="function">send-error/back</code>, but clears the
+            continuation table.
+          </p></blockquote></div>
+      </p></blockquote></div></div></div><div class="navfooter"><hr /><table summary="Navigation footer" width="100%"><tr><td align="left" width="40%"><a accesskey="p" href="ch02.html">Prev</a> </td><td align="center" width="20%"> </td><td align="right" width="40%"> <a accesskey="n" href="ch04.html">Next</a></td></tr><tr><td valign="top" align="left" width="40%">Chapter 2. Installation </td><td align="center" width="20%"><a accesskey="h" href="index.html">Home</a></td><td valign="top" align="right" width="40%"> Chapter 4. Managing Program State</td></tr></table></div></body></html>

@@ -1,0 +1,143 @@
+head	1.1;
+access;
+symbols
+	rel-0-1-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2005.02.17.01.43.59;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.02.17.01.43.59;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.03.02.03.45.59;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2005.03.13.06.15.42;	author acolomba;	state Exp;
+branches;
+next	1.1.2.4;
+
+1.1.2.4
+date	2005.03.16.02.19.58;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5;
+
+1.1.2.5
+date	2005.03.19.14.26.25;	author acolomba;	state Exp;
+branches;
+next	1.1.2.6;
+
+1.1.2.6
+date	2005.03.27.19.44.43;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@file build.properties was initially added on branch rel-0-1-dev.
+@
+text
+@@
+
+
+1.1.2.1
+log
+@moved properties from build.xml to build.properties file.
+@
+text
+@a0 11
+# COMPILE
+compile.debug = true
+compile.deprecation = true
+compile.target = 1.4
+compile.optimize = true
+
+#my gentoo
+#compile.path.servlets = /opt/tomcat5/common/lib/servlet-api.jar
+
+#my mac
+compile.path.servlets = /usr/local/lib/tomcat/common/lib/servlet-api.jar
+@
+
+
+1.1.2.2
+log
+@updated, no biggie
+@
+text
+@d8 1
+a8 1
+compile.path.servlets = /opt/tomcat5/common/lib/servlet-api.jar
+d11 1
+a11 1
+#compile.path.servlets = /usr/local/lib/tomcat/common/lib/servlet-api.jar
+@
+
+
+1.1.2.3
+log
+@added sisc home as part of the new project structure
+@
+text
+@d1 1
+a1 1
+# ** COMPILE **
+d7 1
+a7 1
+# * CONFIGURATION ON SNOOPY *
+a8 1
+sisc.home = /home/acolomba/src/sisc
+d10 1
+a10 1
+# * CONFIGURATION ON WOODSTOCK *
+a11 1
+#sisc.home = /usr/local/lib/sisc
+@
+
+
+1.1.2.4
+log
+@added aspectj home
+@
+text
+@a9 1
+aspectj.home = /usr/share/aspectj
+a13 1
+#aspectj.home = /usr/local/lib/aspectj@
+
+
+1.1.2.5
+log
+@modified to use aspectj
+@
+text
+@d9 1
+a9 2
+#compile.path.servlets = /opt/tomcat4/common/lib/servlet.jar
+sisc.home = /usr/local/lib/sisc
+@
+
+
+1.1.2.6
+log
+@moved build.properties to build.properties.sample with edits
+@
+text
+@@
+
+

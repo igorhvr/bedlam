@@ -1,0 +1,719 @@
+head	1.1;
+access;
+symbols
+	rel-0-3-fix-3:1.1.4.2
+	rel-0-3-fix:1.1.0.4
+	rel-0-4-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2006.03.12.01.30.26;	author acolomba;	state dead;
+branches
+	1.1.2.1
+	1.1.4.1;
+next	;
+
+1.1.2.1
+date	2006.03.12.01.30.26;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2006.03.12.02.11.35;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2006.03.12.12.36.05;	author acolomba;	state Exp;
+branches;
+next	1.1.2.4;
+
+1.1.2.4
+date	2006.03.14.01.52.21;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5;
+
+1.1.2.5
+date	2006.03.14.03.55.45;	author acolomba;	state Exp;
+branches;
+next	1.1.2.6;
+
+1.1.2.6
+date	2006.03.18.23.20.21;	author acolomba;	state Exp;
+branches;
+next	1.1.2.7;
+
+1.1.2.7
+date	2006.03.19.02.13.47;	author acolomba;	state Exp;
+branches;
+next	1.1.2.8;
+
+1.1.2.8
+date	2006.03.21.01.15.25;	author acolomba;	state dead;
+branches;
+next	1.1.2.9;
+
+1.1.2.9
+date	2006.03.27.22.48.18;	author acolomba;	state Exp;
+branches;
+next	1.1.2.10;
+
+1.1.2.10
+date	2006.08.11.03.34.32;	author acolomba;	state dead;
+branches;
+next	;
+
+1.1.4.1
+date	2006.03.12.01.30.26;	author acolomba;	state dead;
+branches;
+next	1.1.4.2;
+
+1.1.4.2
+date	2006.04.15.15.55.23;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@file s2j-io.scm was initially added on branch rel-0-4-dev.
+@
+text
+@@
+
+
+1.1.4.1
+log
+@file s2j-io.scm was added on branch rel-0-3-fix on 2006-04-15 15:55:23 +0000
+@
+text
+@@
+
+
+1.1.4.2
+log
+@merged from rel-0-4-dev
+@
+text
+@a0 152
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2006
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+;; (graph (@@ (id "G"))
+;;  (node (@@ (id "port") (label "<port>")))
+;;  (node (@@ (id "input_port") (label "<input-port>")))
+;;  (node (@@ (id "output_port") (label "<output-port>")))
+;;  (node (@@ (id "character_input_port") (label "<character-input-port>")))
+;;  (node (@@ (id "character_output_port") (label "<character-output-port>")))
+;;  (node (@@ (id "filter_input_port") (label "<filter-input-port>")))
+;;  (node (@@ (id "filter_output_port") (label "<filter-output-port>")))
+;;  (node (@@ (id "native_input_port") (label "<native-input-port>")))
+;;  (node (@@ (id "native_output_port") (label "<native-output-port>")))
+;;  (node (@@ (id "native_character_input_port") (label "<native-character-input-port>")))
+;;  (node (@@ (id "native_character_output_port") (label "<native-character-output-port>")))
+;;  (edge (@@ (from "input_port") (to "port")))
+;;  (edge (@@ (from "output_port") (to "port")))
+;;  (edge (@@ (from "character_input_port") (to "input_port")))
+;;  (edge (@@ (from "character_output_port") (to "output_port")))
+;;  (edge (@@ (from "filter_input_port") (to "input_port")))
+;;  (edge (@@ (from "filter_output_port") (to "output_port")))
+;;  (edge (@@ (from "native_input_port") (to "filter_input_port")))
+;;  (edge (@@ (from "native_output_port") (to "filter_output_port")))
+;;  (edge (@@ (from "native_character_input_port") (to "native_input_port")))
+;;  (edge (@@ (from "native_character_output_port") (to "native_output_port")))
+;;  (edge (@@ (from "native_character_input_port") (to "character_input_port")))
+;;  (edge (@@ (from "native_character_output_port") (to "character_output_port"))))
+
+
+(module util/s2j-io
+  (->binary-input-port ->binary-output-port
+   ->character-input-port ->character-output-port
+   ->jinput-stream ->joutput-stream
+   ->jreader ->jwriter)
+
+  (import s2j)
+  (import generic-procedures)
+  (import type-system)
+  (import oo)
+
+  (import gio/filtergenerics)
+
+  (define-java-classes
+    (<java.io.input-stream> |java.io.InputStream|)
+    (<java.io.output-stream> |java.io.OutputStream|)
+    (<java.io.reader> |java.io.Reader|)
+    (<java.io.writer> |java.io.Writer|)
+    (<sisc.io.stream-input-port> |sisc.io.StreamInputPort|)
+    (<sisc.io.stream-output-port> |sisc.io.StreamOutputPort|)
+    (<sisc.io.reader-input-port> |sisc.io.ReaderInputPort|)
+    (<sisc.io.writer-output-port> |sisc.io.WriterOutputPort|))
+
+  (define-generic-java-methods
+    get-input-stream get-output-stream get-reader get-writer)
+
+
+  ;; Java Input/OutputStream to non-character port
+  (define-generics ->binary-input-port ->binary-output-port)
+
+  ;; 1. InputStream -> <native-input-port>
+  (define-method (->binary-input-port (<java.io.input-stream> is))
+    (make <native-input-port>
+      (java-unwrap (java-new <sisc.io.stream-input-port> is))))
+
+  ;; 2. OutputStream -> <native-output-port>
+  (define-method (->binary-output-port (<java.io.output-stream> os)
+                                       (<boolean> aflush?))
+    (make <native-output-port>
+      (java-unwrap (java-new <sisc.io.stream-output-port> os
+                             (->jboolean aflush?)))))
+  (define-method (->binary-output-port (<java.io.output-stream> os))
+    (->binary-output-port os #f))
+
+
+  ;; Java Read/Writer to character port
+  (define-generics ->character-input-port ->character-output-port)
+
+  ;; 3. Reader -> <native-character-input-port>
+  (define-method (->character-input-port (<java.io.reader> reader))
+    (make <native-character-input-port>
+      (java-unwrap (java-new <sisc.io.reader-input-port> reader))))
+
+  ;; 4. Writer -> <native-character-output-port>
+  (define-method (->character-output-port (<java.io.writer> writer)
+                                          (<boolean> aflush?))
+    (make <native-character-output-port>
+      (java-unwrap (java-new <sisc.io.writer-output-port> writer
+                             (->jboolean aflush?)))))
+  (define-method (->character-output-port (<java.io.writer> writer))
+    (->character-output-port writer #f))
+
+
+
+  ;; <filter-*-port> -> Java Stream
+  (define-generics ->jinput-stream ->joutput-stream)
+
+  ;; 5. <filter-input-port> -> InputStream
+  (define-method (->jinput-stream (<filter-input-port> in-port))
+    (get-input-stream (java-wrap (:in in-port))))
+
+  ;; 6. <character-input-port> -> InputStream (error)
+  (define-method (->jinput-stream (<character-input-port> in-port))
+    (error "Cannot obtain an InputStream from a <character-input-port>"))
+
+  ;; 7. <filter-output-port> -> OutputStream
+  (define-method (->joutput-stream (<filter-output-port> out-port))
+    (get-output-stream (java-wrap (:out out-port))))
+
+  ;; 8. <character-output-port> -> OutputStream (error)
+  (define-method (->joutput-stream (<character-output-port> out-port))
+    (error "Cannot obtain an OutputStream from a <charater-output-port>"))
+
+
+  ;; <native-*-character-port> -> Java Read/Writer
+  (define-generics ->jreader ->jwriter)
+
+  ;; 9. <native-character-input-port> => Reader
+  (define-method (->jreader (<native-character-input-port> in-port))
+    (get-reader (java-wrap (:in in-port))))
+
+  ;; 10. <native-character-output-port> => Writer
+  (define-method (->jwriter (<native-character-output-port> out-port))
+    (get-writer (java-wrap (:out out-port))))
+  )
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 79
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+
+(module util/s2j-io
+  (->binary-input-port ->binary-output-port
+   ->input-port ->output-port
+   #|->jinput-stream ->joutput-stream
+   ->jreader ->jwriter|#)
+
+  (import s2j)
+
+  (import srfi-16)
+
+  (define-java-classes
+    (<stream-input-port> |sisc.io.StreamInputPort|)
+    (<stream-output-port> |sisc.io.StreamOutputPort|)
+    (<reader-input-port> |sisc.io.ReaderInputPort|)
+    (<writer-output-port> |sisc.io.WriterOutputPort))
+
+
+  (define (->binary-input-port java-is)
+    (java-unwrap (java-new <stream-input-port> java-is)))
+
+  (define (->binary-output-port java-os aflush?)
+    (java-unwrap (java-new <stream-output-port>
+                           java-os
+                           (->jboolean aflush?))))
+
+
+  (define ->input-port
+    (case-lambda
+      ((java-is encoding)
+       (java-unwrap (java-new <reader-input-port>
+                              java-is
+                              (->string encoding))))
+      ((java-reader)
+       (java-unwrap (java-new <reader-input-port> java-reader)))))
+
+  (define ->output-port
+    (case-lambda
+      ((java-os encoding aflush?)
+       (java-unwrap (java-new <writer-output-port>
+                              java-os
+                              (->jstring encoding)
+                              (->jboolean aflush?))))
+      ((java-writer aflush?)
+       (java-unwrap (java-new <writer-output-port>
+                              java-writer
+                              (->jboolean aflush?))))))
+  )
+@
+
+
+1.1.2.2
+log
+@added missing parentheses
+@
+text
+@d47 1
+a47 1
+    (<writer-output-port> |sisc.io.WriterOutputPort|))
+@
+
+
+1.1.2.3
+log
+@ports returned by ->*-*-port are now wrapped into <native-*-port>
+objects
+@
+text
+@a39 1
+  (import oo)
+d51 1
+a51 2
+    (make <native-input-port>
+      (java-unwrap (java-new <stream-input-port> java-is))))
+d54 1
+a54 2
+    (make <native-output-port>
+      (java-unwrap (java-new <stream-output-port>
+d56 1
+a56 1
+                           (->jboolean aflush?)))))
+d62 3
+a64 4
+       (make <native-input-port>
+         (java-unwrap (java-new <reader-input-port>
+                                java-is
+                                (->string encoding)))))
+d66 1
+a66 2
+       (make <native-input-port>
+         (java-unwrap (java-new <reader-input-port> java-reader))))))
+d71 4
+a74 5
+       (make <native-output-port>
+         (java-unwrap (java-new <writer-output-port>
+                                java-os
+                                (->jstring encoding)
+                                (->jboolean aflush?)))))
+d76 4
+a79 5
+       (make <native-output-port>
+         (java-unwrap (java-new <writer-output-port>
+                                java-writer
+                                (->jboolean aflush?)))))))
+  )@
+
+
+1.1.2.4
+log
+@fixed charset in ->character-*-port methods
+@
+text
+@d35 1
+a35 1
+   ->character-input-port ->character-output-port
+d37 1
+a37 1
+   ->jreader|# ->jwriter)
+a41 2
+  (import gio/filtergenerics)
+
+a44 1
+    (<charset> |sisc.io.Charset|)
+a49 3
+  (define-generic-java-methods
+    for-name get-writer)
+
+a50 1
+  ;; java.io.InputStream -> binary-input-port
+a54 1
+  ;; java.io.OutputStream -> binary-output-port
+d61 2
+a62 2
+  ;; java.io.InputStream, java.io.Reader -> character input-port
+  (define ->character-input-port
+d65 1
+a65 1
+       (make <native-character-input-port>
+d68 1
+a68 1
+                                (for-name (java-null <charset>) (->jstring "UTF-8"))))))
+d70 1
+a70 1
+       (make <native-character-input-port>
+d73 1
+a73 2
+  ;; java.io.OutputStream, java.io.Writer -> character output-port
+  (define ->character-output-port
+d76 1
+a76 1
+       (make <native-character-output-port>
+d79 1
+a79 1
+                                (for-name (java-null <charset>) (->jstring "UTF-8"))
+d82 1
+a82 1
+       (make <native-character-output-port>
+a85 3
+
+  (define (->jwriter out-port)
+    (get-writer (java-wrap (:out out-port))))
+@
+
+
+1.1.2.5
+log
+@turned procedures into generic procedures; finished conversion functions
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2006
+d31 2
+a39 2
+  (import generic-procedures)
+  (import type-system)
+d44 2
+d47 5
+a51 9
+    (<sisc.io.charset> |sisc.io.Charset|)
+    (<java.io.input-stream> |java.io.InputStream|)
+    (<java.io.output-stream> |java.io.OutputStream|)
+    (<java.io.reader> |java.io.Reader|)
+    (<java.io.writer> |java.io.Writer|)
+    (<sisc.io.stream-input-port> |sisc.io.StreamInputPort|)
+    (<sisc.io.stream-output-port> |sisc.io.StreamOutputPort|)
+    (<sisc.io.reader-input-port> |sisc.io.ReaderInputPort|)
+    (<sisc.io.writer-output-port> |sisc.io.WriterOutputPort|))
+d54 2
+a55 1
+    for-name get-input-stream get-output-stream get-reader get-writer)
+d57 2
+a58 7
+  
+  ;; *** Java Stream to non-character ports
+  (define-generics ->binary-input-port ->binary-output-port)
+
+  ;; ** INPUT
+  ;; 1. InputStream -> <native-input-port>
+  (define-method (->binary-input-port (<java.io.input-stream> is))
+d60 1
+a60 1
+      (java-unwrap (java-new <sisc.io.stream-input-port> is))))
+d62 2
+a63 5
+  
+  ;; ** OUTPUT
+  ;; 2. OutputStream -> <native-output-port>    
+  (define-method (->binary-output-port (<java.io.output-stream> os)
+                                       (<boolean> aflush?))
+d65 30
+a94 7
+      (java-unwrap (java-new <sisc.io.stream-output-port> os
+                             (->jboolean aflush?)))))
+
+  
+
+  ;; *** Java Stream and Read/Writer to character ports
+  (define-generics ->character-input-port ->character-output-port)
+d96 1
+a96 70
+  ;; ** INPUT
+  ;; 3. InputStream -> <native-character-input-port>
+  (define-method (->character-input-port (<java.io.input-stream> is)
+                                         (<string> encoding))
+    (make <native-character-input-port>
+      (java-unwrap (java-new <sisc.io.reader-input-port> is
+                             (for-name (java-null <sisc.io.charset>)
+                                       (->jstring encoding))))))
+
+  ;; 4. Reader -> <native-character-input-port>
+  (define-method (->character-input-port (<java.io.reader> reader))
+    (make <native-character-input-port>
+      (java-unwrap (java-new <sisc.io.reader-input-port> reader))))
+
+
+  ;; ** OUTPUT    
+  ;; 5. OutputStream -> <native-character-output-port>
+  (define-method (->character-output-port (<java.io.output-stream> os)
+                                          (<string> encoding)
+                                          (<boolean> aflush?))
+    (make <native-character-output-port>
+      (java-unwrap (java-new <sisc.io.writer-output-port> os
+                             (for-name (java-null <sisc.io.charset>)
+                                       (->jstring "UTF-8"))
+                             (->jboolean aflush?)))))
+  
+  ;; 6. Writer -> <native-character-output-port>
+  (define-method (->character-output-port (<java.io.writer> writer)
+                                          (<boolean> aflush?))
+    (make <native-character-output-port>
+      (java-unwrap (java-new <sisc.io.writer-output-port> writer
+                             (->jboolean aflush?)))))
+
+
+  
+  ;; *** port -> Java Stream
+  (define-generics ->jinput-stream ->joutput-stream)
+
+  ;; ** INPUT
+  ;; 7. <filter-input-port> -> InputStream
+  (define-method (->jinput-stream (<filter-input-port> in-port))
+    (get-input-stream (java-wrap (:in in-port))))
+
+  ;; 8. <character-input-port> -> InputStream (error)
+  (define-method (->jinput-stream (<character-input-port> in-port))
+    (error "Cannot obtain an InputStream from a <character-input-port>"))
+
+  
+  ;; ** OUTPUT
+  ;; 9. <filter-output-port> -> OutputStream
+  (define-method (->joutput-stream (<filter-output-port> out-port))
+    (get-output-stream (java-wrap (:out out-port))))
+
+  ;; 10. <character-output-port> -> OutputStream (error)
+  (define-method (->joutput-stream (<character-output-port> out-port))
+    (error "Cannot obtain an OutputStream from a <charater-output-port>"))
+
+
+  
+  ;; *** character port -> Java Read/Writer
+  (define-generics ->jreader ->jwriter)
+
+  ;; ** INPUT
+  ;; 11. <native-character-input-port> => Reader
+  (define-method (->jreader (<native-character-input-port> in-port))
+    (get-reader (java-wrap (:in in-port))))
+
+  ;; ** OUTPUT
+  ;; 12. <native-character-output-port> => Writer
+  (define-method (->jwriter (<native-character-output-port> out-port))
+@
+
+
+1.1.2.6
+log
+@removed stream->character-port conversion methods; fixed exports;
+cleaned up comments
+@
+text
+@a30 27
+
+;; (graph (@@ (id "G"))
+;;  (node (@@ (id "port") (label "<port>")))
+;;  (node (@@ (id "input_port") (label "<input-port>")))
+;;  (node (@@ (id "output_port") (label "<output-port>")))
+;;  (node (@@ (id "character_input_port") (label "<character-input-port>")))
+;;  (node (@@ (id "character_output_port") (label "<character-output-port>")))
+;;  (node (@@ (id "filter_input_port") (label "<filter-input-port>")))
+;;  (node (@@ (id "filter_output_port") (label "<filter-output-port>")))
+;;  (node (@@ (id "native_input_port") (label "<native-input-port>")))
+;;  (node (@@ (id "native_output_port") (label "<native-output-port>")))
+;;  (node (@@ (id "native_character_input_port") (label "<native-character-input-port>")))
+;;  (node (@@ (id "native_character_output_port") (label "<native-character-output-port>")))
+;;  (edge (@@ (from "input_port") (to "port")))
+;;  (edge (@@ (from "output_port") (to "port")))
+;;  (edge (@@ (from "character_input_port") (to "input_port")))
+;;  (edge (@@ (from "character_output_port") (to "output_port")))
+;;  (edge (@@ (from "filter_input_port") (to "input_port")))
+;;  (edge (@@ (from "filter_output_port") (to "output_port")))
+;;  (edge (@@ (from "native_input_port") (to "filter_input_port")))
+;;  (edge (@@ (from "native_output_port") (to "filter_output_port")))
+;;  (edge (@@ (from "native_character_input_port") (to "native_input_port")))
+;;  (edge (@@ (from "native_character_output_port") (to "native_output_port")))
+;;  (edge (@@ (from "native_character_input_port") (to "character_input_port")))
+;;  (edge (@@ (from "native_character_output_port") (to "character_output_port"))))
+
+
+d34 2
+a35 2
+   ->jinput-stream ->joutput-stream
+   ->jreader ->jwriter)
+d45 1
+d56 1
+a56 1
+    get-input-stream get-output-stream get-reader get-writer)
+d58 2
+a59 2
+
+  ;; Java Input/OutputStream to non-character port
+d62 1
+d68 3
+a70 1
+  ;; 2. OutputStream -> <native-output-port>
+d77 1
+d79 1
+a79 1
+  ;; Java Read/Writer to character port
+d82 10
+a91 1
+  ;; 3. Reader -> <native-character-input-port>
+d96 13
+a108 1
+  ;; 4. Writer -> <native-character-output-port>
+d116 2
+a117 2
+
+  ;; <filter-*-port> -> Java Stream
+d120 2
+a121 1
+  ;; 5. <filter-input-port> -> InputStream
+d125 1
+a125 1
+  ;; 6. <character-input-port> -> InputStream (error)
+d129 3
+a131 1
+  ;; 7. <filter-output-port> -> OutputStream
+d135 1
+a135 1
+  ;; 8. <character-output-port> -> OutputStream (error)
+d140 2
+a141 1
+  ;; <native-*-character-port> -> Java Read/Writer
+d144 2
+a145 1
+  ;; 9. <native-character-input-port> => Reader
+d149 2
+a150 1
+  ;; 10. <native-character-output-port> => Writer
+d153 1
+a153 1
+  )
+@
+
+
+1.1.2.7
+log
+@auto-flush? parameter now optional in ->*-output-port functions
+@
+text
+@a98 2
+  (define-method (->binary-output-port (<java.io.output-stream> os))
+    (->binary-output-port os #f))
+a114 2
+  (define-method (->character-output-port (<java.io.writer> writer))
+    (->character-output-port writer #f))
+@
+
+
+1.1.2.8
+log
+@moved functionality into SISC (java-io library)
+@
+text
+@@
+
+
+1.1.2.9
+log
+@re-enabled util/s2j-io b/c java-io is not yet released in SISC
+@
+text
+@@
+
+
+1.1.2.10
+log
+@switched from using util/s2j-io to using SISC's java-io library (same code really)
+@
+text
+@@
+
+

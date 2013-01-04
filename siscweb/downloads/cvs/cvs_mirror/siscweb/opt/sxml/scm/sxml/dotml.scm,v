@@ -1,0 +1,492 @@
+head	1.3;
+access;
+symbols
+	rel-0-6-dev:1.3.0.10
+	rel-0-5-fix:1.3.0.8
+	rel-0-5:1.3
+	rel-0-5-dev-safe-frames:1.3.0.6
+	Root_rel-0-5-dev-safe-frames:1.3
+	rel-0-4-fix-0:1.3
+	rel-0-5-dev:1.3.0.4
+	rel-0-4-fix:1.3.0.2
+	rel-0-3-fix-3:1.2.2.1
+	rel-0-3-fix-2:1.2.2.1
+	rel-0-4-dev-sisc-1-11:1.2.4.2
+	rel-0-3-fix-1:1.2
+	rel-0-4-dev:1.2.0.4
+	rel-0-3-fix:1.2.0.2
+	rel-0-3:1.2
+	rel-0-3-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2006.09.03.01.42.23;	author acolomba;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.11.20.18.44.01;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.11.20.18.44.01;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2006.02.25.17.12.02;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.12.01.03.55.53;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2006.02.11.03.53.36;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@merged from rel-0-4-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+;;; This code is a derivative of the DOTML stylesheet developed by
+;;; Martin Loetzsch (http://www.martin-loetzsch.de/DOTML).
+
+
+(require-library 'sisc/libs/srfi/srfi-1) ; list library
+
+(require-library 'sxml/sxml-match)
+(require-library 'util/misc)
+
+
+(module sxml/dotml
+  (dotml->dot)
+
+  (import string-io)
+  (import type-system)
+
+  (import srfi-1)
+
+  (import sxml-matcher)
+  (import util/misc)
+
+
+  (define graph-attributes '(bgcolor fontcolor fontname fontsize label margin nodesep rankdir ranksep ratio size))
+  (define cluster-attributes '(bgcolor color fillcolor fontcolor fontname fontsize label labeljust labelloc style))
+  (define node-attributes '(color fillcolor fixedsize fontcolor fontname fontsize height href shape style URL width))
+  (define record-attributes '(color fillcolor fontcolor fontname fontsize height href style URL width))
+  (define edge-attributes '(arrowhead arrowsize arrowtail constraint color decorate dir fontcolor fontname fontsize headlabel headport href label labeldistance labelfloat labelfontcolor labelfontname labelfontsize minlen samehead sametail style taillabel tailport URL))
+
+
+  (define (dotml->dot dotml)
+    (sxml-match dotml
+     ((graph (@@ (id ,id) . ,attrs) ,[x] ...)
+      (string-append "digraph "
+                     id
+                     " {compound=\"true\";"
+                     (alist->attrs attrs ";")
+                     x ...
+                     "} "))
+     ((sub-graph (@@ (id ,id) (rank ,rank) . ,attrs) ,[x] ...)
+      (string-append "subgraph sub_graph_"
+                     id
+                     " {"
+                     (alist->attrs attrs ";")
+                     x ...
+                     "} "))
+     ((cluster (@@ (id ,id) . ,attrs) ,[x] ...)
+      (string-append "subgraph cluster_"
+                     id
+                     " {"
+                     (alist->attrs attrs ";")
+                     x ...
+                     "} "))
+
+     ((node (@@ (id ,id) . ,attrs))
+      (format "~a[~a];" id (alist->attrs attrs ", ")))
+     ((edge (@@ (from ,src) (to ,dst) . ,attrs))
+      (format "edge[~a] ~a -> ~a;" (alist->attrs attrs ", ") src dst))
+     ((record (@@ (id ,id) . ,attrs) ,x ...)
+      (format "~a[shape=\"record\", ~alabel=\"~a\"];"
+              id (alist->attrs attrs ", ")
+              (make-record-label (cons 'record (list x ...)))))
+     (,any (error
+            (string-append
+             "dotml->dot: Could not recognize element : \""
+             (with-output-to-string (lambda () (pretty-print any)))
+             "\"")))))
+
+  (define (alist->attrs alist separator)
+    (fold-right
+     (lambda (pair str)
+       (format "~a=\"~a\"~a~a" (car pair) (cadr pair) separator str))
+     " "
+     alist))
+
+  (define (make-record-label record-elt)
+    (sxml-match record-elt
+      ((record ,[x] ...)
+       (format  "{ ~s } "
+                (fold-right (lambda (a b)
+                              (if b (format "~a | ~a" a b) a))
+                            #f (list x ...))))
+      ((node (@@ (label ,label)))
+       label)
+      ((node (@@ (id ,id)))
+       id)))
+  )
+@
+
+
+1.2
+log
+@merged from rel-0-3-dev
+@
+text
+@d35 2
+a61 1
+     ;; TODO: check attribute file-name?
+d85 1
+a85 5
+      (string-append id
+                     "["
+                     (alist->attrs attrs ", ")
+                     "];"))
+
+d87 1
+a87 8
+      (string-append "edge["
+                     (alist->attrs attrs ", ")
+                     "] "
+                     src
+                     " -> "
+                     dst
+                     ";"))
+
+d89 3
+a91 7
+      (string-append id
+                     "[shape=\"record\", "
+                     (alist->attrs attrs ", ")
+                     "label=\""
+                     (make-record-label (cons 'record (list x ...)))
+                     "\"];"))
+
+d101 1
+a101 7
+       (string-append
+        (symbol->string (car pair))
+        "=\""
+        (value->string (cadr pair))
+        "\""
+        separator
+        str))
+a104 7
+  (define (value->string value)
+    (typecase value
+      ((<number>) (number->string value))
+      ((<symbol>) (symbol->string value))
+      ((<string>) value)
+      (else (with-output-to-string (lambda () (pretty-print value))))))
+
+d108 4
+a111 8
+       (string-append
+        "{ "
+        (fold-right (lambda (a b)
+                      (if b
+                          (string-append a " | " b)
+                          a))
+                    #f (list x ...))
+        " } "))
+@
+
+
+1.2.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@a34 2
+(require-library 'sisc/libs/srfi/srfi-1) ; list library
+
+d60 1
+d84 5
+a88 1
+      (format "~a[~a];" id (alist->attrs attrs ", ")))
+d90 8
+a97 1
+      (format "edge[~a] ~a -> ~a;" (alist->attrs attrs ", ") src dst))
+d99 7
+a105 3
+      (format "~a[shape=\"record\", ~alabel=\"~a\"];"
+              id (alist->attrs attrs ", ")
+              (make-record-label (cons 'record (list x ...)))))
+d115 7
+a121 1
+       (format "~a=\"~a\"~a~a" (car pair) (cadr pair) separator str))
+d125 7
+d135 8
+a142 4
+       (format  "{ ~s } "
+                (fold-right (lambda (a b)
+                              (if b (format "~a | ~a" a b) a))
+                            #f (list x ...))))
+@
+
+
+1.2.4.1
+log
+@removed value->string (see util/misc); comment edits
+@
+text
+@a34 2
+(require-library 'sisc/libs/srfi/srfi-1) ; list library
+
+d60 1
+d125 7
+@
+
+
+1.2.4.2
+log
+@minor source beautification
+@
+text
+@d85 5
+a89 1
+      (format "~a[~a];" id (alist->attrs attrs ", ")))
+d91 8
+a98 1
+      (format "edge[~a] ~a -> ~a;" (alist->attrs attrs ", ") src dst))
+d100 7
+a106 3
+      (format "~a[shape=\"record\", ~alabel=\"~a\"];"
+              id (alist->attrs attrs ", ")
+              (make-record-label (cons 'record (list x ...)))))
+d116 7
+a122 1
+       (format "~a=\"~a\"~a~a" (car pair) (cadr pair) separator str))
+d129 8
+a136 4
+       (format  "{ ~s } "
+                (fold-right (lambda (a b)
+                              (if b (format "~a | ~a" a b) a))
+                            #f (list x ...))))
+@
+
+
+1.1
+log
+@file dotml.scm was initially added on branch rel-0-3-dev.
+@
+text
+@d1 147
+@
+
+
+1.1.2.1
+log
+@moved from siscweb root to opt/sxml
+@
+text
+@a0 147
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+;;; This code is a derivative of the DOTML stylesheet developed by
+;;; Martin Loetzsch (http://www.martin-loetzsch.de/DOTML).
+
+
+(require-library 'sxml/sxml-match)
+(require-library 'util/misc)
+
+
+(module sxml/dotml
+  (dotml->dot)
+
+  (import string-io)
+  (import type-system)
+
+  (import srfi-1)
+
+  (import sxml-matcher)
+  (import util/misc)
+
+
+  (define graph-attributes '(bgcolor fontcolor fontname fontsize label margin nodesep rankdir ranksep ratio size))
+  (define cluster-attributes '(bgcolor color fillcolor fontcolor fontname fontsize label labeljust labelloc style))
+  (define node-attributes '(color fillcolor fixedsize fontcolor fontname fontsize height href shape style URL width))
+  (define record-attributes '(color fillcolor fontcolor fontname fontsize height href style URL width))
+  (define edge-attributes '(arrowhead arrowsize arrowtail constraint color decorate dir fontcolor fontname fontsize headlabel headport href label labeldistance labelfloat labelfontcolor labelfontname labelfontsize minlen samehead sametail style taillabel tailport URL))
+
+
+  (define (dotml->dot dotml)
+    (sxml-match dotml
+     ;; TODO: check attribute file-name?
+     ((graph (@@ (id ,id) . ,attrs) ,[x] ...)
+      (string-append "digraph "
+                     id
+                     " {compound=\"true\";"
+                     (alist->attrs attrs ";")
+                     x ...
+                     "} "))
+     ((sub-graph (@@ (id ,id) (rank ,rank) . ,attrs) ,[x] ...)
+      (string-append "subgraph sub_graph_"
+                     id
+                     " {"
+                     (alist->attrs attrs ";")
+                     x ...
+                     "} "))
+     ((cluster (@@ (id ,id) . ,attrs) ,[x] ...)
+      (string-append "subgraph cluster_"
+                     id
+                     " {"
+                     (alist->attrs attrs ";")
+                     x ...
+                     "} "))
+
+     ((node (@@ (id ,id) . ,attrs))
+      (string-append id
+                     "["
+                     (alist->attrs attrs ", ")
+                     "];"))
+
+     ((edge (@@ (from ,src) (to ,dst) . ,attrs))
+      (string-append "edge["
+                     (alist->attrs attrs ", ")
+                     "] "
+                     src
+                     " -> "
+                     dst
+                     ";"))
+
+     ((record (@@ (id ,id) . ,attrs) ,x ...)
+      (string-append id
+                     "[shape=\"record\", "
+                     (alist->attrs attrs ", ")
+                     "label=\""
+                     (make-record-label (cons 'record (list x ...)))
+                     "\"];"))
+
+     (,any (error
+            (string-append
+             "dotml->dot: Could not recognize element : \""
+             (with-output-to-string (lambda () (pretty-print any)))
+             "\"")))))
+
+  (define (alist->attrs alist separator)
+    (fold-right
+     (lambda (pair str)
+       (string-append
+        (symbol->string (car pair))
+        "=\""
+        (value->string (cadr pair))
+        "\""
+        separator
+        str))
+     " "
+     alist))
+
+  (define (value->string value)
+    (typecase value
+      ((<number>) (number->string value))
+      ((<symbol>) (symbol->string value))
+      ((<string>) value)
+      (else (with-output-to-string (lambda () (pretty-print value))))))
+
+  (define (make-record-label record-elt)
+    (sxml-match record-elt
+      ((record ,[x] ...)
+       (string-append
+        "{ "
+        (fold-right (lambda (a b)
+                      (if b
+                          (string-append a " | " b)
+                          a))
+                    #f (list x ...))
+        " } "))
+      ((node (@@ (label ,label)))
+       label)
+      ((node (@@ (id ,id)))
+       id)))
+  )
+@
+

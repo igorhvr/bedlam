@@ -1,0 +1,358 @@
+head	1.2;
+access;
+symbols
+	rel-0-6-dev:1.2.0.4
+	rel-0-5-fix:1.2.0.2
+	rel-0-5:1.2
+	rel-0-5-dev:1.1.0.4
+	rel-0-5-dev-safe-frames:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2007.04.12.03.51.19;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2007.03.25.04.45.08;	author acolomba;	state dead;
+branches
+	1.1.2.1
+	1.1.4.1;
+next	;
+
+1.1.2.1
+date	2007.03.25.04.45.08;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.1.4.1
+date	2007.03.25.04.45.08;	author acolomba;	state dead;
+branches;
+next	1.1.4.2;
+
+1.1.4.2
+date	2007.04.01.23.55.26;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2007.10.09.23.53.54;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2007.10.13.18.25.16;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@merged from rel-0-5-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2007
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+(require-library 'sisc/libs/srfi/srfi-27) ; sources of random bits
+(require-library 'sisc/libs/srfi/srfi-42) ; eager comprehensions
+
+(module util/uid
+  (uid/make-integer
+   uid/make-rfc-1738-string)
+
+  (import srfi-27)
+  (import srfi-42)
+
+  ;; by default SISC uses a cryptographically secure random source
+  (define rand (random-source-make-integers default-random-source))
+
+  (define (uid/make-integer)
+    (rand 2147483647))
+
+  (define (uid/make-rfc-1738-string)
+    (let ((s (make-string uid-string-size)))
+      (do-ec (:range i 0 uid-string-size)
+             (:let n (rand (vector-length rfc-1738-chars)))
+        (string-set! s i (vector-ref rfc-1738-chars n)))
+      s))
+
+  (define rfc-1738-chars
+    (list->vector
+     (append (list-ec (:char-range c #\0 #\9) c)
+             (list-ec (:char-range c #\a #\z) c)
+             (list-ec (:char-range c #\A #\Z) c)
+             #|'(#\$ #\- #\_ #\. #\+ #\! #\* #\' #\( #\) #\,)|#))) ; elided for readability
+
+  ;; we want the uid string to be equivalent to ~160 bits
+  (define uid-string-size (inexact->exact (ceiling (/ (log (expt 2 160)) (log 62)))))
+
+  )
+@
+
+
+1.2.4.1
+log
+@now supports optional generation of uids via non-secure random number generator to avoid potential secure random number starvation
+@
+text
+@d36 1
+a36 2
+   uid/make-rfc-1738-string
+   uid/secure?)
+d41 3
+d45 1
+a45 1
+    (uid/rand 2147483647))
+d50 1
+a50 1
+             (:let n (uid/rand (vector-length rfc-1738-chars)))
+a53 5
+  (define (uid/rand n)
+    (if (uid/secure?)
+        (secure-rand n)
+        (fast-rand n)))
+
+a60 2
+
+
+a63 11
+  (define secure-rand
+    (let ((random-source (make-random-source 'secure)))
+      (random-source-randomize! random-source)
+      (random-source-make-integers random-source)))
+
+  (define fast-rand
+    (let ((random-source (make-random-source 'fast))) ; SISC-specific
+      (random-source-randomize! random-source)
+      (random-source-make-integers random-source)))
+
+  (define uid/secure? (make-parameter #t))
+@
+
+
+1.2.4.2
+log
+@workaround for SISC <=1.16.6; removed uid/make-integer
+@
+text
+@d35 2
+a36 1
+  (uid/make-rfc-1738-string
+d42 3
+a56 7
+  ;; workaround for SISC <=1.16.6
+  (define (make-random-source-fast)
+    (import s2j)
+    (define-java-classes <java.util.random>)
+    (let ((golden-ratio (->jlong #x9e3779b97f4a7c15)))
+      (java-new <java.util.random> golden-ratio)))
+
+d74 4
+a77 1
+  (define fast-rand #f)
+a79 5
+
+  (set! fast-rand
+    (let ((random-source (make-random-source-fast)))
+      (random-source-randomize! random-source)
+      (random-source-make-integers random-source)))
+@
+
+
+1.1
+log
+@file uid.scm was initially added on branch rel-0-5-dev-safe-frames.
+@
+text
+@d1 64
+@
+
+
+1.1.4.1
+log
+@file uid.scm was added on branch rel-0-5-dev on 2007-04-01 23:55:26 +0000
+@
+text
+@@
+
+
+1.1.4.2
+log
+@merged from rel-0-5-dev-safe-frames
+@
+text
+@a0 64
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2007
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+(require-library 'sisc/libs/srfi/srfi-27) ; sources of random bits
+(require-library 'sisc/libs/srfi/srfi-42) ; eager comprehensions
+
+(module util/uid
+  (uid/make-integer
+   uid/make-rfc-1738-string)
+
+  (import srfi-27)
+  (import srfi-42)
+
+  ;; by default SISC uses a cryptographically secure random source
+  (define rand (random-source-make-integers default-random-source))
+
+  (define (uid/make-integer)
+    (rand 2147483647))
+
+  (define (uid/make-rfc-1738-string)
+    (let ((s (make-string uid-string-size)))
+      (do-ec (:range i 0 uid-string-size)
+             (:let n (rand (vector-length rfc-1738-chars)))
+        (string-set! s i (vector-ref rfc-1738-chars n)))
+      s))
+
+  (define rfc-1738-chars
+    (list->vector
+     (append (list-ec (:char-range c #\0 #\9) c)
+             (list-ec (:char-range c #\a #\z) c)
+             (list-ec (:char-range c #\A #\Z) c)
+             #|'(#\$ #\- #\_ #\. #\+ #\! #\* #\' #\( #\) #\,)|#))) ; elided for readability
+
+  ;; we want the uid string to be equivalent to ~160 bits
+  (define uid-string-size (inexact->exact (ceiling (/ (log (expt 2 160)) (log 62)))))
+
+  )
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 64
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2007
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+(require-library 'sisc/libs/srfi/srfi-27) ; sources of random bits
+(require-library 'sisc/libs/srfi/srfi-42) ; eager comprehensions
+
+(module util/uid
+  (uid/make-integer
+   uid/make-rfc-1738-string)
+
+  (import srfi-27)
+  (import srfi-42)
+
+  ;; by default SISC uses a cryptographically secure random source
+  (define rand (random-source-make-integers default-random-source))
+
+  (define (uid/make-integer)
+    (rand 2147483647))
+
+  (define (uid/make-rfc-1738-string)
+    (let ((s (make-string uid-string-size)))
+      (do-ec (:range i 0 uid-string-size)
+             (:let n (rand (vector-length rfc-1738-chars)))
+        (string-set! s i (vector-ref rfc-1738-chars n)))
+      s))
+
+  (define rfc-1738-chars
+    (list->vector
+     (append (list-ec (:char-range c #\0 #\9) c)
+             (list-ec (:char-range c #\a #\z) c)
+             (list-ec (:char-range c #\A #\Z) c)
+             #|'(#\$ #\- #\_ #\. #\+ #\! #\* #\' #\( #\) #\,)|#))) ; elided for readability
+
+  ;; we want the uid string to be equivalent to ~160 bits
+  (define uid-string-size (inexact->exact (ceiling (/ (log (expt 2 160)) (log 62)))))
+
+  )
+@
+

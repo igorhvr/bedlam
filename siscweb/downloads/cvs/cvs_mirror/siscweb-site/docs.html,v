@@ -1,0 +1,490 @@
+head	1.11;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.11
+date	2007.04.12.04.27.51;	author acolomba;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2006.09.02.04.12.30;	author acolomba;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2006.04.15.16.57.35;	author acolomba;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2006.02.25.20.20.50;	author acolomba;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2005.12.15.05.17.07;	author acolomba;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2005.11.25.22.08.34;	author acolomba;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2005.10.25.00.30.13;	author acolomba;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2005.10.24.03.56.22;	author acolomba;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2005.08.02.03.14.05;	author acolomba;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2005.08.02.03.05.50;	author acolomba;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2005.07.30.01.50.00;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.11
+log
+@updated for rel-0-5
+@
+text
+@<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"/>
+    <title>SISCweb Docs</title>
+    <link rel="stylesheet" href="style/default.css" type="text/css"/>
+  </head>
+
+  <body>
+    <div class="logo-container">
+      <span class="logo-left">SISC</span><span class="logo-right">web</span>
+      <div class="logo-bottom">Do you call/cc in J2EE?</div>
+    </div>
+
+    <table style="text-align: left; margin-left: auto; margin-right: auto;"
+           class="tab-container" cellpadding="0" cellspacing="0">
+      <tbody>
+        <tr>
+          <td class="tab-padding">&nbsp;</td>
+          <td class="tab-unselected">
+            <a class="tab-link" href="news.html">news</a>
+          </td>
+          <td class="tab-unselected">
+            <a class="tab-link" href="overview.html">overview</a>
+          </td>
+          <td class="tab-selected">docs</td>
+          <td class="tab-unselected">
+            <a class="tab-link" href="download.html">download</a>
+          </td>
+          <td class="tab-unselected">
+            <a class="tab-link" href="screenshots.html">screenshots</a>
+          </td>
+          <td class="tab-unselected">
+            <a class="tab-link" href="license.html">license</a>
+          </td>
+          <td class="tab-padding">&nbsp;</td>
+        </tr>
+      </tbody>
+    </table>
+
+
+    <h3>SISCweb Manual</h3>
+
+    <p>
+      The manual is work-in-progress, and is published here as it is
+      updated. It is available in two formats:
+    </p>
+
+    <ul>
+      <li>
+        <a href="swm/siscweb-manual.html">SISCweb manual, single page</a>
+      </li>
+      <li>
+        <a href="swm/index.html">SISCweb manual, online browsable</a>
+      </li>
+    </ul>
+
+    <!--
+    <p>
+      The SISCweb manual for the version under development is also
+      available as a <a href="swm-dev/siscweb-manual.html">single page</a>
+      or <a href="swm-dev/index.html">online browsable</a>.
+    </p>
+    -->
+
+    <h3>Links</h3>
+
+    <p>
+      The idea at the base of continuation-based web programming is
+      expounded in Christian Queinnec, &quot;<a
+      href="http://www-spi.lip6.fr/%7Equeinnec/Papers/www.ps.gz">Inverting
+      back the inversion of control or, continuations versus
+      page-centric programming</a>&quot;,Technical Report 7, LIP6. May
+      2001. (Also locally <a href="docs/queinnec-inverting.pdf">available in PDF</a>.)
+    </p>
+
+    <p>
+      <a href="http://sisc.sourceforge.net/">SISC</a>, the scheme
+      implementation on which SISCweb is based, has an exhaustive <a
+      href="http://sisc.sourceforge.net/documentation.php">manual</a>.
+    </p>
+
+    <p>
+      Two nice IDEs capable to connect to SISCweb's server-side REPL
+      are (<a href="http://www.xemacs.org">X</a>)<a
+      href="http://www.gnu.org/software/emacs/">Emacs</a>+<a
+      href="http://www.neilvandyke.org/quack/">Quack</a>, and <a
+      href="http://www.eclipse.org">Eclipse</a>+<a
+      href="http://schemeway.sourceforge.net/schemescript.html">SchemeScript</a>. The
+      former requires <a
+      href="http://netcat.sourceforge.net/">netcat</a> (also available
+      for Windows as <a
+      href="http://www.vulnwatch.org/netcat/">nc.exe</a>), but
+      SchemeScript has a specific option preconfigured for SISCweb.
+    </p>
+
+    <p>
+      SISCweb has its own <a
+      href="http://schemepetstore.pbwiki.com/">Pet Store</a>
+      implementation complete with an informative <a
+      href="http://schemepetstore.pbwiki.com/f/writeup.pdf">writeup</a>.
+    </p>
+
+    <p>
+      The <a href="http://www.scsh.net/resources/sunet.html">SUnet</a>
+      package in the <a href="http://www.scsh.net/">scsh</a> scheme
+      implementation features a continuation-based web framework to
+      which SISCweb is inspired. The chapter on the <a
+      href="http://www.scsh.net/resources/sunet-manual/man-Z-H-8.html#node_chap_6">SUrflet
+      server</a>, while not directly applicable to SISCweb, can serve
+      as a nice introduction to the programming style.
+    </p>
+
+    <p>
+      SISCweb adopts the
+      sexp-based <a
+      href="http://okmij.org/ftp/Scheme/SXML.html">SXML</a> notation
+      to represent XML.
+    </p>
+
+    <p>
+      <a href="http://srfi.schemers.org/srfi-39/">SRFI-39</a>
+      parameters are a valid alternative to session attribute for
+      tracking state in SISCweb when not using the strict
+      continuation-based approach (i.e. <span style="font-family:
+      monospace;">send-*/[suspend|forward]</span>.
+    </p>
+
+    <p>
+      The SISCweb <a href="swm/ch07.html">SQL package</a> makes
+      extensive use of <a
+      href="http://srfi.schemers.org/srfi-19/srfi-19.html">srfi-19,
+      &quot;Time Data Types and Procedures&quot;</a>, and <a
+      href="http://srfi.schemers.org/srfi-45/srfi-45.html">srfi-45,
+      &quot;Primitives for Expressing Iterative Lazy Algorithms&quot;</a>.
+    </p>
+
+    <p>
+      Graphs generated through <a
+      href="http://www.graphviz.org/">Graphviz</a> are described via
+      the <a href="http://www.martin-loetzsch.de/DOTML/">DOTML</a> XML
+      language, naturally expressed in SXML notation. The few
+      differences are documented in the <a
+      href="http://siscweb.sourceforge.net/swm/ch02.html#dotml">DotML
+      section</a> of the SISCweb manual.
+    </p>
+
+    <h3>Feedback, Support</h3>
+
+    <p>
+      Comments, ideas and bug reports are welcome at: <a
+      href="mailto:acolomba@@users.sourceforge.net">acolomba@@users.sourceforge.net</a>.
+    </p>
+
+    <p>
+      If you have questions and you believe that the topic might be of
+      interest to others, consider joining and posting on the <a
+      href="http://sourceforge.net/mailarchive/forum.php?forum_id=7422">sisc-users</a>
+      mailing list.
+    </p>
+
+    <p>
+      Thank you!
+    </p>
+
+
+    <hr style="height: 1px; width: 100%;"
+        class="bottom-separator" noshade="noshade"/>
+
+    <p>
+      <div style="font-style: italic;">
+        (C) 2005-2007 Alessandro Colomba - <a
+        href="mailto:acolomba@@users.sourceforge.net">acolomba@@users.sourceforge.net</a>
+      </div>
+      <div style="font-style: italic;">
+        Last updated: $Date: 2006/09/02 04:12:30 $
+      </div>
+    </p>
+
+    <a href="http://sourceforge.net"><img src="http://sourceforge.net/sflogo.php?group_id=130857&amp;type=1" alt="SourceForge.net Logo" border="0" height="31" width="88"/></a>
+
+    <a href="http://www.spreadfirefox.com/?q=affiliates&amp;id=0&amp;t=68"><img alt="Get Firefox!" title="Get Firefox!" src="http://sfx-images.mozilla.org/affiliates/Buttons/88x31/take.gif" border="0"/></a>
+  </body>
+</html>
+@
+
+
+1.10
+log
+@updated logo; css-ized tab table
+@
+text
+@d131 1
+a131 1
+      The SISCweb <a href="swm/ch05.html">SQL package</a> makes
+d173 1
+a173 1
+        (C) 2005-2006 Alessandro Colomba - <a
+d177 1
+a177 1
+        Last updated: $Date: 2006/04/15 16:57:35 $
+@
+
+
+1.9
+log
+@updated for v0.33 release
+@
+text
+@d11 3
+a13 3
+    <div class="logo">
+      <img alt="SISCweb logo" title="SISCweb logo"
+           src="images/logo.png"/>
+d20 2
+a21 2
+          <td width="5%" class="tab-padding">&nbsp;</td>
+          <td width="15%" class="tab-unselected">
+d24 1
+a24 1
+          <td width="15%" class="tab-unselected">
+d27 2
+a28 2
+          <td width="15%" class="tab-selected">docs</td>
+          <td width="15%" class="tab-unselected">
+d31 1
+a31 1
+          <td width="15%" class="tab-unselected">
+d34 1
+a34 1
+          <td width="15%" class="tab-unselected">
+d37 1
+a37 1
+          <td width="15%" class="tab-padding">&nbsp;</td>
+d46 2
+a47 2
+      The SISCweb manual is work-in-progress, and is published here as
+      it is updated. It is available in two formats:
+d177 1
+a177 1
+        Last updated: $Date: 2006/02/25 20:20:50 $
+@
+
+
+1.8
+log
+@updated copyright notice
+@
+text
+@d59 1
+d65 1
+a65 1
+
+d116 12
+a127 5
+      XML documents in SISCweb are represented using the sexp-based <a
+      href="http://okmij.org/ftp/Scheme/SXML.html">SXML</a>
+      notation. SISCweb currently recognizes only the basic
+      element+attributes subset of SXML, which is quite sufficent to
+      express HTML pages.
+d177 1
+a177 1
+        Last updated: $Date: 2005/12/15 05:17:07 $
+@
+
+
+1.7
+log
+@added links to dev manual
+@
+text
+@d165 1
+a165 1
+        (C) 2005 Alessandro Colomba - <a
+d169 1
+a169 1
+        Last updated: $Date: 2005/11/25 22:08:34 $
+@
+
+
+1.6
+log
+@updated for 0.3 release
+@
+text
+@d59 6
+d133 2
+a134 3
+      href="http://www.graphviz.org/">Graphviz</a> are described
+      through the <a
+      href="http://www.martin-loetzsch.de/DOTML/">DOTML</a> XML
+d169 1
+a169 1
+        Last updated: $Date: 2005/10/25 00:30:13 $
+@
+
+
+1.5
+log
+@added link to scheme petstore; changed order
+@
+text
+@d47 1
+a47 1
+      it is updated. Two versions are provided:
+d52 1
+a52 3
+        SISCweb manual for the current release: <a
+        href="swm/siscweb-manual.html">single page</a> or <a
+        href="swm/index.html">online browsable</a>
+a53 1
+
+d55 1
+a55 3
+        SISCweb manual for the CVS development branch: <a
+        href="swm-dev/siscweb-manual.html">single page</a> or <a
+        href="swm-dev/index.html">online browsable</a>
+d164 1
+a164 1
+        Last updated: $Date: 2005/10/24 03:56:22 $
+@
+
+
+1.4
+log
+@added ide notice
+@
+text
+@d65 1
+a65 1
+    <h3>References</h3>
+d88 4
+a91 3
+      href="http://schemeway.sourceforge.net/schemescript.html">SchemeScript</a>. Both
+      require <a href="http://netcat.sourceforge.net/">netcat</a>
+      (also available for Windows as <a
+d93 1
+a93 1
+      SchemeScript should soon relax this requirement.
+d97 4
+a100 5
+      XML documents in SISCweb are represented using the sexp-based <a
+      href="http://okmij.org/ftp/Scheme/SXML.html">SXML</a>
+      notation. SISCweb currently recognizes only the basic
+      element+attributes subset of SXML, which is quite sufficent to
+      express HTML pages.
+d114 8
+d169 1
+a169 1
+        Last updated: $Date: 2005/08/02 03:14:05 $
+@
+
+
+1.3
+log
+@fixed quotes
+@
+text
+@d83 13
+d161 1
+a161 1
+        Last updated: $Date: 2005/08/02 03:05:50 $
+@
+
+
+1.2
+log
+@updated
+@
+text
+@d69 1
+a69 1
+      expounded in Christian Queinnec, "<a
+d72 1
+a72 1
+      page-centric programming</a>",Technical Report 7, LIP6. May
+d148 1
+a148 1
+        Last updated: $Date: 2005/07/30 01:50:00 $
+@
+
+
+1.1
+log
+@initial import
+@
+text
+@d11 2
+a12 3
+    <div style="text-align: center;">
+      <img style="width: 270px; height: 76px;"
+           alt="SISCweb logo" title="SISCweb logo"
+d20 2
+a21 2
+          <td class="tab-padding">&nbsp;</td>
+          <td class="tab-unselected">
+d24 1
+a24 1
+          <td class="tab-unselected">
+d27 2
+a28 2
+          <td class="tab-selected">docs</td>
+          <td class="tab-unselected">
+d31 1
+a31 1
+          <td class="tab-unselected">
+d34 1
+a34 1
+          <td class="tab-unselected">
+d37 1
+a37 1
+          <td class="tab-padding">&nbsp;</td>
+d148 1
+a148 1
+        Last updated: $Date$
+@
+

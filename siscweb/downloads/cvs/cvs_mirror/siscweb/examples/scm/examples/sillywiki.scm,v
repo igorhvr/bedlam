@@ -1,0 +1,1444 @@
+head	1.6;
+access;
+symbols
+	rel-0-6-dev:1.6.0.4
+	rel-0-5-fix:1.6.0.2
+	rel-0-5:1.6
+	rel-0-5-dev-safe-frames:1.5.4.1.0.2
+	Root_rel-0-5-dev-safe-frames:1.5.4.1
+	rel-0-4-fix-0:1.5
+	rel-0-5-dev:1.5.0.4
+	rel-0-4-fix:1.5.0.2
+	rel-0-3-fix-3:1.4.2.2
+	rel-0-3-fix-2:1.4.2.1
+	rel-0-4-dev-sisc-1-11:1.4.4.2
+	rel-0-3-fix-1:1.4
+	rel-0-4-dev:1.4.0.4
+	rel-0-3-fix:1.4.0.2
+	rel-0-3:1.4
+	rel-0-3-dev-1:1.3.4.1
+	rel-0-2-fix-2:1.3.2.1
+	rel-0-2-fix-1:1.3
+	rel-0-2-fix:1.3.0.2
+	rel-0-3-dev:1.3.0.4
+	rel-0-2:1.3
+	rel-0-1-fix-1:1.2
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	start:1.1.1.1
+	rel-0-1-dev:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2007.04.12.03.51.16;	author acolomba;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2006.09.03.01.42.24;	author acolomba;	state Exp;
+branches
+	1.5.4.1;
+next	1.4;
+
+1.4
+date	2005.11.25.20.43.32;	author acolomba;	state Exp;
+branches
+	1.4.2.1
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2005.06.19.03.03.51;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.52;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches;
+next	1.1.1.2;
+
+1.1.1.2
+date	2005.03.06.04.08.49;	author acolomba;	state Exp;
+branches;
+next	1.1.1.3;
+
+1.1.1.3
+date	2005.03.06.18.46.29;	author acolomba;	state Exp;
+branches;
+next	1.1.1.4;
+
+1.1.1.4
+date	2005.03.06.23.02.21;	author acolomba;	state Exp;
+branches;
+next	1.1.1.5;
+
+1.1.1.5
+date	2005.03.26.00.31.43;	author acolomba;	state Exp;
+branches;
+next	1.1.1.6;
+
+1.1.1.6
+date	2005.04.02.02.47.11;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.05.07.02.48.37;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.05.14.04.18.38;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2005.05.22.20.19.25;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2005.05.30.05.14.07;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2005.07.31.20.04.03;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2005.07.19.03.15.30;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.2.1
+date	2006.02.25.17.12.05;	author acolomba;	state Exp;
+branches;
+next	1.4.2.2;
+
+1.4.2.2
+date	2006.04.15.15.55.28;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2006.01.16.00.22.15;	author acolomba;	state Exp;
+branches;
+next	1.4.4.2;
+
+1.4.4.2
+date	2006.02.11.20.21.43;	author acolomba;	state Exp;
+branches;
+next	1.4.4.3;
+
+1.4.4.3
+date	2006.04.08.21.40.41;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.5.4.1
+date	2007.01.27.04.16.38;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@merged from rel-0-5-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+;;; This is a very simplistic wiki to show the use some of the most interesting
+;;; features of the siscweb framework, such as "let-bindings" and "url-bindings"
+;;; Truly a wiki is not the best application to write in continuation-based style,
+;;; yet it can be done for no additional complexity cost.
+;;; In the end the only drawback is that every hyperlink is opaque rather than
+;;; in the form "wiki?page=PageName"; while in a wiki it hampers bookmarking,
+;;; in a web application it is an extra layer of security.
+
+(require-library 'sisc/libs/srfi/srfi-1)
+
+(require-library 'siscweb/xhtml)
+(require-library 'siscweb/bindings)
+(require-library 'util/regexp)
+
+(module examples/sillywiki
+  (sillywiki)
+
+  (import hashtable)
+
+  (import srfi-1)
+
+  (import siscweb/xhtml)
+  (import siscweb/bindings)
+  (import util/regexp)
+
+
+  ;; the page repository.. a couple of wiki pages to go by
+  (define pages (alist->hashtable
+                 '(("MainPage" . "Would you rather I say HelloWorld or SalveMundo?")
+                   ("HelloWorld" . "Hello, world!"))
+                 equal? #t))
+
+  ;; fetches a page from the repository; returns "" if the
+  ;; page does not exist
+  (define (fetch-page-text page-name)
+    (hashtable/get pages page-name))
+
+  ;; stores a wiki page in the repository
+  (define (store-page page-name page-text)
+    (hashtable/put! pages page-name page-text))
+
+  ;; determins whether the indicated page exists in
+  ;; the repository
+  (define (exists-page? page-name)
+    (if (hashtable/get pages page-name) #t #f))
+
+  ;; returns a list of all page names
+  (define (get-all-page-names)
+    (hashtable/keys pages))
+
+  ;; views the given page, then reads the request and either:
+  ;;   a) goes to the page the user has chosen (allowing the
+  ;;      user to create it if it doesn't exist yet)
+  ;;   b) edits the given page if the user has so asked.
+  ;; precondition: the given page-name must exists
+  (define (view-page page-name)
+    ;; page-name -> does not return
+    (let-bindings ((next-page-name "page")
+                   (edit? "edit"))
+                  (get-bindings
+                     (send-xhtml/suspend (make-view-page page-name)))
+      (cond (next-page-name ;; user clicked on a page link?
+             (cond ((exists-page? next-page-name)
+                    (view-page next-page-name))
+                   (else
+                    (let ((new-page-text (read-new-page next-page-name)))
+                      (cond (new-page-text
+                             (store-page next-page-name new-page-text)
+                             (view-page next-page-name))
+                            (else
+                             (view-page page-name)))))))
+            (edit? ;; user wants to edit this page?
+             (edit-page! page-name)
+             (view-page page-name))
+            (else ;; otherwise just redisplay the current page
+             (view-page page-name)))))
+
+  ;; displays all pages
+  (define (view-page-list)
+    (send-xhtml/suspend
+     (lambda (k-url)
+       `(*TOP*
+         (*PI* xml "version=\"1.0\"")
+         (*DTD-INFO/PUBLIC* "html"
+                            "-//W3C//DTD XHTML 1.0 Strict//EN"
+                            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+         (html (@@ (xmlns "http://www.w3.org/1999/xhtml")
+                  (xml:lang "en") (lang "en"))
+          (head
+           (title "All Pages")
+           (link (@@ (href-c "/css/default.css")
+                    (rel "stylesheet")
+                    (type "text/css"))))
+          (body
+           (h2 "All Pages")
+           (ul
+            ,@@(map (lambda (page-name)
+                     `(li (a (@@ (href-p ,(lambda (req)
+                                           (view-page page-name))))
+                             ,page-name)))
+                   (get-all-page-names)))))))))
+
+
+  ;; makes a page for viewing
+  (define (make-view-page page-name)
+    (lambda (k-url)
+      (let ((page-text (fetch-page-text page-name)))
+        `(*TOP*
+          (*PI* xml "version=\"1.0\"")
+          (*DTD-INFO/PUBLIC* "html"
+                             "-//W3C//DTD XHTML 1.0 Strict//EN"
+                             "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+          (html (@@ (xmlns "http://www.w3.org/1999/xhtml")
+                   (xml:lang "en") (lang "en"))
+           (head
+            (title ,page-name)
+            (link (@@ (href-c "/css/default.css")
+                     (rel "stylesheet")
+                     (type "text/css"))))
+           (body
+            (h2 ,page-name)
+            (p ,(htmlize page-text))
+            (p (a (@@ (bindings ((edit . ,page-name))))
+                  "Edit"))
+            (p (a (@@ (href-p ,(lambda (req) (view-page-list))))
+                  "View All Pages"))
+            (p (p (a (@@ (href-c "/")) "^ Home")))))))))
+
+
+  ;; given the text of a wiki page, it creates an html fragment
+  ;; with hyperlinks for each wiki word
+  (define (htmlize page-text)
+    `(pre
+      ,@@(text->sxml page-text)))
+
+
+  ;; returns an sxml fragment of the given text translated to html
+  ;; according to wiki rules; right now it just converts wiki words
+  ;; to bindings links
+  (define (text->sxml text)
+    (let ((matches (regexp-match-positions "(([A-Z][a-z0-9]+){2,})" text)))
+      (if (not matches)
+          `(,text)
+          (reverse
+           (pair-fold
+            (lambda (lst knil)
+              (let* ((x (car lst))
+                     (rest (cdr lst))
+                     (wikiword (substring text (car x) (cdr x))))
+                `(,(if (null? rest)
+                       (substring text (cdr x) (string-length text))
+                       (substring text (cdr x) (car (car rest))))
+                  (a (@@ (bindings ((page . ,wikiword)))) ,wikiword)
+                  . ,knil)))
+            (list (substring text 0 (car (car matches))))
+            matches)))))
+
+
+
+  ;; reads the content of a wiki page from the user, or returns #f
+  ;; if the user cancelled the operation
+  (define (read-new-page page-name)
+    ;; page-name -> page-text (read from user)
+    (let-bindings ((save? "save")
+                   (page-text "page-text"))
+                  (get-bindings
+                   (send-xhtml/suspend
+                    (make-edit-page page-name "")))
+      (if save?
+          page-text
+          #f)))
+
+
+  (define (edit-page! page-name)
+    (let-bindings ((save? "save")
+                   (page-text "page-text"))
+                  (get-bindings
+                   (send-xhtml/suspend
+                    (make-edit-page page-name (fetch-page-text page-name))))
+      (when save?
+        (store-page page-name page-text))))
+
+
+  ;; returns an edit page
+  (define (make-edit-page page-name page-text)
+    (lambda (k-url)
+      `(*TOP*
+        (*PI* xml "version=\"1.0\"")
+        (*DTD-INFO/PUBLIC* "html"
+                           "-//W3C//DTD XHTML 1.0 Strict//EN"
+                           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+        (html (@@ (xmlns "http://www.w3.org/1999/xhtml")
+                 (xml:lang "en") (lang "en"))
+         (head
+          (title ,page-name)
+          (link (@@ (context-href "/css/default.css")
+                   (rel "stylesheet")
+                   (type "text/css"))))
+         (body
+          (h2 ,page-name)
+          (form (@@ (action-e ,k-url) (method "post"))
+                (textarea (@@ (name "page-text") (rows "15") (cols "65"))
+                 ,(fetch-page-text page-name))
+                (br)
+                (input (@@ (type "submit") (name "save") (value "Store")))
+                (input (@@ (type "submit") (name "cancel") (value "Cancel")))))))))
+
+  (define (sillywiki request)
+    (view-page "MainPage"))
+  )
+@
+
+
+1.5
+log
+@merged from rel-0-4-dev
+@
+text
+@d153 1
+a153 1
+            (p (a (@@ (bindings ((edit ,page-name))))
+d183 1
+a183 1
+                  (a (@@ (bindings ((page ,wikiword)))) ,wikiword)
+d240 1
+a240 1
+)
+@
+
+
+1.5.4.1
+log
+@single @@bindings are now sent as such
+@
+text
+@d153 1
+a153 1
+            (p (a (@@ (bindings ((edit . ,page-name))))
+d183 1
+a183 1
+                  (a (@@ (bindings ((page . ,wikiword)))) ,wikiword)
+d240 1
+a240 1
+  )
+@
+
+
+1.4
+log
+@merged from rel-0-3-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+d41 1
+a41 1
+(require-library 'siscweb/html)
+d52 1
+a52 1
+  (import siscweb/html)
+d91 1
+a91 1
+                     (send-html/suspend (make-view-page page-name)))
+d110 1
+a110 1
+    (send-html/suspend
+d112 20
+a131 14
+       `(html
+         (head
+          (title "All Pages")
+          (link (@@ (href-c "/css/default.css")
+                   (rel "stylesheet")
+                   (type "text/css"))))
+         (body
+          (h2 "All Pages")
+          (ul
+           ,@@(map (lambda (page-name)
+                    `(li (a (@@ (href-p ,(lambda (req)
+                                            (view-page page-name))))
+                            ,page-name)))
+                  (get-all-page-names))))))))
+d138 20
+a157 14
+        `(html
+          (head
+           (title ,page-name)
+           (link (@@ (href-c "/css/default.css")
+                    (rel "stylesheet")
+                    (type "text/css"))))
+        (body
+           (h2 ,page-name)
+           (p ,(htmlize page-text))
+           (p (a (@@ (bindings ((edit ,page-name))))
+                "Edit"))
+           (p (a (@@ (href-p ,(lambda (req) (view-page-list))))
+                "View All Pages"))
+           (p (p (a (@@ (href-c "/")) "^ Home"))))))))
+d197 1
+a197 1
+                   (send-html/suspend
+d208 1
+a208 1
+                   (send-html/suspend
+d217 20
+a236 14
+      `(html
+        (head
+         (title ,page-name)
+         (link (@@ (context-href "/css/default.css")
+                  (rel "stylesheet")
+                  (type "text/css"))))
+        (body
+         (h2 ,page-name)
+         (form (@@ (action-e ,k-url) (method "post"))
+               (textarea (@@ (name "page-text") (rows "15") (cols "65"))
+                            ,(fetch-page-text page-name))
+               (br)
+               (input (@@ (type "submit") (name "save") (value "Store")))
+               (input (@@ (type "submit") (name "cancel") (value "Cancel"))))))))
+@
+
+
+1.4.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@d41 1
+a41 1
+(require-library 'siscweb/xhtml)
+d52 1
+a52 1
+  (import siscweb/xhtml)
+d91 1
+a91 1
+                     (send-xhtml/suspend (make-view-page page-name)))
+d110 1
+a110 1
+    (send-xhtml/suspend
+d112 14
+a125 19
+       `(*TOP*
+         (*DTD-INFO/PUBLIC* "html"
+                            "-//W3C//DTD XHTML 1.0 Strict//EN"
+                            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+         (html (@@ (xmlns "http://www.w3.org/1999/xhtml")
+                  (xml:lang "en") (lang "en"))
+          (head
+           (title "All Pages")
+           (link (@@ (href-c "/css/default.css")
+                    (rel "stylesheet")
+                    (type "text/css"))))
+          (body
+           (h2 "All Pages")
+           (ul
+            ,@@(map (lambda (page-name)
+                     `(li (a (@@ (href-p ,(lambda (req)
+                                           (view-page page-name))))
+                             ,page-name)))
+                   (get-all-page-names)))))))))
+d132 14
+a145 19
+        `(*TOP*
+          (*DTD-INFO/PUBLIC* "html"
+                             "-//W3C//DTD XHTML 1.0 Strict//EN"
+                             "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+          (html (@@ (xmlns "http://www.w3.org/1999/xhtml")
+                   (xml:lang "en") (lang "en"))
+           (head
+            (title ,page-name)
+            (link (@@ (href-c "/css/default.css")
+                     (rel "stylesheet")
+                     (type "text/css"))))
+           (body
+            (h2 ,page-name)
+            (p ,(htmlize page-text))
+            (p (a (@@ (bindings ((edit ,page-name))))
+                  "Edit"))
+            (p (a (@@ (href-p ,(lambda (req) (view-page-list))))
+                  "View All Pages"))
+            (p (p (a (@@ (href-c "/")) "^ Home")))))))))
+d185 1
+a185 1
+                   (send-xhtml/suspend
+d196 1
+a196 1
+                   (send-xhtml/suspend
+d205 14
+a218 19
+      `(*TOP*
+        (*DTD-INFO/PUBLIC* "html"
+                           "-//W3C//DTD XHTML 1.0 Strict//EN"
+                           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+        (html (@@ (xmlns "http://www.w3.org/1999/xhtml")
+                 (xml:lang "en") (lang "en"))
+         (head
+          (title ,page-name)
+          (link (@@ (context-href "/css/default.css")
+                   (rel "stylesheet")
+                   (type "text/css"))))
+         (body
+          (h2 ,page-name)
+          (form (@@ (action-e ,k-url) (method "post"))
+                (textarea (@@ (name "page-text") (rows "15") (cols "65"))
+                 ,(fetch-page-text page-name))
+                (br)
+                (input (@@ (type "submit") (name "save") (value "Store")))
+                (input (@@ (type "submit") (name "cancel") (value "Cancel")))))))))
+@
+
+
+1.4.2.2
+log
+@merged from rel-0-4-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+a112 1
+         (*PI* xml "version=\"1.0\"")
+a137 1
+          (*PI* xml "version=\"1.0\"")
+a215 1
+        (*PI* xml "version=\"1.0\"")
+@
+
+
+1.4.4.1
+log
+@added DOCTYPE declarations
+@
+text
+@d112 14
+a125 17
+       `(*TOP*
+         (*DTD-INFO/PUBLIC* |HTML| "-//W3C//DTD HTML 4.01 Transitional//EN"
+                            "http://www.w3.org/TR/html4/loose.dtd")
+         (html
+          (head
+           (title "All Pages")
+           (link (@@ (href-c "/css/default.css")
+                    (rel "stylesheet")
+                    (type "text/css"))))
+          (body
+           (h2 "All Pages")
+           (ul
+            ,@@(map (lambda (page-name)
+                     `(li (a (@@ (href-p ,(lambda (req)
+                                           (view-page page-name))))
+                             ,page-name)))
+                   (get-all-page-names)))))))))
+d132 14
+a145 17
+        `(*TOP*
+          (*DTD-INFO/PUBLIC* |HTML| "-//W3C//DTD HTML 4.01 Transitional//EN"
+                             "http://www.w3.org/TR/html4/loose.dtd")
+          (html
+           (head
+            (title ,page-name)
+            (link (@@ (href-c "/css/default.css")
+                     (rel "stylesheet")
+                     (type "text/css"))))
+           (body
+            (h2 ,page-name)
+            (p ,(htmlize page-text))
+            (p (a (@@ (bindings ((edit ,page-name))))
+                  "Edit"))
+            (p (a (@@ (href-p ,(lambda (req) (view-page-list))))
+                  "View All Pages"))
+            (p (p (a (@@ (href-c "/")) "^ Home")))))))))
+d205 14
+a218 17
+      `(*TOP*
+        (*DTD-INFO/PUBLIC* |HTML| "-//W3C//DTD HTML 4.01 Transitional//EN"
+                           "http://www.w3.org/TR/html4/loose.dtd")
+        (html
+         (head
+          (title ,page-name)
+          (link (@@ (context-href "/css/default.css")
+                   (rel "stylesheet")
+                   (type "text/css"))))
+         (body
+          (h2 ,page-name)
+          (form (@@ (action-e ,k-url) (method "post"))
+                (textarea (@@ (name "page-text") (rows "15") (cols "65"))
+                 ,(fetch-page-text page-name))
+                (br)
+                (input (@@ (type "submit") (name "save") (value "Store")))
+                (input (@@ (type "submit") (name "cancel") (value "Cancel")))))))))
+@
+
+
+1.4.4.2
+log
+@now outputs compliant xhtml
+@
+text
+@d41 1
+a41 1
+(require-library 'siscweb/xhtml)
+d52 1
+a52 1
+  (import siscweb/xhtml)
+d91 1
+a91 1
+                     (send-xhtml/suspend (make-view-page page-name)))
+d110 1
+a110 1
+    (send-xhtml/suspend
+d113 3
+a115 5
+         (*DTD-INFO/PUBLIC* "html"
+                            "-//W3C//DTD XHTML 1.0 Strict//EN"
+                            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+         (html (@@ (xmlns "http://www.w3.org/1999/xhtml")
+                  (xml:lang "en") (lang "en"))
+d136 3
+a138 5
+          (*DTD-INFO/PUBLIC* "html"
+                             "-//W3C//DTD XHTML 1.0 Strict//EN"
+                             "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+          (html (@@ (xmlns "http://www.w3.org/1999/xhtml")
+                   (xml:lang "en") (lang "en"))
+d191 1
+a191 1
+                   (send-xhtml/suspend
+d202 1
+a202 1
+                   (send-xhtml/suspend
+d212 3
+a214 5
+        (*DTD-INFO/PUBLIC* "html"
+                           "-//W3C//DTD XHTML 1.0 Strict//EN"
+                           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+        (html (@@ (xmlns "http://www.w3.org/1999/xhtml")
+                 (xml:lang "en") (lang "en"))
+@
+
+
+1.4.4.3
+log
+@explicitely outputs <?xml pi in pages
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+a112 1
+         (*PI* xml "version=\"1.0\"")
+a137 1
+          (*PI* xml "version=\"1.0\"")
+a215 1
+        (*PI* xml "version=\"1.0\"")
+@
+
+
+1.3
+log
+@merged from rel-0-2-dev
+@
+text
+@d122 1
+a122 1
+                    `(li (a (@@ (dispatch ,(lambda (req)
+d143 1
+a143 1
+           (p (a (@@ (dispatch ,(lambda (req) (view-page-list))))
+@
+
+
+1.3.2.1
+log
+@merged from rel-0-3-dev
+@
+text
+@d122 1
+a122 1
+                    `(li (a (@@ (href-p ,(lambda (req)
+d143 1
+a143 1
+           (p (a (@@ (href-p ,(lambda (req) (view-page-list))))
+@
+
+
+1.3.4.1
+log
+@replaced deprecated @@dispatch with @@href-p
+@
+text
+@d122 1
+a122 1
+                    `(li (a (@@ (href-p ,(lambda (req)
+d143 1
+a143 1
+           (p (a (@@ (href-p ,(lambda (req) (view-page-list))))
+@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@d39 2
+d43 1
+a45 1
+
+a47 1
+  (import s2j)
+d50 2
+d54 1
+a54 8
+
+  (define-java-classes
+    (<matcher> |java.util.regex.Matcher|)
+    (<pattern> |java.util.regex.Pattern|)
+    (<string-buffer> |java.lang.StringBuffer|))
+
+  (define-generic-java-methods
+    append-replacement append-tail compile matcher matches find start end)
+d113 5
+a117 1
+         (head (title "All Pages"))
+d122 3
+a124 1
+                    `(li (url-dispatch ,(lambda (req) (view-page page-name))) ,page-name))
+d133 7
+a139 3
+          (head (title ,page-name))
+          (body
+           (h1 ,page-name)
+d141 5
+a145 3
+           (p (url-bindings ((edit ,page-name)) "Edit"))
+           (p (url-dispatch ,(lambda (req) (view-page-list)) "View All Pages"))
+           (p (p (a (@@ (href "/siscweb-examples/")) "^ Home"))))))))
+d152 1
+a152 1
+      ,@@(wiki-text->sxml page-text)))
+d157 19
+a175 30
+  ;; to bindings links; this is a bit messy and needs to be modularized.
+  ;; also it could be made to use util/regexp
+  (define (wiki-text->sxml text)
+    (define pattern (compile (java-null <pattern>)
+                             (->jstring "(([A-Z][a-z0-9]+){2,})")))
+
+    (define (get-text m)
+      (let ((sb (java-new <string-buffer>)))
+        (append-replacement m sb (->jstring ""))
+        (->string sb)))
+
+    (define (get-last-text m)
+      (let ((sb (java-new <string-buffer>)))
+        (append-tail m sb)
+        (->string sb)))
+
+    (define (get-match m)
+      (substring text
+                 (->number (start m (->jint 1)))
+                 (->number (end m (->jint 1)))))
+
+    (define (wiki-word-proc wiki-word)
+      `(url-bindings ((page ,wiki-word)) ,wiki-word))
+
+    (reverse
+     (let ((m (matcher pattern (->jstring text))))
+       (let loop ((lst '()))
+         (if (->boolean (find m))
+             (loop (cons (wiki-word-proc (get-match m)) (cons (get-text m) lst)))
+             (cons (get-last-text m) lst))))))
+d206 5
+a210 1
+        (head (title ,page-name))
+d212 3
+a214 3
+         (h1 ,page-name)
+         (form (@@ (action ,k-url) (method "post"))
+               (textarea (@@ (name "page-text") (rows 15) (cols 65))
+a219 1
+
+@
+
+
+1.2.4.1
+log
+@wiki->sxml now relies on util/regexp
+@
+text
+@a40 1
+(require-library 'util/regexp)
+d46 1
+d51 8
+a58 1
+  (import util/regexp)
+a133 1
+;;;           (p (url-bindings ((page "HelloWorld")) "HelloWorld"))
+d144 1
+a144 1
+      ,@@(text->sxml page-text)))
+d150 29
+a178 18
+  (define (text->sxml text)
+    (let ((positions (regexp-match-positions "(([A-Z][a-z0-9]+){2,})" text))
+          (current-position 0)
+          (sxml '()))
+      (cond ((not positions) (list text))
+            (else
+             (for-each
+              (lambda (position-pair)
+                (let ((text-fragment (substring text current-position (car position-pair)))
+                      (wikiword (substring text (car position-pair) (cdr position-pair))))
+                  (set! sxml
+                        `((url-bindings ((page ,wikiword)) ,wikiword)
+                          ,text-fragment
+                          ,@@sxml))
+                  (set! current-position (cdr position-pair))))
+              positions)
+             (reverse (cons (substring text current-position (string-length text))
+                            sxml))))))
+@
+
+
+1.2.4.2
+log
+@text->sxml is now written in functional style
+@
+text
+@a38 2
+(require-library 'sisc/libs/srfi/srfi-1)
+
+d44 1
+a48 2
+  (import srfi-1)
+
+d127 1
+d143 1
+a143 1
+  ;; to bindings links
+d145 17
+a161 17
+    (let ((matches (regexp-match-positions "(([A-Z][a-z0-9]+){2,})" text)))
+      (if (not matches)
+          `(,text)
+          (reverse
+           (pair-fold
+            (lambda (lst knil)
+              (let* ((x (car lst))
+                     (rest (cdr lst))
+                     (wikiword (substring text (car x) (cdr x))))
+                `(,(if (null? rest)
+                       (substring text (cdr x) (string-length text))
+                       (substring text (cdr x) (car (car rest))))
+                  (url-bindings ((page ,wikiword)) ,wikiword)
+                  . ,knil)))
+            (list (substring text 0 (car (car matches))))
+            matches)))))
+
+@
+
+
+1.2.4.3
+log
+@now uses context-href and stylesheet; minor aestethic changes
+@
+text
+@d113 1
+a113 5
+         (head
+          (title "All Pages")
+          (link (@@ (context-href "/css/default.css")
+                   (rel "stylesheet")
+                   (type "text/css"))))
+d127 3
+a129 7
+          (head
+           (title ,page-name)
+           (link (@@ (context-href "/css/default.css")
+                    (rel "stylesheet")
+                    (type "text/css"))))
+        (body
+           (h2 ,page-name)
+d133 1
+a133 1
+           (p (p (a (@@ (context-href "/")) "^ Home"))))))))
+d194 1
+a194 5
+        (head
+         (title ,page-name)
+         (link (@@ (context-href "/css/default.css")
+                  (rel "stylesheet")
+                  (type "text/css"))))
+d196 1
+a196 1
+         (h2 ,page-name)
+d204 1
+@
+
+
+1.2.4.4
+log
+@modified to match changes in siscweb/html
+@
+text
+@d115 1
+a115 1
+          (link (@@ (href-c "/css/default.css")
+d122 1
+a122 3
+                    `(li (a (@@ (dispatch ,(lambda (req)
+                                            (view-page page-name))))
+                            ,page-name)))
+d133 1
+a133 1
+           (link (@@ (href-c "/css/default.css")
+d139 3
+a141 5
+           (p (a (@@ (bindings ((edit ,page-name))))
+                "Edit"))
+           (p (a (@@ (dispatch ,(lambda (req) (view-page-list))))
+                "View All Pages"))
+           (p (p (a (@@ (href-c "/")) "^ Home"))))))))
+d167 1
+a167 1
+                  (a (@@ (bindings ((page ,wikiword)))) ,wikiword)
+d209 2
+a210 2
+         (form (@@ (action-e ,k-url) (method "post"))
+               (textarea (@@ (name "page-text") (rows "15") (cols "65"))
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d1 108
+a108 40
+;; the page repository.. a couple of wiki pages to go by
+(define pages '(("Main" "Would you rather I say HelloWorld")
+                ("HelloWorld" "Hello, world!")))
+
+;; fetches a page from the repository; returns "" if the
+;; page does not exist
+(define (fetch-page-text page-name)
+  (let ((apair (assoc page-name pages)))
+    (if apair (cadr apair) "")))
+
+;; stores a wiki page in the repository
+(define (store-page page-name page-text)
+  (set! pages (cons (list page-name page-text) pages)))
+
+
+;; this is the main wiki code. views the given page,
+;; then reads the request and either: a) goes to the
+;; page the user has chosen (allowing the user to create
+;; it if it doesn't exist yet), b) edits the given page
+;; if the user has so asked.
+(define (view-page page-name)
+  ;; page-name -> does not return
+  (let ((bindings (get-bindings
+                   (send/suspend/href (make-view-page page-name)))))
+    (cond ((exists-binding? 'page bindings) ;; user clicked on a page link?
+           (let ((new-page-name (extract-single-binding 'page bindings)))
+             (cond ((equal? "" (fetch-page-text new-page-name))
+                      (let ((new-page-text (read-new-page new-page-name)))
+                        (cond ((equal? "" new-page-text)
+                               (view-page page-name))
+                              (else
+                               (store-page new-page-name new-page-text)
+                               (view-page new-page-name)))))
+                     (else
+                      (view-page new-page-name)))))
+            ((exists-binding? 'edit bindings) ;; user wants to edit this page?
+             (let ((edited-page-text (read-new-page page-name)))
+               (cond (edited-page-text
+                      (store-page page-name edited-page-text)
+                      (view-page page-name)))))
+d112 13
+d134 4
+a137 3
+           ,(htmlize page-text)
+           (a ((href ((edit . ,page-name))))
+              "Edit"))))))
+d144 35
+a178 24
+      ,@@(map (lambda (fragment)
+              (if (symbol? fragment)
+                  `(a ((href ((page . ,(symbol->string fragment)))))
+                      ,(symbol->string fragment))
+                  fragment))
+            (wiki-split page-text))))
+
+  ;; splits the text of a wiki page in a list containing
+  ;; text intermixed with wiki words, which are turned into
+  ;; symbols. e.g. "Please say HelloWorld!" -> '("Please say" HelloWorld "!")
+  (define (wiki-split text)
+    (letrec ((W (lambda (lst)
+                  (let* ((text (car lst))
+                         (positions (pregexp-match-positions
+                                     "(:?[A-Z][a-z0-9]+){2,}" text)))
+                    (if (not positions)
+                        lst
+                        (let ((start (car (car positions)))
+                              (end (cdr (car positions))))
+                          (W `(,(substring text end (string-length text))
+                               ,(string->symbol (substring text start end))
+                               ,(substring text 0 start)
+                               ,@@(cdr lst)))))))))
+      (reverse (W (list text)))))
+d180 2
+a181 1
+  ;; reads the content of a wiki page from the user, or returns ""
+d185 18
+a202 7
+    (let* ((page-text (fetch-page-text page-name))
+           (bindings (request-bindings (send/suspend/href
+                                        (make-edit-page page-name page-text)))))
+      (cond ((exists-binding? 'save bindings)
+             (extract-binding/single 'page-text bindings))
+            (else
+             page-text))))
+d211 8
+a218 6
+         (h1 ,page-text)
+         (form ((action ,k-url) (method "post"))
+               (textarea ((name "page-text"))
+                         ,(fetch-page-text page-name))
+           (input ((type "submit") (name "save") (value "Store")))
+           (input ((type "submit") (name "cancel") (value "Cancel"))))))))
+d220 3
+@
+
+
+1.1.1.1
+log
+@initial import
+@
+text
+@@
+
+
+1.1.1.2
+log
+@ported to siscweb
+@
+text
+@d1 27
+a27 87
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'siscweb/html)
+(require-library 'siscweb/bindings)
+
+(module sillywiki
+  (sillywiki)
+
+  (import s2j)
+  (import hashtable)
+
+  (import siscweb/html)
+  (import siscweb/bindings)
+
+  (define-java-classes
+    (<matcher> |java.util.regex.Matcher|)
+    (<pattern> |java.util.regex.Pattern|)
+    (<string-buffer> |java.lang.StringBuffer|))
+
+  (define-generic-java-methods
+    append-replacement append-tail compile matcher matches find start end)
+
+
+  ;; the page repository.. a couple of wiki pages to go by
+  (define pages (alist->hashtable
+                 '(("Main" . "Would you rather I say HelloWorld or SalveMundo?")
+                   ("HelloWorld" . "Hello, world!"))
+                 equal? #t))
+
+  ;; fetches a page from the repository; returns "" if the
+  ;; page does not exist
+  (define (fetch-page-text page-name)
+    (hashtable/get pages page-name))
+
+  ;; stores a wiki page in the repository
+  (define (store-page page-name page-text)
+    (hashtable/put! pages page-name page-text))
+
+  ;; determins whether the indicated page exists in
+  ;; the repository
+  (define (exists-page? page-name)
+    (if (hashtable/get pages page-name) #t #f))
+
+
+  ;; views the given page, then reads the request and either:
+  ;;   a) goes to the page the user has chosen (allowing the
+  ;;      user to create it if it doesn't exist yet)
+  ;;   b) edits the given page if the user has so asked.
+  ;; precondition: the given page-name must exists
+  (define (view-page page-name)
+    ;; page-name -> does not return
+    (let ((bindings (get-bindings
+                     (send-html/suspend (make-view-page page-name)))))
+      (cond ((exists-binding? 'page bindings) ;; user clicked on a page link?
+             (let ((new-page-name (extract-single-binding 'page bindings)))
+               (cond ((exists-page? new-page-name)
+                      (view-page new-page-name))
+                     (else
+d29 3
+a31 1
+                        (cond (new-page-text
+d33 3
+a35 3
+                               (view-page new-page-name))
+                              (else
+                               (view-page page-name))))))))
+d38 3
+a40 3
+               (when edited-page-text
+                 (store-page page-name edited-page-text))
+               (view-page page-name)))
+d54 2
+a55 2
+           (url-bindings ((edit ,page-name)) "Edit"))))))
+
+d62 24
+a85 1
+      ,@@(wiki-text->sxml page-text)))
+d87 1
+a87 35
+
+  ;; returns an sxml fragment of the given text translated to html
+  ;; according to wiki rules; right now it just converts wiki words
+  ;; to bindings links; this is a bit messy and needs to be modularized
+  (define (wiki-text->sxml text)
+    (define pattern (compile (java-null <pattern>)
+                             (->jstring "(([A-Z][a-z0-9]+){2,})")))
+
+    (define (get-text m)
+      (let ((sb (java-new <string-buffer>)))
+        (append-replacement m sb (->jstring ""))
+        (->string sb)))
+
+    (define (get-last-text m)
+      (let ((sb (java-new <string-buffer>)))
+        (append-tail m sb)
+        (->string sb)))
+
+    (define (get-match m)
+      (substring text
+                 (->number (start m (->jint 1)))
+                 (->number (end m (->jint 1)))))
+
+    (define (wiki-word-proc wiki-word)
+      `(url-bindings ((page ,wiki-word)) ,wiki-word))
+
+    (reverse
+     (let ((m (matcher pattern (->jstring text))))
+       (let loop ((lst '()))
+         (if (->boolean (find m))
+             (loop (cons (wiki-word-proc (get-match m)) (cons (get-text m) lst)))
+             (cons (get-last-text m) lst))))))
+
+
+  ;; reads the content of a wiki page from the user, or returns #f
+d92 2
+a93 3
+           (bindings (get-bindings
+                      (send-html/suspend
+                       (make-edit-page page-name (if page-text page-text ""))))))
+d97 1
+a97 1
+             #f))))
+d106 6
+a111 7
+         (h1 ,page-name)
+         (form (@@ (action ,k-url) (method "post"))
+               (textarea (@@ (name "page-text"))
+                            ,(fetch-page-text page-name))
+               (input (@@ (type "submit") (name "save") (value "Store")))
+               (input (@@ (type "submit") (name "cancel") (value "Cancel"))))))))
+
+a112 3
+  (define (sillywiki request)
+    (view-page "Main"))
+)
+@
+
+
+1.1.1.3
+log
+@streamlined syntax and structure
+@
+text
+@d35 1
+a35 2
+(module examples/sillywiki
+
+d81 18
+a98 17
+    (let-bindings ((next-page-name "page")
+                   (edit? "edit"))
+                  (get-bindings
+                     (send-html/suspend (make-view-page page-name)))
+      (cond (next-page-name ;; user clicked on a page link?
+             (cond ((exists-page? next-page-name)
+                    (view-page next-page-name))
+                   (else
+                    (let ((new-page-text (read-new-page next-page-name)))
+                      (cond (new-page-text
+                             (store-page next-page-name new-page-text)
+                             (view-page next-page-name))
+                            (else
+                             (view-page page-name)))))))
+            (edit? ;; user wants to edit this page?
+             (edit-page! page-name)
+             (view-page page-name))
+d160 8
+a167 18
+    (let-bindings ((save? "save")
+                   (page-text "page-text"))
+                  (get-bindings
+                   (send-html/suspend
+                    (make-edit-page page-name "")))
+      (if save?
+          page-text
+          #f)))
+
+
+  (define (edit-page! page-name)
+    (let-bindings ((save? "save")
+                   (page-text "page-text"))
+                  (get-bindings
+                   (send-html/suspend
+                    (make-edit-page page-name (fetch-page-text page-name))))
+      (when save?
+        (store-page page-name page-text))))
+@
+
+
+1.1.1.4
+log
+@added comments
+@
+text
+@a30 7
+;;; This is a very simplistic wiki to show the use some of the most interesting
+;;; features of the siscweb framework, such as "let-bindings" and "url-bindings"
+;;; Truly a wiki is not the best application to write in continuation-based style,
+;;; yet it can be done for no additional complexity cost.
+;;; In the end the only drawback is that every hyperlink is opaque rather than
+;;; in the form "wiki?page=PageName"; while in a wiki it hampers bookmarking,
+;;; in a web application it is an extra layer of security.
+@
+
+
+1.1.1.5
+log
+@implemented a page listing all pages; minor improvements
+@
+text
+@d63 1
+a63 1
+                 '(("MainPage" . "Would you rather I say HelloWorld or SalveMundo?")
+a80 3
+  ;; returns a list of all page names
+  (define (get-all-page-names)
+    (hashtable/keys pages))
+a108 13
+  ;; displays all pages
+  (define (view-page-list)
+    (send-html/suspend
+     (lambda (k-url)
+       `(html
+         (head (title "All Pages"))
+         (body
+          (h2 "All Pages")
+          (ul
+           ,@@(map (lambda (page-name)
+                    `(li (url-dispatch ,(lambda (req) (view-page page-name))) ,page-name))
+                  (get-all-page-names))))))))
+
+d118 3
+a120 4
+           (p ,(htmlize page-text))
+           (p (url-bindings ((edit ,page-name)) "Edit"))
+           (p (url-dispatch ,(lambda (req) (view-page-list)) "View All Pages"))
+           (p (p (a (@@ (href "/siscweb-examples/")) "^ Home"))))))))
+d195 1
+a195 1
+               (textarea (@@ (name "page-text") (rows 15) (cols 65))
+a196 1
+               (br)
+d202 1
+a202 1
+    (view-page "MainPage"))
+@
+
+
+1.1.1.6
+log
+@minor comment change
+@
+text
+@d149 1
+a149 2
+  ;; to bindings links; this is a bit messy and needs to be modularized.
+  ;; also it could be made to use util/regexp
+@
+
+

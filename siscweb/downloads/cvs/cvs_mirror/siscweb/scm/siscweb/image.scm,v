@@ -1,0 +1,878 @@
+head	1.3;
+access;
+symbols
+	rel-0-6-dev:1.3.0.10
+	rel-0-5-fix:1.3.0.8
+	rel-0-5:1.3
+	rel-0-5-dev-safe-frames:1.3.0.6
+	Root_rel-0-5-dev-safe-frames:1.3
+	rel-0-4-fix-0:1.3
+	rel-0-5-dev:1.3.0.4
+	rel-0-4-fix:1.3.0.2
+	rel-0-3-fix-3:1.2.2.1
+	rel-0-3-fix-2:1.2
+	rel-0-4-dev-sisc-1-11:1.2
+	rel-0-3-fix-1:1.2
+	rel-0-4-dev:1.2.0.4
+	rel-0-3-fix:1.2.0.2
+	rel-0-3:1.2
+	rel-0-3-dev-1:1.1.2.1
+	rel-0-3-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2006.09.03.01.42.22;	author acolomba;	state Exp;
+branches
+	1.3.8.1
+	1.3.10.1;
+next	1.2;
+
+1.2
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.06.24.01.01.24;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.06.24.01.01.24;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2006.04.15.15.55.23;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2006.04.09.18.14.48;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2006.04.10.23.05.08;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2006.04.15.00.28.36;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2006.08.11.03.34.32;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.8.1
+date	2007.09.17.00.00.54;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.10.1
+date	2007.11.24.01.19.19;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@merged from rel-0-4-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+
+(require-library 'siscweb/contcentric)
+(require-library 'siscweb/response)
+
+
+(module siscweb/image
+  (send-image/back send-image/finish
+   send-image-file/back send-image-file/finish
+   read-image write-image
+   read-image-from-file write-image-to-file)
+
+  (import s2j)
+  (import binary-io)
+  (import java-io)
+  (import file-manipulation)
+
+  (import srfi-16)
+
+  (import siscweb/contcentric)
+  (import siscweb/response)
+
+
+  (define-java-classes
+    (<misc-util> |siscweb.util.MiscUtil|))
+
+  (define-generic-java-methods
+    (jread-image |readImage|)
+    (jwrite-image |writeImage|))
+
+
+  (define send-image/back
+    (case-lambda
+      ((fmt image)
+       (send-image/back '() fmt image))
+      ((header-alst fmt image)
+       (send/back
+        (lambda ()
+          (send-image header-alst fmt image))))))
+
+  (define send-image/finish
+    (case-lambda
+      ((fmt image)
+       (send-image/finish '() fmt image))
+      ((header-alst fmt image)
+       (send/finish
+        (lambda ()
+          (send-image header-alst fmt image))))))
+
+
+  (define send-image-file/back
+    (case-lambda
+      ((fmt url)
+       (send-image-file/back '() fmt url))
+      ((header-alst fmt url)
+       (send/back
+        (lambda ()
+          (send-image-file header-alst fmt url))))))
+
+  (define (send-image-file/finish fmt url)
+    (case-lambda
+      ((fmt url)
+       (send-image-file/finish '() fmt url))
+      ((header-alst fmt url)
+       (send/finish
+        (lambda ()
+          (send-image-file header-alst fmt url))))))
+
+
+  (define (send-image header-alst fmt image)
+    (when (not (assoc "Content-Type" header-alst))
+      (response/set-content-type! (make-mime-type fmt)))
+    (response/add-headers! header-alst)
+    (write-image fmt image (response/open-binary-output-port)))
+
+
+  (define (send-image-file header-alst fmt url)
+    (when (not (assoc "Content-Type" header-alst))
+      (response/set-content-type! (make-mime-type fmt)))
+    (when (not (assoc "Content-Length" header-alst))
+      (response/set-content-length! (file-length url)))
+    (call-with-binary-input-file
+     url
+     (lambda (in-port)
+       (copy-binary in-port (response/open-binary-output-port) (response/get-buffer-size)))))
+
+
+  (define write-image
+    (case-lambda
+      ((fmt image)
+       (write-image fmt image (current-output-port)))
+      ((fmt image out-port)
+       (jwrite-image (java-null <misc-util>)
+                     (->jstring fmt)
+                     image
+                     (->joutput-stream out-port)))))
+
+  (define read-image
+    (case-lambda
+      ((fmt)
+       (read-image fmt (current-input-port)))
+      ((fmt in-port)
+       (jread-image (java-null <misc-util>)
+                    (->jstring fmt)
+                    (->jinput-stream in-port)))))
+
+  (define (read-image-from-file fmt url)
+    (call-with-binary-input-file
+     url
+     (lambda (in-port)
+       (read-image fmt in-port))))
+
+  (define (write-image-to-file fmt image url)
+    (call-with-binary-output-file
+     url
+     (lambda (out-port)
+       (write-image fmt image out-port)))
+    (void))
+
+
+  (define (make-mime-type fmt)
+    (format "image/~a" fmt))
+
+  (define (copy-binary in out bufsize)
+    (define (C buf)
+      (define (CB)
+        (let ((cnt (read-block buf 0 bufsize in)))
+          (when (not (eof-object? cnt))
+            (write-block buf 0 cnt out)
+            (CB))))
+      (CB))
+    (C (make-buffer bufsize)))
+
+  )
+@
+
+
+1.3.10.1
+log
+@merged from rel-0-5-fix
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2007
+d91 1
+a91 1
+  (define send-image-file/finish
+@
+
+
+1.3.8.1
+log
+@fixed typo in send-image/finish
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2007
+d91 1
+a91 1
+  (define send-image-file/finish
+@
+
+
+1.2
+log
+@merged from rel-0-3-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+d32 3
+a35 1
+(require-library 'util/image)
+d40 3
+a42 1
+   send-image-file/back send-image-file/finish)
+d45 5
+d51 1
+d53 1
+a53 1
+  (import util/image)
+a55 2
+    (<file> |java.io.File|)
+    (<file-input-stream> |java.io.FileInputStream|)
+d59 107
+a165 54
+    copy-stream
+    get-output-stream
+    (jlength |length|)
+    set-content-type
+    set-header)
+
+
+  (define (send-image/back type image)
+    (send/back
+     (lambda (request response)
+       (send-image response type image))))
+
+  (define (send-image/finish type image)
+    (send/finish
+     (lambda (request response)
+       (send-image response type image))))
+
+
+  (define (send-image-file/back type url)
+    (send/back
+     (lambda (request response)
+       (send-image-file response type url))))
+
+  (define (send-image-file/finish type url)
+    (send/finish
+     (lambda (request response)
+       (send-image-file response type url))))
+
+
+  (define (send-image response type image)
+    (set-content-type response
+                      (->jstring (make-mime-type type)))
+    (image/write-to-java-stream
+     'type
+     image
+     (get-output-stream response)))
+
+  (define (send-image-file response type url)
+    (let* ((image-file (java-new <file> (->jstring url)))
+           (image-size (->number (jlength image-file))))
+      (set-content-type response (->jstring (make-mime-type type)))
+      (set-header response
+                  (->jstring "Content-Length")
+                  (->jstring (number->string image-size)))
+      (copy-stream
+       (java-null <misc-util>)
+       (java-new <file-input-stream> image-file)
+       (get-output-stream response))))
+
+  (define (make-mime-type type)
+    (string-append
+     "image/"
+     (symbol->string type)))
+  )@
+
+
+1.2.2.1
+log
+@merged from rel-0-4-dev
+@
+text
+@a31 3
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+
+(require-library 'siscweb/contcentric)
+d33 1
+a33 1
+(require-library 'util/s2j-io)
+d38 1
+a38 3
+   send-image-file/back send-image-file/finish
+   read-image write-image
+   read-image-from-file write-image-to-file)
+a40 4
+  (import binary-io)
+  (import file-manipulation)
+
+  (import srfi-16)
+a41 1
+  (import siscweb/contcentric)
+d43 1
+a43 2
+  (import util/s2j-io)
+
+d46 2
+d51 54
+a104 107
+    (jread-image |readImage|)
+    (jwrite-image |writeImage|))
+
+
+  (define send-image/back
+    (case-lambda
+      ((fmt image)
+       (send-image/back '() fmt image))
+      ((header-alst fmt image)
+       (send/back
+        (lambda ()
+          (send-image header-alst fmt image))))))
+
+  (define send-image/finish
+    (case-lambda
+      ((fmt image)
+       (send-image/finish '() fmt image))
+      ((header-alst fmt image)
+       (send/finish
+        (lambda ()
+          (send-image header-alst fmt image))))))
+
+
+  (define send-image-file/back
+    (case-lambda
+      ((fmt url)
+       (send-image-file/back '() fmt url))
+      ((header-alst fmt url)
+       (send/back
+        (lambda ()
+          (send-image-file header-alst fmt url))))))
+
+  (define (send-image-file/finish fmt url)
+    (case-lambda
+      ((fmt url)
+       (send-image-file/finish '() fmt url))
+      ((header-alst fmt url)
+       (send/finish
+        (lambda ()
+          (send-image-file header-alst fmt url))))))
+
+
+  (define (send-image header-alst fmt image)
+    (when (not (assoc "Content-Type" header-alst))
+      (response/set-content-type! (make-mime-type fmt)))
+    (response/add-headers! header-alst)
+    (write-image fmt image (response/open-binary-output-port)))
+
+
+  (define (send-image-file header-alst fmt url)
+    (when (not (assoc "Content-Type" header-alst))
+      (response/set-content-type! (make-mime-type fmt)))
+    (when (not (assoc "Content-Length" header-alst))
+      (response/set-content-length! (file-length url)))
+    (call-with-binary-input-file
+     url
+     (lambda (in-port)
+       (copy-binary in-port (response/open-binary-output-port) (response/get-buffer-size)))))
+
+
+  (define write-image
+    (case-lambda
+      ((fmt image)
+       (write-image fmt image (current-output-port)))
+      ((fmt image out-port)
+       (jwrite-image (java-null <misc-util>)
+                     (->jstring fmt)
+                     image
+                     (->joutput-stream out-port)))))
+
+  (define read-image
+    (case-lambda
+      ((fmt)
+       (read-image fmt (current-input-port)))
+      ((fmt in-port)
+       (jread-image (java-null <misc-util>)
+                    (->jstring fmt)
+                    (->jinput-stream in-port)))))
+
+  (define (read-image-from-file fmt url)
+    (call-with-binary-input-file
+     url
+     (lambda (in-port)
+       (read-image fmt in-port))))
+
+  (define (write-image-to-file fmt image url)
+    (call-with-binary-output-file
+     url
+     (lambda (out-port)
+       (write-image fmt image out-port)))
+    (void))
+
+
+  (define (make-mime-type fmt)
+    (format "image/~a" fmt))
+
+  (define (copy-binary in out bufsize)
+    (define (C buf)
+      (define (CB)
+        (let ((cnt (read-block buf 0 bufsize in)))
+          (when (not (eof-object? cnt))
+            (write-block buf 0 cnt out)
+            (CB))))
+      (CB))
+    (C (make-buffer bufsize)))
+
+  )
+@
+
+
+1.2.4.1
+log
+@moved i/o code from util/image module; reworked to use s2j-io (java-io)
+@
+text
+@a31 2
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+
+d33 1
+a33 1
+(require-library 'util/s2j-io)
+d38 1
+a38 2
+   send-image-file/back send-image-file/finish
+   image/read image/write)
+a40 4
+  (import buffers)
+  (import file-manipulation)
+
+  (import srfi-16)
+d43 1
+a43 2
+  (import util/s2j-io)
+
+d46 2
+d51 5
+a55 2
+    (jread-image |readImage|)
+    (jwrite-image |writeImage|))
+d58 1
+a58 1
+  (define (send-image/back fmt image)
+d60 2
+a61 2
+     (lambda ()
+       (send-image fmt image))))
+d63 1
+a63 1
+  (define (send-image/finish fmt image)
+d65 2
+a66 2
+     (lambda ()
+       (send-image fmt image))))
+d69 1
+a69 1
+  (define (send-image-file/back fmt url)
+d71 2
+a72 2
+     (lambda ()
+       (send-image-file fmt url))))
+d74 1
+a74 1
+  (define (send-image-file/finish fmt url)
+d76 2
+a77 3
+     (lambda ()
+       (send-image-file fmt url))))
+
+a78 46
+  (define (send-image fmt image)
+    (response/set-content-type! (make-mime-type fmt))
+    (image/write fmt image (response/open-binary-output-port)))
+
+
+  (define (send-image-file fmt url)
+    (response/set-content-type! (make-mime-type fmt))
+    (response/set-content-length! (file-length url))
+    (call-with-binary-input-file
+     url
+     (lambda (in-port)
+       (copy-binary in-port (response/open-binary-output-port)))))
+
+
+  (define image/write
+    (case-lambda
+      ((fmt image)
+       (image/write fmt image (current-output-port)))
+      ((fmt image out-port)
+       (jwrite-image (java-null <misc-util>)
+                     (->jstring fmt)
+                     image
+                     (->joutput-stream out-port)))))
+
+  (define image/read
+    (case-lambda
+      ((fmt)
+       (image/read fmt (current-input-port)))
+      ((fmt in-port)
+       (jread-image (java-null <misc-util>)
+                    (->jstring fmt)
+                    (->jinput-stream in-port)))))
+
+  (define (make-mime-type fmt)
+    (format "image/~a" fmt))
+
+  (define (copy-binary in out)
+    (define (C buf)
+      (define (CB)
+        (let ((cnt (read-block buf 0 8192 in)))
+          (when (not (eof-object? cnt))
+            (write-block buf 0 cnt out)
+            (CB))))
+      (CB))
+    (let ((buf (make-buffer 8192)))
+      (C buf)))
+d80 25
+a104 1
+  )
+@
+
+
+1.2.4.2
+log
+@send-image-file/* now use the same buffer size as the response
+@
+text
+@d94 1
+a94 1
+       (copy-binary in-port (response/open-binary-output-port) (response/get-buffer-size)))))
+d119 1
+a119 1
+  (define (copy-binary in out bufsize)
+d122 1
+a122 1
+        (let ((cnt (read-block buf 0 bufsize in)))
+d127 2
+a128 1
+    (C (make-buffer bufsize)))
+@
+
+
+1.2.4.3
+log
+@renamed image/[read|write] -> [read|write]-image; added
+read-image-from-file, write-image-to-file; send-image[-file]/* now
+accept a header alist; now correctly import siscweb/contcentric;
+@
+text
+@a33 1
+(require-library 'siscweb/contcentric)
+d41 1
+a41 2
+   read-image write-image
+   read-image-from-file write-image-to-file)
+d44 1
+a44 1
+  (import binary-io)
+a48 1
+  (import siscweb/contcentric)
+d61 20
+a80 8
+  (define send-image/back
+    (case-lambda
+      ((fmt image)
+       (send-image/back '() fmt image))
+      ((header-alst fmt image)
+       (send/back
+        (lambda ()
+          (send-image header-alst fmt image))))))
+a81 8
+  (define send-image/finish
+    (case-lambda
+      ((fmt image)
+       (send-image/finish '() fmt image))
+      ((header-alst fmt image)
+       (send/finish
+        (lambda ()
+          (send-image header-alst fmt image))))))
+d83 3
+a86 8
+  (define send-image-file/back
+    (case-lambda
+      ((fmt url)
+       (send-image-file/back '() fmt url))
+      ((header-alst fmt url)
+       (send/back
+        (lambda ()
+          (send-image-file header-alst fmt url))))))
+d88 3
+a90 22
+  (define (send-image-file/finish fmt url)
+    (case-lambda
+      ((fmt url)
+       (send-image-file/finish '() fmt url))
+      ((header-alst fmt url)
+       (send/finish
+        (lambda ()
+          (send-image-file header-alst fmt url))))))
+
+
+  (define (send-image header-alst fmt image)
+    (when (not (assoc "Content-Type" header-alst))
+      (response/set-content-type! (make-mime-type fmt)))
+    (response/add-headers! header-alst)
+    (write-image fmt image (response/open-binary-output-port)))
+
+
+  (define (send-image-file header-alst fmt url)
+    (when (not (assoc "Content-Type" header-alst))
+      (response/set-content-type! (make-mime-type fmt)))
+    (when (not (assoc "Content-Length" header-alst))
+      (response/set-content-length! (file-length url)))
+d97 1
+a97 1
+  (define write-image
+d100 1
+a100 1
+       (write-image fmt image (current-output-port)))
+d107 1
+a107 1
+  (define read-image
+d110 1
+a110 1
+       (read-image fmt (current-input-port)))
+a115 14
+  (define (read-image-from-file fmt url)
+    (call-with-binary-input-file
+     url
+     (lambda (in-port)
+       (read-image fmt in-port))))
+
+  (define (write-image-to-file fmt image url)
+    (call-with-binary-output-file
+     url
+     (lambda (out-port)
+       (write-image fmt image out-port)))
+    (void))
+
+
+@
+
+
+1.2.4.4
+log
+@switched from using util/s2j-io to using SISC's java-io library (same code really)
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+d36 1
+a46 1
+  (import java-io)
+d53 1
+@
+
+
+1.1
+log
+@file image.scm was initially added on branch rel-0-3-dev.
+@
+text
+@d1 104
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 104
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'siscweb/response)
+(require-library 'util/image)
+
+
+(module siscweb/image
+  (send-image/back send-image/finish
+   send-image-file/back send-image-file/finish)
+
+  (import s2j)
+
+  (import siscweb/response)
+  (import util/image)
+
+  (define-java-classes
+    (<file> |java.io.File|)
+    (<file-input-stream> |java.io.FileInputStream|)
+    (<misc-util> |siscweb.util.MiscUtil|))
+
+  (define-generic-java-methods
+    copy-stream
+    get-output-stream
+    (jlength |length|)
+    set-content-type
+    set-header)
+
+
+  (define (send-image/back type image)
+    (send/back
+     (lambda (request response)
+       (send-image response type image))))
+
+  (define (send-image/finish type image)
+    (send/finish
+     (lambda (request response)
+       (send-image response type image))))
+
+
+  (define (send-image-file/back type url)
+    (send/back
+     (lambda (request response)
+       (send-image-file response type url))))
+
+  (define (send-image-file/finish type url)
+    (send/finish
+     (lambda (request response)
+       (send-image-file response type url))))
+
+
+  (define (send-image response type image)
+    (set-content-type response
+                      (->jstring (make-mime-type type)))
+    (image/write-to-java-stream
+     'type
+     image
+     (get-output-stream response)))
+
+  (define (send-image-file response type url)
+    (let* ((image-file (java-new <file> (->jstring url)))
+           (image-size (->number (jlength image-file))))
+      (set-content-type response (->jstring (make-mime-type type)))
+      (set-header response
+                  (->jstring "Content-Length")
+                  (->jstring (number->string image-size)))
+      (copy-stream
+       (java-null <misc-util>)
+       (java-new <file-input-stream> image-file)
+       (get-output-stream response))))
+
+  (define (make-mime-type type)
+    (string-append
+     "image/"
+     (symbol->string type)))
+  )@
+

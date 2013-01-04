@@ -1,0 +1,1449 @@
+head	1.6;
+access;
+symbols
+	rel-0-6-dev:1.6.0.4
+	rel-0-5-fix:1.6.0.2
+	rel-0-5:1.6
+	rel-0-5-dev-safe-frames:1.5.0.6
+	Root_rel-0-5-dev-safe-frames:1.5
+	rel-0-4-fix-0:1.5
+	rel-0-5-dev:1.5.0.4
+	rel-0-4-fix:1.5.0.2
+	rel-0-3-fix-3:1.4.2.2
+	rel-0-3-fix-2:1.4.2.1
+	rel-0-4-dev-sisc-1-11:1.4.4.2
+	rel-0-3-fix-1:1.4
+	rel-0-4-dev:1.4.0.4
+	rel-0-3-fix:1.4.0.2
+	rel-0-3:1.4
+	rel-0-3-dev-1:1.3.2.2
+	rel-0-2-fix-2:1.3.4.2
+	rel-0-2-fix-1:1.3.4.1
+	rel-0-2-fix:1.3.0.4
+	rel-0-3-dev:1.3.0.2
+	rel-0-2:1.3
+	rel-0-1-fix-1:1.2
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	start:1.1.1.1
+	rel-0-1-dev:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2007.04.12.03.51.15;	author acolomba;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2006.09.03.01.42.24;	author acolomba;	state Exp;
+branches
+	1.5.4.1;
+next	1.4;
+
+1.4
+date	2005.11.25.20.43.32;	author acolomba;	state Exp;
+branches
+	1.4.2.1
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2005.06.19.04.53.02;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.52;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches;
+next	1.1.1.2;
+
+1.1.1.2
+date	2005.03.06.18.49.29;	author acolomba;	state Exp;
+branches;
+next	1.1.1.3;
+
+1.1.1.3
+date	2005.03.06.23.00.29;	author acolomba;	state Exp;
+branches;
+next	1.1.1.4;
+
+1.1.1.4
+date	2005.03.13.06.16.28;	author acolomba;	state Exp;
+branches;
+next	1.1.1.5;
+
+1.1.1.5
+date	2005.03.31.03.23.37;	author acolomba;	state Exp;
+branches;
+next	1.1.1.6;
+
+1.1.1.6
+date	2005.04.02.01.36.46;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2005.04.15.23.21.22;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.04.17.23.31.45;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.05.22.20.17.24;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2005.06.18.16.39.38;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2005.07.10.03.00.26;	author acolomba;	state Exp;
+branches;
+next	1.3.2.2;
+
+1.3.2.2
+date	2005.07.23.19.46.17;	author acolomba;	state Exp;
+branches;
+next	1.3.2.3;
+
+1.3.2.3
+date	2005.11.15.07.32.29;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2005.07.10.20.04.00;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2;
+
+1.3.4.2
+date	2005.07.31.20.04.04;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.2.1
+date	2006.02.25.17.12.07;	author acolomba;	state Exp;
+branches;
+next	1.4.2.2;
+
+1.4.2.2
+date	2006.04.15.15.55.28;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2005.12.06.01.26.50;	author acolomba;	state Exp;
+branches;
+next	1.4.4.2;
+
+1.4.4.2
+date	2006.02.11.20.24.50;	author acolomba;	state Exp;
+branches;
+next	1.4.4.3;
+
+1.4.4.3
+date	2006.08.18.03.02.27;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.5.4.1
+date	2007.04.02.01.44.20;	author acolomba;	state Exp;
+branches;
+next	1.5.4.2;
+
+1.5.4.2
+date	2007.04.05.02.53.09;	author acolomba;	state Exp;
+branches;
+next	1.5.4.3;
+
+1.5.4.3
+date	2007.04.11.03.55.56;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@merged from rel-0-5-dev
+@
+text
+@<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+  <title>SISCweb Examples</title>
+  <link rel="stylesheet" href="css/default.css" type="text/css" />
+</head>
+
+<body>
+  <h2>SISCweb Examples</h2>
+
+  <p>
+    The examples in this page are written using <a
+    href="http://siscweb.sourceforge.net/">SISCweb</a>. Their purpose
+    is to illustrate some features of the framework and of <a
+    href="http://en.wikipedia.org/wiki/Continuations">continuation</a>-based
+    web applications in general.
+  </p>
+
+
+  <h3 id="hello-world">Polyglot Hello World</h3>
+
+  <p>
+    This <q>sisclet</q> is probably the simplest possible example to
+    illustrate some benefits of continuation-based web applications.
+    A for-each loop scans through a list of <q>Hello, world!</q>
+    messages in different languages, and sends one message at a time
+    to the browser. When the user chooses the <q>Next language</q>
+    link, the next message is displayed.
+  </p>
+
+  <p>
+    Note that this example is resilient not only to the back button,
+    but to window cloning as well. In fact you can go through the
+    messages in parallel across windows in the same session, because
+    the individual conversational state of each window is maintained.
+  </p>
+
+  <p>
+    <a href="sisclets/hello/">run</a>
+    or
+    <a href="scm/examples/hello-world.scm">view source</a>.
+  </p>
+
+
+  <h3 id="three-counters">State with Counters</h3>
+
+  <p>
+    SISCweb provides several mechanisms to control state in the presence
+    of backtracking or cloning. These four examples each use a different
+    mechanism to illustrate the differences. Try each of them and play with
+    the back button or cloning the window.
+  </p>
+
+  <p>
+    <ul>
+      <li>
+        Counter using state-passing-style:
+        <a href="sisclets/counter-sps">run</a>
+        or
+        <a href="scm/examples/counter-sps.scm">view source</a>
+      </li>
+
+      <li>
+        Counter using Web Cells:
+        <a href="sisclets/counter-webcells">run</a>
+        or
+        <a href="scm/examples/counter-webcells.scm">view source</a>
+      </li>
+
+      <li>
+        Counter using SRFI-39 Parameters:
+        <a href="sisclets/counter-parameter">run</a>
+        or
+        <a href="scm/examples/counter-parameter.scm">view source</a>
+      </li>
+
+      <li>
+        Counter using the Session object:
+        <a href="sisclets/counter-session">run</a>
+        or
+        <a href="scm/examples/counter-session.scm">view source</a>
+      </li>
+    </ul>
+  </p>
+
+  <p>
+    Another way to understand the differences is to use AJAX. In the
+    following example two AJAX counters increment <em>the same</em>
+    variable.
+  </p>
+
+  <p>
+    Note how Web Cells maintain the two counters separate (and how
+    links are generated with plain <code>forward/store!</code>), and
+    how SRFI-39 share the same value (and links are generated via
+    <code>forward/dynenv/store!</code>). The state-passing-style and
+    Session examples are not given because the former would not have a
+    variable to share, and the latter would trivially update the very
+    same Session attribute.
+  </p>
+
+  <p>
+    These examples also demonstrate the use of continuations in AJAX
+    applications.
+  </p>
+
+  <p>
+    <ul>
+      <li>
+        AJAX Counter using Web Cells:
+        <a href="sisclets/counter-ajax-webcells">run</a>
+        <a href="scm/examples/counter-ajax-webcells.scm">view source</a>
+      </li>
+
+      <li>
+        AJAX Counter using SRFI-39 Parameters:
+        <a href="sisclets/counter-ajax-parameter">run</a>
+        <a href="scm/examples/counter-ajax-parameter.scm">view source</a>
+      </li>
+    </ul>
+  </p>
+
+
+  <h3 id="shopping">Shopping Cart</h3>
+
+  <p>
+    This extremely basic shopping cart program is meant to provide a
+    very simple, yet realistic example of a typical internet
+    application.  The source code is neatly organized in model cart,
+    view, controller, with this division achieved through conceptual
+    modularization rather than file or language barriers.
+  </p>
+
+
+  <p>
+    <a href="sisclets/shopping/">run</a>
+    or
+    <a href="scm/examples/shopping.scm">view source</a>.
+  </p>
+
+
+  <h3 id="tic-tac-toe">Tic-Tac-Toe</h3>
+
+  <p>
+    SISCweb gets out of the way when you need it to. This tic-tac-toe
+    plays against you, and is almost entirely written in <a
+    href="http://www.ccs.neu.edu/home/dorai/schelog/schelog.html">Schelog</a>,
+    a Prolog-like language embedded in Scheme. You are prompted for
+    your move from within Schelog's rule engine, which is
+    transparently interrupted and resumed by SISCweb.
+  </p>
+
+  <p>
+    <a href="sisclets/tic-tac-toe/">run</a>
+    or
+    <a href="scm/examples/tic-tac-toe.scm">view source</a>.
+  </p>
+
+
+  <h3 id="rpn">RPN Calculator</h3>
+
+  <p>
+    This example implements a
+    simple <a
+    href="http://en.wikipedia.org/wiki/Reverse_Polish_notation">RPN</a>
+    calculator. As in the previous example, using the back button or
+    cloning does not disrupt conversational state. You can undo your
+    calculations using the back button, and you can clone the window
+    to the carry on separate calculations in multiple windows.
+  </p>
+
+
+  <p>
+    <a href="sisclets/rpn/">run</a>
+    or
+    <a href="scm/examples/rpn.scm">view source</a>.
+  </p>
+
+
+  <h3 id="sillywiki">Silly Wiki</h3>
+
+  <p>
+    This minimalistic wiki mainly serves to showcase some SISCweb
+    constructs. By their own completely open and almost stateless
+    nature, wikis hardly need any of the features provided by the
+    continuation-based development approach. Yet there is no penalty
+    for writing a fully stateful wiki (save for non-bookmarkable page
+    links), and it provides an example easy to write and to
+    understand.
+  </p>
+
+  <p>
+    <a href="sisclets/sillywiki/">run</a>
+    or
+    <a href="scm/examples/sillywiki.scm">view source</a>.
+  </p>
+
+
+  <h3 id="graphpad">Graphpad</h3>
+
+  <p>
+    This is a simple console to experiment with <a
+    href="http://www.martin-loetzsch.de/DOTML/">DotML</a>. You will
+    need <a href="http://www.graphviz.org/">Graphviz</a> installed on
+    your system.
+  </p>
+
+  <p>
+    <a href="sisclets/graphpad/">run</a>
+    or
+    <a href="scm/examples/graphpad.scm">view source</a>.
+  </p>
+
+
+  <h3 id="webrepl">Web REPL</h3>
+
+  <p>
+    This is a server-side REPL accessible via HTTP. An interesting
+    property of having a REPL connected to a browser is that you can
+    actually invoke send-html/* functions and have their output
+    immediately displayed.  With send-html/suspend and
+    send-html/forward, you can even return to the REPL after
+    interacting with the displayed page, and read the return value.
+  </p>
+
+  <p>
+    <a href="sisclets/webrepl/">run</a>
+    or
+    <a href="scm/examples/webrepl.scm">view source</a>.
+  </p>
+
+
+  <p>
+    <div>
+      <i>(C) 2005-2007 Alessandro Colomba - <a
+      href="mailto:acolomba@@users.sourceforge.net">acolomba@@users.sourceforge.net</a></i>
+    </div>
+    <div><i>Last updated: $Date: 2007/04/11 03:55:56 $</i></div>
+  </p>
+</body>
+@
+
+
+1.5
+log
+@merged from rel-0-4-dev
+@
+text
+@d13 3
+a15 3
+    The examples in this page were written using <a
+    href="http://siscweb.sourceforge.net/">SISCweb</a>. Their
+    purpose is to illustrate some features of the framework and of <a
+d24 6
+a29 6
+    This &quot;sisclet&quot; is probably the simplest possible example
+    to illustrate some benefits of continuation-based web
+    applications.  A for-each loop scans through a list of
+    &quot;Hello, world!&quot; messages in different languages, and
+    sends one message at a time to the browser. When the user chooses
+    the &quot;Next language&quot; link, the next message is displayed.
+d40 3
+a42 2
+    <a href="sisclets/hello/">Run the polyglot hello world</a>
+    or <a href="scm/examples/hello-world.scm">view its source</a>.
+d46 1
+a46 1
+  <h3 id="counter">AJAX Counter</h3>
+d49 4
+a52 2
+    This is very basic example demonstrates both AJAX functionality
+    and a session variable.
+d56 66
+a121 2
+    <a href="sisclets/counter/">Run the AJAX counter</a>
+    or <a href="scm/examples/counter.scm">view its source</a>.
+d131 1
+a131 1
+    view, controller, but this division is achieved through conceptual
+d137 3
+a139 2
+    <a href="sisclets/shopping/">Run the Shopping Cart</a>
+    or <a href="scm/examples/shopping.scm">view its source</a>.
+d155 3
+a157 2
+    <a href="sisclets/tic-tac-toe/">Run the Tic-Tac-Toe game</a>
+    or <a href="scm/examples/tic-tac-toe.scm">view its source</a>.
+d164 7
+a170 6
+    This example implements a simple <a
+    href="http://en.wikipedia.org/wiki/Rpn">RPN</a> calculator. As in
+    the previous example, using the back button or cloning does not
+    disrupt conversational state. You can undo your calculations using
+    the back button, and you can clone the window to the carry on
+    separate calculations in multiple windows.
+d175 3
+a177 2
+    <a href="sisclets/rpn/">Run the RPN calculator</a>
+    or <a href="scm/examples/rpn.scm">view its source</a>.
+d194 3
+a196 2
+    <a href="sisclets/sillywiki/">Run the silly wiki</a>
+    or <a href="scm/examples/sillywiki.scm">view its source</a>.
+d210 3
+a212 2
+    <a href="sisclets/graphpad/">Run the Graphpad</a>
+    or <a href="scm/examples/graphpad.scm">view its source</a>.
+d228 3
+a230 2
+    <a href="sisclets/webrepl/">Run the Web REPL</a>
+    or <a href="scm/examples/webrepl.scm">view its source</a>.
+d236 1
+a236 1
+      <i>(C) 2005,2006 Alessandro Colomba - <a
+d239 1
+a239 1
+    <div><i>Last updated: $Date: 2006/08/18 03:02:27 $</i></div>
+@
+
+
+1.5.4.1
+log
+@added counter examples (no pun intended)
+@
+text
+@a44 37
+  <h3 id="three-counters">A Tale of Four Counters</h3>
+
+  <p>
+    SISCweb provides several mechanisms to control state in the presence
+    of backtracking or cloning. These four examples each use a different
+    mechanism to illustrate the differences. Try each of them and play with
+    the back button or cloning the window.
+
+    <ul>
+      <li>
+        Counter using state-passing-style:
+        <a href="sisclets/counter-sps">run</a>
+        <a href="scm/examples/counter-sps.scm">view code</a>
+      </li>
+
+      <li>
+        Counter using Web Cells:
+        <a href="sisclets/counter-webcells">run</a>
+        <a href="scm/examples/counter-webcells.scm">view code</a>
+      </li>
+
+      <li>
+        Counter using SRFI-39 Parameters:
+        <a href="sisclets/counter-parameter">run</a>
+        <a href="scm/examples/counter-parameter.scm">view code</a>
+      </li>
+
+      <li>
+        Counter using the Session object:
+        <a href="sisclets/counter-session">run</a>
+        <a href="scm/examples/counter-session.scm">view code</a>
+      </li>
+
+    </ul>
+  </p>
+
+
+d165 1
+a165 1
+    <div><i>Last updated: $Date: 2006/09/03 01:42:24 $</i></div>
+@
+
+
+1.5.4.2
+log
+@fixed typos
+@
+text
+@d13 3
+a15 3
+    The examples in this page are written using <a
+    href="http://siscweb.sourceforge.net/">SISCweb</a>. Their purpose
+    is to illustrate some features of the framework and of <a
+d24 6
+a29 6
+    This <q>sisclet</q> is probably the simplest possible example to
+    illustrate some benefits of continuation-based web applications.
+    A for-each loop scans through a list of <q>Hello, world!</q>
+    messages in different languages, and sends one message at a time
+    to the browser. When the user chooses the <q>Next language</q>
+    link, the next message is displayed.
+d40 2
+a41 3
+    <a href="sisclets/hello/">run</a>
+    or
+    <a href="scm/examples/hello-world.scm">view source</a>.
+d45 1
+a45 1
+  <h3 id="three-counters">State with Counters</h3>
+a51 1
+  </p>
+a52 1
+  <p>
+d57 1
+a57 2
+        or
+        <a href="scm/examples/counter-sps.scm">view source</a>
+d63 1
+a63 2
+        or
+        <a href="scm/examples/counter-webcells.scm">view source</a>
+d69 1
+a69 2
+        or
+        <a href="scm/examples/counter-parameter.scm">view source</a>
+d75 1
+a75 2
+        or
+        <a href="scm/examples/counter-session.scm">view source</a>
+d77 1
+a80 5
+  <p>
+    Another way to understand the differences is to use AJAX. In the
+    following example two AJAX counters increment <em>the same</em>
+    variable.
+  </p>
+d82 1
+a82 9
+  <p>
+    Note how Web Cells maintain the two counters separate (and how
+    links are generated with plain <code>forward/store!</code>), and
+    how SRFI-39 share the same value (and links are generated via
+    <code>forward/dynenv/store!</code>). The state-passing-style and
+    Session examples are not given because the former would not have a
+    variable to share, and the latter would trivially update the very
+    same Session attribute.
+  </p>
+d85 2
+a86 2
+    These examples also demonstrate the use of continuations in AJAX
+    applications.
+d90 2
+a91 13
+    <ul>
+      <li>
+        AJAX Counter using Web Cells:
+        <a href="sisclets/counter-ajax-webcells">run</a>
+        <a href="scm/examples/counter-ajax-webcells.scm">view source</a>
+      </li>
+
+      <li>
+        AJAX Counter using SRFI-39 Parameters:
+        <a href="sisclets/counter-ajax-parameter">run</a>
+        <a href="scm/examples/counter-ajax-parameter.scm">view source</a>
+      </li>
+    </ul>
+d101 1
+a101 1
+    view, controller, with this division achieved through conceptual
+d107 2
+a108 3
+    <a href="sisclets/shopping/">run</a>
+    or
+    <a href="scm/examples/shopping.scm">view source</a>.
+d124 2
+a125 3
+    <a href="sisclets/tic-tac-toe/">run</a>
+    or
+    <a href="scm/examples/tic-tac-toe.scm">view source</a>.
+d142 2
+a143 3
+    <a href="sisclets/rpn/">run</a>
+    or
+    <a href="scm/examples/rpn.scm">view source</a>.
+d160 2
+a161 3
+    <a href="sisclets/sillywiki/">run</a>
+    or
+    <a href="scm/examples/sillywiki.scm">view source</a>.
+d175 2
+a176 3
+    <a href="sisclets/graphpad/">run</a>
+    or
+    <a href="scm/examples/graphpad.scm">view source</a>.
+d192 2
+a193 3
+    <a href="sisclets/webrepl/">run</a>
+    or
+    <a href="scm/examples/webrepl.scm">view source</a>.
+d199 1
+a199 1
+      <i>(C) 2005-2007 Alessandro Colomba - <a
+d202 1
+a202 1
+    <div><i>Last updated: $Date: 2007/04/02 01:44:20 $</i></div>
+@
+
+
+1.5.4.3
+log
+@minor fix to RPN link
+@
+text
+@d164 6
+a169 7
+    This example implements a
+    simple <a
+    href="http://en.wikipedia.org/wiki/Reverse_Polish_notation">RPN</a>
+    calculator. As in the previous example, using the back button or
+    cloning does not disrupt conversational state. You can undo your
+    calculations using the back button, and you can clone the window
+    to the carry on separate calculations in multiple windows.
+d238 1
+a238 1
+    <div><i>Last updated: $Date: 2007/04/05 02:53:09 $</i></div>
+@
+
+
+1.4
+log
+@merged from rel-0-3-dev
+@
+text
+@d1 2
+d21 1
+a21 1
+  <h3>Polyglot Hello World</h3>
+d45 14
+a58 1
+  <h3>Shopping Cart</h3>
+d75 1
+a75 1
+  <h3>Tic-Tac-Toe</h3>
+d92 1
+a92 1
+  <h3>RPN Calculator</h3>
+d110 1
+a110 1
+  <h3>Silly Wiki</h3>
+d128 1
+a128 1
+  <h3>Graphpad</h3>
+d143 1
+a143 1
+  <h3>Web REPL</h3>
+d161 5
+a165 4
+    <i>(C) 2005 Alessandro Colomba - <a
+    href="mailto:acolomba@@users.sourceforge.net">acolomba@@users.sourceforge.net</a></i>
+    <br>
+    <i>Last updated: 09 Jul 2005</i>
+@
+
+
+1.4.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@a0 2
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+d19 1
+a19 1
+  <h3 id="hello-world">Polyglot Hello World</h3>
+d43 1
+a43 14
+  <h3 id="counter">AJAX Counter</h3>
+
+  <p>
+    This is very basic example demonstrates both AJAX functionality
+    and a session variable.
+  </p>
+
+  <p>
+    <a href="sisclets/counter/">Run the AJAX counter</a>
+    or <a href="scm/examples/counter.scm">view its source</a>.
+  </p>
+
+
+  <h3 id="shopping">Shopping Cart</h3>
+d60 1
+a60 1
+  <h3 id="tic-tac-toe">Tic-Tac-Toe</h3>
+d77 1
+a77 1
+  <h3 id="rpn">RPN Calculator</h3>
+d95 1
+a95 1
+  <h3 id="sillywiki">Silly Wiki</h3>
+d113 1
+a113 1
+  <h3 id="graphpad">Graphpad</h3>
+d128 1
+a128 1
+  <h3 id="webrepl">Web REPL</h3>
+d146 1
+a146 1
+    <i>(C) 2005,2006 Alessandro Colomba - <a
+d148 2
+a149 2
+    <br> </br>
+    <i>Last updated: $Date: 2006/02/11 20:24:50 $</i>
+@
+
+
+1.4.2.2
+log
+@merged from rel-0-4-dev
+@
+text
+@@
+
+
+1.4.4.1
+log
+@added counter example (no pun)
+@
+text
+@a42 18
+  <h3>AJAX Counter</h3>
+
+  <p>
+    This is another very basic example demonstrating both AJAX
+    functionality and a &quot;session&quot; variable. The former is
+    achieved via the <a
+    href="http://prototype.conio.net/">prototype.js</a> library;
+    the latter is implemented via dynamic scoping with <a
+    href="http://srfi.schemers.org/srfi-39/srfi-39.html">SRFI-39</a>
+    parameters. (NOTE: SISC 1.12 is required for this to work.)
+  </p>
+
+  <p>
+    <a href="sisclets/counter/">Run the AJAX counter</a>
+    or <a href="scm/examples/counter.scm">view its source</a>.
+  </p>
+
+
+@
+
+
+1.4.4.2
+log
+@minor text and structure changes
+@
+text
+@a0 2
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+d19 1
+a19 1
+  <h3 id="hello-world">Polyglot Hello World</h3>
+d43 1
+a43 1
+  <h3 id="counter">AJAX Counter</h3>
+d46 7
+a52 2
+    This is very basic example demonstrates both AJAX functionality
+    and a session variable.
+d61 1
+a61 1
+  <h3 id="shopping">Shopping Cart</h3>
+d78 1
+a78 1
+  <h3 id="tic-tac-toe">Tic-Tac-Toe</h3>
+d95 1
+a95 1
+  <h3 id="rpn">RPN Calculator</h3>
+d113 1
+a113 1
+  <h3 id="sillywiki">Silly Wiki</h3>
+d131 1
+a131 1
+  <h3 id="graphpad">Graphpad</h3>
+d146 1
+a146 1
+  <h3 id="webrepl">Web REPL</h3>
+d164 1
+a164 1
+    <i>(C) 2005,2006 Alessandro Colomba - <a
+d166 2
+a167 2
+    <br> </br>
+    <i>Last updated: $Date: 2005/12/15 05:15:21 $</i>
+@
+
+
+1.4.4.3
+log
+@fixes to footer
+@
+text
+@d161 4
+a164 5
+    <div>
+      <i>(C) 2005,2006 Alessandro Colomba - <a
+      href="mailto:acolomba@@users.sourceforge.net">acolomba@@users.sourceforge.net</a></i>
+    </div>
+    <div><i>Last updated: $Date: 2006/02/11 20:24:50 $</i></div>
+@
+
+
+1.3
+log
+@merged from rel-0-2-dev
+@
+text
+@d38 13
+a50 6
+    To obtain the same result without continuations, a) the loop would
+    have to be implemented manually by keeping a counter, etc., and b)
+    a request parameter would have to be embedded in the &quot;Next
+    language&quot; link. While the former is an annoyance, the latter
+    would become problematic if more than one datum needed to be
+    tracked, as in the next example.
+d53 1
+d55 2
+a56 2
+    <a href="sisclets/hello/">Run the polyglot hello world</a>
+    or <a href="scm/examples/hello-world.scm">view its source</a>.
+d60 1
+a60 1
+  <h3>Tic Tac Toe</h3>
+d63 6
+a68 4
+    Tic Tac Toe is hard. Haven't you have ever wondered what would
+    have happened if only you had crossed that other box? In this
+    example, as in the previous, you can retrace your steps, or even
+    clone the browser window and carry on a parallel game.
+d72 1
+a72 1
+    <a href="sisclets/tic-tac-toe/">Run the Tic Tac Toe game</a>
+a76 1
+
+d113 15
+d131 6
+a136 4
+    This is a server-side REPL accessible via HTTP. An interesting property of having a REPL connected to
+    a browser is that you can actually invoke send-html/* functions and have their output immediately displayed.
+    With send-html/suspend and send-html/forward, you can even return to the REPL after interacting with the
+    displayed page, and read the return value.
+d149 1
+a149 1
+    <i>Last updated: 31 Mar 2005</i>
+@
+
+
+1.3.4.1
+log
+@merged from rel-0-3-dev
+@
+text
+@d38 9
+a103 15
+  <h3>Graphpad</h3>
+
+  <p>
+    This is a simple console to experiment with <a
+    href="http://www.martin-loetzsch.de/DOTML/">DotML</a>. You will
+    need <a href="http://www.graphviz.org/">Graphviz</a> installed on
+    your system.
+  </p>
+
+  <p>
+    <a href="sisclets/graphpad/">Run the Graphpad</a>
+    or <a href="scm/examples/graphpad.scm">view its source</a>.
+  </p>
+
+
+d107 4
+a110 6
+    This is a server-side REPL accessible via HTTP. An interesting
+    property of having a REPL connected to a browser is that you can
+    actually invoke send-html/* functions and have their output
+    immediately displayed.  With send-html/suspend and
+    send-html/forward, you can even return to the REPL after
+    interacting with the displayed page, and read the return value.
+d123 1
+a123 1
+    <i>Last updated: 09 Jul 2005</i>
+@
+
+
+1.3.4.2
+log
+@merged from rel-0-3-dev
+@
+text
+@a42 17
+  <h3>Shopping Cart</h3>
+
+  <p>
+    This extremely basic shopping cart program is meant to provide a
+    very simple, yet realistic example of a typical internet
+    application.  The source code is neatly organized in model cart,
+    view, controller, but this division is achieved through conceptual
+    modularization rather than file or language barriers.
+  </p>
+
+
+  <p>
+    <a href="sisclets/shopping/">Run the Shopping Cart</a>
+    or <a href="scm/examples/shopping.scm">view its source</a>.
+  </p>
+
+
+d58 1
+d131 1
+a131 1
+    <i>Last updated: $Date$</i>
+@
+
+
+1.3.2.1
+log
+@added graphpad example
+@
+text
+@d38 9
+a103 15
+  <h3>Graphpad</h3>
+
+  <p>
+    This is a simple console to experiment with <a
+    href="http://www.martin-loetzsch.de/DOTML/">DotML</a>. You will
+    need <a href="http://www.graphviz.org/">Graphviz</a> installed on
+    your system.
+  </p>
+
+  <p>
+    <a href="sisclets/graphpad/">Run the Graphpad</a>
+    or <a href="scm/examples/graphpad.scm">view its source</a>.
+  </p>
+
+
+d107 4
+a110 6
+    This is a server-side REPL accessible via HTTP. An interesting
+    property of having a REPL connected to a browser is that you can
+    actually invoke send-html/* functions and have their output
+    immediately displayed.  With send-html/suspend and
+    send-html/forward, you can even return to the REPL after
+    interacting with the displayed page, and read the return value.
+d123 1
+a123 1
+    <i>Last updated: 09 Jul 2005</i>
+@
+
+
+1.3.2.2
+log
+@added shopping cart example
+@
+text
+@a42 17
+  <h3>Shopping Cart</h3>
+
+  <p>
+    This extremely basic shopping cart program is meant to provide a
+    very simple, yet realistic example of a typical internet
+    application.  The source code is neatly organized in model cart,
+    view, controller, but this division is achieved through conceptual
+    modularization rather than file or language barriers.
+  </p>
+
+
+  <p>
+    <a href="sisclets/shopping/">Run the Shopping Cart</a>
+    or <a href="scm/examples/shopping.scm">view its source</a>.
+  </p>
+
+
+d58 1
+@
+
+
+1.3.2.3
+log
+@modified description of tic-tac-toe
+@
+text
+@d60 1
+a60 1
+  <h3>Tic-Tac-Toe</h3>
+d63 4
+a66 6
+    SISCweb gets out of the way when you need it to. This tic-tac-toe
+    plays against you, and is almost entirely written in <a
+    href="http://www.ccs.neu.edu/home/dorai/schelog/schelog.html">Schelog</a>,
+    a Prolog-like language embedded in Scheme. You are prompted for
+    your move from within Schelog's rule engine, which is
+    transparently interrupted and resumed by SISCweb.
+d70 1
+a70 1
+    <a href="sisclets/tic-tac-toe/">Run the Tic-Tac-Toe game</a>
+@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@d2 4
+a5 1
+<head><title>SISCweb Examples</title></head>
+d12 1
+a12 1
+    href="http://www.sf.net/projects/siscweb/">SISCweb</a>. Their
+d24 4
+a27 4
+    applications.  A for-each loop scans through a list of "Hello,
+    world!"  messages in different languages, and sends one message at
+    a time to the browser. When the user chooses the "Next language"
+    link, the next message is displayed.
+d40 4
+a43 4
+    a request parameter would have to be embedded in the "Next
+    language" link. While the former is an annoyance, the latter would
+    become problematic if more than one datum needed to be tracked, as
+    in the next example.
+d52 16
+d104 15
+@
+
+
+1.2.4.1
+log
+@merged from rel-0-1-fix and minor changes
+@
+text
+@d21 4
+a24 4
+    applications.  A for-each loop scans through a list of
+    &quot;Hello, world!&quot; messages in different languages, and
+    sends one message at a time to the browser. When the user chooses
+    the &quot;Next language&quot; link, the next message is displayed.
+d37 4
+a40 4
+    a request parameter would have to be embedded in the &quot;Next
+    language&quot; link. While the former is an annoyance, the latter
+    would become problematic if more than one datum needed to be
+    tracked, as in the next example.
+a48 16
+  <h3>Tic Tac Toe</h3>
+
+  <p>
+    Tic Tac Toe is hard. Haven't you have ever wondered what would
+    have happened if only you had crossed that other box? In this
+    example, as in the previous, you can retrace your steps, or even
+    clone the browser window and carry on a parallel game.
+  </p>
+
+  <p>
+    <a href="sisclets/tic-tac-toe/">Run Tic Tac Toe game</a>
+    or <a href="scm/examples/tic-tac-toe.scm">view its source</a>.
+  </p>
+
+
+
+@
+
+
+1.2.4.2
+log
+@now references stylesheet
+@
+text
+@d2 1
+a2 4
+<head>
+  <title>SISCweb Examples</title>
+  <link rel="stylesheet" href="css/default.css" type="text/css" />
+</head>
+@
+
+
+1.2.4.3
+log
+@added webrepl example
+@
+text
+@d12 1
+a12 1
+    href="http://siscweb.sourceforge.net/">SISCweb</a>. Their
+d62 1
+a62 1
+    <a href="sisclets/tic-tac-toe/">Run the Tic Tac Toe game</a>
+a103 15
+  <h3>Web REPL</h3>
+
+  <p>
+    This is a server-side REPL accessible via HTTP. An interesting property of having a REPL connected to
+    a browser is that you can actually invoke send-html/* functions and have their output immediately displayed.
+    With send-html/suspend and send-html/forward, you can even return to the REPL after interacting with the
+    displayed page, and read the return value.
+  </p>
+
+  <p>
+    <a href="sisclets/webrepl/">Run the Web REPL</a>
+    or <a href="scm/examples/webrepl.scm">view its source</a>.
+  </p>
+
+
+@
+
+
+1.2.2.1
+log
+@added tic-tac-toe example
+@
+text
+@a48 16
+  <h3>Tic Tac Toe</h3>
+
+  <p>
+    Tic Tac Toe is hard. Haven't you have ever wondered what would
+    have happened if only you had crossed that other box? In this
+    example, as in the previous, you can retrace your steps, or even
+    clone the browser window and carry on a parallel game.
+  </p>
+
+  <p>
+    <a href="sisclets/tic-tac-toe/">Run Tic Tac Toe game</a>
+    or <a href="scm/examples/tic-tac-toe.scm">view its source</a>.
+  </p>
+
+
+
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d2 1
+a2 1
+<head><title>Contcentric</title></head>
+d5 22
+d28 56
+a83 1
+    Applications here available:
+a84 4
+    <ul>
+      <li><a href="examples/language">language</a></li>
+      <li><a href="examples/rpn">rpn</a></li>
+    </ul>
+d86 5
+@
+
+
+1.1.1.1
+log
+@initial import
+@
+text
+@@
+
+
+1.1.1.2
+log
+@added sillywiki and removed language from
+list of example apps
+@
+text
+@d2 1
+a2 1
+<head><title>SISCweb Home</title></head>
+d6 1
+a6 1
+    Example applications:
+d9 2
+a10 2
+      <li><a href="examples/rpn">RPN Calculator</a></li>
+      <li><a href="examples/sillywiki">A pretty basic wiki</a></li>
+@
+
+
+1.1.1.3
+log
+@added link to hello world sisclet
+@
+text
+@a8 1
+      <li><a href="examples/hello">Simple hello world</a></li>
+@
+
+
+1.1.1.4
+log
+@phrase and path changes
+@
+text
+@d2 1
+a2 1
+<head><title>SISCweb Examples</title></head>
+a4 2
+  <h2>SISCweb Examples</h2>
+
+d6 1
+a6 2
+    This page collects a few simple example &quot;sisclets&quot;
+    along with their source code for illustrative purposes.
+d9 3
+a11 12
+      <li>
+        <a href="sisclets/hello">Simple hello world</a>
+        (<a href="scm/examples/hello-world.scm">source</a>)
+      </li>
+      <li>
+        <a href="sisclets/rpn">RPN Calculator</a>
+        (<a href="scm/examples/rpn.scm">source</a>)
+      </li>
+      <li>
+        <a href="sisclets/sillywiki">A barebones wiki</a>
+        (<a href="scm/examples/sillywiki.scm">source</a>)
+      </li>
+@
+
+
+1.1.1.5
+log
+@added explicatory text
+@
+text
+@d8 2
+a9 70
+    This page collects a few simple sample &quot;sisclets&quot;
+    (SISCweb servlets) along with their source code for illustrative
+    purposes.
+  </p>
+
+
+  <h3>Polyglot Hello World</h3>
+
+  <p>
+    This sisclet is probably the simplest example to illustrate some
+    benefits of continuation-based web applications.  A for-each loop
+    scans through a list of "Hello, world!"  messages in different
+    languages, and sends one message at a time to the browser. When
+    the user chooses the "Next language" link, the next message is
+    displayed.
+  </p>
+
+  <p>
+    Note that this example is resilient not only to the back button,
+    but to window cloning as well. In fact you can go through the
+    languages in parallel across windows in the same session, because
+    the individual conversational state of each window is maintained.
+  </p>
+
+  <p>
+    To obtain the same result without continuations, a) the loop would
+    have to be implemented manually by keeping a counter, etc., and b)
+    a request parameter would have to be embedded in the "Next
+    language" link. While the former is an annoyance, the latter would
+    become problematic if more than one datum needed to be tracked, as
+    in the next example.
+  </p>
+
+  <p>
+    <a href="sisclets/hello/">Run the polyglot hello world</a>
+    or <a href="scm/examples/hello-world.scm">view its source</a>.
+  </p>
+
+
+  <h3>RPN Calculator</h3>
+
+  <p>
+    The code of this example is structured as a simple
+    read-eval-print-loop (REPL). Because stack operations are written
+    in a non-destructive style, using the back button or cloning are
+    again not an issue.
+  </p>
+
+  <p>
+    <a href="sisclets/rpn/">Run the RPN calculator</a>
+    or <a href="scm/examples/rpn.scm">view its source</a>.
+  </p>
+
+
+  <h3>Silly Wiki</h3>
+
+  <p>
+    This minimalistic wiki mainly serves to showcase some SISCweb
+    constructs. By their own completely open and almost stateless
+    nature, wikis hardly need any of the features brought by the
+    continuation-based development approach. Yet there is no penalty
+    for writing a fully stateful wiki (save for non-bookmarkable page
+    links), and a wiki is an example easy to write and understand.
+  </p>
+
+  <p>
+    <a href="sisclets/sillywiki/">Run the silly wiki</a>
+    or <a href="scm/examples/sillywiki.scm">view its source</a>.
+  </p>
+
+d11 14
+a25 5
+    <i>(C) 2005 Alessandro Colomba - <a
+    href="mailto:acolomba@@users.sourceforge.net">acolomba@@users.sourceforge.net</a></i>
+    <br>
+    <i>Last updated: 30 Mar 2005</i>
+  </p>
+@
+
+
+1.1.1.6
+log
+@edited wording, etc.
+@
+text
+@d8 3
+a10 5
+    The examples in this page were written using <a
+    href="http://www.sf.net/projects/siscweb/">SISCweb</a>. Their
+    purpose is to illustrate some features of the framework and of <a
+    href="http://en.wikipedia.org/wiki/Continuations">continuation</a>-based
+    web applications in general.
+d17 6
+a22 6
+    This &quot;sisclet&quot; is probably the simplest possible example
+    to illustrate some benefits of continuation-based web
+    applications.  A for-each loop scans through a list of "Hello,
+    world!"  messages in different languages, and sends one message at
+    a time to the browser. When the user chooses the "Next language"
+    link, the next message is displayed.
+d28 1
+a28 1
+    messages in parallel across windows in the same session, because
+d50 4
+a53 6
+    This example implements a simple <a
+    href="http://en.wikipedia.org/wiki/Rpn">RPN</a> calculator. As in
+    the previous example, using the back button or cloning does not
+    disrupt conversational state. You can undo your calculations using
+    the back button, and you can clone the window to the carry on
+    separate calculations in multiple windows.
+a55 1
+
+d67 1
+a67 1
+    nature, wikis hardly need any of the features provided by the
+d70 1
+a70 2
+    links), and it provides an example easy to write and to
+    understand.
+d83 1
+a83 1
+    <i>Last updated: 31 Mar 2005</i>
+@
+
+

@@ -1,0 +1,269 @@
+head	1.4;
+access;
+symbols
+	rel-0-3-dev-1:1.3
+	rel-0-2-fix-2:1.3
+	rel-0-2-fix-1:1.3
+	rel-0-2-fix:1.3.0.4
+	rel-0-3-dev:1.3.0.2
+	rel-0-2:1.3
+	rel-0-1-fix-1:1.2
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	rel-0-1-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2005.11.25.20.43.31;	author acolomba;	state dead;
+branches;
+next	1.3;
+
+1.3
+date	2005.06.19.04.53.02;	author acolomba;	state Exp;
+branches
+	1.3.2.1;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.52;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.03.20.03.47.06;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.03.20.03.47.06;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.03.27.19.43.06;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2005.04.02.01.35.37;	author acolomba;	state Exp;
+branches;
+next	1.1.2.4;
+
+1.1.2.4
+date	2005.04.02.02.47.28;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5;
+
+1.1.2.5
+date	2005.04.17.21.18.32;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.06.17.02.52.36;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2005.11.25.20.13.29;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@merged from rel-0-3-dev
+@
+text
+@v0.2
+I would like to announce the release of SISCweb v0.2, now available at:
+
+   http://siscweb.sf.net/
+
+<readme here>
+
+
+v0.1
+
+I would like to announce that the first public release of SISCweb is
+available at http://www.sf.net/projects/siscweb/.
+
+In addition to the source code, a small collection of simple examples
+using SISCweb is provided in an immediately deployable war file
+"siscweb-examples.war"
+
+<readme here>
+@
+
+
+1.3
+log
+@merged from rel-0-2-dev
+@
+text
+@@
+
+
+1.3.2.1
+log
+@not needed anymore
+@
+text
+@@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@d1 8
+@
+
+
+1.2.4.1
+log
+@not needed anymore
+@
+text
+@a0 8
+v0.2
+I would like to announce the release of SISCweb v0.2, now available at:
+
+   http://siscweb.sf.net/
+
+<readme here>
+
+
+@
+
+
+1.1
+log
+@file RELEASE was initially added on branch rel-0-1-dev.
+@
+text
+@d1 10
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 55
+v0.1
+
+I would like to announce the first public release of SISCweb available
+from http://www.sf.net/projects/siscweb/.
+
+SISCweb is a framework implemented in SISC and Java to allow writing
+Scheme web applications in a J2EE environment. Through the use of
+first-class continuations, sxml and a server-side REPL, SISCweb aims
+to make web development fun again.
+
+SISCweb is based on SISC (sisc.sf.net), a Scheme interpreter for the
+JVM, and is heavily influenced by other Lisp web frameworks:
+
+  - the PLT web server collection
+    (http://download.plt-scheme.org/scheme/docs/html/web-server/)
+  - SUnet (http://www.scsh.net/resources/sunet.html)
+  - AllegroServe (http://allegroserve.sourceforge.net/)
+
+A couple of design decisions were also lifted from Matthias
+Radestock's servlet code in the contrib section of the SISC CVS tree.
+
+
+OBJECTIVES
+
+SISCweb aims to provide:
+
+  - An interactive, REPL-based web application development style:
+    developers should be able to write applications interactively,
+    without ever bouncing the server and (insofar as it is desirable)
+    ever losing application state. [*]
+  - Continuation-based execution control flow: developers should not
+    need to shuffle state back and forth the request/session objects
+    and language-level variables.
+  - A concise set of functions to build content (HTML, FO, images...):
+    developers should be able to describe the presentation in a language
+    appropriate to the application, and have transformation operators
+    generate the content.
+  - A robust continuation management engine: by v1.0 an application
+    written in SISCweb should be as resilient to load as a traditional
+    Java web application.
+  - The inherent abstraction power of Scheme and the industry support
+    of Java.
+
+[*] Save for the Java portion and the "bootstrap" Scheme code, SISCweb
+    itself has been written in a REPL running in the web server, with
+    hardly any server bounces.
+
+
+STATUS
+
+While about as featureful as PLT's web-server collection, this release
+is strictly oriented to the code-divers. Documentation is basically
+inexistent, but a few illustrative examples are included to showcase
+the main features.
+
+@
+
+
+1.1.2.2
+log
+@updated
+@
+text
+@d3 52
+a54 2
+I would like to announce that the first public release of SISCweb is
+available at http://www.sf.net/projects/siscweb/.
+@
+
+
+1.1.2.3
+log
+@edited wording, etc.
+@
+text
+@a5 1
+<readme here>
+@
+
+
+1.1.2.4
+log
+@minor edits
+@
+text
+@a5 4
+In addition to the source code, a small collection of simple examples
+using SISCweb is provided in an immediately deployable war file
+"siscweb-examples.war"
+
+@
+
+
+1.1.2.5
+log
+@minor changes to mechanics
+@
+text
+@d7 2
+a8 2
+is provided as a war file "siscweb-examples.war" which can be deployed
+in any recent J2EE server (e.g. tomcat 5.x) running under Java 1.4.
+@
+
+

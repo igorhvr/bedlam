@@ -1,0 +1,253 @@
+head	1.5;
+access;
+symbols
+	rel-0-6-dev:1.5.0.4
+	rel-0-5-fix:1.5.0.2
+	rel-0-5:1.5
+	rel-0-5-dev-safe-frames:1.4.0.10
+	Root_rel-0-5-dev-safe-frames:1.4
+	rel-0-4-fix-0:1.4
+	rel-0-5-dev:1.4.0.8
+	rel-0-4-fix:1.4.0.6
+	rel-0-3-fix-3:1.4
+	rel-0-3-fix-2:1.4
+	rel-0-4-dev-sisc-1-11:1.4
+	rel-0-3-fix-1:1.4
+	rel-0-4-dev:1.4.0.4
+	rel-0-3-fix:1.4.0.2
+	rel-0-3:1.4
+	rel-0-3-dev-1:1.3
+	rel-0-2-fix-2:1.3
+	rel-0-2-fix-1:1.3
+	rel-0-2-fix:1.3.0.4
+	rel-0-3-dev:1.3.0.2
+	rel-0-2:1.3
+	rel-0-1-fix-1:1.2
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	rel-0-1-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.5
+date	2007.04.12.03.51.15;	author acolomba;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2005.11.25.20.43.31;	author acolomba;	state Exp;
+branches
+	1.4.8.1;
+next	1.3;
+
+1.3
+date	2005.06.19.04.53.02;	author acolomba;	state Exp;
+branches
+	1.3.2.1;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.52;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.03.27.19.44.43;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.03.27.19.44.43;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.05.15.16.17.18;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.06.04.04.38.54;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2005.06.18.02.19.21;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2005.10.24.03.18.28;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.8.1
+date	2007.04.11.03.15.40;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.5
+log
+@merged from rel-0-5-dev
+@
+text
+@# *** COMPILE ***
+
+# ** FLAGS **
+compile.compiler = modern
+compile.debug = true
+compile.deprecation = true
+compile.source = 1.4
+compile.target = 1.4
+compile.optimize = true
+
+# ** PATHS **
+
+# path to servlet-api jar
+#compile.path.servlets = /opt/tomcat5/common/lib/servlet-api.jar
+
+# path to SISC home; it should also contain sisc-heap.jar
+#sisc.home = /home/acolomba/src/sisc
+
+# stylesheet file to generate the html manual from the docbook source
+#doc.xsl.single = /usr/share/sgml/docbook/xsl-stylesheets-1.70.1/xhtml/docbook.xsl
+#doc.xsl.chunks = /usr/share/sgml/docbook/xsl-stylesheets-1.70.1/xhtml/chunk.xsl
+@
+
+
+1.4
+log
+@merged from rel-0-3-dev
+@
+text
+@d20 2
+a21 2
+#doc.xsl.single = /usr/share/sgml/docbook/xsl-stylesheets-1.66.1/xhtml/docbook.xsl
+#doc.xsl.chunks = /usr/share/sgml/docbook/xsl-stylesheets-1.66.1/xhtml/chunk.xsl
+@
+
+
+1.4.8.1
+log
+@updated doc.xsl paths
+@
+text
+@d20 2
+a21 2
+#doc.xsl.single = /usr/share/sgml/docbook/xsl-stylesheets-1.70.1/xhtml/docbook.xsl
+#doc.xsl.chunks = /usr/share/sgml/docbook/xsl-stylesheets-1.70.1/xhtml/chunk.xsl
+@
+
+
+1.3
+log
+@merged from rel-0-2-dev
+@
+text
+@d7 1
+@
+
+
+1.3.2.1
+log
+@added compile.source variable
+@
+text
+@a6 1
+compile.source = 1.4
+@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@d4 1
+d18 3
+a20 3
+# path to AspectJ home; the jars should be in a lib/ folder
+#aspectj.home = /usr/share/aspectj
+
+@
+
+
+1.2.4.1
+log
+@removed reference to aspectj
+@
+text
+@a3 1
+compile.compiler = modern
+d17 3
+@
+
+
+1.2.4.2
+log
+@added documentation generation task
+@
+text
+@a17 2
+# stylesheet file to generate the html manual from the docbook source
+#doc.xsl = /usr/share/sgml/docbook/xsl-stylesheets-1.65.1/xhtml/docbook.xsl
+@
+
+
+1.2.4.3
+log
+@added generation of manual in chunks
+@
+text
+@d19 1
+a19 2
+#doc.xsl.single = /usr/share/sgml/docbook/xsl-stylesheets-1.66.1/xhtml/docbook.xsl
+#doc.xsl.chunks = /usr/share/sgml/docbook/xsl-stylesheets-1.66.1/xhtml/chunk.xsl
+@
+
+
+1.1
+log
+@file build.properties.sample was initially added on branch rel-0-1-dev.
+@
+text
+@d1 19
+@
+
+
+1.1.2.1
+log
+@moved build.properties to build.properties.sample with edits
+@
+text
+@a0 19
+# *** COMPILE ***
+
+# ** FLAGS **
+compile.debug = true
+compile.deprecation = true
+compile.target = 1.4
+compile.optimize = true
+
+# ** PATHS **
+
+# path to servlet-api jar
+#compile.path.servlets = /opt/tomcat5/common/lib/servlet-api.jar
+
+# path to SISC home; it should also contain sisc-heap.jar
+#sisc.home = /home/acolomba/src/sisc
+
+# path to AspectJ home; the jars should be in a lib/ folder
+#aspectj.home = /usr/share/aspectj
+
+@
+

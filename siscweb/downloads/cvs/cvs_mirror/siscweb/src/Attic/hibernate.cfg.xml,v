@@ -1,0 +1,87 @@
+head	1.1;
+access;
+symbols
+	rel-0-3-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2005.10.24.03.46.11;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.10.24.03.46.11;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.10.30.22.44.12;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@file hibernate.cfg.xml was initially added on branch rel-0-3-dev.
+@
+text
+@@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 33
+<?xml version='1.0' encoding='utf-8'?>
+
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+  <session-factory>
+    <!-- Database connection settings -->
+
+    <property name="connection.driver_class">org.hsqldb.jdbcDriver</property>
+
+    <property name="connection.url">jdbc:hsqldb:mem:siscweb</property>
+    <!-- <property name="connection.url">jdbc:hsqldb:hsql://localhost/swdb</property> -->
+    <property name="connection.username">sa</property>
+    <property name="connection.password"></property>
+
+    <!-- JDBC connection pool (use the built-in) -->
+    <property name="connection.pool_size">1</property>
+
+    <!-- SQL dialect -->
+    <property name="dialect">org.hibernate.dialect.HSQLDialect</property>
+
+    <!-- Echo all executed SQL to stdout -->
+    <property name="show_sql">false</property>
+
+    <!-- Drop and re-create the database schema on startup -->
+    <property name="hbm2ddl.auto">create</property>
+
+    <mapping resource="siscweb/contcentric/Continuation.hbm.xml"/>
+    <mapping resource="siscweb/contcentric/ContinuationGroup.hbm.xml"/>
+    </session-factory>
+</hibernate-configuration>
+@
+
+
+1.1.2.2
+log
+@moved from siscweb/ to siscweb/opt/hibernate/
+@
+text
+@@
+
+

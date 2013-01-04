@@ -1,0 +1,542 @@
+head	1.2;
+access;
+symbols
+	rel-0-6-dev:1.2.0.4
+	rel-0-5-fix:1.2.0.2
+	rel-0-5:1.2
+	rel-0-5-dev:1.1.0.4
+	rel-0-5-dev-safe-frames:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2007.04.12.03.51.19;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2007.03.25.03.35.55;	author acolomba;	state dead;
+branches
+	1.1.2.1
+	1.1.4.1;
+next	;
+
+1.1.2.1
+date	2007.03.25.03.35.56;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2007.04.01.20.35.11;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.1.4.1
+date	2007.03.25.03.35.55;	author acolomba;	state dead;
+branches;
+next	1.1.4.2;
+
+1.1.4.2
+date	2007.04.01.23.55.25;	author acolomba;	state Exp;
+branches;
+next	1.1.4.3;
+
+1.1.4.3
+date	2007.04.03.23.27.31;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2007.09.09.01.59.54;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2007.10.13.18.49.32;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@merged from rel-0-5-dev
+@
+text
+@/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005-2007
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+package siscweb.contcentric;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
+public class Frame implements Serializable
+{
+    private static final long serialVersionUID = -7682735212404396423L;
+
+    private String id;
+    private Map cells;
+
+    public Frame(final String id)
+    {
+        this.id = id;
+        this.cells = new HashMap();
+    }
+
+    public Frame(final String id, final Frame parent)
+    {
+        this.id = id;
+        this.cells = new HashMap(parent.cells);
+    }
+
+    public void set(final String name, final Object value)
+    {
+        this.cells.put(name, value);
+    }
+
+    public Object lookup(String name)
+    {
+        return this.cells.get(name);
+    }
+
+    public String getId()
+    {
+        return this.id;
+    }
+}
+@
+
+
+1.2.4.1
+log
+@merged from rel-0-5-fix
+@
+text
+@d66 1
+a66 1
+    public Object lookup(final String name)
+@
+
+
+1.2.2.1
+log
+@minor syntactical cleanup
+@
+text
+@d66 1
+a66 1
+    public Object lookup(final String name)
+@
+
+
+1.1
+log
+@file Frame.java was initially added on branch rel-0-5-dev-safe-frames.
+@
+text
+@d1 75
+@
+
+
+1.1.4.1
+log
+@file Frame.java was added on branch rel-0-5-dev on 2007-04-01 23:55:25 +0000
+@
+text
+@@
+
+
+1.1.4.2
+log
+@merged from rel-0-5-dev-safe-frames
+@
+text
+@a0 127
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005-2007
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+package siscweb.contcentric;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
+public class Frame implements Serializable
+{
+    private static final long serialVersionUID = -7682735212404396423L;
+
+    private String id;
+    private Frame parent;
+    private Map cells = new HashMap();
+    //private Set children = new HashSet();
+
+    public Frame(final String id)
+    {
+        this.id = id;
+    }
+
+    public Frame(final String id, final Frame parent)
+    {
+        this.id = id;
+        this.parent = parent;
+    }
+
+    public void set(final String name, final Object value)
+    {
+        this.cells.put(name, value);
+    }
+
+    public Object lookup(String name)
+    {
+        for(Frame f = this; f != null; f = f.getParent()) {
+            if(f.cells.containsKey(name)) {
+                return f.cells.get(name);
+            }
+        }
+
+        return null;
+    }
+
+    /*
+    public void unlink()
+    {
+        Map mergedCells = this.getMergedCells();
+        this.parent = null;
+
+        for(Iterator i = this.children.iterator(); i.hasNext(); ) {
+            Frame child = (Frame) i.next();
+
+            Map newCells = new HashMap(mergedCells);
+            newCells.putAll(child.cells);
+
+        }
+    }
+
+    public Map getMergedCells()
+    {
+        Map cells = new HashMap();
+
+        if(this.getParent() != null) {
+            cells.putAll(this.getParent().getMergedCells());
+        }
+
+        cells.putAll(this.cells);
+
+        return cells;
+    }
+    */
+
+    public boolean equals(Object o)
+    {
+    	// pointer equivalence should do
+        return this == o;
+    }
+
+    public int hashCode()
+    {
+        return this.id.hashCode();
+    }
+
+    public String getId()
+    {
+        return this.id;
+    }
+
+    public Frame getParent()
+    {
+        return this.parent;
+    }
+}
+@
+
+
+1.1.4.3
+log
+@copies cells from the parent instead of linking back => space-safe
+@
+text
+@d47 3
+a49 1
+    private Map cells;
+a53 1
+        this.cells = new HashMap();
+d59 1
+a59 1
+        this.cells = new HashMap(parent.cells);
+d69 47
+a115 1
+        return this.cells.get(name);
+d122 5
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 71
+package siscweb.contcentric;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+public class Frame implements Serializable
+{
+    private static final long serialVersionUID = -7682735212404396423L;
+
+    int id;
+    private Frame parent;
+    private Map namespace = new HashMap();
+    private Set children = new HashSet();
+
+    public Frame(final int id)
+    {
+        this.id = id;
+    }
+
+    public Frame(final int id, final Frame parent)
+    {
+        this.id = id;
+        this.link(parent);
+    }
+
+    public void set(final String name, final Object value)
+    {
+        this.namespace.put(name, value);
+    }
+
+    public Object lookup(String name)
+    {
+        for(Frame f = this; f != null; f = f.getParent()) {
+            if(f.namespace.containsKey(name)) {
+                return f.namespace.get(name);
+            }
+        }
+
+        return null;
+    }
+
+    public Frame getParent()
+    {
+        return this.parent;
+    }
+
+    public void link(Frame parent)
+    {
+        this.parent = parent;
+        this.children.add(this);
+    }
+
+    public void unlink()
+    {
+        this.parent.children.remove(this);
+        this.parent = null;
+    }
+
+    public boolean equals(Object o)
+    {
+        return o instanceof Frame && ((Frame) o).id == this.id;
+    }
+
+    public int hashCode()
+    {
+        return this.id;
+    }
+}
+@
+
+
+1.1.2.2
+log
+@de-hacked ContinuationGroup
+@
+text
+@a0 35
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005-2007
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+d5 1
+d7 1
+d13 1
+a13 1
+    private String id;
+d15 2
+a16 2
+    private Map cells = new HashMap();
+    //private Set children = new HashSet();
+d18 1
+a18 1
+    public Frame(final String id)
+d23 1
+a23 1
+    public Frame(final String id, final Frame parent)
+d26 1
+a26 1
+        this.parent = parent;
+d31 1
+a31 1
+        this.cells.put(name, value);
+d37 2
+a38 2
+            if(f.cells.containsKey(name)) {
+                return f.cells.get(name);
+d45 1
+a45 2
+    /*
+    public void unlink()
+d47 2
+a48 2
+        Map mergedCells = this.getMergedCells();
+        this.parent = null;
+d50 4
+a53 7
+        for(Iterator i = this.children.iterator(); i.hasNext(); ) {
+            Frame child = (Frame) i.next();
+
+            Map newCells = new HashMap(mergedCells);
+            newCells.putAll(child.cells);
+
+        }
+d56 1
+a56 1
+    public Map getMergedCells()
+d58 2
+a59 9
+        Map cells = new HashMap();
+
+        if(this.getParent() != null) {
+            cells.putAll(this.getParent().getMergedCells());
+        }
+
+        cells.putAll(this.cells);
+
+        return cells;
+a60 1
+    */
+d64 1
+a64 2
+    	// pointer equivalence should do
+        return this == o;
+a68 5
+        return this.id.hashCode();
+    }
+
+    public String getId()
+    {
+a70 5
+
+    public Frame getParent()
+    {
+        return this.parent;
+    }
+@
+
+

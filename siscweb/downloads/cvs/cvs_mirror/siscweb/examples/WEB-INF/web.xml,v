@@ -1,0 +1,2559 @@
+head	1.6;
+access;
+symbols
+	rel-0-6-dev:1.6.0.4
+	rel-0-5-fix:1.6.0.2
+	rel-0-5:1.6
+	rel-0-5-dev-safe-frames:1.5.4.2.0.2
+	Root_rel-0-5-dev-safe-frames:1.5.4.2
+	rel-0-4-fix-0:1.5
+	rel-0-5-dev:1.5.0.4
+	rel-0-4-fix:1.5.0.2
+	rel-0-3-fix-3:1.4.2.3
+	rel-0-3-fix-2:1.4.2.2
+	rel-0-4-dev-sisc-1-11:1.4.4.4
+	rel-0-3-fix-1:1.4.2.1
+	rel-0-4-dev:1.4.0.4
+	rel-0-3-fix:1.4.0.2
+	rel-0-3:1.4
+	rel-0-3-dev-1:1.3.2.5
+	rel-0-2-fix-2:1.3.4.3
+	rel-0-2-fix-1:1.3.4.1
+	rel-0-2-fix:1.3.0.4
+	rel-0-3-dev:1.3.0.2
+	rel-0-2:1.3
+	rel-0-1-fix-1:1.2
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	start:1.1.1.1
+	rel-0-1-dev:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2007.04.12.03.51.15;	author acolomba;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2006.09.03.01.42.24;	author acolomba;	state Exp;
+branches
+	1.5.4.1;
+next	1.4;
+
+1.4
+date	2005.11.25.20.43.32;	author acolomba;	state Exp;
+branches
+	1.4.2.1
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2005.06.19.04.53.02;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.52;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches;
+next	1.1.1.2;
+
+1.1.1.2
+date	2005.03.02.03.30.46;	author acolomba;	state Exp;
+branches;
+next	1.1.1.3;
+
+1.1.1.3
+date	2005.03.06.18.45.55;	author acolomba;	state Exp;
+branches;
+next	1.1.1.4;
+
+1.1.1.4
+date	2005.03.06.23.01.00;	author acolomba;	state Exp;
+branches;
+next	1.1.1.5;
+
+1.1.1.5
+date	2005.03.12.17.24.32;	author acolomba;	state Exp;
+branches;
+next	1.1.1.6;
+
+1.1.1.6
+date	2005.03.13.06.17.00;	author acolomba;	state Exp;
+branches;
+next	1.1.1.7;
+
+1.1.1.7
+date	2005.04.17.21.20.23;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2005.04.15.23.21.22;	author acolomba;	state Exp;
+branches;
+next	1.2.2.2;
+
+1.2.2.2
+date	2005.04.15.23.23.20;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.04.07.02.09.40;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.04.17.23.31.59;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2005.04.21.00.43.21;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2005.04.23.00.14.11;	author acolomba;	state Exp;
+branches;
+next	1.2.4.5;
+
+1.2.4.5
+date	2005.04.23.15.30.37;	author acolomba;	state Exp;
+branches;
+next	1.2.4.6;
+
+1.2.4.6
+date	2005.05.14.23.17.27;	author acolomba;	state Exp;
+branches;
+next	1.2.4.7;
+
+1.2.4.7
+date	2005.05.15.16.19.28;	author acolomba;	state Exp;
+branches;
+next	1.2.4.8;
+
+1.2.4.8
+date	2005.05.18.00.48.19;	author acolomba;	state Exp;
+branches;
+next	1.2.4.9;
+
+1.2.4.9
+date	2005.05.22.20.16.47;	author acolomba;	state Exp;
+branches;
+next	1.2.4.10;
+
+1.2.4.10
+date	2005.06.11.05.01.12;	author acolomba;	state Exp;
+branches;
+next	1.2.4.11;
+
+1.2.4.11
+date	2005.06.15.01.29.15;	author acolomba;	state Exp;
+branches;
+next	1.2.4.12;
+
+1.2.4.12
+date	2005.06.18.16.39.29;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2005.07.10.03.00.15;	author acolomba;	state Exp;
+branches;
+next	1.3.2.2;
+
+1.3.2.2
+date	2005.07.15.01.51.26;	author acolomba;	state Exp;
+branches;
+next	1.3.2.3;
+
+1.3.2.3
+date	2005.07.23.19.44.51;	author acolomba;	state Exp;
+branches;
+next	1.3.2.4;
+
+1.3.2.4
+date	2005.07.30.16.09.35;	author acolomba;	state Exp;
+branches;
+next	1.3.2.5;
+
+1.3.2.5
+date	2005.09.13.02.51.59;	author acolomba;	state Exp;
+branches;
+next	1.3.2.6;
+
+1.3.2.6
+date	2005.10.24.03.54.03;	author acolomba;	state Exp;
+branches;
+next	1.3.2.7;
+
+1.3.2.7
+date	2005.11.15.07.32.59;	author acolomba;	state Exp;
+branches;
+next	1.3.2.8;
+
+1.3.2.8
+date	2005.11.16.03.35.26;	author acolomba;	state Exp;
+branches;
+next	1.3.2.9;
+
+1.3.2.9
+date	2005.11.19.16.18.24;	author acolomba;	state Exp;
+branches;
+next	1.3.2.10;
+
+1.3.2.10
+date	2005.11.23.02.40.49;	author acolomba;	state Exp;
+branches;
+next	1.3.2.11;
+
+1.3.2.11
+date	2005.11.25.19.55.05;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2005.07.10.20.02.16;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2;
+
+1.3.4.2
+date	2005.07.31.20.04.04;	author acolomba;	state Exp;
+branches;
+next	1.3.4.3;
+
+1.3.4.3
+date	2005.08.02.02.34.49;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.2.1
+date	2005.11.29.01.35.08;	author acolomba;	state Exp;
+branches;
+next	1.4.2.2;
+
+1.4.2.2
+date	2006.02.25.17.12.06;	author acolomba;	state Exp;
+branches;
+next	1.4.2.3;
+
+1.4.2.3
+date	2006.04.15.15.55.28;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2005.11.30.03.46.59;	author acolomba;	state Exp;
+branches;
+next	1.4.4.2;
+
+1.4.4.2
+date	2005.12.06.01.26.25;	author acolomba;	state Exp;
+branches;
+next	1.4.4.3;
+
+1.4.4.3
+date	2006.01.14.01.58.14;	author acolomba;	state Exp;
+branches;
+next	1.4.4.4;
+
+1.4.4.4
+date	2006.02.11.03.59.10;	author acolomba;	state Exp;
+branches;
+next	1.4.4.5;
+
+1.4.4.5
+date	2006.03.10.02.29.55;	author acolomba;	state Exp;
+branches;
+next	1.4.4.6;
+
+1.4.4.6
+date	2006.04.08.16.06.11;	author acolomba;	state Exp;
+branches;
+next	1.4.4.7;
+
+1.4.4.7
+date	2006.04.08.22.37.08;	author acolomba;	state Exp;
+branches;
+next	1.4.4.8;
+
+1.4.4.8
+date	2006.06.25.13.44.55;	author acolomba;	state Exp;
+branches;
+next	1.4.4.9;
+
+1.4.4.9
+date	2006.08.02.02.45.16;	author acolomba;	state Exp;
+branches;
+next	1.4.4.10;
+
+1.4.4.10
+date	2006.08.14.03.23.32;	author acolomba;	state Exp;
+branches;
+next	1.4.4.11;
+
+1.4.4.11
+date	2006.08.17.02.02.08;	author acolomba;	state Exp;
+branches;
+next	1.4.4.12;
+
+1.4.4.12
+date	2006.08.27.02.09.19;	author acolomba;	state Exp;
+branches;
+next	1.4.4.13;
+
+1.4.4.13
+date	2006.08.29.03.26.43;	author acolomba;	state Exp;
+branches;
+next	1.4.4.14;
+
+1.4.4.14
+date	2006.08.31.00.05.28;	author acolomba;	state Exp;
+branches;
+next	1.4.4.15;
+
+1.4.4.15
+date	2006.08.31.00.13.14;	author acolomba;	state Exp;
+branches;
+next	1.4.4.16;
+
+1.4.4.16
+date	2006.09.03.00.42.10;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.5.4.1
+date	2006.10.04.01.35.14;	author acolomba;	state Exp;
+branches;
+next	1.5.4.2;
+
+1.5.4.2
+date	2007.03.10.21.05.51;	author acolomba;	state Exp;
+branches;
+next	1.5.4.3;
+
+1.5.4.3
+date	2007.04.02.01.44.20;	author acolomba;	state Exp;
+branches;
+next	1.5.4.4;
+
+1.5.4.4
+date	2007.04.05.02.53.37;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@merged from rel-0-5-dev
+@
+text
+@<?xml version="1.0"?>
+
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+  <!-- *** APPLICATION NAME *** -->
+  <!-- this also doubles as SISC context name -->
+  <display-name>SISCweb Examples</display-name>
+  <description>
+    Examples of continuation-centric web development in SISCweb
+  </description>
+
+
+
+  <!-- ** ON CONTEXT INIT/DESTROY ** -->
+
+  <!-- * INIT * -->
+  <context-param>
+    <param-name>siscweb.on-init-sexp</param-name>
+    <param-value>
+      <![CDATA[
+        (class-path-extension-append! '("WEB-INF/scm/"))
+
+        ;; configuration
+        (require-extension (lib siscweb/config))
+
+        ;; output xml/html comments?
+        ;; (config/set-sxml-output-comments! #t)
+
+        ;; output formatted xml/html?
+        ;; (config/set-sxml-formatted-output! #f)
+
+        ;; error handling
+        (require-extension (lib examples/fc-handler))
+        (config/set-fc-hook! fc-handler)
+
+        ;; MANDATORY: install sisclet handler
+        (require-extension (lib siscweb/sisclet))
+      ]]>
+    </param-value>
+  </context-param>
+
+  <!-- * DESTROY * -->
+  <context-param>
+    <param-name>siscweb.on-destroy-sexp</param-name>
+    <param-value>
+      <![CDATA[
+        ;; nothing to do
+      ]]>
+    </param-value>
+  </context-param>
+
+
+
+  <!-- *** LISTENERS *** -->
+
+  <!-- ** SISCWEB ** -->
+
+  <!-- * SISCWEB INITIALIZER * -->
+  <listener>
+    <listener-class>siscweb.web.SISCInitializer</listener-class>
+  </listener>
+
+
+  <!-- *** SERVLETS *** -->
+
+  <!-- ** SISCWEB SERVLET ADAPTERS ** -->
+
+  <!-- * EXAMPLES SERVLET * -->
+  <servlet>
+    <servlet-name>examples</servlet-name>
+    <description>siscweb examples</description>
+    <servlet-class>siscweb.web.SISCAdapterServlet</servlet-class>
+    <init-param>
+      <param-name>on-init-sexp</param-name>
+      <param-value>
+        <![CDATA[
+          ;; NOTE: This code could well be stored under WEB-INF and
+          ;; just called from here; It is shown here for clarity.
+          ;; The same is true for the location of the scheme files
+          ;; being loaded: they should be placed under WEB-INF.
+
+          (class-path-extension-append! '("scm/" "WEB-INF/scm/"))
+
+          (require-extension (lib siscweb/publish))
+
+          (require-extension (lib examples/hello-world))
+          (publish "/hello/*" 'hello-world)
+
+          (require-extension (lib examples/counter-sps))
+          (publish "/counter-sps/*" 'counter-sps)
+
+          (require-extension (lib examples/counter-webcells))
+          (publish "/counter-webcells/*" 'counter-webcells)
+
+          (require-extension (lib examples/counter-parameter))
+          (publish "/counter-parameter/*" 'counter-parameter)
+
+          (require-extension (lib examples/counter-session))
+          (publish "/counter-session/*" 'counter-session)
+
+          (require-extension (lib examples/counter-ajax-webcells))
+          (publish "/counter-ajax-webcells/*" 'counter-ajax-webcells)
+
+          (require-extension (lib examples/counter-ajax-parameter))
+          (publish "/counter-ajax-parameter/*" 'counter-ajax-parameter)
+
+          (require-extension (lib examples/shopping))
+          (publish "/shopping/*" 'shopping)
+
+          (require-extension (lib examples/tic-tac-toe))
+          (publish "/tic-tac-toe/*" 'tic-tac-toe)
+
+          (require-extension (lib examples/rpn))
+          (publish "/rpn/*" 'rpn)
+
+          (require-extension (lib examples/sillywiki))
+          (publish "/sillywiki/*" 'sillywiki)
+
+          (require-extension (lib examples/graphpad))
+          (publish "/graphpad/*" 'graphpad)
+
+          (require-extension (lib examples/webrepl))
+          (publish "/webrepl/*" 'webrepl-not-published)
+        ]]>
+      </param-value>
+    </init-param>
+    <init-param>
+      <param-name>on-destroy-sexp</param-name>
+      <param-value>
+        <![CDATA[
+          ;; NOTE: it is not strict necessary to unpublish when
+          ;; the context is destroyed; this is for illustrative
+          ;; purposes only
+
+          (require-extension (lib siscweb/publish))
+          (unpublish-all)
+        ]]>
+      </param-value>
+    </init-param>
+
+    <!-- optional, but recommended -->
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+
+
+  <!-- *** SERVLET MAPPINGS *** -->
+
+  <!-- ** SISCWEB SERVLET MAPPINGS ** -->
+
+  <!-- * EXAMPLE SERVLET MAPPING * -->
+  <servlet-mapping>
+    <servlet-name>examples</servlet-name>
+    <url-pattern>/sisclets/*</url-pattern>
+  </servlet-mapping>
+
+
+
+  <!-- *** SESSION CONFIG *** -->
+  <session-config>
+    <session-timeout>60</session-timeout>
+  </session-config>
+
+
+
+  <!-- *** ENVIRONMENT VARIABLES *** -->
+  <!-- None of these environment entries is mandatory, since
+       reasonable default values, the same as those shown here, are
+       provided.  The values indicated to be static are read only when
+       the context is initialized; the dynamic values are re-read
+       every minute, allowing for their modification through the
+       application server's administrative interface.
+    -->
+
+  <!-- ** REPL ** -->
+
+  <!-- * REPL? * -->
+  <env-entry>
+    <description>Launch REPL? (static)</description>
+    <env-entry-name>siscweb/repl-p</env-entry-name>
+    <env-entry-value>true</env-entry-value>
+    <env-entry-type>java.lang.Boolean</env-entry-type>
+  </env-entry>
+
+
+  <!-- * REPL HOST * -->
+  <env-entry>
+    <description>REPL host (static)</description>
+    <env-entry-name>siscweb/repl-host</env-entry-name>
+    <env-entry-value>localhost</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>
+  </env-entry>
+
+  <!-- * REPL PORT * -->
+  <env-entry>
+    <description>REPL port (static)</description>
+    <env-entry-name>siscweb/repl-port</env-entry-name>
+    <env-entry-value>5156</env-entry-value>
+    <env-entry-type>java.lang.Integer</env-entry-type>
+  </env-entry>
+
+
+  <!-- ** LOGGING ** -->
+
+  <!-- * LOGGING LEVEL * -->
+  <env-entry>
+    <description>Logging level (static)</description>
+    <env-entry-name>siscweb/logging-level</env-entry-name>
+    <env-entry-value>INFO</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>
+  </env-entry>
+
+  <!-- * LOGGING FILE * -->
+  <!-- If a logging file is specified, SISCweb logging messages are
+       routed there away from the application server default logger
+    -->
+  <env-entry>
+    <description>Logging file path; default is console (static)</description>
+    <env-entry-name>siscweb/logging-file</env-entry-name>
+    <env-entry-value><!-- %t/siscweb-%g.log --></env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>
+  </env-entry>
+
+  <!-- * LOGGING LIMIT * -->
+  <!-- The maximum number of bytes written to the file specified above -->
+  <env-entry>
+    <description>Logging limit (static)</description>
+    <env-entry-name>siscweb/logging-limit</env-entry-name>
+    <env-entry-value>5000000</env-entry-value>
+    <env-entry-type>java.lang.Integer</env-entry-type>
+  </env-entry>
+
+  <!-- * LOGGING COUNT * -->
+  <!-- The number of log files to use in the rotation -->
+  <env-entry>
+    <description>Logging count (static)</description>
+    <env-entry-name>siscweb/logging-count</env-entry-name>
+    <env-entry-value>1</env-entry-value>
+    <env-entry-type>java.lang.Integer</env-entry-type>
+  </env-entry>
+
+
+  <!-- ** CONTINUATION MANAGEMENT ** -->
+
+  <!-- * CONTINUATION DEFAULT TIME TO LIVE * -->
+  <env-entry>
+    <description>Continuation time to live in ms (dynamic)</description>
+    <env-entry-name>siscweb/continuation-ttl</env-entry-name>
+    <env-entry-value>1200</env-entry-value>
+    <env-entry-type>java.lang.Long</env-entry-type>
+  </env-entry>
+
+  <!-- * CONTINUATION CLEANUP INTERVAL * -->
+  <env-entry>
+    <description>Continuation cleanup interval in ms (dynamic)</description>
+    <env-entry-name>siscweb/continuation-cleanup-interval</env-entry-name>
+    <env-entry-value>30000</env-entry-value>
+    <env-entry-type>java.lang.Long</env-entry-type>
+  </env-entry>
+
+  <!-- * CONTINUATION CREATE INTERVAL * -->
+  <env-entry>
+    <description>
+      Minimum time interval between creations of continuation groups
+      in milliseconds (dynamic)
+    </description>
+    <env-entry-name>siscweb/continuation-group-creation-interval</env-entry-name>
+    <env-entry-value>500</env-entry-value>
+    <env-entry-type>java.lang.Long</env-entry-type>
+  </env-entry>
+
+  <!-- * USER HISTORY SIZE * -->
+  <env-entry>
+    <description>Max history size per user (dynamic)</description>
+    <env-entry-name>siscweb/user-history-size</env-entry-name>
+    <env-entry-value>50</env-entry-value>
+    <env-entry-type>java.lang.Integer</env-entry-type>
+  </env-entry>
+
+  <!-- * USER HISTORY SIZE SERIALIZED * -->
+  <env-entry>
+    <description>Max history size serialized at session passivation</description>
+    <env-entry-name>siscweb/user-history-size-serialized</env-entry-name>
+    <env-entry-value>10</env-entry-value>
+    <env-entry-type>java.lang.Integer</env-entry-type>
+  </env-entry>
+</web-app>
+@
+
+
+1.5
+log
+@merged from rel-0-4-dev
+@
+text
+@a66 1
+
+d92 17
+a108 2
+          (require-extension (lib examples/counter))
+          (publish "/counter/*" 'counter)
+d139 1
+a139 8
+
+          (unpublish "/hello/*")
+          (unpublish "/shopping/*")
+          (unpublish "/tic-tac-toe/*")
+          (unpublish "/rpn/*")
+          (unpublish "/sillywiki/*")
+          (unpublish "/graphpad/*")
+          (unpublish "/webrepl/*")
+d227 18
+@
+
+
+1.5.4.1
+log
+@added log rotation
+@
+text
+@a219 18
+  <!-- * LOGGING LIMIT * -->
+  <!-- The maximum number of bytes written to the file specified above -->
+  <env-entry>
+    <description>Logging limit (static)</description>
+    <env-entry-name>siscweb/logging-limit</env-entry-name>
+    <env-entry-value>5000000</env-entry-value>
+    <env-entry-type>java.lang.Integer</env-entry-type>
+  </env-entry>
+
+  <!-- * LOGGING COUNT * -->
+  <!-- The number of log files to use in the rotation -->
+  <env-entry>
+    <description>Logging limit (static)</description>
+    <env-entry-name>siscweb/logging-limit</env-entry-name>
+    <env-entry-value>5000000</env-entry-value>
+    <env-entry-type>java.lang.Integer</env-entry-type>
+  </env-entry>
+
+@
+
+
+1.5.4.2
+log
+@fixed logging-count entry
+@
+text
+@d67 1
+d232 3
+a234 3
+    <description>Logging count (static)</description>
+    <env-entry-name>siscweb/logging-count</env-entry-name>
+    <env-entry-value>1</env-entry-value>
+@
+
+
+1.5.4.3
+log
+@added counter examples (no pun intended)
+@
+text
+@a91 12
+          (require-extension (lib examples/counter-sps))
+          (publish "/counter-sps/*" 'counter-sps)
+
+          (require-extension (lib examples/counter-webcells))
+          (publish "/counter-webcells/*" 'counter-webcells)
+
+          (require-extension (lib examples/counter-parameter))
+          (publish "/counter-parameter/*" 'counter-parameter)
+
+          (require-extension (lib examples/counter-session))
+          (publish "/counter-session/*" 'counter-session)
+
+d124 8
+a131 1
+          (unpublish-all)
+@
+
+
+1.5.4.4
+log
+@added counter-ajax-[webcells|parameter] examples
+@
+text
+@d104 2
+a105 5
+          (require-extension (lib examples/counter-ajax-webcells))
+          (publish "/counter-ajax-webcells/*" 'counter-ajax-webcells)
+
+          (require-extension (lib examples/counter-ajax-parameter))
+          (publish "/counter-ajax-parameter/*" 'counter-ajax-parameter)
+@
+
+
+1.4
+log
+@merged from rel-0-3-dev
+@
+text
+@d17 1
+a17 1
+  <!-- *** CONTEXT PARAMETERS *** -->
+d19 1
+a19 5
+  <!-- ** REPL ** -->
+  <!-- NOTE: the REPL can be disabled by simply commenting out the
+       REPLListener below -->
+
+  <!-- * REPL HOST * -->
+d21 4
+a24 3
+      <param-name>repl-host</param-name>
+      <param-value>localhost</param-value>
+  </context-param>
+d26 2
+a27 15
+  <!-- * REPL PORT * -->
+  <context-param>
+    <param-name>repl-port</param-name>
+    <param-value>5156</param-value>
+  </context-param>
+
+  <!-- ** CONTINUATION MANAGER ** -->
+  <!-- pick only one value, and set the listeners below accordingly -->
+  <context-param>
+    <param-name>continuation-store</param-name>
+    <param-value>siscweb.contcentric.SessionContinuationStore</param-value>
+    <!--
+    <param-value>siscweb.contcentric.HibernateContinuationStore</param-value>
+    -->
+  </context-param>
+d29 2
+d32 2
+a33 1
+  <!-- ** ON CONTEXT INIT/DESTROY ** -->
+a34 6
+  <!-- * INIT * -->
+  <context-param>
+    <param-name>on-init-sexp</param-name>
+    <param-value>
+      <![CDATA[
+        (current-class-path '("WEB-INF/scm/"))
+d36 2
+a37 4
+        (require-extension (siscweb config))
+        (require-extension (examples fc-handler))
+
+        (set! *fc-hook* fc-handler)
+d40 1
+a40 1
+        (require-extension (siscweb sisclet))
+d47 1
+a47 1
+    <param-name>on-destroy-sexp</param-name>
+d57 1
+a57 3
+  <!-- *** FILTERS *** -->
+
+  <!-- ** FILTER CLASSES ** -->
+d59 1
+a59 20
+  <!-- * HIBERNATE FILTER * -->
+  <!-- required if using hibernate-based continuation persistence -->
+  <!--
+  <filter>
+    <filter-name>HibernateFilter</filter-name>
+    <filter-class>siscweb.web.HibernateFilter</filter-class>
+  </filter>
+  -->
+
+
+  <!-- ** FILTER MAPPINGS ** -->
+
+  <!-- * HIBERNATE FILTER MAPPING * -->
+  <!-- required if using hibernate-based continuation persistence -->
+  <!--
+  <filter-mapping>
+    <filter-name>HibernateFilter</filter-name>
+    <servlet-name>examples</servlet-name>
+  </filter-mapping>
+  -->
+d61 1
+a61 3
+  <!-- *** LISTENERS *** -->
+
+  <!-- ** SISC INITIALIZER ** -->
+a66 20
+  <!-- ** REPL INITIALIZER ** -->
+  <!-- comment out if no server-side REPL is desired -->
+  <listener>
+    <listener-class>siscweb.web.REPLInitializer</listener-class>
+  </listener>
+
+
+  <!-- ** SESSION LISTENER -->
+  <!-- required if using session-based continuation persistence -->
+  <listener>
+    <listener-class>siscweb.web.SessionTracker</listener-class>
+  </listener>
+
+
+  <!-- ** CONTINUATION STORE INITIALIZER ** -->
+  <listener>
+    <listener-class>siscweb.web.ContinuationStoreInitializer</listener-class>
+  </listener>
+
+
+d70 1
+a70 1
+  <!-- ** SISC SERVLET ADAPTERS ** -->
+d81 6
+a86 1
+          (current-class-path '("scm/" "WEB-INF/scm/"))
+d88 1
+a88 1
+          (require-extension (siscweb publish))
+d90 1
+a90 1
+          (require-extension (examples hello-world))
+d93 4
+a96 1
+          (require-extension (examples shopping))
+d99 1
+a99 1
+          (require-extension (examples tic-tac-toe))
+d102 1
+a102 1
+          (require-extension (examples rpn))
+d105 1
+a105 1
+          (require-extension (examples sillywiki))
+d108 1
+a108 1
+          (require-extension (examples graphpad))
+d111 2
+a112 2
+          (require-extension (examples webrepl))
+          (publish "/webrepl/*" webrepl-not-published)
+d120 5
+a124 1
+          (require-extension (siscweb publish))
+d137 1
+d145 1
+a145 1
+  <!-- ** SISC SERVLET MAPPINGS ** -->
+d153 3
+d159 106
+@
+
+
+1.4.4.1
+log
+@removed sessiontracker; minor changes to comments
+@
+text
+@a34 1
+
+d36 1
+a36 3
+  <!-- pick only one value; if you choose hibernate, uncomment the two
+       HibernateFilter entries below and put siscweb-hibernate.jar and
+       related libraries in WEB-INF/lib/ -->
+d118 7
+a203 2
+
+  <!-- *** SESSION CONFIG *** -->
+@
+
+
+1.4.4.2
+log
+@added counter example (no pun)
+@
+text
+@a147 3
+          (require-extension (examples counter))
+          (publish "/counter/*" 'counter)
+
+@
+
+
+1.4.4.3
+log
+@prepended "siscweb." to context init-params
+@
+text
+@d25 1
+a25 1
+      <param-name>siscweb.repl-host</param-name>
+d31 1
+a31 1
+    <param-name>siscweb.repl-port</param-name>
+d41 1
+a41 1
+    <param-name>siscweb.continuation-store</param-name>
+d53 1
+a53 1
+    <param-name>siscweb.on-init-sexp</param-name>
+d71 1
+a71 1
+    <param-name>siscweb.on-destroy-sexp</param-name>
+@
+
+
+1.4.4.4
+log
+@publishes webrepl-not-installed as a symbol
+@
+text
+@d167 1
+a167 1
+          (publish "/webrepl/*" 'webrepl-not-published)
+@
+
+
+1.4.4.5
+log
+@current-class-path -> class-path-extension-append! in conformance to
+SISC 1.13
+@
+text
+@d56 1
+a56 1
+        (class-path-extension-append! '("WEB-INF/scm/"))
+d141 1
+a141 1
+          (class-path-extension-append! '("scm/" "WEB-INF/scm/"))
+@
+
+
+1.4.4.6
+log
+@added FileContinuationStore entry
+@
+text
+@d37 3
+a39 14
+  <!-- pick only one param-value:
+
+       * Session: continuations are stored in the session object and
+       persisted according to the J2EE container policies
+
+       * Hibernate: continuations are stored in a DB configured in the
+       hibernate.cfg.xml file (by default an in-memory HSQLDB); also
+       the two HibernateFilter entries below must be uncommented, and
+       siscweb-hibernate.jar and related libraries must be in
+       WEB-INF/lib/
+
+       * File: continuations are serialized to the filesystem in /tmp/;
+       this is for development/debugging only, for now.
+    -->
+a44 1
+    <param-value>siscweb.contcentric.FileContinuationStore</param-value>
+@
+
+
+1.4.4.7
+log
+@adapted to config api; added sxml formatted output and comments config
+@
+text
+@d69 1
+a69 2
+
+        ;; configuration
+d71 1
+d73 1
+a73 9
+        ;; output xml/html comments?
+        ;; (config/set-sxml-output-comments! #t)
+
+        ;; output formatted xml/html?
+        ;; (config/set-sxml-formatted-output! #f)
+
+        ;; error handling
+        (require-extension (examples fc-handler))
+        (config/set-fc-hook! fc-handler)
+@
+
+
+1.4.4.8
+log
+@revised format: new env-entries for siscweb operating parameters, removed references to now unused listeners, updated require-library references
+@
+text
+@d17 44
+d71 1
+a71 1
+        (require-extension (lib siscweb/config))
+d80 1
+a80 1
+        (require-extension (lib examples/fc-handler))
+d84 1
+a84 1
+        (require-extension (lib siscweb/sisclet))
+d101 25
+d128 4
+a131 1
+  <!-- ** SISCWEB ** -->
+d133 9
+a141 1
+  <!-- * SISCWEB INITIALIZER * -->
+d143 1
+a143 1
+    <listener-class>siscweb.web.SISCInitializer</listener-class>
+d150 1
+a150 1
+  <!-- ** SISCWEB SERVLET ADAPTERS ** -->
+d163 1
+a163 1
+          (require-extension (lib siscweb/publish))
+d165 1
+a165 1
+          (require-extension (lib examples/hello-world))
+d168 1
+a168 1
+          (require-extension (lib examples/counter))
+d171 1
+a171 1
+          (require-extension (lib examples/shopping))
+d174 1
+a174 1
+          (require-extension (lib examples/tic-tac-toe))
+d177 1
+a177 1
+          (require-extension (lib examples/rpn))
+d180 1
+a180 1
+          (require-extension (lib examples/sillywiki))
+d183 1
+a183 1
+          (require-extension (lib examples/graphpad))
+d186 1
+a186 1
+          (require-extension (lib examples/webrepl))
+d195 1
+a195 1
+          (require-extension (lib siscweb/publish))
+a207 1
+    <!-- optional, but recommended -->
+d215 1
+a215 1
+  <!-- ** SISCWEB SERVLET MAPPINGS ** -->
+a227 103
+
+
+
+  <!-- *** ENVIRONMENT VARIABLES *** -->
+
+  <!-- ** REPL ** -->
+
+  <!-- * REPL? * -->
+  <env-entry>
+    <description>Launch REPL? (static)</description>
+    <env-entry-name>siscweb/repl-p</env-entry-name>
+    <env-entry-value>true</env-entry-value>
+    <env-entry-type>java.lang.Boolean</env-entry-type>
+  </env-entry>
+
+
+  <!-- * REPL HOST * -->
+  <env-entry>
+    <description>REPL host (static)</description>
+    <env-entry-name>siscweb/repl-host</env-entry-name>
+    <env-entry-value>localhost</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>
+  </env-entry>
+
+  <!-- * REPL HOST * -->
+  <env-entry>
+    <description>REPL port (static)</description>
+    <env-entry-name>siscweb/repl-port</env-entry-name>
+    <env-entry-value>5156</env-entry-value>
+    <env-entry-type>java.lang.Integer</env-entry-type>
+  </env-entry>
+
+
+  <!-- ** RESOURCE BOUNDING ** -->
+
+  <!-- * USER HISTORY SIZE * -->
+  <env-entry>
+    <description>Max history size per user (dynamic)</description>
+    <env-entry-name>siscweb/contcentric.user-history-size</env-entry-name>
+    <env-entry-value>50</env-entry-value>
+    <env-entry-type>java.lang.Integer</env-entry-type>
+  </env-entry>
+
+  <!-- * USER HISTORY SIZE SERIALIZED * -->
+  <env-entry>
+    <description>Max history size serialized at shutdown</description>
+    <env-entry-name>
+      siscweb/contcentric.user-history-size-serialized
+    </env-entry-name>
+    <env-entry-value>10</env-entry-value>
+    <env-entry-type>java.lang.Integer</env-entry-type>
+  </env-entry>
+
+
+  <!-- ** CONTINUATION MANAGER ** -->
+
+  <!-- * CONTINUATION STORAGE MEDIUM * -->
+  <!-- pick only one param-value:
+
+       * Session: continuations are stored in the session object and
+       persisted according to the J2EE container policies
+
+       * Hibernate: continuations are stored in a DB configured in the
+       hibernate.cfg.xml file (by default an in-memory HSQLDB); also
+       the two HibernateFilter entries below must be uncommented, and
+       siscweb-hibernate.jar and related libraries must be in
+       WEB-INF/lib/
+
+       * File: continuations are serialized to the filesystem in /tmp/;
+       this is for development/debugging only, for now.
+    -->
+  <env-entry>
+    <description>Continuation storage class (static)</description>
+    <env-entry-name>siscweb/continuation-store-class</env-entry-name>
+    <env-entry-value>
+      siscweb.contcentric.SessionContinuationStore
+    </env-entry-value>
+     <!--
+    <env-entry-value>siscweb.contcentric.HibernateContinuationStore</env-entry-value>
+    <env-entry-value>siscweb.contcentric.FileContinuationStore</env-entry-value>
+    -->
+    <env-entry-type>java.lang.String</env-entry-type>
+  </env-entry>
+
+  <!-- * CONTINUATION CLEANUP INTERVAL * -->
+  <env-entry>
+    <description>Continuation cleanup interval in ms (dynamic)</description>
+    <env-entry-name>siscweb/continuation-cleanup-interval</env-entry-name>
+    <env-entry-value>30000</env-entry-value>
+    <env-entry-type>java.lang.Integer</env-entry-type>
+  </env-entry>
+
+  <!-- * CONTINUATION CLEANUP INTERVAL * -->
+  <env-entry>
+    <description>
+      Min interval between creations of continuation groups (dynamic)
+    </description>
+    <env-entry-name>
+      siscweb/continuation-group-creation-interval
+    </env-entry-name>
+    <env-entry-value>500</env-entry-value>
+    <env-entry-type>java.lang.Integer</env-entry-type>
+  </env-entry>
+@
+
+
+1.4.4.9
+log
+@added logging env entries
+@
+text
+@a181 19
+  <!-- ** LOGGING ** -->
+
+  <!-- * LOGGING LEVEL * -->
+  <env-entry>
+    <description>Logging level (static)</description>
+    <env-entry-name>siscweb/logging-level</env-entry-name>
+    <env-entry-value>INFO</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>
+  </env-entry>
+
+  <!-- * LOGGING FILE * -->
+  <env-entry>
+    <description>Logging file path -- default is console (static)</description>
+    <env-entry-name>siscweb/logging-file</env-entry-name>
+    <env-entry-value><!-- %t/siscweb.log --></env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>
+  </env-entry>
+
+
+d187 1
+a187 1
+    <env-entry-name>siscweb/user-history-size</env-entry-name>
+d196 1
+a196 1
+      siscweb/user-history-size-serialized
+d241 1
+a241 1
+  <!-- * CONTINUATION CREATE INTERVAL * -->
+@
+
+
+1.4.4.10
+log
+@added comments
+@
+text
+@a152 7
+  <!-- None of these environment entries is mandatory, since
+       reasonable default values, the same as those show here, are
+       provided.  The values indicated to be static are read only when
+       the context is initialized; the dynamic values are re-read
+       every minute, allowing for their modification through the
+       application server's administrative interface.
+    -->
+a192 3
+  <!-- If a logging file is specified, SISCweb logging messages are
+       routed there away from the application server default logger
+    -->
+d214 3
+a216 1
+    <env-entry-name>siscweb/user-history-size-serialized</env-entry-name>
+d242 4
+a245 2
+    <env-entry-value>siscweb.contcentric.SessionContinuationStore</env-entry-value>
+    <!--
+d263 1
+a263 2
+      Minimum time interval between creations of continuation groups
+      in milliseconds (dynamic)
+d265 3
+a267 1
+    <env-entry-name>siscweb/continuation-group-creation-interval</env-entry-name>
+@
+
+
+1.4.4.11
+log
+@reshuffled some env entries
+@
+text
+@d211 20
+a230 1
+  <!-- ** CONTINUATION MANAGEMENT ** -->
+a275 16
+
+  <!-- * USER HISTORY SIZE * -->
+  <env-entry>
+    <description>Max history size per user (dynamic)</description>
+    <env-entry-name>siscweb/user-history-size</env-entry-name>
+    <env-entry-value>50</env-entry-value>
+    <env-entry-type>java.lang.Integer</env-entry-type>
+  </env-entry>
+
+  <!-- * USER HISTORY SIZE SERIALIZED * -->
+  <env-entry>
+    <description>Max history size serialized at shutdown</description>
+    <env-entry-name>siscweb/user-history-size-serialized</env-entry-name>
+    <env-entry-value>10</env-entry-value>
+    <env-entry-type>java.lang.Integer</env-entry-type>
+  </env-entry>
+@
+
+
+1.4.4.12
+log
+@added comments; removed FileContinuationStore
+@
+text
+@a80 5
+          ;; NOTE: This code could well be stored under WEB-INF and
+          ;; just called from here; It is shown here for clarity.
+          ;; The same is true for the location of the scheme files
+          ;; being loaded: they should be placed under WEB-INF.
+
+a114 4
+          ;; NOTE: it is not strict necessary to unpublish when
+          ;; the context is destroyed; this is for illustrative
+          ;; purposes only
+
+a144 1
+
+d219 1
+a219 1
+       * Hibernate: *DEPRECATED* continuations are stored in a DB configured in the
+d224 3
+d234 1
+@
+
+
+1.4.4.13
+log
+@added siscweb/continuation-ttl; modified
+siscweb/continuation-cleanup-interval and
+siscweb/continuation-group-creation-interval to java.lang.Long
+@
+text
+@d216 1
+a216 1
+    <env-entry-value><!-- %t/siscweb-%g.log --></env-entry-value>
+a244 8
+  <!-- * CONTINUATION DEFAULT TIME TO LIVE * -->
+  <env-entry>
+    <description>Continuation time to live in ms (dynamic)</description>
+    <env-entry-name>siscweb/continuation-ttl</env-entry-name>
+    <env-entry-value>1200</env-entry-value>
+    <env-entry-type>java.lang.Long</env-entry-type>
+  </env-entry>
+
+d250 1
+a250 1
+    <env-entry-type>java.lang.Long</env-entry-type>
+d261 1
+a261 1
+    <env-entry-type>java.lang.Long</env-entry-type>
+@
+
+
+1.4.4.14
+log
+@removed references to hibernate
+@
+text
+@d214 1
+a214 1
+    <description>Logging file path; default is console (static)</description>
+d223 22
+d282 1
+a282 1
+    <description>Max history size serialized at session passivation</description>
+@
+
+
+1.4.4.15
+log
+@fixed typo
+@
+text
+@d190 1
+a190 1
+  <!-- * REPL PORT * -->
+@
+
+
+1.4.4.16
+log
+@minor typo
+@
+text
+@d164 1
+a164 1
+       reasonable default values, the same as those shown here, are
+@
+
+
+1.4.2.1
+log
+@disabled REPL listener
+@
+text
+@a112 1
+  <!--
+a115 1
+  -->
+@
+
+
+1.4.2.2
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@d25 1
+a25 1
+      <param-name>siscweb.repl-host</param-name>
+d31 1
+a31 1
+    <param-name>siscweb.repl-port</param-name>
+a34 1
+
+d36 1
+a36 3
+  <!-- pick only one value; if you choose hibernate, uncomment the two
+       HibernateFilter entries below and put siscweb-hibernate.jar and
+       related libraries in WEB-INF/lib/ -->
+d38 1
+a38 1
+    <param-name>siscweb.continuation-store</param-name>
+d50 1
+a50 1
+    <param-name>siscweb.on-init-sexp</param-name>
+d68 1
+a68 1
+    <param-name>siscweb.on-destroy-sexp</param-name>
+d120 7
+a153 3
+          (require-extension (examples counter))
+          (publish "/counter/*" 'counter)
+
+d170 1
+a170 1
+          (publish "/webrepl/*" 'webrepl-not-published)
+a205 2
+
+  <!-- *** SESSION CONFIG *** -->
+@
+
+
+1.4.2.3
+log
+@merged from rel-0-4-dev
+@
+text
+@d37 3
+a39 14
+  <!-- pick only one param-value:
+
+       * Session: continuations are stored in the session object and
+       persisted according to the J2EE container policies
+
+       * Hibernate: continuations are stored in a DB configured in the
+       hibernate.cfg.xml file (by default an in-memory HSQLDB); also
+       the two HibernateFilter entries below must be uncommented, and
+       siscweb-hibernate.jar and related libraries must be in
+       WEB-INF/lib/
+
+       * File: continuations are serialized to the filesystem in /tmp/;
+       this is for development/debugging only, for now.
+    -->
+a44 1
+    <param-value>siscweb.contcentric.FileContinuationStore</param-value>
+d56 2
+a57 3
+        (class-path-extension-append! '("WEB-INF/scm/"))
+
+        ;; configuration
+d59 1
+d61 1
+a61 9
+        ;; output xml/html comments?
+        ;; (config/set-sxml-output-comments! #t)
+
+        ;; output formatted xml/html?
+        ;; (config/set-sxml-formatted-output! #f)
+
+        ;; error handling
+        (require-extension (examples fc-handler))
+        (config/set-fc-hook! fc-handler)
+d143 1
+a143 1
+          (class-path-extension-append! '("scm/" "WEB-INF/scm/"))
+@
+
+
+1.3
+log
+@merged from rel-0-2-dev
+@
+text
+@d8 2
+d16 104
+a123 32
+  <servlet>
+    <servlet-name>examples-application</servlet-name>
+    <description>siscweb examples application</description>
+    <servlet-class>siscweb.web.SISCApplicationServlet</servlet-class>
+    <init-param>
+      <param-name>context-name</param-name>
+      <param-value>examples</param-value>
+    </init-param>
+    <init-param>
+      <param-name>on-init-sexp</param-name>
+      <param-value>
+        <![CDATA[
+        ;;; pick only one option
+        ;; option A: continuations stored in session
+        (require-library 'siscweb/ks-session)
+        ;; option B: continuations stored in hsqldb
+        ;(require-library 'siscweb/ks-hsqldb)
+        ;; option C: continuations stored in oracle
+        ;(require-library 'siscweb/ks-oracle)
+
+        (require-library 'siscweb/contcentric)
+        (import siscweb/contcentric)
+
+        ;;; pick the corresponding option
+        ;; A: session
+        (open-ks *SERVLET-CONTEXT*)
+        ;; B: hsqldb
+        ;(open-ks "jdbc:hsqldb:file:/tmp/siscweb-examples-db" "sa" "")
+        ;; C: oracle (through datasource)
+        ;(require-library 'util/jndi)
+        ;(import util/jndi)
+        ;(open-ks (jndi/lookup "java:/comp/env/jdbc/siscwebDS"))
+d125 4
+a128 1
+        (start-ks-manager 30)
+a129 5
+        (require-library 'siscweb/sisclet)
+        (import siscweb/sisclet)
+        ]]>
+      </param-value>
+    </init-param>
+a130 6
+    <init-param>
+      <param-name>on-destroy-sexp</param-name>
+      <param-value>
+        <![CDATA[
+        (require-library 'siscweb/contcentric)
+        (import siscweb/contcentric)
+d132 1
+a132 1
+        (stop-ks-manager)
+d134 1
+a134 21
+        ;;; pick the corresponding option
+        ;; A: session
+        ;(close-ks *SERVLET-CONTEXT*)
+        ;; B,C: hsqldb,oracle
+        ;(close-ks)
+        ]]>
+      </param-value>
+    </init-param>
+    <!--
+    <init-param>
+      <param-name>repl-host</param-name>
+      <param-value>localhost</param-value>
+    </init-param>
+    <init-param>
+      <param-name>repl-port</param-name>
+      <param-value>5156</param-value>
+    </init-param>
+    -->
+ 
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+d136 1
+a141 4
+      <param-name>context-name</param-name>
+      <param-value>examples</param-value>
+    </init-param>
+    <init-param>
+d145 18
+a162 1
+        (current-class-path '("scm/"))
+d164 2
+a165 2
+        (require-library 'siscweb/publish)
+        (import siscweb/publish)
+d167 2
+a168 19
+        (require-library 'examples/hello-world)
+        (import examples/hello-world)
+        (publish "/hello/*" 'hello-world)
+
+        (require-library 'examples/tic-tac-toe)
+        (import examples/tic-tac-toe)
+        (publish "/tic-tac-toe/*" 'tic-tac-toe)
+
+        (require-library 'examples/rpn)
+        (import examples/rpn)
+        (publish "/rpn/*" 'rpn)
+
+        (require-library 'examples/sillywiki)
+        (import examples/sillywiki)
+        (publish "/sillywiki/*" 'sillywiki)
+
+        (require-library 'examples/webrepl)
+        (import examples/webrepl)
+        (publish "/webrepl/*" webrepl-not-published)
+d176 9
+a184 5
+        (unpublish "/hello/*")
+        (unpublish "/tic-tac-toe/*")
+        (unpublish "/rpn/*")
+        (unpublish "/sillywiki/*")
+        (unpublish "/webrepl/*")
+d188 2
+d192 7
+a203 1
+
+@
+
+
+1.3.4.1
+log
+@merged from rel-0-3-dev and updated for rel-0-2-fix
+@
+text
+@d86 1
+a86 1
+
+a122 4
+        (require-library 'examples/graphpad)
+        (import examples/graphpad)
+        (publish "/graphpad/*" 'graphpad)
+
+a136 1
+        (unpublish "/graphpad/*")
+@
+
+
+1.3.4.2
+log
+@merged from rel-0-3-dev
+@
+text
+@a52 12
+        ;; error handling
+        (require-library 'siscweb/config)
+        (import siscweb/config)
+
+        (current-class-path (cons "WEB-INF/scm/" (current-class-path)))
+        (require-library 'examples/fc-handler)
+        (import examples/fc-handler)
+
+        (set! fc-hook fc-handler)
+
+
+        ;; install sisclet handler
+d70 1
+a70 1
+        (close-ks *SERVLET-CONTEXT*)
+d76 1
+d85 2
+a110 4
+        (require-library 'examples/shopping)
+        (import examples/shopping)
+        (publish "/shopping/*" 'shopping)
+
+a137 1
+        (unpublish "/shopping/*")
+@
+
+
+1.3.4.3
+log
+@disabled REPL for release
+@
+text
+@a87 1
+    <!--
+a95 1
+    -->
+@
+
+
+1.3.2.1
+log
+@added graphpad example
+@
+text
+@d76 1
+d85 2
+a86 1
+
+a122 4
+        (require-library 'examples/graphpad)
+        (import examples/graphpad)
+        (publish "/graphpad/*" 'graphpad)
+
+a136 1
+        (unpublish "/graphpad/*")
+@
+
+
+1.3.2.2
+log
+@added error handler
+@
+text
+@a52 12
+        ;; error handling
+        (require-library 'siscweb/config)
+        (import siscweb/config)
+
+        (current-class-path '("WEB-INF/scm/"))
+        (require-library 'examples/fc-handler)
+        (import examples/fc-handler)
+
+        (set! fc-hook fc-handler)
+
+
+        ;; install sisclet handler
+@
+
+
+1.3.2.3
+log
+@added shopping cart example
+@
+text
+@d82 1
+a82 1
+        (close-ks *SERVLET-CONTEXT*)
+a120 4
+        (require-library 'examples/shopping)
+        (import examples/shopping)
+        (publish "/shopping/*" 'shopping)
+
+a147 1
+        (unpublish "/shopping/*")
+@
+
+
+1.3.2.4
+log
+@minor classpath fix
+@
+text
+@d57 1
+a57 1
+        (current-class-path (cons "WEB-INF/scm/" (current-class-path)))
+@
+
+
+1.3.2.5
+log
+@renamed fc-hook to *fc-hook*
+@
+text
+@d61 1
+a61 1
+        (set! *fc-hook* fc-handler)
+@
+
+
+1.3.2.6
+log
+@modified to use SISCInitializer and WEB-INF/init/* files; added
+comments
+@
+text
+@a7 1
+  <!-- *** APPLICATION NAME *** -->
+a13 77
+
+  <!-- *** CONTEXT PARAMETERS *** -->
+
+  <!-- ** REPL ** -->
+
+  <!-- * REPL HOST * -->
+  <context-param>
+      <param-name>repl-host</param-name>
+      <param-value>localhost</param-value>
+  </context-param>
+
+  <!-- * REPL PORT * -->
+  <context-param>
+    <param-name>repl-port</param-name>
+    <param-value>5156</param-value>
+  </context-param>
+
+
+  <!-- ** CONTEXT NAME ** -->
+  <!-- optional, but nice for messages, logging, etc. -->
+  <context-param>
+    <param-name>context-name</param-name>
+    <param-value>examples</param-value>
+  </context-param>
+
+
+  <!-- ** ON CONTEXT INIT/DESTROY ** -->
+
+  <!-- * INIT * -->
+  <context-param>
+    <param-name>on-init-sexp</param-name>
+    <param-value>
+      <![CDATA[
+      (current-class-path '("WEB-INF/scm/"))
+      (load "WEB-INF/scm/init/init.scm")
+      ]]>
+    </param-value>
+  </context-param>
+
+  <!-- * DESTROY * -->
+  <context-param>
+    <param-name>on-destroy-sexp</param-name>
+    <param-value>
+      <![CDATA[
+      (load "WEB-INF/scm/init/destroy.scm")
+      ]]>
+    </param-value>
+  </context-param>
+
+
+
+  <!-- *** FILTERS *** -->
+
+  <!-- ** FILTER CLASSES ** -->
+
+  <!-- * HIBERNATE FILTER * -->
+  <!--
+  <filter>
+    <filter-name>HibernateFilter</filter-name>
+    <filter-class>siscweb.web.HibernateFilter</filter-class>
+  </filter>
+  -->
+
+
+  <!-- ** FILTER MAPPINGS ** -->
+
+  <!-- * HIBERNATE FILTER MAPPING * -->
+  <!--
+  <filter-mapping>
+    <filter-name>HibernateFilter</filter-name>
+    <servlet-name>examples</servlet-name>
+  </filter-mapping>
+  -->
+
+  <!-- *** LISTENERS *** -->
+
+  <!-- ** SISC INITIALIZER ** -->
+d15 1
+a15 1
+    <listener-class>siscweb.web.SISCInitializer</listener-class>
+d18 52
+d71 6
+a76 5
+  <!-- ** SESSION LISTENER -->
+  <!-- required if using session-based continuation persistence -->
+  <listener>
+    <listener-class>siscweb.web.SessionTracker</listener-class>
+  </listener>
+d78 1
+d80 16
+d97 2
+a98 1
+  <!-- *** SERVLETS *** -->
+a99 3
+  <!-- ** SISC SERVLET ADAPTERS ** -->
+
+  <!-- * EXAMPLES SERVLET * -->
+d105 4
+d112 1
+a112 1
+          (current-class-path '("scm/"))
+d114 2
+a115 1
+          (require-extension (siscweb publish))
+d117 27
+a143 20
+          (require-extension (examples hello-world))
+          (publish "/hello/*" 'hello-world)
+
+          (require-extension (examples shopping))
+          (publish "/shopping/*" 'shopping)
+
+          (require-extension (examples tic-tac-toe))
+          (publish "/tic-tac-toe/*" 'tic-tac-toe)
+
+          (require-extension (examples rpn))
+          (publish "/rpn/*" 'rpn)
+
+          (require-extension (examples sillywiki))
+          (publish "/sillywiki/*" 'sillywiki)
+
+          (require-extension (examples graphpad))
+          (publish "/graphpad/*" 'graphpad)
+
+          (require-extension (examples webrepl))
+          (publish "/webrepl/*" webrepl-not-published)
+d151 7
+a157 9
+          (require-extension (siscweb publish))
+
+          (unpublish "/hello/*")
+          (unpublish "/shopping/*")
+          (unpublish "/tic-tac-toe/*")
+          (unpublish "/rpn/*")
+          (unpublish "/sillywiki/*")
+          (unpublish "/graphpad/*")
+          (unpublish "/webrepl/*")
+a160 2
+
+    <load-on-startup>1</load-on-startup>
+a162 7
+
+
+  <!-- *** SERVLET MAPPINGS *** -->
+
+  <!-- ** SISC SERVLET MAPPINGS ** -->
+
+  <!-- * EXAMPLE SERVLET MAPPING * -->
+d168 1
+@
+
+
+1.3.2.7
+log
+@added WEB-INF/scm/ to servlet classpath
+@
+text
+@d118 1
+a118 1
+          (current-class-path '("scm/" "WEB-INF/scm/"))
+@
+
+
+1.3.2.8
+log
+@added comments
+@
+text
+@a70 1
+  <!-- required if using session-based continuation persistence -->
+a81 1
+  <!-- required if using session-based continuation persistence -->
+@
+
+
+1.3.2.9
+log
+@removed context-name parameter; configured REPLInitializer listener; added a few comments
+@
+text
+@a8 1
+  <!-- this also doubles as SISC context name -->
+a18 2
+  <!-- NOTE: the REPL can be disabled by simply commenting out the
+       REPLListener below -->
+d33 8
+d71 1
+a71 1
+  <!-- required if using hibernate-based continuation persistence -->
+d83 1
+a83 1
+  <!-- required if using hibernate-based continuation persistence -->
+a97 6
+  <!-- ** REPL INITIALIZER ** -->
+  <!-- comment out if no server-side REPL is desired -->
+  <listener>
+    <listener-class>siscweb.web.REPLInitializer</listener-class>
+  </listener>
+
+@
+
+
+1.3.2.10
+log
+@added continuation-store parameter; added SISCInitializer listener
+@
+text
+@a34 10
+  <!-- ** CONTINUATION MANAGER ** -->
+  <!-- pick only one value, and set the listeners below accordingly -->
+  <context-param>
+    <param-name>continuation-store</param-name>
+    <param-value>siscweb.contcentric.SessionContinuationStore</param-value>
+    <!--
+    <param-value>siscweb.contcentric.HibernateContinuationStore</param-value>
+    -->
+  </context-param>
+
+a92 1
+
+a106 6
+  <!-- ** CONTINUATION STORE INITIALIZER ** -->
+  <listener>
+    <listener-class>siscweb.web.ContinuationStoreInitializer</listener-class>
+  </listener>
+
+
+@
+
+
+1.3.2.11
+log
+@moved init sexprs from separate files back into web.xml
+@
+text
+@d53 2
+a54 9
+        (current-class-path '("WEB-INF/scm/"))
+        ;; error handling
+        (require-extension (siscweb config))
+        (require-extension (examples fc-handler))
+
+        (set! *fc-hook* fc-handler)
+
+        ;; MANDATORY: install sisclet handler
+        (require-extension (siscweb sisclet))
+d64 1
+a64 1
+        ;; nothing to do
+@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@d1 2
+d13 5
+d29 23
+a51 3
+        (emit-annotations #t)
+        (emit-debugging-symbols #t)
+        (stack-trace-on-error #f)
+d55 1
+d58 1
+d61 14
+a74 1
+      <param-value>#f</param-value>
+d76 1
+a76 1
+
+d85 2
+d101 1
+d107 8
+d117 1
+a117 1
+        (publish "/rpn/*" rpn)
+d121 1
+a121 1
+        (publish "/sillywiki/*" sillywiki)
+d123 4
+a126 3
+        (require-library 'examples/hello-world)
+        (import examples/hello-world)
+        (publish "/hello/*" hello-world)
+d132 3
+d137 2
+a138 1
+        (unpublish "/hello/*")
+@
+
+
+1.2.2.1
+log
+@added tic-tac-toe example
+@
+text
+@a29 1
+
+d34 1
+a42 1
+
+a61 8
+        (require-library 'examples/hello-world)
+        (import examples/hello-world)
+        (publish "/hello/*" hello-world)
+
+        (require-library 'examples/tic-tac-toe)
+        (import examples/tic-tac-toe)
+        (publish "/tic-tac-toe/*" tic-tac-toe)
+
+d69 4
+@
+
+
+1.2.2.2
+log
+@added unpublish for tic-tac-toe at server shutdown
+@
+text
+@a82 2
+        (unpublish "/hello/*")
+        (unpublish "/tic-tac-toe/*")
+d85 1
+@
+
+
+1.2.4.1
+log
+@merged from rel-0-1-fix-1
+@
+text
+@a34 1
+    <!-- ** repl disabled in the distributable
+a42 2
+    -->
+
+@
+
+
+1.2.4.2
+log
+@merged from rel-0-1-fix and minor changes
+@
+text
+@a29 1
+
+d34 2
+d44 1
+a64 8
+        (require-library 'examples/hello-world)
+        (import examples/hello-world)
+        (publish "/hello/*" hello-world)
+
+        (require-library 'examples/tic-tac-toe)
+        (import examples/tic-tac-toe)
+        (publish "/tic-tac-toe/*" tic-tac-toe)
+
+d72 4
+a80 2
+        (unpublish "/hello/*")
+        (unpublish "/tic-tac-toe/*")
+d83 1
+@
+
+
+1.2.4.3
+log
+@added commands to start/stop continuation manager
+@
+text
+@a27 5
+
+        (require-library 'siscweb/contcentric)
+        (import siscweb/contcentric)
+
+        (start-k-manager 5)
+d33 1
+a33 6
+      <param-value>
+        (require-library 'siscweb/contcentric)
+        (import siscweb/contcentric)
+
+        (stop-k-manager)
+      </param-value>
+@
+
+
+1.2.4.4
+log
+@modified to match contcentric interface
+@
+text
+@d22 7
+a31 1
+        (ks/open "jdbc:hsqldb:file:/tmp/siscweb-examples-db" "sa" "")
+a32 3
+
+        (require-library 'siscweb/sisclet)
+        (import siscweb/sisclet)
+a42 1
+        (ks/close)
+@
+
+
+1.2.4.5
+log
+@minor change to match contcentric module i/f
+@
+text
+@d25 1
+a25 1
+        (open-ks "jdbc:hsqldb:file:/tmp/siscweb-examples-db" "sa" "")
+d40 1
+a40 1
+        (close-ks)
+@
+
+
+1.2.4.6
+log
+@now provides choice between ks-session and ks-hsqldb; to support
+ks-session, now declares ContinuationManager as a listener class
+@
+text
+@a10 4
+  <listener>
+    <listener-class>siscweb.contcentric.ContinuationManager</listener-class>
+  </listener>
+
+a21 4
+        ;; pick only one
+        (require-library 'siscweb/ks-session)
+        ;(require-library 'siscweb/ks-hsqldb)
+
+d25 2
+a26 4
+        ;; pick the corresponding one
+        (open-ks *SERVLET-CONTEXT*)
+        ;(open-ks "jdbc:hsqldb:file:/tmp/siscweb-examples-db" "sa" "")
+        (start-ks-manager 30)
+d39 1
+a39 1
+        (stop-ks-manager)
+@
+
+
+1.2.4.7
+log
+@now uses SessionTracker instead of ContinuationManager to track sessions; made on-destroy-sexp compliant with the rest
+@
+text
+@d12 1
+a12 1
+    <listener-class>siscweb.web.SessionTracker</listener-class>
+a49 3
+
+        ;; pick the corresponding one
+        (close-ks *SERVLET-CONTEXT*)
+@
+
+
+1.2.4.8
+log
+@minor bugfix: two ks/close were sent instead of one
+@
+text
+@d53 1
+a53 1
+        ;(close-ks)
+@
+
+
+1.2.4.9
+log
+@publishing is now by symbol rather than by lambda
+@
+text
+@a35 1
+
+d86 1
+a86 1
+        (publish "/hello/*" 'hello-world)
+d90 1
+a90 1
+        (publish "/tic-tac-toe/*" 'tic-tac-toe)
+d94 1
+a94 1
+        (publish "/rpn/*" 'rpn)
+d98 1
+a98 1
+        (publish "/sillywiki/*" 'sillywiki)
+@
+
+
+1.2.4.10
+log
+@added directives for oracle k-store
+@
+text
+@d26 1
+a26 3
+        <![CDATA[
+        ;;; pick only one option
+        ;; option A: continuations stored in session
+a27 1
+        ;; option B: continuations stored in hsqldb
+a28 2
+        ;; option C: continuations stored in oracle
+        ;(require-library 'siscweb/ks-oracle)
+d33 1
+a33 2
+        ;;; pick the corresponding option
+        ;; A: session
+a34 1
+        ;; B: hsqldb
+a35 2
+        ;; C: oracle
+        ;(open-ks "jdbc:oracle:thin:@@linus:1521:orcl" "siscweb" "siscweb")
+a40 1
+        ]]>
+a46 1
+        <![CDATA[
+d52 2
+a53 4
+        ;;; pick the corresponding option
+        ;; A: session
+        ;(close-ks *SERVLET-CONTEXT*)
+        ;; B,C: hsqldb,oracle
+a54 1
+        ]]>
+a79 1
+        <![CDATA[
+a99 1
+        ]]>
+a104 1
+        <![CDATA[
+a108 1
+        ]]>
+@
+
+
+1.2.4.11
+log
+@modified oracle initialization to use a jdbc datasource
+@
+text
+@a0 2
+<?xml version="1.0"?>
+
+a10 1
+
+d43 2
+a44 4
+        ;; C: oracle (through datasource)
+        ;(require-library 'util/jndi)
+        ;(import util/jndi)
+        ;(open-ks (jndi/lookup "java:/comp/env/jdbc/siscwebDS"))
+@
+
+
+1.2.4.12
+log
+@added webrepl example
+@
+text
+@a119 4
+
+        (require-library 'examples/webrepl)
+        (import examples/webrepl)
+        (publish "/webrepl/*" webrepl-not-published)
+a130 1
+        (unpublish "/webrepl/*")
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d6 1
+a6 1
+  <display-name>SISCweb</display-name>
+d8 1
+a8 1
+    Continuation-centric web development in SISC
+d12 2
+a13 2
+    <servlet-name>siscweb-default</servlet-name>
+    <description>default siscweb application</description>
+d17 1
+a17 1
+      <param-value>default</param-value>
+d26 2
+a27 3
+        (current-class-path '("scm/"))
+		(require-library 'siscweb/sisclet)
+		(import siscweb/sisclet)
+d48 1
+a48 1
+    <description>examples</description>
+d52 1
+a52 1
+      <param-value>default</param-value>
+d64 9
+a72 1
+        (publish "/rpn" rpn)
+d78 3
+a80 1
+        (unpublish "/rpn")
+d87 1
+a87 1
+    <url-pattern>/examples/*</url-pattern>
+d89 6
+a94 1
+</web-app>@
+
+
+1.1.1.1
+log
+@initial import
+@
+text
+@@
+
+
+1.1.1.2
+log
+@fixed indentation
+@
+text
+@d27 2
+a28 2
+        (require-library 'siscweb/sisclet)
+        (import siscweb/sisclet)
+@
+
+
+1.1.1.3
+log
+@added sillywiki to examples
+@
+text
+@d17 1
+a17 1
+      <param-value>examples</param-value>
+d53 1
+a53 1
+      <param-value>examples</param-value>
+a65 4
+
+        (require-library 'examples/sillywiki)
+        (import examples/sillywiki)
+        (publish "/sillywiki" sillywiki)
+a79 5
+
+
+  <session-config>
+    <session-timeout>60</session-timeout>
+  </session-config>
+@
+
+
+1.1.1.4
+log
+@removed path assignments; added hello world app
+@
+text
+@d26 1
+d58 2
+a69 4
+
+        (require-library 'examples/hello-world)
+        (import examples/hello-world)
+        (publish "/hello" hello-world)
+a75 2
+        (unpublish "/sillywiki")
+        (unpublish "/hello-world")
+@
+
+
+1.1.1.5
+log
+@now code is published using wildcards
+@
+text
+@d62 1
+a62 1
+        (publish "/rpn/*" rpn)
+d66 1
+a66 1
+        (publish "/sillywiki/*" sillywiki)
+d70 1
+a70 1
+        (publish "/hello/*" hello-world)
+d76 3
+a78 3
+        (unpublish "/rpn/*")
+        (unpublish "/sillywiki/*")
+        (unpublish "/hello/*")
+@
+
+
+1.1.1.6
+log
+@path changes and other minutia
+@
+text
+@d6 1
+a6 1
+  <display-name>SISCweb Examples</display-name>
+d8 1
+a8 1
+    Examples of continuation-centric web development in SISCweb
+d12 2
+a13 2
+    <servlet-name>examples-application</servlet-name>
+    <description>siscweb examples application</description>
+d48 1
+a48 1
+    <description>siscweb examples</description>
+a56 2
+        (current-class-path '("scm/"))
+
+d85 1
+a85 1
+    <url-pattern>/sisclets/*</url-pattern>
+d92 1
+a92 1
+</web-app>
+@
+
+
+1.1.1.7
+log
+@added tic-tac-toe example (merged from rel-0-1-fix)
+@
+text
+@a29 1
+
+d34 1
+a42 1
+
+a61 8
+        (require-library 'examples/hello-world)
+        (import examples/hello-world)
+        (publish "/hello/*" hello-world)
+
+        (require-library 'examples/tic-tac-toe)
+        (import examples/tic-tac-toe)
+        (publish "/tic-tac-toe/*" tic-tac-toe)
+
+d69 4
+a77 2
+        (unpublish "/hello/*")
+        (unpublish "/tic-tac-toe/*")
+d80 1
+@
+
+

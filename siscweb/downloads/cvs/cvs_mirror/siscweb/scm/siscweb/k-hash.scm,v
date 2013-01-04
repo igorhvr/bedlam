@@ -1,0 +1,820 @@
+head	1.6;
+access;
+symbols
+	rel-0-6-dev:1.6.0.4
+	rel-0-5-fix:1.6.0.2
+	rel-0-5:1.6
+	rel-0-5-dev-safe-frames:1.5.4.5.0.2
+	Root_rel-0-5-dev-safe-frames:1.5.4.5
+	rel-0-4-fix-0:1.5
+	rel-0-5-dev:1.5.0.4
+	rel-0-4-fix:1.5.0.2
+	rel-0-3-fix-3:1.4.2.2
+	rel-0-3-fix-2:1.4.2.1
+	rel-0-4-dev-sisc-1-11:1.4.4.1
+	rel-0-3-fix-1:1.4
+	rel-0-4-dev:1.4.0.4
+	rel-0-3-fix:1.4.0.2
+	rel-0-3:1.4
+	rel-0-3-dev-1:1.3
+	rel-0-2-fix-2:1.3
+	rel-0-2-fix-1:1.3
+	rel-0-2-fix:1.3.0.2
+	rel-0-3-dev:1.3.0.4
+	rel-0-2:1.3
+	rel-0-1-fix-1:1.2
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	start:1.1.1.1
+	rel-0-1-dev:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2007.04.12.03.51.18;	author acolomba;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2006.09.03.01.42.22;	author acolomba;	state Exp;
+branches
+	1.5.4.1;
+next	1.4;
+
+1.4
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.4.2.1
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2005.06.19.03.03.51;	author acolomba;	state Exp;
+branches
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.52;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches;
+next	1.1.1.2;
+
+1.1.1.2
+date	2005.02.17.01.08.27;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.04.19.01.42.02;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.04.23.00.39.13;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2005.04.23.15.34.05;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2005.04.24.01.18.44;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2005.10.24.03.49.13;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.2.1
+date	2006.02.25.17.12.02;	author acolomba;	state Exp;
+branches;
+next	1.4.2.2;
+
+1.4.2.2
+date	2006.04.15.15.55.23;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2005.12.10.01.49.44;	author acolomba;	state Exp;
+branches;
+next	1.4.4.2;
+
+1.4.4.2
+date	2006.04.13.00.33.46;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.5.4.1
+date	2007.03.10.14.34.34;	author acolomba;	state Exp;
+branches;
+next	1.5.4.2;
+
+1.5.4.2
+date	2007.03.10.19.04.41;	author acolomba;	state Exp;
+branches;
+next	1.5.4.3;
+
+1.5.4.3
+date	2007.03.10.19.18.12;	author acolomba;	state Exp;
+branches;
+next	1.5.4.4;
+
+1.5.4.4
+date	2007.03.14.22.16.35;	author acolomba;	state Exp;
+branches;
+next	1.5.4.5;
+
+1.5.4.5
+date	2007.03.14.22.34.50;	author acolomba;	state Exp;
+branches
+	1.5.4.5.2.1;
+next	1.5.4.6;
+
+1.5.4.6
+date	2007.04.01.23.55.26;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.5.4.5.2.1
+date	2007.03.25.04.45.26;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@merged from rel-0-5-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2007
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+(require-library 'sisc/libs/srfi/srfi-38) ; intermediate formatting
+(require-library 'sisc/libs/srfi/srfi-48) ; intermediate format strings
+
+(require-library 'util/regexp)
+(require-library 'util/uid)
+
+(module siscweb/k-hash
+  (extract-k-hash make-k-url
+   make-random-hash)
+
+  (import srfi-38)
+  (import srfi-48)
+
+  (import util/regexp)
+  (import util/uid)
+
+  (define (extract-k-hash url)
+    (and (regexp-match url-re url)
+         (regexp-replace url-re url "$2")))
+
+  (define (make-k-url request-uri k-hash)
+    (if (regexp-match? url-re request-uri)
+        (regexp-replace url-re request-uri (format "$1~a$3" k-hash))
+        (format "~a;k-hash=~a" request-uri k-hash)))
+
+  (define make-random-hash uid/make-rfc-1738-string)
+
+  ;; the p{Alnum} part only works if uid/make-rfc-1738-string returns alphanums
+  (define url-re (make-regexp "(\\A.*;k-hash=)(\\p{Alnum}+)([;/].*\\z|.*\\z)"))
+  )
+@
+
+
+1.5
+log
+@merged from rel-0-4-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+d31 5
+a35 3
+(require-library 'sisc/libs/srfi/srfi-1) ; list library
+(require-library 'sisc/libs/srfi/srfi-13) ;string library
+(require-library 'sisc/libs/srfi/srfi-38) ;intermediate formatting
+d38 2
+a39 2
+  (extract-k-hash remove-k-hash
+   make-k-url make-random-hash)
+a40 2
+  (import srfi-1)
+  (import srfi-13)
+d42 1
+d44 2
+a45 7
+  (import s2j)
+
+  (define-java-classes
+    (<guid> |siscweb.util.GUID|))
+
+  (define-generic-java-methods get-random-bytes)
+
+d48 2
+a49 10
+    (let ((idx (string-index url #\;)))
+      (if idx
+          (string-drop url (+ 1 idx))
+          "")))
+
+  (define (remove-k-hash url)
+    (let ((idx (string-index url #\;)))
+      (if idx
+          (string-take url idx)
+          url)))
+d52 3
+a54 1
+    (format "~a;~a" (remove-k-hash request-uri) k-hash))
+d56 1
+d58 2
+a59 12
+  (define (make-random-hash)
+    (byte-array->hex-string
+     (get-random-bytes (java-null <guid>))))
+
+  (define (byte-array->hex-string a)
+    (fold string-append ""
+          (map (lambda (b)
+                 (let ((x (format "~x" (abs (->number b)))))
+                   (if (= 1 (string-length x))
+                       (string-append "0" x)
+                       x)))
+               (->list a))))
+@
+
+
+1.5.4.1
+log
+@k-hash is now prefixed with "k-hash=" in urls; extract-k-hash now returns #f if no k-hash is present in the url
+@
+text
+@a34 2
+(require-library 'util/regexp)
+
+a38 2
+  (import s2j)
+
+d43 1
+a43 1
+  (import util/regexp)
+d52 4
+a55 2
+    (and (regexp-match url-re url)
+         (regexp-replace url-re url "$2")))
+d64 1
+a64 3
+    (if (regexp-match? url-re request-uri)
+        (regexp-replace url-re url (format "$1~a$3" k-hash))
+        (format "~a;k-hash=~a" request-uri k-hash)))
+a78 3
+
+  (define url-re (make-regexp "(\\A.*;k-hash=)(\\p{XDigit}{40})(.*\\z)"))
+
+@
+
+
+1.5.4.2
+log
+@fixed typo; improved tolerance to bad k-hashes
+@
+text
+@d67 1
+a67 1
+        (regexp-replace url-re request-uri (format "$1~a$3" k-hash))
+d84 1
+a84 1
+  (define url-re (make-regexp "(\\A.*;k-hash=)(\\p{XDigit}*)(.*\\z)"))
+@
+
+
+1.5.4.3
+log
+@now fully rsr5+srfi compliant
+@
+text
+@d31 3
+a33 4
+(require-library 'sisc/libs/srfi/srfi-27) ; sources of random bits
+(require-library 'sisc/libs/srfi/srfi-38) ; intermediate formatting
+(require-library 'sisc/libs/srfi/srfi-42) ; eager comprehensions
+(require-library 'sisc/libs/srfi/srfi-48) ; intermediate format strings
+d38 2
+a39 2
+  (extract-k-hash make-k-url
+   make-random-hash)
+d41 4
+a44 1
+  (import srfi-27)
+a45 2
+  (import srfi-42)
+  (import srfi-48)
+d49 5
+d59 6
+d72 2
+a73 1
+    (define rand (random-source-make-integers default-random-source))
+d75 8
+a82 1
+    (fold-ec "" (:range i 1 40) (:let n (rand 16)) (format "~x" n) string-append))
+@
+
+
+1.5.4.4
+log
+@generates a more compact k-hash using alphanums
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2007
+a60 1
+    ;; by default SISC uses a cryptographically secure random source
+d63 4
+a66 14
+    (let ((s (make-string 27)))
+      (do-ec (:range i 0 (string-length s))
+             (:let n (rand (vector-length rfc-1738-chars)))
+        (string-set! s i (vector-ref rfc-1738-chars n)))
+      s))
+
+  (define url-re (make-regexp "(\\A.*;k-hash=)(\\p{Alnum}*)(.*\\z)"))
+
+  (define rfc-1738-chars
+    (list->vector
+     (append (list-ec (:char-range c #\0 #\9) c)
+             (list-ec (:char-range c #\a #\z) c)
+             (list-ec (:char-range c #\A #\Z) c)
+             #|'(#\$ #\- #\_ #\. #\+ #\! #\* #\' #\( #\) #\,)|#)))
+@
+
+
+1.5.4.5
+log
+@determines hash length based on defined keyspace size
+@
+text
+@d64 2
+a65 2
+    (let ((s (make-string hash-size)))
+      (do-ec (:range i 0 hash-size)
+d70 1
+a70 1
+  (define url-re (make-regexp "(\\A.*;k-hash=)(\\p{Alnum}+)([;/].*\\z|.*\\z)"))
+a77 4
+
+  ;; we want the hash to be equivalent to 160 bits
+  (define hash-size (inexact->exact (ceiling (/ (log (expt 2 160)) (log 62)))))
+
+@
+
+
+1.5.4.6
+log
+@merged from rel-0-5-dev-safe-frames
+@
+text
+@d31 1
+d33 1
+a36 1
+(require-library 'util/uid)
+d42 1
+d44 1
+d48 1
+a48 1
+  (import util/uid)
+a58 1
+  (define make-random-hash uid/make-rfc-1738-string)
+d60 10
+a69 1
+  ;; the p{Alnum} part only works if uid/make-rfc-1738-string returns alphanums
+d71 11
+@
+
+
+1.5.4.5.2.1
+log
+@moved random hash generation to util/uid
+@
+text
+@d31 1
+d33 1
+a36 1
+(require-library 'util/uid)
+d42 1
+d44 1
+d48 1
+a48 1
+  (import util/uid)
+a58 1
+  (define make-random-hash uid/make-rfc-1738-string)
+d60 10
+a69 1
+  ;; the p{Alnum} part only works if uid/make-rfc-1738-string returns alphanums
+d71 11
+@
+
+
+1.4
+log
+@merged from rel-0-3-dev
+@
+text
+@d32 2
+a33 2
+(require-library 'sisc/libs/srfi/srfi-13)  ;string library
+(require-library 'sisc/libs/srfi/srfi-38)  ;intermediate formatting
+d37 1
+a37 1
+   append-url-hash make-random-hash)
+a43 1
+  (import generic-procedures)
+d46 1
+a46 2
+    (<secure-random> |java.security.SecureRandom|)
+    (<message-digest> |java.security.MessageDigest|))
+d48 1
+a48 1
+  (define-generic-java-methods digest get-bytes get-instance next-int)
+d63 2
+a64 2
+  (define (append-url-hash request-uri k-hash)
+    (string-append (remove-k-hash request-uri) ";" k-hash))
+a65 2
+  (define prng)
+  (define sha)
+d69 1
+a69 8
+     (digest sha
+             (get-bytes (->jstring
+                         (number->string
+                          (get-random-number prng)))))))
+
+  (define (get-random-number secure-random)
+    (->number (next-int secure-random)))
+
+d79 1
+a79 10
+
+  (set! prng (get-instance
+              (java-null <secure-random>)
+              (->jstring "SHA1PRNG")))
+
+  (set! sha (get-instance
+             (java-null <message-digest>)
+             (->jstring "SHA-1")))
+
+)@
+
+
+1.4.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@d32 2
+a33 2
+(require-library 'sisc/libs/srfi/srfi-13) ;string library
+(require-library 'sisc/libs/srfi/srfi-38) ;intermediate formatting
+d44 1
+d47 2
+a48 1
+    (<guid> |siscweb.util.GUID|))
+d50 1
+a50 1
+  (define-generic-java-methods get-random-bytes)
+d68 2
+d73 8
+a80 1
+     (get-random-bytes (java-null <guid>))))
+d90 10
+a99 1
+  )
+@
+
+
+1.4.2.2
+log
+@merged from rel-0-4-dev
+@
+text
+@d37 1
+a37 1
+   make-k-url make-random-hash)
+d63 2
+a64 2
+  (define (make-k-url request-uri k-hash)
+    (format "~a;~a" (remove-k-hash request-uri) k-hash))
+@
+
+
+1.4.4.1
+log
+@now relies on GUID class to generate random array
+@
+text
+@d32 2
+a33 2
+(require-library 'sisc/libs/srfi/srfi-13) ;string library
+(require-library 'sisc/libs/srfi/srfi-38) ;intermediate formatting
+d44 1
+d47 2
+a48 1
+    (<guid> |siscweb.util.GUID|))
+d50 1
+a50 1
+  (define-generic-java-methods get-random-bytes)
+d68 2
+d73 8
+a80 1
+     (get-random-bytes (java-null <guid>))))
+d90 10
+a99 1
+  )
+@
+
+
+1.4.4.2
+log
+@refactoring: request/response are now just wrappers, with send/*
+functions now in contcentric; moved many s2j calls to
+request/response/session objects
+@
+text
+@d37 1
+a37 1
+   make-k-url make-random-hash)
+d63 2
+a64 2
+  (define (make-k-url request-uri k-hash)
+    (format "~a;~a" (remove-k-hash request-uri) k-hash))
+@
+
+
+1.3
+log
+@merged from rel-0-2-dev
+@
+text
+@d31 3
+a33 1
+(require-library 'sisc/libs/srfi/srfi-13)  ;string libraries
+d39 3
+a41 1
+  (import srfi-13) ;string libraries
+d83 7
+a89 12
+    (let loop ((hex-list
+                (map (lambda (b)
+                       (number->string (abs (->number b)) 16))
+                     (->list a))))
+      (if (null? hex-list)
+          ""
+          (string-append
+           (if (= 1 (string-length (car hex-list)))
+               (string-append "0" (car hex-list))
+               (car hex-list))
+           (loop (cdr hex-list))))))
+
+@
+
+
+1.3.4.1
+log
+@improved byte-array->hex-string method
+@
+text
+@d31 1
+a31 3
+(require-library 'sisc/libs/srfi/srfi-1) ; list library
+(require-library 'sisc/libs/srfi/srfi-13)  ;string library
+(require-library 'sisc/libs/srfi/srfi-38)  ;intermediate formatting
+d37 1
+a37 3
+  (import srfi-1)
+  (import srfi-13)
+  (import srfi-38)
+d79 12
+a90 7
+    (fold string-append ""
+          (map (lambda (b)
+                 (let ((x (format "~x" (abs (->number b)))))
+                   (if (= 1 (string-length x))
+                       (string-append "0" x)
+                       x)))
+               (->list a))))
+@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@d35 1
+a35 1
+   make-k-url get-random-hash)
+d53 1
+a53 1
+          #f)))
+d61 2
+a62 3
+  (define (make-k-url url k-hash)
+    (string-append url ";" k-hash))
+
+d67 1
+a67 1
+  (define (get-random-hash)
+@
+
+
+1.2.4.1
+log
+@make-k-url now sanitizes url first (removes k-hash if present)
+@
+text
+@d61 3
+a63 2
+  (define (make-k-url request-uri k-hash)
+    (string-append (remove-k-hash request-uri) ";" k-hash))
+@
+
+
+1.2.4.2
+log
+@renamed make-k-url to append-url-hash
+@
+text
+@d35 1
+a35 1
+   append-url-hash get-random-hash)
+d61 1
+a61 1
+  (define (append-url-hash request-uri k-hash)
+@
+
+
+1.2.4.3
+log
+@renamed get-random-hash to make-random-hash
+@
+text
+@d35 1
+a35 1
+   append-url-hash make-random-hash)
+d67 1
+a67 1
+  (define (make-random-hash)
+@
+
+
+1.2.4.4
+log
+@extract-k-hash now returns an empty string if no k-hash is present in
+the request url
+@
+text
+@d53 1
+a53 1
+          "")))
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d42 59
+a100 1
+  (include "k-hash-inc.scm")
+@
+
+
+1.1.1.1
+log
+@initial import
+@
+text
+@@
+
+
+1.1.1.2
+log
+@did away with the -inc business; i think it was a bad idea
+@
+text
+@d42 1
+a42 59
+  (define-java-classes
+    (<secure-random> |java.security.SecureRandom|)
+    (<message-digest> |java.security.MessageDigest|))
+
+  (define-generic-java-methods digest get-bytes get-instance next-int)
+
+
+  (define (extract-k-hash url)
+    (let ((idx (string-index url #\;)))
+      (if idx
+          (string-drop url (+ 1 idx))
+          #f)))
+
+  (define (remove-k-hash url)
+    (let ((idx (string-index url #\;)))
+      (if idx
+          (string-take url idx)
+          url)))
+
+  (define (make-k-url url k-hash)
+    (string-append url ";" k-hash))
+
+
+  (define prng)
+  (define sha)
+
+  (define (get-random-hash)
+    (byte-array->hex-string
+     (digest sha
+             (get-bytes (->jstring
+                         (number->string
+                          (get-random-number prng)))))))
+
+  (define (get-random-number secure-random)
+    (->number (next-int secure-random)))
+
+
+  (define (byte-array->hex-string a)
+    (let loop ((hex-list
+                (map (lambda (b)
+                       (number->string (abs (->number b)) 16))
+                     (->list a))))
+      (if (null? hex-list)
+          ""
+          (string-append
+           (if (= 1 (string-length (car hex-list)))
+               (string-append "0" (car hex-list))
+               (car hex-list))
+           (loop (cdr hex-list))))))
+
+
+  (set! prng (get-instance
+              (java-null <secure-random>)
+              (->jstring "SHA1PRNG")))
+
+  (set! sha (get-instance
+             (java-null <message-digest>)
+             (->jstring "SHA-1")))
+
+@
+

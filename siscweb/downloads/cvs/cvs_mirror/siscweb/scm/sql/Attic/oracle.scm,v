@@ -1,0 +1,562 @@
+head	1.3;
+access;
+symbols
+	rel-0-3-dev-1:1.2.4.3
+	rel-0-2-fix-2:1.2.2.1
+	rel-0-2-fix-1:1.2
+	rel-0-2-fix:1.2.0.2
+	rel-0-3-dev:1.2.0.4
+	rel-0-2:1.2
+	rel-0-2-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2005.11.25.20.46.38;	author acolomba;	state dead;
+branches;
+next	1.2;
+
+1.2
+date	2005.06.19.03.03.51;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.06.11.05.00.40;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.06.11.05.00.40;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.06.15.01.11.49;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2005.07.31.20.04.03;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.07.29.00.10.17;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.08.13.04.40.32;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2005.08.28.14.38.03;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2005.11.17.02.49.39;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@merged from rel-0-3-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'sisc/libs/srfi/srfi-19) ; time data types and procedures
+
+(require-library 'sql/jdbc)
+(require-library 'sql/types)
+(require-library 'sql/type-conversion)
+
+
+(module sql/oracle
+  (oracle/read-blob oracle/write-blob)
+
+  (import s2j)
+  (import hashtable)
+  (import type-system)
+
+  (import srfi-19)
+
+  (import sql/jdbc)
+  (import sql/types)
+  (import sql/type-conversion)
+
+  (define-java-classes
+    (<object-input-stream> |java.io.ObjectInputStream|)
+    (<object-output-stream> |java.io.ObjectOutputStream|))
+
+  (define-generic-java-methods get-column-type-name get-nanos get-scale get-time
+    get-binary-stream get-binary-output-stream read-object write-object (jclose |close|) (jflush |flush|) (jlength |length|))
+
+
+  (define (oracle/read-blob blob)
+    (let* ((bis (get-binary-stream blob))
+           (ois (java-new <object-input-stream> bis)))
+    (read-object ois)))
+
+  (define (oracle/write-blob blob jobj)
+    (let* ((bos (get-binary-output-stream blob))
+           (oos (java-new <object-output-stream> bos)))
+      (write-object oos jobj)
+      (jflush oos)
+      (jflush bos)
+      (->number (jlength blob))))
+
+
+  (define (sql->time obj rsmd ji)
+    (let ((ms (->number (get-time obj))))
+      (make-time 'time-monotonic 0 (* 1000 ms))))
+
+  (define (sql->date obj rsmd ji)
+    (let ((ms (->number (get-time obj))))
+      (make-time 'time-monotonic 0 (* 1000 ms))))
+
+  (define (sql->timestamp obj rsmd ji)
+    (let ((ms (->number (get-time obj)))
+          (ns (->number (get-nanos obj))))
+      (make-time 'time-monotonic ns (* 1000 ms))))
+
+  (define (sql->null obj rsmd ji)
+    '())
+
+  (define (sql->number obj rsmd ji)
+    (if (= 0 (->number (get-scale rsmd ji)))
+        (inexact->exact (->number obj))
+        (->number obj)))
+
+  (define (sql->object obj rsmd ji)
+    (if (instance-of? obj <value>)
+        (java-unwrap obj)
+        obj))
+
+  (define (sql->string obj rsmd ji)
+    (->string obj))
+
+
+  (define (unimplemented obj rsmd ji)
+    (error (string-append "unimplemented type conversion from "
+                          (->string (get-column-type-name rsmd ji)))))
+
+
+  (add-sql->scheme-table
+   '|oracle| ;
+   `((,<sql-array> . ,unimplemented)
+     (,<sql-bigint> . ,sql->number)
+     (,<sql-binary> . ,unimplemented)
+     (,<sql-bit> . ,unimplemented)
+     (,<sql-blob> . ,(lambda (x y z) x))
+     (,<sql-boolean> . ,unimplemented)
+     (,<sql-char> . ,sql->string)
+     (,<sql-clob> . ,unimplemented)
+     (,<sql-datalink> . ,unimplemented)
+     (,<sql-date> . ,sql->date)
+     (,<sql-decimal> . ,sql->number)
+     (,<sql-distinct> . ,unimplemented)
+     (,<sql-double> . ,sql->number)
+     (,<sql-float> . ,sql->number)
+     (,<sql-integer> . ,sql->number)
+     (,<sql-java-object> . ,sql->object)
+     (,<sql-longvarbinary> . ,unimplemented)
+     (,<sql-longvarchar> . ,unimplemented)
+     (,<sql-null> . ,sql->null)
+     (,<sql-numeric> . ,sql->number)
+     (,<sql-other> . ,sql->object)
+     (,<sql-real> . ,sql->number)
+     (,<sql-ref> . ,unimplemented)
+     (,<sql-smallint> . ,sql->number)
+     (,<sql-struct> . ,unimplemented)
+     (,<sql-time> . ,sql->time)
+     (,<sql-timestamp> . ,sql->timestamp)
+     (,<sql-tinyint> . ,sql->number)
+     (,<sql-varbinary> . ,unimplemented)
+     (,<sql-varchar> . ,sql->string)))
+
+
+  (jdbc/load-driver "oracle.jdbc.OracleDriver")
+  )
+@
+
+
+1.2
+log
+@merged from rel-0-2-dev
+@
+text
+@@
+
+
+1.2.2.1
+log
+@merged from rel-0-3-dev
+@
+text
+@d76 1
+a76 1
+      (make-time 'time-monotonic 0 (quotient ms 1000))))
+d80 1
+a80 1
+      (make-time 'time-monotonic 0 (quotient ms 1000))))
+d85 2
+a86 2
+      (make-time 'time-monotonic 0 (quotient ms 1000))))
+      
+@
+
+
+1.2.4.1
+log
+@corrected sql->date/time/timestamp functions
+@
+text
+@d76 1
+a76 1
+      (make-time 'time-monotonic 0 (quotient ms 1000))))
+d80 1
+a80 1
+      (make-time 'time-monotonic 0 (quotient ms 1000))))
+d85 2
+a86 2
+      (make-time 'time-monotonic 0 (quotient ms 1000))))
+      
+@
+
+
+1.2.4.2
+log
+@now registers scheme->sql conversion function with
+sql/type-conversion; minor adjustments
+@
+text
+@a52 6
+    (<big-decimal> |java.math.BigDecimal|)
+    (<big-integer> |java.math.BigInteger|)
+    (<date> |java.sql.Date|)
+    (<double> |java.lang.Double|)
+    (<integer> |java.lang.Integer|)
+    (<object> |java.lang.Object|)
+d54 1
+a54 3
+    (<object-output-stream> |java.io.ObjectOutputStream|)
+    (<time> |java.sql.Time|)
+    (<timestamp> |java.sql.Timestamp|))
+a59 2
+  (define VENDOR '|oracle|)
+
+d86 1
+a86 1
+
+d104 2
+a105 2
+  (define (unimplemented-sql obj rsmd ji)
+    (error (string-append "sql/oracle: unimplemented type conversion from "
+a107 3
+  (define (unimplemented-scheme name)
+    (error (string-append "sql/oracle: unimplemented type conversion from "
+                          name)))
+d110 2
+a111 2
+   VENDOR
+   `((,<sql-array> . ,unimplemented-sql)
+d113 2
+a114 2
+     (,<sql-binary> . ,unimplemented-sql)
+     (,<sql-bit> . ,unimplemented-sql)
+d116 1
+a116 1
+     (,<sql-boolean> . ,unimplemented-sql)
+d118 2
+a119 2
+     (,<sql-clob> . ,unimplemented-sql)
+     (,<sql-datalink> . ,unimplemented-sql)
+d122 1
+a122 1
+     (,<sql-distinct> . ,unimplemented-sql)
+d127 2
+a128 2
+     (,<sql-longvarbinary> . ,unimplemented-sql)
+     (,<sql-longvarchar> . ,unimplemented-sql)
+d133 1
+a133 1
+     (,<sql-ref> . ,unimplemented-sql)
+d135 1
+a135 1
+     (,<sql-struct> . ,unimplemented-sql)
+d139 1
+a139 1
+     (,<sql-varbinary> . ,unimplemented-sql)
+a141 27
+  (add-scheme->sql-proc
+   VENDOR
+   (lambda (value)
+     (cond ((null? value) (java-null <object>))
+           ((boolean? value) (->jboolean value))
+           ((or (string? value)
+                (symbol? value))
+            (->jstring value))
+           ((char? value) (->jchar value))
+           ((vector? value) (unimplemented-scheme "vector"))
+           ((procedure? value) (unimplemented-scheme "procedure"))
+           ((pair? value) (unimplemented "pair"))
+           ((and (number? value)
+                 (integer? value))
+            (java-new <integer> (->jstring (number->string value))))
+           ((and (number? value)
+                 (real? value))
+            (java-new <big-decimal> (->jstring (number->string value))))
+           ((and (number? value)
+                 (rational? value))
+            ((java-new <big-decimal> (->jstring (number->string (exact->inexact value))))))
+           ((date? value)
+            (let ((t (date->time-utc value)))
+              (java-new <date> (->jlong (* 1000 (time-second t))))))
+           ((time? value)
+            (java-new <timestamp> (->jlong (* 1000 (time-second value)))))
+           ((else value)))))
+@
+
+
+1.2.4.3
+log
+@fixed else case in add-scheme->sql-proc
+@
+text
+@d181 1
+a181 1
+           (else value))))
+@
+
+
+1.2.4.4
+log
+@moved from project root to opt/sql/
+@
+text
+@@
+
+
+1.1
+log
+@file oracle.scm was initially added on branch rel-0-2-dev.
+@
+text
+@d1 144
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 143
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'sisc/libs/srfi/srfi-19) ; time data types and procedures
+
+(require-library 'sql/jdbc)
+(require-library 'sql/types)
+(require-library 'sql/type-conversion)
+
+
+(module sql/oracle
+  (read-blob write-blob)
+
+  (import s2j)
+  (import hashtable)
+  (import type-system)
+
+  (import srfi-19)
+
+  (import sql/jdbc)
+  (import sql/types)
+  (import sql/type-conversion)
+
+  (define-java-classes
+    (<object-input-stream> |java.io.ObjectInputStream|)
+    (<object-output-stream> |java.io.ObjectOutputStream|))
+
+  (define-generic-java-methods get-column-type-name get-nanos get-scale get-time
+    get-binary-stream get-binary-output-stream read-object write-object (jclose |close|) (jflush |flush|) (jlength |length|))
+
+
+  (define (write-blob blob jobj)
+    (let* ((bos (get-binary-output-stream blob))
+           (oos (java-new <object-output-stream> bos)))
+      (write-object oos jobj)
+      (jflush oos)
+      (jflush bos)
+      (->number (jlength blob))))
+
+  (define (read-blob blob)
+    (let* ((bis (get-binary-stream blob))
+           (ois (java-new <object-input-stream> bis)))
+    (read-object ois)))
+
+  (define (sql->time obj rsmd ji)
+    (let ((ms (->number (get-time obj))))
+      (make-time 'time-monotonic 0 (* 1000 ms))))
+
+  (define (sql->date obj rsmd ji)
+    (let ((ms (->number (get-time obj))))
+      (make-time 'time-monotonic 0 (* 1000 ms))))
+
+  (define (sql->timestamp obj rsmd ji)
+    (let ((ms (->number (get-time obj)))
+          (ns (->number (get-nanos obj))))
+      (make-time 'time-monotonic ns (* 1000 ms))))
+
+  (define (sql->null obj rsmd ji)
+    '())
+
+  (define (sql->number obj rsmd ji)
+    (if (= 0 (->number (get-scale rsmd ji)))
+        (inexact->exact (->number obj))
+        (->number obj)))
+
+  (define (sql->object obj rsmd ji)
+    (if (instance-of? obj <value>)
+        (java-unwrap obj)
+        obj))
+
+  (define (sql->string obj rsmd ji)
+    (->string obj))
+
+
+  (define (unimplemented obj rsmd ji)
+    (error (string-append "unimplemented type conversion from "
+                          (->string (get-column-type-name rsmd ji)))))
+
+
+  (add-sql->scheme-table
+   '|oracle| ;
+   `((,<sql-array> . ,unimplemented)
+     (,<sql-bigint> . ,sql->number)
+     (,<sql-binary> . ,unimplemented)
+     (,<sql-bit> . ,unimplemented)
+     (,<sql-blob> . ,(lambda (x y z) x))
+     (,<sql-boolean> . ,unimplemented)
+     (,<sql-char> . ,sql->string)
+     (,<sql-clob> . ,unimplemented)
+     (,<sql-datalink> . ,unimplemented)
+     (,<sql-date> . ,sql->date)
+     (,<sql-decimal> . ,sql->number)
+     (,<sql-distinct> . ,unimplemented)
+     (,<sql-double> . ,sql->number)
+     (,<sql-float> . ,sql->number)
+     (,<sql-integer> . ,sql->number)
+     (,<sql-java-object> . ,sql->object)
+     (,<sql-longvarbinary> . ,unimplemented)
+     (,<sql-longvarchar> . ,unimplemented)
+     (,<sql-null> . ,sql->null)
+     (,<sql-numeric> . ,sql->number)
+     (,<sql-other> . ,sql->object)
+     (,<sql-real> . ,sql->number)
+     (,<sql-ref> . ,unimplemented)
+     (,<sql-smallint> . ,sql->number)
+     (,<sql-struct> . ,unimplemented)
+     (,<sql-time> . ,sql->time)
+     (,<sql-timestamp> . ,sql->timestamp)
+     (,<sql-tinyint> . ,sql->number)
+     (,<sql-varbinary> . ,unimplemented)
+     (,<sql-varchar> . ,sql->string)))
+
+
+  (jdbc/load-driver "oracle.jdbc.OracleDriver")
+  )
+@
+
+
+1.1.2.2
+log
+@renamed read/write blob operations
+@
+text
+@d40 1
+a40 1
+  (oracle/read-blob oracle/write-blob)
+d60 1
+a60 6
+  (define (oracle/read-blob blob)
+    (let* ((bis (get-binary-stream blob))
+           (ois (java-new <object-input-stream> bis)))
+    (read-object ois)))
+
+  (define (oracle/write-blob blob jobj)
+d68 4
+@
+
+

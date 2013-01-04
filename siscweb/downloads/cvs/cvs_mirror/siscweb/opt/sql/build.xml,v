@@ -1,0 +1,593 @@
+head	1.4;
+access;
+symbols
+	rel-0-6-dev:1.4.0.4
+	rel-0-5-fix:1.4.0.2
+	rel-0-5:1.4
+	rel-0-5-dev-safe-frames:1.3.0.6
+	Root_rel-0-5-dev-safe-frames:1.3
+	rel-0-4-fix-0:1.3
+	rel-0-5-dev:1.3.0.4
+	rel-0-4-fix:1.3.0.2
+	rel-0-3-fix-3:1.2.2.2
+	rel-0-3-fix-2:1.2.2.1
+	rel-0-4-dev-sisc-1-11:1.2.4.1
+	rel-0-3-fix-1:1.2.2.1
+	rel-0-4-dev:1.2.0.4
+	rel-0-3-fix:1.2.0.2
+	rel-0-3:1.2
+	rel-0-3-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2007.04.12.03.51.16;	author acolomba;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2006.09.03.01.42.24;	author acolomba;	state Exp;
+branches
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.11.17.02.50.23;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.11.17.02.50.23;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.11.20.01.37.53;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2005.11.20.18.46.19;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2005.11.29.00.58.56;	author acolomba;	state Exp;
+branches;
+next	1.2.2.2;
+
+1.2.2.2
+date	2006.04.15.15.55.27;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.11.29.01.01.42;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2006.02.17.03.32.01;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2006.02.23.01.49.02;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2006.03.27.23.01.55;	author acolomba;	state Exp;
+branches;
+next	1.2.4.5;
+
+1.2.4.5
+date	2006.08.12.00.18.22;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2007.04.02.00.05.25;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@merged from rel-0-5-dev
+@
+text
+@<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="siscweb" default="dist" basedir="."
+         xmlns:artifact="urn:maven-artifact-ant">
+
+  <!-- *** SETTINGS *** -->
+
+  <!-- ** ENVIRO ** -->
+  <property environment="env"/>
+  <property file="../../build.properties"/>
+
+
+  <!-- ** LOCATIONS ** -->
+  <!-- siscweb root -->
+  <property name="siscweb" value="${basedir}/../.."/>
+  <property name="siscweb.dist" value="${siscweb}/dist"/>
+
+
+  <!-- sql add-on root -->
+  <property name="opt.sql.bin" value="${basedir}/bin"/>
+  <property name="opt.sql.dist" value="${siscweb.dist}/opt/sql"/>
+  <property name="opt.sql.lib" value="${basedir}/lib"/>
+  <property name="opt.sql.misc" value="${basedir}/misc"/>
+  <property name="opt.sql.scm" value="${basedir}/scm"/>
+  <property name="opt.sql.tmp" value="${basedir}/tmp"/>
+
+
+  <!-- ** COMPILE ** -->
+
+  <!-- * SISC CLASSPATH * -->
+  <path id="compile.classpath.sisc">
+    <fileset dir="${sisc.home}">
+      <include name="sisc.jar"/>
+      <include name="sisc-lib.jar"/>
+      <include name="sisc-opt.jar"/>
+    </fileset>
+  </path>
+
+  <!-- * CLASSPATH * -->
+  <path id="compile.classpath">
+    <path refid="compile.classpath.sisc"/>
+
+    <fileset dir="${siscweb.dist}"
+             includes="siscweb.jar"/>
+  </path>
+
+
+
+  <!-- *** TASKS *** -->
+
+  <!-- ** PREPARE ** -->
+  <target name="prepare"
+          description="prepare project">
+    <mkdir dir="${opt.sql.bin}"/>
+    <mkdir dir="${opt.sql.dist}"/>
+    <mkdir dir="${opt.sql.lib}"/>
+    <mkdir dir="${opt.sql.tmp}"/>
+  </target>
+
+
+  <!-- ** COMPILE ** -->
+  <target name="compile"
+          depends="prepare, compile-scm"/>
+
+  <target name="check-compile-scm">
+    <uptodate property="compile.scm.not-required">
+      <srcfiles dir="${opt.sql.scm}" includes="**/*.scm" excludes="lshift/db.scm"/>
+      <mapper type="glob" from="*.scm" to="${opt.sql.bin}/*.scc"/>
+    </uptodate>
+  </target>
+
+  <target name="compile-scm"
+          depends="check-compile-scm"
+          unless="compile.scm.not-required">
+    <java classname="sisc.REPL"
+          dir="${opt.sql.scm}"
+          fork="yes"
+          failonerror="true">
+      <arg value="-h"/>
+      <arg value="${sisc.home}/sisc.shp"/>
+      <arg value="-x"/>
+      <arg value="${opt.sql.misc}/compile.scm"/>
+      <sysproperty key="sisc.maxStackTraceDepth" value="16"/>
+      <classpath>
+        <path refid="compile.classpath"/>
+        <pathelement location="${opt.sql.bin}"/>
+      </classpath>
+    </java>
+  </target>
+
+
+  <!-- ** DIST ** -->
+
+  <!-- * SISCWEB-SQL.JAR DISTRIBUTABLE * -->
+  <target name="dist" depends="compile"
+          description="creates siscweb-sql.jar">
+    <jar destfile="${opt.sql.dist}/siscweb-sql.jar">
+      <fileset dir="${opt.sql.bin}">
+        <include name="**/*.class"/>
+        <include name="**/*.scc"/>
+      </fileset>
+      <zipfileset dir="${siscweb}" prefix="META-INF">
+        <include name="COPYING"/>
+        <include name="LEGAL"/>
+      </zipfileset>
+    </jar>
+
+    <copy todir="${opt.sql.dist}">
+      <fileset  dir="${opt.sql.lib}">
+        <include name="*.jar"/>
+      </fileset>
+    </copy>
+  </target>
+
+
+  <!-- ** CLEAN ** -->
+  <target name="clean"
+          depends="prepare"
+          description="cleans project">
+    <delete includeemptydirs="true">
+      <fileset dir="${opt.sql.bin}">
+        <include name="**/*"/>
+      </fileset>
+      <fileset dir="${opt.sql.dist}">
+        <include name="**/*"/>
+      </fileset>
+    </delete>
+  </target>
+</project>
+@
+
+
+1.3
+log
+@merged from rel-0-4-dev
+@
+text
+@d67 1
+a67 1
+      <srcfiles dir="${opt.sql.scm}" includes="**/*.scm"/>
+@
+
+
+1.3.4.1
+log
+@excludes .scm files that do not result in a .scc file, and avoids
+needless recompiles
+@
+text
+@d67 1
+a67 1
+      <srcfiles dir="${opt.sql.scm}" includes="**/*.scm" excludes="lshift/db.scm"/>
+@
+
+
+1.2
+log
+@merged from rel-0-3-dev
+@
+text
+@d73 1
+a73 1
+          depends="prepare"
+a75 1
+          classpathref="compile.classpath"
+d77 2
+a78 1
+          fork="yes">
+d83 5
+@
+
+
+1.2.4.1
+log
+@merged from rel-0-3-fix
+@
+text
+@d63 1
+a63 1
+          depends="prepare, check-compile-scm, compile-scm"/>
+@
+
+
+1.2.4.2
+log
+@changed compile-scm task for SISC 1.12 compatibility
+@
+text
+@d76 1
+a82 4
+      <classpath>
+        <path refid="compile.classpath"/>
+        <pathelement location="${opt.sql.bin}"/>
+      </classpath>
+@
+
+
+1.2.4.3
+log
+@revised compile-scm-check dependency
+@
+text
+@d63 1
+a63 1
+          depends="prepare, compile-scm"/>
+d73 1
+a73 1
+          depends="check-compile-scm"
+@
+
+
+1.2.4.4
+log
+@compile-scm task now fails on compile error
+@
+text
+@d77 1
+a77 2
+          fork="yes"
+          failonerror="true">
+@
+
+
+1.2.4.5
+log
+@sets stack trace depth during compilation
+@
+text
+@a82 1
+      <sysproperty key="sisc.maxStackTraceDepth" value="16"/>
+@
+
+
+1.2.2.1
+log
+@fixed scm compilation dependency check
+@
+text
+@d63 1
+a63 1
+          depends="prepare, check-compile-scm, compile-scm"/>
+@
+
+
+1.2.2.2
+log
+@merged from rel-0-4-dev
+@
+text
+@d63 1
+a63 1
+          depends="prepare, compile-scm"/>
+d73 1
+a73 1
+          depends="check-compile-scm"
+d76 1
+d78 1
+a78 2
+          fork="yes"
+          failonerror="true">
+a82 4
+      <classpath>
+        <path refid="compile.classpath"/>
+        <pathelement location="${opt.sql.bin}"/>
+      </classpath>
+@
+
+
+1.1
+log
+@file build.xml was initially added on branch rel-0-3-dev.
+@
+text
+@d1 124
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 108
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="siscweb" default="dist" basedir="."
+         xmlns:artifact="urn:maven-artifact-ant">
+
+  <!-- *** SETTINGS *** -->
+
+  <!-- ** ENVIRO ** -->
+  <property environment="env"/>
+
+  <property name="basedir.siscweb" value="${basedir}/../.."/>
+
+  <property file="${basedir.siscweb}/build.properties"/>
+
+
+  <!-- ** COMPILE ** -->
+
+  <!-- * SISC CLASSPATH * -->
+  <path id="compile.classpath.sisc">
+    <fileset dir="${sisc.home}">
+      <include name="sisc.jar"/>
+      <include name="sisc-lib.jar"/>
+      <include name="sisc-opt.jar"/>
+    </fileset>
+    <fileset dir="${basedir.siscweb}/dist">
+      <include name="siscweb.jar"/>
+    </fileset>
+  </path>
+
+
+
+  <!-- *** TASKS *** -->
+
+  <!-- ** PREPARE ** -->
+  <target name="prepare"
+          description="prepare project">
+    <mkdir dir="${basedir}/bin"/>
+    <mkdir dir="${basedir}/lib"/>
+    <mkdir dir="${basedir}/tmp"/>
+    <mkdir dir="${basedir.siscweb}/dist/opt/sql"/>
+  </target>
+
+
+  <!-- ** DEPENDENCIES ** -->
+
+  <!-- ** COMPILE ** -->
+  <target name="compile"
+          depends="prepare, compile-scm"/>
+
+  <target name="check-compile-scm">
+    <uptodate property="compile.scm.not-required">
+      <srcfiles dir="${basedir}/scm" includes="**/*.scm"/>
+      <mapper type="glob" from="*.scm" to="${basedir}/bin/*.scc"/>
+    </uptodate>
+  </target>
+
+  <target name="compile-scm"
+          depends="prepare"
+          unless="compile.scm.not-required">
+    <java classname="sisc.REPL"
+          classpathref="compile.classpath.sisc"
+          dir="${basedir}/scm"
+          fork="yes">
+      <arg value="-h"/>
+      <arg value="${sisc.home}/sisc.shp"/>
+      <arg value="-x"/>
+      <arg value="${basedir}/misc/compile.scm"/>
+    </java>
+  </target>
+
+
+  <!-- ** DIST ** -->
+
+  <!-- * SISCWEB-HIBERNATE.JAR DISTRIBUTABLE * -->
+  <target name="dist" depends="compile"
+          description="creates siscweb-sql.jar">
+    <jar destfile="${basedir.siscweb}/dist/opt/sql/siscweb-sql.jar">
+      <fileset dir="${basedir}/bin">
+        <include name="**/*.class"/>
+        <include name="**/*.scc"/>
+      </fileset>
+      <zipfileset dir="${basedir.siscweb}" prefix="META-INF">
+        <include name="COPYING"/>
+        <include name="LEGAL"/>
+      </zipfileset>
+    </jar>
+
+    <copy todir="${basedir.siscweb}/dist/opt/sql">
+      <fileset  dir="${basedir}/lib">
+        <include name="*.jar"/>
+      </fileset>
+    </copy>
+  </target>
+
+
+  <!-- ** CLEAN ** -->
+  <target name="clean"
+          description="cleans project">
+    <delete includeemptydirs="true">
+      <fileset dir="${basedir}/bin">
+        <include name="**/*"/>
+      </fileset>
+      <fileset dir="${basedir.siscweb}/dist/opt/sql">
+        <include name="**/*"/>
+      </fileset>
+    </delete>
+  </target>
+</project>
+@
+
+
+1.1.2.2
+log
+@set properties for important locations
+@
+text
+@a9 1
+  <property file="../../build.properties"/>
+d11 1
+d13 1
+a13 13
+  <!-- ** LOCATIONS ** -->
+  <!-- siscweb root -->
+  <property name="siscweb" value="${basedir}/../.."/>
+  <property name="siscweb.dist" value="${siscweb}/dist"/>
+
+
+  <!-- sql add-on root -->
+  <property name="opt.sql.bin" value="${basedir}/bin"/>
+  <property name="opt.sql.dist" value="${siscweb.dist}/opt/sql"/>
+  <property name="opt.sql.lib" value="${basedir}/lib"/>
+  <property name="opt.sql.misc" value="${basedir}/misc"/>
+  <property name="opt.sql.scm" value="${basedir}/scm"/>
+  <property name="opt.sql.tmp" value="${basedir}/tmp"/>
+d25 3
+a27 3
+
+    <fileset dir="${siscweb.dist}"
+             includes="siscweb.jar"/>
+d37 4
+a40 4
+    <mkdir dir="${opt.sql.bin}"/>
+    <mkdir dir="${opt.sql.dist}"/>
+    <mkdir dir="${opt.sql.lib}"/>
+    <mkdir dir="${opt.sql.tmp}"/>
+d44 2
+d52 2
+a53 2
+      <srcfiles dir="${opt.sql.scm}" includes="**/*.scm"/>
+      <mapper type="glob" from="*.scm" to="${opt.sql.bin}/*.scc"/>
+d62 1
+a62 1
+          dir="${opt.sql.scm}"
+d67 1
+a67 1
+      <arg value="${opt.sql.misc}/compile.scm"/>
+d74 1
+a74 1
+  <!-- * SISCWEB-SQL.JAR DISTRIBUTABLE * -->
+d77 2
+a78 2
+    <jar destfile="${opt.sql.dist}/siscweb-sql.jar">
+      <fileset dir="${opt.sql.bin}">
+d82 1
+a82 1
+      <zipfileset dir="${siscweb}" prefix="META-INF">
+d88 2
+a89 2
+    <copy todir="${opt.sql.dist}">
+      <fileset  dir="${opt.sql.lib}">
+a97 1
+          depends="prepare"
+d100 1
+a100 1
+      <fileset dir="${opt.sql.bin}">
+d103 1
+a103 1
+      <fileset dir="${opt.sql.dist}">
+@
+
+
+1.1.2.3
+log
+@fixed classpath
+@
+text
+@a36 5
+  </path>
+
+  <!-- * CLASSPATH * -->
+  <path id="compile.classpath">
+    <path refid="compile.classpath.sisc"/>
+d71 1
+a71 1
+          classpathref="compile.classpath"
+@
+
+

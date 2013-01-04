@@ -1,0 +1,1023 @@
+head	1.6;
+access;
+symbols
+	rel-0-6-dev:1.6.0.4
+	rel-0-5-fix:1.6.0.2
+	rel-0-5:1.6
+	rel-0-5-dev-safe-frames:1.5.4.4.0.2
+	Root_rel-0-5-dev-safe-frames:1.5.4.4
+	rel-0-4-fix-0:1.5
+	rel-0-5-dev:1.5.0.4
+	rel-0-4-fix:1.5.0.2
+	rel-0-3-fix-3:1.4.2.1
+	rel-0-3-fix-2:1.4
+	rel-0-4-dev-sisc-1-11:1.4
+	rel-0-3-fix-1:1.4
+	rel-0-4-dev:1.4.0.4
+	rel-0-3-fix:1.4.0.2
+	rel-0-3:1.4
+	rel-0-3-dev-1:1.3.4.2
+	rel-0-2-fix-2:1.3.2.1
+	rel-0-2-fix-1:1.3
+	rel-0-2-fix:1.3.0.2
+	rel-0-3-dev:1.3.0.4
+	rel-0-2:1.3
+	rel-0-1-fix-1:1.2
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	start:1.1.1.1
+	rel-0-1-dev:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2007.04.12.03.51.18;	author acolomba;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2006.09.03.01.42.22;	author acolomba;	state Exp;
+branches
+	1.5.4.1;
+next	1.4;
+
+1.4
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.4.2.1
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2005.06.19.03.03.51;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.52;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches;
+next	1.1.1.2;
+
+1.1.1.2
+date	2005.02.17.01.08.27;	author acolomba;	state Exp;
+branches;
+next	1.1.1.3;
+
+1.1.1.3
+date	2005.03.26.00.33.00;	author acolomba;	state Exp;
+branches;
+next	1.1.1.4;
+
+1.1.1.4
+date	2005.04.17.21.14.43;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.04.17.23.38.44;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.05.15.20.42.08;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2005.07.31.20.04.03;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2005.07.15.01.23.33;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2;
+
+1.3.4.2
+date	2005.09.13.02.51.30;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.2.1
+date	2006.04.15.15.55.23;	author acolomba;	state Exp;
+branches;
+next	1.4.2.2;
+
+1.4.2.2
+date	2006.04.22.12.01.30;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2006.02.22.04.08.39;	author acolomba;	state Exp;
+branches;
+next	1.4.4.2;
+
+1.4.4.2
+date	2006.04.08.03.10.18;	author acolomba;	state Exp;
+branches;
+next	1.4.4.3;
+
+1.4.4.3
+date	2006.04.08.22.33.05;	author acolomba;	state Exp;
+branches;
+next	1.4.4.4;
+
+1.4.4.4
+date	2006.04.09.02.38.09;	author acolomba;	state Exp;
+branches;
+next	1.4.4.5;
+
+1.4.4.5
+date	2006.04.13.00.33.46;	author acolomba;	state Exp;
+branches;
+next	1.4.4.6;
+
+1.4.4.6
+date	2006.04.22.11.57.46;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.5.4.1
+date	2007.03.10.14.34.34;	author acolomba;	state Exp;
+branches;
+next	1.5.4.2;
+
+1.5.4.2
+date	2007.03.10.19.05.04;	author acolomba;	state Exp;
+branches;
+next	1.5.4.3;
+
+1.5.4.3
+date	2007.03.18.23.41.20;	author acolomba;	state Exp;
+branches;
+next	1.5.4.4;
+
+1.5.4.4
+date	2007.03.18.23.59.53;	author acolomba;	state Exp;
+branches
+	1.5.4.4.2.1;
+next	1.5.4.5;
+
+1.5.4.5
+date	2007.04.01.23.55.26;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.5.4.4.2.1
+date	2007.03.25.03.40.23;	author acolomba;	state Exp;
+branches;
+next	1.5.4.4.2.2;
+
+1.5.4.4.2.2
+date	2007.03.25.04.46.04;	author acolomba;	state Exp;
+branches;
+next	1.5.4.4.2.3;
+
+1.5.4.4.2.3
+date	2007.04.01.21.54.14;	author acolomba;	state Exp;
+branches;
+next	1.5.4.4.2.4;
+
+1.5.4.4.2.4
+date	2007.04.01.22.54.06;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@merged from rel-0-5-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2007
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'siscweb/config)
+(require-library 'siscweb/contcentric)
+(require-library 'siscweb/error)
+(require-library 'siscweb/frame)
+(require-library 'siscweb/publish)
+(require-library 'siscweb/request)
+
+(module siscweb/sisclet
+  (sisclet)
+
+  (import siscweb/config)
+  (import siscweb/contcentric)
+  (import siscweb/error)
+  (import siscweb/frame)
+  (import siscweb/publish)
+  (import siscweb/request)
+
+
+  (define (sisclet)
+    (call/cc
+     (lambda (suspend-k)
+       (current-suspend-k suspend-k)
+       (set! suspend-k #f)
+       (with/fc
+        (lambda (m e)
+          ((config/get-fc-hook) m e))
+        (lambda ()
+          (let* ((k-hash (current-k-hash))
+                 (resume-k (fetch/k k-hash)))
+            (cond (resume-k
+                   (current-frame (frame/make (get-request-frame)))
+                   (resume-k (current-request)))
+                  (else
+                   (let ((proc (get-published-proc)))
+                     (cond (proc
+                            (current-frame (frame/make))
+                            (proc (current-request)))
+                           (else
+                            (send-error/back 404 "Not Found"))))))))))))
+
+
+  (define (get-published-proc)
+    (let ((path-info (request/get-path-info)))
+      (and path-info
+          (get-published path-info))))
+  )
+@
+
+
+1.5
+log
+@merged from rel-0-4-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+d35 1
+a35 1
+(require-library 'siscweb/k-hash)
+d45 1
+a45 1
+  (import siscweb/k-hash)
+d59 12
+a70 7
+          (let ((resume-k (fetch/k (current-k-hash))))
+            (if resume-k
+                (resume-k (current-request))
+                (let ((proc (get-published-proc)))
+                  (if proc
+                      (proc (current-request))
+                      (send-error/back 404 "Not Found"))))))))))
+d75 2
+a76 3
+      (if path-info
+          (get-published (remove-k-hash path-info))
+          #f)))
+@
+
+
+1.5.4.1
+log
+@k-hash is now prefixed with "k-hash=" in urls; extract-k-hash now returns #f if no k-hash is present in the url
+@
+text
+@d70 3
+a72 2
+      (and path-info
+          (get-published (remove-k-hash path-info)))))
+@
+
+
+1.5.4.2
+log
+@does not remove path parameters from path-info
+@
+text
+@d71 1
+a71 1
+          (get-published path-info))))
+@
+
+
+1.5.4.3
+log
+@added webcell support
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2007
+a37 1
+(require-library 'siscweb/webcells)
+a47 1
+  (import siscweb/webcells-frame-2)
+d64 1
+a64 2
+                      (with-frame
+                       (proc (current-request)))
+@
+
+
+1.5.4.4
+log
+@turned webcells into a single module; added comments from
+original version
+@
+text
+@d49 1
+a49 1
+  (import siscweb/webcells)
+@
+
+
+1.5.4.5
+log
+@merged from rel-0-5-dev-safe-frames
+@
+text
+@d35 1
+a35 1
+(require-library 'siscweb/frame)
+d38 1
+d46 1
+a46 1
+  (import siscweb/frame)
+d49 1
+d61 8
+a68 12
+          (let* ((k-hash (current-k-hash))
+                 (resume-k (fetch/k k-hash)))
+            (cond (resume-k
+                   (current-frame (frame/make (get-request-frame)))
+                   (resume-k (current-request)))
+                  (else
+                   (let ((proc (get-published-proc)))
+                     (cond (proc
+                            (current-frame (frame/make))
+                            (proc (current-request)))
+                           (else
+                            (send-error/back 404 "Not Found"))))))))))))
+@
+
+
+1.5.4.4.2.1
+log
+@commented out (siscweb/webcells) frame creation
+@
+text
+@d49 1
+a49 1
+;  (import siscweb/webcells)
+d66 1
+a66 1
+;;                      (with-frame
+d68 1
+a68 1
+                      (send-error/back 404 "Not Found")))))))));)
+@
+
+
+1.5.4.4.2.2
+log
+@removed references to webcells
+@
+text
+@d38 1
+d49 1
+d66 3
+a68 2
+                      (proc (current-request))
+                      (send-error/back 404 "Not Found"))))))))))
+@
+
+
+1.5.4.4.2.3
+log
+@removed unused k-hash import
+@
+text
+@d35 1
+d45 1
+@
+
+
+1.5.4.4.2.4
+log
+@moved frame management from java to scheme code
+@
+text
+@a34 1
+(require-library 'siscweb/frame)
+a43 1
+  (import siscweb/frame)
+d57 7
+a63 12
+          (let* ((k-hash (current-k-hash))
+                 (resume-k (fetch/k k-hash)))
+            (cond (resume-k
+                   (current-frame (frame/make (get-request-frame)))
+                   (resume-k (current-request)))
+                  (else
+                   (let ((proc (get-published-proc)))
+                     (cond (proc
+                            (current-frame (frame/make))
+                            (proc (current-request)))
+                           (else
+                            (send-error/back 404 "Not Found"))))))))))))
+@
+
+
+1.4
+log
+@merged from rel-0-3-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+d35 2
+d45 2
+d50 23
+a72 18
+  (define (sisclet request response)
+    (current-response response)
+    (set! response #f)
+    (current-request request)
+    (set! request #f)
+    (with/fc
+     (lambda (m e)
+       (*fc-hook* m e))
+     (lambda ()
+       (call/cc
+        (lambda (suspend-k)
+          (current-suspend-k suspend-k)
+          (set! suspend-k #f)
+          (cond ((resumable-request?)
+                 (resume-request))
+                ((exists-published-proc?)
+                 ((get-published-proc) (current-request)))
+                (else (send-error/back 404 "Not Found"))))))))
+@
+
+
+1.4.2.1
+log
+@merged from rel-0-4-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+a34 2
+(require-library 'siscweb/k-hash)
+(require-library 'siscweb/publish)
+a42 2
+  (import siscweb/k-hash)
+  (import siscweb/publish)
+d46 18
+a63 23
+  (define (sisclet)
+    (call/cc
+     (lambda (suspend-k)
+       (current-suspend-k suspend-k)
+       (set! suspend-k #f)
+       (with/fc
+        (lambda (m e)
+          ((config/get-fc-hook) m e))
+        (lambda ()
+          (let ((resume-k (fetch/k (current-k-hash))))
+            (if resume-k
+                (resume-k (current-request))
+                (let ((proc (get-published-proc)))
+                  (if proc
+                      (proc (current-request))
+                      (error/back 404 "Not Found"))))))))))
+
+
+  (define (get-published-proc)
+    (let ((path-info (request/get-path-info)))
+      (if path-info
+          (get-published (remove-k-hash path-info))
+          #f)))
+@
+
+
+1.4.2.2
+log
+@merged from rel-0-4-dev
+@
+text
+@d65 1
+a65 1
+                      (send-error/back 404 "Not Found"))))))))))
+@
+
+
+1.4.4.1
+log
+@request/response are not passed to sisclet, and are instead looked up
+through contcentric from SISCAdapterServlet threadlocal variables
+@
+text
+@d46 5
+a50 1
+  (define (sisclet)
+@
+
+
+1.4.4.2
+log
+@suspend-k is now a bit lighter
+@
+text
+@d47 8
+a54 8
+    (call/cc
+     (lambda (suspend-k)
+       (current-suspend-k suspend-k)
+       (set! suspend-k #f)
+       (with/fc
+        (lambda (m e)
+          (*fc-hook* m e))
+        (lambda ()
+@
+
+
+1.4.4.3
+log
+@uses new config api
+@
+text
+@d53 1
+a53 1
+          ((config/get-fc-hook) m e))
+@
+
+
+1.4.4.4
+log
+@moved publish/resume code from request module
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+a34 2
+(require-library 'siscweb/k-hash)
+(require-library 'siscweb/publish)
+a42 2
+  (import siscweb/k-hash)
+  (import siscweb/publish)
+a59 36
+
+
+  ;; returns true if the current requests points to a resumable
+  ;; continuation
+  (define (resumable-request?)
+    (if (fetch/resume-k) #t #f))
+
+  ;; resumes the continuation associated to this request
+  ;; TODO: concurrency - the resume-k might have been
+  ;;       deleted from the kstore in the meanwhile
+  (define (resume-request)
+    (let ((resume-k (fetch/resume-k)))
+      (resume-k (current-request))))
+
+
+  ;; fetches the resume continuation associated
+  ;; to this request
+  (define (fetch/resume-k)
+    (fetch/k (current-k-hash)))
+
+
+  ;; returns true if a published procedure exists corresponding to the
+  ;; current request
+  (define (exists-published-proc?)
+    (let ((path-info (request/get-path-info)))
+      (if path-info
+          (published? (remove-k-hash path-info))
+          #f)))
+
+  ;; fetches the published procedure corresponding to the current
+  ;; request
+  (define (get-published-proc)
+    (let ((path-info (request/get-path-info)))
+      (if path-info
+          (get-published (remove-k-hash path-info))
+          #f)))
+@
+
+
+1.4.4.5
+log
+@refactoring: request/response are now just wrappers, with send/*
+functions now in contcentric; moved many s2j calls to
+request/response/session objects
+@
+text
+@d59 5
+a63 7
+          (let ((resume-k (fetch/k (current-k-hash))))
+            (if resume-k
+                (resume-k (current-request))
+                (let ((proc (get-published-proc)))
+                  (if proc
+                      (proc (current-request))
+                      (error/back 404 "Not Found"))))))))))
+d66 29
+@
+
+
+1.4.4.6
+log
+@fixed typo in 404 error function call
+@
+text
+@d65 1
+a65 1
+                      (send-error/back 404 "Not Found"))))))))))
+@
+
+
+1.3
+log
+@merged from rel-0-2-dev
+@
+text
+@d32 1
+d40 1
+d51 13
+a63 9
+    (call/cc
+     (lambda (suspend-k)
+       (current-suspend-k suspend-k)
+       (set! suspend-k #f)
+       (cond ((resumable-request?)
+              (resume-request))
+             ((exists-published-proc?)
+              ((get-published-proc) (current-request)))
+             (else (send-error/back 404 "Not Found"))))))
+@
+
+
+1.3.2.1
+log
+@merged from rel-0-3-dev
+@
+text
+@a31 1
+(require-library 'siscweb/config)
+a38 1
+  (import siscweb/config)
+d49 9
+a57 13
+    (with/fc
+     (lambda (m e)
+       (fc-hook m e))
+     (lambda ()
+       (call/cc
+        (lambda (suspend-k)
+          (current-suspend-k suspend-k)
+          (set! suspend-k #f)
+          (cond ((resumable-request?)
+                 (resume-request))
+                ((exists-published-proc?)
+                 ((get-published-proc) (current-request)))
+                (else (send-error/back 404 "Not Found"))))))))
+@
+
+
+1.3.4.1
+log
+@added support for failure-continuation
+@
+text
+@a31 1
+(require-library 'siscweb/config)
+a38 1
+  (import siscweb/config)
+d49 9
+a57 13
+    (with/fc
+     (lambda (m e)
+       (fc-hook m e))
+     (lambda ()
+       (call/cc
+        (lambda (suspend-k)
+          (current-suspend-k suspend-k)
+          (set! suspend-k #f)
+          (cond ((resumable-request?)
+                 (resume-request))
+                ((exists-published-proc?)
+                 ((get-published-proc) (current-request)))
+                (else (send-error/back 404 "Not Found"))))))))
+@
+
+
+1.3.4.2
+log
+@renamed fc-hook to *fc-hook*
+@
+text
+@d53 1
+a53 1
+       (*fc-hook* m e))
+@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@d33 2
+a34 2
+(require-library 'siscweb/k-hash)
+(require-library 'siscweb/publish)
+a38 2
+  (import s2j)
+
+d40 2
+a41 2
+  (import siscweb/k-hash)
+  (import siscweb/publish)
+a42 3
+  (define-generic-java-methods
+    (get-path-info |getPathInfo|)
+    (get-request-uri |getRequestURI|))
+d57 1
+a57 37
+             (else #f)))))
+
+
+  ;; returns true if the current requests points
+  ;; to a resumable continuation
+  (define (resumable-request?)
+    (if (fetch/resume-k) #t #f))
+
+
+  ;; resumes the continuation associated to
+  ;; this request
+  (define (resume-request)
+    (let ((resume-k (fetch/resume-k)))
+      (resume-k (current-request))))
+
+
+  ;; fetches the resume continuation associated
+  ;; to this request
+  (define (fetch/resume-k)
+    (fetch/k (extract-k-hash
+               (->string (get-request-uri (current-request))))))
+
+
+  ;; returns true if a published procedure exists
+  ;; corresponding to the current request
+  (define (exists-published-proc?)
+    (let ((path (remove-k-hash
+                 (->string (get-path-info (current-request))))))
+      (published? path)))
+
+
+  ;; fetches the published procedure corresponding
+  ;; to the current request
+  (define (get-published-proc)
+    (let ((path (remove-k-hash
+                 (->string (get-path-info (current-request))))))
+      (get-published path)))
+@
+
+
+1.2.4.1
+log
+@moved request functions to request module
+@
+text
+@d33 2
+a34 1
+(require-library 'siscweb/request)
+d39 2
+d42 2
+a43 1
+  (import siscweb/request)
+d45 3
+d63 36
+@
+
+
+1.2.4.2
+log
+@now sends a 404 if the requested resource could not be located
+@
+text
+@a32 1
+(require-library 'siscweb/error)
+a38 1
+  (import siscweb/error)
+d55 1
+a55 1
+             (else (send-error/back 404 "Not Found"))))))
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d1 31
+d33 2
+d39 2
+d42 58
+a99 2
+  
+  (include "sisclet-inc.scm"))
+@
+
+
+1.1.1.1
+log
+@initial import
+@
+text
+@@
+
+
+1.1.1.2
+log
+@did away with the -inc business; i think it was a bad idea
+@
+text
+@a0 31
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+d7 2
+a8 18
+
+
+  (define (sisclet request response)
+    (current-response response)
+    (set! response #f)
+    (current-request request)
+    (set! request #f)
+    (call/cc
+     (lambda (suspend-k)
+       (current-suspend-k suspend-k)
+       (set! suspend-k #f)
+       (cond ((resumable-request?)
+              (resume-request))
+             ((exists-published-proc?)
+              ((get-published-proc) (current-request)))
+             (else #f)))))
+
+  )
+@
+
+
+1.1.1.3
+log
+@spread functions from contcentric.scm onto sisclet.scm and response.scm
+@
+text
+@a32 2
+(require-library 'siscweb/k-hash)
+(require-library 'siscweb/publish)
+a36 2
+  (import s2j)
+
+a37 2
+  (import siscweb/k-hash)
+  (import siscweb/publish)
+a38 3
+  (define-generic-java-methods
+    (get-path-info |getPathInfo|)
+    (get-request-uri |getRequestURI|))
+a54 35
+
+  ;; returns true if the current requests points
+  ;; to a resumable continuation
+  (define (resumable-request?)
+    (if (fetch/resume-k) #t #f))
+
+
+  ;; resumes the continuation associated to
+  ;; this request
+  (define (resume-request)
+    (let ((resume-k (fetch/resume-k)))
+      (resume-k (current-request))))
+
+
+  ;; fetches the resume continuation associated
+  ;; to this request
+  (define (fetch/resume-k)
+    (fetch/k (extract-k-hash
+               (->string (get-request-uri (current-request))))))
+
+
+  ;; returns true if a published procedure exists
+  ;; corresponding to the current request
+  (define (exists-published-proc?)
+    (let ((path (remove-k-hash
+                 (->string (get-path-info (current-request))))))
+      (published? path)))
+
+
+  ;; fetches the published procedure corresponding
+  ;; to the current request
+  (define (get-published-proc)
+    (let ((path (remove-k-hash
+                 (->string (get-path-info (current-request))))))
+      (get-published path)))
+@
+
+
+1.1.1.4
+log
+@moved request functions to request module
+@
+text
+@d33 2
+a34 1
+(require-library 'siscweb/request)
+d39 2
+d42 2
+a43 1
+  (import siscweb/request)
+d45 3
+d63 36
+@
+
+

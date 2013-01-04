@@ -1,0 +1,248 @@
+head	1.2;
+access;
+symbols
+	rel-0-6-dev:1.2.0.10
+	rel-0-5-fix:1.2.0.8
+	rel-0-5:1.2
+	rel-0-5-dev-safe-frames:1.2.0.6
+	Root_rel-0-5-dev-safe-frames:1.2
+	rel-0-4-fix-0:1.2
+	rel-0-5-dev:1.2.0.4
+	rel-0-4-fix:1.2.0.2
+	rel-0-3-fix-3:1.1.4.2
+	rel-0-3-fix:1.1.0.4
+	rel-0-4-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2006.09.03.01.42.23;	author acolomba;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.02.28.01.38.58;	author acolomba;	state dead;
+branches
+	1.1.2.1
+	1.1.4.1;
+next	;
+
+1.1.2.1
+date	2006.02.28.01.38.58;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.1.4.1
+date	2006.02.28.01.38.58;	author acolomba;	state dead;
+branches;
+next	1.1.4.2;
+
+1.1.4.2
+date	2006.04.15.15.55.24;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@merged from rel-0-4-dev
+@
+text
+@;; SISC module of SSAX code
+
+;; These files define macros and I don't feel like messing with the
+;; module system + macros yet.
+(include "define-opt.scm")
+(include "myenv-sisc.scm")
+
+;; These define only functions
+(include "look-for-str.scm")
+(include "parser-error.scm")
+(include "ascii.scm")
+(include "input-parse.scm")
+(include "util.scm")
+
+
+
+(module ssax
+  (xml-token?
+   xml-token-kind xml-token-head
+   make-empty-attlist attlist-add
+   attlist-null?
+   attlist-remove-top
+   attlist->alist attlist-fold
+   equal_?
+   name-compare
+   make-xml-token
+   SSAX:largest-unres-name
+   SSAX:read-pi-body-as-string
+   SSAX:prefix-xml
+   SSAX:resolve-name
+   SSAX:warn
+   SSAX:skip-internal-dtd
+   SSAX:read-markup-token
+   SSAX:read-CDATA-body
+   SSAX:read-NCName
+   SSAX:read-QName
+   SSAX:read-char-ref
+   SSAX:read-attributes
+   SSAX:complete-start-tag
+   SSAX:read-external-ID
+   SSAX:read-char-data
+   SSAX:make-pi-parser SSAX:make-elem-parser SSAX:make-parser
+   SSAX:XML->SXML)
+
+  (import parser-error)
+  (import ascii)
+  (import input-parse)
+  (import util)
+  (import miscio)
+
+  (include "ssax-warn-vanilla.scm")
+  (include "SSAX-code.scm")
+  )@
+
+
+1.1
+log
+@file ssax.scm was initially added on branch rel-0-4-dev.
+@
+text
+@d1 53
+@
+
+
+1.1.4.1
+log
+@file ssax.scm was added on branch rel-0-3-fix on 2006-04-15 15:55:24 +0000
+@
+text
+@@
+
+
+1.1.4.2
+log
+@merged from rel-0-4-dev
+@
+text
+@a0 53
+;; SISC module of SSAX code
+
+;; These files define macros and I don't feel like messing with the
+;; module system + macros yet.
+(include "define-opt.scm")
+(include "myenv-sisc.scm")
+
+;; These define only functions
+(include "look-for-str.scm")
+(include "parser-error.scm")
+(include "ascii.scm")
+(include "input-parse.scm")
+(include "util.scm")
+
+
+
+(module ssax
+  (xml-token?
+   xml-token-kind xml-token-head
+   make-empty-attlist attlist-add
+   attlist-null?
+   attlist-remove-top
+   attlist->alist attlist-fold
+   equal_?
+   name-compare
+   make-xml-token
+   SSAX:largest-unres-name
+   SSAX:read-pi-body-as-string
+   SSAX:prefix-xml
+   SSAX:resolve-name
+   SSAX:warn
+   SSAX:skip-internal-dtd
+   SSAX:read-markup-token
+   SSAX:read-CDATA-body
+   SSAX:read-NCName
+   SSAX:read-QName
+   SSAX:read-char-ref
+   SSAX:read-attributes
+   SSAX:complete-start-tag
+   SSAX:read-external-ID
+   SSAX:read-char-data
+   SSAX:make-pi-parser SSAX:make-elem-parser SSAX:make-parser
+   SSAX:XML->SXML)
+
+  (import parser-error)
+  (import ascii)
+  (import input-parse)
+  (import util)
+  (import miscio)
+
+  (include "ssax-warn-vanilla.scm")
+  (include "SSAX-code.scm")
+  )@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 53
+;; SISC module of SSAX code
+
+;; These files define macros and I don't feel like messing with the
+;; module system + macros yet.
+(include "define-opt.scm")
+(include "myenv-sisc.scm")
+
+;; These define only functions
+(include "look-for-str.scm")
+(include "parser-error.scm")
+(include "ascii.scm")
+(include "input-parse.scm")
+(include "util.scm")
+
+
+
+(module ssax
+  (xml-token?
+   xml-token-kind xml-token-head
+   make-empty-attlist attlist-add
+   attlist-null?
+   attlist-remove-top
+   attlist->alist attlist-fold
+   equal_?
+   name-compare
+   make-xml-token
+   SSAX:largest-unres-name
+   SSAX:read-pi-body-as-string
+   SSAX:prefix-xml
+   SSAX:resolve-name
+   SSAX:warn
+   SSAX:skip-internal-dtd
+   SSAX:read-markup-token
+   SSAX:read-CDATA-body
+   SSAX:read-NCName
+   SSAX:read-QName
+   SSAX:read-char-ref
+   SSAX:read-attributes
+   SSAX:complete-start-tag
+   SSAX:read-external-ID
+   SSAX:read-char-data
+   SSAX:make-pi-parser SSAX:make-elem-parser SSAX:make-parser
+   SSAX:XML->SXML)
+
+  (import parser-error)
+  (import ascii)
+  (import input-parse)
+  (import util)
+  (import miscio)
+
+  (include "ssax-warn-vanilla.scm")
+  (include "SSAX-code.scm")
+  )@
+

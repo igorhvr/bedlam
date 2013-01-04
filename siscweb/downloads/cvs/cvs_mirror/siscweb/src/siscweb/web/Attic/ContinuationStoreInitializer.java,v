@@ -1,0 +1,349 @@
+head	1.3;
+access;
+symbols
+	rel-0-3-fix-3:1.2.2.1
+	rel-0-3-fix-2:1.2.2.1
+	rel-0-4-dev-sisc-1-11:1.2.4.2
+	rel-0-3-fix-1:1.2
+	rel-0-4-dev:1.2.0.4
+	rel-0-3-fix:1.2.0.2
+	rel-0-3:1.2
+	rel-0-3-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2006.09.03.01.42.22;	author acolomba;	state dead;
+branches;
+next	1.2;
+
+1.2
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.11.23.02.32.42;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.11.23.02.32.42;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2006.02.25.17.12.00;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2006.01.14.02.02.50;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2006.01.22.04.02.33;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2006.06.17.13.04.18;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@merged from rel-0-4-dev
+@
+text
+@package siscweb.web;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+
+import siscweb.contcentric.ContinuationStoreSingletonDecorator;
+
+public class ContinuationStoreInitializer implements ServletContextListener, Runnable
+{
+    public void contextInitialized(ServletContextEvent contextEvent)
+    {
+        final ServletContext context = contextEvent.getServletContext();
+        final String contextName = context.getServletContextName();
+        final String className = (String) context.getInitParameter("continuation-store");
+
+        if(className == null || "".equals(className.trim())) {
+            throw new RuntimeException(contextName + " : No continuation-store context parameter set.");
+        }
+
+        ContinuationStoreSingletonDecorator.initialize(className);
+
+        final Thread t = new Thread(this);
+        t.setDaemon(true);
+        t.start();
+    }
+
+    public void contextDestroyed(ServletContextEvent arg0)
+    {
+        this.stop();
+    }
+
+
+
+    private Boolean isRunning = Boolean.FALSE;
+
+    public synchronized void run()
+    {
+        synchronized(this.isRunning) {
+            if(this.isRunning == Boolean.FALSE) {
+                this.isRunning = Boolean.TRUE;
+            }
+        }
+
+        while(this.isRunning == Boolean.TRUE) {
+            ContinuationStoreSingletonDecorator.getInstance().purgeExpired();
+
+            try {
+                Thread.sleep(30000);
+            }
+            catch(InterruptedException e)
+            { /* empty */ }
+        }
+    }
+
+    public void stop()
+    {
+        this.isRunning = Boolean.FALSE;
+    }
+}
+@
+
+
+1.2
+log
+@merged from rel-0-3-dev
+@
+text
+@@
+
+
+1.2.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@d7 1
+a7 1
+import siscweb.contcentric.ContinuationStore;
+a10 2
+    ServletContext context;
+
+d13 3
+a15 3
+        this.context = contextEvent.getServletContext();
+        final String contextName = this.context.getServletContextName();
+        final String className = (String) this.context.getInitParameter("siscweb.continuation-store");
+d18 1
+a18 1
+            throw new RuntimeException(contextName + " : No siscweb.continuation-store context parameter set.");
+d21 1
+a21 1
+        context.setAttribute("*SISCWEB.CONTINUATION-STORE*", ContinuationStore.Factory.create(className));
+a30 1
+        this.context = null;
+d39 11
+a49 22
+        // check if everything is in place first, but no need to make a fuss;;
+        // problems would have been already reported above
+        if(this.context != null) {
+            final ContinuationStore continuationStore = (ContinuationStore) this.context.getAttribute("*SISCWEB.CONTINUATION-STORE*");
+
+            if(continuationStore != null ) {
+
+                synchronized(this.isRunning) {
+                    if(this.isRunning == Boolean.FALSE) {
+                        this.isRunning = Boolean.TRUE;
+                    }
+                }
+
+                while(this.isRunning == Boolean.TRUE) {
+                    continuationStore.purgeExpired();
+
+                    try {
+                        Thread.sleep(30000);
+                    }
+                    catch(InterruptedException e)
+                    { /* empty */ }
+                }
+d51 2
+@
+
+
+1.2.4.1
+log
+@now stores continuationstore instance in servletcontext rather than in
+singleton
+@
+text
+@d7 1
+a7 1
+import siscweb.contcentric.ContinuationStore;
+a10 2
+    ServletContext context;
+
+d13 3
+a15 3
+        this.context = contextEvent.getServletContext();
+        final String contextName = this.context.getServletContextName();
+        final String className = (String) this.context.getInitParameter("siscweb.continuation-store");
+d18 1
+a18 1
+            throw new RuntimeException(contextName + " : No siscweb.continuation-store context parameter set.");
+d21 1
+a21 1
+        context.setAttribute("*SISCWEB.CONTINUATION-STORE*", ContinuationStore.Factory.create(className));
+a30 1
+        this.context = null;
+a38 2
+        final ContinuationStore continuationStore = (ContinuationStore) this.context.getAttribute("*SISCWEB.CONTINUATION-STORE*");
+
+d46 1
+a46 1
+            continuationStore.purgeExpired();
+@
+
+
+1.2.4.2
+log
+@now makes sure to have a valid context and continuationstoremanager
+before starting the purgethread
+@
+text
+@d42 1
+a42 4
+        // check if everything is in place first, but no need to make a fuss;;
+        // problems would have been already reported above
+        if(this.context != null) {
+            final ContinuationStore continuationStore = (ContinuationStore) this.context.getAttribute("*SISCWEB.CONTINUATION-STORE*");
+d44 5
+a48 7
+            if(continuationStore != null ) {
+
+                synchronized(this.isRunning) {
+                    if(this.isRunning == Boolean.FALSE) {
+                        this.isRunning = Boolean.TRUE;
+                    }
+                }
+d50 2
+a51 2
+                while(this.isRunning == Boolean.TRUE) {
+                    continuationStore.purgeExpired();
+d53 2
+a54 6
+                    try {
+                        Thread.sleep(30000);
+                    }
+                    catch(InterruptedException e)
+                    { /* empty */ }
+                }
+d56 2
+@
+
+
+1.2.4.3
+log
+@refactored: moved code from ContinuationStoreInitializer and
+REPLInitializer into SISInitializer so only one listener entry is
+needed in web.ml
+@
+text
+@@
+
+
+1.1
+log
+@file ContinuationStoreInitializer.java was initially added on branch rel-0-3-dev.
+@
+text
+@d1 60
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 60
+package siscweb.web;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+
+import siscweb.contcentric.ContinuationStoreSingletonDecorator;
+
+public class ContinuationStoreInitializer implements ServletContextListener, Runnable
+{
+    public void contextInitialized(ServletContextEvent contextEvent)
+    {
+        final ServletContext context = contextEvent.getServletContext();
+        final String contextName = context.getServletContextName();
+        final String className = (String) context.getInitParameter("continuation-store");
+
+        if(className == null || "".equals(className.trim())) {
+            throw new RuntimeException(contextName + " : No continuation-store context parameter set.");
+        }
+
+        ContinuationStoreSingletonDecorator.initialize(className);
+
+        final Thread t = new Thread(this);
+        t.setDaemon(true);
+        t.start();
+    }
+
+    public void contextDestroyed(ServletContextEvent arg0)
+    {
+        this.stop();
+    }
+
+
+
+    private Boolean isRunning = Boolean.FALSE;
+
+    public synchronized void run()
+    {
+        synchronized(this.isRunning) {
+            if(this.isRunning == Boolean.FALSE) {
+                this.isRunning = Boolean.TRUE;
+            }
+        }
+
+        while(this.isRunning == Boolean.TRUE) {
+            ContinuationStoreSingletonDecorator.getInstance().purgeExpired();
+
+            try {
+                Thread.sleep(30000);
+            }
+            catch(InterruptedException e)
+            { /* empty */ }
+        }
+    }
+
+    public void stop()
+    {
+        this.isRunning = Boolean.FALSE;
+    }
+}
+@
+

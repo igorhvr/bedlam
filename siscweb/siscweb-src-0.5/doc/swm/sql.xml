@@ -1,0 +1,738 @@
+<chapter id="sql">
+  <title>Interaction with SQL Databases</title>
+
+  <para>
+    The SQL library performs automatic conversion between scheme and
+    database types. Since the exact conversion table depends on the
+    vendor, a mechanism is provided to add support for other vendors
+    though vendor-specific modules.
+  </para>
+
+  <note>
+    This library is not yet complete, but it covers the most
+    frequently used functionalities. It should be considered useful
+    but immature; in particular, a few names and function signatures
+    are subject to change.
+  </note>
+
+  <section id="jdbc">
+    <title>JDBC Functions</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>sql/jdbc</emphasis>)
+      </emphasis>
+      <sbr/>
+      &locatedin;
+      <emphasis role="bold">
+        siscweb-sql.jar
+      </emphasis>
+    </para>
+
+    <para>
+      This module provides functions to load drivers, obtain
+      connections, and execute procedures within a transactional
+      context.
+    </para>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>jdbc/load-driver</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>&t;/&f;</type>
+          <methodname>jdbc/load-driver</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Loads the JDBC driver specified by
+            <parameter>name</parameter>. It is not necessary to use
+            this function when obtaining a connection from a JDBC
+            DataSource, or when using a plug-in, vendor-specific
+            module. Returns a boolean representing the success of the
+            operation.
+          </para>
+        </blockquote>
+      </para>
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+(jdbc/load-driver "org.hsqldb.jdbcDriver")
+          ]]>
+        </programlisting>
+      </informalexample>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>jdbc/get-connection</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>connection</type>
+          <methodname>jdbc/get-connection</methodname>
+          <methodparam>
+            <parameter>datasource</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Obtains a connection from the specified JDBC
+            <parameter>datasource</parameter>.
+          </para>
+        </blockquote>
+      </para>
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+(import util/jndi)
+(jdbc/get-connection (jndi/lookup "java:/comp/env/jdbc/myDS"))
+          ]]>
+        </programlisting>
+      </informalexample>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>jdbc/open-connection</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>connection</type>
+          <methodname>jdbc/open-connection</methodname>
+          <methodparam>
+            <parameter>url</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>username</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>password</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Opens and returns a connection to the database specified
+            by the <parameter>url</parameter> parameter, logging in
+            with the given <parameter>username</parameter> and
+            <parameter>password</parameter>. The
+            <parameter>url</parameter> is in the same
+            <parameter>jdbc:subprotocol:subname</parameter> format as
+            in the Java JDBC API.
+          </para>
+        </blockquote>
+      </para>
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+(jdbc/open-connection "jdbc:hsqldb:file:/tmp/my-db" "sa" "")
+            ]]>
+        </programlisting>
+      </informalexample>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>jdbc/close-connection</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>jdbc/close-connection</methodname>
+          <methodparam>
+            <parameter>connection</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Closes the specified <parameter>connection</parameter>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>jdbc/get-vendor</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>vendor-name</type>
+          <methodname>jdbc/get-vendor</methodname>
+          <methodparam>
+            <parameter>connection</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the vendor name, in lowercase, of the database to
+            which <parameter>connection</parameter> points.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>jdbc/call-with-connection</primary>
+        </indexterm>
+        <indexterm>
+          <primary>jdbc/call/conn</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>value</type>
+          <methodname>jdbc/call-with-connection</methodname>
+          <methodparam>
+            <parameter>connection</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>proc</parameter>
+          </methodparam>
+        </methodsynopsis>
+        &sbr;
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>value</type>
+          <methodname>jdbc/call/conn</methodname>
+          <methodparam>
+            <parameter>connection</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>procedure</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Invokes <parameter>procedure</parameter> with the given
+            <parameter>connection</parameter>. When the procedure
+            terminates or fails, the connection is automatically
+            <function>close()</function>ed.  The passed
+            <parameter>procedure</parameter> must accept a
+            <parameter>connection</parameter> as its only
+            argument. The value returned will be that returned by
+            <parameter>procedure</parameter>.
+          </para>
+        </blockquote>
+
+        <informalexample>
+          <programlisting>
+            <![CDATA[
+(jdbc/call/conn
+  (jdbc/get-connection (jndi/lookup "java:/comp/env/jdbc/myDS"))
+  (lambda (conn)
+    (sql/execute conn "SELECT SYSDATE FROM DUAL")))
+            ]]>
+          </programlisting>
+        </informalexample>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>jdbc/call-with-transaction</primary>
+        </indexterm>
+        <indexterm>
+          <primary>jdbc/call/tran</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>value</type>
+          <methodname>jdbc/call-with-transaction</methodname>
+          <methodparam>
+            <parameter>connection</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>proc</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <sbr/>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>value</type>
+          <methodname>jdbc/call/tran</methodname>
+          <methodparam>
+            <parameter>connection</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>procedure</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Invokes <parameter>procedure</parameter> within a
+            transactional context. The transaction is committed if
+            <parameter>procedure</parameter> returns normally, and
+            rolled back in case of failure or invocation of an escape
+            continuation. The passed <parameter>procedure</parameter>
+            must accept <parameter>connection</parameter> as its only
+            argument. The value returned will be that returned by
+            <parameter>procedure</parameter>.
+          </para>
+        </blockquote>
+
+        <informalexample>
+          <programlisting>
+            <![CDATA[
+(jdbc/call/conn
+  (jdbc/get-connection (jndi/lookup "java:/comp/env/jdbc/myDS"))
+  (lambda (conn)
+    (jdbc/call/tran
+      conn
+      (lambda (conn)
+        (sql/execute-update conn "UPDATE my_table SET my_field = 0")))))
+            ]]>
+          </programlisting>
+        </informalexample>
+      </para>
+    </blockquote>
+  </section>
+
+
+  <section id="queries">
+    <title>Running Queries</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>sql/query</emphasis>)
+      </emphasis>
+      <sbr/>
+      &locatedin;
+      <emphasis role="bold">
+        siscweb-sql.jar
+      </emphasis>
+    </para>
+
+    <para>
+      This module provides functions to execute queries and map
+      through result sets.
+    </para>
+
+    <note>
+      JDBC ResultSets are translated to lazy lists (in the sense of
+      <ulink url="http://srfi.schemers.org/srfi-45/">srfi-45</ulink>)
+      of SISC hashtables. When the last element of the list is fetched
+      (or in case of error during fetching), the underlying JDBC
+      ResultSet and Statement are automatically closed. In case of
+      premature escape from the <function>jdbc/call/conn</function>
+      context, intentional or not, the JDBC ResultSet and Statement
+      are closed only upon garbage collection. This can be a
+      particularly insidious problem when using pooled connections,
+      and will be fixed in the future.
+    </note>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>sql/execute</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>number/resultset</type>
+          <methodname>sql/execute</methodname>
+          <methodparam>
+            <parameter>connection</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>sql-query</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>[value] ...</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Executes <parameter>sql-query</parameter> through the
+            given <parameter>connection</parameter>.
+          </para>
+          <para>
+            A number of optional <parameter>value</parameter>s can be
+            specified; these will be bound in order to the
+            placeholders in the query. Date, time and timestamps from
+            <ulink
+            url="http://srfi.schemers.org/srfi-19/srfi-19.html">srfi-19</ulink>
+            can be used to bind to SQL DATE, TIME and TIMESTAMP types.
+          </para>
+          <para>
+            Returns the number of rows updated in case of an
+            INSERT/UPDATE/DELETE query statement, and a result set in
+            case of a SELECT statement. Result sets are lazy lists in
+            the sense of <ulink
+            url="http://srfi.schemers.org/srfi-45/srfi-45.html">srfi-45</ulink>. Each
+            element of the list is a hashtable <parameter>(field-name
+            =&gt; value)</parameter>.  Multiple result sets are not
+            supported.
+          </para>
+        </blockquote>
+      </para>
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+(sql/execute conn "SELECT * FROM my_table WHERE id = ?" 12345)
+            ]]>
+        </programlisting>
+      </informalexample>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>sql/execute-query</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>resultset</type>
+          <methodname>sql/execute-query</methodname>
+          <methodparam>
+            <parameter>connection</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>sql-query</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>[value] ...</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Runs <parameter>sql-query</parameter> and returns a result
+            set.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>sql/execute-update</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>number</type>
+          <methodname>sql/execute-update</methodname>
+          <methodparam>
+            <parameter>connection</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>sql-query</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>[value] ...</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Runs <parameter>sql-query</parameter> and returns the
+            number of updated rows.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>sql/map-row</primary>
+        </indexterm>
+        <indexterm>
+          <primary>sql/for-each-row</primary>
+        </indexterm>
+        &syntax;
+        <methodsynopsis language="scheme">
+          <type>list</type>
+          <methodname>sql/map-row</methodname>
+          <methodparam>
+            <parameter>procedure</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>((variable field-name) ...)</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>body</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <sbr/>
+        &syntax;
+        <methodsynopsis language="scheme">
+          <type>undefined</type>
+          <methodname>sql/for-each-row</methodname>
+          <methodparam>
+            <parameter>procedure</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>((variable field-name) ...)</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>body</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            These two macros facilitate writing code that loops
+            through a resultset. Like their correspectives
+            <function>map</function> and
+            <function>for-each</function>, the former collects results
+            into a list, while the latter is to be used for
+            side-effects.
+          </para>
+          <para>
+            For each row in the <parameter>resultset</parameter>, a
+            Scheme <parameter>variable</parameter> is bound to the
+            value of the indicated <parameter>field-name</parameter>
+            in the resultset, where <parameter>field-name</parameter>
+            is either a string or a symbol.
+          </para>
+          <para>
+            In the case of <function>sql/map-row</function>, the value
+            returned by the last expression in
+            <parameter>body</parameter> is collected into the returned
+            <parameter>list</parameter>.
+          </para>
+        </blockquote>
+      </para>
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+(sql/for-each-row (sql/execute-query conn "SELECT id, name FROM person")
+    ((id 'id)
+     (name 'name))
+  (display (format "~a:~a\n" id name)))
+          ]]>
+        </programlisting>
+      </informalexample>
+    </blockquote>
+  </section>
+
+  <section id="vendors">
+      <title>Database Vendor Support </title>
+
+    <para>
+      &SISCweb; includes a number of vendor-specific modules that map
+      Scheme data types onto SQL types and provide extra
+      functionalities, usually in the area of BLOB handling.
+    </para>
+
+    <para>
+      Adding support for new vendors is described in <xref
+      linkend="otherdb"/>
+    </para>
+
+    <section id="hsqldb">
+      <title>HSQLDB</title>
+
+      <para>
+        &requires;
+        <emphasis role="bold">
+          (import <emphasis>sql/hsqldb</emphasis>)
+        </emphasis>
+        <sbr/>
+        &locatedin;
+        <emphasis role="bold">
+          siscweb-sql.jar
+        </emphasis>
+      </para>
+
+      <para>
+        Importing this module registers type conversions between
+        HSQLDB and Scheme. Currently only numbers, strings, time types
+        and Java objects are supported.
+      </para>
+    </section>
+
+    <section id="postgresql">
+      <title>Microsoft SQL Server Support</title>
+
+      <para>
+        &requires;
+        <emphasis role="bold">
+          (import <emphasis>sql/mssql</emphasis>)
+        </emphasis>
+        <sbr/>
+        &locatedin;
+        <emphasis role="bold">
+          siscweb-sql.jar
+        </emphasis>
+      </para>
+
+      <para>
+        Importing this module registers type conversions between
+        Microsoft SQL Server and Scheme. At this time bits, numbers,
+        strings, and time types are supported.
+      </para>
+    </section>
+
+    <section id="oracle">
+      <title>Oracle</title>
+
+      <para>
+        &requires;
+        <emphasis role="bold">
+          (import <emphasis>sql/oracle</emphasis>)
+        </emphasis>
+        <sbr/>
+        &locatedin;
+        <emphasis role="bold">
+          siscweb-sql.jar
+        </emphasis>
+      </para>
+
+      <para>
+        Importing this module registers type conversions between
+        Oracle and Scheme. At this time numbers, strings (but not
+        CLOBs), and time types are supported.  BLOBs are returned as
+        such, but two functions are provided to use them as containers
+        of Java objects.
+      </para>
+
+      <blockquote>
+        <para>
+          <indexterm>
+            <primary>oracle/read-blob</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>|java.lang.Object|</type>
+            <methodname>oracle/read-blob</methodname>
+            <methodparam>
+              <parameter>blob</parameter>
+            </methodparam>
+          </methodsynopsis>
+
+          <blockquote>
+            <para>
+              Deserializes a Java object from
+              <parameter>blob</parameter>.
+            </para>
+          </blockquote>
+        </para>
+
+        <informalexample>
+          <programlisting>
+            <![CDATA[
+;; returns an alist (id => object)
+(sql/map-row (sql/execute-query "SELECT id, obj FROM my_table")
+    ((id 'id)
+     (blob 'obj))
+  `(,id . ,(oracle/read-blob blob)))
+            ]]>
+          </programlisting>
+        </informalexample>
+      </blockquote>
+
+      <blockquote>
+        <para>
+          <indexterm>
+            <primary>oracle/write-blob</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>undefined</type>
+            <methodname>oracle/write-blob</methodname>
+            <methodparam>
+              <parameter>blob</parameter>
+            </methodparam>
+            <methodparam>
+              <parameter>java-object</parameter>
+            </methodparam>
+          </methodsynopsis>
+
+          <blockquote>
+            <para>
+              Serializes <parameter>java-object</parameter> into
+              <parameter>blob</parameter>. Complex Scheme values can
+              also be serialized by <function>java-wrap</function>ping
+              them. The blob has to be first inserted using the Oracle
+              EMPTY_BLOB() function, and then read back with a SELECT
+              query.
+            </para>
+          </blockquote>
+        </para>
+
+        <informalexample>
+          <programlisting>
+            <![CDATA[
+(sql/for-each-row (sql/execute-query "SELECT id, obj FROM my_table WHERE id = ?" 12345)
+    ((blob 'obj))
+  (oracle/write-blob blob (java-wrap (lambda (x) (* x x)))))
+            ]]>
+          </programlisting>
+        </informalexample>
+      </blockquote>
+    </section>
+
+    <section id="postgresql">
+      <title>PostgreSQL</title>
+
+      <para>
+        &requires;
+        <emphasis role="bold">
+          (import <emphasis>sql/postgresql</emphasis>)
+        </emphasis>
+        <sbr/>
+        &locatedin;
+        <emphasis role="bold">
+          siscweb-sql.jar
+        </emphasis>
+      </para>
+
+      <para>
+        Importing this module registers type conversions between
+        PostgreSQL and Scheme. At this time bits, numbers, strings,
+        time types and vectors are supported.
+      </para>
+    </section>
+
+    <section id="otherdb">
+      <title>Adding Support for Other Vendors</title>
+
+      <para>
+        It is possible to add support for other database vendors. The
+        existing modules (such as sql/hsqldb.scm) can be used as base
+        and reference.
+      </para>
+      <para>
+        At this stage, supporting a new vendor is simply a matter of
+        defining an association list between SQL types and conversion
+        procedures. Each conversion procedure accepts the object as
+        read by the Java <function>Statement.getObject(n)</function>
+        method, a ResultSetMetaData object, and the column number.
+      </para>
+      <para>
+        The function should return a Scheme type. If that is not
+        possible (such as it is the case with BLOBs), the function can
+        return a raw Java type, as long as the module provides other
+        functions to transform the Java type into a Scheme type.
+      </para>
+    </section>
+  </section>
+</chapter>

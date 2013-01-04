@@ -1,0 +1,1553 @@
+head	1.3;
+access;
+symbols
+	rel-0-6-dev:1.3.0.4
+	rel-0-5-fix:1.3.0.2
+	rel-0-5:1.3
+	rel-0-5-dev-safe-frames:1.2.4.2.0.2
+	Root_rel-0-5-dev-safe-frames:1.2.4.2
+	rel-0-4-fix-0:1.2
+	rel-0-5-dev:1.2.0.4
+	rel-0-4-fix:1.2.0.2
+	rel-0-4-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2007.04.12.03.51.15;	author acolomba;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2006.09.03.01.42.25;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2006.08.15.00.51.11;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2006.08.15.00.51.11;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2006.08.16.03.17.10;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2006.08.18.02.57.07;	author acolomba;	state Exp;
+branches;
+next	1.1.2.4;
+
+1.1.2.4
+date	2006.08.27.02.33.24;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5;
+
+1.1.2.5
+date	2006.08.29.03.37.06;	author acolomba;	state Exp;
+branches;
+next	1.1.2.6;
+
+1.1.2.6
+date	2006.08.31.00.05.28;	author acolomba;	state Exp;
+branches;
+next	1.1.2.7;
+
+1.1.2.7
+date	2006.08.31.02.50.09;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2006.12.02.22.05.17;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2007.01.27.04.17.52;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2007.04.04.23.47.18;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2007.04.08.14.37.53;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@merged from rel-0-5-dev
+@
+text
+@<chapter id="install">
+  <title>Installation</title>
+
+  <para>
+    Using &SISCweb; in web applications is simple matter of including
+    its components in the classpath and making some entries in the
+    <literal>web.xml</literal> deployment descriptor.
+  </para>
+
+  <para>
+    First-time users may want to check out the example WAR file
+    (siscweb-examples-[v].war). It can be deployed by simply dropping
+    it into the deployment folder of a J2EE appserver, and can also be
+    used as the starting point for developing a new application.
+  </para>
+
+  <warning>
+    <para>
+      While the server-side REPL is disabled in the &SISCweb; examples
+      WAR file available from sourceforge.net, if you build it from
+      sources, a REPL will be bound to the localhost:5156
+      socket. <emphasis>This is a security vulnerability.</emphasis>
+      You should make sure to disable this feature if you are
+      concerned about other people on the same host gaining access to
+      a full-fledged REPL.
+    </para>
+  </warning>
+
+  <section id="requirements">
+    <title>Requirements</title>
+
+    <para>
+      &SISCweb; requires a J2EE 1.3 application server (Servlet
+      spec. 2.3), Java 1.4 or later, and &SISC; version 1.15.x or
+      later. &SISC; version 1.16.x or later is recommended.
+    </para>
+  </section>
+
+  <section id="components">
+    <title>Components</title>
+
+    <para>
+      &SISCweb; is divided into different components:
+
+      <itemizedlist>
+        <listitem>
+          <emphasis>siscweb.jar</emphasis>: The &SISCweb; core
+          library manages continuations and provides functions to
+          forward requests to other J2EE component.
+          This is a mandatory component.
+        </listitem>
+        <listitem>
+          <emphasis>siscweb-sxml.jar</emphasis>: An add-on library to
+          produce HTML/XHTML/XML pages and Graphviz graphs from SXML
+          notation. (In the future it will also provide
+          &quot;recommended&quot; SXML packages.)
+        </listitem>
+        <listitem>
+          <emphasis>siscweb-sql.jar</emphasis>: An add-on library
+          providing a Scheme interface over JDBC. It supports a few
+          database vendors, and more can be easily added through
+          Scheme modules.
+        </listitem>
+      </itemizedlist>
+
+      The only required component is
+      <literal>siscweb.jar</literal>. The desired components should be
+      placed in the context's <literal>WEB-INF/lib</literal>.
+    </para>
+
+    <para>
+      The &SISC; libraries, including the
+      <literal>sisc-heap.jar</literal> file, should be also added to
+      the load path. They are found in the &SISC; binary distribution.
+    </para>
+
+    <note>
+      <para>
+        Starting from &SISCweb; v0.5, the SISC libraries can be placed
+        in a classpath common to multiple contexts (e.g. in an EAR
+        root or in the application server's path).
+      </para>
+
+      <para>
+        The core <literal>siscweb.jar</literal> instead MUST be placed
+        in the context's <literal>WEB-INF/lib</literal>. While
+        &SISCweb;'s critical data (e.g. the continuation table) is
+        per-context, the logger and the configuration settings
+        detailed below are (for now) in the Java static scope.
+      </para>
+    </note>
+  </section>
+
+  <section id="configuration">
+    <title>Configuration</title>
+
+    <para>
+      &SISCweb; requires a couple of context parameters and a listener
+      in order to initialize. Besides that, the
+      <literal>SISCAdapterServlet</literal> should be associated to
+      the context path under which <emphasis>sisclets</emphasis>
+      (&SISC; servlets) should be published.
+    </para>
+
+    <para>
+      Optionally, a number of environment entries are used to control
+      various aspects of &SISCweb;'s behavior and performance.
+    </para>
+
+    <para>
+      Beside &SISCweb;-specific settings, it is also possible to specify
+      &SISC; parameters.
+    </para>
+
+    <section id="context-parameters">
+      <title>Context Parameters</title>
+
+      <para>
+        Two servlet context parameters,
+        <literal>siscweb.on-init-sexp</literal> and
+        <literal>siscweb.on-destroy-sexp</literal>, contain Scheme
+        code executed respectively when the context is initialized and
+        destroyed (i.e. during application server startup and
+        shutdown, as well as during context restarts.)
+      </para>
+
+      <para>
+        The <literal>siscweb.on-init-sexp</literal>
+        <emphasis>must</emphasis> contain a line to load the
+        <literal>siscweb/sisclet</literal> module in the Scheme
+        toplevel. While &SISCweb; could well do this implicitly, the
+        current setup allows advanced users to substitute the module
+        with an equivalent one.
+      </para>
+
+      <para>
+        The context parameters are read by a the &SISCweb; J2EE
+        listener, which must also be specified. The example below
+        shows a typical configuration.
+      </para>
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+<context-param>
+  <param-name>siscweb.on-init-sexp</param-name>
+  <param-value>
+    <![CDATA[
+      (require-extension (lib siscweb/sisclet))
+
+    ;; replace round parentheses below with square ones in real life
+    ))>
+  </param-value>
+</context-param>
+
+<context-param>
+  <param-name>siscweb.on-destroy-sexp</param-name>
+  <param-value>
+    <![CDATA[
+      ;; generally nothing to do
+
+    ;; replace round parentheses below with square ones in real life
+    ))>
+  </param-value>
+</context-param>
+
+<listener>
+  <listener-class>siscweb.web.SISCInitializer</listener-class>
+</listener>
+          ]]>
+        </programlisting>
+      </informalexample>
+    </section>
+
+    <section id="adapter-servlet">
+      <title>The Adapter Servlet</title>
+
+      <para>
+        A Java adapter servlet allows the mapping of context paths to
+        groups of sisclets. Sisclets are simply Scheme procedures
+        associated through the publish mechanism (see <xref
+        linkend="publishing"/>) to paths <emphasis>below</emphasis>
+        that of the adapter servlet.
+      </para>
+
+      <para>
+        The adapter servlet accepts two parameters,
+        <literal>on-init-sexp</literal> and
+        <literal>on-destroy-sexp</literal>, which are invoked when the
+        servlet is initialized and destroyed. As the example below
+        shows, they are typically used to respectively publish and
+        unpublish sisclets.
+      </para>
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+<servlet>
+  <servlet-name>examples</servlet-name>
+  <description>siscweb examples</description>
+  <servlet-class>siscweb.web.SISCAdapterServlet</servlet-class>
+  <init-param>
+    <param-name>on-init-sexp</param-name>
+    <param-value>
+      <![CDATA[
+        ;; NOTE: scm/ is not generally a good place, since it is browsable
+        (class-path-extension-append! '("scm/" "WEB-INF/scm/"))
+
+        (require-extension (lib siscweb/publish))
+        (require-extension (lib examples/hello-world))
+
+        (publish "/hello/*" 'hello-world)
+
+      ;; replace round parentheses below with square ones in real life
+      ))>
+    </param-value>
+  </init-param>
+  <init-param>
+    <param-name>on-destroy-sexp</param-name>
+    <param-value>
+      <![CDATA[
+        (require-extension (lib siscweb/publish))
+
+        (unpublish "/hello/*")
+      ;; replace round parentheses with square in real life
+      ))>
+    </param-value>
+  </init-param>
+</servlet>
+
+<servlet-mapping>
+  <servlet-name>examples</servlet-name>
+  <url-pattern>/sisclets/*</url-pattern>
+</servlet-mapping>
+          ]]>
+        </programlisting>
+      </informalexample>
+    </section>
+
+    <section id="sisc-params">
+      <title>SISC Configuration Parameters</title>
+
+      <para>
+        &SISCweb; will initialize the &SISC; interpreter with
+        parameters loaded from the file
+        <literal>WEB-INF/sisc.properties</literal> if present.  This
+        is particularly useful for static parameters, but also
+        convenient for dynamic parameters that are not changed by the
+        application. Some often-used settings are:
+      </para>
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+; max stack trace in case of errors
+sisc.maxStackTraceDepth = 16
+
+; web prompt
+sisc.replPrompt = "W;> "
+
+; disable in production
+sisc.stackTraceOnError = true
+          ]]>
+        </programlisting>
+      </informalexample>
+    </section>
+  </section>
+
+  <section id="env-entries">
+    <title>Environment Entries</title>
+
+    <para>
+      Some aspects of &SISCweb;'s inner workings can be controlled via
+      a number of environment entries. The advantage of environment
+      entries over Java properties or context parameters is that they
+      can be usually changed through the application server's
+      administrative console. This is especially useful because new
+      values for a select environment entries are dynamically
+      picked up within about one minute.
+    </para>
+
+    <section id="env-repl">
+      <title>REPL Entries</title>
+
+      <para>
+        Applications using &SISCweb; can optionally provide a
+        network-accessible Scheme REPL. This is particularly useful
+        during development, and with precautions it can be an
+        invaluable feature in the deployment environment as well.
+      </para>
+
+      <note>
+        <para>
+          The server-side REPL amounts to a no-login shell into a
+          server, therefore it is highly advisable to at least bind it
+          to the local interface only (i.e. localhost).
+        </para>
+
+        <para>
+          The REPL can then be made remotely accessible in a secure
+          manner by establishing an SSH tunnel.
+        </para>
+      </note>
+
+      <table id="env-repl-list">
+        <title>REPL-related environment entries</title>
+
+        <tgroup cols="3" align="left" colsep="1" rowsep="1">
+          <colspec colname="Name"/>
+          <colspec colname="Values;Type"/>
+          <colspec colname="Description"/>
+
+          <thead>
+            <row>
+              <entry>Name</entry>
+              <entry>Values;Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>siscweb/repl-p</literal></entry>
+              <entry>
+                <literal>true</literal>|<literal>false</literal>;
+                <literal>java.lang.Boolean</literal>
+              </entry>
+              <entry>
+                Whether or not &SISCweb; should bind a REPL to a
+                network socket. Static, defaults to
+                <literal>false</literal>.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>siscweb/repl-host</literal></entry>
+              <entry>
+                IP address (e.g. <literal>127.0.0.1</literal>);
+                <literal>java.lang.String</literal>
+              </entry>
+              <entry>
+                The network address to which the REPL should be
+                bound. Static, defaults to <literal>null</literal>.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>siscweb/repl-port</literal></entry>
+              <entry>
+                Port number (e.g. <literal>5156</literal>);
+                <literal>java.lang.Integer</literal>
+              </entry>
+              <entry>
+                The port to which the REPL should be bound. Static,
+                defaults to <literal>0</literal>.
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section id="env-logging">
+      <title>Logging Entries</title>
+
+      <para>
+        &SISCweb; logs its internal operations in order to aid
+        troubleshooting.
+      </para>
+
+      <table id="env-repl-list">
+        <title>Log-related environment entries</title>
+
+        <tgroup cols="3" align="left" colsep="1" rowsep="1">
+          <colspec colname="Name"/>
+          <colspec colname="Values;Type"/>
+          <colspec colname="Description"/>
+
+          <thead>
+            <row>
+              <entry>Name</entry>
+              <entry>Values;Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>siscweb/logging-level</literal></entry>
+              <entry>
+                <literal>SEVERE</literal>| <literal>WARNING</literal>|
+                <literal>INFO</literal>| <literal>CONFIG</literal>|
+                <literal>FINE</literal>| <literal>FINER</literal>|
+                <literal>FINEST</literal>;
+                <literal>java.lang.String</literal>
+              </entry>
+              <entry>
+                The Java logging level that &SISCweb; should adopt.
+                Static, defaults to <literal>INFO</literal>.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>siscweb/logging-file</literal></entry>
+              <entry>
+                File path (e.g. <literal>%t/siscweb.log</literal>);
+                <literal>java.lang.String</literal>
+              </entry>
+              <entry>
+                A file path where &SISCweb; should log its messages.
+                Static, defaults to <literal>null</literal>, i.e. it
+                logs to the application server's location.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>siscweb/logging-limit</literal></entry>
+              <entry>
+                <literal>java.lang.Integer</literal>
+              </entry>
+              <entry>
+                The maximum number of bytes to write to the log
+                file. Static, defaults to <literal>5000000</literal>.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>siscweb/logging-count</literal></entry>
+              <entry>
+                <literal>java.lang.Integer</literal>
+              </entry>
+              <entry>
+                The maximum number of log files to rotate. Static,
+                defaults to <literal>1</literal>.
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section id="env-contcentric">
+      <title>Continuation Manager Entries</title>
+
+      <para>
+        &SISCweb; stores and manages the lifecycle of the
+        continuations corresponding to URLs through a pluggable
+        class. This allows storing continuations in the Session object
+        (recommended), databases, flat files, or user-defined storage.
+      </para>
+
+      <table id="env-repl-list">
+        <title>Continuation management environment entries</title>
+
+        <tgroup cols="3" align="left" colsep="1" rowsep="1">
+          <colspec colname="Name"/>
+          <colspec colname="Values"/>
+          <colspec colname="Description"/>
+
+          <thead>
+            <row>
+              <entry>Name</entry>
+              <entry>Domain</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>siscweb/continuation-ttl</literal></entry>
+              <entry>
+                seconds; <literal>java.lang.Long</literal>
+              </entry>
+              <entry>
+                New continuations will have the indicated time-to-live
+                unless overridden via the
+                <function>adjust-timeout!</function> procedure.
+                Dynamic, defaults to <literal>1200</literal> seconds.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>siscweb/continuation-cleanup-interval</literal></entry>
+              <entry>
+                milliseconds; <literal>java.lang.Long</literal>
+              </entry>
+              <entry>
+                &SISCweb; will remove expired continuations
+                periodically according to the indicated
+                interval. Dynamic, defaults to
+                <literal>30000</literal>ms.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>siscweb/continuation-group-creation-interval</literal></entry>
+              <entry>
+                milliseconds; <literal>java.lang.Long</literal>
+              </entry>
+              <entry>
+                This parameter can be used to limit the rate at which
+                new continuation groups -- each group corresponds to a
+                request --, are created for each session. A reasonable
+                value will go unnoticed by human users, but assist
+                against basic DoS attacks. Dynamic, defaults to
+                <literal>500</literal>ms.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>siscweb/user-history-size</literal></entry>
+              <entry>
+                <literal>java.lang.Integer</literal>
+              </entry>
+              <entry>
+                Technically the maximum number of continuation groups
+                stored per user at any given time, in practice it
+                amounts to the number of pages/requests in the user
+                history for which continuations are still stored. If
+                the maximum number is reached, the continuation group
+                expiring the soonest is removed to make room for a new
+                group. This parameter can be used to roughly bound the
+                amount of resources devoted to each user. Dynamic,
+                defaults to <literal>50</literal>.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>siscweb/user-history-size-serialized</literal></entry>
+              <entry>
+                <literal>java.lang.Integer</literal>
+              </entry>
+              <entry>
+                When a user session is passified, only the indicated
+                number of continuation groups is maintained. Dynamic,
+                defaults to <literal>10</literal>.
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+  </section>
+</chapter>
+@
+
+
+1.2
+log
+@merged from rel-0-4-dev
+@
+text
+@d18 9
+a26 7
+    While the server-side REPL is disabled in the &SISCweb; examples
+    WAR file available from sourceforge.net, if you build it from
+    sources, a REPL will be bound to the localhost:5156
+    socket. <emphasis>This is a security vulnerability.</emphasis> You
+    should make sure to disable this feature if you are concerned
+    about other people on the same host gaining access to a
+    full-fledged REPL.
+d53 2
+a54 2
+          <emphasis>siscweb-sxml.jar</emphasis>: An add-on library
+          to produce HTML pages and Graphviz graphs from SXML
+d68 1
+a68 2
+      placed in the web application's load path, typically
+      <literal>WEB-INF/lib</literal>.
+d70 1
+d74 1
+a74 1
+      the classpath. They are found in the &SISC; binary distribution.
+d76 16
+d288 2
+a289 2
+        during development, and with precautions it can be an invaluable
+        feature in the deployment environment as well.
+d292 13
+d412 20
+@
+
+
+1.2.4.1
+log
+@added logging-limit and logging-count entry descriptions
+@
+text
+@a380 20
+            <row>
+              <entry><literal>siscweb/logging-limit</literal></entry>
+              <entry>
+                <literal>java.lang.Integer</literal>
+              </entry>
+              <entry>
+                The maximum number of bytes to write to the log
+                file. Static, defaults to <literal>5000000</literal>.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>siscweb/logging-count</literal></entry>
+              <entry>
+                <literal>java.lang.Integer</literal>
+              </entry>
+              <entry>
+                The maximum number of log files to rotate. Static,
+                defaults to <literal>1</literal>.
+              </entry>
+            </row>
+@
+
+
+1.2.4.2
+log
+@changes to reflect the ability to share sisc.jar among servlet
+contexts
+@
+text
+@d18 7
+a24 9
+    <para>
+      While the server-side REPL is disabled in the &SISCweb; examples
+      WAR file available from sourceforge.net, if you build it from
+      sources, a REPL will be bound to the localhost:5156
+      socket. <emphasis>This is a security vulnerability.</emphasis>
+      You should make sure to disable this feature if you are
+      concerned about other people on the same host gaining access to
+      a full-fledged REPL.
+    </para>
+d66 2
+a67 1
+      placed in the context's <literal>WEB-INF/lib</literal>.
+a68 1
+
+d72 1
+a72 1
+      the load path. They are found in the &SISC; binary distribution.
+a73 16
+
+    <note>
+      <para>
+        Starting from &SISCweb; v0.5, the SISC libraries can be placed
+        in a classpath common to multiple contexts (e.g. in an EAR
+        root or in the application server's path).
+      </para>
+
+      <para>
+        The core <literal>siscweb.jar</literal> instead MUST be placed
+        in the context's <literal>WEB-INF/lib</literal>. While
+        &SISCweb;'s critical data (e.g. the continuation table) is
+        per-context, the logger and the configuration settings
+        detailed below are (for now) in the Java static scope.
+      </para>
+    </note>
+@
+
+
+1.2.4.3
+log
+@added note about repl and ssh tunneling
+@
+text
+@d288 2
+a289 2
+        during development, and with precautions it can be an
+        invaluable feature in the deployment environment as well.
+a291 13
+      <note>
+        <para>
+          The server-side REPL amounts to a no-login shell into a
+          server, therefore it is highly advisable to at least bind it
+          to the local interface only (i.e. localhost).
+        </para>
+
+        <para>
+          The REPL can then be made remotely accessible in a secure
+          manner by establishing an SSH tunnel.
+        </para>
+      </note>
+
+@
+
+
+1.2.4.4
+log
+@example formatting; nesting; clarifications
+@
+text
+@d53 2
+a54 2
+          <emphasis>siscweb-sxml.jar</emphasis>: An add-on library to
+          produce HTML/XHTML/XML pages and Graphviz graphs from SXML
+@
+
+
+1.1
+log
+@file install.xml was initially added on branch rel-0-4-dev.
+@
+text
+@d1 484
+@
+
+
+1.1.2.1
+log
+@moved install section from introduction.xml to install.xml; also expanded
+@
+text
+@a0 229
+<chapter id="install">
+  <title>Installation</title>
+
+  <para>
+    Using &SISCweb; in web applications is simple matter of
+    including its components in the classpath and making some
+    entries in the application's <function>web.xml</function>.
+  </para>
+
+  <para>
+    First-time users may want to check out the example WAR file
+    (siscweb-examples-[v].war), which can be deployed by simply
+    dropping it into the deployment folder of a J2EE appserver. The
+    example WAR file can also be used as a starting point for
+    developing an application.
+  </para>
+
+  <warning>
+    While the server-side REPL is disabled in the &SISCweb; examples
+    WAR file available from sourceforge.net, if you build your own
+    WAR file, a REPL will be bound to the localhost:5156
+    socket. <emphasis>This is a security vulnerability.</emphasis>
+    You should make sure to disable this feature if you are
+    concerned about other people on the same host gaining access to
+    a full-fledged REPL.
+  </warning>
+
+  <section id="components">
+    <title>Components</title>
+
+    <para>
+      &SISCweb; is broken down into different components, which
+      should be placed in the web application's load path, typically
+      <function>WEB-INF/lib</function>.
+
+      <itemizedlist>
+        <listitem>
+          <emphasis>siscweb.jar</emphasis>: The &SISCweb; core
+          library manages continuations and provides functions to
+          forward requests to other J2EE component. This is the only
+          mandatory component.
+        </listitem>
+        <listitem>
+          <emphasis>siscweb-sxml.jar</emphasis>: An add-on library
+          to produce HTML pages and Graphviz graphs from SXML
+          notation. (In the future it will also provide
+          &quot;recommended&quot; SXML packages.)
+        </listitem>
+        <listitem>
+          <emphasis>siscweb-sql.jar</emphasis>: An add-on library
+          providing a Scheme interface over JDBC. It supports a few
+          database vendors, and more can be easily added through
+          Scheme modules.
+        </listitem>
+        <listitem>
+          <emphasis>siscweb-hibernate.jar</emphasis>: An add-on
+          library to persist continuations using <ulink
+          url="http://www.hibernate.org">Hibernate</ulink>. This
+          library requires the standard hibernate.jar and its
+          dependencies to work.
+        </listitem>
+      </itemizedlist>
+
+      The &SISC; libraries, including the sisc-heap.jar, should be
+      added to the classpath. These are easily found in the &SISC;
+      binary distribution.
+    </para>
+  </section>
+
+  <section id="configuration">
+    <title>Configuration</title>
+
+    <para>
+      &SISCweb; requires a couple of context parameters and a
+      listener to initialize. Besides that, the SISCAdapterServlet
+      should be associated to the context path under which
+      <emphasis>sisclets</emphasis>, &SISC; servlets, should be
+      published.
+    </para>
+
+    <para>
+      Optionally, a number of environment entries can be defined to control
+      various aspects of &SISCweb;'s behavior and performance.
+    </para>
+
+    <section id="context-parameters">
+      <title>Context Parameters</title>
+
+      <para>
+        Two servlet context parameters,
+        <function>siscweb.on-init-sexp</function> and
+        <function>siscweb.on-destroy-sexp</function>, contain Scheme
+        code executed respectively when the context is initialized
+        or destroyed, i.e. during application server startup and
+        shutdown, as well as during context restarts.)
+      </para>
+
+      <para>
+        The <function>siscweb.on-init-sexp</function>
+        <emphasis>must</emphasis> contain a line to load the
+        <function>siscweb/sisclet</function> module in the Scheme
+        toplevel. While &SISCweb; could well do this implicitely,
+        the current setup allows advanced users to substitute the
+        module with an equivalent one.
+      </para>
+
+      <para>
+        The context parameters are read by a J2EE listener, which
+        also must be specified. The example below shows a typical
+        setup.
+      </para>
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+<context-param>
+  <param-name>siscweb.on-init-sexp</param-name>
+  <param-value>
+    <![CDATA[
+      (require-extension (lib siscweb/sisclet))
+
+    ;; replace round parentheses with square in real life
+    ))>
+  </param-value>
+</context-param>
+
+<context-param>
+  <param-name>siscweb.on-destroy-sexp</param-name>
+  <param-value>
+    <![CDATA[
+      ;; generally nothing to do
+
+    ;; replace round parentheses with square in real life
+    ))>
+  </param-value>
+</context-param>
+
+<listener>
+  <listener-class>siscweb.web.SISCInitializer</listener-class>
+</listener>
+          ]]>
+        </programlisting>
+      </informalexample>
+    </section>
+
+    <section id="adapter-servlet">
+      <title>The Adapter Servlet</title>
+
+      <para>
+        A Java adapter servlet allows the mapping of context paths
+        to groups of sisclets. Sisclets are simply Scheme procedures
+        associated through the publish mechanism (see <xref
+        linkend="publishing"/>) to paths <emphasis>below</emphasis>
+        that of the adapter servlet.
+      </para>
+
+      <para>
+        The adapter servlet accepts two parameters,
+        <function>on-init-sexp</function> and
+        <function>on-destroy-sexp</function>, which are invoked when
+        the servlet is initialized or destroyed. As the example
+        below shows, they are typically used to respectively publish
+        and unpublish sisclets.
+      </para>
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+<servlet>
+  <servlet-name>examples</servlet-name>
+  <description>siscweb examples</description>
+  <servlet-class>siscweb.web.SISCAdapterServlet</servlet-class>
+  <init-param>
+    <param-name>on-init-sexp</param-name>
+    <param-value>
+      <![CDATA[
+        ;; NOTE: scm/ is not generally a good place, since it is browsable
+        (class-path-extension-append! '("scm/" "WEB-INF/scm/"))
+
+        (require-extension (lib siscweb/publish))
+        (require-extension (lib examples/hello-world))
+
+        (publish "/hello/*" 'hello-world)
+
+      ;; replace round parentheses with square in real life
+      ))>
+    </param-value>
+  </init-param>
+  <init-param>
+    <param-name>on-destroy-sexp</param-name>
+    <param-value>
+      <![CDATA[
+        (require-extension (lib siscweb/publish))
+
+        (unpublish "/hello/*")
+      ;; replace round parentheses with square in real life
+      ))>
+    </param-value>
+  </init-param>
+</servlet>
+
+<servlet-mapping>
+  <servlet-name>examples</servlet-name>
+  <url-pattern>/sisclets/*</url-pattern>
+</servlet-mapping>
+          ]]>
+        </programlisting>
+      </informalexample>
+    </section>
+  </section>
+
+  <section id="env-entries">
+    <title>Environment Entries</title>
+
+    <para>
+      Some aspects of &SISCweb; inner workings can be controlled via a
+      number of environment entries. The advantage of environment
+      entries over Java properties or context parameters is that the
+      former can be usually altered through the application server's
+      administrative console. This is especially useful because new
+      values for a number of environment entries are picked up within
+      about one minute.
+    </para>
+
+    <para>
+      more more more...
+    </para>
+  </section>
+</chapter>
+@
+
+
+1.1.2.2
+log
+@added docs for environment entries
+@
+text
+@d32 3
+a34 3
+      &SISCweb; is broken down into different components, which should
+      be placed in the web application's load path, typically
+      <literal>WEB-INF/lib</literal>.
+d91 4
+a94 4
+        <literal>siscweb.on-init-sexp</literal> and
+        <literal>siscweb.on-destroy-sexp</literal>, contain Scheme
+        code executed respectively when the context is initialized or
+        destroyed, i.e. during application server startup and
+d99 1
+a99 1
+        The <literal>siscweb.on-init-sexp</literal>
+d101 4
+a104 4
+        <literal>siscweb/sisclet</literal> module in the Scheme
+        toplevel. While &SISCweb; could well do this implicitely, the
+        current setup allows advanced users to substitute the module
+        with an equivalent one.
+d150 2
+a151 2
+        A Java adapter servlet allows the mapping of context paths to
+        groups of sisclets. Sisclets are simply Scheme procedures
+d159 5
+a163 5
+        <literal>on-init-sexp</literal> and
+        <literal>on-destroy-sexp</literal>, which are invoked when the
+        servlet is initialized or destroyed. As the example below
+        shows, they are typically used to respectively publish and
+        unpublish sisclets.
+d225 3
+a227 244
+    <section id="env-repl">
+      <title>REPL Entries</title>
+
+      <para>
+        Applications using &SISCweb; can optionally provide a
+        network-accessible Scheme REPL. This is particularly useful
+        during development, and with precautions it can be an invaluable
+        feature in the deployment environment as well.
+      </para>
+
+      <table id="env-repl-list">
+        <title>REPL-related environment entries</title>
+
+        <tgroup cols="3" align="left" colsep="1" rowsep="1">
+          <colspec colname="Name"/>
+          <colspec colname="Domain"/>
+          <colspec colname="Description"/>
+
+          <thead>
+            <row>
+              <entry>Name</entry>
+              <entry>Values</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>siscweb/repl-p</literal></entry>
+              <entry>
+                <literal>true</literal>|<literal>false</literal>;
+                <literal>java.lang.Boolean</literal>
+              </entry>
+              <entry>
+                Whether or not &SISCweb; should bind a REPL to a
+                network socket. Static, defaults to
+                <literal>false</literal>.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>siscweb/repl-host</literal></entry>
+              <entry>
+                IP address (e.g. <literal>127.0.0.1</literal>);
+                <literal>java.lang.String</literal>
+              </entry>
+              <entry>
+                The network address to which the REPL should be
+                bound. Static, defaults to <literal>null</literal>.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>siscweb/repl-port</literal></entry>
+              <entry>
+                Port number (e.g. <literal>5156</literal>);
+                <literal>java.lang.Integer</literal>
+              </entry>
+              <entry>
+                The port to which the REPL should be bound. Static,
+                defaults to <literal>0</literal>.
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section id="env-logging">
+      <title>Logging Entries</title>
+
+      <para>
+        &SISCweb; logs its internal operations in order to aid
+        troubleshooting.
+      </para>
+
+      <table id="env-repl-list">
+        <title>Log-related environment entries</title>
+
+        <tgroup cols="3" align="left" colsep="1" rowsep="1">
+          <colspec colname="Name"/>
+          <colspec colname="Domain"/>
+          <colspec colname="Description"/>
+
+          <thead>
+            <row>
+              <entry>Name</entry>
+              <entry>Values</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>siscweb/logging-level</literal></entry>
+              <entry>
+                <literal>SEVERE</literal>| <literal>WARNING</literal>|
+                <literal>INFO</literal>| <literal>CONFIG</literal>|
+                <literal>FINE</literal>| <literal>FINEST</literal>;
+                <literal>java.lang.String</literal>
+              </entry>
+              <entry>
+                The Java logging level that &SISCweb; should adopt.
+                Static, defaults to <literal>INFO</literal>.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>siscweb/logging-file</literal></entry>
+              <entry>
+                File path (e.g. <literal>%t/siscweb.log</literal>);
+                <literal>java.lang.String</literal>
+              </entry>
+              <entry>
+                A file path to which &SISCweb; should log its
+                messages.  Static, defaults to
+                <literal>null</literal>, i.e. it logs to the
+                application server's location.
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section id="env-contcentric">
+      <title>Continuation Manager Entries</title>
+
+      <para>
+        &SISCweb; stores and manages the lifecycle of the
+        continuations corresponding to URLs through a pluggable
+        class. This allows storing continuations in the Session object
+        (recommended), databases, flat files, or user-defined storage.
+      </para>
+
+      <table id="env-repl-list">
+        <title>Continuation management environment entries</title>
+
+        <tgroup cols="3" align="left" colsep="1" rowsep="1">
+          <colspec colname="Name"/>
+          <colspec colname="Values"/>
+          <colspec colname="Description"/>
+
+          <thead>
+            <row>
+              <entry>Name</entry>
+              <entry>Domain</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><literal>siscweb/continuation-store-class</literal></entry>
+              <entry>
+                A class implementing the
+                <literal>siscweb.contcentric.ContinuationStore</literal>
+                interface; <literal>java.lang.String</literal>
+              </entry>
+              <entry>
+                A class that stores continuations on a medium, and
+                provides a method to purge unused continuations, for
+                some definition of &quot;unused&quot;. The example
+                <literal>web.xml</literal> file and &SISCweb;'s source
+                code are the only documentaion for now. Static,
+                defaults to
+                <literal>siscweb.contcentric.SessionContinuationStore</literal>.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>siscweb/continuation-cleanup-interval</literal></entry>
+              <entry>
+                milliseconds; <literal>java.lang.Integer</literal>
+              </entry>
+              <entry>
+                &SISCweb; will direct the
+                <literal>ContinuationStore</literal> object to remove
+                unused continuations periodically according to the
+                indicated interval. Dynamic, defaults to
+                <literal>30000</literal>ms.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>siscweb/continuation-cleanup-interval</literal></entry>
+              <entry>
+                milliseconds; <literal>java.lang.Integer</literal>
+              </entry>
+              <entry>
+                &SISCweb; will direct the
+                <literal>ContinuationStore</literal> class to remove
+                unused continuations periodically according to the
+                indicated interval. Dynamic, defaults to
+                <literal>30000</literal>ms.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>siscweb/continuation-group-creation-interval</literal></entry>
+              <entry>
+                milliseconds; <literal>java.lang.Integer</literal>
+              </entry>
+              <entry>
+                This parameter can be used to limit the rate at which
+                new continuation groups -- each group corresponds to a
+                request --, are created for each session.  Currently
+                only used by the
+                <literal>SessionContinuationStore</literal>.  A
+                reasonable value will go unnoticed by human users, but
+                assist against basic DoS attacks. Dynamic, defaults to
+                <literal>500</literal>ms.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>siscweb/user-history-size</literal></entry>
+              <entry>
+                <literal>java.lang.Integer</literal>
+              </entry>
+              <entry>
+                Technically the maximum number of continuation groups
+                stored per user at any given time, in practice it
+                amounts to the number of pages/requests in the user
+                history for which continuations are still stored. If
+                the maximum number is reached, the continuation group
+                expiring the soonest is removed to make room for a new
+                group. This parameter can be used to roughly bound the
+                amount of resources devoted to each user. Currently
+                only used by the
+                <literal>SessionContinuationStore</literal>. Dynamic,
+                defaults to <literal>50</literal>.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>siscweb/user-history-size-serialized</literal></entry>
+              <entry>
+                <literal>java.lang.Integer</literal>
+              </entry>
+              <entry>
+                When a user session is passified, only the indicated
+                number of continuation groups is maintained. Currently
+                only used by the
+                <literal>SessionContinuationStore</literal>. Dynamic,
+                defaults to <literal>10</literal>.
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+@
+
+
+1.1.2.3
+log
+@mechanics, typos
+@
+text
+@d12 4
+a15 3
+    (siscweb-examples-[v].war). It can be deployed by simply dropping
+    it into the deployment folder of a J2EE appserver, and can also be
+    used as the starting point for developing a new application.
+d20 6
+a25 6
+    WAR file available from sourceforge.net, if you build it from
+    sources a REPL will be bound to the localhost:5156
+    socket. <emphasis>This is a security vulnerability.</emphasis> You
+    should make sure to disable this feature if you are concerned
+    about other people on the same host gaining access to a
+    full-fledged REPL.
+d32 3
+a34 1
+      &SISCweb; is divided into different components:
+d40 1
+a40 1
+          forward requests to other J2EE component.
+d64 3
+a66 9
+      The only required component is
+      <literal>siscweb.jar</literal>. The desired components should be
+      placed in the web application's load path, typically
+      <literal>WEB-INF/lib</literal>.
+    </para>
+    <para>
+      The &SISC; libraries, including the
+      <literal>sisc-heap.jar</literal>, should be also added to the
+      classpath. They are found in the &SISC; binary distribution.
+d74 5
+a78 5
+      &SISCweb; requires a couple of context parameters and a listener
+      in order to initialize. Besides that, the
+      <literal>SISCAdapterServlet</literal> should be associated to
+      the context path under which <emphasis>sisclets</emphasis>
+      (&SISC; servlets) should be published.
+d82 1
+a82 1
+      Optionally, a number of environment entries are used to control
+d94 1
+a94 1
+        destroyed (i.e. during application server startup and
+d102 1
+a102 1
+        toplevel. While &SISCweb; could well do this implicitly, the
+d108 3
+a110 3
+        The context parameters are read by a the &SISCweb; J2EE
+        listener, which must also be specified. The example below
+        shows a typical configuration.
+d122 1
+a122 1
+    ;; replace round parentheses below with square ones in real life
+d133 1
+a133 1
+    ;; replace round parentheses below with square ones in real life
+d161 1
+a161 1
+        servlet is initialized and destroyed. As the example below
+d185 1
+a185 1
+      ;; replace round parentheses below with square ones in real life
+d216 4
+a219 4
+      Some aspects of &SISCweb;'s inner workings can be controlled via
+      a number of environment entries. The advantage of environment
+      entries over Java properties or context parameters is that they
+      can be usually changed through the application server's
+d221 2
+a222 2
+      values for a select environment entries are dynamically
+      picked up within about one minute.
+d240 1
+a240 1
+          <colspec colname="Values;Type"/>
+d246 1
+a246 1
+              <entry>Values;Type</entry>
+d304 1
+a304 1
+          <colspec colname="Values;Type"/>
+d310 1
+a310 1
+              <entry>Values;Type</entry>
+d336 4
+a339 3
+                A file path where &SISCweb; should log its messages.
+                Static, defaults to <literal>null</literal>, i.e. it
+                logs to the application server's location.
+@
+
+
+1.1.2.4
+log
+@added sisc.properties docs; minor fixes
+@
+text
+@a88 5
+    <para>
+      Beside &SISCweb;-specific settings, it is also possible to specify
+      &SISC; parameters.
+    </para>
+
+a212 28
+
+    <section id="sisc-params">
+      <title>SISC Configuration Parameters</title>
+
+      <para>
+        &SISCweb; will initialize the &SISC; interpreter with
+        parameters loaded from the file
+        <literal>WEB-INF/sisc.properties</literal> if present.  This
+        is particularly useful for static parameters, but also
+        convenient for dynamic parameters that are not changed by the
+        application. Some often-used settings are:
+      </para>
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+; max stack trace in case of errors
+sisc.maxStackTraceDepth = 16
+
+; web prompt
+sisc.replPrompt = "W;> "
+
+; disable in production
+sisc.stackTraceOnError = true
+          ]]>
+        </programlisting>
+      </informalexample>
+    </section>
+d324 1
+a324 2
+                <literal>FINE</literal>| <literal>FINER</literal>|
+                <literal>FINEST</literal>;
+d407 13
+@
+
+
+1.1.2.5
+log
+@added docs for siscweb/continuation-ttl
+@
+text
+@a427 12
+              <entry><literal>siscweb/continuation-ttl</literal></entry>
+              <entry>
+                seconds; <literal>java.lang.Long</literal>
+              </entry>
+              <entry>
+                New continuations will have the indicated time-to-live
+                unless overridden via the
+                <function>adjust-timeout!</function> procedure.
+                Dynamic, defaults to <literal>1200</literal> seconds.
+              </entry>
+            </row>
+            <row>
+d430 1
+a430 1
+                milliseconds; <literal>java.lang.Long</literal>
+d443 1
+a443 1
+                milliseconds; <literal>java.lang.Long</literal>
+@
+
+
+1.1.2.6
+log
+@removed references to hibernate
+@
+text
+@d5 3
+a7 3
+    Using &SISCweb; in web applications is simple matter of including
+    its components in the classpath and making some entries in the
+    <literal>web.xml</literal> deployment descriptor.
+d20 1
+a20 1
+    sources, a REPL will be bound to the localhost:5156
+d38 1
+a38 1
+          This is a mandatory component.
+d52 7
+d68 2
+a69 2
+      <literal>sisc-heap.jar</literal> file, should be also added to
+      the classpath. They are found in the &SISC; binary distribution.
+d101 1
+a101 1
+        code executed respectively when the context is initialized and
+d411 17
+@
+
+
+1.1.2.7
+log
+@moved requirement section from introduction.xml to install.xml;
+removed references to ContinuationStore
+@
+text
+@a26 10
+  <section id="requirements">
+    <title>Requirements</title>
+
+    <para>
+      &SISCweb; requires a J2EE 1.3 application server (Servlet
+      spec. 2.3), Java 1.4 or later, and &SISC; version 1.15.x or
+      later. &SISC; version 1.16.x or later is recommended.
+    </para>
+  </section>
+
+d421 4
+a424 3
+                &SISCweb; will remove expired continuations
+                periodically according to the indicated
+                interval. Dynamic, defaults to
+d436 5
+a440 3
+                request --, are created for each session. A reasonable
+                value will go unnoticed by human users, but assist
+                against basic DoS attacks. Dynamic, defaults to
+d457 3
+a459 1
+                amount of resources devoted to each user. Dynamic,
+d470 3
+a472 1
+                number of continuation groups is maintained. Dynamic,
+@
+
+

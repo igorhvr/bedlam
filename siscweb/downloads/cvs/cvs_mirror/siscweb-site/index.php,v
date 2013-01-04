@@ -1,0 +1,32 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2005.08.02.03.15.19;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@initial import
+@
+text
+@<?php header("Location: http://siscweb.sourceforge.net/news.html"); 
+exit; ?>
+<html>
+<head>
+</head>
+<body>
+If you have not been automatically redirected, you should click <a href="http://siscweb.sourceforge.net/news.html">here</a>.
+</body>
+</html>
+@

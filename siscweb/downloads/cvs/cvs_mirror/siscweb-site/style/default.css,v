@@ -1,0 +1,301 @@
+head	1.4;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2007.04.05.04.41.51;	author acolomba;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2006.09.02.04.12.30;	author acolomba;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2005.08.02.03.17.33;	author acolomba;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2005.07.30.01.49.17;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@some improvements
+@
+text
+@html {
+  font-size: 100.01%;
+}
+
+body {
+  background-color: #ffffff;
+  color: #333333;
+  font-size: 1em;
+  line-height: 1.4em;
+  padding-left: 3%;
+  padding-right: 3%;
+}
+
+h1, h2 { color: navy; }
+h3, h4, h5 { color: navy; }
+
+ul { list-style-type: square; }
+
+.code {
+  color: black;
+  background-color: #f5f5f5;
+  border-style: dashed;
+  border-width: 1px;
+  font-family: monospace;
+  padding: 1%;
+#  white-space: nowrap;
+}
+
+.tab-container {
+  border-style: none;
+  border-width: 1px;
+  border-collapse: collapse;
+  font-weight: bold;
+  margin: 0px;
+  width: 100%;
+}
+
+.tab-padding {
+  border-bottom-width: 1px;
+  border-style: none none solid;
+  width: 3%;
+}
+
+.tab-padding {
+  border-bottom: 1px solid navy;
+  opacity: 0.65;
+  text-align: center;
+  width: 5%;
+}
+
+.tab-selected {
+  border-top: 1px solid navy;
+  border-left: 1px solid navy;
+  border-right: 1px solid navy;
+  text-align: center;
+  color: red;
+  width: 15%;
+}
+
+.tab-unselected {
+  border-bottom: 1px solid navy;
+  opacity: 0.65;
+  text-align: center;
+  width: 15%;
+}
+
+a.tab-link:visited { color: navy; text-decoration: none; }
+a.tab-link:link { color: navy; text-decoration: none; }
+a.tab-link:focus { color: blue; text-decoration: none; }
+a.tab-link:hover { color: blue; text-decoration: none; }
+a.tab-link:active { color: red; text-decoration: none; }
+
+
+
+.logo-container {
+  margin-top: 0.8em;
+  margin-bottom: 2em;
+  border-collapse: collapse;
+}
+
+.logo-left {
+  color: white;
+  background-color: blue;
+  border: 1px solid blue;
+  font-size: 40px;
+  line-height: 40px;
+}
+
+.logo-right {
+  color: blue;
+  background-color: white;
+  border-top: 1px solid blue;
+  border-right: 1px solid blue;
+  border-bottom: 1px solid blue;
+  font-size: 40px;
+  font-style: italic;
+  line-height: 40px;
+}
+
+.logo-bottom {
+  color: blue;
+  font-size: 15px;
+  white-space: nowrap;
+}
+@
+
+
+1.3
+log
+@updated logo; css-ized tab table
+@
+text
+@d1 4
+d6 4
+a9 1
+  color: black;
+d26 1
+a26 1
+  white-space: nowrap;
+d86 1
+d97 1
+d101 2
+a102 1
+  color: navy;
+@
+
+
+1.2
+log
+@major revision
+@
+text
+@a0 6
+a:active { color: #ff0000; }
+a:hover { color: #ff0000; }
+a:link { text-decoration: none; color: #0000ff; }
+a:unvisited { text-decoration: none; color: #0000ff; }
+a:visited { text-decoration: none; color: #0000ff; }
+
+d2 1
+a2 4
+  background-color: #ffffff;
+  color: #000000;
+  font-family: sans-serif;
+  font-size: smaller;
+d7 2
+a8 4
+h1, h2 { color: #009966; }
+
+h3, h4, h5 { color: #003399; }
+
+a11 1
+
+d13 2
+a14 1
+  background-color: #fafafa;
+d19 1
+d22 7
+a28 4
+.logo {
+  margin-bottom: 20pt;
+  margin-top: 10pt;
+  text-align: center;
+d37 6
+a42 3
+.tab-container {
+  border-style: none;
+  border-width: 1px;
+d44 4
+a47 7
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+
+  font-weight: bold;
+  margin: 0px;
+  padding: 0px;
+d49 2
+a50 3
+  top: 0px;
+  width: 100%;
+
+d54 1
+a54 1
+  border-bottom: 1px solid #000000;
+d57 1
+d60 34
+a93 6
+.tab-selected {
+  border-top: 1px solid #000000;
+  border-left: 1px solid #000000;
+  border-right: 1px solid #000000;
+  text-align: center;
+  color: #ff0000;
+@
+
+
+1.1
+log
+@initial import
+@
+text
+@d1 37
+d39 1
+a40 1
+  border-bottom-width: 1px;
+d47 6
+d56 1
+d58 1
+a58 5
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  font-weight: bold;
+d63 1
+a73 45
+
+body {
+  font-family: sans-serif;
+  font-size: smaller;
+  color: #000000;
+  opacity: 1;
+  font-size: smaller;
+  padding-left: 3%;
+  padding-right: 3%;
+  background-color: #ffffff;
+}
+
+hr {
+  border-style: inset none none;
+  opacity: 0.65;
+  font-weight: inherit;
+  border-top-width: 1px;
+}
+
+h1, h2 {
+  color: #009966;
+}
+
+h3, h4, h5 {
+  color: rgb(0, 153, 102);
+}
+
+ul {
+  list-style-type: square;
+}
+
+.code {
+  border-style: dashed;
+  border-width: 1px;
+  padding: 1%;
+  font-family: monospace;
+  background-color: #fafafa;
+}
+
+
+a:link { text-decoration: none; color: #0000ff; }
+a:visited { text-decoration: none; color: #0000ff; }
+a:unvisited { text-decoration: none; color: #0000ff; }
+a:hover { color: #ff0000; }
+a:active { color: #ff0000; }
+@
+

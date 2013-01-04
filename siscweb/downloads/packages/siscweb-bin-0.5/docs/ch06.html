@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Chapter 6. Request Bindings</title><link href="siscweb-manual.css" rel="stylesheet" type="text/css" /><meta content="DocBook XSL Stylesheets V1.70.1" name="generator" /><link rel="start" href="index.html" title="SISCweb Manual" /><link rel="up" href="index.html" title="SISCweb Manual" /><link rel="prev" href="ch05.html" title="Chapter 5. Publishing Procedures" /><link rel="next" href="ch07.html" title="Chapter 7. Interaction with SQL Databases" /></head><body><div class="navheader"><table summary="Navigation header" width="100%"><tr><th align="center" colspan="3">Chapter 6. Request Bindings</th></tr><tr><td align="left" width="20%"><a accesskey="p" href="ch05.html">Prev</a> </td><th align="center" width="60%"> </th><td align="right" width="20%"> <a accesskey="n" href="ch07.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="bindings" />Chapter 6. Request Bindings</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ch06.html#extracting-bindings">Extracting Bindings</a></span></dt><dt><span class="section"><a href="ch06.html#bindings-java">Extracting Bindings from Java</a></span></dt><dt><span class="section"><a href="ch06.html#security-bindings">Bindings and Security</a></span></dt></dl></div><p>
+    Bindings associated with the request returned by the
+    <code class="function">send-*/(suspend|forward)</code> functions, or passed
+    as parameters to procedures that are either published or the
+    target of a dispatch, can be extracted and associated to
+    language-level variables.
+  </p><p>
+    Bindings, as returned by the function
+    <code class="function">get-bindings</code> are contained in an opaque
+    object. This object can be converted to an association list via
+    <code class="function">bindings-&gt;alist</code>, or queried in constant time
+    using the <code class="function">extract-bindings</code> or
+    <code class="function">extract-single-binding</code> functions. The object
+    is guaranteed to be serializable, but code should not rely on its
+    specific implementation.
+  </p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="extracting-bindings" />Extracting Bindings</h2></div></div></div><p>
+      <span class="emphasis"><em>Requires:</em></span>
+      <span class="bold"><strong>
+        (import <span class="emphasis"><em>siscweb/bindings</em></span>)
+      </strong></span>
+      <br />
+      <span class="emphasis"><em>Located in:</em></span>
+      <span class="bold"><strong>
+        siscweb.jar
+      </strong></span>
+    </p><p>
+      This module assists developers in obtaining values of parameters
+      passed in a request.
+    </p><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N10FF1" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">get-bindings</span> [<span class="methodparam"><span class="parameter">char-set</span></span>] <span class="methodparam"><span class="parameter">request</span></span>) =&gt; <span class="type">bindings</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Given a request object, this procedure returns an opaque
+            object representing the request parameters as key-value(s)
+            pairs.
+          </p><p>
+            The optional <em class="parameter"><code>char-set</code></em> parameter can
+            be used to override the character encoding of the request.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11019" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">exists-binding?</span> <span class="methodparam"><span class="parameter">name</span></span> <span class="methodparam"><span class="parameter">bindings</span></span>) =&gt; <span class="type">#t/#f</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns a boolean indicating whether a parameter with the
+            given <em class="parameter"><code>name</code></em> contained in the request
+            object. <em class="parameter"><code>name</code></em> can be either a string
+            or a symbol.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11043" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">extract-single-binding</span> <span class="methodparam"><span class="parameter">name</span></span> <span class="methodparam"><span class="parameter">bindings</span></span>) =&gt; <span class="type">string/#f</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the value associated to the given
+            <em class="parameter"><code>name</code></em> or #f if
+            <em class="parameter"><code>name</code></em> is not present in the request
+            object. If more than one value is bound to
+            <em class="parameter"><code>name</code></em>, only the first one is
+            returned.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N11071" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">extract-bindings</span> <span class="methodparam"><span class="parameter">name</span></span> <span class="methodparam"><span class="parameter">bindings</span></span>) =&gt; <span class="type">list</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns the values bound to the given
+            <em class="parameter"><code>name</code></em> in a list. Even if only one
+            value is bound to the request parameter
+            <em class="parameter"><code>name</code></em>, a list will still be
+            returned.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N1109B" />
+        <span class="emphasis"><em>procedure: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">bindings-&gt;alist</span> <span class="methodparam"><span class="parameter">bindings</span></span>) =&gt; <span class="type">((name . value) ...)</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Returns an association list corresponding to the
+            bindings. The <em class="parameter"><code>name</code></em> returned is
+            always a string to maintain its casing, while the
+            <em class="parameter"><code>value</code></em> returned is an atom or a list
+            if <em class="parameter"><code>name</code></em> is associated to multiple
+            values.
+          </p></blockquote></div>
+      </p></blockquote></div><div class="blockquote"><blockquote class="blockquote"><p>
+        <a class="indexterm" id="N110C3" />
+        <span class="emphasis"><em>syntax: </em></span>
+        <code xmlns="http://www.w3.org/TR/xhtml1/transitional" class="methodsynopsis">(<span class="methodname">let-bindings</span> <span class="methodparam"><span class="parameter">((variable name) ... ) bindings body ...)</span></span>) =&gt; <span class="type">value</span></code>
+
+        <div class="blockquote"><blockquote class="blockquote"><p>
+            Behaves like (let ...), but
+            <em class="parameter"><code>variable</code></em>s are set to the values
+            corresponding to the <em class="parameter"><code>name</code></em>s in the
+            <em class="parameter"><code>bindings</code></em> object. The
+            <em class="parameter"><code>value</code></em> returned is that of the last
+            expression in the <em class="parameter"><code>body</code></em>.  A typical
+            usage scenario could be:
+          </p></blockquote></div>
+
+        <div class="informalexample"><pre class="programlisting">
+            
+(let-bindings ((name "name"))
+     (get-bindings
+       (send-html/suspend
+         (lambda (k-url)
+           `(html
+              (body
+                (form (@ (action ,k-url))
+                  (input (@ (type "text") (name "name")))))))))
+  (send-html/back
+    `(html
+       (body
+         (p "You typed: " ,name)))))
+            
+          </pre></div>
+      </p></blockquote></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="bindings-java" />Extracting Bindings from Java</h2></div></div></div><p>
+      Bindings specified in the <code class="function">send-forward/*</code>
+      functions are assigned to request attributes. This method
+      supercedes the previous <code class="literal">request.getBinding*()</code>
+      API, which is now deprecated and will be removed in the
+      next release.
+    </p><p>
+      Multi-valued bindings, as in <code class="literal">'((messages "hello"
+      "there"))</code>, are turned into a
+      <code class="literal">java.util.List</code> and can be easily scanned
+      using such tools as JSTL's
+      <code class="literal">&lt;c:forEach&gt;</code>. Single-valued bindings,
+      such as <code class="literal">'((message . "hello"))</code> are simply
+      assigned to the attribute.
+    </p><p>
+      Multi-valued bindings originating from a Scheme list are also
+      marked as such, so that they can be converted back to a list of
+      values rather than to an object of type
+      <code class="literal">java.util.List</code>.
+    </p><p>
+      A minimal amount of type conversion is performed. Scheme values
+      are passed as <span class="application">SISC</span> objects, except for Scheme strings, which
+      are converted to Java strings. Java objects are left
+      untouched. This also applies to the individual values of
+      multi-valued bindings.
+    </p><p>
+      For instance, below is the Polyglot Hello World example using
+      JSP/JSTL as the presentation layer. This example is not included
+      in the distribution because of its external dependencies on the
+      JSTL libraries.
+    </p><div class="informalexample"><pre class="programlisting">
+        
+;; file: hello.scm
+(require-library 'siscweb/forward)
+
+(module examples/hello-world
+  (hello-world)
+
+  (import siscweb/forward)
+
+  (define messages '("Hello, world!" "Salve, mundo!" "Hallo, Welt!" "Salve, mondo!" "Bonjour, monde!" "Hola, mundo!"))
+
+  (define (hello-world req)
+    (let loop ()
+      (for-each
+       (lambda (message)
+         (send-forward/suspend "/jsp/hello.jsp" `((message . ,message))))
+       messages)
+      (loop)))
+  )
+
+
+&lt;%-- File: jsp/hello.jsp
+--%&gt;&lt;%@ page contentType="text/html" %&gt;&lt;%--
+--%&gt;&lt;%@ page isELIgnored="false" %&gt;&lt;%-- just for servlet v2.3 containers
+--%&gt;&lt;%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%&gt;&lt;%--
+--%&gt;&lt;%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%&gt;&lt;%--
+--%&gt;&lt;%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%&gt;&lt;%--
+--%&gt;&lt;%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%&gt;&lt;%--
+--%&gt;&lt;%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%&gt;&lt;%--
+--%&gt;&lt;?xml version="1.0"?&gt;
+
+&lt;!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+
+&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;
+  &lt;head&gt;
+    &lt;title&gt;&lt;c:out value="${requestScope.message}"/&gt;&lt;/title&gt;
+
+    &lt;c:url var="cssUrl" value="/css/default.css"/&gt;
+    &lt;link href="${cssUrl}"
+          rel="stylesheet"
+          type="text/css"/&gt;
+  &lt;/head&gt;
+
+  &lt;body&gt;
+      &lt;h3&gt;Polyglot hello world&lt;/h3&gt;
+      &lt;p&gt;${requestScope.message}&lt;/p&gt;
+
+    &lt;p&gt;&lt;a href="${requestScope["siscweb.kURL"]}"&gt;Next language &amp;gt;&lt;/a&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;a href="${requestScope["siscweb.kURL"]}" target="_blank"&gt;Next language in new window&lt;/a&gt;&lt;/p&gt;
+    &lt;c:url var="homeUrl" value="/"/&gt;
+    &lt;p&gt;&lt;a href="${homeUrl}"&gt;^ Home&lt;/a&gt;&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+        
+      </pre></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="security-bindings" />Bindings and Security</h2></div></div></div><p>
+      At the lower level, bindings are looked up in the request scope
+      first (i.e. from request attributes) and then from request
+      parameters. This behavior allows a more natural integration with
+      standard J2EE components such as JSPs, but can be unsafe during
+      forwards.
+    </p><p>
+      Specifically, if the application performs a server-side forward
+      to Scheme code that relies on the absence of a binding to
+      determine a course of action, a malicious user can inject a
+      parameter by the same name into the request (provided they can
+      guess the name), and upset the application's behavior. The best
+      options in this case are:
+    </p><div class="orderedlist"><ol type="1"><li><p>
+          When forwarding from Scheme, pass bindings to the
+          <code class="function">forward/*</code> and
+          <code class="function">send-forward/*</code> functions even if they
+          are #f or the empty list. SISCweb will add the name to a
+          per-request blacklist, and will not look up the binding
+          among the request parameters.
+        </p></li><li><p>
+          When forwarding from Java to Scheme, set the attributes to
+          <code class="literal">null</code>. Again, the name will be
+          blacklisted.
+        </p></li><li><p>
+          If the Java code that forwards to the Scheme code cannot be
+          trusted or modified for some reason, the Scheme side can
+          always use the <code class="literal">java/get-request-attribute</code>
+          function described in <a href="ch08.html#request" title="Request Procedures">the section called “Request Procedures”</a>.
+        </p></li></ol></div></div></div><div class="navfooter"><hr /><table summary="Navigation footer" width="100%"><tr><td align="left" width="40%"><a accesskey="p" href="ch05.html">Prev</a> </td><td align="center" width="20%"> </td><td align="right" width="40%"> <a accesskey="n" href="ch07.html">Next</a></td></tr><tr><td valign="top" align="left" width="40%">Chapter 5. Publishing Procedures </td><td align="center" width="20%"><a accesskey="h" href="index.html">Home</a></td><td valign="top" align="right" width="40%"> Chapter 7. Interaction with SQL Databases</td></tr></table></div></body></html>

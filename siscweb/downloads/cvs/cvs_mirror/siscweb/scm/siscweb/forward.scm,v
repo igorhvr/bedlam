@@ -1,0 +1,1400 @@
+head	1.5;
+access;
+symbols
+	rel-0-6-dev:1.5.0.4
+	rel-0-5-fix:1.5.0.2
+	rel-0-5:1.5
+	rel-0-5-dev-safe-frames:1.4.4.2.0.2
+	Root_rel-0-5-dev-safe-frames:1.4.4.2
+	rel-0-4-fix-0:1.4
+	rel-0-5-dev:1.4.0.4
+	rel-0-4-fix:1.4.0.2
+	rel-0-3-fix-3:1.3.2.1
+	rel-0-3-fix-2:1.3
+	rel-0-4-dev-sisc-1-11:1.3.4.2
+	sisc-bug-1375026:1.3.4.1
+	rel-0-3-fix-1:1.3
+	rel-0-4-dev:1.3.0.4
+	rel-0-3-fix:1.3.0.2
+	rel-0-3:1.3
+	rel-0-3-dev-1:1.2.4.4
+	rel-0-2-fix-2:1.2.2.1
+	rel-0-2-fix-1:1.2
+	rel-0-2-fix:1.2.0.2
+	rel-0-3-dev:1.2.0.4
+	rel-0-2:1.2
+	rel-0-2-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.5
+date	2007.04.12.03.51.18;	author acolomba;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2006.09.03.01.42.23;	author acolomba;	state Exp;
+branches
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.06.19.03.03.51;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.05.08.17.26.55;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.05.08.17.26.55;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2005.07.31.20.04.03;	author acolomba;	state Exp;
+branches;
+next	1.2.2.2;
+
+1.2.2.2
+date	2005.10.03.02.01.18;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.07.18.04.48.42;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.07.19.03.05.27;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2005.07.28.04.01.10;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2005.08.28.15.48.29;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2006.04.15.15.55.23;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2005.12.06.00.45.03;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2;
+
+1.3.4.2
+date	2005.12.10.22.17.14;	author acolomba;	state Exp;
+branches;
+next	1.3.4.3;
+
+1.3.4.3
+date	2006.02.22.04.14.52;	author acolomba;	state Exp;
+branches;
+next	1.3.4.4;
+
+1.3.4.4
+date	2006.04.08.03.06.23;	author acolomba;	state Exp;
+branches;
+next	1.3.4.5;
+
+1.3.4.5
+date	2006.04.08.13.45.50;	author acolomba;	state Exp;
+branches;
+next	1.3.4.6;
+
+1.3.4.6
+date	2006.04.09.17.12.38;	author acolomba;	state Exp;
+branches;
+next	1.3.4.7;
+
+1.3.4.7
+date	2006.04.13.00.33.46;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2007.01.22.05.02.52;	author acolomba;	state Exp;
+branches;
+next	1.4.4.2;
+
+1.4.4.2
+date	2007.03.10.20.58.44;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.5
+log
+@merged from rel-0-5-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2007
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+
+(require-library 'siscweb/bindings)
+(require-library 'siscweb/contcentric)
+(require-library 'siscweb/request)
+(require-library 'siscweb/response)
+(require-library 'util/misc)
+
+(module siscweb/forward
+  (send-forward/suspend send-forward/finish
+   send-forward/forward send-forward/back
+   forward/store! forward/dynenv/store!)
+
+  (import s2j)
+  (import type-system)
+
+  (import srfi-16)
+
+  (import siscweb/bindings)
+  (import siscweb/contcentric)
+  (import siscweb/request)
+  (import siscweb/response)
+  (import util/misc)
+
+  (define-java-classes
+    (<sisc-http-servlet-request> |siscweb.web.SISCHttpServletRequest|))
+
+
+  (define (make-bound-request request bindings)
+    (if (null? bindings)
+        request
+        (java-new <sisc-http-servlet-request>
+                  request
+                  (if (list? bindings)
+                      (alist->bindings bindings)
+                      bindings))))
+
+  (define (forward url bindings)
+    ((request/get-dispatcher url)
+     (make-bound-request (current-request) bindings)
+     (current-response)))
+
+  (define send-forward/suspend
+    (case-lambda
+      ((url)
+       (send-forward/suspend url '()))
+      ((url bindings)
+       (send/suspend
+        (lambda (k-url resume-k)
+          (request/set-java-attribute! "siscweb.kURL" (->jstring k-url))
+          (forward url bindings))))))
+
+  (define send-forward/finish
+    (case-lambda
+      ((url)
+       (send-forward/finish url '()))
+      ((url bindings)
+       (send/finish
+        (lambda ()
+          (forward url bindings))))))
+
+
+  (define send-forward/forward
+    (case-lambda
+      ((url)
+       (send-forward/forward url '()))
+      ((url bindings)
+       (send/forward
+        (lambda (k-url resume-k)
+          (request/set-java-attribute! "siscweb.kURL" (->jstring k-url))
+          (forward url bindings))))))
+
+  (define send-forward/back
+    (case-lambda
+      ((url)
+       (send-forward/back url '()))
+      ((url bindings)
+       (send/back
+        (lambda ()
+          (forward url bindings))))))
+
+
+
+  (define forward/store!
+    (case-lambda
+      ((proc-or-c-url)
+       (if (procedure? proc-or-c-url)
+           (store/k! proc-or-c-url)
+           (response/encode-url (string-append
+                                 (request/get-context-path)
+                                 proc-or-c-url))))
+      ((proc-or-c-url bindings)
+       (if (procedure? proc-or-c-url)
+           (forward/store!
+            (lambda (request)
+              (proc-or-c-url (make-bound-request request bindings))))
+           (send-forward/back proc-or-c-url bindings)))))
+
+  (define (capture-dynenv proc)
+    (let/cc k-esc
+      (proc
+       (let/cc k-res
+         (k-esc k-res)))))
+
+  (define (forward/dynenv/store! proc . rest)
+    (if (procedure? proc)
+        (apply forward/store! (cons (capture-dynenv proc) rest))
+        (forward/store! (cons proc rest))))
+  )
+@
+
+
+1.4
+log
+@merged from rel-0-4-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+a68 1
+
+@
+
+
+1.4.4.1
+log
+@adds siscweb.kUrl in request attributes and
+deprecates siscweb.kURL
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2007
+d69 1
+d82 1
+a82 2
+          (request/set-java-attribute! "siscweb.kUrl" (->jstring k-url))
+          (request/set-java-attribute! "siscweb.kURL" (->jstring k-url)) ; legacy
+d102 1
+a102 2
+          (request/set-java-attribute! "siscweb.kUrl" (->jstring k-url))
+          (request/set-java-attribute! "siscweb.kURL" (->jstring k-url)) ; legacy
+@
+
+
+1.4.4.2
+log
+@now just sets kURL, not kUrl
+@
+text
+@d81 2
+a82 1
+          (request/set-java-attribute! "siscweb.kURL" (->jstring k-url))
+d102 2
+a103 1
+          (request/set-java-attribute! "siscweb.kURL" (->jstring k-url))
+@
+
+
+1.3
+log
+@merged from rel-0-3-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+d32 2
+d36 1
+d38 1
+d43 1
+a43 1
+   forward/store!)
+a45 2
+  (import generic-procedures)
+  (import oo)
+d48 2
+d52 1
+d54 1
+d57 1
+a57 57
+    (<sisc-http-servlet-request> |siscweb.web.SISCHttpServletRequest|)
+    (<bindings> |java.util.HashMap|))
+
+  (define-generic-java-methods
+    get-writer
+    (encode-url |encodeURL|)
+    (jforward |forward|)
+    get-request-dispatcher
+    get-servlet-context
+    (get-request-uri |getRequestURI|)
+    get-session
+    set-attribute
+    set-content-type
+    write)
+
+
+  (define (forward request response url bindings)
+    (let* ((servlet-context (get-servlet-context
+                             (get-session request)))
+           (request-dispatcher (get-request-dispatcher
+                                servlet-context
+                                (->jstring url))))
+      (jforward request-dispatcher
+                (java-new <sisc-http-servlet-request>
+                          request
+                          bindings)
+                response)))
+
+
+  (define-generic send-forward/suspend)
+
+  (define-method (send-forward/suspend (<string> url) (<bindings> bindings))
+    (send/suspend
+     (lambda (request response k-url resume-k)
+       (set-attribute request (->jstring "siscweb.kURL") (->jstring k-url))
+       (forward request response url bindings))))
+
+  (define-method (send-forward/suspend (<string> url))
+    (send-forward/suspend url (alist->bindings '())))
+
+  (define-method (send-forward/suspend (<string> url) (<list> alist))
+    (send-forward/suspend url (alist->bindings alist)))
+
+
+  (define-generic send-forward/finish)
+
+  (define-method (send-forward/finish (<string> url) (<bindings> bindings))
+    (send/finish
+     (lambda (request response)
+       (forward request response url bindings))))
+
+  (define-method (send-forward/finish (<string> url))
+    (send-forward/finish url (alist->bindings '())))
+
+  (define-method (send-forward/finish (<string> url) (<list> alist))
+    (send-forward/finish url (alist->bindings alist)))
+
+a58 1
+  (define-generic send-forward/forward)
+d60 3
+a62 36
+  (define-method (send-forward/forward (<string> url) (<bindings> bindings))
+    (send/forward
+     (lambda (request response k-url resume-k)
+       (set-attribute request (->jstring "siscweb.kURL") (->jstring k-url))
+       (forward request response url bindings))))
+
+  (define-method (send-forward/forward (<string> url))
+    (send-forward/forward url (alist->bindings '())))
+
+  (define-method (send-forward/forward (<string> url) (<list> alist))
+    (send-forward/forward url (alist->bindings alist)))
+
+
+  (define-generic send-forward/back)
+
+  (define-method (send-forward/back (<string> url) (<bindings> bindings))
+    (send/back
+     (lambda (request response)
+       (forward request response url bindings))))
+
+  (define-method (send-forward/back (<string> url))
+    (send-forward/back url (alist->bindings '())))
+
+  (define-method (send-forward/back (<string> url) (<list> alist))
+    (send-forward/back url (alist->bindings alist)))
+
+
+  (define-generic forward/store!)
+
+  (define-method (forward/store! (<procedure> proc))
+    (store/k! proc))
+
+  (define-method (forward/store! (<procedure> proc) (<bindings> bindings))
+    (store/k!
+     (lambda (request)
+       (proc
+d65 76
+a140 17
+                  bindings)))))
+
+  (define-method (forward/store! (<procedure> proc) (<list> bindings-alist))
+    (forward/store! proc (alist->bindings bindings-alist)))
+
+
+  (define-method (forward/store! (<string> c-url))
+    (encode-url (string-append (->string (get-context-path request))
+                               c-url)))
+
+  (define-method (forward/store! (<string> c-url) (<bindings> bindings))
+    (store/k!
+     (lambda (request)
+       (send-forward/back url bindings))))
+
+  (define-method (forward/store! (<string> c-url) (<list> bindings-alist))
+    (forward/store! c-url (alist->bindings bindings-alist)))
+@
+
+
+1.3.2.1
+log
+@merged from rel-0-4-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+a31 2
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+
+a33 1
+(require-library 'siscweb/request)
+a34 1
+(require-library 'util/misc)
+d39 1
+a39 1
+   forward/store! forward/dynenv/store!)
+d42 2
+a45 2
+  (import srfi-16)
+
+a47 1
+  (import siscweb/request)
+a48 1
+  (import util/misc)
+d51 57
+a107 1
+    (<sisc-http-servlet-request> |siscweb.web.SISCHttpServletRequest|))
+d109 1
+d111 36
+a146 3
+  (define (make-bound-request request bindings)
+    (if (null? bindings)
+        request
+d149 17
+a165 76
+                  (if (list? bindings)
+                      (alist->bindings bindings)
+                      bindings))))
+
+
+  (define (forward url bindings)
+    ((request/get-dispatcher url)
+     (make-bound-request (current-request) bindings)
+     (current-response)))
+
+  (define send-forward/suspend
+    (case-lambda
+      ((url)
+       (send-forward/suspend url '()))
+      ((url bindings)
+       (send/suspend
+        (lambda (k-url resume-k)
+          (request/set-java-attribute! "siscweb.kURL" (->jstring k-url))
+          (forward url bindings))))))
+
+  (define send-forward/finish
+    (case-lambda
+      ((url)
+       (send-forward/finish url '()))
+      ((url bindings)
+       (send/finish
+        (lambda ()
+          (forward url bindings))))))
+
+
+  (define send-forward/forward
+    (case-lambda
+      ((url)
+       (send-forward/forward url '()))
+      ((url bindings)
+       (send/forward
+        (lambda (k-url resume-k)
+          (request/set-java-attribute! "siscweb.kURL" (->jstring k-url))
+          (forward url bindings))))))
+
+  (define send-forward/back
+    (case-lambda
+      ((url)
+       (send-forward/back url '()))
+      ((url bindings)
+       (send/back
+        (lambda ()
+          (forward url bindings))))))
+
+
+
+  (define forward/store!
+    (case-lambda
+      ((proc-or-c-url)
+       (if (procedure? proc-or-c-url)
+           (store/k! proc-or-c-url)
+           (response/encode-url (string-append
+                                 (request/get-context-path)
+                                 proc-or-c-url))))
+      ((proc-or-c-url bindings)
+       (if (procedure? proc-or-c-url)
+           (forward/store!
+            (lambda (request)
+              (proc-or-c-url (make-bound-request request bindings))))
+           (send-forward/back proc-or-c-url bindings)))))
+
+  (define (capture-dynenv proc)
+    (let/cc k-esc
+      (proc
+       (let/cc k-res
+         (k-esc k-res)))))
+
+  (define (forward/dynenv/store! proc . rest)
+    (if (procedure? proc)
+        (apply forward/store! (cons (capture-dynenv proc) rest))
+        (forward/store! (cons proc rest))))
+@
+
+
+1.3.4.1
+log
+@forward/store! procs now should capture the dynamic environment
+@
+text
+@a34 1
+(require-library 'util/misc)
+a48 1
+  (import util/misc)
+d141 1
+a141 3
+    (store/k!
+     (let/cc k-esc
+       (proc (let/cc k-res (k-esc k-res))))))
+d145 3
+a147 3
+     (let/cc k-esc
+       (let ((request (let/cc k-res (k-esc k-res))))
+         (proc (java-new <sisc-http-servlet-request>
+d149 1
+a149 2
+                  bindings))))))
+
+@
+
+
+1.3.4.2
+log
+@rolled back to use session variables instead of srfi-39 parameters
+because of sisc bug #1375026
+@
+text
+@d35 1
+d50 1
+d143 3
+a145 1
+    (store/k! proc))
+d149 3
+a151 3
+     (lambda (request)
+       (proc
+        (java-new <sisc-http-servlet-request>
+d153 2
+a154 1
+                  bindings)))))
+@
+
+
+1.3.4.3
+log
+@now forward/store! also captures the dynamic environment of the
+closure it stores
+@
+text
+@a34 1
+(require-library 'util/misc)
+a48 1
+  (import util/misc)
+d141 1
+a141 5
+    (store/k!
+     (let/cc k-esc
+       (proc
+        (let/cc k-res
+          (k-esc k-res))))))
+d144 1
+a144 1
+    (forward/store!
+d152 1
+a152 3
+    (if (null? bindings-alist)
+        (forward/store! proc)
+        (forward/store! proc (alist->bindings bindings-alist))))
+d160 1
+a160 1
+    (forward/store!
+@
+
+
+1.3.4.4
+log
+@switched from generic methods to case-lambda; removed call/cc from
+forward/store!; added forward/dynenv/store!
+@
+text
+@a31 2
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+
+d40 1
+a40 1
+   forward/store! forward/dynenv/store!)
+d43 2
+a46 2
+  (import srfi-16)
+
+d62 1
+a68 10
+  (define (make-bound-request request bindings)
+    (if (null? bindings)
+        request
+        (java-new <sisc-http-servlet-request>
+                  request
+                  (if (list? bindings)
+                      (alist->bindings bindings)
+                      bindings))))
+
+
+d76 3
+a78 1
+                (make-bound-request request bindings)
+d82 39
+a120 59
+  (define send-forward/suspend
+    (case-lambda
+      ((url)
+       (send-forward/suspend url '()))
+      ((url bindings)
+       (send/suspend
+        (lambda (request response k-url resume-k)
+          (set-attribute request (->jstring "siscweb.kURL") (->jstring k-url))
+          (forward request response url bindings))))))
+
+  (define send-forward/finish
+    (case-lambda
+      ((url)
+       (send-forward/finish url '()))
+      ((url bindings)
+       (send/finish
+        (lambda (request response)
+          (forward request response url bindings))))))
+
+
+  (define send-forward/forward
+    (case-lambda
+      ((url)
+       (send-forward/forward url '()))
+      ((url bindings)
+       (send/forward
+        (lambda (request response k-url resume-k)
+          (set-attribute request (->jstring "siscweb.kURL") (->jstring k-url))
+          (forward request response url bindings))))))
+
+  (define send-forward/back
+    (case-lambda
+      ((url)
+       (send-forward/back url '()))
+      ((url bindings)
+       (send/back
+        (lambda (request response)
+          (forward request response url bindings))))))
+
+
+  (define (capture-dynenv proc)
+    (let/cc k-esc
+      (proc
+       (let/cc k-res
+         (k-esc k-res)))))
+
+  (define forward/store!
+    (case-lambda
+      ((proc)
+       (if (procedure? proc)
+           (store/k! proc)
+           (encode-url (string-append (->string (get-context-path request))
+                                      c-url))))
+      ((proc bindings)
+       (if (procedure? proc)
+           (forward/store!
+            (lambda (request)
+              (proc (make-bound-request request bindings))))
+           (send-forward/back url bindings)))))
+d122 21
+a142 1
+  (define (forward/dynenv/store! proc)
+d148 26
+@
+
+
+1.3.4.5
+log
+@finalized forward/dynenv/store!
+@
+text
+@d131 6
+d151 6
+a156 10
+  (define (capture-dynenv proc)
+    (let/cc k-esc
+      (proc
+       (let/cc k-res
+         (k-esc k-res)))))
+
+  (define (forward/dynenv/store! proc . rest)
+    (if (procedure? proc)
+        (apply forward/store! (cons (capture-dynenv proc) rest))
+        (forward/store! (cons proc rest))))
+@
+
+
+1.3.4.6
+log
+@uses request/response api; fixed bugs introduced when moving from
+generic functions to case-lambda
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+a50 1
+  (import siscweb/request)
+d55 13
+a67 1
+    (<sisc-http-servlet-request> |siscweb.web.SISCHttpServletRequest|))
+d80 10
+a89 4
+  (define (forward url bindings)
+    ((request/get-dispatcher url)
+     (make-bound-request (current-request) bindings)
+     (current-response)))
+d97 3
+a99 3
+        (lambda (k-url resume-k)
+          (request/set-java-attribute! "siscweb.kURL" (->jstring k-url))
+          (forward url bindings))))))
+d107 2
+a108 2
+        (lambda ()
+          (forward url bindings))))))
+d117 3
+a119 3
+        (lambda (k-url resume-k)
+          (request/set-java-attribute! "siscweb.kURL" (->jstring k-url))
+          (forward url bindings))))))
+d127 2
+a128 3
+        (lambda ()
+          (forward url bindings))))))
+
+d133 7
+a139 8
+      ((proc-or-c-url)
+       (if (procedure? proc-or-c-url)
+           (store/k! proc-or-c-url)
+           (response/encode-url (string-append
+                                 (request/get-context-path)
+                                 proc-or-c-url))))
+      ((proc-or-c-url bindings)
+       (if (procedure? proc-or-c-url)
+d142 2
+a143 2
+              (proc-or-c-url (make-bound-request request bindings))))
+           (send-forward/back proc-or-c-url bindings)))))
+@
+
+
+1.3.4.7
+log
+@refactoring: request/response are now just wrappers, with send/*
+functions now in contcentric; moved many s2j calls to
+request/response/session objects
+@
+text
+@a35 1
+(require-library 'siscweb/request)
+@
+
+
+1.2
+log
+@merged from rel-0-2-dev
+@
+text
+@d33 1
+a33 1
+(require-library 'siscweb/k-hash)
+d38 2
+a39 1
+   send-forward/forward send-forward/back)
+d42 1
+a43 1
+  (import generic-procedures)
+d47 1
+a47 1
+  (import siscweb/k-hash)
+d50 4
+d57 1
+a57 1
+   (jforward |forward|)
+d67 1
+a67 1
+  (define (forwardo request response url)
+d74 3
+a76 1
+                request
+d84 3
+a86 5
+     (lambda (request response k-hash resume-k)
+       (let ((k-url (make-k-url response k-hash)))
+         (put-bindings request bindings)
+         (set-attribute request (->jstring "siscweb.kURL") (->jstring k-url))
+         (forwardo request response url)))))
+d89 1
+a89 1
+    (send-forward/suspend url (make <bindings> '())))
+d92 1
+a92 1
+    (send-forward/suspend url (make <bindings> alist)))
+d100 1
+a100 2
+       (put-bindings request bindings)
+       (forwardo request response url))))
+d103 1
+a103 1
+    (send-forward/finish url (make <bindings> '())))
+d106 1
+a106 1
+    (send-forward/finish url (make <bindings> alist)))
+d113 3
+a115 5
+     (lambda (request response k-hash resume-k)
+       (let ((k-url (make-k-url response k-hash)))
+         (put-bindings request bindings)
+         (set-attribute request (->jstring "siscweb.kURL") (->jstring k-url))
+         (forwardo request response url)))))
+d118 1
+a118 1
+    (send-forward/forward url (make <bindings> '())))
+d121 1
+a121 1
+    (send-forward/forward url (make <bindings> alist)))
+d129 1
+a129 2
+       (put-bindings request bindings)
+       (forwardo request response url))))
+d132 1
+a132 1
+    (send-forward/back url (make <bindings> '())))
+d135 23
+a157 1
+    (send-forward/back url (make <bindings> alist)))
+d159 4
+a162 6
+  (define (make-k-url response k-hash)
+    (->string
+     (encode-url (current-response)
+                 (->jstring (append-url-hash
+                             (->string (get-request-uri (current-request)))
+                             k-hash)))))
+d164 3
+a166 1
+  )@
+
+
+1.2.2.1
+log
+@merged from rel-0-3-dev
+@
+text
+@d33 1
+a33 1
+(require-library 'siscweb/contcentric)
+d38 1
+a38 2
+   send-forward/forward send-forward/back
+   forward/store!)
+d41 1
+a42 1
+  (import oo)
+d46 1
+a46 1
+  (import siscweb/contcentric)
+a48 3
+  (define-java-classes
+    (<sisc-http-servlet-request> |siscweb.web.SISCHttpServletRequest|))
+
+d52 1
+a52 1
+    (jforward |forward|)
+d62 1
+a62 1
+  (define (forward request response url bindings)
+d69 1
+a69 3
+                (java-new <sisc-http-servlet-request>
+                          request
+                          (:parameter-map bindings))
+d77 5
+a81 3
+     (lambda (request response k-url resume-k)
+       (set-attribute request (->jstring "siscweb.kURL") (->jstring k-url))
+       (forward request response url bindings))))
+d95 2
+a96 1
+       (forward request response url bindings))))
+d109 5
+a113 3
+     (lambda (request response k-url resume-k)
+       (set-attribute request (->jstring "siscweb.kURL") (->jstring k-url))
+       (forward request response url bindings))))
+d127 2
+a128 1
+       (forward request response url bindings))))
+d136 6
+d143 1
+a143 29
+  (define-generic forward/store!)
+
+  (define-method (forward/store! (<procedure> proc))
+    (store/k! proc))
+
+  (define-method (forward/store! (<procedure> proc) (<bindings> bindings))
+    (store/k!
+     (lambda (request)
+       (proc
+        (java-new <sisc-http-servlet-request>
+                  request
+                  (:parameter-map bindings))))))
+
+  (define-method (forward/store! (<procedure> proc) (<list> bindings-alist))
+    (forward/store! proc (alist->bindings bindings-alist)))
+
+
+  (define-method (forward/store! (<string> c-url))
+    (encode-url (string-append (->string (get-context-path request))
+                               c-url)))
+
+  (define-method (forward/store! (<string> c-url) (<bindings> bindings))
+    (store/k!
+     (lambda (request)
+       (send-forward/back url bindings))))
+
+  (define-method (forward/store! (<string> c-url) (<list> bindings-alist))
+    (forward/store! c-url (alist->bindings bindings-alist)))
+  )
+@
+
+
+1.2.2.2
+log
+@merged from rel-0-3-dev; adapted to the fact that <bindings> is not a
+scheme class anymore; also turned a few (make <bindings> alist) into
+more proper (alist->bindings alist)
+@
+text
+@d51 1
+a51 2
+    (<sisc-http-servlet-request> |siscweb.web.SISCHttpServletRequest|)
+    (<bindings> |java.util.HashMap|))
+d75 1
+a75 1
+                          bindings)
+d88 1
+a88 1
+    (send-forward/suspend url (alist->bindings '())))
+d91 1
+a91 1
+    (send-forward/suspend url (alist->bindings alist)))
+d102 1
+a102 1
+    (send-forward/finish url (alist->bindings '())))
+d105 1
+a105 1
+    (send-forward/finish url (alist->bindings alist)))
+d117 1
+a117 1
+    (send-forward/forward url (alist->bindings '())))
+d120 1
+a120 1
+    (send-forward/forward url (alist->bindings alist)))
+d131 1
+a131 1
+    (send-forward/back url (alist->bindings '())))
+d134 1
+a134 1
+    (send-forward/back url (alist->bindings alist)))
+d148 1
+a148 1
+                  bindings)))))
+@
+
+
+1.2.4.1
+log
+@bindings are now passed to the forwarded url by wrapping the request
+into SISCHttpServletRequest; renamed internal procedure
+@
+text
+@d41 1
+a42 1
+  (import oo)
+a48 3
+  (define-java-classes
+    (<sisc-http-servlet-request> |siscweb.web.SISCHttpServletRequest|))
+
+d62 1
+a62 1
+  (define (forward request response url bindings)
+d69 1
+a69 3
+                (java-new <sisc-http-servlet-request>
+                          request
+                          (:parameter-map bindings))
+d79 1
+d81 1
+a81 1
+         (forward request response url bindings)))))
+d95 2
+a96 1
+       (forward request response url bindings))))
+d111 1
+d113 1
+a113 1
+         (forward request response url bindings)))))
+d127 2
+a128 1
+       (forward request response url bindings))))
+d142 1
+@
+
+
+1.2.4.2
+log
+@removed make-k-url function; adapted to new response interface
+@
+text
+@d33 1
+d46 1
+d82 4
+a85 3
+     (lambda (request response k-url resume-k)
+       (set-attribute request (->jstring "siscweb.kURL") (->jstring k-url))
+       (forward request response url bindings))))
+d112 4
+a115 3
+     (lambda (request response k-url resume-k)
+       (set-attribute request (->jstring "siscweb.kURL") (->jstring k-url))
+       (forward request response url bindings))))
+d136 8
+a143 1
+  )
+@
+
+
+1.2.4.3
+log
+@added forward/store! procedure
+@
+text
+@a32 1
+(require-library 'siscweb/contcentric)
+d37 1
+a37 2
+   send-forward/forward send-forward/back
+   forward/store!)
+a44 1
+  (import siscweb/contcentric)
+d53 1
+a53 1
+    (jforward |forward|)
+a131 30
+
+
+  (define-generic forward/store!)
+
+  (define-method (forward/store! (<procedure> proc))
+    (store/k! proc))
+
+  (define-method (forward/store! (<procedure> proc) (<bindings> bindings))
+    (store/k!
+     (lambda (request)
+       (proc
+        (java-new <sisc-http-servlet-request>
+                  request
+                  (:parameter-map bindings))))))
+
+  (define-method (forward/store! (<procedure> proc) (<list> bindings-alist))
+    (forward/store! proc (alist->bindings bindings-alist)))
+
+
+  (define-method (forward/store! (<string> c-url))
+    (encode-url (string-append (->string (get-context-path request))
+                               c-url)))
+
+  (define-method (forward/store! (<string> c-url) (<bindings> bindings))
+    (store/k!
+     (lambda (request)
+       (send-forward/back url bindings))))
+
+  (define-method (forward/store! (<string> c-url) (<list> bindings-alist))
+    (forward/store! c-url (alist->bindings bindings-alist)))
+@
+
+
+1.2.4.4
+log
+@adapted to the fact that <bindings> is not a scheme class anymore;
+also turned a few (make <bindings> alist) into more proper
+(alist->bindings alist)
+@
+text
+@d51 1
+a51 2
+    (<sisc-http-servlet-request> |siscweb.web.SISCHttpServletRequest|)
+    (<bindings> |java.util.HashMap|))
+d75 1
+a75 1
+                          bindings)
+d88 1
+a88 1
+    (send-forward/suspend url (alist->bindings '())))
+d91 1
+a91 1
+    (send-forward/suspend url (alist->bindings alist)))
+d102 1
+a102 1
+    (send-forward/finish url (alist->bindings '())))
+d105 1
+a105 1
+    (send-forward/finish url (alist->bindings alist)))
+d117 1
+a117 1
+    (send-forward/forward url (alist->bindings '())))
+d120 1
+a120 1
+    (send-forward/forward url (alist->bindings alist)))
+d131 1
+a131 1
+    (send-forward/back url (alist->bindings '())))
+d134 1
+a134 1
+    (send-forward/back url (alist->bindings alist)))
+d148 1
+a148 1
+                  bindings)))))
+@
+
+
+1.1
+log
+@file forward.scm was initially added on branch rel-0-2-dev.
+@
+text
+@d1 143
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 143
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'siscweb/bindings)
+(require-library 'siscweb/k-hash)
+(require-library 'siscweb/response)
+
+(module siscweb/forward
+  (send-forward/suspend send-forward/finish
+   send-forward/forward send-forward/back)
+
+  (import s2j)
+  (import oo)
+  (import generic-procedures)
+  (import type-system)
+
+  (import siscweb/bindings)
+  (import siscweb/k-hash)
+  (import siscweb/response)
+
+  (define-generic-java-methods
+    get-writer
+    (encode-url |encodeURL|)
+   (jforward |forward|)
+    get-request-dispatcher
+    get-servlet-context
+    (get-request-uri |getRequestURI|)
+    get-session
+    set-attribute
+    set-content-type
+    write)
+
+
+  (define (forwardo request response url)
+    (let* ((servlet-context (get-servlet-context
+                             (get-session request)))
+           (request-dispatcher (get-request-dispatcher
+                                servlet-context
+                                (->jstring url))))
+      (jforward request-dispatcher
+                request
+                response)))
+
+
+  (define-generic send-forward/suspend)
+
+  (define-method (send-forward/suspend (<string> url) (<bindings> bindings))
+    (send/suspend
+     (lambda (request response k-hash resume-k)
+       (let ((k-url (make-k-url response k-hash)))
+         (put-bindings request bindings)
+         (set-attribute request (->jstring "siscweb.kURL") (->jstring k-url))
+         (forwardo request response url)))))
+
+  (define-method (send-forward/suspend (<string> url))
+    (send-forward/suspend url (make <bindings> '())))
+
+  (define-method (send-forward/suspend (<string> url) (<list> alist))
+    (send-forward/suspend url (make <bindings> alist)))
+
+
+  (define-generic send-forward/finish)
+
+  (define-method (send-forward/finish (<string> url) (<bindings> bindings))
+    (send/finish
+     (lambda (request response)
+       (put-bindings request bindings)
+       (forwardo request response url))))
+
+  (define-method (send-forward/finish (<string> url))
+    (send-forward/finish url (make <bindings> '())))
+
+  (define-method (send-forward/finish (<string> url) (<list> alist))
+    (send-forward/finish url (make <bindings> alist)))
+
+
+  (define-generic send-forward/forward)
+
+  (define-method (send-forward/forward (<string> url) (<bindings> bindings))
+    (send/forward
+     (lambda (request response k-hash resume-k)
+       (let ((k-url (make-k-url response k-hash)))
+         (put-bindings request bindings)
+         (set-attribute request (->jstring "siscweb.kURL") (->jstring k-url))
+         (forwardo request response url)))))
+
+  (define-method (send-forward/forward (<string> url))
+    (send-forward/forward url (make <bindings> '())))
+
+  (define-method (send-forward/forward (<string> url) (<list> alist))
+    (send-forward/forward url (make <bindings> alist)))
+
+
+  (define-generic send-forward/back)
+
+  (define-method (send-forward/back (<string> url) (<bindings> bindings))
+    (send/back
+     (lambda (request response)
+       (put-bindings request bindings)
+       (forwardo request response url))))
+
+  (define-method (send-forward/back (<string> url))
+    (send-forward/back url (make <bindings> '())))
+
+  (define-method (send-forward/back (<string> url) (<list> alist))
+    (send-forward/back url (make <bindings> alist)))
+
+  (define (make-k-url response k-hash)
+    (->string
+     (encode-url (current-response)
+                 (->jstring (append-url-hash
+                             (->string (get-request-uri (current-request)))
+                             k-hash)))))
+
+  )@
+

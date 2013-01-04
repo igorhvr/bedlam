@@ -1,0 +1,774 @@
+head	1.5;
+access;
+symbols
+	rel-0-6-dev:1.5.0.10
+	rel-0-5-fix:1.5.0.8
+	rel-0-5:1.5
+	rel-0-5-dev-safe-frames:1.5.0.6
+	Root_rel-0-5-dev-safe-frames:1.5
+	rel-0-4-fix-0:1.5
+	rel-0-5-dev:1.5.0.4
+	rel-0-4-fix:1.5.0.2
+	rel-0-3-fix-3:1.4.2.1
+	rel-0-3-fix-2:1.4.2.1
+	rel-0-4-dev-sisc-1-11:1.4.4.1
+	rel-0-3-fix-1:1.4
+	rel-0-4-dev:1.4.0.4
+	rel-0-3-fix:1.4.0.2
+	rel-0-3:1.4
+	rel-0-3-dev-1:1.3
+	rel-0-2-fix-2:1.3
+	rel-0-2-fix-1:1.3
+	rel-0-2-fix:1.3.0.4
+	rel-0-3-dev:1.3.0.2
+	rel-0-2:1.3
+	rel-0-1-fix-1:1.2.2.1
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	rel-0-1-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.5
+date	2006.09.03.01.42.25;	author acolomba;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2005.11.25.20.43.31;	author acolomba;	state Exp;
+branches
+	1.4.2.1
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2005.06.19.04.53.02;	author acolomba;	state Exp;
+branches
+	1.3.2.1;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.52;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.02.16.04.36.15;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.02.16.04.36.15;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.03.06.18.52.35;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2005.03.13.01.29.22;	author acolomba;	state Exp;
+branches;
+next	1.1.2.4;
+
+1.1.2.4
+date	2005.03.20.03.47.40;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5;
+
+1.1.2.5
+date	2005.03.27.19.43.06;	author acolomba;	state Exp;
+branches;
+next	1.1.2.6;
+
+1.1.2.6
+date	2005.04.02.01.35.37;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2005.04.06.02.32.09;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.04.07.02.09.41;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.06.17.03.11.26;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2005.11.25.20.09.25;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.2.1
+date	2006.02.25.17.12.07;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2005.12.15.04.30.05;	author acolomba;	state Exp;
+branches;
+next	1.4.4.2;
+
+1.4.4.2
+date	2006.08.31.02.48.15;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.5
+log
+@merged from rel-0-4-dev
+@
+text
+@SISCWEB
+
+OVERVIEW
+
+SISCweb is a framework aimed to facilitate writing stateful Scheme web
+applications in J2EE environments.
+
+
+FEATURES
+
+SISCweb sports an interactive, REPL-based web application development
+style. Developers can write applications interactively, without ever
+restarting the context, and, insofar as it is desirable, without ever
+losing application state. (In fact, save for the Java portion, SISCweb
+itself is developed interactively in its own REPL.)
+
+Through the use of continuations, SISCweb does away with the
+page-centric execution model typical of web applications [*].  Every
+time a response is sent to the browser, the program execution flow is
+suspended, to be then resumed from that exact point when the browser
+submits a request.
+
+[*] More information can be found in this paper: Christian
+Queinnec. "Inverting back the inversion of control or, continuations
+versus page-centric programming". Technical Report 7, LIP6. May
+2001. (http://www-spi.lip6.fr/~queinnec/Papers/www.ps.gz)
+
+
+REQUIREMENTS
+
+SISCweb requires a J2EE 1.3 application server and a JDK 1.4 or
+later. More detailed information is contained in the documentation.
+
+
+CREDITS
+
+SISCweb is based on SISC (sisc.sf.net), a Scheme interpreter for the
+JVM, and is heavily influenced by other Lisp web frameworks:
+
+  - the PLT web server collection
+    (http://download.plt-scheme.org/scheme/docs/html/web-server/)
+  - SUnet (http://www.scsh.net/resources/sunet.html)
+  - AllegroServe (http://allegroserve.sourceforge.net/)
+
+A couple of initial design decisions were also lifted from Matthias
+Radestock's servlet code in the contrib section of the SISC CVS tree.
+
+
+CONTRIBUTING, BUG REPORTS
+
+Comments, ideas, and bug reports are welcome at:
+
+    acolomba@@users.sourceforge.net
+
+Thank you!
+
+(C) 2005-2006 Alessandro Colomba <acolomba@@users.sourceforge.net>
+@
+
+
+1.4
+log
+@merged from rel-0-3-dev
+@
+text
+@d11 5
+a15 5
+SISCweb features an interactive, REPL-based web application
+development style. Developers can write applications interactively,
+without ever bouncing the server, and, insofar as it is desirable,
+without ever losing application state. (In fact, save for the Java
+portion, SISCweb itself is written interactively in a REPL.)
+d18 1
+a18 1
+page-centric execution model typical of web applications. [*] Every
+d32 1
+a32 1
+later. More detailed information is contained in the INSTALL file.
+d57 1
+a57 1
+(C) 2005 Alessandro Colomba <acolomba@@users.sourceforge.net>
+@
+
+
+1.4.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@d15 1
+a15 1
+portion, SISCweb itself is written interactively in its own REPL.)
+@
+
+
+1.4.4.1
+log
+@minor revision
+@
+text
+@d15 1
+a15 1
+portion, SISCweb itself is written interactively in its own REPL.)
+@
+
+
+1.4.4.2
+log
+@updated
+@
+text
+@d11 5
+a15 5
+SISCweb sports an interactive, REPL-based web application development
+style. Developers can write applications interactively, without ever
+restarting the context, and, insofar as it is desirable, without ever
+losing application state. (In fact, save for the Java portion, SISCweb
+itself is developed interactively in its own REPL.)
+d18 1
+a18 1
+page-centric execution model typical of web applications [*].  Every
+d32 1
+a32 1
+later. More detailed information is contained in the documentation.
+d57 1
+a57 1
+(C) 2005-2006 Alessandro Colomba <acolomba@@users.sourceforge.net>
+@
+
+
+1.3
+log
+@merged from rel-0-2-dev
+@
+text
+@d5 1
+a5 1
+SISCweb is a framework to facilitate writing stateful Scheme web
+@
+
+
+1.3.2.1
+log
+@minor edit
+@
+text
+@d5 1
+a5 1
+SISCweb is a framework aimed to facilitate writing stateful Scheme web
+@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@d1 1
+a1 1
+SISC
+d5 2
+a6 2
+SISCweb is a framework to facilitate writing Scheme web applications
+in a J2EE environment.
+d21 1
+a21 31
+submits a request. Some consequences of this approach are:
+
+  - Programs can be structured around their problem domain rather than
+    presentation.
+  - Developers are freed from having to manually manage the lifecycle
+    of objects in the session. In fact, there is hardly any need to store
+    objects in the session; when the browser submits a request and the
+    program's execution flow is resumed, all the language-level variables
+    the were in scope are again available.
+  - Thanks to SISC's serializable continuations, accumulated program state
+    is transparent to server restarts and (theoretically) to clustering.
+  - Programs can be made resilient to page reloads and cloning with much
+    less effort.
+  - An extra security layer is added because URLs (which now encode a
+    reference to program state) cannot quite be manipulated, hidden form
+    variables are not needed anymore, and in general the automatic state
+    management in SISCweb should be more difficult to fool than the ad-hoc
+    solutions developers are forced to implement in traditional web
+    applications.
+
+SISCweb uses SXML to generate the content of the response, but any
+other mechanism can be easily plugged on top of a basic set of the
+response functions.
+
+Additionally, features planned for future releases are:
+
+  - A concise set of functionalities to build content (HTML, JPG, PNG,
+    etc.)
+  - A robust continuation management engine: by v1.0 an application
+    written in SISCweb should be as resilient to load as a traditional
+    Java web application.
+d31 2
+a32 15
+SISCweb requires a relatively recent J2EE application server (Tomcat
+5.0 for instance) and Java 1.4.2. More information in the INSTALL
+file.
+
+
+STATUS
+
+While currently about as featureful as PLT's web-server collection,
+this release is strictly oriented to people already familiar with
+Scheme and the continuation-based development approach. A concise
+reference to the main modules is provided in the doc/ folder, and a
+few basic examples can be found in the examples/ folder.
+
+This release features a very simple continuation manager that removes
+accumulated continuations based on an assigned time-to-live.
+a57 2
+
+
+@
+
+
+1.2.4.1
+log
+@merged from rel-0-1-fix-1
+@
+text
+@d1 1
+a1 1
+SISCWEB
+d5 2
+a6 2
+SISCweb is a framework to facilitate writing stateful Scheme web
+applications in J2EE environments.
+d23 2
+a24 2
+  - Programs are more easily structured around their problem domain
+    rather than their presentation.
+a48 1
+  - SXML markup wizardries such as (image (@@ (src ,get-image))) and more.
+d62 2
+a63 2
+5.0 for instance) and Java 1.4.2. More detailed information is
+contained in the INSTALL file.
+d75 1
+a75 2
+accumulated continuations based on an assigned time-to-live. More is
+in store.
+@
+
+
+1.2.4.2
+log
+@updated
+@
+text
+@d21 32
+a52 1
+submits a request.
+d62 16
+a77 2
+SISCweb requires a J2EE 1.3 application server and a JDK 1.4 or
+later. More detailed information is contained in the INSTALL file.
+d103 2
+@
+
+
+1.2.2.1
+log
+@misc fixes
+@
+text
+@d1 1
+a1 1
+SISCWEB
+d5 2
+a6 2
+SISCweb is a framework to facilitate writing stateful Scheme web
+applications in J2EE environments.
+d23 2
+a24 2
+  - Programs are more easily structured around their problem domain
+    rather than their presentation.
+a48 1
+  - SXML markup wizardries such as (image (@@ (src ,get-image))) and more.
+d62 2
+a63 2
+5.0 for instance) and Java 1.4.2. More detailed information is
+contained in the INSTALL file.
+d75 1
+a75 2
+accumulated continuations based on an assigned time-to-live. More is
+in store.
+@
+
+
+1.1
+log
+@file README was initially added on branch rel-0-1-dev.
+@
+text
+@d1 102
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 83
+DESCRIPTION
+
+SISCweb is a framework implemented in SISC and Java to allow writing
+Scheme applications in a J2EE environment. Combining continuations,
+sxml and a server-side REPL, SISCweb aims to make developing web
+applications fun again.
+
+SISCweb is based on SISC (sisc.sf.net), a Scheme interpreter for the JVM.
+SISCweb is heavily influenced by other frameworks in non-Java environments:
+
+  - the PLT web server collection
+    (http://download.plt-scheme.org/scheme/docs/html/web-server/)
+  - SUnet (http://www.scsh.net/resources/sunet.html)
+  - AllegroServe (http://allegroserve.sourceforge.net/)
+
+
+MOTIVATIONS
+
+In my day job I design and develop Java software in EJB, Struts, JSPs,
+XML, et al. While each technology offers a solution to common problems
+of web applications, they do so in a manner that a) forces one to bend
+the very structure of one's application to the technology, b) fragments
+the code in several distinct, limited-scope fragments in small languages.
+
+
+OBJECTIVES
+
+While the persistence and transaction management of EJBs is quite
+outside of the scope of SISCweb, I believe Scheme offers a more
+integrated approach to the controller implementation in Struts, the
+presentation technique of JSPs, and the XML mini-languages -- all
+within a J2EE server thanks to SISC.
+
+As such, SISCweb aims to provide:
+
+  - an interactive, REPL-based web application development style: a
+    developer should be able to write an application without ever
+    bouncing the server or losing state.
+  - continuation-based execution control flow: a developer should not
+    need to shuffle state back and forth the request/session objects
+    and the local, language-level variables
+  - a small set of operators to build content (HTML, FO, whatever): a
+    developer should be able to describe the presentation in a language
+    appropriate to the application, and have macro-like operators generate
+    the content.
+  - the full abstraction power of Scheme: developers should see and write
+    as little piping (or glue if you like) as possible.
+
+
+CHALLENGES
+
+Web applications must have three characteristics, all starting with
+the letter "S": Scalability, Scalability, Scalability.
+
+The use of continuations is a trade-off of scalability that benefits
+the developer, much like automatic memory management is. (And in fact,
+what are continuations in this context if not an automatically managed
+way to keep track of data?) Current frameworks use an "expiration"
+approach, but I would like to do better. Needless to say, this is
+where most of the effort will go in the early stages.
+
+
+STATUS
+
+You can see a few very simple "sisclets" in scm/examples. It is my
+intention to add examples as new features are added. The example
+folder and the TODO file are the best source for now.
+
+
+CONTRIBUTING, BUG REPORTS
+
+Ideas, code and bug reports are welcome, if possible with a ratio
+of bugs to ideas+code equal to the SISCweb version number.
+
+At this point in time you can write to:
+
+acolomba@@users.sourceforge.net
+
+Thank you!
+
+
+
+(C) 2005 Alessandro Colomba <acolomba@@users.sourceforge.net>
+@
+
+
+1.1.2.2
+log
+@minor changes
+@
+text
+@d37 2
+a38 2
+    developer should be able to write an application interactively,
+    without ever bouncing the server or losing state.
+d66 1
+a66 1
+intention to add examples as new features are added. The examples
+@
+
+
+1.1.2.3
+log
+@modified
+@
+text
+@d1 1
+a1 1
+OVERVIEW
+d4 1
+a4 1
+Scheme web applications in a J2EE environment. Combining continuations,
+d8 2
+a9 2
+SISCweb is based on SISC (sisc.sf.net), a Scheme interpreter for the JVM,
+and is heavily influenced by other frameworks in non-Java environments:
+d17 9
+d30 1
+a30 1
+integrated approach than the controller implementation in Struts, the
+d36 4
+a39 5
+  - an interactive, REPL-based web application development style:
+    developers should be able to write applications interactively,
+    without ever bouncing the server and (insofar as it is desirable)
+    ever losing application state.
+  - continuation-based execution control flow: developers should not
+d42 2
+a43 2
+  - a concise set of operators to build content (HTML, FO, whatever):
+    developers should be able to describe the presentation in a language
+d46 2
+a47 1
+  - the full abstraction power of Scheme under J2EE
+d52 9
+a60 5
+The use of continuations is a trade-off of scalability for abstraction;
+abstraction benefits the developer, much like automatic memory management
+doesi. (And in fact, what are continuations in this context if not an
+automatically managed way to keep state?) Current frameworks use simple
+"expiration" approaches, but I would like to do better.
+d65 3
+a67 8
+I regret the lack of documentation, but please consider this release
+is aimed at fellow developers interested in scheme continuation-based
+web development on the Java platform.
+
+However, you can see a few illustrative "sisclets" in scm/examples.
+It is my intention to add examples as new features are added. The examples/
+folder, the source code, and the TODO file are the best information source
+for now.
+a68 2
+A basic reference manual for people already familiar with the PLT webserver.ss
+and SUnet SUrflets is in the TODO for version 0.2.
+d72 4
+a75 1
+Comments, ideas, code and bug reports are welcome at:
+d77 1
+a77 1
+    acolomba@@users.sourceforge.net
+@
+
+
+1.1.2.4
+log
+@updated
+@
+text
+@a0 2
+SISC
+
+d4 3
+a6 3
+Scheme web applications in a J2EE environment. Through the use of
+first-class continuations, sxml and a server-side REPL, SISCweb aims
+to make web development fun again.
+d8 2
+a9 2
+SISCweb is based on SISC (sisc.sf.net), a Scheme interpreter for the
+JVM, and is heavily influenced by other Lisp web frameworks:
+a15 2
+A couple of design decisions were also lifted from Matthias
+Radestock's servlet code in the contrib section of the SISC CVS tree.
+d17 1
+d19 5
+a23 1
+OBJECTIVES
+d25 1
+a25 1
+SISCweb aims to provide:
+d27 1
+a27 1
+  - An interactive, REPL-based web application development style:
+d30 2
+a31 2
+    ever losing application state. [*]
+  - Continuation-based execution control flow: developers should not
+d33 2
+a34 2
+    and language-level variables.
+  - A concise set of functions to build content (HTML, FO, images...):
+d36 12
+a47 12
+    appropriate to the application, and have transformation operators
+    generate the content.
+  - A robust continuation management engine: by v1.0 an application
+    written in SISCweb should be as resilient to load as a traditional
+    Java web application, as well as to DoS attacks trying to overload
+    the continuation tables.
+  - The inherent abstraction power of Scheme and the industry support
+    of Java.
+
+[*] Save for the Java portion and the "bootstrap" Scheme code, SISCweb
+    itself has been written in a REPL running in the web server, with
+    hardly any server bounces.
+d50 14
+a71 1
+(C) 2005 Alessandro Colomba <acolomba@@users.sourceforge.net>
+d74 1
+@
+
+
+1.1.2.5
+log
+@updated
+@
+text
+@d5 4
+a8 64
+SISCweb is a framework to facilitate writing Scheme web applications
+in a J2EE environment.
+
+
+FEATURES
+
+SISCweb features an interactive, REPL-based web application
+development style. Developers can write applications interactively,
+without ever bouncing the server, and, insofar as it is desirable,
+without ever losing application state. (In fact, save for the Java
+portion, SISCweb itself is written interactively in a REPL.)
+
+Through the use of continuations, SISCweb does away with the
+page-centric execution model typical of web applications. [*] Every
+time a response is sent to the browser, the program execution flow is
+suspended, to be then resumed from that exact point when the browser
+submits a request. Some consequences of this approach are:
+
+  - Programs can be structured around their problem domain rather than
+    presentation.
+  - Developers are freed from having to manually manage the lifecycle
+    of objects in the session. In fact, there is hardly any need to store
+    objects in the session; when the browser submits a request and the
+    program's execution flow is resumed, all the language-level variables
+    the were in scope are again available.
+  - Thanks to SISC's serializable continuations, accumulated program state
+    is transparent to server restarts and (theoretically) to clustering.
+  - Programs can be made resilient to page reloads and cloning with much
+    less effort.
+  - An extra security layer is added because URLs (which now encode a
+    reference to program state) cannot quite be manipulated, hidden form
+    variables are not needed anymore, and in general the automatic state
+    management in SISCweb should be more difficult to fool than the ad-hoc
+    solutions developers are forced to implement in traditional web
+    applications.
+
+SISCweb uses SXML to generate the content of the response, but any
+other mechanism can be easily plugged on top of a basic set of
+response functions.
+
+Additionally, features planned for future releases are:
+
+  - A concise set of functionalities to build content (HTML, JPG, PNG,
+    etc.)
+  - A robust continuation management engine: by v1.0 an application
+    written in SISCweb should be as resilient to load as a traditional
+    Java web application.
+
+[*] More information can be found in this paper: Christian
+Queinnec. "Inverting back the inversion of control or, continuations
+versus page-centric programming". Technical Report 7, LIP6. May
+2001. (http://www-spi.lip6.fr/~queinnec/Papers/www.ps.gz)
+
+
+STATUS
+
+While currently about as featureful as PLT's web-server collection,
+this release is strictly oriented to people already familiar with
+Scheme and the continuation-based development approach. A concise
+reference to the main modules is provided in the doc/ folder, and a
+few basic examples can be found in the examples/ folder.
+
+
+CREDITS
+d22 27
+d51 1
+a51 1
+Comments, ideas, and bug reports are welcome at:
+@
+
+
+1.1.2.6
+log
+@edited wording, etc.
+@
+text
+@d42 1
+a42 1
+other mechanism can be easily plugged on top of a basic set of the
+a58 7
+REQUIREMENTS
+
+SISCweb requires a relatively recent J2EE application server (Tomcat
+5.0 for instance) and Java 1.4.2. More information in the INSTALL
+file.
+
+
+a66 3
+This release features a very simple continuation manager that removes
+accumulated continuations based on an assigned time-to-live.
+
+d78 1
+a78 1
+A couple of initial design decisions were also lifted from Matthias
+@
+
+

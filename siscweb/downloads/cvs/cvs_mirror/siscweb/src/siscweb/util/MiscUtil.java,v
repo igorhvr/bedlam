@@ -1,0 +1,888 @@
+head	1.5;
+access;
+symbols
+	rel-0-6-dev:1.5.0.4
+	rel-0-5-fix:1.5.0.2
+	rel-0-5:1.5
+	rel-0-5-dev-safe-frames:1.4.4.2.0.2
+	Root_rel-0-5-dev-safe-frames:1.4.4.2
+	rel-0-4-fix-0:1.4
+	rel-0-5-dev:1.4.0.4
+	rel-0-4-fix:1.4.0.2
+	rel-0-3-fix-3:1.3.2.2
+	rel-0-3-fix-2:1.3.2.1
+	rel-0-4-dev-sisc-1-11:1.3.4.1
+	rel-0-3-fix-1:1.3
+	rel-0-4-dev:1.3.0.4
+	rel-0-3-fix:1.3.0.2
+	rel-0-3:1.3
+	rel-0-3-dev-1:1.2.4.3
+	rel-0-2-fix-2:1.2
+	rel-0-2-fix-1:1.2
+	rel-0-2-fix:1.2.0.2
+	rel-0-3-dev:1.2.0.4
+	rel-0-2:1.2
+	rel-0-1-fix-1:1.1
+	rel-0-2-dev:1.1.0.4
+	rel-0-1-fix:1.1.0.2
+	rel-0-1:1.1
+	start:1.1.1.1
+	rel-0-1-dev:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.5
+date	2007.04.12.03.51.19;	author acolomba;	state Exp;
+branches
+	1.5.2.1;
+next	1.4;
+
+1.4
+date	2006.09.03.01.42.22;	author acolomba;	state Exp;
+branches
+	1.4.2.1
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.06.19.03.03.51;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches
+	1.1.1.1
+	1.1.4.1;
+next	;
+
+1.1.1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.1.4.1
+date	2005.04.12.04.51.00;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.06.24.00.59.30;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.07.17.23.47.02;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2005.09.28.02.44.58;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2006.02.25.17.12.01;	author acolomba;	state Exp;
+branches;
+next	1.3.2.2;
+
+1.3.2.2
+date	2006.04.15.15.55.23;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2006.01.22.03.59.58;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2;
+
+1.3.4.2
+date	2006.02.18.16.39.01;	author acolomba;	state Exp;
+branches;
+next	1.3.4.3;
+
+1.3.4.3
+date	2006.02.22.04.13.54;	author acolomba;	state Exp;
+branches;
+next	1.3.4.4;
+
+1.3.4.4
+date	2006.06.25.21.03.05;	author acolomba;	state Exp;
+branches;
+next	1.3.4.5;
+
+1.3.4.5
+date	2006.08.28.02.27.12;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.2.1
+date	2006.09.20.02.31.25;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2006.09.19.02.31.46;	author acolomba;	state Exp;
+branches;
+next	1.4.4.2;
+
+1.4.4.2
+date	2007.01.08.03.47.11;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.5.2.1
+date	2007.09.09.01.59.54;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.5
+log
+@merged from rel-0-5-dev
+@
+text
+@/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005-2006
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ * Dan Muresan
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+package siscweb.util;
+
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.util.Iterator;
+
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageInputStream;
+import javax.imageio.stream.ImageOutputStream;
+
+import sisc.data.Procedure;
+import sisc.data.SchemeString;
+import sisc.data.Symbol;
+import sisc.data.Value;
+import sisc.interpreter.AppContext;
+import sisc.interpreter.Context;
+import sisc.interpreter.Interpreter;
+import sisc.interpreter.SchemeCaller;
+import sisc.interpreter.SchemeException;
+import sisc.util.Util;
+
+
+public class MiscUtil
+{
+    public static String qualifyName(String context, String name)
+    {
+        return (context != null && !"".equals(context.trim()))
+             ? context + "::" + name
+             : name;
+    }
+
+
+
+    public static void copyStream(InputStream is, OutputStream os)
+        throws IOException
+    {
+        final int BUF_SIZE = 10000;
+        byte[] buffer = new byte[BUF_SIZE];
+
+        for(int length = -1; (length = is.read(buffer, 0, BUF_SIZE)) != -1;) {
+            os.write(buffer, 0, length);
+        }
+    }
+
+
+    public static BufferedImage readImage(String type, InputStream is)
+        throws IOException
+    {
+        Iterator readers = ImageIO.getImageReadersByFormatName(type);
+        ImageReader reader = (ImageReader)readers.next();
+
+
+        ImageInputStream iis = ImageIO.createImageInputStream(is);
+        reader.setInput(iis, true);
+
+        return reader.read(0);
+    }
+
+    public static void writeImage(String type, RenderedImage image, OutputStream os)
+        throws IOException
+    {
+        Iterator writers = ImageIO.getImageWritersByFormatName(type);
+        ImageWriter writer = (ImageWriter)writers.next();
+
+        ImageOutputStream ios = ImageIO.createImageOutputStream(os);
+
+        writer.setOutput(ios);
+        writer.write(image);
+    }
+
+    public static void eval(final String sexp,
+                            final URL path,
+                            final AppContext appContext,
+                            final String contextName)
+        throws SchemeException
+    {
+        try {
+            if(sexp != null) {
+                Context.execute(appContext, new SchemeCaller() {
+                        public Object execute(Interpreter r)
+                            throws SchemeException
+                        {
+                            try {
+                                if(path != null) {
+                                    final Procedure currentDirectory =
+                                        (Procedure) r.lookup(Symbol.get("current-url"),
+                                                             Util.TOPLEVEL);
+                                    r.eval(currentDirectory,
+                                           new Value[] {
+                                               new SchemeString(path.toString())
+                                           });
+                                }
+
+                                return r.eval(sexp);
+                            }
+                            catch(final IOException ioe) {
+                                throw new RuntimeException(ioe);
+                            }
+                        } });
+            }
+        }
+        catch(final SchemeException se) {
+            Context.execute(new SchemeCaller() {
+                    public Object execute(Interpreter r)
+                        throws SchemeException
+                    {
+                        final Procedure printError = (Procedure) r.lookup(Symbol.get("print-error"), Util.TOPLEVEL);
+
+                        return r.eval(printError, new Value[] {se.m, se.e});
+                    } });
+
+            throw se;
+        }
+    }
+}
+@
+
+
+1.5.2.1
+log
+@minor syntactical cleanup
+@
+text
+@d67 1
+a67 1
+    public static String qualifyName(final String context, final String name)
+d76 1
+a76 1
+    public static void copyStream(final InputStream inputStream, final OutputStream outputStream)
+d80 1
+a80 1
+        final byte[] buffer = new byte[BUF_SIZE];
+d82 2
+a83 2
+        for(int length = -1; (length = inputStream.read(buffer, 0, BUF_SIZE)) != -1;) {
+            outputStream.write(buffer, 0, length);
+d88 1
+a88 1
+    public static BufferedImage readImage(final String type, final InputStream inputStream)
+d91 2
+a92 2
+        final Iterator readers = ImageIO.getImageReadersByFormatName(type);
+        final ImageReader reader = (ImageReader)readers.next();
+d95 1
+a95 1
+        final ImageInputStream iis = ImageIO.createImageInputStream(inputStream);
+d101 1
+a101 1
+    public static void writeImage(final String type, final RenderedImage image, final OutputStream outputStream)
+d104 2
+a105 2
+        final Iterator writers = ImageIO.getImageWritersByFormatName(type);
+        final ImageWriter writer = (ImageWriter)writers.next();
+d107 1
+a107 1
+        final ImageOutputStream imageOutputStream = ImageIO.createImageOutputStream(outputStream);
+d109 1
+a109 1
+        writer.setOutput(imageOutputStream);
+@
+
+
+1.4
+log
+@merged from rel-0-4-dev
+@
+text
+@d17 1
+a17 1
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005
+d21 1
+d44 1
+d57 1
+d113 4
+a116 1
+    public static void eval(final String sexp, final String path, final String contextName)
+d121 1
+a121 1
+                Context.execute(new SchemeCaller() {
+d126 9
+a134 5
+                                final Procedure currentDirectory =
+                                    (Procedure) r.lookup(Symbol.get("current-directory"),
+                                                         Util.TOPLEVEL);
+
+                                r.eval(currentDirectory, new Value[] { new SchemeString(path) });
+a156 1
+
+@
+
+
+1.4.2.1
+log
+@merged from rel-0-5-dev
+@
+text
+@a42 1
+import java.net.URL;
+d110 1
+a110 1
+    public static void eval(final String sexp, final URL path, final String contextName)
+d120 5
+a124 9
+                                if(path != null) {
+                                    final Procedure currentDirectory =
+                                        (Procedure) r.lookup(Symbol.get("current-url"),
+                                                             Util.TOPLEVEL);
+                                    r.eval(currentDirectory,
+                                           new Value[] {
+                                               new SchemeString(path.toString())
+                                           });
+                                }
+@
+
+
+1.4.4.1
+log
+@MiscUtil.eval() now uses current-url instead of current-directory,
+thus fixing issues when running as a non-exploded WAR
+@
+text
+@a42 1
+import java.net.URL;
+d110 1
+a110 1
+    public static void eval(final String sexp, final URL path, final String contextName)
+d120 5
+a124 9
+                                if(path != null) {
+                                    final Procedure currentDirectory =
+                                        (Procedure) r.lookup(Symbol.get("current-url"),
+                                                             Util.TOPLEVEL);
+                                    r.eval(currentDirectory,
+                                           new Value[] {
+                                               new SchemeString(path.toString())
+                                           });
+                                }
+@
+
+
+1.4.4.2
+log
+@sisc appcontext is now local to the servlet context instead of
+the static scope
+@
+text
+@d17 1
+a17 1
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005-2006
+a20 1
+ * Dan Muresan
+a55 1
+import sisc.interpreter.AppContext;
+d111 1
+a111 4
+    public static void eval(final String sexp,
+                            final URL path,
+                            final AppContext appContext,
+                            final String contextName)
+d116 1
+a116 1
+                Context.execute(appContext, new SchemeCaller() {
+d152 1
+@
+
+
+1.3
+log
+@merged from rel-0-3-dev
+@
+text
+@a39 1
+import java.io.FileNotFoundException;
+a42 1
+import java.net.URL;
+d44 1
+a50 2
+
+import sisc.REPL;
+a54 1
+import sisc.interpreter.AppContext;
+d57 1
+a58 1
+import sisc.ser.MemoryRandomAccessInputStream;
+a70 38
+    public static void changeDirectory(Interpreter r, String dir)
+    {
+        try {
+            Procedure currentDirectory = (Procedure)r.lookup(Symbol.get("current-directory"), Util.TOPLEVEL);
+
+            r.eval(currentDirectory, new Value[] { new SchemeString(dir) });
+        }
+        catch(SchemeException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void initializeContext(String name)
+    	throws IOException
+    {
+        try {
+            Context.register(name, new AppContext());
+
+            final Interpreter r = Context.enter(name);
+
+            URL heapLocation = sisc.boot.HeapAnchor.class.getResource("sisc.shp");
+            
+            if(heapLocation == null) {
+            	throw new FileNotFoundException("SISC heap not found. (Perhaps you forgot to include sisc-heap.jar?)");
+            }
+            	
+            REPL.loadHeap(r, new MemoryRandomAccessInputStream(heapLocation.openStream()));
+        }
+        catch(ClassNotFoundException e) {
+            throw new FileNotFoundException("SISC heap not found. (You probably forgot to include sisc-heap.jar.)");
+        }
+        catch(IOException e) {
+            throw new IOException("I/O error while loading SISC heap.");
+        }
+        finally {
+            Context.exit();
+        }
+    }
+d109 39
+@
+
+
+1.3.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@a45 1
+
+d52 1
+a75 1
+        throws SchemeException
+d77 2
+a78 1
+        Procedure currentDirectory = (Procedure)r.lookup(Symbol.get("current-directory"), Util.TOPLEVEL);
+d80 5
+a84 1
+        r.eval(currentDirectory, new Value[] { new SchemeString(dir) });
+d88 1
+a88 1
+        throws IOException
+d96 1
+a96 1
+
+d98 1
+a98 1
+                throw new FileNotFoundException("SISC heap not found. (Perhaps you forgot to include sisc-heap.jar?)");
+d100 1
+a100 1
+
+@
+
+
+1.3.2.2
+log
+@merged from rel-0-4-dev
+@
+text
+@d40 1
+d44 1
+d53 12
+d75 34
+@
+
+
+1.3.4.1
+log
+@changeDirectory() now throws SchemeException; minor formatting fixes
+@
+text
+@a45 1
+
+d52 1
+a75 1
+        throws SchemeException
+d77 2
+a78 1
+        Procedure currentDirectory = (Procedure)r.lookup(Symbol.get("current-directory"), Util.TOPLEVEL);
+d80 5
+a84 1
+        r.eval(currentDirectory, new Value[] { new SchemeString(dir) });
+d88 1
+a88 1
+        throws IOException
+d96 1
+a96 1
+
+d98 1
+a98 1
+                throw new FileNotFoundException("SISC heap not found. (Perhaps you forgot to include sisc-heap.jar?)");
+d100 1
+a100 1
+
+@
+
+
+1.3.4.2
+log
+@loads heap using recommended random access method
+@
+text
+@d91 1
+a91 1
+            InputStream heapInputStream = sisc.boot.HeapAnchor.class.getResourceAsStream("sisc.shp");
+d93 1
+a93 1
+            if(heapInputStream == null) {
+d97 1
+a97 1
+            REPL.loadHeap(r, new MemoryRandomAccessInputStream(heapInputStream));
+@
+
+
+1.3.4.3
+log
+@removed unused initializeContext and changeDirectory methods
+@
+text
+@d40 1
+d44 1
+d53 12
+d75 34
+@
+
+
+1.3.4.4
+log
+@added eval() with code from SISCInitializer.evalInitParameter()
+@
+text
+@a43 1
+import java.util.logging.Level;
+a49 11
+import javax.servlet.ServletContext;
+
+import sisc.data.Procedure;
+import sisc.data.SchemeString;
+import sisc.data.Symbol;
+import sisc.data.Value;
+import sisc.interpreter.Context;
+import sisc.interpreter.Interpreter;
+import sisc.interpreter.SchemeCaller;
+import sisc.interpreter.SchemeException;
+import sisc.util.Util;
+a98 39
+
+    public static void eval(final String sexp, final String path, final String contextName)
+        throws SchemeException
+    {
+        try {
+            if(sexp != null) {
+                Context.execute(new SchemeCaller() {
+                        public Object execute(Interpreter r)
+                            throws SchemeException
+                        {
+                            try {
+                                final Procedure currentDirectory =
+                                    (Procedure) r.lookup(Symbol.get("current-directory"),
+                                                         Util.TOPLEVEL);
+
+                                r.eval(currentDirectory, new Value[] { new SchemeString(path) });
+
+                                return r.eval(sexp);
+                            }
+                            catch(final IOException ioe) {
+                                throw new RuntimeException(ioe);
+                            }
+                        } });
+            }
+        }
+        catch(final SchemeException se) {
+            Context.execute(new SchemeCaller() {
+                    public Object execute(Interpreter r)
+                        throws SchemeException
+                    {
+                        final Procedure printError = (Procedure) r.lookup(Symbol.get("print-error"), Util.TOPLEVEL);
+
+                        return r.eval(printError, new Value[] {se.m, se.e});
+                    } });
+
+            throw se;
+        }
+    }
+
+@
+
+
+1.3.4.5
+log
+@minor cleanups in import section
+@
+text
+@d44 1
+d51 1
+@
+
+
+1.2
+log
+@merged from rel-0-2-dev
+@
+text
+@d38 3
+d42 10
+d88 1
+d95 7
+a101 3
+            REPL.loadHeap(r, new MemoryRandomAccessInputStream(
+                sisc.boot.HeapAnchor.class
+                    .getResource("sisc.shp").openStream()));
+d104 1
+a104 1
+            throw new RuntimeException("Unable to load heap", e);
+d107 1
+a107 1
+            throw new RuntimeException("Unable to load heap", e);
+d113 38
+@
+
+
+1.2.4.1
+log
+@added image load/write utility methods
+@
+text
+@a37 2
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+a38 9
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Iterator;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageInputStream;
+import javax.imageio.stream.ImageOutputStream;
+
+a94 39
+
+
+    public static void copyStream(InputStream is, OutputStream os)
+        throws IOException
+    {
+        byte[] buffer = new byte[10000];
+
+        for(int length = -1; (length = is.read(buffer, 0, 1000)) != -1;) {
+            os.write(buffer, 0, length);
+        }
+    }
+
+
+    public static BufferedImage readImage(String type, InputStream is)
+        throws IOException
+    {
+        Iterator readers = ImageIO.getImageReadersByFormatName(type);
+        ImageReader reader = (ImageReader)readers.next();
+
+
+        ImageInputStream iis = ImageIO.createImageInputStream(is);
+        reader.setInput(iis, true);
+
+        return reader.read(0);
+    }
+
+    public static void writeImage(String type, RenderedImage image, OutputStream os)
+        throws IOException
+    {
+        Iterator writers = ImageIO.getImageWritersByFormatName(type);
+        ImageWriter writer = (ImageWriter)writers.next();
+
+        ImageOutputStream ios = ImageIO.createImageOutputStream(os);
+
+        writer.setOutput(ios);
+        writer.write(image);
+    }
+
+
+@
+
+
+1.2.4.2
+log
+@minor bug fix in copyStream()
+@
+text
+@d111 1
+a111 2
+        final int BUF_SIZE = 10000;
+        byte[] buffer = new byte[BUF_SIZE];
+d113 1
+a113 1
+        for(int length = -1; (length = is.read(buffer, 0, BUF_SIZE)) != -1;) {
+d143 2
+@
+
+
+1.2.4.3
+log
+@improved error handling in case of missing heap
+@
+text
+@a39 1
+import java.io.FileNotFoundException;
+a42 1
+import java.net.URL;
+a85 1
+    	throws IOException
+d92 3
+a94 7
+            URL heapLocation = sisc.boot.HeapAnchor.class.getResource("sisc.shp");
+            
+            if(heapLocation == null) {
+            	throw new FileNotFoundException("SISC heap not found. (Perhaps you forgot to include sisc-heap.jar?)");
+            }
+            	
+            REPL.loadHeap(r, new MemoryRandomAccessInputStream(heapLocation.openStream()));
+d97 1
+a97 1
+            throw new FileNotFoundException("SISC heap not found. (You probably forgot to include sisc-heap.jar.)");
+d100 1
+a100 1
+            throw new IOException("I/O error while loading SISC heap.");
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d38 3
+d45 2
+d49 1
+d73 22
+@
+
+
+1.1.4.1
+log
+@added initializeContext() method (SISC application context, that is)
+@
+text
+@a37 3
+import java.io.IOException;
+
+import sisc.REPL;
+a41 2
+import sisc.interpreter.AppContext;
+import sisc.interpreter.Context;
+a43 1
+import sisc.ser.MemoryRandomAccessInputStream;
+a66 22
+
+    public static void initializeContext(String name)
+    {
+        try {
+            Context.register(name, new AppContext());
+
+            final Interpreter r = Context.enter(name);
+
+            REPL.loadHeap(r, new MemoryRandomAccessInputStream(
+                sisc.boot.HeapAnchor.class
+                    .getResource("sisc.shp").openStream()));
+        }
+        catch(ClassNotFoundException e) {
+            throw new RuntimeException("Unable to load heap", e);
+        }
+        catch(IOException e) {
+            throw new RuntimeException("Unable to load heap", e);
+        }
+        finally {
+            Context.exit();
+        }
+    }
+@
+
+
+1.1.1.1
+log
+@initial import
+@
+text
+@@

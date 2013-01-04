@@ -1,0 +1,716 @@
+head	1.2;
+access;
+symbols
+	rel-0-6-dev:1.2.0.10
+	rel-0-5-fix:1.2.0.8
+	rel-0-5:1.2
+	rel-0-5-dev-safe-frames:1.2.0.6
+	Root_rel-0-5-dev-safe-frames:1.2
+	rel-0-4-fix-0:1.2
+	rel-0-5-dev:1.2.0.4
+	rel-0-4-fix:1.2.0.2
+	rel-0-3-fix-3:1.1.4.3
+	rel-0-3-fix-2:1.1.4.2
+	rel-0-3-fix:1.1.0.4
+	rel-0-4-dev-sisc-1-11:1.1.2.4
+	rel-0-4-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2006.09.03.01.42.23;	author acolomba;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.01.17.03.11.44;	author acolomba;	state dead;
+branches
+	1.1.2.1
+	1.1.4.1;
+next	;
+
+1.1.2.1
+date	2006.01.17.03.11.44;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2006.01.17.05.34.19;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2006.01.31.04.31.38;	author acolomba;	state Exp;
+branches;
+next	1.1.2.4;
+
+1.1.2.4
+date	2006.02.12.23.27.49;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5;
+
+1.1.2.5
+date	2006.02.22.04.26.06;	author acolomba;	state Exp;
+branches;
+next	1.1.2.6;
+
+1.1.2.6
+date	2006.03.12.13.03.34;	author acolomba;	state Exp;
+branches;
+next	1.1.2.7;
+
+1.1.2.7
+date	2006.03.12.14.36.23;	author acolomba;	state Exp;
+branches;
+next	1.1.2.8;
+
+1.1.2.8
+date	2006.03.29.00.36.40;	author acolomba;	state Exp;
+branches;
+next	1.1.2.9;
+
+1.1.2.9
+date	2006.04.08.22.35.18;	author acolomba;	state Exp;
+branches;
+next	1.1.2.10;
+
+1.1.2.10
+date	2006.04.09.16.38.45;	author acolomba;	state Exp;
+branches;
+next	1.1.2.11;
+
+1.1.2.11
+date	2006.04.13.00.33.46;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.1.4.1
+date	2006.01.17.03.11.44;	author acolomba;	state dead;
+branches;
+next	1.1.4.2;
+
+1.1.4.2
+date	2006.02.25.17.12.03;	author acolomba;	state Exp;
+branches;
+next	1.1.4.3;
+
+1.1.4.3
+date	2006.04.15.15.55.24;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@merged from rel-0-4-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+
+(require-library 'siscweb/config)
+(require-library 'siscweb/contcentric)
+(require-library 'siscweb/response)
+(require-library 'sxml/ehtml)
+(require-library 'sxml/sxml-to-xml)
+
+(module siscweb/xhtml
+  (send-xhtml/back send-xhtml/finish
+   send-xhtml/suspend send-xhtml/forward)
+
+  (import srfi-16)
+
+  (import siscweb/config)
+  (import siscweb/contcentric)
+  (import siscweb/response)
+  (import sxml/ehtml)
+  (import sxml/sxml-to-xml)
+
+
+  (define (send-xhtml header-alst page)
+    (when (not (assoc "Content-Type" header-alst))
+      (response/set-content-type! "text/html"))
+    (response/add-headers! header-alst)
+    (if (config/sxml-formatted-output?)
+        (sxml/display page (response/open-output-port))
+        (sxml/write page (response/open-output-port))))
+
+
+  (define send-xhtml/back
+    (case-lambda
+      ((page)
+       (send-xhtml/back '() page))
+      ((header-alst page)
+       (send/back
+        (lambda ()
+          (send-xhtml
+           header-alst
+           (ehtml->html page (lambda (x) #f))))))))
+
+  (define send-xhtml/finish
+    (case-lambda
+      ((page)
+       (send-xhtml/finish '() page))
+      ((header-alst page)
+       (send/finish
+        (lambda ()
+          (send-xhtml
+           header-alst
+           (ehtml->html page (lambda (x) #f))))))))
+
+  (define send-xhtml/suspend
+    (case-lambda
+      ((page-proc)
+       (send-xhtml/suspend '() page-proc))
+      ((header-alst page-proc)
+       (send/suspend
+        (lambda (k-url resume-k)
+          (send-xhtml
+           header-alst
+           (ehtml->html (page-proc k-url) resume-k)))))))
+
+  (define send-xhtml/forward
+    (case-lambda
+      ((page-proc)
+       (send-xhtml/forward '() page-proc))
+      ((header-alst page-proc)
+       (send/forward
+        (lambda (k-url resume-k)
+          (send-xhtml
+           header-alst
+           (ehtml->html (page-proc k-url) resume-k)))))))
+  )
+@
+
+
+1.1
+log
+@file xhtml.scm was initially added on branch rel-0-4-dev.
+@
+text
+@d1 104
+@
+
+
+1.1.4.1
+log
+@file xhtml.scm was added on branch rel-0-3-fix on 2006-02-25 17:12:03 +0000
+@
+text
+@@
+
+
+1.1.4.2
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@a0 102
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+
+(require-library 'siscweb/response)
+(require-library 'sxml/ehtml)
+(require-library 'sxml/sxml-to-xml)
+
+(module siscweb/xhtml
+  (send-xhtml/back send-xhtml/finish
+   send-xhtml/suspend send-xhtml/forward)
+
+  (import srfi-16)
+
+  (import siscweb/response)
+  (import sxml/ehtml)
+  (import sxml/sxml-to-xml)
+
+
+  (define (send-xhtml header-alst page)
+    (when (not (assoc "Content-Type" header-alst))
+      (response/set-content-type! "text/html"))
+    (response/add-headers! header-alst)
+    (response/write (sxml->string page)))
+
+
+  (define send-xhtml/back
+    (case-lambda
+      ((page)
+       (send-xhtml/back '() page))
+      ((header-alst page)
+       (send/back
+        (lambda (request response)
+          (send-xhtml
+           header-alst
+           (ehtml->html request response page
+                        (lambda (x) #f))))))))
+
+  (define send-xhtml/finish
+    (case-lambda
+      ((page)
+       (send-xhtml/finish '() page))
+      ((header-alst page)
+       (send/finish
+        (lambda (request response)
+          (send-xhtml
+           header-alst
+           (ehtml->html request response page
+                        (lambda (x) #f))))))))
+
+  (define send-xhtml/suspend
+    (case-lambda
+      ((page-proc)
+       (send-xhtml/suspend '() page-proc))
+      ((header-alst page-proc)
+       (send/suspend
+        (lambda (request response k-url resume-k)
+          (send-xhtml
+           header-alst
+           (ehtml->html request response (page-proc k-url)
+                        resume-k)))))))
+
+  (define send-xhtml/forward
+    (case-lambda
+      ((page-proc)
+       (send-xhtml/forward '() page-proc))
+      ((header-alst page-proc)
+       (send/forward
+        (lambda (request response k-url resume-k)
+          (send-xhtml
+           header-alst
+           (ehtml->html request response (page-proc k-url)
+                        resume-k)))))))
+  )
+@
+
+
+1.1.4.3
+log
+@merged from rel-0-4-dev
+@
+text
+@a32 2
+(require-library 'siscweb/config)
+(require-library 'siscweb/contcentric)
+a42 2
+  (import siscweb/config)
+  (import siscweb/contcentric)
+d52 1
+a52 3
+    (if (config/sxml-formatted-output?)
+        (sxml/display page (response/open-output-port))
+        (sxml/write page (response/open-output-port))))
+d61 1
+a61 1
+        (lambda ()
+d64 2
+a65 1
+           (ehtml->html page (lambda (x) #f))))))))
+d73 1
+a73 1
+        (lambda ()
+d76 2
+a77 1
+           (ehtml->html page (lambda (x) #f))))))))
+d85 1
+a85 1
+        (lambda (k-url resume-k)
+d88 2
+a89 1
+           (ehtml->html (page-proc k-url) resume-k)))))))
+d97 1
+a97 1
+        (lambda (k-url resume-k)
+d100 2
+a101 1
+           (ehtml->html (page-proc k-url) resume-k)))))))
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 88
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+(require-library 'io/servlet-io)
+(require-library 'siscweb/response)
+(require-library 'sxml/ehtml)
+(require-library 'sxml/sxml-to-xml)
+
+(module siscweb/xhtml
+  (send-xhtml/back send-xhtml/finish
+   send-xhtml/suspend send-xhtml/forward)
+
+  (import s2j)
+
+  (import io/servlet-io)
+  (import siscweb/response)
+  (import sxml/ehtml)
+  (import sxml/sxml-to-xml)
+
+  (define-generic-java-methods set-content-type)
+
+  (define (send-xhtml response page)
+    (set-content-type response (->jstring "application/xhtml+xml"))
+    (with-output-to-port
+        (open-servlet-output response)
+      (lambda ()
+        (sxml/write page))))
+
+  (define (send-xhtml/back page)
+    (send/back
+     (lambda (request response)
+       (send-xhtml response (ehtml->html request response page
+                                         (lambda (x) #f))))))
+
+  (define (send-xhtml/finish page)
+    (send/finish
+     (lambda (request response)
+       (send-xhtml response (ehtml->html request response page
+                                         (lambda (x) #f))))))
+
+  (define (send-xhtml/suspend page-proc)
+    (send/suspend
+     (lambda (request response k-url resume-k)
+       (send-xhtml response
+                 (ehtml->html
+                   request
+                   response
+                   (page-proc k-url)
+                   resume-k)))))
+
+  (define (send-xhtml/forward page-proc)
+    (send/forward
+     (lambda (request response k-url resume-k)
+       (send-xhtml response
+                 (ehtml->html
+                   request
+                   response
+                   (page-proc k-url)
+                   resume-k)))))
+
+  )
+@
+
+
+1.1.2.2
+log
+@corrected WebIt! license to MIT
+@
+text
+@d50 1
+a50 1
+    (set-content-type response (->jstring "text/html"))
+@
+
+
+1.1.2.3
+log
+@does not use servlet/io anymore; uses response/* functions instead of
+s2j methods
+@
+text
+@d31 1
+d40 3
+d47 1
+d49 6
+a54 4
+  (define (send-xhtml page)
+    (response/set-content-type! "text/html")
+    (response/write (sxml->string page)))
+
+d59 2
+a60 3
+       (send-xhtml
+        (ehtml->html request response page
+                     (lambda (x) #f))))))
+d65 2
+a66 3
+       (send-xhtml
+        (ehtml->html request response page
+                     (lambda (x) #f))))))
+d71 6
+a76 3
+       (send-xhtml
+        (ehtml->html request response (page-proc k-url)
+                     resume-k)))))
+d81 6
+a86 3
+       (send-xhtml
+        (ehtml->html request response (page-proc k-url)
+                     resume-k)))))
+@
+
+
+1.1.2.4
+log
+@send-*/* functions now accept an assoc list of HTTP headers
+@
+text
+@a30 2
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+
+a38 2
+  (import srfi-16)
+
+d44 2
+a45 4
+  (define (send-xhtml header-alst page)
+    (when (not (assoc "Content-Type" header-alst))
+      (response/set-content-type! "text/html"))
+    (response/add-headers! header-alst)
+d49 28
+a76 47
+  (define send-xhtml/back
+    (case-lambda
+      ((page)
+       (send-xhtml/back '() page))
+      ((header-alst page)
+       (send/back
+        (lambda (request response)
+          (send-xhtml
+           header-alst
+           (ehtml->html request response page
+                        (lambda (x) #f))))))))
+
+  (define send-xhtml/finish
+    (case-lambda
+      ((page)
+       (send-xhtml/finish '() page))
+      ((header-alst page)
+       (send/finish
+        (lambda (request response)
+          (send-xhtml
+           header-alst
+           (ehtml->html request response page
+                        (lambda (x) #f))))))))
+
+  (define send-xhtml/suspend
+    (case-lambda
+      ((page-proc)
+       (send-xhtml/suspend '() page-proc))
+      ((header-alst page-proc)
+       (send/suspend
+        (lambda (request response k-url resume-k)
+          (send-xhtml
+           header-alst
+           (ehtml->html request response (page-proc k-url)
+                        resume-k)))))))
+
+  (define send-xhtml/forward
+    (case-lambda
+      ((page-proc)
+       (send-xhtml/forward '() page-proc))
+      ((header-alst page-proc)
+       (send/forward
+        (lambda (request response k-url resume-k)
+          (send-xhtml
+           header-alst
+           (ehtml->html request response (page-proc k-url)
+                        resume-k)))))))
+@
+
+
+1.1.2.5
+log
+@adapted to response/send, and send functions look up request/response on their own,
+instead of needing them passed as parameters
+@
+text
+@d61 1
+a61 1
+        (lambda ()
+d64 2
+a65 1
+           (ehtml->html page (lambda (x) #f))))))))
+d73 1
+a73 1
+        (lambda ()
+d76 2
+a77 1
+           (ehtml->html page (lambda (x) #f))))))))
+d85 1
+a85 1
+        (lambda (k-url resume-k)
+d88 2
+a89 1
+           (ehtml->html (page-proc k-url) resume-k)))))))
+d97 1
+a97 1
+        (lambda (k-url resume-k)
+d100 2
+a101 1
+           (ehtml->html (page-proc k-url) resume-k)))))))
+@
+
+
+1.1.2.6
+log
+@now outputs markup using the response port instead of the
+response/write procedure
+@
+text
+@d52 1
+a52 1
+    (sxml/write page (response/get-output-port)))
+@
+
+
+1.1.2.7
+log
+@outputs formatted xhtml
+@
+text
+@d52 1
+a52 1
+    (sxml/display page (response/get-output-port)))
+@
+
+
+1.1.2.8
+log
+@does not output formatted xhtml anymore (was not working well with
+<pre>formatted text
+@
+text
+@d52 1
+a52 1
+    (sxml/write page (response/get-output-port)))
+@
+
+
+1.1.2.9
+log
+@outputs formatted markup according to config
+@
+text
+@a32 1
+(require-library 'siscweb/config)
+a42 1
+  (import siscweb/config)
+d52 1
+a52 3
+    (if (config/sxml-formatted-output?)
+        (sxml/display page (response/get-output-port))
+        (sxml/write page (response/get-output-port))))
+@
+
+
+1.1.2.10
+log
+@now uses siscweb/response api
+@
+text
+@d55 2
+a56 2
+        (sxml/display page (response/open-output-port))
+        (sxml/write page (response/open-output-port))))
+@
+
+
+1.1.2.11
+log
+@refactoring: request/response are now just wrappers, with send/*
+functions now in contcentric; moved many s2j calls to
+request/response/session objects
+@
+text
+@a33 1
+(require-library 'siscweb/contcentric)
+a44 1
+  (import siscweb/contcentric)
+@
+
+

@@ -1,0 +1,556 @@
+head	1.3;
+access;
+symbols
+	rel-0-1-fix-1:1.2
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	rel-0-1-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2005.06.19.03.03.51;	author acolomba;	state dead;
+branches;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.52;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.03.16.02.19.09;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.03.16.02.19.09;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.03.19.02.54.37;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2005.03.19.14.34.21;	author acolomba;	state Exp;
+branches;
+next	1.1.2.4;
+
+1.1.2.4
+date	2005.03.19.17.30.11;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5;
+
+1.1.2.5
+date	2005.03.26.00.33.55;	author acolomba;	state Exp;
+branches;
+next	1.1.2.6;
+
+1.1.2.6
+date	2005.04.02.01.21.35;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.05.15.16.20.21;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@merged from rel-0-2-dev
+@
+text
+@/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+package siscweb.contcentric;
+
+import java.io.IOException;
+import java.util.logging.Handler;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+import java.util.logging.SimpleFormatter;
+
+
+public aspect ContinuationManagementTracing
+{
+    protected static Logger logger = Logger.getLogger("siscweb.tracing");
+
+    {
+        try {
+            // TODO: this should come from a property
+            logger.setLevel(Level.WARNING);
+
+            Handler h = new FileHandler("%t/siscweb-tracing.log");
+            h.setFormatter(new SimpleFormatter());
+
+            logger.addHandler(h);
+        }
+        catch(IOException e) {
+            logger.warning("Could not add FileHandler to siscweb.tracing logger:" + e);
+        }
+    }
+
+    pointcut registerPointcut(ContinuationTable ct) :
+        execution(void ContinuationManager.register(ContinuationTable)) &&
+        args(ct);
+
+    before(ContinuationTable ct) :
+        registerPointcut(ct) &&
+        !within(ContinuationManagementTracing +)
+    {
+        logger.fine("Registering continuation table for session id : " + ct.getID());
+    }
+
+
+    pointcut unregisterPointcut(ContinuationTable ct) :
+        execution(void ContinuationManager.unregister(ContinuationTable)) &&
+        args(ct);
+
+    before(ContinuationTable ct) :
+        unregisterPointcut(ct) &&
+        !within(ContinuationManagementTracing +)
+    {
+        logger.fine("Unregistering continuation table for session id : " + ct.getID());
+    }
+
+
+    pointcut purgeExpiredPointcut(ContinuationTable ct) :
+        execution(void ContinuationTable.purgeExpired()) &&
+        target(ct);
+
+    before(ContinuationTable ct) :
+        purgeExpiredPointcut(ct) &&
+        !within(ContinuationManagementTracing +)
+    {
+        String sid = ct.session != null
+                   ? ct.session.getId()
+                   : "<none>";
+
+        logger.finer("Purging expired continuations from table in session id : "
+                    + sid + "; size=" + ct.size());
+    }
+
+    after(ContinuationTable ct) :
+        purgeExpiredPointcut(ct) &&
+        !within(ContinuationManagementTracing +)
+    {
+        String sid = ct.session != null
+                   ? ct.session.getId()
+                   : "<none>";
+
+
+        logger.finer("Purged expired continuations from table in session id : "
+                    + sid + "; size=" + ct.size());
+    }
+
+
+    pointcut clearContinuationTable(ContinuationTable ct) :
+        execution(void ContinuationTable.clear()) &&
+        target(ct);
+
+    after(ContinuationTable ct) :
+        clearContinuationTable(ct) &&
+        !within(ContinuationManagementTracing +)
+    {
+        logger.finer("Cleared continuation table; size=" + ct.size());
+    }
+
+
+    pointcut passivateContinuationTable(ContinuationTable ct) :
+        execution(void ContinuationTable.sessionWillPassivate()) &&
+        target(ct);
+
+    before(ContinuationTable ct) :
+        passivateContinuationTable(ct) &&
+        !within(ContinuationManagementTracing +)
+    {
+        logger.finer("Passivating continuation table in session id : "
+                     + ct.session.getId() + "; size=" + ct.size());
+    }
+
+
+    pointcut runContinuationManagerThread() :
+        execution(void ContinuationManagerThread.run());
+
+    before() :
+        runContinuationManagerThread() &&
+        !within(ContinuationManagementTracing +)
+    {
+        logger.fine("Starting continuation manager thread.");
+    }
+
+    after() :
+        runContinuationManagerThread() &&
+        !within(ContinuationManagementTracing +)
+    {
+        logger.fine("Stopped continuation manager thread.");
+    }
+
+
+    pointcut terminateContinuationManagerThread() :
+        execution(void ContinuationManagerThread.terminate());
+
+    before() :
+        terminateContinuationManagerThread() &&
+        !within(ContinuationManagementTracing +)
+    {
+        logger.fine("Stopping continuation manager thread.");
+    }
+}
+@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@@
+
+
+1.2.4.1
+log
+@we don't use aspectj anymore
+@
+text
+@@
+
+
+1.1
+log
+@file ContinuationManagementTracing.aj was initially added on branch rel-0-1-dev.
+@
+text
+@d1 171
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 107
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+package siscweb.contcentric;
+
+import java.io.IOException;
+import java.util.logging.Handler;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+import java.util.logging.SimpleFormatter;
+
+
+public aspect ContinuationManagementTracing
+{
+    protected static Logger logger = Logger.getLogger("siscweb.tracing");
+
+    {
+        try {
+            logger.setLevel(Level.FINER);
+            Handler h = new FileHandler();
+
+            h.setFormatter(new SimpleFormatter());
+
+            logger.addHandler(h);
+        }
+        catch(IOException e) {
+            logger.warning("Could not add FileHandler to siscweb.tracing logger");
+        }
+    }
+
+    pointcut registerPointcut(String sid, ContinuationTable ct) :
+        execution(void ContinuationManager.register(String, ContinuationTable)) &&
+        args(sid, ct);
+
+    before(String sid, ContinuationTable ct) :
+        registerPointcut(sid, ct) &&
+        !within(ContinuationManagementTracing +)
+    {
+        logger.fine("Registering continuation table for session id : " + sid);
+    }
+
+
+    pointcut unregisterPointcut(String sid) :
+        execution(void ContinuationManager.unregister(String)) &&
+        args(sid);
+
+    before(String sid) :
+        unregisterPointcut(sid) &&
+        !within(ContinuationManagementTracing +)
+    {
+        logger.fine("Unregistering continuation table for session id : " + sid);
+    }
+
+
+    pointcut purgeExpiredPointcut(ContinuationTable ct) :
+        execution(void ContinuationTable.purgeExpired()) &&
+        target(ct);
+
+    before(ContinuationTable ct) :
+        purgeExpiredPointcut(ct) &&
+        !within(ContinuationManagementTracing +)
+    {
+        logger.finer("Purging expired continuations from table in session id : "
+                    + ct.session.getId() + "; size=" + ct.size());
+    }
+
+    after(ContinuationTable ct) :
+        purgeExpiredPointcut(ct) &&
+        !within(ContinuationManagementTracing +)
+    {
+        logger.finer("Purged expired continuations from table in session id : "
+                    + ct.session.getId() + "; size=" + ct.size());
+    }
+}
+@
+
+
+1.1.2.2
+log
+@more tracing
+@
+text
+@d53 1
+a54 1
+            Handler h = new FileHandler("%t/siscweb-tracing.log");
+d60 1
+a60 1
+            logger.warning("Could not add FileHandler to siscweb.tracing logger:" + e);
+a95 4
+        String sid = ct.session != null
+                   ? ct.session.getId()
+                   : "<none>";
+
+d97 1
+a97 1
+                    + sid + "; size=" + ct.size());
+a103 5
+        String sid = ct.session != null
+                   ? ct.session.getId()
+                   : "<none>";
+
+
+d105 1
+a105 43
+                    + sid + "; size=" + ct.size());
+    }
+
+
+    pointcut passivateContinuationTable(ContinuationTable ct) :
+        execution(void ContinuationTable.sessionWillPassivate()) &&
+        target(ct);
+
+    before(ContinuationTable ct) :
+        passivateContinuationTable(ct) &&
+        !within(ContinuationManagementTracing +)
+    {
+        logger.finer("Passivating continuation table in session id : "
+                     + ct.session.getId() + "; size=" + ct.size());
+    }
+
+
+    pointcut startContinuationManager() :
+        execution(void ContinuationManager.run());
+
+    before() :
+        startContinuationManager() &&
+        !within(ContinuationManagementTracing +)
+    {
+        logger.fine("Starting continuation manager thread.");
+    }
+
+    after() :
+        startContinuationManager() &&
+        !within(ContinuationManagementTracing +)
+    {
+        logger.fine("Stopped continuation manager thread.");
+    }
+
+
+    pointcut stopContinuationManager() :
+        execution(void ContinuationManager.stop());
+
+    before() :
+        stopContinuationManager() &&
+        !within(ContinuationManagementTracing +)
+    {
+        logger.fine("Stopping continuation manager thread.");
+@
+
+
+1.1.2.3
+log
+@now uses ContinuationManagerThread
+@
+text
+@d131 2
+a132 2
+    pointcut runContinuationManagerThread() :
+        execution(void ContinuationManagerThread.run());
+d135 1
+a135 1
+        runContinuationManagerThread() &&
+d142 1
+a142 1
+        runContinuationManagerThread() &&
+d149 2
+a150 2
+    pointcut terminateContinuationManagerThread() :
+        execution(void ContinuationManagerThread.terminate());
+d152 2
+a153 2
+    after() :
+        terminateContinuationManagerThread() &&
+@
+
+
+1.1.2.4
+log
+@modified to fit ContinuationManager.register()/unregister()
+@
+text
+@d64 3
+a66 3
+    pointcut registerPointcut(ContinuationTable ct) :
+        execution(void ContinuationManager.register(ContinuationTable)) &&
+        args(ct);
+d68 2
+a69 2
+    before(ContinuationTable ct) :
+        registerPointcut(ct) &&
+d72 1
+a72 1
+        logger.fine("Registering continuation table for session id : " + ct.getID());
+d76 3
+a78 3
+    pointcut unregisterPointcut(ContinuationTable ct) :
+        execution(void ContinuationManager.unregister(ContinuationTable)) &&
+        args(ct);
+d80 2
+a81 2
+    before(ContinuationTable ct) :
+        unregisterPointcut(ct) &&
+d84 1
+a84 1
+        logger.fine("Unregistering continuation table for session id : " + ct.getID());
+d152 1
+a152 1
+    before() :
+@
+
+
+1.1.2.5
+log
+@added tracing for ContinuationTable.clear()
+@
+text
+@a117 12
+    pointcut clearContinuationTable(ContinuationTable ct) :
+        execution(void ContinuationTable.clear()) &&
+        target(ct);
+
+    after(ContinuationTable ct) :
+        clearContinuationTable(ct) &&
+        !within(ContinuationManagementTracing +)
+    {
+        logger.finer("Cleared continuation table; size=" + ct.size());
+    }
+
+
+@
+
+
+1.1.2.6
+log
+@set logger level to WARNING
+@
+text
+@d52 1
+a52 2
+            // TODO: this should come from a property
+            logger.setLevel(Level.WARNING);
+@
+
+

@@ -1,0 +1,62 @@
+head	1.2;
+access;
+symbols
+	start:1.1.1.1 rel-0-1-dev:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2005.04.03.06.47.33;	author acolomba;	state dead;
+branches;
+next	1.1;
+
+1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@removed
+@
+text
+@<?xml version="1.0" encoding="UTF-8"?>
+<tomcatProjectProperties>
+    <rootDir>/</rootDir>
+    <exportSource>false</exportSource>
+    <reloadable>true</reloadable>
+    <redirectLogger>false</redirectLogger>
+    <updateXml>true</updateXml>
+    <warLocation></warLocation>
+    <extraInfo></extraInfo>
+    <webPath>/siscweb</webPath>
+</tomcatProjectProperties>
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@@
+
+
+1.1.1.1
+log
+@initial import
+@
+text
+@@

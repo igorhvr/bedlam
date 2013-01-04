@@ -1,0 +1,392 @@
+head	1.2;
+access;
+symbols
+	rel-0-6-dev:1.2.0.18
+	rel-0-5-fix:1.2.0.16
+	rel-0-5:1.2
+	rel-0-5-dev-safe-frames:1.2.0.14
+	Root_rel-0-5-dev-safe-frames:1.2
+	rel-0-4-fix-0:1.2
+	rel-0-5-dev:1.2.0.12
+	rel-0-4-fix:1.2.0.10
+	rel-0-3-fix-3:1.2
+	rel-0-3-fix-2:1.2
+	rel-0-4-dev-sisc-1-11:1.2
+	rel-0-3-fix-1:1.2
+	rel-0-4-dev:1.2.0.8
+	rel-0-3-fix:1.2.0.6
+	rel-0-3:1.2
+	rel-0-3-dev-1:1.2
+	rel-0-2-fix-2:1.2
+	rel-0-2-fix-1:1.2
+	rel-0-2-fix:1.2.0.2
+	rel-0-3-dev:1.2.0.4
+	rel-0-2:1.2
+	rel-0-2-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2005.06.19.04.53.02;	author acolomba;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2005.06.05.18.07.58;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.06.05.18.07.58;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.06.05.20.56.22;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@merged from rel-0-2-dev
+@
+text
+@<?xml version='1.0'?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                version='1.0'
+                xmlns="http://www.w3.org/TR/xhtml1/transitional"
+                exclude-result-prefixes="#default">
+
+<xsl:import href="@@@@@@doc.style@@@@@@"/>
+
+<xsl:variable name="chunk.section.depth">0</xsl:variable>
+
+<xsl:param name="html.stylesheet"/>
+
+<!-- <xsl:variable name="html.stylesheet">siscweb-manual.css</xsl:variable> -->
+<!--
+<xsl:variable name="default-classsynopsis-language">scheme</xsl:variable>
+-->
+
+<xsl:template match="classsynopsis
+                     |fieldsynopsis
+                     |methodsynopsis
+                     |constructorsynopsis
+                     |destructorsynopsis">
+  <xsl:param name="language">
+    <xsl:choose>
+      <xsl:when test="@@language">
+	<xsl:value-of select="@@language"/>
+      </xsl:when>
+      <xsl:otherwise>
+	<xsl:value-of select="$default-classsynopsis-language"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+
+  <xsl:choose>
+    <xsl:when test="$language='java'">
+      <xsl:apply-templates select="." mode="java"/>
+    </xsl:when>
+    <xsl:when test="$language='perl'">
+      <xsl:apply-templates select="." mode="perl"/>
+    </xsl:when>
+    <xsl:when test="$language='idl'">
+      <xsl:apply-templates select="." mode="idl"/>
+    </xsl:when>
+    <xsl:when test="$language='cpp'">
+      <xsl:apply-templates select="." mode="cpp"/>
+    </xsl:when>
+    <xsl:when test="$language='scheme'">
+      <xsl:apply-templates select="." mode="scheme"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:message>
+	<xsl:text>Unrecognized language on </xsl:text>
+        <xsl:value-of select="name(.)"/>
+        <xsl:text>: </xsl:text>
+	<xsl:value-of select="$language"/>
+      </xsl:message>
+      <xsl:apply-templates select=".">
+	<xsl:with-param name="language"
+	  select="$default-classsynopsis-language"/>
+      </xsl:apply-templates>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="methodname" mode="scheme">
+  <span class="{name(.)}">
+    <xsl:apply-templates mode="scheme"/>
+  </span>
+</xsl:template>
+
+<xsl:template match="methodparam" mode="scheme">
+  <xsl:variable name="choice" select="@@choice"/>
+  <xsl:variable name="rep" select="@@rep"/>
+  <xsl:if test="position() &gt; 0">
+    <xsl:text> </xsl:text>
+  </xsl:if>
+  <xsl:choose>
+    <xsl:when test="$choice='opt'">
+      <xsl:text>[</xsl:text>
+      <xsl:if test="type">
+        <xsl:text>(</xsl:text>
+      </xsl:if>
+      <xsl:if test="type">
+        <span class="{name(.)}">
+          <xsl:apply-templates select="type" mode="scheme"/>
+        </span>
+        <xsl:text> </xsl:text>
+      </xsl:if>
+      <span class="{name(.)}">
+        <xsl:apply-templates select="parameter" mode="scheme"/>
+      </span>
+      <xsl:if test="type">
+        <xsl:text>)</xsl:text>
+      </xsl:if>
+      <xsl:text>]</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:if test="type">
+        <xsl:text>(</xsl:text>
+      </xsl:if>
+      <xsl:if test="type">
+        <span class="{name(.)}">
+          <xsl:apply-templates select="type" mode="scheme"/>
+        </span>
+        <xsl:text> </xsl:text>
+      </xsl:if>
+      <span class="{name(.)}">
+        <xsl:apply-templates select="parameter" mode="scheme"/>
+      </span>
+      <xsl:if test="type">
+        <xsl:text>)</xsl:text>
+      </xsl:if>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:choose>
+    <xsl:when test="$rep='repeat'">
+      <xsl:text> ...</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="type" mode="scheme">
+  <span class="{name(.)}">
+    <xsl:apply-templates mode="scheme"/>
+  </span>
+</xsl:template>
+
+<xsl:template match="parameter" mode="scheme">
+  <span class="{name(.)}">
+    <xsl:apply-templates mode="scheme"/>
+  </span>
+</xsl:template>
+
+<xsl:template match="methodsynopsis" mode="scheme">
+  <code class="{name(.)}">
+    <xsl:text>(</xsl:text>
+    <xsl:apply-templates select="methodname" mode="scheme"/>
+    <xsl:apply-templates select="methodparam" mode="scheme"/>
+    <xsl:text>)</xsl:text>
+    <xsl:if test="type">
+      <xsl:text> =&gt; </xsl:text>
+      <xsl:apply-templates select="type" mode="scheme"/>
+    </xsl:if>
+  </code>
+<!--  <xsl:call-template name="synop-break"/>-->
+</xsl:template>
+
+</xsl:stylesheet>
+@
+
+
+1.1
+log
+@file html.xsl was initially added on branch rel-0-2-dev.
+@
+text
+@d1 150
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 150
+<?xml version='1.0'?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                version='1.0'
+                xmlns="http://www.w3.org/TR/xhtml1/transitional"
+                exclude-result-prefixes="#default">
+
+<xsl:import href="/usr/share/sgml/docbook/xsl-stylesheets-1.65.1/xhtml/docbook.xsl"/>
+
+<xsl:variable name="chunk.section.depth">0</xsl:variable>
+
+<xsl:param name="html.stylesheet"/>
+
+<!-- <xsl:variable name="html.stylesheet">siscweb-manual.css</xsl:variable> -->
+<!--
+<xsl:variable name="default-classsynopsis-language">scheme</xsl:variable>
+-->
+
+<xsl:template match="classsynopsis
+                     |fieldsynopsis
+                     |methodsynopsis
+                     |constructorsynopsis
+                     |destructorsynopsis">
+  <xsl:param name="language">
+    <xsl:choose>
+      <xsl:when test="@@language">
+	<xsl:value-of select="@@language"/>
+      </xsl:when>
+      <xsl:otherwise>
+	<xsl:value-of select="$default-classsynopsis-language"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+
+  <xsl:choose>
+    <xsl:when test="$language='java'">
+      <xsl:apply-templates select="." mode="java"/>
+    </xsl:when>
+    <xsl:when test="$language='perl'">
+      <xsl:apply-templates select="." mode="perl"/>
+    </xsl:when>
+    <xsl:when test="$language='idl'">
+      <xsl:apply-templates select="." mode="idl"/>
+    </xsl:when>
+    <xsl:when test="$language='cpp'">
+      <xsl:apply-templates select="." mode="cpp"/>
+    </xsl:when>
+    <xsl:when test="$language='scheme'">
+      <xsl:apply-templates select="." mode="scheme"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:message>
+	<xsl:text>Unrecognized language on </xsl:text>
+        <xsl:value-of select="name(.)"/>
+        <xsl:text>: </xsl:text>
+	<xsl:value-of select="$language"/>
+      </xsl:message>
+      <xsl:apply-templates select=".">
+	<xsl:with-param name="language"
+	  select="$default-classsynopsis-language"/>
+      </xsl:apply-templates>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="methodname" mode="scheme">
+  <span class="{name(.)}">
+    <xsl:apply-templates mode="scheme"/>
+  </span>
+</xsl:template>
+
+<xsl:template match="methodparam" mode="scheme">
+  <xsl:variable name="choice" select="@@choice"/>
+  <xsl:variable name="rep" select="@@rep"/>
+  <xsl:if test="position() &gt; 0">
+    <xsl:text> </xsl:text>
+  </xsl:if>
+  <xsl:choose>
+    <xsl:when test="$choice='opt'">
+      <xsl:text>[</xsl:text>
+      <xsl:if test="type">
+        <xsl:text>(</xsl:text>
+      </xsl:if>
+      <xsl:if test="type">
+        <span class="{name(.)}">
+          <xsl:apply-templates select="type" mode="scheme"/>
+        </span>
+        <xsl:text> </xsl:text>
+      </xsl:if>
+      <span class="{name(.)}">
+        <xsl:apply-templates select="parameter" mode="scheme"/>
+      </span>
+      <xsl:if test="type">
+        <xsl:text>)</xsl:text>
+      </xsl:if>
+      <xsl:text>]</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:if test="type">
+        <xsl:text>(</xsl:text>
+      </xsl:if>
+      <xsl:if test="type">
+        <span class="{name(.)}">
+          <xsl:apply-templates select="type" mode="scheme"/>
+        </span>
+        <xsl:text> </xsl:text>
+      </xsl:if>
+      <span class="{name(.)}">
+        <xsl:apply-templates select="parameter" mode="scheme"/>
+      </span>
+      <xsl:if test="type">
+        <xsl:text>)</xsl:text>
+      </xsl:if>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:choose>
+    <xsl:when test="$rep='repeat'">
+      <xsl:text> ...</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="type" mode="scheme">
+  <span class="{name(.)}">
+    <xsl:apply-templates mode="scheme"/>
+  </span>
+</xsl:template>
+
+<xsl:template match="parameter" mode="scheme">
+  <span class="{name(.)}">
+    <xsl:apply-templates mode="scheme"/>
+  </span>
+</xsl:template>
+
+<xsl:template match="methodsynopsis" mode="scheme">
+  <code class="{name(.)}">
+    <xsl:text>(</xsl:text>
+    <xsl:apply-templates select="methodname" mode="scheme"/>
+    <xsl:apply-templates select="methodparam" mode="scheme"/>
+    <xsl:text>)</xsl:text>
+    <xsl:if test="type">
+      <xsl:text> =&gt; </xsl:text>
+      <xsl:apply-templates select="type" mode="scheme"/>
+    </xsl:if>
+  </code>
+<!--  <xsl:call-template name="synop-break"/>-->
+</xsl:template>
+
+</xsl:stylesheet>
+@
+
+
+1.1.2.2
+log
+@had forgotten to make doc.style a parameter
+@
+text
+@d7 1
+a7 1
+<xsl:import href="@@@@@@doc.style@@@@@@"/>
+@
+
+

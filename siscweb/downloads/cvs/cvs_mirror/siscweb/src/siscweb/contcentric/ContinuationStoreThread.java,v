@@ -1,0 +1,507 @@
+head	1.3;
+access;
+symbols
+	rel-0-6-dev:1.3.0.4
+	rel-0-5-fix:1.3.0.2
+	rel-0-5:1.3
+	rel-0-5-dev-safe-frames:1.2.4.1.0.2
+	Root_rel-0-5-dev-safe-frames:1.2.4.1
+	rel-0-4-fix-0:1.2
+	rel-0-5-dev:1.2.0.4
+	rel-0-4-fix:1.2.0.2
+	rel-0-4-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2007.04.12.03.51.19;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2006.09.03.01.42.22;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2006.06.17.12.59.32;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2006.06.17.12.59.32;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2006.06.25.13.06.01;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2006.06.25.20.57.52;	author acolomba;	state Exp;
+branches;
+next	1.1.2.4;
+
+1.1.2.4
+date	2006.07.08.02.32.35;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5;
+
+1.1.2.5
+date	2006.07.28.03.05.47;	author acolomba;	state Exp;
+branches;
+next	1.1.2.6;
+
+1.1.2.6
+date	2006.07.29.14.46.05;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2007.01.08.01.28.38;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2007.09.09.01.59.54;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2007.10.13.18.49.32;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@merged from rel-0-5-dev
+@
+text
+@/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005-2006
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+package siscweb.contcentric;
+
+import java.util.logging.Level;
+
+import siscweb.util.Environment;
+import siscweb.util.Logger;
+
+public class ContinuationStoreThread extends Thread
+{
+    private ContinuationStore continuationStore;
+    private final Object threadLock = new Object();
+    private boolean isRunning = false;
+
+    public ContinuationStoreThread(final ContinuationStore continuationStore)
+    {
+        this.continuationStore = continuationStore;
+    }
+
+
+    public synchronized void run()
+    {
+        synchronized(this.threadLock) {
+            if(this.isRunning) {
+                if(Logger.logger.isLoggable(Level.WARNING)) {
+                    Logger.logger.warning("Attempted to start ContinuationStoreThread twice. Not starting.");
+                }
+
+                return;
+            }
+            else {
+                this.isRunning = true;
+            }
+        }
+
+        if(Logger.logger.isLoggable(Level.INFO)) {
+            Logger.logger.info("Starting continuation cleanup thread.");
+        }
+
+        while(this.isRunning) {
+            this.continuationStore.purgeExpired();
+
+            try {
+                Thread.sleep(Environment.getContinuationCleanupInterval());
+            }
+            catch(InterruptedException e)
+            { /* empty */ }
+        }
+    }
+
+    public void terminate()
+    {
+        if(Logger.logger.isLoggable(Level.INFO)) {
+            Logger.logger.info("Stopping continuation cleanup thread.");
+        }
+
+        this.isRunning = false;
+    }
+}
+@
+
+
+1.3.4.1
+log
+@merged from rel-0-5-fix
+@
+text
+@a50 1
+        super();
+d55 1
+a55 1
+    public void run()
+@
+
+
+1.3.2.1
+log
+@minor syntactical cleanup
+@
+text
+@a50 1
+        super();
+d55 1
+a55 1
+    public void run()
+@
+
+
+1.2
+log
+@merged from rel-0-4-dev
+@
+text
+@d45 1
+d49 6
+a56 2
+        final ContinuationStore continuationStore = ContinuationStore.Singleton.getInstance();
+
+d75 1
+a75 1
+            continuationStore.purgeExpired();
+@
+
+
+1.2.4.1
+log
+@continuationstore is now local to the servlet context, not the
+static scope (i.e. zapped the singleton)
+@
+text
+@a44 1
+    private ContinuationStore continuationStore;
+d48 1
+a48 1
+    public ContinuationStoreThread(final ContinuationStore continuationStore)
+d50 1
+a50 3
+        this.continuationStore = continuationStore;
+    }
+
+a51 2
+    public synchronized void run()
+    {
+d70 1
+a70 1
+            this.continuationStore.purgeExpired();
+@
+
+
+1.1
+log
+@file ContinuationStoreThread.java was initially added on branch rel-0-4-dev.
+@
+text
+@d1 88
+@
+
+
+1.1.2.1
+log
+@continuation resource management thread code moved from
+ContinuationStoreInitializer
+@
+text
+@a0 50
+package siscweb.contcentric;
+
+import siscweb.util.Environment;
+
+public class ContinuationStoreThread extends Thread
+{
+    public ContinuationStoreThread()
+    {
+        final String className = Environment.getContinuationStoreClassName();
+
+        if(className == null || "".equals(className.trim())) {
+            throw new RuntimeException("No ContinuationStore class specified.");
+        }
+
+        ContinuationStore.Factory.create(className);
+    }
+
+    private Boolean isRunning = Boolean.FALSE;
+
+    public synchronized void run()
+    {
+        // check if everything is in place first, but no need to make a fuss;;
+        // problems would have been already reported above
+        final ContinuationStore continuationStore = ContinuationStore.Singleton.getInstance();
+
+        if(continuationStore != null ) {
+
+            synchronized(this.isRunning) {
+                if(this.isRunning == Boolean.FALSE) {
+                    this.isRunning = Boolean.TRUE;
+                }
+            }
+
+            while(this.isRunning == Boolean.TRUE) {
+                continuationStore.purgeExpired();
+
+                try {
+                    Thread.sleep(Environment.getContinuationCleanupInterval());
+                }
+                catch(InterruptedException e)
+                { /* empty */ }
+            }
+        }
+    }
+
+    public void terminate()
+    {
+        this.isRunning = Boolean.FALSE;
+    }
+}
+@
+
+
+1.1.2.2
+log
+@improved thread locking code; added license block
+@
+text
+@a0 35
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005-2006
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+d18 1
+a18 3
+
+    private final Object threadLock = new Object();
+    private boolean isRunning = false;
+d28 3
+a30 3
+            synchronized(this.threadLock) {
+                if(!this.isRunning) {
+                    this.isRunning = true;
+d34 1
+a34 1
+            while(this.isRunning) {
+d48 1
+a48 1
+        this.isRunning = false;
+@
+
+
+1.1.2.3
+log
+@added logging
+@
+text
+@a37 2
+import java.util.logging.Level;
+
+a38 1
+import siscweb.util.Loggers;
+d47 1
+a47 6
+            if(Loggers.configuration.isLoggable(Level.SEVERE)) {
+                Loggers.configuration.severe("No continuation store class specified.");
+            }
+        }
+        else {
+            ContinuationStore.Factory.create(className);
+d49 2
+d59 2
+d63 5
+a67 4
+        synchronized(this.threadLock) {
+            if(this.isRunning) {
+                if(Loggers.configuration.isLoggable(Level.WARNING)) {
+                    Loggers.configuration.warning("Attempt to start ContinuationStoreThread twice. Not starting.");
+a68 5
+
+                return;
+            }
+            else {
+                this.isRunning = true;
+a69 1
+        }
+d71 2
+a72 6
+        // check if everything is in place first, but no need to make a fuss;;
+        // problems would have been already reported above
+        if(continuationStore == null ) {
+            if(Loggers.configuration.isLoggable(Level.WARNING)) {
+                Loggers.configuration.warning("Not starting continuation cleanup thread: no continuation class specified.");
+            }
+d74 5
+a78 13
+            this.isRunning = false;
+            return;
+        }
+
+        if(Loggers.contcentric.isLoggable(Level.INFO)) {
+            Loggers.contcentric.info("Starting continuation cleanup thread.");
+        }
+
+        while(this.isRunning) {
+            continuationStore.purgeExpired();
+
+            try {
+                Thread.sleep(Environment.getContinuationCleanupInterval());
+a79 2
+            catch(InterruptedException e)
+            { /* empty */ }
+a84 4
+        if(Loggers.contcentric.isLoggable(Level.INFO)) {
+            Loggers.contcentric.info("Stopping continuation cleanup thread.");
+        }
+
+@
+
+
+1.1.2.4
+log
+@added logging
+@
+text
+@d41 1
+a41 1
+import siscweb.util.Logger;
+d50 2
+a51 2
+            if(Logger.logger.isLoggable(Level.SEVERE)) {
+                Logger.logger.severe("No continuation store class specified.");
+d69 2
+a70 2
+                if(Logger.logger.isLoggable(Level.WARNING)) {
+                    Logger.logger.warning("Attempt to start ContinuationStoreThread twice. Not starting.");
+d83 2
+a84 2
+            if(Logger.logger.isLoggable(Level.WARNING)) {
+                Logger.logger.warning("Not starting continuation cleanup thread: no continuation class specified.");
+d91 2
+a92 2
+        if(Logger.logger.isLoggable(Level.INFO)) {
+            Logger.logger.info("Starting continuation cleanup thread.");
+d108 2
+a109 2
+        if(Logger.logger.isLoggable(Level.INFO)) {
+            Logger.logger.info("Stopping continuation cleanup thread.");
+@
+
+
+1.1.2.5
+log
+@initialization of continuation store now goes through
+singletondecorator; removed extra check one className, since an
+invalid/null classname is already handled in the initialization
+@
+text
+@d49 8
+a56 1
+        ContinuationStoreSingletonDecorator.initialize(className);
+d70 1
+a70 1
+                    Logger.logger.warning("Attempted to start ContinuationStoreThread twice. Not starting.");
+d80 11
+@
+
+
+1.1.2.6
+log
+@does not initialize the continuation store anymore
+@
+text
+@d45 8
+@
+
+

@@ -1,0 +1,204 @@
+head	1.1;
+access;
+symbols
+	rel-0-5-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2007.03.19.04.25.54;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2007.03.19.04.25.54;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2007.03.20.02.42.45;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2007.03.20.03.08.29;	author acolomba;	state Exp;
+branches;
+next	1.1.2.4;
+
+1.1.2.4
+date	2007.03.22.02.01.50;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@file cells.scm was initially added on branch rel-0-5-dev.
+@
+text
+@@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 100
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2007
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+;; this is a re-implementation of PLT's webcells using sisc
+;; environments
+
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+(require-library 'sisc/libs/srfi/srfi-39) ; parameter objects
+(require-library 'sisc/libs/srfi/srfi-69) ; basic hash tables
+
+(require-library 'siscweb/k-hash)
+
+(module siscweb/cells
+  (make-cell
+   (with-frame make-env current-environment)
+   (with-frame-after push-frame!)
+   make-env current-environment push-frame! get-fid)
+
+  (import srfi-16)
+  (import srfi-39)
+
+  (import siscweb/k-hash)
+
+  (define (make-cell value)
+    (let ((name (string->symbol (make-random-hash))))
+      (cell-set! name value)
+      (case-lambda
+        (() (cell-ref name))
+        ((value) (cell-set! name value)))))
+
+  (define (cell-ref name)
+    (display (format "DEBUG: looking up ~s from ~s\n" name (get-fid (unbox (current-environment)))))
+    (getprop name (unbox (current-environment))))
+
+  (define (cell-set! name value)
+    (display (format "DEBUG: setting ~s to ~s in ~s\n" name value (get-fid (unbox (current-environment)))))
+    (putprop name (unbox (current-environment)) value))
+
+  (define (push-frame!)
+    (let* ((cur-top-box (current-environment))
+           (cur-top (unbox cur-top-box)))
+    (current-environment (box (make-env cur-top)))))
+
+  (define-syntax with-frame
+    (syntax-rules ()
+      ((_ body ...)
+       (parameterize ((current-environment (box (make-env (unbox (current-environment))))))
+         body ...))))
+
+  (define-syntax with-frame-after
+    (syntax-rules ()
+      ((_ body ...)
+       (let ((initial-environment (current-environment)))
+         (let ((value ((lambda () body ...))))
+           (current-environment initial-environment)
+           (push-frame!)
+           value)))))
+
+  (define (make-env parent-environment)
+    (let ((env (make-child-environment parent-environment))
+          (fid (make-random-hash))
+          (parent-fid (get-fid parent-environment)))
+      (putprop 'fid env fid)
+      (display (format "DEBUG: creating new environment ~s with parent ~s\n" fid parent-fid))
+      env))
+
+  (define (get-fid env)
+    (with/fc
+      (lambda (m e) #f)
+      (lambda () (getprop 'fid env))))
+
+  (define current-environment (make-parameter (box (interaction-environment))))
+  )
+@
+
+
+1.1.2.2
+log
+@uses null-environment as root namespace; renamed make-cell to make-cell-parameter
+@
+text
+@d41 1
+a41 1
+  (make-cell-parameter
+d51 1
+a51 1
+  (define (make-cell-parameter value)
+d99 1
+a99 1
+  (define current-environment (make-parameter (box (null-environment 0))))
+@
+
+
+1.1.2.3
+log
+@added make-cell, cell-ref and cell-shadow (now compatible with PLT's implementation)
+@
+text
+@a41 1
+   make-cell cell-ref cell-shadow
+a57 6
+
+  (define (make-cell value)
+    (let ((name (string->symbol (make-random-hash))))
+      (cell-set! name value)
+      name))
+
+a65 5
+  (define (cell-shadow name value)
+    (cell-set! name value))
+
+
+
+@
+
+
+1.1.2.4
+log
+@replaced PLT webcell port with own env-based rewrite
+@
+text
+@@
+
+

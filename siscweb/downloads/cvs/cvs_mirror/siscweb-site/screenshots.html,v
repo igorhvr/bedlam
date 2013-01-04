@@ -1,0 +1,232 @@
+head	1.6;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2007.04.12.04.27.51;	author acolomba;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2006.09.02.04.12.30;	author acolomba;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2006.02.25.20.21.43;	author acolomba;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2005.10.24.03.57.53;	author acolomba;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2005.08.02.03.16.59;	author acolomba;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2005.07.30.01.50.00;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@updated for rel-0-5
+@
+text
+@<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"/>
+    <title>SISCweb Screenshots</title>
+    <link rel="stylesheet" href="style/default.css" type="text/css"/>
+  </head>
+
+  <body>
+    <div class="logo-container">
+      <span class="logo-left">SISC</span><span class="logo-right">web</span>
+      <div class="logo-bottom">Do you call/cc in J2EE?</div>
+    </div>
+
+    <table class="tab-container">
+      <tbody>
+        <tr>
+          <td class="tab-padding">&nbsp;</td>
+          <td class="tab-unselected">
+            <a class="tab-link" href="news.html">news</a>
+          </td>
+          <td class="tab-unselected">
+            <a class="tab-link" href="overview.html">overview</a>
+          </td>
+          <td class="tab-unselected">
+            <a class="tab-link" href="docs.html">docs</a>
+          </td>
+          <td class="tab-unselected">
+            <a class="tab-link" href="download.html">download</a>
+          </td>
+          <td class="tab-selected">screenshots</td>
+          <td class="tab-unselected">
+            <a class="tab-link" href="license.html">license</a>
+          </td>
+          <td class="tab-padding">&nbsp;</td>
+        </tr>
+      </tbody>
+    </table>
+
+
+    <h3>Shots of SISCweb</h3>
+
+    <a href="images/hello.png"><img alt="screenshot of hello" title="Hello World example" src="images/hello-thumb.png" border="0"/></a>
+    <a href="images/schemeway.png"><img alt="screenshot of schemeway" title="SchemeScript Eclipse plugin" src="images/schemeway-thumb.png" border="0"/></a>
+    <a href="images/graphviz.png"><img alt="screenshot of graphviz" title="Generating Graphviz graphs" src="images/graphviz-thumb.png" border="0"/></a>
+    <a href="images/guru.png"><img alt="screenshot of guru meditation" title="An example error handler" src="images/guru-thumb.png" border="0"/></a>
+
+
+    <hr style="height: 1px; width: 100%;"
+        class="bottom-separator" noshade="noshade"/>
+
+    <p>
+      <div style="font-style: italic;">
+        (C) 2005-2007 Alessandro Colomba - <a
+        href="mailto:acolomba@@users.sourceforge.net">acolomba@@users.sourceforge.net</a>
+      </div>
+      <div style="font-style: italic;">
+        Last updated: $Date: 2006/09/02 04:12:30 $
+      </div>
+    </p>
+
+    <a href="http://sourceforge.net"><img src="http://sourceforge.net/sflogo.php?group_id=130857&amp;type=1" alt="SourceForge.net Logo" border="0" height="31" width="88"/></a>
+
+    <a href="http://www.spreadfirefox.com/?q=affiliates&amp;id=0&amp;t=68"><img alt="Get Firefox!" title="Get Firefox!" src="http://sfx-images.mozilla.org/affiliates/Buttons/88x31/take.gif" border="0"/></a>
+  </body>
+</html>
+@
+
+
+1.5
+log
+@updated logo; css-ized tab table
+@
+text
+@d55 1
+a55 1
+        (C) 2005-2006 Alessandro Colomba - <a
+d59 1
+a59 1
+        Last updated: $Date: 2006/02/25 20:21:43 $
+@
+
+
+1.4
+log
+@updated copyright notice
+@
+text
+@d11 3
+a13 3
+    <div class="logo">
+      <img alt="SISCweb logo" title="SISCweb logo"
+           src="images/logo.png"/>
+d16 1
+a16 2
+    <table style="text-align: left; margin-left: auto; margin-right: auto;"
+           class="tab-container" cellpadding="0" cellspacing="0">
+d19 2
+a20 2
+          <td width="5%" class="tab-padding">&nbsp;</td>
+          <td width="15%" class="tab-unselected">
+d23 1
+a23 1
+          <td width="15%" class="tab-unselected">
+d26 1
+a26 1
+          <td width="15%" class="tab-unselected">
+d29 1
+a29 1
+          <td width="15%" class="tab-unselected">
+d32 2
+a33 2
+          <td width="15%" class="tab-selected">screenshots</td>
+          <td width="15%" class="tab-unselected">
+d36 1
+a36 1
+          <td width="5%" class="tab-padding">&nbsp;</td>
+d59 1
+a59 1
+        Last updated: $Date: 2005/10/24 03:57:53 $
+@
+
+
+1.3
+log
+@added schemeway screenshot
+@
+text
+@d56 1
+a56 1
+        (C) 2005 Alessandro Colomba - <a
+d60 1
+a60 1
+        Last updated: $Date: 2005/08/02 03:16:59 $
+@
+
+
+1.2
+log
+@improved tabs et al.
+@
+text
+@d46 1
+d60 1
+a60 1
+        Last updated: $Date: 2005/07/30 01:50:00 $
+@
+
+
+1.1
+log
+@initial import
+@
+text
+@d11 2
+a12 3
+    <div style="text-align: center;">
+      <img style="width: 270px; height: 76px;"
+           alt="SISCweb logo" title="SISCweb logo"
+d20 2
+a21 2
+          <td class="tab-padding">&nbsp;</td>
+          <td class="tab-unselected">
+d24 1
+a24 1
+          <td class="tab-unselected">
+d27 1
+a27 1
+          <td class="tab-unselected">
+d30 1
+a30 1
+          <td class="tab-unselected">
+d33 2
+a34 2
+          <td class="tab-selected">screenshots</td>
+          <td class="tab-unselected">
+d37 1
+a37 1
+          <td class="tab-padding">&nbsp;</td>
+d59 1
+a59 1
+        Last updated: $Date$
+@
+

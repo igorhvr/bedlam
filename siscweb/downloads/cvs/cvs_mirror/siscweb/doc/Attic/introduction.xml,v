@@ -1,0 +1,117 @@
+head	1.1;
+access;
+symbols
+	rel-0-2-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2005.06.04.04.38.07;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.06.04.04.38.07;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.06.06.02.36.53;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@file introduction.xml was initially added on branch rel-0-2-dev.
+@
+text
+@@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 63
+<chapter id="introduction">
+  <title>Introduction</title>
+
+  <para>
+    &SISCweb; is a framework to facilitate writing stateful Scheme web
+    applications in J2EE environments.
+  </para>
+
+  <section id="features">
+    <title>Features</title>
+
+    <para>
+      &SISCweb; sports an interactive, REPL-based web application
+      development style. Developers can write applications
+      interactively, without ever bouncing the server, and, insofar as
+      it is desirable, without ever losing application state. (In
+      fact, save for the Java portion, &SISCweb; itself is written
+      interactively in a REPL.)
+    </para>
+    <para>
+      Through the use of continuations, &SISCweb; does away with the
+      page-centric execution model typical of web applications.  Every
+      time a response is sent to the browser, the program execution
+      flow is suspended, to be then resumed from that exact point when
+      the browser submits a request. Some consequences of this
+      approach are:
+    </para>
+      <itemizedlist>
+        <listitem>
+          Programs are more easily structured around their problem
+          domain rather than their presentation.
+        </listitem>
+        <listitem>
+          Developers are freed from having to manually manage the
+          lifecycle of objects in the session. In fact, there is
+          hardly any need to store objects in the session; when the
+          browser submits a request and the program's execution flow
+          is resumed, all the language-level variables the were in
+          scope are again available.
+        </listitem>
+        <listitem>
+          Thanks to &SISC;'s serializable continuations, accumulated
+          program state is transparent to server restarts and
+          clustering.
+        </listitem>
+        <listitem>
+          Programs can be made resilient to page reloads and cloning
+          with much less effort.
+        </listitem>
+        <listitem>
+          An extra security layer is added because URLs (which now
+          encode a reference to program state) cannot quite be
+          manipulated, hidden form variables are not needed anymore,
+          and in general the automatic state management in &SISCweb;
+          should be more difficult to fool than the ad-hoc solutions
+          developers are forced to implement in traditional web
+          applications.
+        </listitem>
+      </itemizedlist>
+
+  </section>
+</chapter>
+
+@
+
+
+1.1.2.2
+log
+@moved to swm/
+@
+text
+@@
+
+

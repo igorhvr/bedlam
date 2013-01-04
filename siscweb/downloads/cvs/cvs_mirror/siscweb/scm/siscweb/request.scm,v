@@ -1,0 +1,1628 @@
+head	1.4;
+access;
+symbols
+	rel-0-6-dev:1.4.0.4
+	rel-0-5-fix:1.4.0.2
+	rel-0-5:1.4
+	rel-0-5-dev-safe-frames:1.3.4.3.0.2
+	Root_rel-0-5-dev-safe-frames:1.3.4.3
+	rel-0-4-fix-0:1.3
+	rel-0-5-dev:1.3.0.4
+	rel-0-4-fix:1.3.0.2
+	rel-0-3-fix-3:1.2.6.1
+	rel-0-3-fix-2:1.2
+	rel-0-4-dev-sisc-1-11:1.2
+	rel-0-3-fix-1:1.2
+	rel-0-4-dev:1.2.0.8
+	rel-0-3-fix:1.2.0.6
+	rel-0-3:1.2
+	rel-0-3-dev-1:1.2
+	rel-0-2-fix-2:1.2
+	rel-0-2-fix-1:1.2
+	rel-0-2-fix:1.2.0.2
+	rel-0-3-dev:1.2.0.4
+	rel-0-2:1.2
+	rel-0-2-dev:1.1.0.4
+	rel-0-1-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2007.04.12.03.51.18;	author acolomba;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2006.09.03.01.42.22;	author acolomba;	state Exp;
+branches
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.06.19.03.03.51;	author acolomba;	state Exp;
+branches
+	1.2.6.1
+	1.2.8.1;
+next	1.1;
+
+1.1
+date	2005.04.17.21.14.20;	author acolomba;	state dead;
+branches
+	1.1.4.1;
+next	;
+
+1.1.4.1
+date	2005.04.17.23.35.47;	author acolomba;	state Exp;
+branches;
+next	1.1.4.2;
+
+1.1.4.2
+date	2005.04.23.00.42.11;	author acolomba;	state Exp;
+branches;
+next	1.1.4.3;
+
+1.1.4.3
+date	2005.04.23.15.36.40;	author acolomba;	state Exp;
+branches;
+next	1.1.4.4;
+
+1.1.4.4
+date	2005.04.23.15.53.57;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.6.1
+date	2006.04.15.15.55.23;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.8.1
+date	2006.04.08.21.41.47;	author acolomba;	state Exp;
+branches;
+next	1.2.8.2;
+
+1.2.8.2
+date	2006.04.09.02.39.03;	author acolomba;	state Exp;
+branches;
+next	1.2.8.3;
+
+1.2.8.3
+date	2006.04.09.15.05.37;	author acolomba;	state Exp;
+branches;
+next	1.2.8.4;
+
+1.2.8.4
+date	2006.04.09.18.15.36;	author acolomba;	state Exp;
+branches;
+next	1.2.8.5;
+
+1.2.8.5
+date	2006.04.11.03.04.13;	author acolomba;	state Exp;
+branches;
+next	1.2.8.6;
+
+1.2.8.6
+date	2006.04.13.00.33.46;	author acolomba;	state Exp;
+branches;
+next	1.2.8.7;
+
+1.2.8.7
+date	2006.04.13.02.57.50;	author acolomba;	state Exp;
+branches;
+next	1.2.8.8;
+
+1.2.8.8
+date	2006.04.14.00.58.59;	author acolomba;	state Exp;
+branches;
+next	1.2.8.9;
+
+1.2.8.9
+date	2006.08.11.03.34.32;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2007.01.20.17.15.54;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2;
+
+1.3.4.2
+date	2007.01.30.01.09.26;	author acolomba;	state Exp;
+branches;
+next	1.3.4.3;
+
+1.3.4.3
+date	2007.01.30.01.32.25;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@merged from rel-0-5-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2007
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+(require-library 'sisc/libs/srfi/srfi-18) ; multithreading support
+(require-library 'sisc/libs/srfi/srfi-19) ; time data types and procedures
+
+(require-library 'util/misc)
+
+(module siscweb/request
+  (current-request
+   request/get-auth-type request/get-character-encoding
+   request/get-content-length request/get-content-type
+   request/get-context-path request/get-cookies
+   request/get-date-header request/get-dispatcher request/get-header
+   request/get-header-alist request/get-header-hashtable
+   request/get-header-names request/get-int-header
+   request/get-java-attribute request/get-java-attribute-names
+   request/get-locale request/get-locales request/get-method
+   request/get-parameter request/get-parameter-alist
+   request/get-parameter-hashtable request/get-parameter-names
+   request/get-parameter-values request/get-path-info
+   request/get-path-translated request/get-protocol
+   request/get-query-string request/get-remote-addr
+   request/get-remote-host request/get-remote-user
+   request/get-requested-session-id request/get-scheme
+   request/get-server-name request/get-server-port
+   request/get-servlet-path request/get-session request/get-uri
+   request/get-url request/get-user-principal request/make-parameter
+   request/open-binary-input-port request/open-input-port
+   request/remove-java-attribute!
+   request/requested-session-id-from-cookie?
+   request/requested-session-id-from-url?
+   request/requested-session-id-valid? request/secure?
+   request/set-character-encoding! request/set-java-attribute!
+   request/user-in-role?)
+
+  (import s2j)
+  (import hashtable)
+  (import java-io)
+
+  (import srfi-16)
+  ;; time? is defined both in srfi-18 and srfi-19
+  (import* srfi-18 make-mutex mutex-lock! mutex-unlock!)
+  (import srfi-19)
+
+  (import util/misc)
+
+
+  (define-generic-java-methods
+    (jentry-set |entrySet|)
+    (jforward |forward|)
+    (jget-attribute |getAttribute|)
+    (jget-header |getHeader|)
+    (jget-header-names |getHeaderNames|)
+    (jget-key |getKey|)
+    (jget-parameter-map |getParameterMap|)
+    (jget-request-dispatcher |getRequestDispatcher|)
+    (jget-request |getRequest|)
+    (jget-session |getSession|)
+    (jget-value |getValue|)
+    (jiterator |iterator|)
+    (jremove-attribute |removeAttribute|)
+    (jset-attribute |setAttribute|)
+    (to-string |toString|))
+
+
+  (define (current-request)
+    (jget-request (java-null (java-class '|siscweb.web.RequestScope|))))
+
+  ;; a poor person's ffi generator
+  ;; TODO: make this more generic?
+  (define-syntax java-lambda
+    (syntax-rules (boolean int
+                   Date
+                   Enumeration<Object> Enumeration<String>
+                   InputStream
+                   Object ObjectArray
+                   Reader
+                   String StringArray StringBuffer
+                   void)
+      ((_ (boolean java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (->boolean (scheme-java-method (current-request))))))
+      ((_ (boolean java-method String))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda (string)
+           (->boolean (scheme-java-method (current-request) (->jstring string))))))
+      ((_ (Date java-method String))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda (string)
+           (let ((ms (->number (scheme-java-method (current-request) (->jstring string)))))
+             (if (= -1 ms)
+                 #f
+                 (make-time 'time-monotonic 0 (quotient ms 1000)))))))
+      ((_ (Enumeration<Object> java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (let ((enum (scheme-java-method (current-request))))
+             (if (java-null? enum)
+                 '()
+                 (enumeration/map (lambda (o) o) enum))))))
+      ((_ (int java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (let ((n (->number (scheme-java-method (current-request)))))
+             (if (= -1 n) #f n)))))
+      ((_ (int java-method String))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda (string)
+           (let ((n (->number (scheme-java-method (current-request)
+                                                  (->jstring string)))))
+             (if (= -1 n) #f n)))))
+      ((_ (Enumeration<String> java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (let ((enum (scheme-java-method (current-request))))
+             (if (java-null? enum)
+                 '()
+                 (enumeration/map ->string enum))))))
+      ((_ (InputStream java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (->binary-input-port (scheme-java-method (current-request))))))
+      ((_ (Object java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (scheme-java-method (current-request)))))
+      ((_ (ObjectArray java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (let ((jarray (scheme-java-method (current-request))))
+             (if (java-null? jarray)
+                 '()
+                 (->list jarray))))))
+      ((_ (Reader java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (->character-input-port (scheme-java-method (current-request))))))
+      ((_ (String java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (let ((jstring (scheme-java-method (current-request))))
+             (if (java-null? jstring) #f (->string jstring))))))
+      ((_ (String java-method String))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda (string)
+           (let ((jstring (scheme-java-method (current-request) (->jstring string))))
+             (if (java-null? jstring) #f (->string jstring))))))
+      ((_ (StringArray java-method String))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda (string)
+           (let ((jarray (scheme-java-method (current-request) (->jstring string))))
+             (if (java-null? jarray)
+                 '()
+                 (map ->string (->list jarray)))))))
+      ((_ (StringBuffer java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (->string (to-string (scheme-java-method (current-request)))))))
+      ((_ (void java-method String))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda (string)
+           (scheme-java-method (current-request) (->jstring string))
+           (void))))))
+
+
+  (define-syntax define-java-wrappers
+    (syntax-rules ()
+      ((_ (name signature-list) ...)
+       (begin
+         (define name
+           (java-lambda signature-list)) ...))))
+
+  (define-java-wrappers
+    (request/get-java-attribute-names (Enumeration<String> |getAttributeNames|))
+    (request/get-auth-type (String |getAuthType|))
+    (request/get-character-encoding (String |getCharacterEncoding|))
+    (request/get-content-length (int |getContentLength|))
+    (request/get-content-type (String |getContentType|))
+    (request/get-context-path (String |getContextPath|))
+    (request/get-cookies (ObjectArray |getCookies|))
+    (request/get-date-header (Date |getDateHeader| String))
+    (request/get-header (String |getHeader| String))
+    (request/get-header-names (Enumeration<String> |getHeaderNames|))
+    (request/open-binary-input-port (InputStream |getInputStream|))
+    (request/get-int-header (int |getIntHeader| String))
+    (request/get-locale (Object |getLocale|))
+    (request/get-locales (Enumeration<Object> |getLocales|))
+    (request/get-method (String |getMethod|))
+    (request/get-parameter (String |getParameter| String))
+    (request/get-parameter-names (Enumeration<String> |getParameterNames|))
+    (request/get-parameter-values (StringArray |getParameterValues| String))
+    (request/get-path-info (String |getPathInfo|))
+    (request/get-path-translated (String |getPathTranslated|))
+    (request/get-protocol (String |getProtocol|))
+    (request/get-query-string (String |getQueryString|))
+    (request/open-input-port (Reader |getReader|))
+    (request/get-remote-addr (String |getRemoteAddr|))
+    (request/get-remote-host (String |getRemoteHost|))
+    (request/get-remote-user (String |getRemoteUser|))
+    (request/get-uri (String |getRequestURI|))
+    (request/get-url (StringBuffer |getRequestURL|))
+    (request/get-requested-session-id (String |getRequestedSessionId|))
+    (request/get-scheme (String |getScheme|))
+    (request/get-server-name (String |getServerName|))
+    (request/get-servlet-path (String |getServletPath|))
+    (request/get-server-port (int |getServerPort|))
+    (request/get-user-principal (Object |getUserPrincipal|))
+    (request/remove-attribute (void |removeAttribute| String))
+    (request/requested-session-id-from-cookie? (boolean |isRequestedSessionIdFromCookie|))
+    (request/requested-session-id-from-url? (boolean |isRequestedSessionIdFromURL|))
+    (request/requested-session-id-valid? (boolean |isRequestedSessionIdValid|))
+    (request/secure? (boolean |isSecure|))
+    (request/set-character-encoding! (void |setCharacterEncoding| String))
+    (request/user-in-role? (boolean |isUserInRole| String)))
+
+
+  (define (request/get-scheme-attribute name)
+    (let ((jvalue (request/get-java-attribute name)))
+      (if (java-null? jvalue)
+          #f
+          (java-unwrap jvalue))))
+
+  (define (request/set-scheme-attribute! name value)
+    (request/set-java-attribute! name (if value (java-wrap value) jnull))
+    (void))
+
+  (define (request/remove-scheme-attribute! name)
+    (request/remove-java-attribute! name))
+
+  (define request/make-parameter
+    (case-lambda
+     ((name)
+      (request/make-parameter name #f))
+     ((name thread-safe?)
+      (if thread-safe?
+          (let ((mutex (make-mutex)))
+            (case-lambda
+             (()
+              (dynamic-wind
+               (lambda () (mutex-lock! mutex))
+               (lambda () (request/get-scheme-attribute name))
+               (lambda () (mutex-unlock! mutex))))
+             ((value)
+              (dynamic-wind
+               (lambda () (mutex-lock! mutex))
+               (lambda ()
+                 (if value
+                     (begin
+                       (request/set-scheme-attribute! name value)
+                       value)
+                     (request/remove-scheme-attribute! name)))
+               (lambda () (mutex-unlock! mutex))))))
+          (case-lambda
+           (() (request/get-scheme-attribute name))
+           ((value)
+            (if value
+                (begin
+                  (request/set-scheme-attribute! name value)
+                  value)
+                (request/remove-scheme-attribute! name))))))))
+
+
+  (define (request/get-java-attribute name)
+    (jget-attribute (current-request) (->jstring name)))
+
+  (define (request/remove-java-attribute! name)
+    (jremove-attribute (current-request) (->jstring name)))
+
+  (define (request/set-java-attribute! name java-object)
+    (jset-attribute (current-request) (->jstring name) java-object))
+
+
+  (define (request/get-header-hashtable)
+    (alist->hashtable (request/get-header-alist)))
+
+  (define (request/get-header-alist)
+    (enumeration/map
+     (lambda (jname)
+       (cons (->string jname)
+             (->string (jget-header (current-request) jname))))
+     (jget-header-names (current-request))))
+
+  (define (request/get-parameter-hashtable)
+    (alist->hashtable (request/get-parameter-alist)))
+
+  (define (request/get-parameter-alist)
+    (iterator/map
+     (lambda (entry)
+       (cons (->string (jget-key entry)) ; TODO: java methods
+             (map ->string (->list (jget-value entry)))))
+     (jiterator (jentry-set (jget-parameter-map (current-request))))))
+
+  (define (request/get-dispatcher path)
+    (let ((jdispatcher (jget-request-dispatcher (current-request) (->jstring path))))
+      (if (java-null? jdispatcher)
+          #f
+          (lambda (request response)
+            (jforward jdispatcher request response)))))
+
+
+  (define request/get-session
+    (case-lambda
+      (() (request/get-session #t))
+      ((create?) (jget-session (current-request) (->jboolean create?)))))
+  )
+@
+
+
+1.3
+log
+@merged from rel-0-4-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+d33 1
+d71 2
+a77 3
+  (define-java-classes
+    (<sisc-adapter-servlet> |siscweb.web.SISCAdapterServlet|))
+
+d97 1
+a97 1
+    (jget-request (java-null <sisc-adapter-servlet>)))
+d261 1
+a261 1
+  (define (request/make-parameter name)
+d263 29
+a291 7
+      (() (request/get-scheme-attribute name))
+      ((value)
+       (if value
+           (begin
+             (request/set-scheme-attribute! name value)
+             value)
+           (request/remove-java-attribute! name)))))
+@
+
+
+1.3.4.1
+log
+@now uses RequestScope to read/write request/response objects
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2007
+d75 3
+d97 1
+a97 1
+    (jget-request (java-null (java-class '|siscweb.web.RequestScope|))))
+@
+
+
+1.3.4.2
+log
+@request/make-parameter now accepts a thread-safe? flag
+@
+text
+@a32 1
+(require-library 'sisc/libs/srfi/srfi-18) ; multithreading support
+a71 7
+  ;; time? is defined both in srfi-18 and srfi-19
+  (module mutex-srfi-18
+    (make-mutex mutex-lock! mutex-unlock!)
+
+    (import srfi-18))
+  (import mutex-srfi-18)
+
+d258 1
+a258 1
+  (define request/make-parameter
+d260 7
+a266 29
+     ((name)
+      (request/make-parameter name #f))
+     ((name thread-safe?)
+      (if thread-safe?
+          (let ((mutex (make-mutex)))
+            (case-lambda
+             (()
+              (dynamic-wind
+               (lambda () (mutex-lock! mutex))
+               (lambda () (request/get-scheme-attribute name))
+               (lambda () (mutex-unlock! mutex))))
+             ((value)
+              (dynamic-wind
+               (lambda () (mutex-lock! mutex))
+               (lambda ()
+                 (if value
+                     (begin
+                       (request/set-scheme-attribute! name value)
+                       value)
+                     (request/remove-scheme-attribute! name)))
+               (lambda () (mutex-unlock! mutex))))))
+          (case-lambda
+           (() (request/get-scheme-attribute name))
+           ((value)
+            (if value
+                (begin
+                  (request/set-scheme-attribute! name value)
+                  value)
+                (request/remove-scheme-attribute! name))))))))
+@
+
+
+1.3.4.3
+log
+@uses import* srfi-18
+@
+text
+@d71 2
+d74 5
+a78 2
+  (import* srfi-18 make-mutex mutex-lock! mutex-unlock!)
+  (import srfi-19)
+@
+
+
+1.2
+log
+@merged from rel-0-2-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+d32 4
+a35 3
+(require-library 'siscweb/contcentric)
+(require-library 'siscweb/k-hash)
+(require-library 'siscweb/publish)
+d38 26
+a63 2
+  (resumable-request? resume-request
+   exists-published-proc? get-published-proc)
+d66 2
+d69 2
+a70 3
+  (import siscweb/contcentric)
+  (import siscweb/k-hash)
+  (import siscweb/publish)
+d72 1
+a72 2
+  (define-generic-java-methods
+    (get-path-info |getPathInfo|))
+d75 2
+a76 4
+  ;; returns true if the current requests points to a resumable
+  ;; continuation
+  (define (resumable-request?)
+    (if (fetch/resume-k) #t #f))
+d78 237
+a314 31
+
+  ;; resumes the continuation associated to this request
+  ;; TODO: concurrency - the resume-k might have been
+  ;;       deleted from the kstore in the meanwhile
+  (define (resume-request)
+    (let ((resume-k (fetch/resume-k)))
+      (resume-k (current-request))))
+
+
+  ;; fetches the resume continuation associated
+  ;; to this request
+  (define (fetch/resume-k)
+    (fetch/k (current-k-hash)))
+
+
+  ;; returns true if a published procedure exists corresponding to the
+  ;; current request
+  (define (exists-published-proc?)
+    (let ((path (remove-k-hash
+                 (->string (get-path-info (current-request))))))
+      (published? path)))
+
+
+  ;; fetches the published procedure corresponding to the current
+  ;; request
+  (define (get-published-proc)
+    (let ((path (remove-k-hash
+                 (->string (get-path-info (current-request))))))
+      (get-published path)))
+
+  )@
+
+
+1.2.6.1
+log
+@merged from rel-0-4-dev
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+d32 3
+a34 5
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+(require-library 'sisc/libs/srfi/srfi-19) ; time data types and procedures
+
+(require-library 'util/misc)
+(require-library 'util/s2j-io)
+d37 2
+a38 26
+  (current-request
+   request/get-auth-type request/get-character-encoding
+   request/get-content-length request/get-content-type
+   request/get-context-path request/get-cookies
+   request/get-date-header request/get-dispatcher request/get-header
+   request/get-header-alist request/get-header-hashtable
+   request/get-header-names request/get-int-header
+   request/get-java-attribute request/get-java-attribute-names
+   request/get-locale request/get-locales request/get-method
+   request/get-parameter request/get-parameter-alist
+   request/get-parameter-hashtable request/get-parameter-names
+   request/get-parameter-values request/get-path-info
+   request/get-path-translated request/get-protocol
+   request/get-query-string request/get-remote-addr
+   request/get-remote-host request/get-remote-user
+   request/get-requested-session-id request/get-scheme
+   request/get-server-name request/get-server-port
+   request/get-servlet-path request/get-session request/get-uri
+   request/get-url request/get-user-principal request/make-parameter
+   request/open-binary-input-port request/open-input-port
+   request/remove-java-attribute!
+   request/requested-session-id-from-cookie?
+   request/requested-session-id-from-url?
+   request/requested-session-id-valid? request/secure?
+   request/set-character-encoding! request/set-java-attribute!
+   request/user-in-role?)
+a40 1
+  (import hashtable)
+d42 13
+a54 2
+  (import srfi-16)
+  (import srfi-19)
+d56 6
+a61 2
+  (import util/misc)
+  (import util/s2j-io)
+a62 2
+  (define-java-classes
+    (<sisc-adapter-servlet> |siscweb.web.SISCAdapterServlet|))
+d64 22
+a85 237
+  (define-generic-java-methods
+    (jentry-set |entrySet|)
+    (jforward |forward|)
+    (jget-attribute |getAttribute|)
+    (jget-header |getHeader|)
+    (jget-header-names |getHeaderNames|)
+    (jget-key |getKey|)
+    (jget-parameter-map |getParameterMap|)
+    (jget-request-dispatcher |getRequestDispatcher|)
+    (jget-request |getRequest|)
+    (jget-session |getSession|)
+    (jget-value |getValue|)
+    (jiterator |iterator|)
+    (jremove-attribute |removeAttribute|)
+    (jset-attribute |setAttribute|)
+    (to-string |toString|))
+
+
+  (define (current-request)
+    (jget-request (java-null <sisc-adapter-servlet>)))
+
+  ;; a poor person's ffi generator
+  ;; TODO: make this more generic?
+  (define-syntax java-lambda
+    (syntax-rules (boolean int
+                   Date
+                   Enumeration<Object> Enumeration<String>
+                   InputStream
+                   Object ObjectArray
+                   Reader
+                   String StringArray StringBuffer
+                   void)
+      ((_ (boolean java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (->boolean (scheme-java-method (current-request))))))
+      ((_ (boolean java-method String))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda (string)
+           (->boolean (scheme-java-method (current-request) (->jstring string))))))
+      ((_ (Date java-method String))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda (string)
+           (let ((ms (->number (scheme-java-method (current-request) (->jstring string)))))
+             (if (= -1 ms)
+                 #f
+                 (make-time 'time-monotonic 0 (quotient ms 1000)))))))
+      ((_ (Enumeration<Object> java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (let ((enum (scheme-java-method (current-request))))
+             (if (java-null? enum)
+                 '()
+                 (enumeration/map (lambda (o) o) enum))))))
+      ((_ (int java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (let ((n (->number (scheme-java-method (current-request)))))
+             (if (= -1 n) #f n)))))
+      ((_ (int java-method String))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda (string)
+           (let ((n (->number (scheme-java-method (current-request)
+                                                  (->jstring string)))))
+             (if (= -1 n) #f n)))))
+      ((_ (Enumeration<String> java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (let ((enum (scheme-java-method (current-request))))
+             (if (java-null? enum)
+                 '()
+                 (enumeration/map ->string enum))))))
+      ((_ (InputStream java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (->binary-input-port (scheme-java-method (current-request))))))
+      ((_ (Object java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (scheme-java-method (current-request)))))
+      ((_ (ObjectArray java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (let ((jarray (scheme-java-method (current-request))))
+             (if (java-null? jarray)
+                 '()
+                 (->list jarray))))))
+      ((_ (Reader java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (->character-input-port (scheme-java-method (current-request))))))
+      ((_ (String java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (let ((jstring (scheme-java-method (current-request))))
+             (if (java-null? jstring) #f (->string jstring))))))
+      ((_ (String java-method String))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda (string)
+           (let ((jstring (scheme-java-method (current-request) (->jstring string))))
+             (if (java-null? jstring) #f (->string jstring))))))
+      ((_ (StringArray java-method String))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda (string)
+           (let ((jarray (scheme-java-method (current-request) (->jstring string))))
+             (if (java-null? jarray)
+                 '()
+                 (map ->string (->list jarray)))))))
+      ((_ (StringBuffer java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (->string (to-string (scheme-java-method (current-request)))))))
+      ((_ (void java-method String))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda (string)
+           (scheme-java-method (current-request) (->jstring string))
+           (void))))))
+
+
+  (define-syntax define-java-wrappers
+    (syntax-rules ()
+      ((_ (name signature-list) ...)
+       (begin
+         (define name
+           (java-lambda signature-list)) ...))))
+
+  (define-java-wrappers
+    (request/get-java-attribute-names (Enumeration<String> |getAttributeNames|))
+    (request/get-auth-type (String |getAuthType|))
+    (request/get-character-encoding (String |getCharacterEncoding|))
+    (request/get-content-length (int |getContentLength|))
+    (request/get-content-type (String |getContentType|))
+    (request/get-context-path (String |getContextPath|))
+    (request/get-cookies (ObjectArray |getCookies|))
+    (request/get-date-header (Date |getDateHeader| String))
+    (request/get-header (String |getHeader| String))
+    (request/get-header-names (Enumeration<String> |getHeaderNames|))
+    (request/open-binary-input-port (InputStream |getInputStream|))
+    (request/get-int-header (int |getIntHeader| String))
+    (request/get-locale (Object |getLocale|))
+    (request/get-locales (Enumeration<Object> |getLocales|))
+    (request/get-method (String |getMethod|))
+    (request/get-parameter (String |getParameter| String))
+    (request/get-parameter-names (Enumeration<String> |getParameterNames|))
+    (request/get-parameter-values (StringArray |getParameterValues| String))
+    (request/get-path-info (String |getPathInfo|))
+    (request/get-path-translated (String |getPathTranslated|))
+    (request/get-protocol (String |getProtocol|))
+    (request/get-query-string (String |getQueryString|))
+    (request/open-input-port (Reader |getReader|))
+    (request/get-remote-addr (String |getRemoteAddr|))
+    (request/get-remote-host (String |getRemoteHost|))
+    (request/get-remote-user (String |getRemoteUser|))
+    (request/get-uri (String |getRequestURI|))
+    (request/get-url (StringBuffer |getRequestURL|))
+    (request/get-requested-session-id (String |getRequestedSessionId|))
+    (request/get-scheme (String |getScheme|))
+    (request/get-server-name (String |getServerName|))
+    (request/get-servlet-path (String |getServletPath|))
+    (request/get-server-port (int |getServerPort|))
+    (request/get-user-principal (Object |getUserPrincipal|))
+    (request/remove-attribute (void |removeAttribute| String))
+    (request/requested-session-id-from-cookie? (boolean |isRequestedSessionIdFromCookie|))
+    (request/requested-session-id-from-url? (boolean |isRequestedSessionIdFromURL|))
+    (request/requested-session-id-valid? (boolean |isRequestedSessionIdValid|))
+    (request/secure? (boolean |isSecure|))
+    (request/set-character-encoding! (void |setCharacterEncoding| String))
+    (request/user-in-role? (boolean |isUserInRole| String)))
+
+
+  (define (request/get-scheme-attribute name)
+    (let ((jvalue (request/get-java-attribute name)))
+      (if (java-null? jvalue)
+          #f
+          (java-unwrap jvalue))))
+
+  (define (request/set-scheme-attribute! name value)
+    (request/set-java-attribute! name (if value (java-wrap value) jnull))
+    (void))
+
+  (define (request/remove-scheme-attribute! name)
+    (request/remove-java-attribute! name))
+
+  (define (request/make-parameter name)
+    (case-lambda
+      (() (request/get-scheme-attribute name))
+      ((value)
+       (if value
+           (begin
+             (request/set-scheme-attribute! name value)
+             value)
+           (request/remove-java-attribute! name)))))
+
+
+  (define (request/get-java-attribute name)
+    (jget-attribute (current-request) (->jstring name)))
+
+  (define (request/remove-java-attribute! name)
+    (jremove-attribute (current-request) (->jstring name)))
+
+  (define (request/set-java-attribute! name java-object)
+    (jset-attribute (current-request) (->jstring name) java-object))
+
+
+  (define (request/get-header-hashtable)
+    (alist->hashtable (request/get-header-alist)))
+
+  (define (request/get-header-alist)
+    (enumeration/map
+     (lambda (jname)
+       (cons (->string jname)
+             (->string (jget-header (current-request) jname))))
+     (jget-header-names (current-request))))
+
+  (define (request/get-parameter-hashtable)
+    (alist->hashtable (request/get-parameter-alist)))
+
+  (define (request/get-parameter-alist)
+    (iterator/map
+     (lambda (entry)
+       (cons (->string (jget-key entry)) ; TODO: java methods
+             (map ->string (->list (jget-value entry)))))
+     (jiterator (jentry-set (jget-parameter-map (current-request))))))
+
+  (define (request/get-dispatcher path)
+    (let ((jdispatcher (jget-request-dispatcher (current-request) (->jstring path))))
+      (if (java-null? jdispatcher)
+          #f
+          (lambda (request response)
+            (jforward jdispatcher request response)))))
+
+
+  (define request/get-session
+    (case-lambda
+      (() (request/get-session #t))
+      ((create?) (jget-session (current-request) (->jboolean create?)))))
+  )
+@
+
+
+1.2.8.1
+log
+@fixed npe
+@
+text
+@d73 3
+a75 4
+    (let ((path-info (get-path-info (current-request))))
+      (if (java-null? path-info)
+          #f
+          (published? (remove-k-hash (->string path-info))))))
+@
+
+
+1.2.8.2
+log
+@provided wrappers for all request object methods; moved publish/resume
+code to sisclet module
+@
+text
+@d14 1
+a14 1
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+a31 2
+(require-library 'sisc/libs/srfi/srfi-19) ; time data types and procedures
+
+d33 2
+a34 2
+(require-library 'util/misc)
+(require-library 'util/s2j-io)
+d37 2
+a38 25
+  (request/get-java-attribute request/get-java-attribute-names
+   request/get-auth-type request/get-character-encoding
+   request/get-content-length request/get-content-type
+   request/get-context-path request/get-cookies
+   request/get-date-header request/get-header
+   request/get-header-names request/get-input-stream
+   request/get-int-header request/get-locale request/get-locales
+   request/get-method request/get-parameter
+   request/get-parameter-hashtable request/get-parameter-names
+   request/get-parameter-values request/get-path-info
+   request/get-path-translated request/get-protocol
+   request/get-query-string request/get-reader
+   request/get-remote-addr request/get-remote-host
+   request/get-remote-user request/get-dispatcher
+   request/get-uri request/get-url
+   request/get-requested-session-id request/get-scheme
+   request/get-server-name request/get-servlet-path
+   request/get-server-port request/get-session
+   request/get-user-principal
+   request/remove-java-attribute!
+   request/requested-session-id-from-cookie?
+   request/requested-session-id-from-url?
+   request/requested-session-id-valid?  request/secure?
+   request/set-java-attribute! request/set-character-encoding!
+   request/user-in-role?)
+a41 2
+  (import srfi-19)
+
+d43 2
+a44 2
+  (import util/misc)
+  (import util/s2j-io)
+d47 38
+a84 174
+    (jentry-set |entrySet|)
+    (jforward |forward|)
+    (jget-key |getKey|)
+    (jget-parameter-map |getParameterMap|)
+    (jget-request-dispatcher |getRequestDispatcher|)
+    (jget-value |getValue|)
+    (jiterator |iterator|)
+    (to-string |toString|))
+
+
+
+  ;; TODO: make this more generic?
+  (define-syntax java-lambda
+    (syntax-rules (boolean int
+                   Date
+                   Enumeration<Object> Enumeration<String>
+                   InputStream
+                   Object ObjectArray
+                   Reader
+                   String StringArray StringBuffer
+                   void)
+      ((_ (boolean java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (->boolean (scheme-java-method (current-request))))))
+      ((_ (boolean java-method String))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda (string)
+           (->boolean (scheme-java-method (current-request) (->jstring string))))))
+      ((_ (Date java-method String))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda (string)
+           (let ((ms (->number (get-time (scheme-java-method (current-request) (->jstring string))))))
+             (make-time 'time-monotonic 0 (quotient ms 1000))))))
+      ((_ (Enumeration<Object> java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (enumeration/map
+            (lambda (o) o)
+            (scheme-java-method (current-request))))))
+      ((_ (int java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (->number (scheme-java-method (current-request))))))
+      ((_ (int java-method String))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda (string)
+           (->number (scheme-java-method (current-request) (->jstring string))))))
+      ((_ (Enumeration<String> java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (enumeration/map
+            ->symbol
+            (scheme-java-method (current-request))))))
+      ((_ (InputStream java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (->binary-input-port (scheme-java-method (current-request))))))
+      ((_ (Object java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (scheme-java-method (current-request)))))
+      ((_ (ObjectArray java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (let ((jarray (scheme-java-method (current-request))))
+             (if (java-null? jarray)
+                 '()
+                 (->list jarray))))))
+      ((_ (Reader java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (->character-input-port (scheme-java-method (current-request))))))
+      ((_ (String java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (let ((jstring (scheme-java-method (current-request))))
+             (if (java-null? jstring) #f (->string jstring))))))
+      ((_ (String java-method String))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda (string)
+           (let ((jstring (scheme-java-method (current-request) (->jstring string))))
+             (if (java-null? jstring) #f (->string jstring))))))
+      ((_ (StringArray java-method String))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda (string)
+           (let ((jarray (scheme-java-method (current-request) (->jstring string))))
+             (if (java-null? jarray)
+                 '()
+                 (map ->string (->list jarray)))))))
+      ((_ (StringBuffer java-method))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda ()
+           (->string (to-string (scheme-java-method (current-request)))))))
+      ((_ (void java-method String))
+       (let ((scheme-java-method (generic-java-method (quote java-method))))
+         (lambda (string)
+           (scheme-java-method (current-request) (->jstring string))
+           (void))))))
+
+
+  (define-syntax define-java-wrappers
+    (syntax-rules ()
+      ((_ (name signature-list) ...)
+       (begin
+         (define name
+           (java-lambda signature-list)) ...))))
+
+  (define-java-wrappers
+    (request/get-java-attribute-names (Enumeration<String> |getAttributeNames|))
+    (request/get-auth-type (String |getAuthType|))
+    (request/get-character-encoding (String |getCharacterEncoding|))
+    (request/get-content-length (int |getContentLength|))
+    (request/get-content-type (String |getContentType|))
+    (request/get-context-path (String |getContextPath|))
+    (request/get-cookies (ObjectArray |getCookies|))
+    (request/get-date-header (Date |getDateHeader| String))
+    (request/get-header (String |getHeader| String))
+    (request/get-header-names (Enumeration<String> |getHeaderNames|))
+    (request/get-input-stream (InputStream |getInputStream|))
+    (request/get-int-header (int |getIntHeader| String))
+    (request/get-locale (Object |getLocale|))
+    (request/get-locales (Enumeration<Object> |getLocales|))
+    (request/get-method (String |getMethod|))
+    (request/get-parameter (String |getParameter| String))
+    (request/get-parameter-names (Enumeration<String> |getParameterNames|))
+    (request/get-parameter-values (StringArray |getParameterValues| String))
+    (request/get-path-info (String |getPathInfo|))
+    (request/get-path-translated (String |getPathTranslated|))
+    (request/get-protocol (String |getProtocol|))
+    (request/get-query-string (String |getQueryString|))
+    (request/get-reader (Reader |getReader|))
+    (request/get-remote-addr (String |getRemoteAddr|))
+    (request/get-remote-host (String |getRemoteHost|))
+    (request/get-remote-user (String |getRemoteUser|))
+    (request/get-uri (String |getRequestURI|))
+    (request/get-url (StringBuffer |getRequestURL|))
+    (request/get-requested-session-id (String |getRequestedSessionId|))
+    (request/get-scheme (String |getScheme|))
+    (request/get-server-name (String |getServerName|))
+    (request/get-servlet-path (String |getServletPath|))
+    (request/get-server-port (int |getServerPort|))
+    (request/get-session (Object |getSession|))
+    (request/get-user-principal (Object |getUserPrincipal|))
+    (request/remove-attribute (void |removeAttribute| String))
+    (request/requested-session-id-from-cookie? (boolean |isRequestedSessionIdFromCookie|))
+    (request/requested-session-id-from-url? (boolean |isRequestedSessionIdFromURL|))
+    (request/requested-session-id-valid? (boolean |isRequestedSessionIdValid|))
+    (request/secure? (boolean |isSecure|))
+    (request/set-character-encoding! (void |setCharacterEncoding| String))
+    (request/user-in-role? (boolean |isUserInRole| String)))
+
+
+  (define (request/get-java-attribute name)
+    (get-attribute (get-current-request) (->jstring name)))
+
+  (define (request/remove-java-attribute! name)
+    (remove-attribute (get-current-request) (->jstring name)))
+
+  (define (request/set-java-attribute! name java-object)
+    (set-attribute (get-current-request) (->jstring name) java-object))
+
+  (define (request/get-parameter-hashtable)
+    (alist->hashtable
+     (iterator/map
+      (lambda (entry)
+        (cons (->string (jget-key entry)) ; TODO: java methods
+              (map ->jstring (->list (jget-value entry)))))
+      (jiterator (jentry-set (jget-parameter-map (current-request)))))))
+
+  (define (request/get-dispatcher path)
+    (let ((jdispatcher (jget-request-dispatcher (current-request) (->jstring path))))
+      (lambda (request response)
+        (jforward jdispatcher request response))))
+d86 1
+a86 1
+  )
+@
+
+
+1.2.8.3
+log
+@header/parameters functions use strings as keys instead of symbols;
+added get-[header|parameter]-[alist|hashtable]; renamed
+get-input-stream -> open-binary-output-port, get-reader ->
+open-input-port; added request/make-parameter; fixed
+[get|set|remove]-java-attribute[!]
+@
+text
+@d39 2
+a40 1
+  (request/get-auth-type request/get-character-encoding
+d42 5
+a46 7
+   request/get-cookies request/get-date-header
+   request/get-dispatcher request/get-header
+   request/get-header-alist request/get-header-hashtable
+   request/get-header-names request/get-int-header
+   request/get-java-attribute request/get-java-attribute-names
+   request/get-locale request/get-locales request/get-method
+   request/get-parameter request/get-parameter-alist
+d50 4
+a53 2
+   request/get-query-string request/get-remote-addr
+   request/get-remote-host request/get-remote-user
+d55 3
+a57 4
+   request/get-server-name request/get-server-port
+   request/get-servlet-path request/get-session request/get-uri
+   request/get-url request/get-user-principal request/make-parameter
+   request/open-binary-input-port request/open-input-port
+d61 2
+a62 2
+   request/requested-session-id-valid? request/secure?
+   request/set-character-encoding! request/set-java-attribute!
+a65 1
+  (import hashtable)
+a75 3
+    (jget-attribute |getAttribute|)
+    (jget-header |getHeader|)
+    (jget-header-names |getHeaderNames|)
+a80 2
+    (jremove-attribute |removeAttribute|)
+    (jset-attribute |setAttribute|)
+d126 1
+a126 1
+            ->string
+d193 1
+a193 1
+    (request/open-binary-input-port (InputStream |getInputStream|))
+d205 1
+a205 1
+    (request/open-input-port (Reader |getReader|))
+a226 15
+  (define (request/make-parameter name)
+    (define (get-scheme-attribute name)
+      (let ((jvalue (request/get-java-attribute name)))
+        (if (java-null? jvalue)
+            #f
+            (java-unwrap jvalue))))
+
+    (define (set-scheme-attribute! name value)
+      (request/set-java-attribute! name (if value (java-wrap value) jnull)))
+
+    (lambda x
+      (if (pair? x)
+          (set-scheme-attribute! name (car x))
+          (get-scheme-attribute name))))
+
+d228 1
+a228 1
+    (jget-attribute (current-request) (->jstring name)))
+d231 1
+a231 1
+    (jremove-attribute (current-request) (->jstring name)))
+d234 1
+a234 12
+    (jset-attribute (current-request) (->jstring name) java-object))
+
+
+  (define (request/get-header-hashtable)
+    (alist->hashtable (request/get-header-alist)))
+
+  (define (request/get-header-alist)
+    (enumeration/map
+     (lambda (jname)
+       (cons (->string jname)
+             (->string (jget-header (current-request) jname))))
+     (jget-header-names (current-request))))
+d237 6
+a242 8
+    (alist->hashtable (request/get-parameter-alist)))
+
+  (define (request/get-parameter-alist)
+    (iterator/map
+     (lambda (entry)
+       (cons (->string (jget-key entry)) ; TODO: java methods
+             (map ->string (->list (jget-value entry)))))
+     (jiterator (jentry-set (jget-parameter-map (current-request))))))
+@
+
+
+1.2.8.4
+log
+@wrappers over methods that return nullable Enumerations now return the
+empty string
+@
+text
+@d117 3
+a119 4
+           (let ((enum (scheme-java-method (current-request))))
+             (if (java-null? enum)
+                 '()
+                 (enumeration/map (lambda (o) o) enum))))))
+d131 3
+a133 4
+           (let ((enum (scheme-java-method (current-request))))
+             (if (java-null? enum)
+                 '()
+                 (enumeration/map ->string enum))))))
+@
+
+
+1.2.8.5
+log
+@wrappers that return integers now return #f is the integer is -1;
+wrappers that return dates now return #f instead of null;
+request/get-session now accepts an optional create? boolean
+@
+text
+@a82 1
+    (jget-session |getSession|)
+d90 1
+a90 1
+  ;; a poor person's ffi generator
+d112 2
+a113 4
+           (let ((ms (->number (scheme-java-method (current-request) (->jstring string)))))
+             (if (= -1 ms)
+                 #f
+                 (make-time 'time-monotonic 0 (quotient ms 1000)))))))
+d124 1
+a124 2
+           (let ((n (->number (scheme-java-method (current-request)))))
+             (if (= -1 n) #f n)))))
+d128 1
+a128 3
+           (let ((n (->number (scheme-java-method (current-request)
+                                                  (->jstring string)))))
+             (if (= -1 n) #f n)))))
+d224 1
+a284 5
+
+  (define request/get-session
+    (case-lambda
+      (() (request/get-session #t))
+      ((create?) (jget-session (current-request) (->jboolean create?)))))
+@
+
+
+1.2.8.6
+log
+@refactoring: request/response are now just wrappers, with send/*
+functions now in contcentric; moved many s2j calls to
+request/response/session objects
+@
+text
+@a31 1
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+d34 1
+d39 1
+a39 2
+  (current-request
+   request/get-auth-type request/get-character-encoding
+d41 2
+a42 2
+   request/get-context-path request/get-cookies
+   request/get-date-header request/get-dispatcher request/get-header
+a67 1
+  (import srfi-16)
+d70 1
+a73 3
+  (define-java-classes
+    (<sisc-adapter-servlet> |siscweb.web.SISCAdapterServlet|))
+
+a82 1
+    (jget-request |getRequest|)
+a90 3
+  (define (current-request)
+    (jget-request (java-null <sisc-adapter-servlet>)))
+
+@
+
+
+1.2.8.7
+log
+@fixed parameters
+@
+text
+@a247 13
+  (define (request/get-scheme-attribute name)
+    (let ((jvalue (request/get-java-attribute name)))
+      (if (java-null? jvalue)
+          #f
+          (java-unwrap jvalue))))
+
+  (define (request/set-scheme-attribute! name value)
+    (request/set-java-attribute! name (if value (java-wrap value) jnull))
+    (void))
+
+  (define (request/remove-scheme-attribute! name)
+    (request/remove-java-attribute! name))
+
+d249 13
+a261 9
+    (case-lambda
+      (() (request/get-scheme-attribute name))
+      ((value)
+       (if value
+           (begin
+             (request/set-scheme-attribute! name value)
+             value)
+           (request/remove-java-attribute! name)))))
+
+@
+
+
+1.2.8.8
+log
+@get/dispatcher now returns #f instead of jnull
+@
+text
+@d304 2
+a305 4
+      (if (java-null? jdispatcher)
+          #f
+          (lambda (request response)
+            (jforward jdispatcher request response)))))
+@
+
+
+1.2.8.9
+log
+@switched from using util/s2j-io to using SISC's java-io library (same code really)
+@
+text
+@d36 1
+a67 1
+  (import java-io)
+d73 1
+a73 1
+
+@
+
+
+1.1
+log
+@file request.scm was initially added on branch rel-0-1-dev.
+@
+text
+@d1 85
+@
+
+
+1.1.4.1
+log
+@initial import
+@
+text
+@a0 86
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'siscweb/contcentric)
+(require-library 'siscweb/k-hash)
+(require-library 'siscweb/publish)
+
+(module siscweb/request
+  (resumable-request? resume-request
+   exists-published-proc? get-published-proc)
+
+  (import s2j)
+
+  (import siscweb/contcentric)
+  (import siscweb/k-hash)
+  (import siscweb/publish)
+
+  (define-generic-java-methods
+    (get-path-info |getPathInfo|)
+    (get-request-uri |getRequestURI|))
+
+  ;; returns true if the current requests points
+  ;; to a resumable continuation
+  (define (resumable-request?)
+    (if (fetch/resume-k) #t #f))
+
+
+  ;; resumes the continuation associated to
+  ;; this request
+  (define (resume-request)
+    (let ((resume-k (fetch/resume-k)))
+      (resume-k (current-request))))
+
+
+  ;; fetches the resume continuation associated
+  ;; to this request
+  (define (fetch/resume-k)
+    (fetch/k (current-session)
+             (extract-k-hash
+              (->string (get-request-uri (current-request))))))
+
+
+  ;; returns true if a published procedure exists
+  ;; corresponding to the current request
+  (define (exists-published-proc?)
+    (let ((path (remove-k-hash
+                 (->string (get-path-info (current-request))))))
+      (published? path)))
+
+
+  ;; fetches the published procedure corresponding
+  ;; to the current request
+  (define (get-published-proc)
+    (let ((path (remove-k-hash
+                 (->string (get-path-info (current-request))))))
+      (get-published path)))
+
+  )@
+
+
+1.1.4.2
+log
+@now sends session-id instead of session object as parameter to
+continuation storage functions (hopefully it can stay this way)
+@
+text
+@d50 2
+a51 3
+
+  ;; returns true if the current requests points to a resumable
+  ;; continuation
+d56 2
+a57 1
+  ;; resumes the continuation associated to this request
+d66 3
+a68 3
+    (fetch/k (current-session-id)
+             (extract-k-hash (->string (get-request-uri
+                                        (current-request))))))
+d71 2
+a72 2
+  ;; returns true if a published procedure exists corresponding to the
+  ;; current request
+d79 2
+a80 2
+  ;; fetches the published procedure corresponding to the current
+  ;; request
+@
+
+
+1.1.4.3
+log
+@modified to match simplified contcentric's fetch/k call
+@
+text
+@d66 2
+a67 1
+    (fetch/k (extract-k-hash (->string (get-request-uri
+@
+
+
+1.1.4.4
+log
+@now uses current-k-hash function from contcentric
+@
+text
+@d47 2
+a48 1
+    (get-path-info |getPathInfo|))
+a57 2
+  ;; TODO: concurrency - the resume-k might have been
+  ;;       deleted from the kstore in the meanwhile
+d66 2
+a67 1
+    (fetch/k (current-k-hash)))
+@
+
+

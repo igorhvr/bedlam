@@ -1,0 +1,96 @@
+head	1.3;
+access;
+symbols
+	rel-0-3-fix-3:1.2
+	rel-0-3-fix-2:1.2
+	rel-0-4-dev-sisc-1-11:1.2
+	rel-0-3-fix-1:1.2
+	rel-0-4-dev:1.2.0.4
+	rel-0-3-fix:1.2.0.2
+	rel-0-3:1.2
+	rel-0-3-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2006.09.03.01.42.24;	author acolomba;	state dead;
+branches;
+next	1.2;
+
+1.2
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.10.30.22.31.24;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.10.30.22.31.24;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2006.08.30.23.07.55;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@merged from rel-0-4-dev
+@
+text
+@bin
+dist
+lib
+tmp
+@
+
+
+1.2
+log
+@merged from rel-0-3-dev
+@
+text
+@@
+
+
+1.2.4.1
+log
+@removed hibernate continuation store (adieu mon ami)
+@
+text
+@@
+
+
+1.1
+log
+@file .cvsignore was initially added on branch rel-0-3-dev.
+@
+text
+@d1 4
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 4
+bin
+dist
+lib
+tmp
+@
+

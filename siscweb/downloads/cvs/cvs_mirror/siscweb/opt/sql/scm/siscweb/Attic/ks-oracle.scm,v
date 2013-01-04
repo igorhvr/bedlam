@@ -1,0 +1,504 @@
+head	1.3;
+access;
+symbols
+	rel-0-4-dev:1.2.0.4
+	rel-0-3-fix:1.2.0.2
+	rel-0-3:1.2
+	rel-0-3-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2006.09.03.01.42.23;	author acolomba;	state dead;
+branches;
+next	1.2;
+
+1.2
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.11.17.02.49.39;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.11.17.02.49.39;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2005.11.29.00.58.22;	author acolomba;	state dead;
+branches;
+next	;
+
+1.2.4.1
+date	2005.11.29.01.01.42;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@merged from rel-0-4-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'sisc/libs/srfi/srfi-19) ; time data types and procedures
+(require-library 'sisc/libs/srfi/srfi-45) ; primitives for expressing iterative lazy algorithms
+
+(require-library 'util/misc)
+(require-library 'sql/jdbc)
+(require-library 'sql/query)
+(require-library 'sql/oracle)
+
+(module siscweb/ks-oracle
+  (ks/clear! ks/get ks/put!
+   ks/setup ks/teardown
+   ks/open ks/close
+   ks/purge-expired!)
+
+  (import s2j)
+  (import hashtable)
+
+  (import srfi-19)
+  (import srfi-45)
+
+  (import util/misc)
+  (import sql/jdbc)
+  (import sql/query)
+  (import sql/oracle)
+
+  (define-generic-java-methods
+    (get-id |getId|))
+
+
+  (define data-source #f)
+
+  (define (get-connection)
+    (jdbc/get-connection data-source))
+
+  (define (ks/open ds)
+    (set! data-source ds))
+
+  (define (ks/close)
+    (set! data-source #f))
+
+
+  (define (ks/setup)
+    (define create-table-continuation-sql
+      (string-append "CREATE TABLE continuation (\n"
+                     "    id INTEGER PRIMARY KEY,\n"
+                     "    jsessionid CHAR(32) NOT NULL,\n"
+                     "    hash CHAR(40) NOT NULL,\n"
+                     "    creation_time DATE DEFAULT SYSDATE NOT NULL,\n"
+                     "    visit_time DATE,\n"
+                     "    ttl INTEGER DEFAULT 1200 NOT NULL,\n"
+                     "    expiration_time DATE NOT NULL,\n"
+                     "    parent INTEGER,\n"
+                     "    procedure BLOB,\n"
+                     "    FOREIGN KEY (parent) REFERENCES continuation(id) ON DELETE SET NULL);\n"
+                     "CREATE UNIQUE INDEX continuation_uniq_idx ON continuation(jsessionid, hash);\n"
+                     "CREATE INDEX continuation_expr_time_idx ON continuation(expiration_time);\n"
+                     "CREATE INDEX continuation_parent_idx ON continuation(parent);\n"
+                     "CREATE SEQUENCE continuation_seq;\n"))
+
+    (jdbc/call/conn
+     (get-connection)
+     (lambda (c)
+       (sql/execute-update c create-table-continuation-sql))))
+
+  (define (ks/teardown)
+    (define drop-table-continuation-sql
+      (string-append "DROP TABLE continuation;"))
+
+    (jdbc/call/conn
+     (get-connection)
+     (lambda (c)
+       (sql/execute-update c drop-table-continuation-sql))))
+
+
+  (define (ks/put! session-id k-hash g-hash k ttl current-k-hash)
+    (define insert-continuation-sql
+      (string-append "INSERT INTO continuation\n"
+                     "    (id, jsessionid, hash, creation_time, ttl, expiration_time, procedure, parent)\n"
+                     "VALUES (continuation_seq.NEXTVAL, ?, ?, ?, ?, ?, EMPTY_BLOB(),\n"
+                     "        (SELECT  id\n"
+                     "         FROM    continuation\n"
+                     "         WHERE   1=1\n"
+                     "             AND jsessionid = ?\n"
+                     "             AND hash = ?))"))
+    (define select-procedure-blob-sql
+      (string-append "SELECT  procedure\n"
+                     "FROM    continuation\n"
+                     "WHERE   1=1\n"
+                     "    AND jsessionid = ?\n"
+                     "    AND hash = ?\n"
+                     "FOR UPDATE"))
+
+    (jdbc/call/conn
+     (get-connection)
+     (lambda (conn)
+       (jdbc/call/tran
+        conn
+        (lambda (conn)
+          (if (= 1 (sql/execute-update conn insert-continuation-sql
+                                       session-id k-hash
+                                       (current-time)
+                                       ttl
+                                       (add-duration
+                                        (current-time)
+                                        (make-time 'time-duration 0 ttl))
+                                       session-id current-k-hash))
+              (let ((blob (hashtable/get
+                           (car (force (sql/execute-query conn select-procedure-blob-sql
+                                                          session-id k-hash)))
+                           'procedure)))
+             (oracle/write-blob blob (java-wrap k)))))))))
+
+
+  (define (ks/get session-id k-hash)
+    (define select-continuation-sql
+      (string-append "SELECT  procedure,\n"
+                     "        ttl\n"
+                     "FROM    continuation\n"
+                     "WHERE   1=1\n"
+                     "    AND jsessionid = ?\n"
+                     "    AND hash = ?\n"))
+
+    (define update-continuation-sql
+      (string-append "UPDATE  continuation\n"
+                     "    SET visit_time = ?,\n"
+                     "        expiration_time = ?\n"
+                     "WHERE   1=1\n"
+                     "    AND jsessionid = ?\n"
+                     "    AND hash = ?\n"))
+    (let ((k #f))
+      (jdbc/call/conn
+       (get-connection)
+       (lambda (conn)
+         (jdbc/call/tran
+          conn
+          (lambda (conn)
+            (sql/for-each-row (sql/execute-query conn select-continuation-sql
+                                                 session-id k-hash)
+                              ((blob 'procedure)
+                               (ttl 'ttl))
+                              (sql/execute-update conn update-continuation-sql
+                                                  (current-time)
+                                                  (add-duration
+                                                   (current-time)
+                                                   (make-time 'time-duration 0 ttl))
+                                                  session-id k-hash)
+                              (set! k (java-unwrap (oracle/read-blob blob))))))))
+      k))
+
+
+  (define (ks/clear! session-id)
+    (define delete-continuations-sql
+      (string-append "DELETE FROM continuation\n"
+                     "WHERE   1=1\n"
+                     "    AND TRIM(jsessionid) = ?\n"))
+
+    (jdbc/call/conn
+     (get-connection)
+     (lambda (c)
+       (sql/execute-update c delete-continuations-sql session-id))))
+
+
+  (define (ks/purge-expired!)
+    (define purge-continuations-sql
+      (string-append "DELETE FROM continuation\n"
+                     "WHERE   1=1\n"
+                     "    AND expiration_time < SYSDATE\n"))
+    (jdbc/call/conn
+     (get-connection)
+     (lambda (c)
+       (sql/execute-update c purge-continuations-sql))))
+  )
+@
+
+
+1.2
+log
+@merged from rel-0-3-dev
+@
+text
+@@
+
+
+1.2.4.1
+log
+@merged from rel-0-3-fix
+@
+text
+@@
+
+
+1.2.2.1
+log
+@functionality replaced by hibernate
+@
+text
+@@
+
+
+1.1
+log
+@file ks-oracle.scm was initially added on branch rel-0-3-dev.
+@
+text
+@d1 203
+@
+
+
+1.1.2.1
+log
+@moved from project root to opt/sql/
+@
+text
+@a0 203
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'sisc/libs/srfi/srfi-19) ; time data types and procedures
+(require-library 'sisc/libs/srfi/srfi-45) ; primitives for expressing iterative lazy algorithms
+
+(require-library 'util/misc)
+(require-library 'sql/jdbc)
+(require-library 'sql/query)
+(require-library 'sql/oracle)
+
+(module siscweb/ks-oracle
+  (ks/clear! ks/get ks/put!
+   ks/setup ks/teardown
+   ks/open ks/close
+   ks/purge-expired!)
+
+  (import s2j)
+  (import hashtable)
+
+  (import srfi-19)
+  (import srfi-45)
+
+  (import util/misc)
+  (import sql/jdbc)
+  (import sql/query)
+  (import sql/oracle)
+
+  (define-generic-java-methods
+    (get-id |getId|))
+
+
+  (define data-source #f)
+
+  (define (get-connection)
+    (jdbc/get-connection data-source))
+
+  (define (ks/open ds)
+    (set! data-source ds))
+
+  (define (ks/close)
+    (set! data-source #f))
+
+
+  (define (ks/setup)
+    (define create-table-continuation-sql
+      (string-append "CREATE TABLE continuation (\n"
+                     "    id INTEGER PRIMARY KEY,\n"
+                     "    jsessionid CHAR(32) NOT NULL,\n"
+                     "    hash CHAR(40) NOT NULL,\n"
+                     "    creation_time DATE DEFAULT SYSDATE NOT NULL,\n"
+                     "    visit_time DATE,\n"
+                     "    ttl INTEGER DEFAULT 1200 NOT NULL,\n"
+                     "    expiration_time DATE NOT NULL,\n"
+                     "    parent INTEGER,\n"
+                     "    procedure BLOB,\n"
+                     "    FOREIGN KEY (parent) REFERENCES continuation(id) ON DELETE SET NULL);\n"
+                     "CREATE UNIQUE INDEX continuation_uniq_idx ON continuation(jsessionid, hash);\n"
+                     "CREATE INDEX continuation_expr_time_idx ON continuation(expiration_time);\n"
+                     "CREATE INDEX continuation_parent_idx ON continuation(parent);\n"
+                     "CREATE SEQUENCE continuation_seq;\n"))
+
+    (jdbc/call/conn
+     (get-connection)
+     (lambda (c)
+       (sql/execute-update c create-table-continuation-sql))))
+
+  (define (ks/teardown)
+    (define drop-table-continuation-sql
+      (string-append "DROP TABLE continuation;"))
+
+    (jdbc/call/conn
+     (get-connection)
+     (lambda (c)
+       (sql/execute-update c drop-table-continuation-sql))))
+
+
+  (define (ks/put! session-id k-hash g-hash k ttl current-k-hash)
+    (define insert-continuation-sql
+      (string-append "INSERT INTO continuation\n"
+                     "    (id, jsessionid, hash, creation_time, ttl, expiration_time, procedure, parent)\n"
+                     "VALUES (continuation_seq.NEXTVAL, ?, ?, ?, ?, ?, EMPTY_BLOB(),\n"
+                     "        (SELECT  id\n"
+                     "         FROM    continuation\n"
+                     "         WHERE   1=1\n"
+                     "             AND jsessionid = ?\n"
+                     "             AND hash = ?))"))
+    (define select-procedure-blob-sql
+      (string-append "SELECT  procedure\n"
+                     "FROM    continuation\n"
+                     "WHERE   1=1\n"
+                     "    AND jsessionid = ?\n"
+                     "    AND hash = ?\n"
+                     "FOR UPDATE"))
+
+    (jdbc/call/conn
+     (get-connection)
+     (lambda (conn)
+       (jdbc/call/tran
+        conn
+        (lambda (conn)
+          (if (= 1 (sql/execute-update conn insert-continuation-sql
+                                       session-id k-hash
+                                       (current-time)
+                                       ttl
+                                       (add-duration
+                                        (current-time)
+                                        (make-time 'time-duration 0 ttl))
+                                       session-id current-k-hash))
+              (let ((blob (hashtable/get
+                           (car (force (sql/execute-query conn select-procedure-blob-sql
+                                                          session-id k-hash)))
+                           'procedure)))
+             (oracle/write-blob blob (java-wrap k)))))))))
+
+
+  (define (ks/get session-id k-hash)
+    (define select-continuation-sql
+      (string-append "SELECT  procedure,\n"
+                     "        ttl\n"
+                     "FROM    continuation\n"
+                     "WHERE   1=1\n"
+                     "    AND jsessionid = ?\n"
+                     "    AND hash = ?\n"))
+
+    (define update-continuation-sql
+      (string-append "UPDATE  continuation\n"
+                     "    SET visit_time = ?,\n"
+                     "        expiration_time = ?\n"
+                     "WHERE   1=1\n"
+                     "    AND jsessionid = ?\n"
+                     "    AND hash = ?\n"))
+    (let ((k #f))
+      (jdbc/call/conn
+       (get-connection)
+       (lambda (conn)
+         (jdbc/call/tran
+          conn
+          (lambda (conn)
+            (sql/for-each-row (sql/execute-query conn select-continuation-sql
+                                                 session-id k-hash)
+                              ((blob 'procedure)
+                               (ttl 'ttl))
+                              (sql/execute-update conn update-continuation-sql
+                                                  (current-time)
+                                                  (add-duration
+                                                   (current-time)
+                                                   (make-time 'time-duration 0 ttl))
+                                                  session-id k-hash)
+                              (set! k (java-unwrap (oracle/read-blob blob))))))))
+      k))
+
+
+  (define (ks/clear! session-id)
+    (define delete-continuations-sql
+      (string-append "DELETE FROM continuation\n"
+                     "WHERE   1=1\n"
+                     "    AND TRIM(jsessionid) = ?\n"))
+
+    (jdbc/call/conn
+     (get-connection)
+     (lambda (c)
+       (sql/execute-update c delete-continuations-sql session-id))))
+
+
+  (define (ks/purge-expired!)
+    (define purge-continuations-sql
+      (string-append "DELETE FROM continuation\n"
+                     "WHERE   1=1\n"
+                     "    AND expiration_time < SYSDATE\n"))
+    (jdbc/call/conn
+     (get-connection)
+     (lambda (c)
+       (sql/execute-update c purge-continuations-sql))))
+  )
+@
+

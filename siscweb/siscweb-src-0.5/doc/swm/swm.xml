@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN"
+                      "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+  <!ENTITY SISC "<application>SISC</application>">
+  <!ENTITY SISCweb "<application>SISCweb</application>">
+  <!ENTITY syntax "<emphasis>syntax: </emphasis>">
+  <!ENTITY returns "<emphasis>returns: </emphasis>">
+  <!ENTITY procedure "<emphasis>procedure: </emphasis>">
+  <!ENTITY parameter "<emphasis>parameter: </emphasis>">
+  <!ENTITY sxml-attribute "<emphasis>attribute: </emphasis>">
+  <!ENTITY f "&num;f">
+  <!ENTITY t "&num;t">
+  <!ENTITY arrow ";=&gt;">
+  <!ENTITY requires "<emphasis>Requires:</emphasis>">
+  <!ENTITY locatedin "<emphasis>Located in:</emphasis>">
+
+  <!ENTITY legalnotice SYSTEM "legalnotice.xml">
+  <!ENTITY introduction SYSTEM "introduction.xml">
+  <!ENTITY install SYSTEM "install.xml">
+  <!ENTITY pages SYSTEM "pages.xml">
+  <!ENTITY state SYSTEM "state.xml">
+  <!ENTITY publishing SYSTEM "publishing.xml">
+  <!ENTITY bindings SYSTEM "bindings.xml">
+  <!ENTITY sql SYSTEM "sql.xml">
+  <!ENTITY lowlev SYSTEM "lowlev.xml">
+  <!ENTITY gpl SYSTEM "gpl.xml">
+  <!ENTITY index SYSTEM "index.xml">
+]>
+
+<book id="siscweb-manual" lang="en">
+
+  <bookinfo>
+    <title>SISCweb Manual</title>
+
+    <author>
+      <firstname>Alessandro</firstname>
+      <surname>Colomba</surname>
+    </author>
+
+    <copyright>
+      <year>2005-2007</year>
+      <holder>Alessandro Colomba</holder>
+    </copyright>
+
+    &legalnotice;
+  </bookinfo>
+
+
+  &introduction;
+  &install;
+  &pages;
+  &state;
+  &publishing;
+  &bindings;
+  &sql;
+  &lowlev;
+
+  &gpl;
+  &index;
+</book>

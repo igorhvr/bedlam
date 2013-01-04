@@ -1,0 +1,371 @@
+head	1.1;
+access;
+symbols
+	rel-0-2-dev:1.1.0.4
+	rel-0-1-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2005.04.17.21.15.20;	author acolomba;	state dead;
+branches
+	1.1.4.1;
+next	;
+
+1.1.4.1
+date	2005.04.17.23.35.47;	author acolomba;	state Exp;
+branches;
+next	1.1.4.2;
+
+1.1.4.2
+date	2005.04.19.01.47.51;	author acolomba;	state Exp;
+branches;
+next	1.1.4.3;
+
+1.1.4.3
+date	2005.04.21.00.53.39;	author acolomba;	state Exp;
+branches;
+next	1.1.4.4;
+
+1.1.4.4
+date	2005.04.23.00.39.38;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@file k-hsqldb.scm was initially added on branch rel-0-1-dev.
+@
+text
+@@
+
+
+1.1.4.1
+log
+@initial import
+@
+text
+@a0 149
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+
+(require-library 'siscweb/contcentric)
+(require-library 'siscweb/k-hash)
+(require-library 'siscweb/util)
+(require-library 'util/sql)
+
+(require-library 'sisc/libs/srfi/srfi-19) ; time data types and procedures
+(require-library 'sisc/libs/srfi/srfi-45) ; primitives for expressing iterative lazy algorithms
+
+
+(module siscweb/k-hsqldb
+  (clear/k!)
+
+  (import s2j)
+  (import type-system)
+
+  (import siscweb/contcentric)
+  (import siscweb/k-hash)
+  (import siscweb/util)
+  (import util/sql)
+
+  (import srfi-19)
+  (import srfi-45)
+
+
+  (define-generic-java-methods
+    (encode-url |encodeURL|)
+    (get-request-uri |getRequestURI|)
+    get-session)
+
+
+  (define db-url "jdbc:hsqldb:file:/tmp/siscweb-examples-db")
+  (define db-usr "sa")
+  (define db-pwd "")
+
+
+  (define (initialize)
+    (define create-table-continuation-sql
+      (string-append "CREATE TABLE continuation (\n"
+                     "    id INTEGER IDENTITY,\n"
+                     "    jsessionid CHAR(32) NOT NULL,\n"
+                     "    hash CHAR(40) NOT NULL,\n"
+                     "    creation_time TIME NOT NULL,\n"
+                     "    visit_time TIME,\n"
+                     "    ttl INTEGER DEFAULT 1200 NOT NULL,\n"
+                     "    expiration_time,\n" ; TIME NOT NULL,\n"
+                     "    parent INTEGER,\n"
+                     "    procedure OBJECT,\n"
+                     "    FOREIGN KEY (parent) REFERENCES continuation(id) ON DELETE SET NULL);\n"
+                     "CREATE UNIQUE INDEX continuation_uniq_idx ON continuation(jsessionid, hash);\n"
+                     "CREATE INDEX continuation_expr_time_idx ON continuation(expiration_time) DESC;\n"
+                     "CREATE INDEX continuation_parent_idx ON continuation(parent);\n"))
+
+    (load-jdbc-driver "org.hsqldb.jdbcDriver")
+    (call-with-connection
+     (get-connection db-url db-usr db-pwd)
+     (lambda (c)
+       (execute c create-table-continuation-sql))))
+
+
+  (define (store/k! k)
+    (define insert-continuation-sql
+      (string-append "INSERT INTO continuation\n"
+                     "    (jsessionid, hash, creation_time, expiration_time, procedure)\n"
+                     "VALUES (?, ?, ?, ?, ?);"))
+
+    (let ((k-hash (get-random-hash)))
+      (call-with-connection
+       (get-connection db-url db-usr db-pwd)
+       (lambda (conn)
+         (execute-update conn
+                         insert-continuation-sql
+                         (->string (get-session (current-request)))
+                         k-hash
+                         (current-date)
+                         (current-date) ; use a trigger instead
+                         k)))
+      (make-k-url (->string (encode-url (current-response) (->jstring (remove-k-hash (->string (get-request-uri (current-request)))))))
+                  k-hash)))
+
+
+  (define (fetch/k k-hash)
+    (define select-continuation-sql
+      (string-append "SELECT  procedure\n"
+                     "FROM    continuation\n"
+                     "WHERE   1=1\n"
+                     "    AND jsessionid = ?\n"
+                     "    AND hash = ?\n"))
+
+    (if k-hash
+        (call-with-connection
+         (get-connection db-url db-usr db-pwd)
+         (lambda (c)
+           (let ((rs (force (execute-query c select-continuation-sql (->string (get-session (current-request))) k-hash))))
+             (if (not (null? rs))
+                 (let ((k-wrap (hashtable/get (car rs) 'procedure)))
+                   (if (not (java-null? k-wrap))
+                       (java-unwrap k-wrap)
+                       #f))
+                 #f))))
+        #f))
+
+  (define (clear/k!)
+    (define delete-continuations-sql
+      (string-append "DELETE FROM continuation\n"
+                     "WHERE   1=1\n"
+                     "    AND jsessionid = ?\n"))
+
+    (call-with-connection
+     (get-connection db-url db-usr db-pwd)
+     (lambda (c)
+       (execute-update c delete-continuations-sql (->string (get-session (current-request)))))))
+
+
+  (define (adjust-timeout! ttl) ; seconds
+    (current-timeout ttl))
+
+  (define current-timeout (make-parameter 300))
+  )@
+
+
+1.1.4.2
+log
+@now accepts session objects as input; misc fixes
+@
+text
+@d32 5
+a39 3
+(require-library 'siscweb/util)
+(require-library 'util/sql)
+
+d42 1
+a42 1
+  (clear/k! fetch/k store/k! start-k-manager stop-k-manager)
+d45 6
+a50 1
+  (import hashtable)
+a54 2
+  (import siscweb/util)
+  (import util/sql)
+d57 3
+a59 1
+    (get-id |getId|))
+a65 5
+  (define (start-k-manager url usr pwd)
+    (set! db-url url)
+    (set! db-usr usr)
+    (set! db-pwd pwd)
+    (initialize))
+d76 1
+a76 1
+                     "    expiration_time TIME NOT NULL,\n"
+d88 1
+a88 5
+       (execute-update c create-table-continuation-sql))))
+
+
+  (define (stop-k-manager)
+    #f)
+d91 1
+a91 2
+
+  (define (store/k! session hash k ttl)
+d94 2
+a95 2
+                     "    (jsessionid, hash, creation_time, ttl, expiration_time, procedure)\n"
+                     "VALUES (?, ?, ?, ?, ?, ?);"))
+d97 13
+a109 12
+    (call-with-connection
+     (get-connection db-url db-usr db-pwd)
+     (lambda (conn)
+       (execute-update conn insert-continuation-sql
+                       (->string (get-id session))
+                       hash
+                       (current-time)
+                       ttl
+                       (add-duration
+                        (current-time)
+                        (make-time 'time-duration 0 ttl))
+                       k))))
+d112 1
+a112 1
+  (define (fetch/k session k-hash)
+d124 1
+a124 1
+           (let ((rs (force (execute-query c select-continuation-sql (->string (get-id session)) k-hash))))
+d133 1
+a133 1
+  (define (clear/k! session)
+d142 7
+a148 1
+       (execute-update c delete-continuations-sql (->string (get-id session))))))
+@
+
+
+1.1.4.3
+log
+@moved start/stop-k-manager to contcentric module; now provides
+setup/teardown for one-time schema setup and wipeout; minor changes to
+schema; changes to how continuation store/fetch in accordance to
+changes in sql module; added purge-expired function
+@
+text
+@d38 1
+d40 1
+a40 3
+  (clear/k! fetch/k store/k!
+   setup teardown
+   purge-expired)
+d59 7
+a65 1
+  (define (setup)
+d71 2
+a72 2
+                     "    creation_time TIMESTAMP DEFAULT CURRENT_TIME NOT NULL,\n"
+                     "    visit_time TIMESTAMP,\n"
+d74 1
+a74 1
+                     "    expiration_time TIMESTAMP NOT NULL,\n"
+d82 1
+a82 1
+
+a87 3
+  (define (teardown)
+    (define drop-table-continuation-sql
+      (string-append "DROP TABLE continuation;"))
+d89 4
+a92 4
+    (call-with-connection
+     (get-connection db-url db-usr db-pwd)
+     (lambda (c)
+       (execute-update c drop-table-continuation-sql))))
+d116 1
+a116 2
+      (string-append "SELECT  procedure,\n"
+                     "        ttl\n"
+a121 7
+    (define update-continuation-sql
+      (string-append "UPDATE  continuation\n"
+                     "    SET visit_time = ?,\n"
+                     "        expiration_time = ?\n"
+                     "WHERE   1=1\n"
+                     "    AND jsessionid = ?\n"
+                     "    AND hash = ?\n"))
+d126 1
+a126 2
+           (let ((rs (force (execute-query c select-continuation-sql
+                                           (->string (get-id session)) k-hash))))
+d130 1
+a130 10
+                       (begin
+                         (let ((ttl (->number (hashtable/get (car rs) 'ttl))))
+                           (execute-update c update-continuation-sql
+                                           (current-time)
+                                           (add-duration
+                                            (current-time)
+                                            (make-time 'time-duration 0 ttl))
+                                           (->string (get-id session))
+                                           k-hash))
+                         (java-unwrap k-wrap))
+a144 14
+
+
+  (define (purge-expired)
+    (define purge-continuations-sql
+      (string-append "DELETE FROM continuation\n"
+                     "WHERE   1=1\n"
+                     "    AND expiration_time < NOW()\n"))
+    (call-with-connection
+     (get-connection db-url db-usr db-pwd)
+     (lambda (c)
+       (execute-update c purge-continuations-sql))))
+
+
+  (load-jdbc-driver "org.hsqldb.jdbcDriver")
+@
+
+
+1.1.4.4
+log
+@renamed to ks-hsqldb
+@
+text
+@@
+
+

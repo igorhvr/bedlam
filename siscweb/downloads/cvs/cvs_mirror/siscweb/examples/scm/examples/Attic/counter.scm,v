@@ -1,0 +1,738 @@
+head	1.3;
+access;
+symbols
+	rel-0-5-dev-safe-frames:1.2.0.6
+	Root_rel-0-5-dev-safe-frames:1.2
+	rel-0-4-fix-0:1.2
+	rel-0-5-dev:1.2.0.4
+	rel-0-4-fix:1.2.0.2
+	rel-0-3-fix-3:1.1.4.3
+	rel-0-3-fix-2:1.1.4.2
+	rel-0-3-fix:1.1.0.4
+	rel-0-4-dev-sisc-1-11:1.1.2.7
+	sisc-bug-1375026:1.1.2.3
+	rel-0-4-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2007.04.12.03.51.16;	author acolomba;	state dead;
+branches;
+next	1.2;
+
+1.2
+date	2006.09.03.01.42.24;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.12.06.01.26.07;	author acolomba;	state dead;
+branches
+	1.1.2.1
+	1.1.4.1;
+next	;
+
+1.1.2.1
+date	2005.12.06.01.26.07;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.12.06.03.09.27;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2005.12.06.03.14.55;	author acolomba;	state Exp;
+branches;
+next	1.1.2.4;
+
+1.1.2.4
+date	2005.12.10.22.17.14;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5;
+
+1.1.2.5
+date	2005.12.15.04.25.25;	author acolomba;	state Exp;
+branches;
+next	1.1.2.6;
+
+1.1.2.6
+date	2006.01.16.00.22.15;	author acolomba;	state Exp;
+branches;
+next	1.1.2.7;
+
+1.1.2.7
+date	2006.02.11.20.21.43;	author acolomba;	state Exp;
+branches;
+next	1.1.2.8;
+
+1.1.2.8
+date	2006.02.22.04.33.54;	author acolomba;	state Exp;
+branches;
+next	1.1.2.9;
+
+1.1.2.9
+date	2006.03.28.23.49.54;	author acolomba;	state Exp;
+branches;
+next	1.1.2.10;
+
+1.1.2.10
+date	2006.04.08.21.37.34;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.1.4.1
+date	2005.12.06.01.26.07;	author acolomba;	state dead;
+branches;
+next	1.1.4.2;
+
+1.1.4.2
+date	2006.02.25.17.12.05;	author acolomba;	state Exp;
+branches;
+next	1.1.4.3;
+
+1.1.4.3
+date	2006.04.15.15.55.28;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2007.03.04.14.51.54;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2007.04.05.02.47.22;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@merged from rel-0-5-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+;;; This is a very basic AJAX-style example. State is maintained through a
+;;; dynamically scoped variable -- the Scheme equivalent of a session variable.
+
+
+(require-library 'sisc/libs/srfi/srfi-39) ; parameter objects
+
+(require-library 'siscweb/forward)
+(require-library 'siscweb/html)
+
+
+(module examples/counter
+  (counter)
+
+  (import srfi-39)
+
+  (import siscweb/forward)
+  (import siscweb/html)
+  (import util/misc)
+
+  ;; "session" variable; note that it becomes "per user" (sort of)
+  ;; only if parameterized at the application entry point; otherwise
+  ;; it would be shared among all users
+  (define *N* (make-parameter 0))
+
+  (define (inc*N*)
+    (let ((n+1 (+ 1 (*N*))))
+      (*N* n+1)
+      n+1))
+
+
+  (define (counter request)
+    ;; initializes and binds with dynamic extent
+    (parameterize ((*N* 0))
+      (send-html/back
+       (make-counter-page))))
+
+
+  (define (make-counter-page)
+    `(html
+      (head
+       (title "AJAX Counter")
+       (link (@@ (href-c "/css/default.css")
+                (rel "stylesheet")
+                (type "text/css")))
+       ;; includes AJAX js library
+       (script (@@ (src-c "/js/prototype.js") (type "text/javascript"))))
+      (body
+       (h3 "AJAX Counter")
+       (p (@@ (id "counter"))
+        ,(inc*N*)) ; note that *N* itself is not passed
+
+       (p (a (@@ (href "#")
+                (onclick
+                 ,(format "new Ajax.Updater('counter', '~a', {method : 'get'});"
+                          (forward/dynenv/store! (lambda (req) (send-counter))))))
+             "Increment >"))
+       (p (a (@@ (href-c "/")) "^ Home")))))
+
+  (define (send-counter)
+    (send-html/back
+     (inc*N*)))
+
+  )
+@
+
+
+1.2
+log
+@merged from rel-0-4-dev
+@
+text
+@@
+
+
+1.2.4.1
+log
+@minor fix to link
+@
+text
+@d84 1
+a84 1
+                 ,(format "new Ajax.Updater('counter', '~a', {method : 'get'}); return false;"
+@
+
+
+1.2.4.2
+log
+@obsoleted by counter-ajax-*.scm
+@
+text
+@@
+
+
+1.1
+log
+@file counter.scm was initially added on branch rel-0-4-dev.
+@
+text
+@d1 93
+@
+
+
+1.1.4.1
+log
+@file counter.scm was added on branch rel-0-3-fix on 2006-02-25 17:12:05 +0000
+@
+text
+@@
+
+
+1.1.4.2
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@a0 91
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+;;; This is a very basic AJAX-style example. State is maintained through a
+;;; session variable
+
+
+(require-library 'siscweb/xhtml)
+(require-library 'siscweb/session)
+
+
+(module examples/counter
+  (counter)
+
+  (import siscweb/xhtml)
+  (import siscweb/session)
+
+  ;; session variable
+  (define *N* (session/make-parameter "*N*"))
+
+  (define (inc*N*)
+    (let ((n+1 (+ 1 (*N*))))
+      (*N* n+1)
+      n+1))
+
+
+  (define (counter request)
+    ;; initializes and binds with dynamic extent
+    (*N* 0)
+    (send-xhtml/back
+     (make-counter-page)))
+
+
+  (define (make-counter-page)
+    `(*TOP*
+      (*DTD-INFO/PUBLIC* "html"
+                         "-//W3C//DTD XHTML 1.0 Strict//EN"
+                         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+      (html (@@ (xmlns "http://www.w3.org/1999/xhtml")
+               (xml:lang "en") (lang "en"))
+       (head
+        (title "AJAX Counter")
+        (link (@@ (href-c "/css/default.css")
+                 (rel "stylesheet")
+                 (type "text/css")))
+        ;; includes AJAX js library
+        (script (@@ (src-c "/js/prototype.js")
+                   (type "text/javascript"))))
+        (body
+        (h3 "AJAX Counter")
+        (p (@@ (id "counter") (name "counter"))
+         ,(inc*N*)) ; note that *N* itself is not passed
+
+        (p (a (@@ (update "counter") ; update the paragraph above
+                 (href-p ,(lambda (req) (send-counter)))
+                 (options ((method "'get'"))))
+              "Increment >"))
+        (p (a (@@ (href-c "/")) "^ Home"))))))
+
+  (define (send-counter)
+    (send-xhtml/back
+     (inc*N*)))
+
+  )
+@
+
+
+1.1.4.3
+log
+@merged from rel-0-4-dev
+@
+text
+@d32 1
+a32 1
+;;; dynamically scoped variable -- the Scheme equivalent of a session variable.
+d35 2
+a36 4
+(require-library 'sisc/libs/srfi/srfi-39) ; parameter objects
+
+(require-library 'siscweb/forward)
+(require-library 'siscweb/html)
+d42 2
+a43 1
+  (import srfi-39)
+d45 2
+a46 8
+  (import siscweb/forward)
+  (import siscweb/html)
+  (import util/misc)
+
+  ;; "session" variable; note that it becomes "per user" (sort of)
+  ;; only if parameterized at the application entry point; otherwise
+  ;; it would be shared among all users
+  (define *N* (make-parameter 0))
+d56 3
+a58 3
+    (parameterize ((*N* 0))
+      (send-html/back
+       (make-counter-page))))
+d62 24
+a85 19
+    `(html
+      (head
+       (title "AJAX Counter")
+       (link (@@ (href-c "/css/default.css")
+                (rel "stylesheet")
+                (type "text/css")))
+       ;; includes AJAX js library
+       (script (@@ (src-c "/js/prototype.js") (type "text/javascript"))))
+      (body
+       (h3 "AJAX Counter")
+       (p (@@ (id "counter"))
+        ,(inc*N*)) ; note that *N* itself is not passed
+
+       (p (a (@@ (href "#")
+                (onclick
+                 ,(format "new Ajax.Updater('counter', '~a', {method : 'get'});"
+                          (forward/dynenv/store! (lambda (req) (send-counter))))))
+             "Increment >"))
+       (p (a (@@ (href-c "/")) "^ Home")))))
+d88 1
+a88 1
+    (send-html/back
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 94
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+;;; This is a very basic AJAX-style example. State is maintained through a
+;;; dynamically scoped variable -- the Scheme equivalent of a session variable.
+
+
+(require-library 'sisc/libs/srfi/srfi-39) ; parameter objects
+
+(require-library 'siscweb/html)
+
+
+(module examples/counter
+  (counter)
+
+  (import oo)
+  (import generic-procedures)
+  (import type-system)
+
+  (import srfi-39)
+
+  (import siscweb/html)
+  (import util/misc)
+
+  ;; "session" variable; note that it becomes "per user" (sort of)
+  ;; only if parameterized at the application entry point; otherwise
+  ;; it would be shared among all users
+  (define *N* (make-parameter 0))
+
+  (define (inc*N*)
+    (let ((n+1 (+ 1 (*N*))))
+      (*N* n+1)
+      n+1))
+
+
+  (define (counter request)
+    ;; initializes and binds with dynamic extent
+    (parameterize ((*N* 0))
+      (send-html/back
+       (make-counter-page))))
+
+
+  (define (make-counter-page)
+    `(html
+      (head
+       (title "AJAX Counter")
+       (link (@@ (href-c "/css/default.css")
+                (rel "stylesheet")
+                (type "text/css")))
+       ;; includes
+       (script (@@ (src-c "/js/prototype.js") (type "text/javascript"))))
+      (body
+       (h3 "AJAX Counter")
+       (p (@@ (id "counter"))
+        ,(inc*N*)) ; note that *N* itself is not passed
+
+       (p (a (@@ (update "counter") ; update the paragraph above
+                (href-p ,(lambda (req) (send-counter)))
+                (options ((method "'get'"))))
+             "Increment >"))
+       (p (a (@@ (href-c "/")) "^ Home")))))
+
+  (define (send-counter)
+    (send-html/back
+     `(p ,(inc*N*))))
+
+  )
+@
+
+
+1.1.2.2
+log
+@removed unused imports; small fixes to comments
+@
+text
+@d43 4
+d77 1
+a77 1
+       ;; includes AJAX js library
+@
+
+
+1.1.2.3
+log
+@removed extraneous (p) element
+@
+text
+@d88 1
+a88 1
+     (inc*N*)))
+@
+
+
+1.1.2.4
+log
+@rolled back to use session variables instead of srfi-39 parameters
+because of sisc bug #1375026
+@
+text
+@d35 2
+a37 1
+(require-library 'siscweb/session)
+d43 2
+d46 1
+a46 1
+  (import siscweb/session)
+d48 4
+a51 2
+  ;; session variable
+  (define *N* (make-session-parameter "*N*"))
+d61 3
+a63 3
+    (*N* 0)
+    (send-html/back
+     (make-counter-page)))
+@
+
+
+1.1.2.5
+log
+@adapted to new names in siscweb/session module
+@
+text
+@d46 1
+a46 1
+  (define *N* (session/make-parameter "*N*"))
+@
+
+
+1.1.2.6
+log
+@added DOCTYPE declarations
+@
+text
+@d62 12
+a73 15
+    `(*TOP*
+      (*DTD-INFO/PUBLIC* |HTML| "-//W3C//DTD HTML 4.01 Transitional//EN"
+                         "http://www.w3.org/TR/html4/loose.dtd")
+      (html
+       (head
+        (title "AJAX Counter")
+        (link (@@ (href-c "/css/default.css")
+                 (rel "stylesheet")
+                 (type "text/css")))
+        ;; includes AJAX js library
+        (script (@@ (src-c "/js/prototype.js") (type "text/javascript"))))
+       (body
+        (h3 "AJAX Counter")
+        (p (@@ (id "counter"))
+         ,(inc*N*)) ; note that *N* itself is not passed
+d75 5
+a79 5
+        (p (a (@@ (update "counter") ; update the paragraph above
+                 (href-p ,(lambda (req) (send-counter)))
+                 (options ((method "'get'"))))
+              "Increment >"))
+        (p (a (@@ (href-c "/")) "^ Home"))))))
+@
+
+
+1.1.2.7
+log
+@now outputs compliant xhtml
+@
+text
+@d32 1
+a32 1
+;;; session variable
+d35 1
+a35 1
+(require-library 'siscweb/xhtml)
+d42 1
+a42 1
+  (import siscweb/xhtml)
+d57 1
+a57 1
+    (send-xhtml/back
+d63 3
+a65 5
+      (*DTD-INFO/PUBLIC* "html"
+                         "-//W3C//DTD XHTML 1.0 Strict//EN"
+                         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd")
+      (html (@@ (xmlns "http://www.w3.org/1999/xhtml")
+               (xml:lang "en") (lang "en"))
+d72 2
+a73 3
+        (script (@@ (src-c "/js/prototype.js")
+                   (type "text/javascript"))))
+        (body
+d75 1
+a75 1
+        (p (@@ (id "counter") (name "counter"))
+d85 1
+a85 1
+    (send-xhtml/back
+@
+
+
+1.1.2.8
+log
+@reverted example to use srfi-39 parameters again
+@
+text
+@d32 1
+a32 1
+;;; dynamically scoped variable -- the Scheme equivalent of a session variable.
+d35 2
+a36 3
+(require-library 'sisc/libs/srfi/srfi-39) ; parameter objects
+
+(require-library 'siscweb/html)
+d42 2
+a43 4
+  (import srfi-39)
+
+  (import siscweb/html)
+  (import util/misc)
+d45 2
+a46 4
+  ;; "session" variable; note that it becomes "per user" (sort of)
+  ;; only if parameterized at the application entry point; otherwise
+  ;; it would be shared among all users
+  (define *N* (make-parameter 0))
+d56 3
+a58 3
+    (parameterize ((*N* 0))
+      (send-html/back
+       (make-counter-page))))
+d62 24
+a85 18
+    `(html
+      (head
+       (title "AJAX Counter")
+       (link (@@ (href-c "/css/default.css")
+                (rel "stylesheet")
+                (type "text/css")))
+       ;; includes AJAX js library
+       (script (@@ (src-c "/js/prototype.js") (type "text/javascript"))))
+      (body
+       (h3 "AJAX Counter")
+       (p (@@ (id "counter"))
+        ,(inc*N*)) ; note that *N* itself is not passed
+
+       (p (a (@@ (update "counter") ; update the paragraph above
+                (href-p ,(lambda (req) (send-counter)))
+                (options ((method "'get'"))))
+             "Increment >"))
+       (p (a (@@ (href-c "/")) "^ Home")))))
+d88 1
+a88 1
+    (send-html/back
+@
+
+
+1.1.2.9
+log
+@substituted deprecated ajax (a (@@ (update ...) ...) ...) with manual
+string generation (not as bad as it sounds)
+@
+text
+@a36 1
+(require-library 'siscweb/forward)
+a44 1
+  (import siscweb/forward)
+d80 3
+a82 4
+       (p (a (@@ (href "#")
+                (onclick
+                 ,(format "new Ajax.Updater('counter', '~a', {method : 'get'});"
+                          (forward/store! (lambda (req) (send-counter))))))
+@
+
+
+1.1.2.10
+log
+@now uses forward/dynenv/store! to capture srfi-39 params
+@
+text
+@d85 1
+a85 1
+                          (forward/dynenv/store! (lambda (req) (send-counter))))))
+@
+
+

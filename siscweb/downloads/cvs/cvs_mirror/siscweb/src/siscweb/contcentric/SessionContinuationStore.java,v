@@ -1,0 +1,894 @@
+head	1.4;
+access;
+symbols
+	rel-0-6-dev:1.4.0.4
+	rel-0-5-fix:1.4.0.2
+	rel-0-5:1.4
+	rel-0-5-dev-safe-frames:1.3.4.2.0.2
+	Root_rel-0-5-dev-safe-frames:1.3.4.2
+	rel-0-4-fix-0:1.3
+	rel-0-5-dev:1.3.0.4
+	rel-0-4-fix:1.3.0.2
+	rel-0-3-fix-3:1.2.2.1
+	rel-0-3-fix-2:1.2.2.1
+	rel-0-4-dev-sisc-1-11:1.2.4.1
+	rel-0-3-fix-1:1.2
+	rel-0-4-dev:1.2.0.4
+	rel-0-3-fix:1.2.0.2
+	rel-0-3:1.2
+	rel-0-3-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2007.04.12.03.51.19;	author acolomba;	state Exp;
+branches
+	1.4.2.1
+	1.4.4.1;
+next	1.3;
+
+1.3
+date	2006.09.03.01.42.22;	author acolomba;	state Exp;
+branches
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.11.25.20.46.38;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.10.24.03.44.10;	author acolomba;	state dead;
+branches
+	1.1.2.1;
+next	;
+
+1.1.2.1
+date	2005.10.24.03.44.10;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.11.23.02.31.01;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2006.02.25.17.12.01;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.11.30.03.44.43;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2006.07.08.02.32.35;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2006.07.28.03.06.46;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2006.08.29.03.34.14;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2007.01.05.05.39.00;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2;
+
+1.3.4.2
+date	2007.01.05.05.45.12;	author acolomba;	state Exp;
+branches
+	1.3.4.2.2.1;
+next	1.3.4.3;
+
+1.3.4.3
+date	2007.04.01.23.55.25;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.2.2.1
+date	2007.03.25.03.37.34;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2.2.2;
+
+1.3.4.2.2.2
+date	2007.04.01.20.35.10;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.2.1
+date	2007.09.09.01.59.54;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.4.4.1
+date	2007.10.13.18.49.32;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@merged from rel-0-5-dev
+@
+text
+@/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005-2006
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+package siscweb.contcentric;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.logging.Level;
+
+import javax.servlet.http.HttpSession;
+
+import sisc.data.Procedure;
+import siscweb.util.Environment;
+import siscweb.util.Logger;
+
+public class SessionContinuationStore implements ContinuationStore
+{
+    private final HashMap continuationTables = new HashMap();
+
+
+    public void store(final HttpSession session,
+                      final String groupId,
+                      final String continuationId,
+                      final Procedure procedure,
+                      long ttl,
+                      final Frame frame)
+    {
+        if(ttl < 0) {
+            ttl = Environment.getContinuationTtl();
+        }
+
+        ContinuationTable.getInstance(session).store(groupId, continuationId, procedure, ttl, frame);
+    }
+
+    public Procedure fetch(final HttpSession session, final String continuationId)
+    {
+        ContinuationTable table = ContinuationTable.getInstance(session);
+
+        if(table == null) {
+            return null;
+        }
+
+        return table.fetch(continuationId);
+    }
+
+    public Frame getFrame(final HttpSession session, final String continuationId)
+    {
+        ContinuationTable table = ContinuationTable.getInstance(session);
+
+        if(table == null) {
+            return null;
+        }
+
+        return table.getFrame(continuationId);
+    }
+
+    public void clear(final HttpSession session)
+    {
+        ContinuationTable.getInstance(session).clear();
+    }
+
+    public int purgeExpired()
+    {
+        int n = 0;
+
+        if(Logger.logger.isLoggable(Level.FINE)) {
+            Logger.logger.fine("Purging expired continuations from all sessions.");
+        }
+
+        for(Iterator i = new ArrayList(this.continuationTables.keySet()).iterator(); i.hasNext();) {
+            String sid = (String) i.next();
+            ContinuationTable ct = (ContinuationTable) this.continuationTables.get(sid);
+
+            // the table may have been unregistered in the meanwhile
+            if(ct != null) {
+                n += ct.purgeExpired();
+            }
+        }
+
+        return n;
+    }
+
+    public HashMap getContinuationTables()
+    {
+        return this.continuationTables;
+    }
+
+
+    public void register(ContinuationTable ct)
+    {
+        this.continuationTables.put(ct.getSessionId(), ct);
+    }
+
+    public void unregister(ContinuationTable ct)
+    {
+        this.continuationTables.remove(ct.getSessionId());
+    }
+}
+@
+
+
+1.4.4.1
+log
+@merged from rel-0-5-fix
+@
+text
+@a40 1
+import java.util.Map;
+d51 1
+a51 1
+    private final Map continuationTables = new HashMap();
+d58 1
+a58 1
+                      final long ttl,
+d61 3
+a63 1
+        final long storedTtl = ttl >= 0 ? ttl : Environment.getContinuationTtl();
+d65 1
+a65 1
+        ContinuationTable.getInstance(session).store(groupId, continuationId, procedure, storedTtl, frame);
+d70 5
+a74 1
+        final ContinuationTable table = ContinuationTable.getInstance(session);
+d76 1
+a76 1
+        return table != null ? table.fetch(continuationId) : null;
+d81 5
+a85 1
+        final ContinuationTable table = ContinuationTable.getInstance(session);
+d87 1
+a87 1
+        return table != null ? table.getFrame(continuationId) : null;
+d97 1
+a97 1
+        int purgedCount = 0;
+d103 3
+a105 3
+        for(final Iterator i = new ArrayList(this.continuationTables.keySet()).iterator(); i.hasNext();) {
+            final String sid = (String) i.next();
+            final ContinuationTable continuationTable = (ContinuationTable) this.continuationTables.get(sid);
+d108 2
+a109 2
+            if(continuationTable != null) {
+                purgedCount += continuationTable.purgeExpired();
+d113 1
+a113 1
+        return purgedCount;
+d116 1
+a116 1
+    public Map getContinuationTables()
+d122 1
+a122 1
+    public void register(final ContinuationTable continuationTable)
+d124 1
+a124 1
+        this.continuationTables.put(continuationTable.getSessionId(), continuationTable);
+d127 1
+a127 1
+    public void unregister(final ContinuationTable continuationTable)
+d129 1
+a129 1
+        this.continuationTables.remove(continuationTable.getSessionId());
+@
+
+
+1.4.2.1
+log
+@minor syntactical cleanup
+@
+text
+@a40 1
+import java.util.Map;
+d51 1
+a51 1
+    private final Map continuationTables = new HashMap();
+d58 1
+a58 1
+                      final long ttl,
+d61 3
+a63 1
+        final long storedTtl = ttl >= 0 ? ttl : Environment.getContinuationTtl();
+d65 1
+a65 1
+        ContinuationTable.getInstance(session).store(groupId, continuationId, procedure, storedTtl, frame);
+d70 5
+a74 1
+        final ContinuationTable table = ContinuationTable.getInstance(session);
+d76 1
+a76 1
+        return table != null ? table.fetch(continuationId) : null;
+d81 5
+a85 1
+        final ContinuationTable table = ContinuationTable.getInstance(session);
+d87 1
+a87 1
+        return table != null ? table.getFrame(continuationId) : null;
+d97 1
+a97 1
+        int purgedCount = 0;
+d103 3
+a105 3
+        for(final Iterator i = new ArrayList(this.continuationTables.keySet()).iterator(); i.hasNext();) {
+            final String sid = (String) i.next();
+            final ContinuationTable continuationTable = (ContinuationTable) this.continuationTables.get(sid);
+d108 2
+a109 2
+            if(continuationTable != null) {
+                purgedCount += continuationTable.purgeExpired();
+d113 1
+a113 1
+        return purgedCount;
+d116 1
+a116 1
+    public Map getContinuationTables()
+d122 1
+a122 1
+    public void register(final ContinuationTable continuationTable)
+d124 1
+a124 1
+        this.continuationTables.put(continuationTable.getSessionId(), continuationTable);
+d127 1
+a127 1
+    public void unregister(final ContinuationTable continuationTable)
+d129 1
+a129 1
+        this.continuationTables.remove(continuationTable.getSessionId());
+@
+
+
+1.3
+log
+@merged from rel-0-4-dev
+@
+text
+@d58 2
+a59 1
+                      long ttl)
+d65 1
+a65 1
+        ContinuationTable.getInstance(session).store(session, groupId, continuationId, procedure, ttl);
+d76 12
+a87 1
+        return table.fetch(session, continuationId);
+d92 1
+a92 1
+        ContinuationTable.getInstance(session).clear(session);
+d121 1
+d124 1
+a124 1
+        this.continuationTables.put(ct.getId(), ct);
+a126 1
+
+d129 1
+a129 1
+        this.continuationTables.remove(ct.getId());
+@
+
+
+1.3.4.1
+log
+@continuationtable does not store session anymore, just session id
+@
+text
+@d111 1
+a111 1
+        this.continuationTables.put(ct.getSessionId(), ct);
+d117 1
+a117 1
+        this.continuationTables.remove(ct.getSessionId());
+@
+
+
+1.3.4.2
+log
+@continuationtable methods do not require session object
+@
+text
+@d64 1
+a64 1
+        ContinuationTable.getInstance(session).store(groupId, continuationId, procedure, ttl);
+d75 1
+a75 1
+        return table.fetch(continuationId);
+d80 1
+a80 1
+        ContinuationTable.getInstance(session).clear();
+@
+
+
+1.3.4.3
+log
+@merged from rel-0-5-dev-safe-frames
+@
+text
+@d58 1
+a58 2
+                      long ttl,
+                      final Frame frame)
+d64 1
+a64 1
+        ContinuationTable.getInstance(session).store(groupId, continuationId, procedure, ttl, frame);
+a77 11
+    public Frame getFrame(final HttpSession session, final String continuationId)
+    {
+        ContinuationTable table = ContinuationTable.getInstance(session);
+
+        if(table == null) {
+            return null;
+        }
+
+        return table.getFrame(continuationId);
+    }
+
+a108 1
+
+d114 1
+@
+
+
+1.3.4.2.2.1
+log
+@added getFrame() method
+@
+text
+@a77 11
+    public Frame getFrame(final HttpSession session, final String continuationId)
+    {
+        ContinuationTable table = ContinuationTable.getInstance(session);
+
+        if(table == null) {
+            return null;
+        }
+
+        return table.getFrame(continuationId);
+    }
+
+@
+
+
+1.3.4.2.2.2
+log
+@de-hacked ContinuationGroup
+@
+text
+@d58 1
+a58 2
+                      long ttl,
+                      final Frame frame)
+d64 1
+a64 1
+        ContinuationTable.getInstance(session).store(groupId, continuationId, procedure, ttl, frame);
+a119 1
+
+d125 1
+@
+
+
+1.2
+log
+@merged from rel-0-3-dev
+@
+text
+@d17 1
+a17 1
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005
+d41 1
+d46 2
+a47 2
+import siscweb.web.SessionTracker;
+
+d54 5
+a58 5
+    public void store(final String sessionId,
+            final String groupId,
+            final String continuationId,
+            final Procedure procedure,
+            final long ttl)
+d60 5
+a64 1
+        this.getContinuationTable(sessionId).store(sessionId, groupId, continuationId, procedure, ttl);
+d67 1
+a67 1
+    public Procedure fetch(final String sessionId, final String continuationId)
+d69 1
+a69 1
+        ContinuationTable table = this.getContinuationTable(sessionId);
+d75 1
+a75 1
+        return table.fetch(sessionId, continuationId);
+d78 3
+a80 2
+    public void clear(final String sessionId) {
+        this.getContinuationTable(sessionId).clear(sessionId);
+d83 2
+a84 1
+    public int purgeExpired() {
+d87 4
+a118 13
+
+    public ContinuationTable getContinuationTable(String sid)
+    {
+        HttpSession session = SessionTracker.get(sid);
+
+        // this is a weird bugfix; sometimes the session is
+        // not registered, so we just try to get the ct
+        // from the map directly; if that fails, well, not
+        // much else we can do
+        return session != null
+             ? ContinuationTable.getInstance(session)
+             : (ContinuationTable) this.continuationTables.get(sid);
+    }
+@
+
+
+1.2.2.1
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@d45 2
+d53 5
+a57 5
+    public void store(final HttpSession session,
+                      final String groupId,
+                      final String continuationId,
+                      final Procedure procedure,
+                      final long ttl)
+d59 1
+a59 1
+        ContinuationTable.getInstance(session).store(session, groupId, continuationId, procedure, ttl);
+d62 1
+a62 1
+    public Procedure fetch(final HttpSession session, final String continuationId)
+d64 1
+a64 1
+        ContinuationTable table = ContinuationTable.getInstance(session);
+d70 1
+a70 1
+        return table.fetch(session, continuationId);
+d73 2
+a74 2
+    public void clear(final HttpSession session) {
+        ContinuationTable.getInstance(session).clear(session);
+d108 13
+@
+
+
+1.2.4.1
+log
+@the continuation store now uses the session object instead of just the
+sessionId (simpler and more reliable)
+@
+text
+@d45 2
+d53 5
+a57 5
+    public void store(final HttpSession session,
+                      final String groupId,
+                      final String continuationId,
+                      final Procedure procedure,
+                      final long ttl)
+d59 1
+a59 1
+        ContinuationTable.getInstance(session).store(session, groupId, continuationId, procedure, ttl);
+d62 1
+a62 1
+    public Procedure fetch(final HttpSession session, final String continuationId)
+d64 1
+a64 1
+        ContinuationTable table = ContinuationTable.getInstance(session);
+d70 1
+a70 1
+        return table.fetch(session, continuationId);
+d73 2
+a74 2
+    public void clear(final HttpSession session) {
+        ContinuationTable.getInstance(session).clear(session);
+d108 13
+@
+
+
+1.2.4.2
+log
+@added logging
+@
+text
+@d75 1
+a75 2
+    public int purgeExpired()
+    {
+@
+
+
+1.2.4.3
+log
+@added logging message to purge method
+@
+text
+@a40 1
+import java.util.logging.Level;
+a44 1
+import siscweb.util.Logger;
+d71 1
+a71 2
+    public void clear(final HttpSession session)
+    {
+a78 4
+        if(Logger.logger.isLoggable(Level.FINE)) {
+            Logger.logger.fine("Purging expired continuations from all sessions.");
+        }
+
+@
+
+
+1.2.4.4
+log
+@picks up continuation ttl from the environment, if provided a negative
+number
+@
+text
+@d17 1
+a17 1
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005-2006
+a45 1
+import siscweb.util.Environment;
+d57 1
+a57 1
+                      long ttl)
+a58 4
+        if(ttl < 0) {
+            ttl = Environment.getContinuationTtl();
+        }
+
+@
+
+
+1.1
+log
+@file SessionContinuationStore.java was initially added on branch rel-0-3-dev.
+@
+text
+@d1 121
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 147
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+package siscweb.contcentric;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
+
+import sisc.data.Procedure;
+import siscweb.web.SessionTracker;
+
+
+public class SessionContinuationStore implements ContinuationStore
+{
+    public static SessionContinuationStore getInstance(ServletContext context)
+    {
+        synchronized(context) {
+            SessionContinuationStore continuationManager = (SessionContinuationStore)
+                context.getAttribute("continuation-manager");
+
+            if(continuationManager == null) {
+                continuationManager = new SessionContinuationStore();
+
+                context.setAttribute("continuation-manager",
+                                     continuationManager);
+            }
+
+            return continuationManager;
+        }
+    }
+
+    public static void removeInstance(ServletContext context)
+    {
+        synchronized(context) {
+            context.removeAttribute("continuation-manager");
+        }
+    }
+
+
+    private SessionContinuationStore()
+    { }
+
+
+    private final HashMap continuationTables = new HashMap();
+
+
+    public void store(final String sessionId,
+            final String groupId,
+            final String continuationId,
+            final Procedure procedure,
+            final long ttl)
+    {
+        this.getContinuationTable(sessionId).store(sessionId, groupId, continuationId, procedure, ttl);
+    }
+
+    public Procedure fetch(final String sessionId, final String continuationId)
+    {
+        return this.getContinuationTable(sessionId).fetch(sessionId, continuationId);
+    }
+
+    public void clear(final String sessionId) {
+        this.getContinuationTable(sessionId).clear(sessionId);
+    }
+
+    public int purgeExpired() {
+        int n = 0;
+
+        for(Iterator i = new ArrayList(this.continuationTables.keySet()).iterator(); i.hasNext();) {
+            String sid = (String) i.next();
+            ContinuationTable ct = (ContinuationTable) this.continuationTables.get(sid);
+
+            // the table may have been unregistered in the meanwhile
+            if(ct != null) {
+                n += ct.purgeExpired();
+            }
+        }
+
+        return n;
+    }
+
+    public HashMap getContinuationTables()
+    {
+        return this.continuationTables;
+    }
+
+    public void register(ContinuationTable ct)
+    {
+        this.continuationTables.put(ct.getID(), ct);
+    }
+
+
+    public void unregister(ContinuationTable ct)
+    {
+        this.continuationTables.remove(ct.getID());
+    }
+
+
+
+    public ContinuationTable getContinuationTable(String sid)
+    {
+        HttpSession session = SessionTracker.get(sid);
+
+        // this is a weird bugfix; sometimes the session is
+        // not registered, so we just try to get the ct
+        // from the map directly; if that fails, well, not
+        // much else we can do
+        return session != null
+             ? ContinuationTable.getInstance(session)
+             : (ContinuationTable) this.continuationTables.get(sid);
+    }
+
+}
+@
+
+
+1.1.2.2
+log
+@not a singleton anymore (see ContinuationStoreSingletonDecorator);
+eliminated a source of sporadic NPEs
+@
+text
+@d41 1
+a41 1
+
+d50 29
+d93 1
+a93 7
+        ContinuationTable table = this.getContinuationTable(sessionId);
+
+        if(table == null) {
+            return null;
+        }
+
+        return table.fetch(sessionId, continuationId);
+d123 1
+a123 1
+        this.continuationTables.put(ct.getId(), ct);
+d129 1
+a129 1
+        this.continuationTables.remove(ct.getId());
+d132 2
+d146 1
+@
+
+

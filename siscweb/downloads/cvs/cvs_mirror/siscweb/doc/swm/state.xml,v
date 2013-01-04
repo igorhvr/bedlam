@@ -1,0 +1,2411 @@
+head	1.3;
+access;
+symbols
+	rel-0-6-dev:1.3.0.4
+	rel-0-5-fix:1.3.0.2
+	rel-0-5:1.3
+	rel-0-5-dev-safe-frames:1.2.4.2.0.2
+	Root_rel-0-5-dev-safe-frames:1.2.4.2
+	rel-0-4-fix-0:1.2
+	rel-0-5-dev:1.2.0.4
+	rel-0-4-fix:1.2.0.2
+	rel-0-3-fix-3:1.1.4.3
+	rel-0-3-fix-2:1.1.4.2
+	rel-0-3-fix:1.1.0.4
+	rel-0-4-dev-sisc-1-11:1.1.2.6
+	rel-0-4-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2007.04.12.03.51.15;	author acolomba;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2006.09.03.01.42.24;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.12.11.03.00.30;	author acolomba;	state dead;
+branches
+	1.1.2.1
+	1.1.4.1;
+next	;
+
+1.1.2.1
+date	2005.12.11.03.00.30;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2005.12.14.22.46.55;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2005.12.15.05.08.26;	author acolomba;	state Exp;
+branches;
+next	1.1.2.4;
+
+1.1.2.4
+date	2006.02.22.04.27.21;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5;
+
+1.1.2.5
+date	2006.02.24.04.17.27;	author acolomba;	state Exp;
+branches;
+next	1.1.2.6;
+
+1.1.2.6
+date	2006.02.25.15.28.56;	author acolomba;	state Exp;
+branches;
+next	1.1.2.7;
+
+1.1.2.7
+date	2006.04.11.02.58.37;	author acolomba;	state Exp;
+branches;
+next	1.1.2.8;
+
+1.1.2.8
+date	2006.04.12.02.46.52;	author acolomba;	state Exp;
+branches;
+next	1.1.2.9;
+
+1.1.2.9
+date	2006.08.12.13.12.40;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.1.4.1
+date	2005.12.11.03.00.30;	author acolomba;	state dead;
+branches;
+next	1.1.4.2;
+
+1.1.4.2
+date	2006.02.25.17.12.07;	author acolomba;	state Exp;
+branches;
+next	1.1.4.3;
+
+1.1.4.3
+date	2006.04.15.15.55.29;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2006.12.02.22.07.23;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2007.01.27.04.22.04;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2007.04.01.03.31.53;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2007.04.02.03.46.21;	author acolomba;	state Exp;
+branches;
+next	1.2.4.5;
+
+1.2.4.5
+date	2007.04.03.23.42.13;	author acolomba;	state Exp;
+branches;
+next	1.2.4.6;
+
+1.2.4.6
+date	2007.04.04.21.36.05;	author acolomba;	state Exp;
+branches;
+next	1.2.4.7;
+
+1.2.4.7
+date	2007.04.08.14.37.53;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@merged from rel-0-5-dev
+@
+text
+@<chapter id="state">
+  <title>Managing Program State</title>
+
+  <section id="stateful">
+    <title>Introduction to Statefulness</title>
+
+    <section id="state-traditional">
+      <title>State in Traditional Web Applications</title>
+
+      <para>
+        Introductions to web programming often mention the
+        statelessness of the HTTP protocol, to then describe how cookies
+        and sessions solve the problem. This is not a complete solution
+        however: being &quot;sessionful&quot; is not the same as being
+        &quot;stateful.&quot;
+      </para>
+
+      <para>
+        Cookies and sessions are mechanisms laid on top of the HTTP
+        protocol respectively to: a) allow an application to recognize
+        two requests coming from the same browser as such, and b) to
+        store data common to such requests.
+      </para>
+
+      <para>
+        Neither cookies nor sessions completely address the issue of
+        statelesness because, while programs have the means to
+        associate two requests to a given user (as they contain the
+        same cookie), they have no means by which to associate two
+        requests as being part of the same navigation flow. It is in
+        fact possible to manually place requests out of sync with
+        program state, and often trigger incorrect
+        behavior. Traditional web applications are thus less like a
+        program with a GUI interface and more like an API open to the
+        world. Forced browsing, or even using the back button, can
+        cause an application to misbehave in ways that are not easily
+        foreseeable as application complexity increases.
+      </para>
+
+      <para>
+        Aside from state, the Session object is common to all requests
+        from the same browser, so simply using a web application from
+        two windows can produce concurrency problems such as loss of
+        consistency or race conditions. Moreover, since the session is
+        a global scope for the application, in fact the only scope
+        that traditionally persists from request to request,
+        developers are unable to take advantage of the finer scoping
+        mechanisms available in modern programming languages.
+      </para>
+
+      <para>
+        One last major issue with traditional web applications is that
+        they are made of short-lived code snippets which, after
+        parsing the request in the context of the session, generate a
+        response and exit. Because their state is lost, it is
+        impossible to use structured programming techniques in code
+        spanning multiple requests. Even the simplest for-loop must be
+        expressed in terms of a (global) session variable increment
+        and a GOTO (HREF).
+      </para>
+    </section>
+
+    <section id="state-continuation">
+      <title>Continuations and State</title>
+
+      <para>
+        Continuations afford a truly stateful approach. When a program
+        generates a response, it suspends its execution instead of
+        exiting. This suspended state is a continuation, and it
+        includes stack and variables in scope.  When the execution is
+        resumed by the subsequent request, stack and variables are as
+        they were left -- no manual storage in the session is
+        needed.
+      </para>
+
+      <para>
+        &SISCweb;, like other similar frameworks, is able to determine
+        which requests are associated with which continuations by
+        branding each request and its corresponding continuation with
+        a unique, cryptographically strong hash.
+      </para>
+
+      <para>
+        Branding reduces the issue of the back button because any
+        request originating from a page in the browser history is
+        associated with a unique continuation. Re-submitting the same
+        request results in the same code being run, with the same
+        local variables and stack it had at the time it was
+        suspended. A program written in functional style (i.e. with no
+        side effects) will be completely immune to the back button.
+      </para>
+
+      <para>
+        Saving the local state means that a for-loop can be written at
+        the language level. (The <ulink
+        url="http://cvs.sourceforge.net/viewcvs.py/siscweb/siscweb/examples/scm/examples/hello-world.scm?view=markup">Polyglot
+        Hello World</ulink> example included with &SISCweb;
+        demonstrates this feature.)  Saving the stack also means that
+        an entire navigation flow can be represented as a subroutine
+        returning a value, rather than as a sequence of code snippets
+        connected by GOTOs (HREFs) finally depositing a value in the
+        global scope.
+      </para>
+    </section>
+
+    <section id="state-finer">
+      <title>Finer Statefulness</title>
+
+      <para>
+        Most complex applications will require a finer amount of
+        control over state. For instance, a shopping cart should
+        reflect the most recent operations even if the user were to
+        backtrack by a few pages and resume shopping from a point in
+        the navigation history. SRFI-39 or plain session variables can
+        be used in such cases.
+      </para>
+
+      <para>
+        In other cases state is more closely dependent to the specific
+        page, such as in the case of sorting a table in the
+        browser. The sorting order should behave consistently in the
+        presence of backtracking, cloning, and concurrent requests.
+      </para>
+
+      <para>
+        A possible solution for these cases is state-passing style,
+        where a structure is passed from continuation to continuation
+        and updated non-destructively. This can be somewhat
+        inconvenient though, so instead &SISCweb; implements Web
+        Cells, a dynamic scoping mechanism that follows the page flow
+        and branches with backtracking and cloning.
+      </para>
+    </section>
+  </section>
+
+  <section id="parameters">
+    <title>State with SRFI-39 Parameter Objects</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>srfi-39</emphasis>)
+      </emphasis>
+    </para>
+
+    <para>
+      A complete treatment of parameters is available in <ulink
+      url="http://srfi.schemers.org/srfi-39/">SRFI-39</ulink>. This
+      section is concerned with the use of the dynamic environment to
+      maintain state shared by all requests for the same user in the
+      same execution flow.
+    </para>
+
+    <para>
+      SRFI-39 parameters are essentially dynamically-scoped
+      variables. They can be defined in the global or the module scope
+      and then bound to the dynamic scope -- the scope of the
+      execution flow -- in the application entry point through the
+      <function>parameterize</function> form.
+    </para>
+
+    <para>
+      When using <function>send-*/[suspend|forward]</function>, the
+      parameters, being part of the dynamic environment, are captured
+      in the suspended state -- the suspension of the program
+      execution is transparent to parameter bindings.
+    </para>
+
+    <para>
+      However procedures stored with
+      <function>@@href-p</function>-style attributes or the
+      <function>forward/store!</function> procedure will run in the
+      base dynamic environment, and thus will see fresh values of the
+      parameters. In those cases on can use
+      <function>forward/dynenv/store!</function>, which instead
+      preserves the dynamic environment.
+    </para>
+
+    <para>
+      The <ulink
+      url="http://cvs.sourceforge.net/viewcvs.py/siscweb/siscweb/examples/scm/examples/counter-parameter.scm?view=markup">Counter
+      with SRFI-39 Parameters</ulink> example demonstrates this
+      technique.
+    </para>
+  </section>
+
+  <section id="webcells">
+    <title>State with Web Cells</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>siscweb/webcells</emphasis>)
+      </emphasis>
+    </para>
+
+    <para>
+      Web Cells are a way to track program state according to the
+      navigation flow. They are described in full in the paper <ulink
+      url="http://library.readscheme.org/servlets/cite.ss?pattern=McCarthySK-Scheme2006">Interaction-Safe
+      State for the Web</ulink>.
+    </para>
+
+    <para>
+      In essence, cells establish a dynamic scope over the navigation
+      path of a user. Successive pages can overshadow values of
+      bindings set in previous pages, but do not destroy them.
+    </para>
+
+    <para>
+      If a user backtracks the browser window, previous values are
+      again visible. If the user clones the window and proceeds
+      through two different navigation branches, each branch sees the
+      values it overshadows.
+    </para>
+
+    <para>
+      The <ulink
+      url="http://cvs.sourceforge.net/viewcvs.py/siscweb/siscweb/examples/scm/examples/counter-webcells.scm?view=markup">Counter
+      with Webcells</ulink> example demonstrates this technique.
+    </para>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>webcell/make</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>&lt;cell&gt;</type>
+          <methodname>webcell/make</methodname>
+          <methodparam choice="opt">
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>default-value</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Creates a cell with the given
+            <parameter>default-value</parameter> with the specified
+            name. Please note that <literal>webcell/make</literal>
+            is a macro, so <parameter>name</parameter> is an
+            identifier, not a symbol.
+          </para>
+
+          <para>
+            If <parameter>name</parameter> is omitted, a random name
+            is generated. Omitting a specific name is useful to avoid
+            name collisions (since cells are dynamically, not
+            lexically, scoped). However if it is expected that
+            sessions be serialized across context or server restarts,
+            it may be important to guarantee that cells defined in the
+            toplevel or int the module scope carry the same name.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>webcell/make-parameter</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>cell-parameter-proc</type>
+          <methodname>webcell/make-parameter</methodname>
+          <methodparam choice="opt">
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>default-value</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Creates a parameter procedure in the sense of SRFI-39. As
+            in the case of <function>webcell/make</function>, the
+            <parameter>name</parameter> parameter is optional, but
+            recommended if maintaining the same name across context or
+            server restarts is important.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>webcell/set!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>undefined</type>
+          <methodname>webcell/set!</methodname>
+          <methodparam>
+            <parameter>cell</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>value</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Sets the content of the given <parameter>cell</parameter>
+            to the specified <parameter>value</parameter>.
+          </para>
+
+          <para>
+            Of course the specified value is only accessible to the
+            current and successive request.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>webcell/ref</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>value</type>
+          <methodname>webcell/ref</methodname>
+          <methodparam>
+            <parameter>cell</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the value of the specified <parameter>cell</parameter>
+            in the context of the current request.
+          </para>
+
+          <para>
+            If the current request did not set a value already, the
+            value will be looked up from the previous request (leading
+            to the current), and then the previous again.
+          </para>
+
+          <para>
+            If no value can be found through the history of requests,
+            then the cell's default value is returned.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+  </section>
+
+  <section id="session-parameters">
+    <title>State with the Session Object</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>siscweb/session</emphasis>)
+      </emphasis>
+      <sbr/>
+      &locatedin;
+      <emphasis role="bold">
+        siscweb.jar
+      </emphasis>
+    </para>
+
+    <para>
+      In some situations a global, per-user scope may be
+      desirable. This approach is more prone to concurrency
+      problems, but its semantics is very straightforward.
+    </para>
+
+    <para>
+      The Session object can be accessed via a syntax similar to that
+      of <ulink
+      url="http://srfi.schemers.org/srfi-39/">SRFI-39</ulink>
+      parameters, or via Scheme wrappers around the
+      <function>Session.get/setAttribute()</function> calls. While the
+      former is appropriate for storing Scheme values, the latter is
+      provided as a means to store and retrieve Java objects (or
+      <function>java-wrap</function>ped Scheme values.)
+    </para>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/make-parameter</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>proc</type>
+          <methodname>session/make-parameter</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a procedure <function>proc</function> that, when
+            invoked, sets or retrieves a Scheme value to/from the a
+            Session attribute named <parameter>name</parameter>,
+            depending on whether a value is passed or not to
+            <procedure>proc</procedure>.  If <function>proc</function>
+            is passed the &f; value, the attribute is removed from the
+            Session object altogether.
+          </para>
+        </blockquote>
+      </para>
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+(module security
+  (define auth-token (session/make-parameter "auth-key"))
+
+  ;; sets an auth token in the session object
+  (define (login usr pwd)
+    (auth-token (make-token usr pwd))))
+          ]]>
+        </programlisting>
+      </informalexample>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/get-java-attribute</primary>
+          <primary>session/get-java-attribute-names</primary>
+          <primary>session/remove-java-attribute!</primary>
+          <primary>session/set-java-attribute!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>jobject</type>
+          <methodname>session/get-java-attribute</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <sbr/>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>list</type>
+          <methodname>session/get-java-attribute-names</methodname>
+        </methodsynopsis>
+        <sbr/>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>session/set-java-attribute!</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>jobject</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <sbr/>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+          <methodname>session/set-java-attribute!</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>jobject</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            These functions access Java attributes as session
+            objects. Complete descriptions are given in <xref
+            linkend="session"/>.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+  </section>
+</chapter>
+@
+
+
+1.2
+log
+@merged from rel-0-4-dev
+@
+text
+@d7 127
+a133 98
+    <para>
+      As mentioned in the introduction, &SISCweb; facilitates writing
+      stateful web applications. Introductions to web programming
+      often mention the statelessness of the HTTP protocol, an issue
+      then resolved by using cookies and sessions. This is not
+      completely accurate, in the sense that being
+      &quot;sessionful&quot; does not completely address the issue of
+      statelessness.
+    </para>
+
+    <para>
+      Cookies and sessions are mechanisms laid on top of the HTTP
+      protocol respectively to: a) allow an application to recognize
+      two requests coming from the same browser as such, and b) to
+      store data common to such requests.
+    </para>
+
+    <para>
+      Neither cookies nor sessions address the issue of state because,
+      while programs have the means to associate two requests to a
+      given user (because they contain the same cookie), they have no
+      means by which to associate two requests as being part of the
+      same navigation flow. It is in fact possible to manually place
+      requests out of sync with program state, and often trigger
+      incorrect behavior. Traditional web applications are thus less
+      like a program with a GUI interface and more like an API open to
+      the world. Forced browsing, or even using the back button, can
+      cause an application to misbehave in ways that are not easily
+      foreseeable as application complexity increases.
+    </para>
+
+    <para>
+      Since the Session object is common to all requests from the same
+      browser, just using a web application from two windows can
+      produce concurrency problems such as loss of consistency or
+      race conditions. Moreover, since the session is a global scope
+      for the application, and the only scope that persists from
+      request to request, developers are unable to take advantage of
+      the finer scoping mechanisms available in modern programming
+      languages.
+    </para>
+
+    <para>
+      Another major issue with traditional web applications is that
+      they are made of short-lived code snippets which, after parsing
+      the request in the context of the session, generate a response
+      and exit. Because their state is lost, it is impossible to use
+      structured programming techniques in code spanning multiple
+      requests. Even the simplest for-loop must be expressed in terms
+      of a (global) session variable increment and a GOTO (HREF).
+    </para>
+
+    <para>
+      Continuations afford a truly stateful approach. When a program
+      generates a response, it suspends its execution instead of
+      exiting. This suspended state is a continuation, and it includes
+      stack and variables in scope.  When the execution is resumed by
+      the subsequent request, stack and variables are as they were
+      left -- no manual storage in the session is needed. Furthermore,
+      &SISCweb; is able to determine which requests are associated
+      with which continuations by branding each request and its
+      corresponding continuation with a unique, cryptographically
+      strong hash.
+    </para>
+
+    <para>
+      Branding each request reduces the issue of the back button
+      because any request originating from a page in the browser
+      history is associated with a unique continuation. Re-submitting
+      the same request results in the same code being run, with the
+      same local variables and stack it had at the time it was
+      suspended. A program written in functional style (i.e. with no
+      side effects) will be completely immune to the back button.
+    </para>
+
+    <para>
+      Saving the local state means that a for-loop can be written at
+      the language level. (The <ulink
+      url="http://cvs.sourceforge.net/viewcvs.py/siscweb/siscweb/examples/scm/examples/hello-world.scm?view=markup">Polyglot
+      Hello World</ulink> example included with &SISCweb;
+      demonstrates this feature.)  Saving the stack means that an
+      entire navigation flow can be represented as a subroutine
+      returning a value, rather than as a sequence of code snippets
+      connected by GOTOs finally depositing a value in the global
+      scope.
+    </para>
+
+    <para>
+      However, most complex applications will require some amount of
+      side effects. For instance a shopping cart should reflect the
+      most recent operations even if the user were to backtrack by a
+      few pages and resume shopping from a point in the navigation
+      history.  While it is possible to pass such shared objects --
+      cart, user data, etc. -- by reference from function to function,
+      this is often inconvenient. &SISCweb; provides two ways to
+      store data common to all functions but partitioned by execution
+      flow or user.
+    </para>
+d147 5
+a151 5
+      A complete treatment of parameters is available in the <ulink
+      url="http://srfi.schemers.org/srfi-39/">SRFI-39
+      document</ulink>. This section is concerned with the use of the
+      dynamic environment to maintain state shared by all requests for
+      the same user in the same execution flow.
+d161 1
+d168 1
+d178 1
+d180 3
+a182 1
+      The Counter sisclet in the &SISCweb; examples demonstrates this
+d187 170
+d374 2
+a375 3
+      desirable. While this approach is more prone to concurrency
+      problems, its semantics are clearer than the dynamic extent of
+      SRFI-39 parameters.
+d379 2
+a380 2
+      In these cases the Session object can be accessed via a syntax
+      similar to that of <ulink
+d419 2
+a420 2
+            (module security
+              (define auth-token (session/make-parameter "auth-key"))
+d422 3
+a424 4
+              ;; sets an auth token in the session object
+              (define (login usr pwd)
+                (auth-token (make-token usr pwd)))
+            )
+a486 40
+  <section id="parameters-vs-session">
+    <title>SRFI-39 Parameters vs. Session Attributes</title>
+
+    <para>
+      The choice between using SRFI-39 parameters vs. Session attributes lies in the desired scope.
+    </para>
+    <para>
+      SRFI-39 parameters have two scopes: a) lexical, determined by where the parameter is defined, and b) dynamic, determined by the use of the <function>parameterize</function> form.
+    </para>
+
+    <para>
+      The lexical scope is useful to avoid name collisions, since two
+      modules of the same application are free to use parameters with
+      the same name, but in different scopes.
+    </para>
+
+    <para>
+      The dynamic scope allows to avoid collisions on the same datum
+      between two parallel navigation flows by the same user.
+    </para>
+
+    <para>
+      On the other hand, Session attributes only have one global
+      scope. Not only different parts of the application can interfere
+      with each other if they use the same Session attribute name, but
+      even a single piece of code can interfere with itself when used
+      within two navigational flows at the same time.
+    </para>
+
+    <para>
+      Because web applications are intrinsically concurrent and
+      re-entrant, the level of isolation among different components
+      and different execution flows should be chosen carefully. Scheme
+      variables, SRFI-39 parameters and Session variables all offer
+      different trade-off points in the isolation spectrum. Choosing
+      among them may not always be straightforward, but they afford
+      allows a degree of control not normally found in web
+      programming.
+    </para>
+  </section>
+@
+
+
+1.2.4.1
+log
+@minor changes
+@
+text
+@d8 7
+a14 6
+      As mentioned in the introduction, &SISCweb; facilitates
+      writing stateful web applications. Introductions to web
+      programming often mention the statelessness of the HTTP protocol,
+      to then describe how cookies and sessions solve the problem. This
+      is not a complete solution however; being &quot;sessionful&quot;
+      is not the same as being &quot;stateful.&quot;
+d25 11
+a35 12
+      Neither cookies nor sessions completely address the issue of
+      statelesness because, while programs have the means to associate
+      two requests to a given user (because they contain the same
+      cookie), they have no means by which to associate two requests
+      as being part of the same navigation flow. It is in fact
+      possible to manually place requests out of sync with program
+      state, and often trigger incorrect behavior. Traditional web
+      applications are thus less like a program with a GUI interface
+      and more like an API open to the world. Forced browsing, or even
+      using the back button, can cause an application to misbehave in
+      ways that are not easily foreseeable as application complexity
+      increases.
+d292 1
+a292 3
+      SRFI-39 parameters have two scopes: a) lexical, determined by
+      where the parameter is defined, and b) dynamic, determined by
+      the use of the <function>parameterize</function> form.
+@
+
+
+1.2.4.2
+log
+@typo
+@
+text
+@d322 3
+a324 2
+      among them may not always be straightforward, but they afford a
+      degree of control not normally found in web programming.
+@
+
+
+1.2.4.3
+log
+@added webcell section
+@
+text
+@d7 98
+a104 127
+    <section id="state-traditional">
+      <title>State in Traditional Web Applications</title>
+
+      <para>
+        Introductions to web programming often mention the
+        statelessness of the HTTP protocol, to then describe how cookies
+        and sessions solve the problem. This is not a complete solution
+        however: being &quot;sessionful&quot; is not the same as being
+        &quot;stateful.&quot;
+      </para>
+
+      <para>
+        Cookies and sessions are mechanisms laid on top of the HTTP
+        protocol respectively to: a) allow an application to recognize
+        two requests coming from the same browser as such, and b) to
+        store data common to such requests.
+      </para>
+
+      <para>
+        Neither cookies nor sessions completely address the issue of
+        statelesness because, while programs have the means to
+        associate two requests to a given user (as they contain the
+        same cookie), they have no means by which to associate two
+        requests as being part of the same navigation flow. It is in
+        fact possible to manually place requests out of sync with
+        program state, and often trigger incorrect
+        behavior. Traditional web applications are thus less like a
+        program with a GUI interface and more like an API open to the
+        world. Forced browsing, or even using the back button, can
+        cause an application to misbehave in ways that are not easily
+        foreseeable as application complexity increases.
+      </para>
+
+      <para>
+        Aside from state, the Session object is common to all requests
+        from the same browser, so simply using a web application from
+        two windows can produce concurrency problems such as loss of
+        consistency or race conditions. Moreover, since the session is
+        a global scope for the application, in fact the only scope
+        that traditionally persists from request to request,
+        developers are unable to take advantage of the finer scoping
+        mechanisms available in modern programming languages.
+      </para>
+
+      <para>
+        One last major issue with traditional web applications is that
+        they are made of short-lived code snippets which, after
+        parsing the request in the context of the session, generate a
+        response and exit. Because their state is lost, it is
+        impossible to use structured programming techniques in code
+        spanning multiple requests. Even the simplest for-loop must be
+        expressed in terms of a (global) session variable increment
+        and a GOTO (HREF).
+      </para>
+    </section>
+
+    <section title="state-continuation">
+      <title>Continuations and State</title>
+
+      <para>
+        Continuations afford a truly stateful approach. When a program
+        generates a response, it suspends its execution instead of
+        exiting. This suspended state is a continuation, and it
+        includes stack and variables in scope.  When the execution is
+        resumed by the subsequent request, stack and variables are as
+        they were left -- no manual storage in the session is
+        needed.
+      </para>
+
+      <para>
+        &SISCweb;, like other similar frameworks, is able to determine
+        which requests are associated with which continuations by
+        branding each request and its corresponding continuation with
+        a unique, cryptographically strong hash.
+      </para>
+
+      <para>
+        Branding reduces the issue of the back button because any
+        request originating from a page in the browser history is
+        associated with a unique continuation. Re-submitting the same
+        request results in the same code being run, with the same
+        local variables and stack it had at the time it was
+        suspended. A program written in functional style (i.e. with no
+        side effects) will be completely immune to the back button.
+      </para>
+
+      <para>
+        Saving the local state means that a for-loop can be written at
+        the language level. (The <ulink
+        url="http://cvs.sourceforge.net/viewcvs.py/siscweb/siscweb/examples/scm/examples/hello-world.scm?view=markup">Polyglot
+        Hello World</ulink> example included with &SISCweb;
+        demonstrates this feature.)  Saving the stack also means that
+        an entire navigation flow can be represented as a subroutine
+        returning a value, rather than as a sequence of code snippets
+        connected by GOTOs (HREFs) finally depositing a value in the
+        global scope.
+      </para>
+    </section>
+
+    <section id="state-finer">
+      <title>Finer Statefulness</title>
+
+      <para>
+        Most complex applications will require a finer amount of
+        control over state. For instance, a shopping cart should
+        reflect the most recent operations even if the user were to
+        backtrack by a few pages and resume shopping from a point in
+        the navigation history. SRFI-39 or plain session variables can
+        be used in such cases.
+      </para>
+
+      <para>
+        In other cases state is more closely dependent to the specific
+        page, such as in the case of sorting a table in the
+        browser. The sorting order should behave consistently in the
+        presence of backtracking, cloning, and concurrent requests.
+      </para>
+
+      <para>
+        A possible solution for these cases is state-passing style,
+        where a structure is passed from continuation to continuation
+        and updated non-destructively. This can be somewhat
+        inconvenient though, so instead &SISCweb; implements Web
+        Cells, a dynamic scoping mechanism that follows the page flow
+        and branches with backtracking and cloning.
+      </para>
+    </section>
+d118 5
+a122 5
+      A complete treatment of parameters is available in <ulink
+      url="http://srfi.schemers.org/srfi-39/">SRFI-39</ulink>. This
+      section is concerned with the use of the dynamic environment to
+      maintain state shared by all requests for the same user in the
+      same execution flow.
+a131 1
+
+a137 1
+
+a146 31
+
+    <para>
+      The <ulink
+      url="http://cvs.sourceforge.net/viewcvs.py/siscweb/siscweb/examples/scm/examples/counter.scm?view=markup">Counter</ulink>
+      example (no put intended) demonstrates this technique.
+    </para>
+  </section>
+
+  <section id="webcells">
+    <title>State with Web Cells</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>siscweb/webcells</emphasis>)
+      </emphasis>
+    </para>
+
+    <para>
+      Web Cells are a way to track program state according to the
+      navigation flow. They are described in full in the paper <ulink
+      url="http://library.readscheme.org/servlets/cite.ss?pattern=McCarthySK-Scheme2006">Interaction-Safe
+      State for the Web</ulink>.
+    </para>
+
+    <para>
+      In essence, cells establish a dynamic scope over the navigation
+      path of a user. Successive pages can overshadow values of
+      bindings set in previous pages, but do not destroy them.
+    </para>
+
+d148 2
+a149 4
+      If a user backtracks the browser window, previous values are
+      again visible. If the user clones the window and proceeds
+      through two different navigation branches, each branch sees the
+      values it overshadows.
+a150 152
+
+    <warning>
+      <para>
+        The current implementation maintains a complete history of all
+        the values a cells was given from request to request, even when
+        the corresponding continuation has ceased to exist. (Naively destroying
+        cell values would potentially destroy values looked up in later requests.)
+      </para>
+
+      <para>
+        This is not an intrinsic characteristics of Web Cells, but
+        rather of the current implementation. At this stage it is
+        suggested to store small data items. In a next release a more
+        sophisticated management of cell storage will only preserve
+        cell values that are supposed to be accessible from surviving
+        continuations.
+      </para>
+    </warning>
+
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>webcell/make</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>&lt;cell&gt;</type>
+          <methodname>webcell/make</methodname>
+          <methodparam choice="opt">
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>default-value</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Creates a cell with the given
+            <parameter>default-value</parameter> with the specified
+            name. Please note that <literal>webcell/make</literal>
+            is a macro, so <parameter>name</parameter> is an
+            identifier, not a symbol.
+          </para>
+
+          <para>
+            If <parameter>name</parameter> is omitted, a random name
+            is generated. Omitting a specific name is useful to avoid
+            name collisions (since cells are dynamically, not
+            lexically, scoped). However if it is expected that
+            sessions be serialized across context or server restarts,
+            it may be important to guarantee that cells defined in the
+            toplevel or int the module scope carry the same name.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>webcell/make-parameter</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>cell-parameter-proc</type>
+          <methodname>webcell/make-parameter</methodname>
+          <methodparam choice="opt">
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>default-value</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Creates a parameter procedure in the sense of SRFI-39. As
+            in the case of <function>webcell/make</function>, the
+            <parameter>name</parameter> parameter is optional, but
+            recommended if maintaining the same name across context or
+            server restarts is important.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>webcell/set!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>undefined</type>
+          <methodname>webcell/set!</methodname>
+          <methodparam>
+            <parameter>cell</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>value</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Sets the content of the given <parameter>cell</parameter>
+            to the specified <parameter>value</parameter>.
+          </para>
+
+          <para>
+            Of course the specified value is only accessible to the
+            current and successive request.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>webcell/ref</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>value</type>
+          <methodname>webcell/ref</methodname>
+          <methodparam>
+            <parameter>cell</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns the value of the specified <parameter>cell</parameter>
+            in the context of the current request.
+          </para>
+
+          <para>
+            If the current request did not set a value already, the
+            value will be looked up from the previous request (leading
+            to the current), and then the previous again.
+          </para>
+
+          <para>
+            If no value can be found through the history of requests,
+            then the cell's default value is returned.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+d170 3
+a172 2
+      desirable. This approach is more prone to concurrency
+      problems, but its semantics is very straightforward.
+d176 2
+a177 2
+      The Session object can be accessed via a syntax similar to that
+      of <ulink
+@
+
+
+1.2.4.4
+log
+@removed outdated section
+@
+text
+@d500 41
+@
+
+
+1.2.4.5
+log
+@removed space-safe warning
+@
+text
+@d216 19
+@
+
+
+1.2.4.6
+log
+@minor fixes
+@
+text
+@d63 1
+a63 1
+    <section id="state-continuation">
+@
+
+
+1.2.4.7
+log
+@example formatting; nesting; clarifications
+@
+text
+@d181 2
+a182 3
+      url="http://cvs.sourceforge.net/viewcvs.py/siscweb/siscweb/examples/scm/examples/counter-parameter.scm?view=markup">Counter
+      with SRFI-39 Parameters</ulink> example demonstrates this
+      technique.
+a215 6
+    <para>
+      The <ulink
+      url="http://cvs.sourceforge.net/viewcvs.py/siscweb/siscweb/examples/scm/examples/counter-webcells.scm?view=markup">Counter
+      with Webcells</ulink> example demonstrates this technique.
+    </para>
+
+d412 2
+a413 2
+(module security
+  (define auth-token (session/make-parameter "auth-key"))
+d415 4
+a418 3
+  ;; sets an auth token in the session object
+  (define (login usr pwd)
+    (auth-token (make-token usr pwd))))
+@
+
+
+1.1
+log
+@file state.xml was initially added on branch rel-0-4-dev.
+@
+text
+@d1 325
+@
+
+
+1.1.4.1
+log
+@file state.xml was added on branch rel-0-3-fix on 2006-02-25 17:12:07 +0000
+@
+text
+@@
+
+
+1.1.4.2
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@a0 293
+<chapter id="state">
+  <title>Managing Program State</title>
+
+  <section id="stateful">
+    <title>Introduction to Statefulness</title>
+
+    <para>
+      As mentioned in the introduction, &SISCweb; facilitates writing
+      stateful web applications. Introductions to web programming
+      often mention the statelessness of the HTTP protocol, an issue
+      then resolved by using cookies and sessions. This is not
+      completely accurate, in the sense that being
+      &quot;sessionful&quot; does not completely address the issue of
+      statelessness.
+    </para>
+
+    <para>
+      Cookies and sessions are mechanisms laid on top of the HTTP
+      protocol respectively to allow an application to recognize two
+      requests coming from the same browser as such, and to store data
+      common to such requests.
+    </para>
+
+    <para>
+      Neither cookies nor sessions address the issue of state because
+      while programs have the means to associate two requests to a
+      given user (because they contain the same cookie), they have no
+      means by which to associate two requests as being part of the
+      same navigation flow. It is in fact possible to manually place
+      requests out of sync with program state, and often trigger
+      incorrect behavior. Traditional web applications are thus less
+      like a program with a GUI interface and more like an API open to
+      the world. Forced browsing, or even using the back button, can
+      cause an application to misbehave in ways that are not easily
+      foreseeable as application complexity increases.
+    </para>
+
+    <para>
+      Since the Session object is common to all requests from the same
+      browser, just using a web application from two windows can
+      produce concurrency problems such as loss of consistency or
+      race conditions. Moreover, since the session is a global scope
+      for the application, and the only scope that persists from
+      request to request, developers are unable to take advantage of
+      the finer scoping mechanisms available in modern programming
+      languages.
+    </para>
+
+    <para>
+      Another major issue with traditional web applications is that
+      they are made of short-lived code snippets which, after parsing
+      the request in the context of the session, generate a response
+      and exit. Because their state is lost, it is impossible to use
+      structured programming techniques in code spanning multiple
+      requests. Even the simplest for-loop must be expressed in terms
+      of a (global) session variable increment and a GOTO (HREF).
+    </para>
+
+    <para>
+      Continuations afford a truly stateful approach. When a program
+      generates a response, it suspends its execution instead of
+      exiting. This suspended state is a continuation, and it includes
+      stack and variables in scope.  When the execution is resumed by
+      the subsequent request, stack and variables are as they were
+      left -- no manual storage in the session is needed. Furthermore,
+      &SISCweb; is able to determine which requests are associated
+      with which continuations by branding each request and its
+      corresponding continuation with a unique, cryptographically
+      strong hash.
+    </para>
+
+    <para>
+      Branding each request reduces the issue of the back button
+      because any request originating from a page in the browser
+      history is associated with a unique continuation. Re-submitting
+      the same request results in the same code being run, with the
+      same local variables and stack it had at the time it was
+      suspended. A program written in functional style (i.e. with no
+      side effects) will be completely immune to the back button.
+    </para>
+
+    <para>
+      Saving the local state means that a for-loop can be written at
+      the language level. (The <ulink
+      url="http://cvs.sourceforge.net/viewcvs.py/siscweb/siscweb/examples/scm/examples/hello-world.scm?view=markup">Polyglot
+      Hello World</ulink> example included with &SISCweb;
+      demonstrates this feature.)  Saving the stack means that an
+      entire navigation flow can be represented as a subroutine
+      returning a value, rather than as a sequence of code snippets
+      connected by GOTOs finally depositing a value in the global
+      scope.
+    </para>
+
+    <para>
+      However, most complex applications will require some amount of
+      side effects. For instance a shopping cart should reflect the
+      most recent operations even if the user were to backtrack by a
+      few pages and resume shopping from a point in the navigation
+      history.  While it is possible to pass such shared objects --
+      cart, user data, etc. -- by reference from function to function,
+      this is often inconvenient. &SISCweb; provides a few ways to
+      store data common to all functions but partitioned by execution
+      flow or user.
+    </para>
+  </section>
+
+  <section id="parameters">
+    <title>State with SRFI-39 Parameter Objects</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>srfi-39</emphasis>)
+      </emphasis>
+    </para>
+
+    <para>
+      A complete treatment of parameters is available in the <ulink
+      url="http://srfi.schemers.org/srfi-39/">SRFI-39
+      document</ulink>. This section is concerned with the use of the
+      dynamic environment to maintain state shared by all requests for
+      the same user in the same execution flow.
+    </para>
+
+    <warning>
+      <para>
+        This approach is not currently usable in SISC 1.11 in
+        conjunction to the <function>@@href-p</function>-type
+        attributes. The current implementation of these attributes
+        does not capture the dynamic environment because doing so
+        would also capture non-serializable parts of the toplevel (see
+        <ulink
+        url="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1375026&amp;group_id=23735&amp;atid=379534">SISC
+        bug #1375026</ulink>).  This in turn would create errors when
+        serializing stored continuations to disk or database.
+      </para>
+      <para>
+        Since the bug is now resolved in SISC 1.12 CVS, the feature
+        is here documented in provision to its being available in the
+        next SISCweb version.
+      </para>
+    </warning>
+
+    <para>
+      SRFI-39 parameters are essentially dynamically-scoped
+      variables. They can be defined in the global or the module scope
+      and then bound to the dynamic scope -- the scope of the
+      execution flow -- in the application entry point through the
+      <function>parameterize</function> form. A version of the <ulink
+      url="http://cvs.sourceforge.net/viewcvs.py/siscweb/siscweb/examples/scm/examples/Attic/counter.scm?rev=1.1.2.3&amp;view=markup">&quot;counter&quot;</ulink>
+      example demonstrates this technique.
+    </para>
+  </section>
+
+  <section id="session-parameters">
+    <title>State with the Session Object</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>siscweb/session</emphasis>)
+      </emphasis>
+      <sbr/>
+      &locatedin;
+      <emphasis role="bold">
+        siscweb.jar
+      </emphasis>
+    </para>
+
+    <para>
+      The session object can be accessed via a syntax similar to that of <ulink
+      url="http://srfi.schemers.org/srfi-39/">SRFI-39</ulink>
+      parameters, or via Scheme wrappers around the
+      <function>Session.get/setAttribute()</function> calls. While the
+      former approach is geared towards storing Scheme values, the
+      latter is provided as a means to store and retrieve Java objects
+      (or <function>java-wrap</function>ped Scheme values.)
+    </para>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/make-parameter</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>proc</type>
+          <methodname>session/make-parameter</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a procedure that, when invoked, retrieves or sets
+            attribute <parameter>name</parameter> in the session
+            object. Whether or not the attribute is retrieved or set
+            depends on whether no parameter or one parameter is passed
+            to <function>proc</function>. If <function>proc</function>
+            is applied to the &f; value, the attribute is removed from
+            the session object.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/get-java-attribute</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>javax.lang.Object</type>
+          <methodname>session/get-java-attribute</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Retrieves the value of the Session attribute
+            <parameter>name</parameter> as a Java value.
+          </para>
+        </blockquote>
+      </para>
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+            (session/get-java-attribute "pluto")
+          ]]>
+        </programlisting>
+      </informalexample>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/set-java-attribute!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>undefined</type>
+          <methodname>session/set-java-attribute!</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>java-object</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Sets the Session attribute <parameter>name</parameter> to
+            the Java value <parameter>java-object</parameter>.
+          </para>
+        </blockquote>
+      </para>
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+            (session/set-java-attribute "pluto" (->jstring "3"))
+          ]]>
+        </programlisting>
+      </informalexample>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/get-java-attribute-names</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>list</type>
+          <methodname>session/get-java-attribute-names</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a list of names of attributes in the Session.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+  </section>
+
+</chapter>
+@
+
+
+1.1.4.3
+log
+@merged from rel-0-4-dev
+@
+text
+@d19 3
+a21 3
+      protocol respectively to: a) allow an application to recognize
+      two requests coming from the same browser as such, and b) to
+      store data common to such requests.
+d25 1
+a25 1
+      Neither cookies nor sessions address the issue of state because,
+d101 1
+a101 1
+      this is often inconvenient. &SISCweb; provides two ways to
+d125 19
+d149 3
+a151 20
+      <function>parameterize</function> form.
+    </para>
+    <para>
+      When using <function>send-*/[suspend|forward]</function>, the
+      parameters, being part of the dynamic environment, are captured
+      in the suspended state -- the suspension of the program
+      execution is transparent to parameter bindings.
+    </para>
+    <para>
+      However procedures stored with
+      <function>@@href-p</function>-style attributes or the
+      <function>forward/store!</function> procedure will run in the
+      base dynamic environment, and thus will see fresh values of the
+      parameters. In those cases on can use
+      <function>forward/dynenv/store!</function>, which instead
+      preserves the dynamic environment.
+    </para>
+    <para>
+      The Counter sisclet in the &SISCweb; examples demonstrates this
+      technique.
+d171 1
+a171 9
+      In some situations a global, per-user scope may be
+      desirable. While this approach is more prone to concurrency
+      problems, its semantics are clearer than the dynamic extent of
+      SRFI-39 parameters.
+    </para>
+
+    <para>
+      In these cases the Session object can be accessed via a syntax
+      similar to that of <ulink
+d175 3
+a177 3
+      former is appropriate for storing Scheme values, the latter is
+      provided as a means to store and retrieve Java objects (or
+      <function>java-wrap</function>ped Scheme values.)
+d196 30
+a225 7
+            Returns a procedure <function>proc</function> that, when
+            invoked, sets or retrieves a Scheme value to/from the a
+            Session attribute named <parameter>name</parameter>,
+            depending on whether a value is passed or not to
+            <procedure>proc</procedure>.  If <function>proc</function>
+            is passed the &f; value, the attribute is removed from the
+            Session object altogether.
+d233 1
+a233 7
+            (module security
+              (define auth-token (session/make-parameter "auth-key"))
+
+              ;; sets an auth token in the session object
+              (define (login usr pwd)
+                (auth-token (make-token usr pwd)))
+            )
+a241 3
+          <primary>session/get-java-attribute</primary>
+          <primary>session/get-java-attribute-names</primary>
+          <primary>session/remove-java-attribute!</primary>
+d246 1
+a246 16
+          <type>jobject</type>
+          <methodname>session/get-java-attribute</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+        <sbr/>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>list</type>
+          <methodname>session/get-java-attribute-names</methodname>
+        </methodsynopsis>
+        <sbr/>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>#!void</type>
+d252 1
+a252 1
+            <parameter>jobject</parameter>
+d255 23
+a277 1
+        <sbr/>
+d280 2
+a281 8
+          <type>#!void</type>
+          <methodname>session/set-java-attribute!</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>jobject</parameter>
+          </methodparam>
+d286 1
+a286 3
+            These functions access Java attributes as session
+            objects. Complete descriptions are given in <xref
+            linkend="session"/>.
+d292 1
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 158
+<chapter id="state">
+  <title>Managing Program State</title>
+
+  <section id="stateful">
+    <title>Stateful, not Sessionful</title>
+
+    <para>
+      As mentioned in the introduction, &SISCweb; facilitates writing
+      stateful web applications. In introductions to web programming
+      one often finds a mention of the HTTP protocol statelessness, an
+      issue then resolved using cookies and sessions. This is not
+      completely accurate, in the sense that being
+      &quot;sessionful&quot; does not completely resolve the issue of
+      statelessness.
+    </para>
+
+    <para>
+      Cookies and sessions are mechanisms laid on top of the HTTP
+      protocol respectively to allow an application to recognize two
+      requests coming from the same browser as such, and to store data
+      common to such requests. The purpose being to isolate operations
+      executed by different users.
+    </para>
+
+    <para>
+      Neither cookies nor sessions address the issue of state because
+      no information is conveyed regarding the nature of the request
+      in relation to program state. While programs have the means to
+      associate two requests to a given user because they contain the
+      same cookie, it has no means to associate two requests as being
+      part of the same navigation flow. It is in fact possible to
+      manually place requests out of sync with program state, most
+      often triggering incorrect behavior. Traditional web
+      applications are thus less like a program with a GUI interface
+      and more like an API open to the world. Forced browing, or even
+      using the back button, can make an application misbehave in ways
+      that are not easily forseeable as the application complexity
+      increases.
+    </para>
+
+    <para>
+      Another major issue with traditional web applications is that
+      they are made of short-lived code snippets which, after parsing
+      the request in the context of the session, generate a response
+      and exit.
+    </para>
+
+    <para>
+      Since the session is common to all requests, browsing of the
+      same site from two browser windows can easily produce
+      concurrency problems such as loss of consistency or even race
+      condtions. Moreover, since the session is a global scope for the
+      application and the only scope that persists from request to
+      request, developers are unable to take advantage of the finer
+      scoping mechanisms available in modern programming languages.
+    </para>
+
+    <para>
+      Also, because these snippets are short-lived, there is no real
+      opportunity to use structured programming techniques that span
+      multiple requests. Even the simplest for-loop must be expressed
+      in terms of a (global) variable increment and a GOTO (HREF).
+    </para>
+
+    <para>
+      Continuations enable a truly stateful approach. When a program
+      generates a response, it suspends its execution instead of
+      exiting. This suspended state is a continuation, and includes
+      the stack and local variables.  When the execution is resumed by
+      the subsequent request, stack and local variables are as they
+      were left -- no need for manual storage in the
+      session. Furthermore, &SISCweb; is able to determine which
+      requestsa are associated to which continuations by branding each
+      request and its corresponding continuation with a unique,
+      cryptographically strong hash.
+    </para>
+
+    <para>
+      Branding each requests makes the back button less problematic
+      because any request originating from a page in the browser
+      history is associated to a unique continuation. Re-submitting
+      the same request results in the same code being run, with the
+      same local variables and stack it had at the time it was
+      suspended. A program written in functional style (i.e. no side
+      effects) will be completely immune to the back button.
+    </para>
+
+    <para>
+      Saving the local state means that a for-loop can be written at
+      the language level. (The <ulink
+      url="http://cvs.sourceforge.net/viewcvs.py/siscweb/siscweb/examples/scm/examples/hello-world.scm?view=markup">&quot;Polyglot
+      Hello World&quot;</ulink> example included with &SISCweb;
+      demonstrates this feature.)  Saving the stack means that an
+      entire navigation flow can be represented as a subroutine
+      returning a value, rather than as a sequence of code snippets
+      connected by GOTOs finally depositing a value in the global
+      scope.
+    </para>
+
+    <para>
+      However, most complex applications will require some amount of
+      side effects. For instance a shopping cart should reflect the
+      most recent operations even if the user were to backtrack by a
+      few pages and resume shopping from a point of the navigation
+      history.  While it is possible to pass such shared objects -
+      cart, user data, etc. - by reference from function to function,
+      this is often inconvenient. &SISCweb; provides a few ways to
+      store data common to all functions but partitioned by execution
+      flow or user.
+    </para>
+  </section>
+
+  <section id="parameters">
+    <title>State with SRFI-39 Parameter Objects</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>srfi-39</emphasis>)
+      </emphasis>
+    </para>
+
+    <para>
+      A complete treatment of parameters is available in the <ulink
+      url="http://srfi.schemers.org/srfi-39/">SRFI-39
+      document</ulink>. This section is concerned with the use of the
+      dynamic environment to maintain state shared by all requests for
+      the same user in the same execution flow.
+    </para>
+
+    <note>
+      <para>
+        This approach is not currently usable in conjunction to the
+        <function>@@href-p</function>-type attributes. The current
+        implementation of these attributes does not capture the
+        dynamic environment because doing so would also capture
+        non-serializable parts of the toplevel (see <ulink
+        url="https://sourceforge.net/tracker/index.php?func=detail&amp;aid=1375026&amp;group_id=23735&amp;atid=379534">SISC
+        bug #1375026</ulink>). This in turn would create errors when
+        serializing stored continuations to disk or database.
+      </para>
+      <para>
+        This approach is nevertheless here illustrated in the hope
+        that the bug will be eventually resolved.
+      </para>
+    </note>
+
+    <para>
+      SRFI-39 parameters are essentially dynamically-scoped
+      variables. They can be defined in the global or the module scope
+      and then bound to the dynamic scope -- the scope of the execution
+      flow -- in the application entry point. The <ulink
+      url="http://cvs.sourceforge.net/viewcvs.py/siscweb/siscweb/examples/scm/examples/Attic/counter.scm?rev=1.1.2.3&amp;view=markup">&quot;counter&quot;</ulink>
+      examples demonstrates this technique.
+    </para>
+  </section>
+
+</chapter>
+@
+
+
+1.1.2.2
+log
+@revised mechanics
+@
+text
+@d9 3
+a11 3
+      stateful web applications. Introductions to web programming
+      often mention the statelessness of the HTTP protocol, an issue
+      then resolved by using cookies and sessions. This is not
+d13 1
+a13 1
+      &quot;sessionful&quot; does not completely address the issue of
+d19 4
+a22 3
+      protocol respectively to: a) allow an application to recognize
+      two requests coming from the same browser as such, and b) to
+      store data common to such requests.
+d27 12
+a38 12
+      they do not convey any information regarding the nature of the
+      request in relation to program state. While programs have the
+      means to associate two requests to a given user because they
+      contain the same cookie, they have no means by which to
+      associate two requests as being part of the same navigation
+      flow. It is in fact possible to manually place requests out of
+      sync with program state, most often triggering incorrect
+      behavior. Traditional web applications are thus less like a
+      program with a GUI interface and more like an API open to the
+      world. Forced browsing, or even using the back button, can cause
+      an application to misbehave in ways that are not easily foreseeable
+      as the application complexity increases.
+d50 6
+a55 7
+      same site from two (or more) windows of the same browser can
+      easily produce concurrency problems such as loss of consistency
+      or even race conditions. Moreover, since the session is a global
+      scope for the application and the only scope that persists from
+      request to request, developers are unable to take advantage of
+      the finer scoping mechanisms available in modern programming
+      languages.
+d59 4
+a62 5
+      Also, because the code Qsnippets are short-lived, it is
+      impossible to use structured programming techniques in code
+      spanning multiple requests. Even the simplest for-loop must be
+      expressed in terms of a (global) variable increment and a GOTO
+      (HREF).
+d66 1
+a66 1
+      Continuations afford a truly stateful approach. When a program
+d69 7
+a75 7
+      stack and variables in scope.  When the execution is resumed by
+      the subsequent request, stack and variables are as they were
+      left -- no manual storage in the session is needed. Furthermore,
+      &SISCweb; is able to determine which requests are associated
+      with which continuations by branding each request and its
+      corresponding continuation with a unique, cryptographically
+      strong hash.
+d79 1
+a79 1
+      Branding each request reduces the issue of the back button
+d81 1
+a81 1
+      history is associated with a unique continuation. Re-submitting
+d84 2
+a85 2
+      suspended. A program written in functional style (i.e. with no
+      side effects) will be completely immune to the back button.
+d91 2
+a92 2
+      url="http://cvs.sourceforge.net/viewcvs.py/siscweb/siscweb/examples/scm/examples/hello-world.scm?view=markup">Polyglot
+      Hello World</ulink> example included with &SISCweb;
+d104 3
+a106 3
+      few pages and resume shopping from a point in the navigation
+      history.  While it is possible to pass such shared objects --
+      cart, user data, etc. -- by reference from function to function,
+d137 1
+a137 6
+        non-serializable parts of the toplevel (see
+<ulink
+      url="http://www.graphviz.org">http://www.graphviz.org</ulink>
+
+        <!--
+<ulink
+d139 1
+a139 4
+        bug #1375026</ulink>).
+
+-->
+This in turn would create errors when
+@
+
+
+1.1.2.3
+log
+@added session/*-java* functions
+@
+text
+@d138 11
+a148 3
+        non-serializable parts of the toplevel (see <ulink
+        url="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1375026&amp;group_id=23735&amp;atid=379534">SISC
+        bug #1375026</ulink>).  This in turn would create errors when
+d161 1
+a161 1
+      flow -- in the application entry point. A version of the <ulink
+a166 138
+  <section id="session-paraeters">
+    <title>State with the Session Object</title>
+
+    <para>
+      &requires;
+      <emphasis role="bold">
+        (import <emphasis>siscweb/session</emphasis>)
+      </emphasis>
+      <sbr/>
+      &locatedin;
+      <emphasis role="bold">
+        siscweb.jar
+      </emphasis>
+    </para>
+
+    <para>
+      The session object can be accessed via <ulink
+      url="http://srfi.schemers.org/srfi-39/">SRFI-39</ulink>-style
+      parameters, or via Scheme wrappers around the
+      <function>Session.get/setAttribute()</function> calls. While the
+      former approach is geared towards storing Scheme values, the
+      latter is provided as a means to store and retrieve Java objects
+      (or <function>java-wrap</function>ped Scheme values.)
+    </para>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/make-parameter</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>proc</type>
+          <methodname>session/make-parameter</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a procedure that, when invoked, retrieves or sets
+            attribute <parameter>name</parameter> in the session
+            object. Whether or not the attribute is retrieved or set
+            depends on whether no parameter or one parameter is passed
+            to <function>proc</function>. If <function>proc</function>
+            is applied to the &f; value, the attribute is removed from
+            the session object.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/get-java-attribute</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>javax.lang.Object</type>
+          <methodname>session/get-java-attribute</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Retrieves the value of the Session attribute
+            <parameter>name</parameter> as a Java value.
+          </para>
+        </blockquote>
+      </para>
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+            (session/get-java-attribute "pluto")
+          ]]>
+        </programlisting>
+      </informalexample>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/set-java-attribute!</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>undefined</type>
+          <methodname>session/set-java-attribute!</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>java-object</parameter>
+          </methodparam>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Sets the Session attribute <parameter>name</parameter> to
+            the Java value <parameter>java-object</parameter>.
+          </para>
+        </blockquote>
+      </para>
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+            (session/set-java-attribute "pluto" (->jstring "3"))
+          ]]>
+        </programlisting>
+      </informalexample>
+    </blockquote>
+
+    <blockquote>
+      <para>
+        <indexterm>
+          <primary>session/get-java-attribute-names</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>list</type>
+          <methodname>session/get-java-attribute-names</methodname>
+        </methodsynopsis>
+
+        <blockquote>
+          <para>
+            Returns a list of names of attributes in the Session.
+          </para>
+        </blockquote>
+      </para>
+    </blockquote>
+  </section>
+
+@
+
+
+1.1.2.4
+log
+@updated wording
+@
+text
+@d26 12
+a37 10
+      while programs have the means to associate two requests to a
+      given user (because they contain the same cookie), they have no
+      means by which to associate two requests as being part of the
+      same navigation flow. It is in fact possible to manually place
+      requests out of sync with program state, and often trigger
+      incorrect behavior. Traditional web applications are thus less
+      like a program with a GUI interface and more like an API open to
+      the world. Forced browsing, or even using the back button, can
+      cause an application to misbehave in ways that are not easily
+      foreseeable as application complexity increases.
+d41 12
+a52 5
+      Since the Session object is common to all requests from the same
+      browser, just using a web application from two windows can
+      produce concurrency problems such as loss of consistency or
+      race conditions. Moreover, since the session is a global scope
+      for the application, and the only scope that persists from
+d59 5
+a63 7
+      Another major issue with traditional web applications is that
+      they are made of short-lived code snippets which, after parsing
+      the request in the context of the session, generate a response
+      and exit. Because their state is lost, it is impossible to use
+      structured programming techniques in code spanning multiple
+      requests. Even the simplest for-loop must be expressed in terms
+      of a (global) variable increment and a GOTO (HREF).
+d69 1
+a69 1
+      exiting. This suspended state is a continuation, and it includes
+d155 1
+a155 1
+      example demonstrates this technique.
+@
+
+
+1.1.2.5
+log
+@updated to SISC 1.12 CVS info
+@
+text
+@d5 1
+a5 1
+    <title>Introduction to Statefulness</title>
+d127 5
+a131 6
+        This approach is not currently usable in SISC 1.11 in
+        conjunction to the <function>@@href-p</function>-type
+        attributes. The current implementation of these attributes
+        does not capture the dynamic environment because doing so
+        would also capture non-serializable parts of the toplevel (see
+        <ulink
+d137 2
+a138 3
+        Since the bug is now resolved in SISC 1.12 CVS, the feature
+        is here documented in provision to its being available in the
+        next SISCweb version.
+d152 1
+a152 1
+  <section id="session-parameters">
+@
+
+
+1.1.2.6
+log
+@clearer sentences
+@
+text
+@d19 3
+a21 3
+      protocol respectively to allow an application to recognize two
+      requests coming from the same browser as such, and to store data
+      common to such requests.
+d56 1
+a56 1
+      of a (global) session variable increment and a GOTO (HREF).
+d125 1
+a125 1
+    <warning>
+d142 1
+a142 1
+    </warning>
+d147 2
+a148 3
+      and then bound to the dynamic scope -- the scope of the
+      execution flow -- in the application entry point through the
+      <function>parameterize</function> form. A version of the <ulink
+d170 2
+a171 2
+      The session object can be accessed via a syntax similar to that of <ulink
+      url="http://srfi.schemers.org/srfi-39/">SRFI-39</ulink>
+@
+
+
+1.1.2.7
+log
+@some cleanup
+@
+text
+@d19 3
+a21 3
+      protocol respectively to: a) allow an application to recognize
+      two requests coming from the same browser as such, and b) to
+      store data common to such requests.
+d25 1
+a25 1
+      Neither cookies nor sessions address the issue of state because,
+d101 1
+a101 1
+      this is often inconvenient. &SISCweb; provides two ways to
+d125 19
+d149 3
+a151 2
+      <function>parameterize</function> form.  The Counter sisclet in
+      the &SISCweb; examples demonstrates this technique.
+d171 1
+a171 9
+      In some situations a global, per-user scope may be
+      desirable. While this approach is more prone to concurrency
+      problems, its semantics are clearer than the dynamic extent of
+      SRFI-39 parameters.
+    </para>
+
+    <para>
+      In these cases the Session object can be accessed via a syntax
+      similar to that of <ulink
+d175 3
+a177 3
+      former is appropriate for storing Scheme values, the latter is
+      provided as a means to store and retrieve Java objects (or
+      <function>java-wrap</function>ped Scheme values.)
+d196 7
+a202 7
+            Returns a procedure <function>proc</function> that, when
+            invoked, sets or retrieves a Scheme value to/from the a
+            Session attribute named <parameter>name</parameter>,
+            depending on whether a value is passed or not to
+            <procedure>proc</procedure>.  If <function>proc</function>
+            is passed the &f; value, the attribute is removed from the
+            Session object altogether.
+a205 14
+
+      <informalexample>
+        <programlisting>
+          <![CDATA[
+            (module security
+              (define auth-token (session/make-parameter "auth-key"))
+
+              ;; sets an auth token in the session object
+              (define (login usr pwd)
+                (auth-token (make-token usr pwd)))
+            )
+          ]]>
+        </programlisting>
+      </informalexample>
+d215 1
+a215 1
+          <type>java-object</type>
+@
+
+
+1.1.2.8
+log
+@some cleanup
+@
+text
+@d130 2
+a131 20
+      <function>parameterize</function> form.
+    </para>
+    <para>
+      When using <function>send-*/[suspend|forward]</function>, the
+      parameters, being part of the dynamic environment, are captured
+      in the suspended state -- the suspension of the program
+      execution is transparent to parameter bindings.
+    </para>
+    <para>
+      However procedures stored with
+      <function>@@href-p</function>-style attributes or the
+      <function>forward/store!</function> procedure will run in the
+      base dynamic environment, and thus will see fresh values of the
+      parameters. In those cases on can use
+      <function>forward/dynenv/store!</function>, which instead
+      preserves the dynamic environment.
+    </para>
+    <para>
+      The Counter sisclet in the &SISCweb; examples demonstrates this
+      technique.
+a213 3
+          <primary>session/get-java-attribute-names</primary>
+          <primary>session/remove-java-attribute!</primary>
+          <primary>session/set-java-attribute!</primary>
+d217 1
+a217 1
+          <type>jobject</type>
+d223 23
+a245 7
+        <sbr/>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>list</type>
+          <methodname>session/get-java-attribute-names</methodname>
+        </methodsynopsis>
+        <sbr/>
+d248 1
+a248 1
+          <type>#!void</type>
+d254 1
+a254 1
+            <parameter>jobject</parameter>
+d257 23
+a279 1
+        <sbr/>
+d282 2
+a283 8
+          <type>#!void</type>
+          <methodname>session/set-java-attribute!</methodname>
+          <methodparam>
+            <parameter>name</parameter>
+          </methodparam>
+          <methodparam>
+            <parameter>jobject</parameter>
+          </methodparam>
+d288 1
+a288 3
+            These functions access Java attributes as session
+            objects. Complete descriptions are given in <xref
+            linkend="session"/>.
+d294 1
+@
+
+
+1.1.2.9
+log
+@added srfi-39 vs. session section
+@
+text
+@a284 40
+  <section id="parameters-vs-session">
+    <title>SRFI-39 Parameters vs. Session Attributes</title>
+
+    <para>
+      The choice between using SRFI-39 parameters vs. Session attributes lies in the desired scope.
+    </para>
+    <para>
+      SRFI-39 parameters have two scopes: a) lexical, determined by where the parameter is defined, and b) dynamic, determined by the use of the <function>parameterize</function> form.
+    </para>
+
+    <para>
+      The lexical scope is useful to avoid name collisions, since two
+      modules of the same application are free to use parameters with
+      the same name, but in different scopes.
+    </para>
+
+    <para>
+      The dynamic scope allows to avoid collisions on the same datum
+      between two parallel navigation flows by the same user.
+    </para>
+
+    <para>
+      On the other hand, Session attributes only have one global
+      scope. Not only different parts of the application can interfere
+      with each other if they use the same Session attribute name, but
+      even a single piece of code can interfere with itself when used
+      within two navigational flows at the same time.
+    </para>
+
+    <para>
+      Because web applications are intrinsically concurrent and
+      re-entrant, the level of isolation among different components
+      and different execution flows should be chosen carefully. Scheme
+      variables, SRFI-39 parameters and Session variables all offer
+      different trade-off points in the isolation spectrum. Choosing
+      among them may not always be straightforward, but they afford
+      allows a degree of control not normally found in web
+      programming.
+    </para>
+  </section>
+@
+
+

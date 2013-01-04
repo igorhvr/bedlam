@@ -1,0 +1,847 @@
+head	1.4;
+access;
+symbols
+	rel-0-3-dev-1:1.3.4.2
+	rel-0-2-fix-2:1.3.2.1
+	rel-0-2-fix-1:1.3
+	rel-0-2-fix:1.3.0.2
+	rel-0-3-dev:1.3.0.4
+	rel-0-2:1.3
+	rel-0-1-fix-1:1.2
+	rel-0-2-dev:1.2.0.4
+	rel-0-1-fix:1.2.0.2
+	rel-0-1:1.2
+	start:1.1.1.1
+	rel-0-1-dev:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2005.11.25.20.46.38;	author acolomba;	state dead;
+branches;
+next	1.3;
+
+1.3
+date	2005.06.19.03.03.51;	author acolomba;	state Exp;
+branches
+	1.3.2.1
+	1.3.4.1;
+next	1.2;
+
+1.2
+date	2005.04.03.06.50.52;	author acolomba;	state Exp;
+branches
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2005.02.16.03.33.32;	author acolomba;	state Exp;
+branches;
+next	1.1.1.2;
+
+1.1.1.2
+date	2005.03.02.03.28.58;	author acolomba;	state Exp;
+branches;
+next	1.1.1.3;
+
+1.1.1.3
+date	2005.03.14.03.11.25;	author acolomba;	state Exp;
+branches;
+next	1.1.1.4;
+
+1.1.1.4
+date	2005.03.19.14.33.32;	author acolomba;	state Exp;
+branches;
+next	1.1.1.5;
+
+1.1.1.5
+date	2005.03.19.15.06.03;	author acolomba;	state Exp;
+branches;
+next	1.1.1.6;
+
+1.1.1.6
+date	2005.03.19.17.40.15;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2005.04.10.21.58.52;	author acolomba;	state Exp;
+branches;
+next	1.2.4.2;
+
+1.2.4.2
+date	2005.04.12.04.52.07;	author acolomba;	state Exp;
+branches;
+next	1.2.4.3;
+
+1.2.4.3
+date	2005.05.14.23.14.57;	author acolomba;	state Exp;
+branches;
+next	1.2.4.4;
+
+1.2.4.4
+date	2005.05.22.20.15.28;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.2.1
+date	2005.07.31.20.04.02;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.3.4.1
+date	2005.07.27.02.58.08;	author acolomba;	state Exp;
+branches;
+next	1.3.4.2;
+
+1.3.4.2
+date	2005.09.28.02.45.25;	author acolomba;	state Exp;
+branches;
+next	1.3.4.3;
+
+1.3.4.3
+date	2005.11.19.16.12.56;	author acolomba;	state Exp;
+branches;
+next	1.3.4.4;
+
+1.3.4.4
+date	2005.11.23.02.38.10;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@merged from rel-0-3-dev
+@
+text
+@/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SISCweb.
+ *
+ * The Initial Developer of the Original Code is Alessandro Colomba.
+ * Portions created by the Alessandro Colomba are Copyright (C) 2005
+ * Alessandro Colomba. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+package siscweb.web;
+
+import java.io.IOException;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+
+import sisc.REPL;
+import sisc.data.Symbol;
+import sisc.data.Value;
+import sisc.interpreter.AppContext;
+import sisc.interpreter.Context;
+import sisc.interpreter.Interpreter;
+import sisc.interpreter.SchemeException;
+import sisc.util.Util;
+
+import siscweb.contcentric.ContinuationManager;
+import siscweb.util.MiscUtil;
+import siscweb.util.REPLThread;
+
+
+/**
+ * This class initializes a SISC application context, sets up a
+ * ContinuationManager, and starts a server-side REPL if so
+ * instructed.  Only one SISCApplicationServlet for SISC application
+ * context should be specified; also the servlet should be loaded on
+ * startup and take care to load and import the core siscweb scheme
+ * modules. (The latter is subject to be automated, though.)
+ */
+public class SISCApplicationServlet extends HttpServlet
+{
+    private static final long serialVersionUID = 1737751555054728207L;
+
+    protected String contextName;
+    protected REPLThread repl;
+
+
+    public void init()
+        throws ServletException
+    {
+        // instantiates and registers sisc context
+        this.contextName = MiscUtil.qualifyName(
+            getServletContext().getServletContextName(),
+            getInitParameter("context-name"));
+
+        MiscUtil.initializeContext(this.contextName);
+
+
+        // defines a global variable to hold the servlet context
+        try {
+            final Interpreter r = Context.enter(this.contextName);
+
+            r.define(Symbol.get("*SERVLET-CONTEXT*"),
+                     sisc.modules.s2j.Util.makeJObj(
+                         this.getServletContext(), ServletContext.class),
+                     Util.TOPLEVEL);
+        }
+        finally {
+            Context.exit();
+        }
+
+
+        // optionally starts the repl
+        try {
+            final String host = getInitParameter("repl-host");
+            final String port = getInitParameter("repl-port");
+
+            if(host != null && port != null) {
+                this.repl = new REPLThread(contextName, host, Integer.parseInt(port));
+
+                this.repl.start();
+            }
+        }
+        catch(final NumberFormatException e) {
+            System.err.println(
+                this.contextName + " : invalid repl port specified (WARNING)");
+        }
+
+
+        // evaluates on-init-sexp servlet init parameter
+        try {
+            final Interpreter r = Context.enter(this.contextName);
+
+            MiscUtil.changeDirectory(r, getServletContext().getRealPath("/"));
+
+            final String onInitSExp = getInitParameter("on-init-sexp");
+
+            if(onInitSExp != null) {
+                r.eval(onInitSExp);
+            }
+        }
+        catch(final IOException e) {
+            throw new ServletException(
+                this.contextName + " : unable to retrieve on-init-sexp (WARNING)");
+        }
+        catch(final SchemeException e) {
+            throw new ServletException(
+                this.contextName +
+                " : error evaluating on-init-sexp for servlet " +
+                this.getServletName(),
+                sisc.modules.s2j.Util.javaException(e));
+        }
+        finally {
+            Context.exit();
+        }
+    }
+
+    public void destroy()
+    {
+        try {
+            final Interpreter r = Context.enter(this.contextName);
+
+            r.eval(getInitParameter("on-destroy-sexp"));
+        }
+        catch(final IOException e) {
+            throw new RuntimeException(
+                    this.contextName +
+                    " : error evaluating on-init-sexp for servlet " +
+                    this.getServletName(), e);
+        }
+        catch(final SchemeException e) {
+            throw new RuntimeException(
+                    this.contextName +
+                    " : error evaluating on-destroy-sexp for servlet " +
+                    this.getServletName(),
+                    sisc.modules.s2j.Util.javaException(e));
+        }
+        finally {
+            if(this.repl != null) {
+                this.repl.terminate();
+            }
+
+            Context.exit();
+            Context.unregister(this.contextName);
+        }
+    }
+}
+@
+
+
+1.3
+log
+@merged from rel-0-2-dev
+@
+text
+@@
+
+
+1.3.2.1
+log
+@merged from rel-0-3-dev
+@
+text
+@d44 1
+d46 2
+d52 2
+@
+
+
+1.3.4.1
+log
+@cleaned up imports
+@
+text
+@d44 1
+d46 2
+d52 2
+@
+
+
+1.3.4.2
+log
+@improved error handling in case of missing heap
+@
+text
+@d72 9
+a81 9
+	        // instantiates and registers sisc context
+	        this.contextName = MiscUtil.qualifyName(
+	            getServletContext().getServletContextName(),
+	            getInitParameter("context-name"));
+	
+	        MiscUtil.initializeContext(this.contextName);
+	
+	
+	        // defines a global variable to hold the servlet context
+a88 4
+        catch(IOException e)
+        {
+        	throw new ServletException(e);
+        }
+@
+
+
+1.3.4.3
+log
+@SISC context name is now based just on ServletContext name
+@
+text
+@d73 9
+a81 7
+            // instantiates and registers sisc context
+            this.contextName = getServletContext().getServletContextName();
+
+            MiscUtil.initializeContext(this.contextName);
+
+
+            // defines a global variable to hold the servlet context
+@
+
+
+1.3.4.4
+log
+@not needed anymore: functionalities moved to separate components
+@
+text
+@@
+
+
+1.2
+log
+@merged from rel-0-1-dev
+@
+text
+@d40 1
+d45 2
+d51 1
+a51 1
+import sisc.ser.MemoryRandomAccessInputStream;
+a53 1
+import siscweb.contcentric.ContinuationManagerThread;
+d58 8
+a71 1
+    protected ContinuationManagerThread continuationManagerThread;
+d77 4
+a80 4
+        try {
+            this.contextName = MiscUtil.qualifyName(
+                getServletContext().getServletContextName(),
+                getInitParameter("context-name"));
+d82 1
+a83 1
+            AppContext context = new AppContext();
+d85 3
+a87 1
+            Context.register(this.contextName, context);
+d89 8
+a96 1
+            Interpreter r = Context.enter(this.contextName);
+a97 3
+            REPL.loadHeap(r, new MemoryRandomAccessInputStream(
+                sisc.boot.HeapAnchor.class
+                    .getResource("sisc.shp").openStream()));
+d99 4
+a102 3
+            // initializes the continuation manager thread
+            this.continuationManagerThread = new ContinuationManagerThread(
+                ContinuationManager.getInstance(this.getServletContext()));
+d104 2
+a105 1
+            this.continuationManagerThread.start();
+d107 7
+a114 14
+            try {
+                String host = getInitParameter("repl-host");
+                String port = getInitParameter("repl-port");
+
+                if(host != null && port != null) {
+                    this.repl = new REPLThread(contextName, host, Integer.parseInt(port));
+
+                    new Thread(this.repl).start();
+                }
+            } // TODO: use logging
+            catch(NumberFormatException e) {
+                System.err.println(
+                    this.contextName + " : invalid repl port specified (WARNING)");
+            }
+d116 3
+d120 1
+d122 1
+a122 2
+            try {
+                MiscUtil.changeDirectory(r, getServletContext().getRealPath("/"));
+d124 2
+a125 1
+                r.eval(getInitParameter("on-init-sexp"));
+a126 7
+            catch(IOException e) {
+                throw new ServletException(
+                    this.contextName + " : unable to retrieve on-init-sexp (WARNING)");
+            }
+        }
+        catch(NullPointerException e) { throw new ServletException(
+            this.contextName + " : unable to load the heap file", e);
+d128 10
+a137 8
+        catch(IOException e) { throw new ServletException(
+            this.contextName + " : unable to load the heap file", e);
+        }
+        catch(ClassNotFoundException e) { throw new ServletException(
+            this.contextName + " : unable to load the heap file", e);
+        }
+        catch(SchemeException e) { throw new ServletException(
+            this.contextName + " : scheme error", e);
+a145 6
+        this.continuationManagerThread.terminate();
+        this.continuationManagerThread = null;
+
+        ContinuationManager.removeInstance(this.getServletContext());
+
+
+d147 1
+a147 1
+            Interpreter r = Context.enter(this.contextName);
+d151 1
+a151 1
+        catch(IOException e) {
+d153 3
+a155 1
+                this.contextName + " : I/O error in destroy-sexp");
+d157 1
+a157 1
+        catch (SchemeException e) {
+d159 4
+a162 1
+                this.contextName + " : scheme error in destroy sexp (WARNING)", e);
+@
+
+
+1.2.4.1
+log
+@added javadoc; removed a potential npe; polished exception handling;
+sprinkled finals around
+@
+text
+@a55 8
+/**
+ * This class initializes a SISC application context, sets up a
+ * ContinuationManager, and starts a server-side REPL if so
+ * instructed.  Only one SISCApplicationServlet for SISC application
+ * context should be specified; also the servlet should be loaded on
+ * startup and take care to load and import the core siscweb scheme
+ * modules. (The latter is subject to be automated, though.)
+ */
+a68 1
+            // instantiates and registers sisc context
+a72 1
+            Context.register(this.contextName, new AppContext());
+d74 5
+a78 1
+            final Interpreter r = Context.enter(this.contextName);
+a83 1
+
+a90 1
+            // optionally starts the repl
+d92 2
+a93 2
+                final String host = getInitParameter("repl-host");
+                final String port = getInitParameter("repl-port");
+d100 1
+a100 1
+            }
+d107 1
+a107 1
+            // evaluates on-init-sexp servlet init parameter
+d111 1
+a111 5
+                final String onInitSExp = getInitParameter("on-init-sexp");
+
+                if(onInitSExp != null) {
+                    r.eval(onInitSExp);
+                }
+d118 1
+a118 1
+        catch(final NullPointerException e) { throw new ServletException(
+d121 1
+a121 1
+        catch(final IOException e) { throw new ServletException(
+d124 1
+a124 1
+        catch(final ClassNotFoundException e) { throw new ServletException(
+d127 2
+a128 6
+        catch(final SchemeException e) {
+            throw new ServletException(
+                    this.contextName +
+                    " : error evaluating on-init-sexp for servlet " +
+                    this.getServletName(),
+                    sisc.modules.s2j.Util.javaException(e));
+d144 1
+a144 1
+            final Interpreter r = Context.enter(this.contextName);
+d148 1
+a148 1
+        catch(final IOException e) {
+d150 1
+a150 3
+                    this.contextName +
+                    " : error evaluating on-init-sexp for servlet " +
+                    this.getServletName(), e);
+d152 1
+a152 1
+        catch(final SchemeException e) {
+d154 1
+a154 4
+                    this.contextName +
+                    " : error evaluating on-destroy-sexp for servlet " +
+                    this.getServletName(),
+                    sisc.modules.s2j.Util.javaException(e));
+@
+
+
+1.2.4.2
+log
+@now uses MiscUtil.initializeContext() method instead of DIY; cleaned
+up exception handling a bit
+@
+text
+@d48 1
+d76 5
+a80 4
+        // instantiates and registers sisc context
+        this.contextName = MiscUtil.qualifyName(
+            getServletContext().getServletContextName(),
+            getInitParameter("context-name"));
+d82 1
+a82 1
+        MiscUtil.initializeContext(this.contextName);
+d84 1
+a84 3
+        // initializes the continuation manager thread
+        this.continuationManagerThread = new ContinuationManagerThread(
+            ContinuationManager.getInstance(this.getServletContext()));
+d86 3
+a88 1
+        this.continuationManagerThread.start();
+d91 3
+a93 4
+        // optionally starts the repl
+        try {
+            final String host = getInitParameter("repl-host");
+            final String port = getInitParameter("repl-port");
+d95 1
+a95 2
+            if(host != null && port != null) {
+                this.repl = new REPLThread(contextName, host, Integer.parseInt(port));
+a96 7
+                this.repl.start();
+            }
+        }
+        catch(NumberFormatException e) {
+            System.err.println(
+                this.contextName + " : invalid repl port specified (WARNING)");
+        }
+d98 4
+d103 2
+a104 3
+        // evaluates on-init-sexp servlet init parameter
+        try {
+            final Interpreter r = Context.enter(this.contextName);
+d106 7
+a112 1
+            MiscUtil.changeDirectory(r, getServletContext().getRealPath("/"));
+a113 1
+            final String onInitSExp = getInitParameter("on-init-sexp");
+d115 13
+a127 2
+            if(onInitSExp != null) {
+                r.eval(onInitSExp);
+d130 8
+a137 3
+        catch(IOException e) {
+            throw new ServletException(
+                this.contextName + " : unable to retrieve on-init-sexp (WARNING)");
+d141 4
+a144 4
+                this.contextName +
+                " : error evaluating on-init-sexp for servlet " +
+                this.getServletName(),
+                sisc.modules.s2j.Util.javaException(e));
+@
+
+
+1.2.4.3
+log
+@removed continuation manager thread; now sets a *SERVLET-CONTEXT*
+global variable
+@
+text
+@a39 1
+import javax.servlet.ServletContext;
+a43 2
+import sisc.data.Symbol;
+import sisc.data.Value;
+a47 1
+import sisc.util.Util;
+d50 1
+d69 1
+d82 3
+d86 1
+a86 12
+        // defines a global variable to hold the servlet context
+        try {
+            final Interpreter r = Context.enter(this.contextName);
+
+            r.define(Symbol.get("*SERVLET-CONTEXT*"),
+                     sisc.modules.s2j.Util.makeJObj(
+                         this.getServletContext(), ServletContext.class),
+                     Util.TOPLEVEL);
+        }
+        finally {
+            Context.exit();
+        }
+d136 6
+@
+
+
+1.2.4.4
+log
+@minor stylistic changes
+@
+text
+@d110 1
+a110 1
+        catch(final NumberFormatException e) {
+d128 1
+a128 1
+        catch(final IOException e) {
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d50 2
+d59 1
+d62 1
+d71 1
+a71 1
+                getInitParameter("contextName"));
+d84 7
+d92 2
+a93 3
+                final String host = getInitParameter("repl-host");
+                final int port = Integer.parseInt(
+                    getInitParameter("repl-port"));
+d95 2
+a96 1
+                this.repl = new REPLThread(contextName, host, port);
+d98 3
+a100 2
+                new Thread(this.repl).start();
+             } // TODO: use logging
+d106 2
+d137 6
+d158 1
+a158 1
+                this.repl.stop();
+@
+
+
+1.1.1.1
+log
+@initial import
+@
+text
+@@
+
+
+1.1.1.2
+log
+@now correctly looks up "context-name" servlet parameter instead of "contextName"
+@
+text
+@d67 1
+a67 1
+                getInitParameter("context-name"));
+@
+
+
+1.1.1.3
+log
+@now spawns the continuation manager thread
+@
+text
+@a49 1
+import siscweb.contcentric.ContinuationManager;
+a56 1
+
+d60 1
+a79 17
+            // initializes the continuation manager thread
+            // FIXME: this is not thread-safe; maybe we could move it
+            //        to a separate servlet
+            ContinuationManager continuationManager = (ContinuationManager)
+                this.getServletContext().getAttribute("continuation-manager");
+
+            if( continuationManager == null) {
+                continuationManager = new ContinuationManager();
+
+                this.getServletContext().setAttribute("continuation-manager",
+                                                      continuationManager);
+            }
+
+            new Thread(continuationManager).start();
+
+
+
+d88 1
+a88 1
+            } // TODO: use logging
+@
+
+
+1.1.1.4
+log
+@now uses ContinuationManagerThread; improved repl host:port detection
+@
+text
+@a50 1
+import siscweb.contcentric.ContinuationManagerThread;
+a60 2
+    protected ContinuationManagerThread continuationManagerThread;
+
+d82 2
+d94 2
+a95 2
+            this.continuationManagerThread = new ContinuationManagerThread(continuationManager);
+            this.continuationManagerThread.start();
+d99 3
+a101 2
+                String host = getInitParameter("repl-host");
+                String port = getInitParameter("repl-port");
+d103 1
+a103 2
+                if(host != null && port != null) {
+                    this.repl = new REPLThread(contextName, host, Integer.parseInt(port));
+d105 1
+a105 2
+                    new Thread(this.repl).start();
+                }
+a111 2
+
+
+a140 6
+        this.continuationManagerThread.terminate();
+        this.continuationManagerThread = null;
+
+        this.getServletContext().removeAttribute("continuation-manager");
+
+
+@
+
+
+1.1.1.5
+log
+@uses REPLThread.terminate() instead of REPLThread.stop()
+@
+text
+@d166 1
+a166 1
+                this.repl.terminate();
+@
+
+
+1.1.1.6
+log
+@now grabs/removes ContinuationManager instances through the servletcontext-singleton interface
+@
+text
+@d85 2
+a86 2
+            this.continuationManagerThread = new ContinuationManagerThread(
+                ContinuationManager.getInstance(this.getServletContext()));
+d88 8
+d148 1
+a148 1
+        ContinuationManager.removeInstance(this.getServletContext());
+@
+
+

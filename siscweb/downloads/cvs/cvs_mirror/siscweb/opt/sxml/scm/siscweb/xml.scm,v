@@ -1,0 +1,720 @@
+head	1.3;
+access;
+symbols
+	rel-0-6-dev:1.3.0.4
+	rel-0-5-fix:1.3.0.2
+	rel-0-5:1.3
+	rel-0-5-dev-safe-frames:1.2.4.1.0.2
+	Root_rel-0-5-dev-safe-frames:1.2.4.1
+	rel-0-4-fix-0:1.2
+	rel-0-5-dev:1.2.0.4
+	rel-0-4-fix:1.2.0.2
+	rel-0-3-fix-3:1.1.4.3
+	rel-0-3-fix-2:1.1.4.2
+	rel-0-3-fix:1.1.0.4
+	rel-0-4-dev-sisc-1-11:1.1.2.3
+	rel-0-4-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2007.04.12.03.51.17;	author acolomba;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2006.09.03.01.42.23;	author acolomba;	state Exp;
+branches
+	1.2.2.1
+	1.2.4.1;
+next	1.1;
+
+1.1
+date	2006.01.15.22.09.29;	author acolomba;	state dead;
+branches
+	1.1.2.1
+	1.1.4.1;
+next	;
+
+1.1.2.1
+date	2006.01.15.22.09.29;	author acolomba;	state Exp;
+branches;
+next	1.1.2.2;
+
+1.1.2.2
+date	2006.01.31.04.31.38;	author acolomba;	state Exp;
+branches;
+next	1.1.2.3;
+
+1.1.2.3
+date	2006.02.12.23.27.49;	author acolomba;	state Exp;
+branches;
+next	1.1.2.4;
+
+1.1.2.4
+date	2006.02.22.04.26.06;	author acolomba;	state Exp;
+branches;
+next	1.1.2.5;
+
+1.1.2.5
+date	2006.02.28.04.30.55;	author acolomba;	state Exp;
+branches;
+next	1.1.2.6;
+
+1.1.2.6
+date	2006.03.10.02.33.16;	author acolomba;	state Exp;
+branches;
+next	1.1.2.7;
+
+1.1.2.7
+date	2006.03.12.13.04.34;	author acolomba;	state Exp;
+branches;
+next	1.1.2.8;
+
+1.1.2.8
+date	2006.04.08.22.35.18;	author acolomba;	state Exp;
+branches;
+next	1.1.2.9;
+
+1.1.2.9
+date	2006.04.09.16.38.45;	author acolomba;	state Exp;
+branches;
+next	1.1.2.10;
+
+1.1.2.10
+date	2006.04.13.00.33.46;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.1.4.1
+date	2006.01.15.22.09.29;	author acolomba;	state dead;
+branches;
+next	1.1.4.2;
+
+1.1.4.2
+date	2006.02.25.17.12.03;	author acolomba;	state Exp;
+branches;
+next	1.1.4.3;
+
+1.1.4.3
+date	2006.04.15.15.55.24;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.2.1
+date	2006.11.30.03.48.11;	author acolomba;	state Exp;
+branches;
+next	;
+
+1.2.4.1
+date	2006.11.30.03.15.51;	author acolomba;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@merged from rel-0-5-dev
+@
+text
+@;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+
+(require-library 'siscweb/config)
+(require-library 'siscweb/contcentric)
+(require-library 'siscweb/response)
+(require-library 'ssax/ssax)
+(require-library 'sxml/sxml-to-xml)
+
+(module siscweb/xml
+  (send-xml/back send-xml/finish
+   send-xml/suspend send-xml/forward
+   read-xml)
+
+  (import string-io)
+
+  (import srfi-16)
+
+  (import siscweb/config)
+  (import siscweb/contcentric)
+  (import siscweb/response)
+  (import ssax)
+  (import sxml/sxml-to-xml)
+
+
+  (define (send-xml header-alst doc)
+    (when (not (assoc "Content-Type" header-alst))
+      (response/set-content-type! "application/xml"))
+    (response/add-headers! header-alst)
+    (if (config/sxml-formatted-output?)
+        (sxml/display doc (response/open-output-port))
+        (sxml/write doc (response/open-output-port))))
+
+  (define send-xml/back
+    (case-lambda
+      ((doc)
+       (send-xml/back '() doc))
+      ((header-alst doc)
+       (send/back
+        (lambda ()
+          (send-xml header-alst doc))))))
+
+  (define send-xml/finish
+    (case-lambda
+      ((doc)
+       (send-xml/finish '() doc))
+      ((header-alst doc)
+       (send/finish
+        (lambda ()
+          (send-xml header-alst doc))))))
+
+
+  (define send-xml/suspend
+    (case-lambda
+      ((doc-proc)
+       (send-xml/suspend '() doc-proc))
+      ((header-alst doc-proc)
+       (send/suspend
+        (lambda (k-url resume-k)
+          (send-xml header-alst (doc-proc k-url)))))))
+
+  (define send-xml/forward
+    (case-lambda
+      ((doc-proc)
+       (send-xml/forward '() doc-proc))
+      ((header-alst doc-proc)
+       (send/forward
+        (lambda (k-url resume-k)
+          (send-xml header-alst (doc-proc k-url)))))))
+
+  (define read-xml
+    (case-lambda
+      ((namespaces)
+       (read-xml namespaces (current-input-port)))
+      ((namespaces port)
+       (SSAX:XML->SXML port namespaces))))
+  )
+@
+
+
+1.2
+log
+@merged from rel-0-4-dev
+@
+text
+@d79 1
+a79 1
+          (send-xhtml header-alst doc))))))
+@
+
+
+1.2.2.1
+log
+@merged from rel-0-5-dev
+@
+text
+@d79 1
+a79 1
+          (send-xml header-alst doc))))))
+@
+
+
+1.2.4.1
+log
+@fixed typo
+@
+text
+@d79 1
+a79 1
+          (send-xml header-alst doc))))))
+@
+
+
+1.1
+log
+@file xml.scm was initially added on branch rel-0-4-dev.
+@
+text
+@d1 106
+@
+
+
+1.1.4.1
+log
+@file xml.scm was added on branch rel-0-3-fix on 2006-02-25 17:12:03 +0000
+@
+text
+@@
+
+
+1.1.4.2
+log
+@merged from rel-0-4-dev-sisc-1-11
+@
+text
+@a0 89
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+
+(require-library 'siscweb/response)
+(require-library 'sxml/sxml-to-xml)
+
+(module siscweb/xml
+  (send-xml/back send-xml/finish
+   send-xml/suspend send-xml/forward)
+
+  (import srfi-16)
+
+  (import siscweb/response)
+  (import sxml/sxml-to-xml)
+
+
+  (define (send-xml header-alst doc)
+    (when (not (assoc "Content-Type" header-alst))
+      (response/set-content-type! "application/xml"))
+    (response/add-headers! header-alst)
+    (response/write (sxml->string doc)))
+
+  (define send-xml/back
+    (case-lambda
+      ((doc)
+       (send-xml/back '() doc))
+      ((header-alst doc)
+       (send/back
+        (lambda (request response)
+          (send-xml header-alst doc))))))
+
+  (define send-xml/finish
+    (case-lambda
+      ((doc)
+       (send-xml/finish '() doc))
+      ((header-alst doc)
+       (send/finish
+        (lambda (request response)
+          (send-xhtml header-alst doc))))))
+
+
+  (define send-xml/suspend
+    (case-lambda
+      ((doc-proc)
+       (send-xml/suspend '() doc-proc))
+      ((header-alst doc-proc)
+       (send/suspend
+        (lambda (request response k-url resume-k)
+          (send-xml header-alst (doc-proc k-url)))))))
+
+  (define send-xml/forward
+    (case-lambda
+      ((doc-proc)
+       (send-xml/forward '() doc-proc))
+      ((header-alst doc-proc)
+       (send/forward
+        (lambda (request response k-url resume-k)
+          (send-xml header-alst (doc-proc k-url)))))))
+
+  )
+@
+
+
+1.1.4.3
+log
+@merged from rel-0-4-dev
+@
+text
+@a32 2
+(require-library 'siscweb/config)
+(require-library 'siscweb/contcentric)
+a33 1
+(require-library 'ssax/ssax)
+d38 1
+a38 4
+   send-xml/suspend send-xml/forward
+   read-xml)
+
+  (import string-io)
+a41 2
+  (import siscweb/config)
+  (import siscweb/contcentric)
+a42 1
+  (import ssax)
+d50 1
+a50 3
+    (if (config/sxml-formatted-output?)
+        (sxml/display doc (response/open-output-port))
+        (sxml/write doc (response/open-output-port))))
+d58 1
+a58 1
+        (lambda ()
+d67 1
+a67 1
+        (lambda ()
+d77 1
+a77 1
+        (lambda (k-url resume-k)
+d86 1
+a86 1
+        (lambda (k-url resume-k)
+a88 6
+  (define read-xml
+    (case-lambda
+      ((namespaces)
+       (read-xml namespaces (current-input-port)))
+      ((namespaces port)
+       (SSAX:XML->SXML port namespaces))))
+@
+
+
+1.1.2.1
+log
+@initial import
+@
+text
+@a0 74
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005-2006
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+(require-library 'io/servlet-io)
+(require-library 'siscweb/response)
+(require-library 'sxml/sxml-to-xml)
+
+(module siscweb/xml
+  (send-xml/back send-xml/finish
+   send-xml/suspend send-xml/forward)
+
+  (import s2j)
+
+  (import io/servlet-io)
+  (import siscweb/response)
+  (import sxml/sxml-to-xml)
+
+  (define-generic-java-methods set-content-type)
+
+  (define (send-xml response mime-type doc)
+    (set-content-type response (->jstring mime-type))
+    (with-output-to-port
+        (open-servlet-output response)
+      (lambda ()
+        (sxml/write doc))))
+
+  (define (send-xml/back mime-type doc)
+    (send/back
+     (lambda (request response)
+       (send-xml response mime-type doc))))
+
+  (define (send-xml/finish mime-type doc)
+    (send/finish
+     (lambda (request response)
+       (send-xml response mime-type doc))))
+
+  (define (send-xml/suspend mime-type doc-proc)
+    (send/suspend
+     (lambda (request response k-url resume-k)
+       (send-xml response mime-type (doc-proc k-url)))))
+
+  (define (send-xml/forward mime-type doc-proc)
+    (send/forward
+     (lambda (request response k-url resume-k)
+       (send-xml response mime-type (doc-proc k-url)))))
+
+  )
+@
+
+
+1.1.2.2
+log
+@does not use servlet/io anymore; uses response/* functions instead of
+s2j methods
+@
+text
+@d31 1
+d39 3
+d45 1
+a45 3
+  (define (send-xml mime-type doc)
+    (response/set-content-type! mime-type)
+    (response/write (sxml->string doc)))
+d47 6
+d57 1
+a57 1
+       (send-xml mime-type doc))))
+d62 1
+a62 1
+       (send-xml mime-type doc))))
+d67 1
+a67 1
+       (send-xml mime-type (doc-proc k-url)))))
+d72 1
+a72 1
+       (send-xml mime-type (doc-proc k-url)))))
+@
+
+
+1.1.2.3
+log
+@send-*/* functions now accept an assoc list of HTTP headers
+@
+text
+@a30 2
+(require-library 'sisc/libs/srfi/srfi-16) ; syntax for procedures of variable arity
+
+a37 2
+  (import srfi-16)
+
+d41 3
+a44 5
+  (define (send-xml header-alst doc)
+    (when (not (assoc "Content-Type" header-alst))
+      (response/set-content-type! "application/xml"))
+    (response/add-headers! header-alst)
+    (response/write (sxml->string doc)))
+d46 19
+a64 36
+  (define send-xml/back
+    (case-lambda
+      ((doc)
+       (send-xml/back '() doc))
+      ((header-alst doc)
+       (send/back
+        (lambda (request response)
+          (send-xml header-alst doc))))))
+
+  (define send-xml/finish
+    (case-lambda
+      ((doc)
+       (send-xml/finish '() doc))
+      ((header-alst doc)
+       (send/finish
+        (lambda (request response)
+          (send-xhtml header-alst doc))))))
+
+
+  (define send-xml/suspend
+    (case-lambda
+      ((doc-proc)
+       (send-xml/suspend '() doc-proc))
+      ((header-alst doc-proc)
+       (send/suspend
+        (lambda (request response k-url resume-k)
+          (send-xml header-alst (doc-proc k-url)))))))
+
+  (define send-xml/forward
+    (case-lambda
+      ((doc-proc)
+       (send-xml/forward '() doc-proc))
+      ((header-alst doc-proc)
+       (send/forward
+        (lambda (request response k-url resume-k)
+          (send-xml header-alst (doc-proc k-url)))))))
+@
+
+
+1.1.2.4
+log
+@adapted to response/send, and send functions look up request/response on their own,
+instead of needing them passed as parameters
+@
+text
+@d58 1
+a58 1
+        (lambda ()
+d67 1
+a67 1
+        (lambda ()
+d77 1
+a77 1
+        (lambda (k-url resume-k)
+d86 1
+a86 1
+        (lambda (k-url resume-k)
+@
+
+
+1.1.2.5
+log
+@added ssax
+@
+text
+@a33 1
+(require-library 'ssax/ssax)
+a35 1
+
+d38 1
+a38 4
+   send-xml/suspend send-xml/forward
+   read-xml)
+
+  (import string-io)
+a42 1
+  (import ssax)
+a88 2
+  (define (read-xml namespaces)
+    (SSAX:XML->SXML (current-input-port) namespaces))))
+@
+
+
+1.1.2.6
+log
+@fixed parentheses
+@
+text
+@d96 1
+a96 1
+    (SSAX:XML->SXML (current-input-port) namespaces))
+@
+
+
+1.1.2.7
+log
+@now outputs markup using the response port instead of the
+response/write procedure; read-xml now accepts an optional input port
+argument
+@
+text
+@d37 1
+d56 1
+a56 1
+    (sxml/write doc (response/get-output-port)))
+d95 2
+a96 6
+  (define read-xml
+    (case-lambda
+      ((namespaces)
+       (read-xml namespaces (current-input-port)))
+      ((namespaces port)
+       (SSAX:XML->SXML port namespaces))))
+@
+
+
+1.1.2.8
+log
+@outputs formatted markup according to config
+@
+text
+@a32 1
+(require-library 'siscweb/config)
+a45 1
+  (import siscweb/config)
+d55 1
+a55 3
+    (if (config/sxml-formatted-output?)
+        (sxml/display doc (response/get-output-port))
+        (sxml/write doc (response/get-output-port))))
+@
+
+
+1.1.2.9
+log
+@now uses siscweb/response api
+@
+text
+@d58 2
+a59 2
+        (sxml/display doc (response/open-output-port))
+        (sxml/write doc (response/open-output-port))))
+@
+
+
+1.1.2.10
+log
+@refactoring: request/response are now just wrappers, with send/*
+functions now in contcentric; moved many s2j calls to
+request/response/session objects
+@
+text
+@a33 1
+(require-library 'siscweb/contcentric)
+a47 1
+  (import siscweb/contcentric)
+@
+
+

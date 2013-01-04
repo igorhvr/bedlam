@@ -1,0 +1,148 @@
+<chapter id="introduction">
+  <title>Introduction</title>
+
+  <para>
+    &SISCweb; is a framework to facilitate writing stateful
+    Scheme web applications in J2EE environments.
+  </para>
+
+  <section id="features">
+    <title>Features</title>
+
+    <para>
+      &SISCweb; sports an interactive, REPL-based web application
+      development style. Developers can write applications
+      interactively, without ever restarting the context, and, insofar as
+      it is desirable, without ever losing application state. (In
+      fact, save for the Java portion, &SISCweb; itself is developed
+      interactively in its own REPL.)
+    </para>
+    <para>
+      Through the use of continuations, &SISCweb; does away with the
+      page-centric execution model typical of web applications (see
+
+      <footnote>
+        <para>
+          Christian Queinnec. &quot;Inverting back the inversion of
+          control or, continuations versus page-centric
+          programming&quot;. Technical Report 7, LIP6. May
+          2001. (<ulink
+          url="http://www-spi.lip6.fr/~queinnec/Papers/www.ps.gz">
+          http://www-spi.lip6.fr/~queinnec/Papers/www.ps.gz </ulink>)
+        </para>
+      </footnote>.)
+
+      Every time a response is sent to the browser, the program
+      execution flow is suspended, to be then resumed from that exact
+      point when the browser submits a request. Some consequences of
+      this approach are:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        Programs are more easily structured around their problem
+        domain rather than their presentation.
+      </listitem>
+      <listitem>
+        Developers are mostly freed from having to manually manage the
+        lifecycle of objects in the session. The need to to store
+        objects in the session is greatly reduced because when the
+        browser submits a request, and the program's execution flow is
+        resumed, all the language-level variables that were in scope
+        are again available.
+      </listitem>
+      <listitem>
+        Thanks to &SISC;'s serializable continuations, accumulated
+        program state is transparent to server restarts.
+      </listitem>
+      <listitem>
+        Programs can be made resilient to page reloads and browser
+        window cloning with much less effort.
+      </listitem>
+      <listitem>
+        An extra security layer is added because URLs (which now
+        encode a reference to program state) cannot easily be
+        manipulated, hidden form variables are not needed anymore, and
+        in general the automatic state management in &SISCweb; should
+        be more difficult to hack than the ad-hoc solutions developers
+        are forced to implement in traditional web frameworks.
+        </listitem>
+      </itemizedlist>
+
+      <note>
+        This document is a work-in-progress. Readers not familiar with
+        other Scheme web frameworks might want to also read through
+        the documentation of more mature implementations:
+
+        <itemizedlist>
+          <listitem>
+            PLT web server:
+            <ulink url="http://docs.plt-scheme.org/web-server/web-server.html"/>
+          </listitem>
+          <listitem>
+            SUrflet server:
+            <ulink url="http://www.scsh.net/resources/sunet-manual/man-Z-H-8.html#node_chap_6"/>
+          </listitem>
+        </itemizedlist>
+      </note>
+  </section>
+
+  <section id="license">
+    <title>License</title>
+
+    <para>
+      &SISCweb; is open-source software licensed under the <ulink
+      url="http://www.mozilla.org/MPL/MPL-1.1.html">MPL</ulink>, the
+      <ulink url="http://www.gnu.org/copyleft/gpl.html">GPL</ulink>,
+      and the <ulink
+      url="http://www.gnu.org/copyleft/lgpl.html">LGPL</ulink>.
+    </para>
+  </section>
+
+  <section id="credits">
+    <title>Credits</title>
+
+    <para>
+      &SISCweb; is based on &SISC; (<ulink
+      url="http://sisc.sourceforge.net/"/>), a Scheme interpreter for
+      the JVM with full continuations, and is heavily influenced by
+      other Lisp web frameworks:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        The PLT web server collection:
+        <ulink url="http://download.plt-scheme.org/scheme/docs/html/web-server/"/>
+      </listitem>
+      <listitem>
+        SUnet:
+        <ulink url="http://www.scsh.net/resources/sunet.html"/>
+      </listitem>
+      <listitem>
+        AllegroServe:
+        <ulink url="http://allegroserve.sourceforge.net"/>
+      </listitem>
+    </itemizedlist>
+
+    <para>
+      A couple of initial design decisions were also lifted from
+      Matthias Radestock's servlet code in the contrib section of the
+      SISC CVS tree.
+    </para>
+
+    <para>
+      Also special thanks to Anton van Straaten, Dominique Boucher,
+      Ben Simon, Dan Muresan, Felix Klock and Tony Garnock-Jones for
+      bug reports, suggestions, and/or work in support of &SISCweb;.
+    </para>
+  </section>
+
+  <section id="contact">
+    <title>Contact Information</title>
+
+    <para>
+      Comments, ideas, and bug reports are welcome at:
+      <email>acolomba@users.sourceforge.net</email>
+    </para>
+  </section>
+</chapter>

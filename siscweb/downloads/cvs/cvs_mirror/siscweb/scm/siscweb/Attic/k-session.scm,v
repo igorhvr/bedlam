@@ -1,0 +1,204 @@
+head	1.1;
+access;
+symbols
+	rel-0-2-dev:1.1.0.4
+	rel-0-1-dev:1.1.0.2;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2005.04.17.21.12.35;	author acolomba;	state dead;
+branches
+	1.1.4.1;
+next	;
+
+1.1.4.1
+date	2005.04.17.23.35.47;	author acolomba;	state Exp;
+branches;
+next	1.1.4.2;
+
+1.1.4.2
+date	2005.04.19.01.43.52;	author acolomba;	state Exp;
+branches;
+next	1.1.4.3;
+
+1.1.4.3
+date	2005.05.08.18.40.29;	author acolomba;	state dead;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@file k-session.scm was initially added on branch rel-0-1-dev.
+@
+text
+@@
+
+
+1.1.4.1
+log
+@initial import
+@
+text
+@a0 100
+;;; The contents of this file are subject to the Mozilla Public License Version
+;;; 1.1 (the "License"); you may not use this file except in compliance with
+;;; the License. You may obtain a copy of the License at
+;;; http://www.mozilla.org/MPL/
+;;;
+;;; Software distributed under the License is distributed on an "AS IS" basis,
+;;; WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+;;; for the specific language governing rights and limitations under the
+;;; License.
+;;;
+;;; The Original Code is SISCweb.
+;;;
+;;; The Initial Developer of the Original Code is Alessandro Colomba.
+;;; Portions created by the Initial Developer are Copyright (C) 2005
+;;; Alessandro Colomba. All Rights Reserved.
+;;;
+;;; Contributor(s):
+;;;
+;;; Alternatively, the contents of this file may be used under the terms of
+;;; either the GNU General Public License Version 2 or later (the "GPL"), or
+;;; the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+;;; in which case the provisions of the GPL or the LGPL are applicable instead
+;;; of those above. If you wish to allow use of your version of this file only
+;;; under the terms of either the GPL or the LGPL, and not to allow others to
+;;; use your version of this file under the terms of the MPL, indicate your
+;;; decision by deleting the provisions above and replace them with the notice
+;;; and other provisions required by the GPL or the LGPL. If you do not delete
+;;; the provisions above, a recipient may use your version of this file under
+;;; the terms of any one of the MPL, the GPL or the LGPL.
+
+(require-library 'siscweb/k-hash)
+(require-library 'siscweb/util)
+
+(module siscweb/k-session
+  (clear/k! fetch/k store/k! start-k-manager stop-k-manager)
+
+  (import s2j)
+  (import type-system)
+
+  (import siscweb/k-hash)
+  (import siscweb/util)
+
+
+  (define-java-classes
+    (<continuation-manager> |siscweb.contcentric.ContinuationManager|)
+    (<continuation-manager-thread> |siscweb.contcentric.ContinuationManagerThread|)
+    (<continuation-table> |siscweb.contcentric.ContinuationTable|))
+
+  (define-generic-java-methods store-continuation fetch-continuation purge-expired clear get-attribute set-attribute get-instance start terminate)
+
+
+  (define k-manager-thread #f)
+
+  (define (start-k-manager servlet-context)
+    (set! k-manager-thread (java-new <continuation-manager-thread>
+                                      (get-instance (java-null <continuation-manager>)
+                                                    servlet-context)))
+    (start k-manager-thread))
+
+  (define (stop-k-manager servlet-context)
+    (if k-manager-thread
+        (terminate k-manager-thread)
+        (set! k-manager-thread #f)))
+
+
+  ;; fetches the continuation identified by k-id
+  ;; from the repository in the session
+  (define (fetch/k session k-hash)
+    (if k-hash
+        (let ((k-wrap (fetch-continuation (get-continuation-table session)
+                                          (->jstring k-hash))))
+          (if (java-null? k-wrap)
+              #f
+              (java-unwrap k-wrap)))
+        #f))
+
+
+  ;; fetches the continuation-table
+  (define (get-continuation-table session)
+     (get-instance (java-null <continuation-table>) session))
+
+  ;; stores the given continuation and
+  ;; returns a k-url made of the current
+  ;; request url with the k-id added/substituted
+  (define (store/k! session k ttl)
+    (let ((k-hash (get-random-hash)))
+      (store-continuation (get-continuation-table session)
+                          (->jstring k-hash)
+                          (java-wrap k)
+                          (->jlong ttl))
+      k-hash))
+
+
+
+  ;; clears the continuation table
+  (define (clear/k! session-id)
+    (clear (get-continuation-table session-id)))
+
+
+  )
+@
+
+
+1.1.4.2
+log
+@changed interface -- now accepts session objects in input
+@
+text
+@d31 1
+d38 1
+d40 1
+d43 1
+d49 1
+a49 3
+  (define-generic-java-methods
+    clear get-attribute fetch-continuation get-instance purge-expired
+    set-attribute start store-continuation terminate)
+d55 3
+a57 4
+    (set! k-manager-thread
+          (java-new <continuation-manager-thread>
+                    (get-instance (java-null <continuation-manager>)
+                                  servlet-context)))
+d66 2
+a67 2
+  ;; fetches the continuation identified by k-hash from the repository
+  ;; in the session
+d72 3
+a74 4
+          (display k-wrap)
+          (if (not (java-null? k-wrap))
+              (java-unwrap k-wrap)
+              #f))
+d85 7
+a91 5
+  (define (store/k! session hash k ttl)
+    (store-continuation (get-continuation-table session)
+                        (->jstring hash)
+                        (java-wrap k)
+                        (->jlong ttl)))
+d96 2
+a97 2
+  (define (clear/k! session)
+    (clear (get-continuation-table session)))
+@
+
+
+1.1.4.3
+log
+@rename from k-session.scm to ks-session.scm
+@
+text
+@@
+
+
