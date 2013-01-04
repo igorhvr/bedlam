@@ -4,13 +4,16 @@
   (j "clojure.lang.Compiler.load(new StringReader(s));" `((s ,(->jstring code)))))
 
 (define clojure/repl-start
-  (lambda* ((port 5000))
+  (lambda* ((port 5000) (tty-port (+ port 1)))
       (clojure/run
        (string-append
         "(use '[clojure.tools.nrepl.server :only (start-server stop-server)])"       
-        "(defonce server (start-server :port "
-        (number->string port)
-        "))"))))
+        "(start-server :port "  (number->string port) ")"
+        "(require '[clojure.tools.nrepl.transport :as t])"
+        "(start-server :transport-fn t/tty :port " (number->string tty-port)  ")"
+        ))))
+
+
 
 (define (create-runner)
   (j

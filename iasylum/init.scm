@@ -226,7 +226,7 @@
 
 (define (nrepls)
   (d "\nStarting repls at 3000 (SISC), 3001 (beanshell httpd), 3002 (beanshell), 6000 (clojure)...")
-  (d "\nClojure: " (clojure/repl-start 6000) " - started at port 6000\n")
+  (d "\nClojure: " (clojure/repl-start 6000) " - started at port 6000 (nrepl) and 6001 (tty transport).\n")
   (j "iu.M.i();"))
 
 ;; and-let*. e.g.:
