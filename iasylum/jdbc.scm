@@ -14,7 +14,9 @@
                      )
 
   (define (jdbc/load-drivers)
-    (and (j "Class.forName(\"org.postgresql.Driver\");") #t))
+    (and (j "Class.forName(\"org.postgresql.Driver\");")
+         (j "Class.forName(\"net.sf.log4jdbc.DriverSpy\");")
+         #t))
   
   (define (jdbc/get-connection url username password)
     (jdbc/load-drivers)
