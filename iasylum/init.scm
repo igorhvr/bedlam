@@ -45,6 +45,8 @@
 (add-lib "u/bsf.jar")
 (add-lib "u/js.jar")
 (add-lib "u/jdbc-postgresql.jar")
+(add-lib "jdbc/log4jdbc4-1.2.jar")
+(add-lib "jdbc/slf4j-api-1.6.0.jar")
 (add-lib "excel/poi-3.9-20121203.jar")
 (add-lib "excel/poi-ooxml-3.9-20121203.jar")
 (add-lib "excel/poi-examples-3.9-20121203.jar")
