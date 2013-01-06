@@ -14,7 +14,8 @@
                      )
 
   (define (jdbc/load-drivers)
-    (and (j "Class.forName(\"org.postgresql.Driver\");")
+    (j "System.setProperty(\"log4jdbc.dump.sql.maxlinelength\", \"0\");")
+    (and (j "Class.forName(\"org.postgresql.Driver\");")         
          (j "Class.forName(\"net.sf.log4jdbc.DriverSpy\");")
          #t))
   
