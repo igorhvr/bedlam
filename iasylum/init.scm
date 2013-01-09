@@ -235,3 +235,29 @@
 ;; and-let*. e.g.:
 ;; (and-let* ((v (assoc  "subscription_id" '(("subscription_id" ":db/unique    :db.unique/identity")) ))) (cdr v))
 (require-extension (srfi 2))
+
+;; Irresistibly horrible.
+;; Source: http://okmij.org/ftp/Scheme/setf.txt
+(define-macro (setf! F V)
+  ;; symbol->string chopping off a trailing -ref if any
+  (define (-ref-less sym)
+    (let* ((str (symbol->string sym)) (suffix "-ref")
+           (s-pos (- (string-length str) (string-length suffix))))
+      (if (negative? s-pos) str
+        (let loop ((i 0))
+             (cond
+              ((>= i (string-length suffix)) (substring str 0 s-pos))
+              ((char=? (string-ref suffix i) (string-ref str (+ i s-pos)))
+               (loop (+ 1 i)))
+              (else str))))))
+
+  (if (not (pair? F)) `(set! ,F ,V)
+    (case (car F)
+          ((car) `(set-car! ,@(cdr F) ,V))
+          ((cdr) `(set-cdr! ,@(cdr F) ,V))
+          ((cadr) `(setf! (car (cdr ,@(cdr F))) ,V))
+          ((cddr) `(setf! (cdr (cdr ,@(cdr F))) ,V))
+                ; I need to handle other cadda..vers but I'm tired...
+          (else `(,(string->symbol (string-append (-ref-less (car F)) "-set!"))
+                  ,@(cdr F) ,V)))))
+
