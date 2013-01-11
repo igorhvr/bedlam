@@ -13,11 +13,14 @@
                      jdbc/for-each-triple
                      )
 
+  
   (define (jdbc/load-drivers)
     (j "System.setProperty(\"log4jdbc.dump.sql.maxlinelength\", \"0\");")
-    (and (j "Class.forName(\"org.postgresql.Driver\");")         
-         (j "Class.forName(\"net.sf.log4jdbc.DriverSpy\");")
-         #t))
+    (and
+     (with-failure-continuation (lambda (e p) (list e p)) (lambda () (j "Class.forName(\"org.postgresql.Driver\");")))
+     (with-failure-continuation (lambda (e p) (list e p)) (lambda () (j "Class.forName(\"net.sf.log4jdbc.DriverSpy\");")))
+     (with-failure-continuation (lambda (e p) (list e p)) (lambda () (j "Class.forName(\"net.sourceforge.jtds.jdbc.Driver\");")))
+     #t))
   
   (define (jdbc/get-connection url username password)
     (jdbc/load-drivers)
