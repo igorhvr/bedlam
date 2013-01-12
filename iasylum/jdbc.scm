@@ -11,6 +11,7 @@
                      for-each-data
                      map-each-data
                      jdbc/for-each-triple
+                     create-thread-local-jdbc/get-connection-function
                      )
 
   
@@ -24,16 +25,36 @@
   
   (define (jdbc/get-connection url username password)
     (jdbc/load-drivers)
-    ;;(jdbc/load-driver "org.postgresql.Driver")
-    ;;jdbc:postgresql://host:port/database
-    ;; Why the heck the below does not work?
-    ;;(jdbc/open-connection "jdbc:postgresql://localhost:5432/dtdata" "dtdata" "dtdata")
+
     (j "java.sql.DriverManager.getConnection(url,username,password);"
        `(
          (url ,(->jstring url))
          (username ,(->jstring username))
          (password ,(->jstring password))
          )))
+
+  (define-generic-java-method get |get|)
+  (define-generic-java-method set |set|)
+  
+  (define (create-thread-local-jdbc/get-connection-function url username password)
+    (jdbc/load-drivers)
+
+    (let ((tl
+           (j "mtl=new ThreadLocal() {
+                   protected synchronized Object initialValue() {                       
+                       return java.sql.DriverManager.getConnection(url,username,password);
+                   }
+               }; mtl;"
+       `(
+         (url ,(->jstring url))
+         (username ,(->jstring username))
+         (password ,(->jstring password))
+         ))))
+      (lambda ()
+        (let ((result (get tl)))
+          (when (java-null? result) (set tl (jdbc/get-connection url username password)))
+          (let ((to-return (get tl)))            
+            to-return)))))
 
   (define-generic-java-method gmd |getMetaData|)
   
