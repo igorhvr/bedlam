@@ -224,6 +224,9 @@
 ;; From http://johannburkard.de/software/uuid/
 (add-lib "u/uuid-3.3.jar")
 
+;; Force class loading.
+(j "iu.M.d;")
+
 (require-extension (lib iasylum/clojure))
 
 (define nrepls

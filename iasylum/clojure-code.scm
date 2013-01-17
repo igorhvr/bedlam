@@ -22,7 +22,9 @@
 
    public class ClojureScriptRunner {
 
-       public static Object runClosureScript(Map bindings, String script) throws Exception { 
+       public static Object runClosureScript(Map bindings, String script) throws Exception {
+           Object ClojureScriptRunner_result=null;
+
 	   try { 
 	       new Binding(script); Namespace ns = (Namespace) RT.CURRENT_NS.get(); Associative mappings = PersistentHashMap.EMPTY; 
 	       mappings = mappings.assoc(RT.CURRENT_NS, RT.CURRENT_NS.get()); 
@@ -30,12 +32,17 @@
 		   String varName = e.getKey(); Symbol sym = Symbol.intern(varName); Var var = Var.intern(ns, sym); 
 		   mappings = mappings.assoc(var, e.getValue()); 
 	       }
-	       Var.pushThreadBindings(mappings); return Compiler.load(new StringReader(script)); 
+               Var.pushThreadBindings(mappings);
+               ClojureScriptRunner_result = Compiler.load(new StringReader(script));
 	   } finally { 
 	       try {
                    Var.popThreadBindings();
-               } catch(Exception e) {}
+               } catch(Exception e) {
+                   throw new RuntimeException(\"Exception while running Clojure script.\", e);
+               }
            }
+
+           return ClojureScriptRunner_result;
        }
 
        
