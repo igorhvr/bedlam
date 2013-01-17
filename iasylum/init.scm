@@ -172,8 +172,7 @@
 
 (add-lib "u/junrar-0.7-SNAPSHOT.jar")
 
-;;(add-lib "clojure/clojure-1.4.0.jar")
-(add-lib "clojure-1.5.0-master-SNAPSHOT.jar")
+(add-lib "clojure/clojure-1.5.0-master-SNAPSHOT.jar")
 (add-lib "clojure/tools.nrepl-0.2.0-SNAPSHOT.jar")
 
 (define (extend-classpath i)
