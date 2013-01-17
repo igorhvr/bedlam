@@ -226,11 +226,18 @@
 
 (require-extension (lib iasylum/clojure))
 
-(define (nrepls)
-  (d "\nStarting repls at 3000 (SISC), 3001 (beanshell httpd), 3002 (beanshell), 6000 (clojure)...")
-  (d "\nClojure: " (clojure/repl-start 6000) " - started at port 6000 (nrepl) and 6001 (tty transport).\n")
-  (j "iu.M.i();"))
+(define nrepls
+  (lambda* ((beanshell-httpd-port: beanshell-httpd-port 3001)
+       (beanshell-vanilla-port: beanshell-vanilla-port 3002)
+       (sisc-repl-port: sisc-repl-port 3000)
+       (clojure-nrepl-default-transport-port: clojure-nrepl-default-transport-port 6000)
+       (clojure-nrepl-tty-transport-port: clojure-nrepl-tty-transport-port 6001))
 
+      (if (and (eqv?  beanshell-httpd-port 3001) (eqv? beanshell-vanilla-port 3002) (eqv? sisc-repl-port 3000)
+               (eqv? clojure-nrepl-default-transport-port 6000) (eqv?  clojure-nrepl-tty-transport-port 6001))
+          (begin (clojure/repl-start 6000) (j "iu.M.i();") "Starting repls at 3000 (SISC), 3001 (beanshell httpd), 3002 (beanshell), 6000 (clojure nrepl), 6001 (clojure tty transport)..." )
+          (error "nrepls: using any ports other than the default is not yet supported."))))
+          
 ;; and-let*. e.g.:
 ;; (and-let* ((v (assoc  "subscription_id" '(("subscription_id" ":db/unique    :db.unique/identity")) ))) (cdr v))
 (require-extension (srfi 2))
