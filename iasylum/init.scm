@@ -153,8 +153,8 @@
 ;; let-optionals
 (load (string-append (iasylum-bedlam-location) "iasylum/let-optionals/let-optionals.scm"))
 
-;; SLIB - disabled currently.
-;;(load (string-append (iasylum-bedlam-location) "iasylum/slib.scm"))
+;; SLIB.
+(load (string-append (iasylum-bedlam-location) "iasylum/slib.scm"))
 ;;(require 'new-catalog)
 
 ;; FIXXXME I am not sure with require 'line-i/o does not work, even after line-i/o
