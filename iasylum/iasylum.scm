@@ -35,6 +35,12 @@
    for-each-row-in-a-spreadsheet-in-a-zipfile
    concurrent-semaphore
    uuid-string
+   get-all-jstreams
+   jstream->tmp-file
+   string-drop-both
+   xor
+   ensure-zipped-copy
+   vector-binary-search
    )
   (import hashtable)
   (import file-manipulation)  ;; rglob uses this.
@@ -430,9 +436,27 @@
       }
       result;"
      `((fname ,(->jstring fname))))))
-  
-  (define d)
-  (define w)
+
+  (define (get-all-jstreams path+filename)
+  (or
+   (and-let* ((is-matching (irregex-search (irregex '(w/nocase (: "." (=> extension (or "zip" "rar") eos)))) path+filename))
+              (extension (irregex-match-substring is-matching 'extension)))        
+          (cond ((string-ci=? "zip" extension)
+                 (let ((zip-streams-list (get-streams-in-zipfile path+filename)))
+                   (map
+                    (lambda (v)                      
+                      (list (string-append path+filename "/@zip-compressed@/" (->string (_1_ v)))
+                            (_0_ v)))
+                    zip-streams-list)))
+                ((string-ci=? "rar" extension)
+                 (let ((rar-streams-list (get-streams-in-rarfile path+filename)))
+                   (map
+                    (lambda (v)
+                      (list (string-append path+filename "/@rar-compressed@/" (->string (_1_ v)))
+                            (_0_ v)))
+                    rar-streams-list)))
+                (else (error "Bug."))))
+   (list (list path+filename (j "new java.io.FileInputStream(fname);" `((fname ,(->jstring path+filename))))))))
 
   (define concurrent-semaphore
     (lambda* ((initialPermits 0))
@@ -445,6 +469,72 @@
             inner-semaphore]
            [()
             (->number (available-permits inner-semaphore)])))))
+
+  (define (jstream->tmp-file stream)
+  (j "jstreamtofile_result=java.io.File.createTempFile(\"jstream-to-file\",\"tmp\");
+      { 
+	jstreamtofile_out = new java.io.FileOutputStream(jstreamtofile_result);
+ 
+	jstreamtofile_read = 0;
+	jstreamtofile_bytes = new byte[1024];
+ 
+	while ((jstreamtofile_read = inputstream.read(jstreamtofile_bytes)) != -1) {
+		jstreamtofile_out.write(jstreamtofile_bytes, 0, jstreamtofile_read);
+	}
+ 	
+	jstreamtofile_out.flush();
+	jstreamtofile_out.close();
+      }
+      jstreamtofile_result;"
+     `((inputstream ,stream))))
+
+  (define (string-drop-both s left-n right-n)
+    (string-drop (string-drop-right s right-n) left-n))
+
+  (define xor
+    (lambda (a b)
+      (cond
+       (a (if (not b) a #f))
+       (else b))))
+  
+  ;; Ensures there is a .zip version of each file in a given directory.
+  (define (ensure-zipped-copy dir)
+    (let* ((file-list (sort (rglob dir) string<))
+           (file-vector (list->vector file-list))
+           (files-without-corresponding-zipfile
+            (filter (lambda (v)
+                      (and
+                       (not (irregex-search (irregex '(w/nocase (: ".zip" eos))) v))
+                       (not (vector-binary-search file-vector (string-append v ".zip") string<))))
+                    file-list))
+           (commands (map (lambda (v)
+                            (string-append "zip -9 -r " v ".zip" " " v))
+                          files-without-corresponding-zipfile)))
+      (for-each
+       (lambda (v)
+         (d "\n\n\nAbout to run " v "...\n")
+         (d "\nResult= " (r/s v)))
+       commands)))
+  
+  ;; If precedes?-operatio returns false for both (precedes? a b) and (precedes? b a)
+  ;; this means that a and b are the same element.
+  (define vector-binary-search
+    (lambda (vec sought . precedes?-operation)
+      (let ((precedes? (if (null? precedes?-operation) < (car precedes?-operation))))
+        (let loop ((start 0)
+                   (stop (- (vector-length vec) 1)))
+          (if (< stop start)
+              #f
+              (let* ((midpoint (quotient (+ start stop) 2))
+                     (mid-value (vector-ref vec midpoint)))
+                (cond ((precedes? sought mid-value)
+                       (loop start (- midpoint 1)))
+                      ((precedes? mid-value sought)
+                       (loop (+ midpoint 1) stop))
+                      (else #t))))))))
+  
+  (define d)
+  (define w)
 
   (define (reset-d)
     (set! d (let ((m (mutex/new))) (lambda p (mutex/lock! m) (for-each display p) (mutex/unlock! m) (void)))))
