@@ -1,0 +1,280 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><head>
+<title>Download SSAX-SXML Package
+</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="GENERATOR" content="hevea 1.10">
+<style type="text/css">
+.li-itemize{margin:1ex 0ex;}
+.li-enumerate{margin:1ex 0ex;}
+.dd-description{margin:0ex 0ex 1ex 4ex;}
+.dt-description{margin:0ex;}
+.toc{list-style:none;}
+.thefootnotes{text-align:left;margin:0ex;}
+.dt-thefootnotes{margin:0em;}
+.dd-thefootnotes{margin:0em 0em 0em 2em;}
+.footnoterule{margin:1em auto 1em 0px;width:50%;}
+.caption{padding-left:2ex; padding-right:2ex; margin-left:auto; margin-right:auto}
+.title{margin:2ex auto;text-align:center}
+.center{text-align:center;margin-left:auto;margin-right:auto;}
+.flushleft{text-align:left;margin-left:0ex;margin-right:auto;}
+.flushright{text-align:right;margin-left:auto;margin-right:0ex;}
+DIV TABLE{margin-left:inherit;margin-right:inherit;}
+PRE{text-align:left;margin-left:0ex;margin-right:auto;}
+BLOCKQUOTE{margin-left:4ex;margin-right:4ex;text-align:left;}
+TD P{margin:0px;}
+.boxed{border:1px solid black}
+.textboxed{border:1px solid black}
+.vbar{border:none;width:2px;background-color:black;}
+.hbar{border:none;height:2px;width:100%;background-color:black;}
+.hfill{border:none;height:1px;width:200%;background-color:black;}
+.vdisplay{border-collapse:separate;border-spacing:2px;width:auto; empty-cells:show; border:2px solid red;}
+.vdcell{white-space:nowrap;padding:0px;width:auto; border:2px solid green;}
+.display{border-collapse:separate;border-spacing:2px;width:auto; border:none;}
+.dcell{white-space:nowrap;padding:0px;width:auto; border:none;}
+.dcenter{margin:0ex auto;}
+.vdcenter{border:solid #FF8000 2px; margin:0ex auto;}
+.minipage{text-align:left; margin-left:0em; margin-right:auto;}
+.marginpar{border:solid thin black; width:20%; text-align:left;}
+.marginparleft{float:left; margin-left:0ex; margin-right:1ex;}
+.marginparright{float:right; margin-left:1ex; margin-right:0ex;}
+.theorem{text-align:left;margin:1ex auto 1ex 0ex;}
+.part{margin:2ex auto;text-align:center}
+</style>
+<script src="ssax-sxml-docs_files/ga.js" async="" type="text/javascript"></script><script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34109655-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+<body>
+<!--HEVEA command line is: D:\Dima\Soft\hevea_2007\hevea -exec xxdate.exe download.tex -->
+<!--CUT DEF section 1 --><table class="title"><tbody><tr><td><h1 class="titlemain">Download SSAX-SXML Package</h1></td></tr>
+</tbody></table><p>On this page:
+</p><ol class="enumerate" type="1"><li class="li-enumerate">
+<a href="#hevea:bigloo">SSAX-SXML package for Bigloo</a>
+</li><li class="li-enumerate"><a href="#hevea:chicken">SSAX-SXML package for Chicken</a>
+</li><li class="li-enumerate"><a href="#hevea:gambit">SSAX-SXML package for Gambit</a>
+</li><li class="li-enumerate"><a href="#hevea:plt">SSAX-SXML package for PLT</a>
+</li><li class="li-enumerate"><a href="#hva:sisc">SSAX-SXML package for SISC</a> (ported by 
+<a href="http://jottbee.org/english/index.html">Johannes Brügmann</a>)
+</li></ol><p><a name="hevea:bigloo"></a>
+</p><!--TOC section SSAX-SXML package for Bigloo-->
+<h2 class="section"><!--SEC ANCHOR --><a name="htoc1">1</a>&nbsp;&nbsp;SSAX-SXML package for Bigloo</h2><!--SEC END --><p><a href="http://modis.ispras.ru/Lizorkin/Download/ssax-sxml-bigloo-060529.tgz"><em>Download the package</em></a> (last updated: 29.05.2006)</p><p>Depending on your operating system, different actions are required for
+compiling/using the package:</p><!--TOC subsection Compiling/using the package under Linux-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc2">1.1</a>&nbsp;&nbsp;Compiling/using the package under Linux</h3><!--SEC END --><!--TOC subsubsection Installing the library-->
+<h4 class="subsubsection"><!--SEC ANCHOR --><a name="htoc3">1.1.1</a>&nbsp;&nbsp;Installing the library</h4><!--SEC END --><p>To install the SSAX-SXML library, take the following steps:
+</p><ol class="enumerate" type="1"><li class="li-enumerate">
+Execute the following commands in your terminal:<br>
+ <tt>$ tar zxf ssax-sxml-bigloo-060529.tgz</tt><br>
+ <tt>$ cd ssax-sxml</tt><br>
+ <tt>$ make lib</tt></li><li class="li-enumerate">Ensure that the value bound to the <code>DEST</code> variable in the first
+non-commented line of the “<code>./Makefile</code>” is a path presented in your
+“<code>/etc/ld.so.conf</code>” file.</li><li class="li-enumerate">Execute:<br>
+ <tt>$ make install</tt><br>
+ <tt>$ ldconfig</tt>
+</li></ol><!--TOC subsubsection Running the example-->
+<h4 class="subsubsection"><!--SEC ANCHOR --><a name="htoc4">1.1.2</a>&nbsp;&nbsp;Running the example</h4><!--SEC END --><p>The SSAX-SXML package comes with an example that illustrates the primary
+high-level functions provided in the package.</p><p>To run the example, execute:<br>
+<tt>$ make</tt><br>
+<tt>$ ./example.out</tt></p><!--TOC subsubsection Running tests-->
+<h4 class="subsubsection"><!--SEC ANCHOR --><a name="htoc5">1.1.3</a>&nbsp;&nbsp;Running tests</h4><!--SEC END --><p>The SSAX-SXML package comes with a test fixture that allows you ensure that
+the package works properly on your machine.</p><p>To run tests, execute:<br>
+<tt>$ ./test-sxml.out</tt></p><p>The executable “<code>test-sxml.out</code>” may take several minutes to perform all
+the tests.
+The executable should normally display “<code>All tests passed successfully</code>”
+at the end.</p><!--TOC subsection Compiling/using the package under Windows-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc6">1.2</a>&nbsp;&nbsp;Compiling/using the package under Windows</h3><!--SEC END --><!--TOC subsubsection Installing the library-->
+<h4 class="subsubsection"><!--SEC ANCHOR --><a name="htoc7">1.2.1</a>&nbsp;&nbsp;Installing the library</h4><!--SEC END --><p>To install the SSAX-SXML library, take the following steps:
+</p><ol class="enumerate" type="1"><li class="li-enumerate">
+Execute the following commands in your command-line:<br>
+ <tt>$ tar zxf ssax-sxml-bigloo-060529.tgz</tt><br>
+ <tt>$ cd ssax-sxml</tt><br>
+ <tt>$ mv Makefile Makefile.linux</tt><br>
+ <tt>$ mv Makefile.win Makefile</tt></li><li class="li-enumerate">Execute:<br>
+ <tt>$ make dll</tt></li></ol><!--TOC subsubsection Running the example-->
+<h4 class="subsubsection"><!--SEC ANCHOR --><a name="htoc8">1.2.2</a>&nbsp;&nbsp;Running the example</h4><!--SEC END --><p>The SSAX-SXML package comes with an example that illustrates the primary
+high-level functions provided in the package.</p><p>To run the example, execute:<br>
+<tt>$ make</tt><br>
+<tt>$ ./example.exe</tt></p><!--TOC subsubsection Running tests-->
+<h4 class="subsubsection"><!--SEC ANCHOR --><a name="htoc9">1.2.3</a>&nbsp;&nbsp;Running tests</h4><!--SEC END --><p>The SSAX-SXML package comes with a test fixture that allows you ensure that
+the package works properly on your machine.</p><p>To run tests, execute:<br>
+<tt>$ ./test-sxml.exe</tt></p><p>The executable should normally display “<code>All tests passed successfully</code>”
+at the end.</p><div class="theorem"><b>Note&nbsp;1</b>&nbsp;&nbsp;<em>
+The Makefile in the package is specific for the recent Bigloo version&nbsp;2.7a.<br>
+ For Bigloo&nbsp;2.6f, you can </em><a href="http://modis.ispras.ru/Lizorkin/Download/ssax-sxml-bigloo-060126.tgz">download the older package</a><em> (last updated: 26.01.2006).
+The package for Bigloo&nbsp;2.6f will not probably be updated further.
+</em></div><p><a name="hevea:chicken"></a>
+</p><!--TOC section SSAX-SXML package for Chicken-->
+<h2 class="section"><!--SEC ANCHOR --><a name="htoc10">2</a>&nbsp;&nbsp;SSAX-SXML package for Chicken</h2><!--SEC END --><p><a href="http://modis.ispras.ru/Lizorkin/Download/ssax-sxml-chicken-060529.tgz"><em>Download the package</em></a> (last updated: 29.05.2006)</p><!--TOC subsection Compiling the package-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc11">2.1</a>&nbsp;&nbsp;Compiling the package</h3><!--SEC END --><p>To compile the SSAX-SXML package, execute the following commands in your
+terminal:<br>
+<tt>$ tar zxf ssax-sxml-chicken-060529.tgz</tt><br>
+<tt>$ cd ssax-sxml</tt><br>
+<tt>$ make</tt></p><!--TOC subsection Running the example-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc12">2.2</a>&nbsp;&nbsp;Running the example</h3><!--SEC END --><p>The SSAX-SXML package comes with an example that illustrates the primary
+high-level functions provided in the package.</p><p>To run the example, execute:<br>
+<tt>$ ./example.out</tt></p><!--TOC subsection Running tests-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc13">2.3</a>&nbsp;&nbsp;Running tests</h3><!--SEC END --><p>The SSAX-SXML package comes with a test fixture that allows you ensure that
+the package works properly on your machine.</p><p>To run tests, execute:<br>
+<tt>$ make test-sxml.out</tt><br>
+<tt>$ ./test-sxml.out</tt></p><p><a name="hevea:gambit"></a>
+</p><!--TOC section SSAX-SXML package for Gambit-->
+<h2 class="section"><!--SEC ANCHOR --><a name="htoc14">3</a>&nbsp;&nbsp;SSAX-SXML package for Gambit</h2><!--SEC END --><p><a href="http://modis.ispras.ru/Lizorkin/Download/ssax-sxml-gambit-060529.tgz"><em>Download the package</em></a> (last updated: 29.05.2006)</p><!--TOC subsection Compiling the package-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc15">3.1</a>&nbsp;&nbsp;Compiling the package</h3><!--SEC END --><p>To compile the SSAX-SXML package, execute the following commands in your
+terminal:<br>
+<tt>$ tar zxf ssax-sxml-gambit-060529.tgz</tt><br>
+<tt>$ cd ssax-sxml</tt><br>
+<tt>$ make</tt></p><!--TOC subsection Running the example-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc16">3.2</a>&nbsp;&nbsp;Running the example</h3><!--SEC END --><p>The SSAX-SXML package comes with an example that illustrates the primary
+high-level functions provided in the package.</p><p>To run the example, execute:<br>
+<tt>$ LD_LIBRARY_PATH=.:/usr/local/lib ./example.out</tt></p><!--TOC subsection Running tests-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc17">3.3</a>&nbsp;&nbsp;Running tests</h3><!--SEC END --><p>The SSAX-SXML package comes with a test fixture that allows you ensure that
+the package works properly on your machine.</p><p>To run tests, execute:<br>
+<tt>$ LD_LIBRARY_PATH=.:/usr/local/lib ./test-sxml.out</tt></p><p>The executable should normally display “<code>All tests passed successfully</code>”
+at the end.</p><p><a name="hevea:plt"></a>
+<a name="hva:plt"></a>
+</p><!--TOC section SSAX-SXML package for PLT-->
+<h2 class="section"><!--SEC ANCHOR --><a name="htoc18">4</a>&nbsp;&nbsp;SSAX-SXML package for PLT</h2><!--SEC END --><p><a href="http://modis.ispras.ru/Lizorkin/Download/ssax-sxml-060530.plt"><em>Download the package</em></a> (last updated: 30.05.2006)</p><!--TOC subsection Setting up the package-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc19">4.1</a>&nbsp;&nbsp;Setting up the package</h3><!--SEC END --><ol class="enumerate" type="1"><li class="li-enumerate">
+Put the downloaded file “<tt>ssax-sxml-060530.plt</tt>”
+to the PLT “<tt>collect/</tt>” folder:
+<ul class="itemize"><li class="li-itemize">
+on Linux, this is probably “<code>/usr/local/plt/collects/</code>”
+</li><li class="li-itemize">on Windows, this is probably “<code>C:\Program Files\plt\collects\</code>”
+</li></ul></li><li class="li-enumerate">Execute:
+<ul class="itemize"><li class="li-itemize">
+on Linux:<br>
+ <tt>$ setup-plt --force ssax-sxml-060530.plt</tt>
+</li><li class="li-itemize">on Windows:<br>
+ <tt>$ "Setup PLT.exe" --force ssax-sxml-060530.plt</tt>
+</li></ul>
+</li></ol><p>You can now use the SSAX-SXML library by adding the following line to your
+Scheme programme:<br>
+<tt>(require (lib "ssax-sxml.ss" "ssax-sxml"))</tt></p><!--TOC subsection Running the example-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc20">4.2</a>&nbsp;&nbsp;Running the example</h3><!--SEC END --><p>The SSAX-SXML package comes with an example that illustrates the primary
+high-level functions provided in the package.</p><p>You can run the example by requiring the file “<code>example.ss</code>” from
+“<code>ssax-sxml</code>” library.
+In particular, you can run the example from your command-line, by executing 
+the following command:<br>
+<tt>$ mzscheme -g</tt><br>
+&nbsp;&nbsp;&nbsp;<tt>&gt; (require (lib "ssax-sxml.ss" "ssax-sxml"))</tt><br>
+&nbsp;&nbsp;&nbsp;<tt>&gt; (require (lib "example.ss" "ssax-sxml"))</tt></p><!--TOC subsection Running tests-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc21">4.3</a>&nbsp;&nbsp;Running tests</h3><!--SEC END --><p>The SSAX-SXML package comes with a test fixture that allows you ensure that
+the package works properly on your machine.</p><p>To run the tests, execute:<br>
+<tt>$ mzscheme -g</tt><br>
+&nbsp;&nbsp;&nbsp;<tt>&gt; (require (lib "test-sxml.ss" "ssax-sxml"))</tt></p><p>The executable should normally display “<code>All tests passed successfully</code>”
+at the end.</p><div class="theorem"><b>Note&nbsp;2</b>&nbsp;&nbsp;<em>
+For proper XML processing, the SSAX-SXML package requires case-sensitivity
+to be turned on.
+Ensure to turn case-sensitivity on when running the tests.
+</em></div><div class="theorem"><b>Note&nbsp;3</b>&nbsp;&nbsp;<em>
+For PLT v.&nbsp;207 or higher, you can alternatively download the SSAX-SXML package
+from the PlaneT repository:
+</em><ul class="itemize"><li class="li-itemize"><em>
+</em><em>for PLT (207 &lt;= version &lt; 299), add the following line to your Scheme
+programme:
+</em><pre class="verbatim"><em>(require (planet "sxml.ss" ("lizorkin" "sxml.plt" 2 2)))</em></pre></li><li class="li-itemize"><em>for PLT v. 299 or higher, add the following line to your programme:
+</em><pre class="verbatim"><em>(require (planet "sxml.ss" ("lizorkin" "sxml.plt" 1 4)))</em></pre></li></ul><em>
+</em></div><p><a name="hva:sisc"></a>
+</p><!--TOC section SSAX-SXML package for SISC<BR>
+ (ported and maintained by 
+Johannes Brügmann)
+-->
+<h2 class="section"><!--SEC ANCHOR --><a name="htoc22">5</a>&nbsp;&nbsp;SSAX-SXML package for SISC<br>
+ (ported and maintained by 
+<a href="http://jottbee.org/english/index.html">Johannes Brügmann</a>)
+</h2><!--SEC END --><p><a href="http://www.jottbee.org/download/ssax-sxml.jar"><em>Download the package</em></a> (last updated: 14.11.2008)</p><!--TOC subsection Setting up the package-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc23">5.1</a>&nbsp;&nbsp;Setting up the package</h3><!--SEC END --><ol class="enumerate" type="1"><li class="li-enumerate">
+Store the downloaded file “<tt>ssax-sxml.jar</tt>” somewhere on your
+classpath, let’s say “<code>C:\users\MeMyselfAndI\sisc</code>”.</li><li class="li-enumerate">Tell java about your new jar-file and define the abbreviated path
+<tt>sisc.ssax-sxml</tt> for it.
+There are several alternative ways of doing this:
+<ul class="itemize"><li class="li-itemize">
+By adding the new location of the jar-file, that is, 
+“<code>C:\users\MeMyselfAndI\sisc\ssax-sxml.jar</code>”, to the
+<tt>CLASSPATH</tt> environment-variable</li><li class="li-itemize">By editing the “<tt>sisc.bat</tt>” or “<tt>sisc</tt>” file
+directly (which is necessary anyway):
+<pre class="verbatim">%JAVA% %JAVAOPT% \
+       -classpath "...;C:\users\MeMyselfAndI\sisc\ssax-sxml.jar;%CLASSPATH%" \
+       -Dsisc.ssax-sxml="C:\users\MeMyselfAndI\sisc" \
+       -Xmx512m \
+       sisc.REPL</pre></li><li class="li-itemize">For FreeBSD and tcsh users, by creating a new “sisc”-shellscript:
+<ol class="enumerate" type="a"><li class="li-enumerate">
+Edit the file “<tt>/home/MeMyselfAndI/.cshrc</tt>”
+like <a href="http://modis.ispras.ru/Lizorkin/Download/cshrc.txt">this</a></li><li class="li-enumerate">Create the shell script “<tt>/home/MeMyselfAndI/bin/sisc</tt>”:
+<pre class="verbatim">#!/usr/bin/env tcsh
+source ~/.cshrc
+exec $JAVA $JAVAOPT \
+           -classpath "$CLASSPATH" \
+     sisc.REPL -h /usr/local/share/sisc/sisc.shp \
+               $argv</pre></li></ol>
+</li></ul><p>Make sure that the abbreviated path is <tt>sisc.ssax-sxml</tt>, or otherwise
+edit “<tt>ssax-sxml.scm</tt>” and the dependent files.
+Exception: <code>(require-library 'sisc/foo/ssax-sxml-code)</code> should work
+anyway.
+</p></li></ol><!--TOC subsection Using the libraries-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc24">5.2</a>&nbsp;&nbsp;Using the libraries</h3><!--SEC END --><p>Now start sisc and load the libraries you need.
+This port comes with SSAX-SXML,
+<a href="http://celtic.benderweb.net/sxml-match/index.html">SXML-Match</a>, and
+<a href="http://celtic.benderweb.net/webit/docs/xquery-pre/">XQuery</a> support:
+</p><pre class="verbatim">SISC (1.16.6)
+&gt; (require-library 'sisc/ssax-sxml/ssax-sxml-code)
+(sisc/ssax-sxml/ssax-sxml-code
+  (sisc/libs/srfi 
+    ...
+    )
+&gt; (require-library 'sisc/ssax-sxml/sxml-match)
+(sisc/ssax-sxml/sxml-match)
+&gt; (require-library 'sisc/ssax-sxml/query)
+(sisc/ssax-sxml/query)</pre><!--TOC subsection Running tests-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc25">5.3</a>&nbsp;&nbsp;Running tests</h3><!--SEC END --><p>You can run all the tests that are shipped with SSAX-SXML to verify
+that everything works in one of the following ways:
+</p><ul class="itemize"><li class="li-itemize">
+Evaluate:<br>
+ <tt>&gt; (require-library ’sisc/ssax-sxml/doc/tests/all-tests)</tt><br>
+ or</li><li class="li-itemize">Unpack the JAR-file using unzip (maybe rename that file to <tt>.zip</tt>)
+in a place of your choice and change to subdirectory
+<tt>sisc/ssax-sxml/doc/tests</tt> and then evaluate:<br>
+ <tt>&gt; (load "all-tests.scm")</tt>
+</li></ul><!--TOC subsection Additional notes-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc26">5.4</a>&nbsp;&nbsp;Additional notes</h3><!--SEC END --><ol class="enumerate" type="1"><li class="li-enumerate">
+Have a look at “<tt>sisc/ssax-sxml/doc/tests/vsxml-tutorial.scm</tt>”
+in the package, the file contains an xtest-assertion for every example from
+<a href="http://modis.ispras.ru/Lizorkin/sxml-tutorial.html">SXML-Tutorial</a>
+and a list of modules to import.</li><li class="li-enumerate">Differences to other SSAX-SXML-Ports:
+<ul class="itemize"><li class="li-itemize">
+module <tt>sxpath</tt> is called <tt>mdl:sxpath</tt>
+(if you know how to fix that, please let me know)
+</li><li class="li-itemize">module <tt>txpath</tt> is called <tt>mdl:txpath</tt>
+(if you know how to fix that, please let me know)
+</li><li class="li-itemize">case-sensitivity is achieved in SISC with <code>'|FooBar|</code>, so some
+examples of the SXML-Tutorial need to be adopted for this
+</li><li class="li-itemize">the lib contains two versions of the code: 
+<ul class="itemize"><li class="li-itemize">
+<tt>sisc/ssax-sxml/ssax-sxml</tt> is modularized and scheme source code
+</li><li class="li-itemize"><tt>sisc/ssax-sxml/ssax-sxml-code</tt> is a “all-in-one” single file
+with compiled code for little better performance and faster loading
+(loads in max 4 seconds on Turion64 X2)
+</li></ul>
+</li></ul></li><li class="li-enumerate">Bug-reports: please send bugreports that are limited to the
+SISC-port to <a href="mailto:bugs@jottbee.org">bugs@jottbee.org</a>
+</li></ol><p><br>
+
+<a href="http://modis.ispras.ru/Lizorkin/xml-functional.html"><em>Back to XML-Functional page</em></a></p><!--CUT END -->
+<!--HTMLFOOT-->
+<!--ENDHTML-->
+<!--FOOTER-->
+<hr size="2"><blockquote class="quote"><em>This document was translated from L<sup>A</sup>T<sub>E</sub>X by
+</em><a href="http://hevea.inria.fr/index.html"><em>H</em><em><font size="2"><sup>E</sup></font></em><em>V</em><em><font size="2"><sup>E</sup></font></em><em>A</em></a><em>.</em></blockquote>
+
+</body></html>
