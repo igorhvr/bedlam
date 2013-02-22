@@ -64,7 +64,7 @@
 (add-lib "u/activation-1.1.jar")
 (add-lib "u/commons-email-1.1.jar")
 (add-lib "u/commons-fileupload-1.2.1.jar")
-(add-lib "u/commons-io-1.4.jar")
+(add-lib "u/commons-io-2.0.1.jar")
 (add-lib "u/commons-logging-1.1.jar")
 (add-lib "u/junit-3.8.1.jar")
 (add-lib "u/log4j-1.2.13.jar")
