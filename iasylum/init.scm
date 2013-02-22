@@ -240,6 +240,34 @@
                (eqv? clojure-nrepl-default-transport-port 6000) (eqv?  clojure-nrepl-tty-transport-port 6001))
           (begin (clojure/repl-start 6000) (j "iu.M.i();") "Starting repls at 3000 (SISC), 3001 (beanshell httpd), 3002 (beanshell), 6000 (clojure nrepl), 6001 (clojure tty transport)..." )
           (error "nrepls: using any ports other than the default is not yet supported."))))
+
+(define (start-bsh-service portnum)
+  (j "		bsh.Interpreter i = new bsh.Interpreter();
+		i.set( \"data\", iu.M.d );
+		i.set( \"portnum\", portnum );  
+		i.eval(\"setAccessibility(true)\");
+		i.eval(\"show()\");
+		i.eval(\"server(portnum)\");" `((portnum ,(->jint portnum)))))
+
+	     
+;; FIXME - this is not working currently.
+(define (start-sisc-service portnum)
+  (let* ((addr (j "java.net.InetAddress.getByName(\"localhost\");"))
+          (server-socket (j "new ServerSocket(port, 50, addr);" `((addr ,addr) (port ,(->jint portnum))))))
+    (j "new Thread() {
+                  public void run() {
+                      try {
+                          appcontext = new sisc.interpreter.AppContext()
+                          appcontext.addDefaultHeap();
+                          dynenv = new sisc.env.DynamicEnvironment(appcontext, System.in, System.out);
+                          interpreter = new sisc.interpreter.Interpreter(new sisc.interpreter.ThreadContext(), dynenv);
+                          dynenv.bind();
+                          sisc.REPL.listen(interpreter.getCtx(), serversocket);
+                      } catch (Exception e) {
+                          throw new RuntimeException(e);
+                      }
+                  }
+              }.start();" `((serversocket ,server-socket)))))
           
 ;; and-let*. e.g.:
 ;; (and-let* ((v (assoc  "subscription_id" '(("subscription_id" ":db/unique    :db.unique/identity")) ))) (cdr v))
