@@ -3,28 +3,48 @@
 ;(begin (define iasylum-bedlam-location "/home/igorhvr/idm/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")))
 (require-extension (srfi 23)) ; error
 
-(with-failure-continuation 
- (lambda (e p)
-   (display "\n\nThe variable iasylum-bedlam-location must be defined and initialized to the location of the library - which must be writable by you...\n")
-   (display "\nExample of code to use this library.: \n")
-   (display "   (begin (define iasylum-bedlam-location \"/home/igorhvr/idm/bedlam/\") (load (string-append iasylum-bedlam-location \"iasylum/init.scm\")))\n\n\n")
-   
-   
-                                        ;(display "\n\nStarting iasylum-bedlam at [")
-                                        ;(display iasylum-bedlam-location)
-  ;(display "] ...\n\n")
-  (throw e))
- (lambda ()
-   (define tmp iasylum-bedlam-location)
-   (string-append "test" tmp)
-   (void)
-   ))
+;;(with-failure-continuation 
+;; (lambda (e p)
+;;   (display "\n\nSince we cannot find bedlam in the classpath, the variable iasylum-bedlam-location must be defined and initialized to the location of the library.\n")
+;;   (display "\nExample of code to use this library.: \n")
+;;   (display "   (begin (define iasylum-bedlam-location \"/home/igorhvr/idm/bedlam/\") (load (string-append iasylum-bedlam-location \"iasylum/init.scm\")))\n\n\n")
+;;   (throw e))
+;; (lambda ()
+;;   (define tmp iasylum-bedlam-location)
+;;   (string-append "test" tmp)
+;;   (void)
+;;   ))
+
+;; This is to allow classpath-based loading (with the help of a custom URL Handler) -  E.g.: (load "classpath:iasylum/jdbc.scm")
+(define original-load load)
+(set! load
+      (lambda (name)
+        (with-failure-continuation 
+         (lambda (e p)
+           (with-failure-continuation 
+            (lambda (e p)
+              (with-failure-continuation
+               (lambda (e p)
+                 (let ((name (irregex-replace/all (irregex "file:") name "")))
+                   (original-load (string-append "classpath:" name))))
+               (lambda ()
+                 (original-load (string-append "classpath:iasylum/" name)))))
+            (lambda ()
+              (original-load (string-append "classpath:" name)))))
+         (lambda ()
+           (with-failure-continuation 
+            (lambda (e p)
+              (original-load (string-append (iasylum-bedlam-location) "/" name)))
+            (lambda ()
+              (original-load name)))))))
 
 (require-extension (srfi 39)) ; make-parameter
 
 (define iasylum-bedlam-location
   (let ((param (make-parameter #f)))
-    (param iasylum-bedlam-location)
+    (with-failure-continuation 
+     (lambda (e p) (param ""))
+     (lambda () (param iasylum-bedlam-location)))
     param
     ))
 
@@ -108,6 +128,10 @@
 (import debugging)
 (require-extension (lib iasylum/jcode))
 
+;; If this is called (j "new URL(\"classpath:iasylum/jdbc.scm\");") and similar things will work.
+(define (setup-classpath-url-handler)
+  (j "iu.BedlamBundleInit.setupClasspathURLHandler();"))
+
 (require-extension (lib iasylum/match))
 (require-extension (lib iasylum/random))
 (require-extension (lib iasylum/srfi-88))
@@ -148,19 +172,20 @@
 (require-extension (lib iasylum/iasylum))
 
 ;; irregex
-(load (string-append (iasylum-bedlam-location) "iasylum/irregex.scc"))
+(load "iasylum/irregex.scc")
 
 ;; let-optionals
-(load (string-append (iasylum-bedlam-location) "iasylum/let-optionals/let-optionals.scm"))
+(load "iasylum/let-optionals/let-optionals.scm")
 
 ;; SLIB.
-(load (string-append (iasylum-bedlam-location) "iasylum/slib.scm"))
+;;(load "iasylum/slib.scm")
+(load "iasylum/slib/iasylum-sisc.init")
 ;;(require 'new-catalog)
 
 ;; FIXXXME I am not sure with require 'line-i/o does not work, even after line-i/o
 ;; was added to supported features. This will do for now, providing the very useful
 ;; read-line.
-(load (string-append (iasylum-bedlam-location) "iasylum/slib/3b2/lineio.scm")) 
+(load "iasylum/slib/3b2/lineio.scm")
 
 ;(display "\n\nLOADED iasylum-bedlam.\n\n")
 
@@ -198,21 +223,21 @@
 ;;(require-extension (lib iasylum/fmt)) ; Disabled because of
 ;;{warning: naked left-hand reference in letrec rhs: '%%_FXYoD_hd61_pad'.}
 ;;{warning: naked left-hand reference in letrec rhs: '%%_FXa1-0dd61_make-string-fmt-transformer'.}
-;; and similar issues, tstill to be debugged.
+;; and similar issues, still to be debugged.
 
  (define (force-fmt-load)
-    (load (string-append (iasylum-bedlam-location) "iasylum/fmt/fmt-0.8.1/let-optionals.scm"))  ; if you don't have LET-OPTIONALS*
-    (load (string-append (iasylum-bedlam-location) "iasylum/fmt/fmt-0.8.1/read-line.scm"))      ; if you don't have READ-LINE
-    (load (string-append (iasylum-bedlam-location) "iasylum/fmt/fmt-0.8.1/string-ports.scm"))   ; if you don't have CALL-WITH-OUTPUT-STRING
-    (load (string-append (iasylum-bedlam-location) "iasylum/fmt/fmt-0.8.1/make-eq-table.scm"))
-    (load (string-append (iasylum-bedlam-location) "iasylum/fmt/fmt-0.8.1/mantissa.scm"))
-    (load (string-append (iasylum-bedlam-location) "iasylum/fmt/fmt-0.8.1/fmt.scm"))
-    (load (string-append (iasylum-bedlam-location) "iasylum/fmt/fmt-0.8.1/fmt-pretty.scm"))     ; optional pretty printing
-    (load (string-append (iasylum-bedlam-location) "iasylum/fmt/fmt-0.8.1/fmt-column.scm"))     ; optional columnar output
-    (load (string-append (iasylum-bedlam-location) "iasylum/fmt/fmt-0.8.1/fmt-c.scm"))          ; optional C formatting utilities
-    (load (string-append (iasylum-bedlam-location) "iasylum/fmt/fmt-0.8.1/fmt-color.scm"))      ; optional color utilities
-    (load (string-append (iasylum-bedlam-location) "iasylum/fmt/fmt-0.8.1/fmt-js.scm"))         ; javascript utilities. 
-    (load (string-append (iasylum-bedlam-location) "iasylum/fmt/fmt-0.8.1/fmt-unicode.scm")))         ; javascript utilities.
+    (load "iasylum/fmt/fmt-0.8.1/let-optionals.scm")  ; if you don't have LET-OPTIONALS*
+    (load "iasylum/fmt/fmt-0.8.1/read-line.scm")      ; if you don't have READ-LINE
+    (load "iasylum/fmt/fmt-0.8.1/string-ports.scm")   ; if you don't have CALL-WITH-OUTPUT-STRING
+    (load "iasylum/fmt/fmt-0.8.1/make-eq-table.scm")
+    (load "iasylum/fmt/fmt-0.8.1/mantissa.scm")
+    (load "iasylum/fmt/fmt-0.8.1/fmt.scm")
+    (load "iasylum/fmt/fmt-0.8.1/fmt-pretty.scm")     ; optional pretty printing
+    (load "iasylum/fmt/fmt-0.8.1/fmt-column.scm")     ; optional columnar output
+    (load "iasylum/fmt/fmt-0.8.1/fmt-c.scm")          ; optional C formatting utilities
+    (load "iasylum/fmt/fmt-0.8.1/fmt-color.scm")      ; optional color utilities
+    (load "iasylum/fmt/fmt-0.8.1/fmt-js.scm")         ; javascript utilities. 
+    (load "iasylum/fmt/fmt-0.8.1/fmt-unicode.scm"))         ; javascript utilities.
 
 ;; FIXXXME Hack that will be used until I debug the naked left-hand reference issues above.
 (force-fmt-load)
@@ -347,3 +372,6 @@
 (import query)
 
 ;; This would run all tests: (require-library 'sisc/ssax-sxml/doc/tests/all-tests)
+
+
+(set! load original-load)

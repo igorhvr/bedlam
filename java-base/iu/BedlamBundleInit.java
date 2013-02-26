@@ -36,13 +36,12 @@ public class BedlamBundleInit {
     }
 
     public static void main(String[] args) throws Exception {
-	setupClasspathURLHandler();
 	Interpreter i = getBedlamInterpreter(null);
 	System.err.println(i.eval("(+ 3 4 5)"));
     }
 
-    public static Interpreter getBedlamInterpreter(String iasylumBedlamLocationParameter) {
-	String iasylumBedlamLocation = (iasylumBedlamLocationParameter != null) ? iasylumBedlamLocationParameter : "/home/igorhvr/idm/bedlam/";
+    public static Interpreter getBedlamInterpreter(String iasylumBedlamLocation) {
+	if(iasylumBedlamLocation == null) setupClasspathURLHandler();
 
 	try {
 	    AppContext context = new AppContext();
@@ -51,13 +50,19 @@ public class BedlamBundleInit {
 	    
 	    
 	    final Interpreter i = new Interpreter(new ThreadContext(), new DynamicEnvironment(context, System.in, System.out));
-	    i.eval("(define bean (make-parameter #f))");
-	    i.eval("(define (set-bean v) (bean v) )");
-	    Closure setBean = (Closure) retrieveSymbolValue(i, "set-bean");
-	    Value[] parameters = new Value[] {new JavaObject(iasylumBedlamLocation)};
-	    i.eval(setBean, parameters);
-	    i.eval("(import s2j) (define iasylum-bedlam-location (->string (bean)))");
-	    i.eval("(begin (load  (string-append iasylum-bedlam-location \"/iasylum/init.scm\"))) ");
+
+	    if(iasylumBedlamLocation != null) {
+		i.eval("(define bean (make-parameter #f))");
+		i.eval("(define (set-bean v) (bean v) )");
+		Closure setBean = (Closure) retrieveSymbolValue(i, "set-bean");
+		Value[] parameters = new Value[] {new JavaObject(iasylumBedlamLocation)};
+		i.eval(setBean, parameters);
+		i.eval("(import s2j) (define iasylum-bedlam-location (->string (bean)))");
+		i.eval("(begin (load  (string-append iasylum-bedlam-location \"/iasylum/init.scm\"))) ");
+	    } else {
+		i.eval("(begin (load  \"classpath:iasylum/init.scm\"))");
+	    }
+
 	    return i;
 	} catch(Exception e) {
 	    throw new RuntimeException(e);
@@ -87,6 +92,7 @@ public class BedlamBundleInit {
 	
 	protected URLConnection openConnection(URL u) throws IOException {
 	    final URL resourceUrl = classLoader.getResource(u.getPath());
+	    if(resourceUrl == null) throw new IOException("classLoader.getResource(u.getPath()) returned NULL for "+u+" - impossible to open a connection to this resource.");
 	    return resourceUrl.openConnection();
 	}
     }
