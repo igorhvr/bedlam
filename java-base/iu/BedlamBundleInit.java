@@ -21,8 +21,22 @@ import sisc.interpreter.SchemeException;
 import sisc.interpreter.ThreadContext;
 import sisc.modules.s2j.JavaObject;
 
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLStreamHandler;
+
+import java.net.URLStreamHandler;
+import java.net.URLStreamHandlerFactory;
+import java.util.Map;
+
 public class BedlamBundleInit {
+    public static void setupClasspathURLHandler() {
+	URL.setURLStreamHandlerFactory(new BedlamBundleInit.ConfigurableStreamHandlerFactory("classpath", new BedlamBundleInit.Handler(ClassLoader.getSystemClassLoader())));
+    }
+
     public static void main(String[] args) throws Exception {
+	setupClasspathURLHandler();
 	Interpreter i = getBedlamInterpreter(null);
 	System.err.println(i.eval("(+ 3 4 5)"));
     }
@@ -57,4 +71,40 @@ public class BedlamBundleInit {
 	    throw new RuntimeException(e);
 	}
     }
+
+    /** A {@link URLStreamHandler} that handles resources on the classpath. */
+    public static class Handler extends URLStreamHandler {
+	/** The classloader to find resources from. */
+	private final ClassLoader classLoader;
+	
+	public Handler() {
+	    this.classLoader = getClass().getClassLoader();
+	}
+	
+	public Handler(ClassLoader classLoader) {
+	    this.classLoader = classLoader;
+	}
+	
+	protected URLConnection openConnection(URL u) throws IOException {
+	    final URL resourceUrl = classLoader.getResource(u.getPath());
+	    return resourceUrl.openConnection();
+	}
+    }
+    
+    public static class ConfigurableStreamHandlerFactory implements URLStreamHandlerFactory {
+	private final Map<String, URLStreamHandler> protocolHandlers=new java.util.concurrent.ConcurrentHashMap();
+	
+	public ConfigurableStreamHandlerFactory(String protocol, URLStreamHandler urlHandler) {
+	    addHandler(protocol, urlHandler);
+	}
+	
+	public void addHandler(String protocol, URLStreamHandler urlHandler) {
+	    protocolHandlers.put(protocol, urlHandler);
+	}
+	
+	public URLStreamHandler createURLStreamHandler(String protocol) {
+	    return protocolHandlers.get(protocol);
+	}
+    }
+    
 }
