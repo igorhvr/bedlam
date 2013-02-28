@@ -114,7 +114,7 @@
 (add-lib "tomcat/annotations-api.jar")
 (add-lib "tomcat/standard.jar")
 
-(add-lib "u//quartz-all-2.1.6.jar")
+(add-lib "u/quartz-all-1.7.3.jar")
 
 (import os)
 (import java-io)
