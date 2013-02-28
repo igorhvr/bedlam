@@ -5,7 +5,7 @@
 
 ;; Sends an email according to parameters.
 ;; Depends on:
-;;    activation-1.1.jar  commons-email-1.1.jar  mail.jar
+;;    activation-1.1.jar  commons-email-1.2.jar  mail.jar
 ;;    iasylum/jcode
 (module iasylum/email
   (send-email send-email-k)
