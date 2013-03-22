@@ -170,7 +170,7 @@
 (import custom-io)
 (import file-manipulation)
 (require-extension (lib iasylum/iasylum))
-
+(require-extension (lib iasylum/json))
 ;; irregex
 (load "iasylum/irregex.scc")
 
