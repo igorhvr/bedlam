@@ -21,6 +21,7 @@
      (with-failure-continuation (lambda (e p) (list e p)) (lambda () (j "Class.forName(\"org.postgresql.Driver\");")))
      (with-failure-continuation (lambda (e p) (list e p)) (lambda () (j "Class.forName(\"net.sf.log4jdbc.DriverSpy\");")))
      (with-failure-continuation (lambda (e p) (list e p)) (lambda () (j "Class.forName(\"net.sourceforge.jtds.jdbc.Driver\");")))
+     (with-failure-continuation (lambda (e p) (list e p)) (lambda () (j "Class.forName(\"com.mysql.jdbc.Driver\");")))
      #t))
   
   (define (jdbc/get-connection url username password)

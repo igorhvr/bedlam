@@ -68,6 +68,7 @@
 (add-lib "jdbc/log4jdbc4-1.2.jar")
 (add-lib "jdbc/slf4j-api-1.6.0.jar")
 (add-lib "jdbc/slf4j-log4j12-1.7.2.jar")
+(add-lib "jdbc/mysql-connector-java-5.1.24-bin_and_src.jar")
 (add-lib "excel/poi-3.9-20121203.jar")
 (add-lib "excel/poi-ooxml-3.9-20121203.jar")
 (add-lib "excel/poi-examples-3.9-20121203.jar")
