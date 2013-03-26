@@ -171,7 +171,7 @@
 (import custom-io)
 (import file-manipulation)
 (require-extension (lib iasylum/iasylum))
-(require-extension (lib iasylum/json))
+
 ;; irregex
 (load "iasylum/irregex.scc")
 
@@ -374,5 +374,9 @@
 
 ;; This would run all tests: (require-library 'sisc/ssax-sxml/doc/tests/all-tests)
 
+
+(require-extension (lib iasylum/match))
+(require-extension (lib iasylum/jdbc))
+(require-extension (lib iasylum/json))
 
 (set! load original-load)
