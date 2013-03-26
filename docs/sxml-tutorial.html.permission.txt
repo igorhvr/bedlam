@@ -1,0 +1,44 @@
+sxml-tutorial is a snapshot of  http://modis.ispras.ru/Lizorkin/sxml-tutorial.html added with permission from the author:
+
+Received-SPF: neutral (google.com: 207.210.106.8 is neither permitted nor denied by domain of dmitry.lizorkin@gmail.com) client-ip=207.210.106.8;
+To: Igor Hjelmstrom Vinhas Ribeiro <igorhvr@iasylum.net>
+Subject: Re: sxml tutorial - permission to include in library.
+From: Dmitry Lizorkin <dmitry.lizorkin@gmail.com>
+Delivered-To: igor.ribeiro@gmail.com
+Authentication-Results: mx.google.com;       spf=neutral (google.com: 207.210.106.8 is neither permitted nor denied by domain of dmitry.lizorkin@gmail.com) smtp.mail=dmitry.lizorkin@gmail.com;       dkim=pass header.i=@gmail.com
+Delivered-To: igorhvr@iasylum.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=gmail.com; s=20120113;        h=x-received:mime-version:in-reply-to:references:from:date:message-id         :subject:to:content-type;        bh=OGnlKqxh2SekUT2iw+p3D3ZiMA3Ck3gHiTDLrH53OJI=;        b=SqumF+UZZwRNlDkgm5FkxtAf0wHKFoVEb2Oy2SJSJFtDAN3n30ftRfb3JtFFtqPFzs         +NztfdqTWKH1ehmwTGnSHmETCD/pHkkB6hK5/CtMIRdMYb1jvtOth1KK6VwnWjoLy5wf         WLOpRoup6KfpYMj4Da7mEOON3hitd5axLDuIwneWKieW2STjFJvPmwxT9q06EqlUzUhv         AwQcvAQ2HWno9EDwL3RCTWtOgRQ6/os58BEReTxoxaoDV9flEAOLpaqittSVrpE700Wm         Fn/ur6NptIF8NyJZAwmh8hWukzN/LTJFIHUkNou4EDvwAJYR0TSDy6Y/08fL+sAmMbPK         dLGA==
+MIME-Version: 1.0
+In-Reply-To: <CAKGma3Njoq0AEdxw20eEdgOeHE+ZrNKhDBQbc3ZN-6AuuY-B8A@mail.gmail.com>
+Date: Fri, 22 Mar 2013 19:56:41 +0400
+Message-ID: <CAEOduA5qx3tOXyWUDaDvPyeVrMaxUXFkCoaibvZgUtV4skaQwA@mail.gmail.com>
+
+Hi!
+
+Sure, please do!
+
+Best regards,
+Dmitry
+
+
+On Fri, Mar 22, 2013 at 7:02 PM, Igor Hjelmstrom Vinhas Ribeiro
+<igorhvr@iasylum.net> wrote:
+> Hi!
+>
+>    Could you please give me permission to include a snapshot of
+> http://modis.ispras.ru/Lizorkin/sxml-tutorial.html inside my bedlam
+> (https://github.com/igorhvr/bedlam) library?
+>
+>    sxml is part of it, and your tutorial (thanks for it!) is the best simple
+> explanation of it I could find.
+>
+> Best Regards,
+>
+> --
+> igorhvr
+> cel: +55 19 8801 1458
+> home: +55 19 2121 8558
+> email: igorhvr@iasylum.net
+> skype: igor.hvr
+> gtalk: igor.ribeiro@gmail.com
+

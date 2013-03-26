@@ -1,0 +1,1393 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><head>
+<title>SXML Tools Tutorial
+</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<meta name="GENERATOR" content="hevea 1.10">
+<style type="text/css">
+.li-itemize{margin:1ex 0ex;}
+.li-enumerate{margin:1ex 0ex;}
+.dd-description{margin:0ex 0ex 1ex 4ex;}
+.dt-description{margin:0ex;}
+.toc{list-style:none;}
+.thefootnotes{text-align:left;margin:0ex;}
+.dt-thefootnotes{margin:0em;}
+.dd-thefootnotes{margin:0em 0em 0em 2em;}
+.footnoterule{margin:1em auto 1em 0px;width:50%;}
+.caption{padding-left:2ex; padding-right:2ex; margin-left:auto; margin-right:auto}
+.title{margin:2ex auto;text-align:center}
+.center{text-align:center;margin-left:auto;margin-right:auto;}
+.flushleft{text-align:left;margin-left:0ex;margin-right:auto;}
+.flushright{text-align:right;margin-left:auto;margin-right:0ex;}
+DIV TABLE{margin-left:inherit;margin-right:inherit;}
+PRE{text-align:left;margin-left:0ex;margin-right:auto;}
+BLOCKQUOTE{margin-left:4ex;margin-right:4ex;text-align:left;}
+TD P{margin:0px;}
+.boxed{border:1px solid black}
+.textboxed{border:1px solid black}
+.vbar{border:none;width:2px;background-color:black;}
+.hbar{border:none;height:2px;width:100%;background-color:black;}
+.hfill{border:none;height:1px;width:200%;background-color:black;}
+.vdisplay{border-collapse:separate;border-spacing:2px;width:auto; empty-cells:show; border:2px solid red;}
+.vdcell{white-space:nowrap;padding:0px;width:auto; border:2px solid green;}
+.display{border-collapse:separate;border-spacing:2px;width:auto; border:none;}
+.dcell{white-space:nowrap;padding:0px;width:auto; border:none;}
+.dcenter{margin:0ex auto;}
+.vdcenter{border:solid #FF8000 2px; margin:0ex auto;}
+.minipage{text-align:left; margin-left:0em; margin-right:auto;}
+.marginpar{border:solid thin black; width:20%; text-align:left;}
+.marginparleft{float:left; margin-left:0ex; margin-right:1ex;}
+.marginparright{float:right; margin-left:1ex; margin-right:0ex;}
+.theorem{text-align:left;margin:1ex auto 1ex 0ex;}
+.part{margin:2ex auto;text-align:center}
+</style>
+<script src="sxml-tutorial_files/ga.js" async="" type="text/javascript"></script><script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34109655-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+<body>
+<!--HEVEA command line is: D:\Dima\Soft\hevea_2007\hevea -exec xxdate.exe sxml-tutorial.tex -->
+<!--CUT DEF section 1 --><table class="title"><tbody><tr><td><h1 class="titlemain">SXML Tools Tutorial</h1></td></tr>
+</tbody></table>
+<p>On this page:
+</p><ol class="enumerate" type="1"><li class="li-enumerate">
+<a href="#hevea:sxml-doc">Obtaining the SXML Representation of a Document</a>
+</li><li class="li-enumerate"><a href="#hevea:sxpathlib">XPath for SXML</a>
+</li><li class="li-enumerate"><a href="#hevea:flwor">Querying SXML</a>
+</li><li class="li-enumerate"><a href="#hevea:transformations">SXML Transformations</a>
+</li><li class="li-enumerate"><a href="#hevea:xpathlink">XPathLink: a Query Language with XLink Support</a>
+</li><li class="li-enumerate"><a href="#hevea:sxml-match">SXML Match</a>
+</li><li class="li-enumerate"><a href="#hevea:modif">SXML Modifications</a>
+</li><li class="li-enumerate"><a href="#hevea:ddo">DDO SXPath: the Optimized XPath Implementation</a>
+</li><li class="li-enumerate"><a href="#hevea:lazy">Lazy SXML Processing</a>
+</li><li class="li-enumerate"><a href="#hevea:serializ">SXML Serialization</a>
+</li></ol><p><a name="hevea:sxml-doc"></a>
+</p><!--TOC section Obtaining the SXML Representation of a Document-->
+<h2 class="section"><!--SEC ANCHOR --><a name="htoc1">1</a>&nbsp;&nbsp;Obtaining the SXML Representation of a Document</h2><!--SEC END --><p>The SXML representation for your XML or HTML document can be constructed
+automatically.
+For obtaining the SXML representation for an XML/HTML document, located either
+locally or remotely, the library
+function&nbsp;<a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc35033"><b>sxml:document</b></a> is
+provided.
+The function accepts a filename or a Uniform Resource Identifier&nbsp;(URI) of the
+requested XML/HTML&nbsp;document and returns the SXML&nbsp;document being the
+SXML&nbsp;representation for the requested one.</p><div class="theorem"><b>Example&nbsp;1</b>&nbsp;&nbsp;<em> </em><a name="ex:poem-sxml-doc"></a><em>
+Obtaining the SXML document from XML by Uniform Resource Identifier&nbsp;(URI):
+</em><pre><em>(</em><a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc35033"><em><b>sxml:document</b></em></a><em> "</em><a href="http://modis.ispras.ru/Lizorkin/XML/poem.xml"><em>http://modis.ispras.ru/Lizorkin/XML/poem.xml</em></a><em>")
+==&gt;
+(*TOP*
+ (*PI* xml "version='1.0'")
+ (poem
+  (@ (title "The Lovesong of J. Alfred Prufrock") (poet "T. S. Eliot"))
+  (stanza
+    (line "Let us go then, you and I,")
+    (line "When the evening is spread out against the sky")
+    (line "Like a patient etherized upon a table:"))
+  (stanza
+    (line "In the room the women come and go")
+    (line "Talking of Michaelangelo."))))</em></pre><em>
+</em></div><div class="theorem"><b>Example&nbsp;2</b>&nbsp;&nbsp;<em>
+Obtaining the SXML representation of a document located in a local file:
+</em><pre><em>(sxml:document </em>"filename"<em>)
+==&gt;
+; The SXML representation of your document located in </em>"filename"</pre><em>
+</em></div><p>The <code>sxml:document</code>&nbsp;function provides a convenient wrapper for the
+XML&nbsp;parser (SSAX), the HTML&nbsp;parser (HtmlPrag) and remote resource accessor.
+Depending on the requested document type, the appropriate parser (either
+XML&nbsp;one or HTML&nbsp;one) is chosen automatically.
+The interface for SSAX and HtmlPrag parsers is considered in the next two
+subsections respectively.</p><!--TOC subsection SSAX parser-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc2">1.1</a>&nbsp;&nbsp;SSAX parser</h3><!--SEC END --><div class="theorem"><b>Example&nbsp;3</b>&nbsp;&nbsp;<em>
+Rewriting Example&nbsp;</em><a href="#ex:poem-sxml-doc"><em>1</em></a><em> with equivalent lower-level
+function calls&nbsp;&#8211; the SSAX parser and remote resource accessor:
+</em><pre><em>(</em><a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc62346"><em><b>ssax:xml-&gt;sxml</b></em></a><em>
+  (</em><a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc60351"><em><b>open-input-resource</b></em></a><em> "</em><a href="http://modis.ispras.ru/Lizorkin/XML/poem.xml"><em>http://modis.ispras.ru/Lizorkin/XML/poem.xml</em></a><em>")
+  '())
+==&gt;
+; Yields the same result as for Example </em><a href="#ex:poem-sxml-doc"><em>1</em></a></pre><em>
+</em></div><p>The second argument supplied to the <code>ssax:xml-&gt;sxml</code>&nbsp;function is the
+socalled namespace prefix assignment.
+The semantics of this argument is discussed below; this argument can be the
+empty list and it affects the result only for an XML document with XML
+namespaces.</p><pre>(ssax:xml-&gt;sxml
+ (open-input-resource "<a href="http://modis.ispras.ru/Lizorkin/XML/selflinked.xml">http://modis.ispras.ru/Lizorkin/XML/selflinked.xml</a>")
+ '())
+==&gt;
+(*TOP*
+ (*PI* xml "version='1.0'")
+ (doc
+  (title "This document is linked with itself by XLink link")
+  (body
+   (link (@
+          (<b>http://www.w3.org/1999/xlink:type</b> "simple")
+          (<b>http://www.w3.org/1999/xlink:href</b> "selflinked.xml"))
+         "Following this link would result in this document again"))))</pre><p>
+Please note the qualified SXML names emphasized in bold.</p><p>The <code>ns-prefix-assing</code> can be supplied for SSAX parser:
+</p><pre>(ssax:xml-&gt;sxml
+ (open-input-resource "<a href="http://modis.ispras.ru/Lizorkin/XML/selflinked.xml">http://modis.ispras.ru/Lizorkin/XML/selflinked.xml</a>")
+ '[(xl . "http://www.w3.org/1999/xlink")])
+==&gt;
+(*TOP*
+ <b>(@@ (*NAMESPACES* (xl "http://www.w3.org/1999/xlink")))</b>
+ (*PI* xml "version='1.0'")
+ (doc
+  (title "This document is linked with itself by XLink link")
+  (body
+   (link (@ (<b>xl:type</b> "simple") (<b>xl:href</b> "selflinked.xml"))
+         "Following this link would result in this document again"))))</pre><p>
+Note the namespace node appeared in the auxiliary list of the SXML document
+node, and the qualified names of XLink attributes.</p><!--TOC subsection HTML Prag-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc3">1.2</a>&nbsp;&nbsp;HTML Prag</h3><!--SEC END --><pre>(<a href="http://modis.ispras.ru/Lizorkin/Apidoc/htmlprag.html"><b>html-&gt;sxml</b></a>
+ (open-input-resource "<a href="http://modis.ispras.ru/Lizorkin/XML/amorphis.html">http://modis.ispras.ru/Lizorkin/XML/amorphis.html</a>"))
+==&gt;
+(*TOP*
+ (html
+  (head (title "Amorphis lyrics"))
+  (body
+   (h2 "To Fathers Cabin")
+   "(Lyrics: trad., Music: Holopainen, Laine)"
+   (p
+    "O old man, good god" (br)
+    "careful man of heaven" (br)
+    "keeper of storm clouds" (br)
+    "make misty weather" (br)
+    "and create a tiny cloud" (br)
+    "in whose shelter I may go"))))</pre><p><a name="hevea:sxpathlib"></a>
+</p><!--TOC section XPath for SXML-->
+<h2 class="section"><!--SEC ANCHOR --><a name="htoc4">2</a>&nbsp;&nbsp;XPath for SXML</h2><!--SEC END --><p>
+<a name="sxpathlib"></a></p><p>The XPath support provided for SXML in SXPath is fully compatible with the
+XPath Recommendation version&nbsp;1.0&nbsp;[<a href="#XPath">1</a>].</p><pre>(<b>(</b><a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc16984"><b>sxpath</b></a> "doc/title"<b>)</b>
+ '(*TOP*
+    (doc (title "Hello world"))))
+==&gt;
+((title "Hello world"))</pre><ol class="enumerate" type="1"><li class="li-enumerate">
+The inner function call&nbsp;&#8211;
+<pre class="verbatim">(sxpath "doc/title")</pre>&#8211; corresponds to the static analysis phase&nbsp;[<a href="#XPath-2">2</a>].</li><li class="li-enumerate">The outer function call&nbsp;&#8211;
+<pre><b>(</b>(sxpath "doc/title")
+ <b>'(*TOP*
+    (doc (title "Hello world"))))</b></pre>
+&#8211; corresponds to the dynamic evaluation phase.
+</li></ol><!--TOC subsection Typical expressions in XPath/SXPath-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc5">2.1</a>&nbsp;&nbsp;Typical expressions in XPath/SXPath</h3><!--SEC END --><p>Due to the similarity between SXML elements and attributes, the attribute value
+can be obtained by applying the child axis to the attribute node:</p><div class="theorem"><b>Example&nbsp;4</b>&nbsp;&nbsp;<em> </em><a name="ex:access-attr-val"></a><em>
+Return the poem title:
+</em><pre><em>((sxpath "poem/@title/text()")
+  (sxml:document "</em><a href="http://modis.ispras.ru/Lizorkin/XML/poem.xml"><em>http://modis.ispras.ru/Lizorkin/XML/poem.xml</em></a><em>"))
+==&gt;
+("The Lovesong of J. Alfred Prufrock")</em></pre><em>
+</em></div><p>Although not compatible with the XPath Specification&nbsp;[<a href="#XPath">1</a>], the
+functionality illustrated in example&nbsp;<a href="#ex:access-attr-val">4</a> allows
+<em>addressing</em> the attribute value.
+This is extremely important, for instance, when XML modification is
+considered&nbsp;[<a href="#Tatarinov">3</a>].</p><div class="theorem"><b>Example&nbsp;5</b>&nbsp;&nbsp;<em> </em><a name="ex:name-alternative"></a><em>
+For each book in the bibliography, return its authors and editors:
+</em><pre><em>((sxpath "bib/book/*[self::author or self::editor]")
+ (sxml:document "</em><a href="http://modis.ispras.ru/Lizorkin/XML/bib.xml"><em>http://modis.ispras.ru/Lizorkin/XML/bib.xml</em></a><em>"))
+==&gt;
+((author (last "Stevens") (first "W."))
+ (author (last "Stevens") (first "W."))
+ (author (last "Abiteboul") (first "Serge"))
+ (author (last "Buneman") (first "Peter"))
+ (author (last "Suciu") (first "Dan"))
+ (editor (last "Gerbarg") (first "Darcy") (affiliation "CITI")))</em></pre><em>
+In XPath&nbsp;2.0, the solution would look more compact, namely
+&#8220;</em><code><em>bib/book/(author | editor)</em></code><em>&#8221;.
+However, XPath&nbsp;1.0 and, consequently, SXPath do not support union expressions
+in location steps.
+On the other hand, the solution presented in SXPath has the advantage of
+automatically preserving the correct order of nodes in the result nodeset.
+</em></div><div class="theorem"><b>Example&nbsp;6</b>&nbsp;&nbsp;<em> </em><a name="ex:select-by-publisher"></a><em>
+Select the titles of all books published by </em>Addison-Wesley<em>:
+</em><pre><em>((sxpath "bib/book[publisher = 'Addison-Wesley']/title")
+ (sxml:document "</em><a href="http://modis.ispras.ru/Lizorkin/XML/bib.xml"><em>http://modis.ispras.ru/Lizorkin/XML/bib.xml</em></a><em>"))
+==&gt;
+((title "TCP/IP Illustrated")
+ (title "Advanced Programming in the Unix environment"))</em></pre><em>
+</em></div><p>Many XPath operations (and comparison operations in particular) involve
+implicitly taking the <em>string-value</em> of its arguments.
+As defined in the XPath Spefication&nbsp;[<a href="#XPath">1</a>], 
+&#8220;The string-value of an element node is the concatenation of the string-values
+of all text node descendants of the element node in document order.
+The string-value of a text node is the character data.&#8221;</p><p>The idea can be best illustrated by the following example:</p><div class="theorem"><b>Example&nbsp;7</b>&nbsp;&nbsp;<em>
+Return all books written by </em>StevensW.<em>:
+</em><pre><em>((sxpath "bib/book[author = 'StevensW.']")
+ (sxml:document "</em><a href="http://modis.ispras.ru/Lizorkin/XML/bib.xml"><em>http://modis.ispras.ru/Lizorkin/XML/bib.xml</em></a><em>"))
+==&gt;
+((book
+  (@ (year "1994"))
+  (title "TCP/IP Illustrated")
+  (author (last "Stevens") (first "W."))
+  (publisher "Addison-Wesley")
+  (price " 65.95"))
+ (book
+  (@ (year "1992"))
+  (title "Advanced Programming in the Unix environment")
+  (author (last "Stevens") (first "W."))
+  (publisher "Addison-Wesley")
+  (price "65.95")))</em></pre><em>
+</em></div><p>Existential semantics of comparison operation in XPath:</p><div class="theorem"><b>Example&nbsp;8</b>&nbsp;&nbsp;<em>
+Return all books written by the author whose last name is </em>Abiteboul<em>:
+</em><pre><em>((sxpath "bib/book[author/last = 'Abiteboul']")
+ (sxml:document "</em><a href="http://modis.ispras.ru/Lizorkin/XML/bib.xml"><em>http://modis.ispras.ru/Lizorkin/XML/bib.xml</em></a><em>"))
+==&gt;
+((book
+  (@ (year "2000"))
+  (title "Data on the Web")
+  (author (last "Abiteboul") (first "Serge"))
+  (author (last "Buneman") (first "Peter"))
+  (author (last "Suciu") (first "Dan"))
+  (publisher "Morgan Kaufmann Publishers")
+  (price "39.95")))</em></pre><em>
+Note that the XML document considered contains books (a)&nbsp;with no authors,
+(b)&nbsp;with one author, (c)&nbsp;with more than one author.
+</em></div><p>In XPath, arguments of a comparison operation are implicitly converted to a
+common datatype:</p><div class="theorem"><b>Example&nbsp;9</b>&nbsp;&nbsp;<em>
+Select the titles of all books that cost less than&nbsp;100:
+</em><pre><em>((sxpath "bib/book[price &lt; 100]/title")
+ (sxml:document "</em><a href="http://modis.ispras.ru/Lizorkin/XML/bib.xml"><em>http://modis.ispras.ru/Lizorkin/XML/bib.xml</em></a><em>"))
+==&gt;
+((title "TCP/IP Illustrated")
+ (title "Advanced Programming in the Unix environment")
+ (title "Data on the Web"))</em></pre><em>
+In this example, both argument of the comparison operation in the predicate
+are converted to numbers.
+</em></div><p>When multiple predicates are presented in a location step, the syntactical
+order of predicates is generally important:</p><div class="theorem"><b>Example&nbsp;10</b>&nbsp;&nbsp;<em>
+Consider the results produced by the following two location paths:
+</em><pre><em>((sxpath "bib/book[@year &gt; 1993][position()&lt;=2]")
+ (sxml:document "</em><a href="http://modis.ispras.ru/Lizorkin/XML/bib.xml"><em>http://modis.ispras.ru/Lizorkin/XML/bib.xml</em></a><em>"))
+==&gt;
+((book
+  (@ (year "1994"))
+  (title "TCP/IP Illustrated")
+  (author (last "Stevens") (first "W."))
+  (publisher "Addison-Wesley")
+  (price " 65.95"))
+ (book
+  (@ (year "2000"))
+  (title "Data on the Web")
+  (author (last "Abiteboul") (first "Serge"))
+  (author (last "Buneman") (first "Peter"))
+  (author (last "Suciu") (first "Dan"))
+  (publisher "Morgan Kaufmann Publishers")
+  (price "39.95")))</em></pre><em>
+&#8211;&nbsp;has the semantics &#8220;select the first 2&nbsp;books from the bibliography that
+have their publication year grater than&nbsp;1993&#8221;.</em><pre><em><em>((sxpath "bib/book[position()&lt;=2][@year &gt; 1993]")
+ (sxml:document "http://modis.ispras.ru/Lizorkin/XML/bib.xml"))
+==&gt;
+((book
+  (@ (year "1994"))
+  (title "TCP/IP Illustrated")
+  (author (last "Stevens") (first "W."))
+  (publisher "Addison-Wesley")
+  (price " 65.95")))</em></em></pre><p><em><em>
+&#8211;&nbsp;has the semantics &#8220;from the first 2&nbsp;books in the bibliography, select
+those that have their publication year grater than&nbsp;1993&#8221;.
+</em></em></p></div><!--TOC subsection Using XPath namespace prefixes-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc6">2.2</a>&nbsp;&nbsp;Using XPath namespace prefixes</h3><!--SEC END --><p>Namespace bindings are supplied at XPath static analysis phase&nbsp;[<a href="#XPath-2">2</a>],
+i.e. as an optional second argument of the <code>sxpath</code>&nbsp;function.</p><div class="theorem"><b>Example&nbsp;11</b>&nbsp;&nbsp;<em>
+Obtaining the </em><code><em>xlink:href</em></code><em>&nbsp;attribute of the XLink linking element:
+</em><pre><em>(</em><em><b>(</b></em><em>sxpath "doc/body/link/@xlink:href"
+         '[(xlink . "http://www.w3.org/1999/xlink")]</em><em><b>)</b></em><em>
+ (sxml:document "</em><a href="http://modis.ispras.ru/Lizorkin/XML/selflinked.xml"><em>http://modis.ispras.ru/Lizorkin/XML/selflinked.xml</em></a><em>"))
+==&gt;
+((http://www.w3.org/1999/xlink:href "selflinked.xml"))</em></pre><em>
+Please note that prefixes in the XML document and in the XPath node test are
+completely independent&nbsp;</em><em>[</em><a href="#Elbib3"><em>4</em></a><em>]</em><em>: rather than prefixes, their
+corresponding namespace URIs are compared when evaluating the node test.</em><p><em>In particular, a different prefix name can be chosen to stand for the same
+namespace URI:
+</em></p><pre><em>(</em><em><b>(</b></em><em>sxpath "doc/body/link/@x:href"
+         '[(x . "http://www.w3.org/1999/xlink")]</em><em><b>)</b></em><em>
+ (sxml:document "</em><a href="http://modis.ispras.ru/Lizorkin/XML/selflinked.xml"><em>http://modis.ispras.ru/Lizorkin/XML/selflinked.xml</em></a><em>"))
+==&gt;
+; Yields the same result</em></pre></div><p>Note that (unlike XPath 2.0) the XPath 1.0 Specification implemented in SXPath
+does not support a default namespace declaration in node tests:
+in <a href="http://www.w3.org/TR/xpath#node-tests">subsect.&nbsp;2.3</a> of the
+XPath&nbsp;1.0 Specification, it is stated that
+&#8220;..if the QName [in the node test] does not have a prefix, then the
+namespace&nbsp;URI is null (this is the same way attribute names are expanded).&#8221;
+Prefixes in XPath name tests thus <em>have to</em> be used when addressing a named
+node from a non-null namespace&nbsp;URI.</p><p>A more elaborate example:
+</p><pre>(<b>(</b>sxpath "rdf:RDF/rdf:Description/dc:title/text()"
+         '((rdf . "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+           (dc . "http://purl.org/dc/elements/1.1/"))<b>)</b>
+ '(*TOP*
+   (*PI* xml "version='1.0'")
+   (http://www.w3.org/1999/02/22-rdf-syntax-ns#:RDF
+     (http://www.w3.org/1999/02/22-rdf-syntax-ns#:Description
+       (http://purl.org/dc/elements/1.1/:creator "Karl Mustermann")
+       (http://purl.org/dc/elements/1.1/:title "Algebra")
+       (http://purl.org/dc/elements/1.1/:subject "mathematics")
+       (http://purl.org/dc/elements/1.1/:date "2000-01-23")
+       (http://purl.org/dc/elements/1.1/:language "EN")))))
+==&gt;
+("Algebra")</pre><p>When addressing parts of an SXML document that uses
+<a href="http://okmij.org/ftp/Scheme/SXML.html#Namespaces">namespace-ids</a>
+instead of explicitly expanded qualified names, namespace prefixes in
+XPath node tests should be mapped to namespace-ids instead of
+namespace&nbsp;URIs:
+</p><pre>(<b>(</b>sxpath "my:schema/my:complexType/my:sequence/*"
+         '[(my . "xsd")]<b>)</b>
+ '(*TOP*
+   (@ (*NAMESPACES* (xsd "http://www.w3.org/2001/XMLSchema")))
+   (xsd:schema
+    (xsd:complexType (@ (name "Address"))
+     (xsd:sequence
+      (xsd:element (@ (type "xsd:string") (name "name")))
+      (xsd:element (@ (type "xsd:string") (name "street")))
+      (xsd:element (@ (type "xsd:string") (name "city"))))
+     (xsd:attribute (@ (type "xsd:NMTOKEN") (name "country") (fixed "US")))))))
+==&gt;
+((xsd:element (@ (type "xsd:string") (name "name")))
+ (xsd:element (@ (type "xsd:string") (name "street")))
+ (xsd:element (@ (type "xsd:string") (name "city"))))</pre><p>XPath&nbsp;1.0 has the node test that is &#8220;true for any node ... whose expanded-name
+has the namespace URI to which the prefix expands, regardless of the local part
+of the name&#8221;&nbsp;[<a href="#XPath">1</a>].
+Such a node test allows selecting all the nodes that belong to a given
+namespace:</p><div class="theorem"><b>Example&nbsp;12</b>&nbsp;&nbsp;<em>
+Returning all attributes of the </em><code><em>link</em></code><em>&nbsp;element that belong to the XLink
+namespace:
+</em><pre><em>(</em><em><b>(</b></em><em>sxpath "//link/@xlink:*"
+         '[(xlink . "http://www.w3.org/1999/xlink")]</em><em><b>)</b></em><em>
+ (sxml:document "</em><a href="http://modis.ispras.ru/Lizorkin/XML/selflinked.xml"><em>http://modis.ispras.ru/Lizorkin/XML/selflinked.xml</em></a><em>"))
+==&gt;
+((http://www.w3.org/1999/xlink:type "simple")
+ (http://www.w3.org/1999/xlink:href "selflinked.xml"))</em></pre><em>
+</em></div><!--TOC subsection Using XPath variables-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc7">2.3</a>&nbsp;&nbsp;Using XPath variables</h3><!--SEC END --><p>Variable bindings are supplied at XPath dynamic evaluation
+phase&nbsp;[<a href="#XPath-2">2</a>], i.e. as an optional second argument to the function
+constructed by&nbsp;<code>sxpath</code>.</p><pre>(<b>(</b>sxpath "table/tr[$k]")
+ '(*TOP*
+   (table (tr "First table row")
+          (tr "Second table row")))
+ '[(k . 2)]<b>)</b>
+==&gt;
+((tr "Second table row"))</pre><p>Multiple variables can be used in an XPath expression as well.</p><div class="theorem"><b>Example&nbsp;13</b>&nbsp;&nbsp;<em> </em><a name="ex:vars-numbers"></a><em>
+Return the titles of the first </em><code><em>n</em></code><em>&nbsp;books published
+after&nbsp;</em><code><em>publ_year</em></code><em>.
+</em><pre><em>((sxpath
+  "bib/book[@year &gt; $publ_year][position() &lt;= $n]/title")
+ (sxml:document "</em><a href="http://modis.ispras.ru/Lizorkin/XML/bib.xml"><em>http://modis.ispras.ru/Lizorkin/XML/bib.xml</em></a><em>")
+ '</em><em><b>(</b></em><em>(publ_year . 1993)
+   (n . 2)</em><em><b>)</b></em><em>)
+==&gt;
+((title "TCP/IP Illustrated")
+ (title "Data on the Web"))</em></pre><em>
+</em></div><p>The variable passed to the SXPath evaluator may have any of the four data types
+supported in XPath&nbsp;1.0&nbsp;[<a href="#XPath">1</a>]:
+</p><ul class="itemize"><li class="li-itemize">
+<em>Node-set.</em> 
+In particular, this can be especially convenient for joining information from
+several (S)XML documents.<div class="theorem"><b>Example&nbsp;14</b>&nbsp;&nbsp;<em>
+Return descriptions of all items offered by </em>Tom Jones<em>:
+</em><pre><em>((sxpath "items/item_tuple[offered_by = $i]/description")
+ (sxml:document "</em><a href="http://modis.ispras.ru/Lizorkin/XML/items.xml"><em>http://modis.ispras.ru/Lizorkin/XML/items.xml</em></a><em>")
+ `[(i . ,</em><em><b>(</b></em><em>(sxpath "users/user_tuple[name='Tom Jones']/userid")
+          (sxml:document
+           "</em><a href="http://modis.ispras.ru/Lizorkin/XML/users.xml"><em>http://modis.ispras.ru/Lizorkin/XML/users.xml</em></a><em>")</em><em><b>)</b></em><em>)])
+==&gt;
+((description "Red Bicycle")
+ (description "Tricycle")
+ (description "Broken Bicycle"))</em></pre><em>
+</em></div></li><li class="li-itemize"><em>Boolean.</em><div class="theorem"><b>Example&nbsp;15</b>&nbsp;&nbsp;<em>
+For the book </em>&#8220;Data on the Web&#8221;<em>, return either all authors or just the
+first author, as specified by the variable </em><code><em>retrieve_all_authors?</em></code><em>:
+</em><pre><em>(</em><em><b>(</b></em><em>sxpath
+  "bib/book[title = 'Data on the Web']/
+   author[$retrieve_all_authors? or position()=1]"</em><em><b>)</b></em><em>
+ (sxml:document "</em><a href="http://modis.ispras.ru/Lizorkin/XML/bib.xml"><em>http://modis.ispras.ru/Lizorkin/XML/bib.xml</em></a><em>")
+ '[(retrieve_all_authors? . #f)])
+==&gt;
+((author (last "Abiteboul")
+         (first "Serge")))</em></pre><em>
+</em></div></li><li class="li-itemize"><em>Number.</em>
+We have already considered this case in the example&nbsp;<a href="#ex:vars-numbers">13</a>
+above.</li><li class="li-itemize"><em>String.</em>
+</li></ul><!--TOC subsection SXPath native syntax-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc8">2.4</a>&nbsp;&nbsp;SXPath native syntax</h3><!--SEC END --><p>Rewriting Example&nbsp;<a href="#ex:access-attr-val">4</a> in SXPath native syntax:</p><div class="theorem"><b>Example&nbsp;16</b>&nbsp;&nbsp;<em>
+Return the poem title:
+</em><pre><em>([sxpath '(poem @ title *text*)]
+ (sxml:document "</em><a href="http://modis.ispras.ru/Lizorkin/XML/poem.xml"><em>http://modis.ispras.ru/Lizorkin/XML/poem.xml</em></a><em>"))
+==&gt;
+("The Lovesong of J. Alfred Prufrock")</em></pre><em>
+</em></div><p>Analogue of Example&nbsp;<a href="#ex:name-alternative">5</a> in SXPath native syntax:</p><div class="theorem"><b>Example&nbsp;17</b>&nbsp;&nbsp;<em> 
+For each book in the bibliography, return its authors and editors:
+</em><pre><em>(</em><em><b>(</b></em><em>sxpath '(bib book (</em><em><b>*or*</b></em><em> author editor))</em><em><b>)</b></em><em>
+ (sxml:document "</em><a href="http://modis.ispras.ru/Lizorkin/XML/bib.xml"><em>http://modis.ispras.ru/Lizorkin/XML/bib.xml</em></a><em>"))
+==&gt;
+((author (last "Stevens") (first "W."))
+ (author (last "Stevens") (first "W."))
+ (author (last "Abiteboul") (first "Serge"))
+ (author (last "Buneman") (first "Peter"))
+ (author (last "Suciu") (first "Dan"))
+ (editor (last "Gerbarg") (first "Darcy") (affiliation "CITI")))</em></pre><em>
+</em></div><p>Analogue of Example&nbsp;<a href="#ex:select-by-publisher">6</a> in SXPath native syntax:</p><div class="theorem"><b>Example&nbsp;18</b>&nbsp;&nbsp;<em> 
+Select the titles of all books published by </em>Addison-Wesley<em>:
+</em><pre><em>((sxpath '</em><em><b>(</b></em><em>bib (book [publisher (equal? "Addison-Wesley")]) title</em><em><b>)</b></em><em>)
+ (sxml:document "</em><a href="http://modis.ispras.ru/Lizorkin/XML/bib.xml"><em>http://modis.ispras.ru/Lizorkin/XML/bib.xml</em></a><em>"))
+==&gt;
+((title "TCP/IP Illustrated")
+ (title "Advanced Programming in the Unix environment"))</em></pre><em>
+</em></div><!--TOC subsection SXPath as a query language-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc9">2.5</a>&nbsp;&nbsp;SXPath as a query language</h3><!--SEC END --><div class="theorem"><b>Example&nbsp;19</b>&nbsp;&nbsp;<em>
+Return all lines that contain exactly 7&nbsp;words:
+</em><pre><em>((sxpath
+  `</em><em><b>(</b></em><em>poem stanza (line (,(lambda (nodeset var-binding)
+                          (= 7
+                             (length
+                              (filter
+                               (lambda (str) (not (string=? "" str)))
+                               (</em><a href="http://modis.ispras.ru/Lizorkin/Apidoc/util.html#codefunc39259"><em>string-split</em></a><em>
+                                (</em><a href="http://modis.ispras.ru/Lizorkin/Apidoc/sxpath-ext.html#docfunc15784"><em>sxml:string-value</em></a><em> (car nodeset))
+                                '(#</em><em>\</em><em>space #</em><em>\</em><em>tab))))))
+                       ))</em><em><b>)</b></em><em>)
+ (sxml:document "</em><a href="http://modis.ispras.ru/Lizorkin/XML/poem.xml"><em>http://modis.ispras.ru/Lizorkin/XML/poem.xml</em></a><em>"))
+==&gt;
+((line "Let us go then, you and I,")
+ (line "Like a patient etherized upon a table:"))</em></pre><p><em>The solution in XPath, although possible, does not look straightforward:
+</em></p><pre><em>((sxpath
+  "poem/stanza/line[</em><a href="http://www.w3.org/TR/xpath#function-string-length"><em>string-length</em></a><em>() + 1 -
+                    string-length(</em><a href="http://www.w3.org/TR/xpath#function-translate"><em>translate</em></a><em>(</em><a href="http://www.w3.org/TR/xpath#function-normalize-space"><em>normalize-space</em></a><em>(), ' ', &#8221;)) =
+                    7 ]")
+ (sxml:document "</em><a href="http://modis.ispras.ru/Lizorkin/XML/poem.xml"><em>http://modis.ispras.ru/Lizorkin/XML/poem.xml</em></a><em>"))
+==&gt;
+; Yields the same result</em></pre></div><p>There are certain queries that cannot be expressed in XPath, however can be
+expressed in native SXPath syntax&nbsp;+ lambda steps.
+A couple of such examples are considered below:</p><div class="theorem"><b>Example&nbsp;20</b>&nbsp;&nbsp;<em>
+Return all lines that contain at least a single 7-letter word.
+</em><pre><em>((sxpath
+  `</em><em><b>(</b></em><em>poem stanza line ,(lambda (nodeset var-binding)
+                        (filter
+                         (lambda (node)
+                           (not (null?
+                                 (filter
+                                  (lambda (str) (= (string-length str) 7))
+                                  (</em><a href="http://modis.ispras.ru/Lizorkin/Apidoc/util.html#codefunc39259"><em>string-split</em></a><em>
+                                   (</em><a href="http://modis.ispras.ru/Lizorkin/Apidoc/sxpath-ext.html#docfunc15784"><em>sxml:string-value</em></a><em> node)
+                                   '(#</em><em>\</em><em>space #</em><em>\</em><em>tab #</em><em>\</em><em>. #</em><em>\</em><em>, #</em><em>\</em><em>:))))))
+                         nodeset))
+   </em><em><b>)</b></em><em>)
+ (sxml:document "</em><a href="http://modis.ispras.ru/Lizorkin/XML/poem.xml"><em>http://modis.ispras.ru/Lizorkin/XML/poem.xml</em></a><em>"))
+==&gt;
+((line "When the evening is spread out against the sky")
+ (line "Like a patient etherized upon a table:")
+ (line "Talking of Michaelangelo."))</em></pre><em>
+and the 7-letter words in the above three lines are &#8220;</em><code><em>evening</em></code><em>&#8221;,
+&#8220;</em><code><em>patient</em></code><em>&#8221; and &#8220;</em><code><em>Talking</em></code><em>&#8221; respectively.
+</em></div><div class="theorem"><b>Example&nbsp;21</b>&nbsp;&nbsp;<em>
+Return all books that have their year of publication closest to&nbsp;1993 by
+absolute value.
+</em><pre><em>((sxpath
+  `</em><em><b>(</b></em><em>bib book ,</em><em><b>(</b></em><em>lambda (book-set var-binding)
+                (map
+                 (lambda (book)
+                   (cons (abs
+                          ((sxpath "@year - 1993") book))
+                         book))
+                 book-set)</em><em><b>)</b></em><em>
+             ,</em><em><b>(</b></em><em>lambda (alist var-binding)
+                (let ((min-delta (apply min (map car alist))))
+                  (filter
+                   (lambda (pair) (= (car pair) min-delta))
+                   alist))</em><em><b>)</b></em><em>
+             ,</em><em><b>(</b></em><em>lambda (alist var-binding)                
+                (map cdr alist)</em><em><b>)</b></em><em>
+        </em><em><b>)</b></em><em>)
+ (sxml:document "</em><a href="http://modis.ispras.ru/Lizorkin/XML/bib.xml"><em>http://modis.ispras.ru/Lizorkin/XML/bib.xml</em></a><em>"))
+==&gt;
+((book
+  (@ (year "1994"))
+  (title "TCP/IP Illustrated")
+  (author (last "Stevens") (first "W."))
+  (publisher "Addison-Wesley")
+  (price " 65.95"))
+ (book
+  (@ (year "1992"))
+  (title "Advanced Programming in the Unix environment")
+  (author (last "Stevens") (first "W."))
+  (publisher "Addison-Wesley")
+  (price "65.95")))</em></pre><em>
+The SXPath expression contains three lambda steps.
+On the first lambda step, each book is cons'ed with the proximity of its
+publication date to year&nbsp;1993.
+On the second lambda step, the associative list is filtered with respect to
+the minimal value of the proximity.
+On the third lambda step, the (filtered) associative list is turned into a
+list of books again.
+</em></div><p><a name="hevea:flwor"></a>
+</p><!--TOC section Querying SXML-->
+<h2 class="section"><!--SEC ANCHOR --><a name="htoc10">3</a>&nbsp;&nbsp;Querying SXML</h2><!--SEC END --><p>Jim Bender implemented the XQuery FLWOR-expression in Scheme, as described
+<a href="http://celtic.benderweb.net/webit/docs/xquery-pre/"><em>here</em></a>.<br>
+For a detailed description of the XQuery FLWOR-expression, take a look
+<a href="http://www.w3.org/TR/xquery/#id-flwor-expressions"><em>here</em></a>.</p><p>In this section, this technique is demonstrated by a couple of examples from
+XQuery Use Cases&nbsp;[<a href="#XQ-UC">5</a>].</p><p>The analogue in Scheme for the XQuery query
+<a href="http://www.w3.org/TR/xquery-use-cases/#xmp-queries-results-q1"><em>1.1.9.1 Q1</em></a>
+from&nbsp;[<a href="#XQ-UC">5</a>]:</p><div class="theorem"><b>Example&nbsp;22</b>&nbsp;&nbsp;<em>
+List books published by Addison-Wesley after 1991, including their year and
+title:
+</em><pre><em>`(bib
+  . ,(</em><em><b>for</b></em><em> </em><em><b>(</b></em><em>(b ((sxpath "/bib/book")
+               (sxml:document
+                "</em><a href="http://modis.ispras.ru/Lizorkin/XML/bib.xml"><em>http://modis.ispras.ru/Lizorkin/XML/bib.xml</em></a><em>")))</em><em><b>)</b></em><em>
+          (</em><em><b>where</b></em><em>
+           </em><em><b>(</b></em><em>(sxpath "./publisher = 'Addison-Wesley' and ./@year &gt; 1991") b</em><em><b>)</b></em><em>
+           `(book
+             (@ year ,((sxpath "string(./@year)") b))
+             . ,((sxpath "./title") b)))))
+==&gt;
+(bib
+ (book (@ year "1994")
+  (title "TCP/IP Illustrated"))
+ (book (@ year "1992")
+  (title "Advanced Programming in the Unix environment")))</em></pre><em>
+</em></div><p>The analogue in Scheme for the XQuery query
+<a href="http://www.w3.org/TR/xquery-use-cases/#xmp-queries-results-q6"><em>1.1.9.6 Q6</em></a>
+from&nbsp;[<a href="#XQ-UC">5</a>]:</p><div class="theorem"><b>Example&nbsp;23</b>&nbsp;&nbsp;<em>
+For each book that has at least one author, list the title and first two
+authors, and an empty "</em><code><em>et-al</em></code><em>" element if the book has additional
+authors:
+</em><pre><em>`(bib
+  ,@(</em><em><b>for</b></em><em> </em><em><b>(</b></em><em>(b ((sxpath "//book")
+              (sxml:document
+               "</em><a href="http://modis.ispras.ru/Lizorkin/XML/bib.xml"><em>http://modis.ispras.ru/Lizorkin/XML/bib.xml</em></a><em>")))</em><em><b>)</b></em><em>
+         (</em><em><b>where</b></em><em>
+          </em><em><b>(</b></em><em>(sxpath "count(./author) &gt; 0") b</em><em><b>)</b></em><em>
+          `(book
+            ,@((sxpath "./title") b)
+            ,@(for ((a ((sxpath "./author[position()&lt;=2]") b)))
+                   a)
+            ,@(if ((sxpath "count(./author) &gt; 2") b)
+                  '((et-al))
+                  '())))))
+==&gt;
+(bib
+ (book
+  (title "TCP/IP Illustrated")
+  (author (last "Stevens") (first "W.")))
+ (book
+  (title "Advanced Programming in the Unix environment")
+  (author (last "Stevens") (first "W.")))
+ (book
+  (title "Data on the Web")
+  (author (last "Abiteboul") (first "Serge"))
+  (author (last "Buneman") (first "Peter"))
+  (et-al)))</em></pre><em>
+</em></div><p>The FLWOR-expressions can involve multiple (S)XML documents as well as a single
+XML document.</p><p>The analogue in Scheme for the XQuery query
+<a href="http://www.w3.org/TR/xquery-use-cases/#rdb-queries-results-q2"><em>1.4.4.2 Q2</em></a>
+from&nbsp;[<a href="#XQ-UC">5</a>]:</p><div class="theorem"><b>Example&nbsp;24</b>&nbsp;&nbsp;<em>
+For all bicycles, list the item number, description, and highest bid (if any),
+ordered by item number:
+</em><pre><em>`(result
+  . ,(</em><em><b>for</b></em><em> </em><em><b>(</b></em><em>(i ((sxpath "//item_tuple")
+               (sxml:document
+                "</em><a href="http://modis.ispras.ru/Lizorkin/XML/items.xml"><em>http://modis.ispras.ru/Lizorkin/XML/items.xml</em></a><em>")))</em><em><b>)</b></em><em>
+          (let ((b ((sxpath "//bid_tuple[itemno = $i/itemno]")
+                    (sxml:document
+                     "</em><a href="http://modis.ispras.ru/Lizorkin/XML/bids.xml"><em>http://modis.ispras.ru/Lizorkin/XML/bids.xml</em></a><em>")
+                    `((i . ,(</em><a href="http://modis.ispras.ru/Lizorkin/Apidoc/sxpathlib.html#docfunc11721"><em>as-nodeset</em></a><em> i))))))
+            (</em><em><b>where</b></em><em>
+             ((sxpath "</em><a href="http://www.w3.org/TR/xpath#function-contains"><em>contains</em></a><em>(./description, 'Bicycle')") i)
+             (</em><em><b>order</b></em><em> </em><em><b>(by</b></em><em> ((sxpath "./itemno") i)</em><em><b>)</b></em><em>
+                    `(item_tuple
+                      ,@((sxpath "./itemno") i)
+                      ,@((sxpath "./description") i)
+                      (high_bid
+                       ,@((sxpath
+                           `</em><em><b>(</b></em><em>"./bid" ,(lambda (nodeset var-binding)
+                                        (if
+                                         (null? nodeset)
+                                         '()
+                                         (list
+                                          (apply max
+                                            (map
+                                             (lambda (node)
+                                               (</em><a href="http://modis.ispras.ru/Lizorkin/Apidoc/sxpath-ext.html#docfunc9829"><em>sxml:number</em></a><em>
+                                                (</em><a href="http://modis.ispras.ru/Lizorkin/Apidoc/sxpath-ext.html#docfunc15784"><em>sxml:string-value</em></a><em> node)))
+                                             nodeset)))))
+                             </em><em><b>)</b></em><em>)
+                         b))))))))
+==&gt;
+(result
+  (item_tuple (itemno "1001") (description "Red Bicycle") (high_bid 55))
+  (item_tuple (itemno "1003") (description "Old Bicycle") (high_bid 20))
+  (item_tuple (itemno "1007") (description "Racing Bicycle") (high_bid 225))
+  (item_tuple (itemno "1008") (description "Broken Bicycle") (high_bid)))</em></pre><em>
+</em></div><p><a name="hevea:transformations"></a>
+</p><!--TOC section SXML Transformations-->
+<h2 class="section"><!--SEC ANCHOR --><a name="htoc11">4</a>&nbsp;&nbsp;SXML Transformations</h2><!--SEC END --><p>SXML transformations are used for transforming an SXML document tree into
+another tree.
+Two primary kinds of SXML transformation tools can be considered: the XSLT
+processor <em>STX</em> (by Kirill Lisovsky) and the pre-post-order SXML
+transformer (by Oleg Kiselyov).</p><!--TOC subsection STX: Scheme-enabled XSLT Processor-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc12">4.1</a>&nbsp;&nbsp;STX: Scheme-enabled XSLT Processor</h3><!--SEC END --><pre>(for-each
+ display
+ <b>(</b><a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc59359"><b>sxml:clean-feed</b></a><b>
+  (</b><a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc55988"><b>stx:transform-dynamic</b></a><b>
+   (</b><a href="http://modis.ispras.ru/Lizorkin/Apidoc/sxml-tools.html#codefunc28392"><b>sxml:add-parents</b></a> (sxml:document 
+                      "<a href="http://modis.ispras.ru/Lizorkin/XML/poem.xml">http://modis.ispras.ru/Lizorkin/XML/poem.xml</a>")<b>)</b>
+   <b>(</b><a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc33217"><b>stx:make-stx-stylesheet</b></a>
+    (sxml:document
+     "<a href="http://modis.ispras.ru/Lizorkin/XML/poem2html.xsl">http://modis.ispras.ru/Lizorkin/XML/poem2html.xsl</a>"
+     '[(xsl . "http://www.w3.org/1999/XSL/Transform")])<b>)))</b>)
+==&gt;
+; Produces the following input [I inserted additional whitespaces here
+; to improve readability]:
+&lt;html&gt;
+ &lt;head&gt;&lt;title&gt;The Lovesong of J. Alfred Prufrock&lt;/title&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;The Lovesong of J. Alfred Prufrock&lt;/h1&gt;
+  &lt;p&gt;
+   Let us go then, you and I,&lt;br/&gt;
+   When the evening is spread out against the sky&lt;br/&gt;
+   Like a patient etherized upon a table:&lt;br/&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+   In the room the women come and go&lt;br/&gt;
+   Talking of Michaelangelo.&lt;br/&gt;
+  &lt;/p&gt;
+  &lt;i&gt;T. S. Eliot&lt;/i&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</pre><!--TOC subsection Transfromation with Pre-post-order-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc13">4.2</a>&nbsp;&nbsp;Transfromation with Pre-post-order</h3><!--SEC END --><p>The same transformation in Oleg Kiselyov's pre-post-order SXML transformer:
+</p><pre>(<a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc51646"><b>pre-post-order</b></a>
+ (sxml:document "<a href="http://modis.ispras.ru/Lizorkin/XML/poem.xml">http://modis.ispras.ru/Lizorkin/XML/poem.xml</a>")
+ `(<b>(</b>*TOP* *macro* . ,(lambda top
+                       (car ((sxpath '(*)) top)))<b>)</b>
+   <b>(</b>poem . ,(lambda elem
+              `(html
+                (head
+                 (title ,((sxpath "string(@title)") elem)))
+                (body
+                 (h1 ,((sxpath "string(@title)") elem))
+                 ,@((sxpath "node()") elem)
+                 (i ,((sxpath "string(@poet)") elem)))))<b>)</b>
+   <b>(</b>@ *preorder* . ,(lambda x x)<b>)</b>
+   <b>(</b>stanza . ,(lambda (tag . content)
+                `(p ,@(map-union
+                       (lambda (x) x)
+                       content)))<b>)</b>
+   <b>(</b>line . ,(lambda (tag . content)
+              (append content '((br))))<b>)</b>
+   <b>(</b>*text* . ,(lambda (tag text) text)<b>)</b>))
+==&gt;
+(html
+ (head (title "The Lovesong of J. Alfred Prufrock"))
+ (body
+  (h1 "The Lovesong of J. Alfred Prufrock")
+  (p
+   "Let us go then, you and I,"
+   (br)
+   "When the evening is spread out against the sky"
+   (br)
+   "Like a patient etherized upon a table:"
+   (br))
+  (p
+   "In the room the women come and go"
+   (br)
+   "Talking of Michaelangelo."
+   (br))
+  (i "T. S. Eliot")))</pre><p><a name="hevea:xpathlink"></a>
+</p><!--TOC section XPathLink: a Query Language with XLink Support-->
+<h2 class="section"><!--SEC ANCHOR --><a name="htoc14">5</a>&nbsp;&nbsp;XPathLink: a Query Language with XLink Support</h2><!--SEC END --><p>Under construction</p><p><a href="http://modis.ispras.ru/Lizorkin/xpathlink.html">http://modis.ispras.ru/Lizorkin/xpathlink.html</a></p><div class="theorem"><b>Example&nbsp;25</b>&nbsp;&nbsp;<em>
+Find a </em><code><em>link</em></code><em>&nbsp;element and traverse it:
+</em><pre><em>(</em><em><b>(</b></em><a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc42375"><em><b>sxpath/c</b></em></a><em> "/doc/descendant::link/</em><a href="http://modis.ispras.ru/Lizorkin/xpathlink.html#hevea:def-traverse"><em>traverse</em></a><em>::doc"</em><em><b>)</b></em><em>
+ (</em><a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc54371"><em><b>xlink:documents</b></em></a><em> "</em><a href="http://modis.ispras.ru/Lizorkin/XML/selflinked.xml"><em>http://modis.ispras.ru/Lizorkin/XML/selflinked.xml</em></a><em>"))
+==&gt;
+(</em><em><b>(</b></em><em>doc
+  (title "This document is linked with itself by XLink link")
+  (body
+   (link (@
+          (http://www.w3.org/1999/xlink:type "simple")
+          (http://www.w3.org/1999/xlink:href "selflinked.xml"))
+         "Following this link would result in this document again"))</em><em><b>)</b></em><em>)</em></pre><em>
+</em></div><p>XLink extended links are supported in XPathLink as well as XLink simple links:</p><div class="theorem"><b>Example&nbsp;26</b>&nbsp;&nbsp;<em>
+Return a </em><code><em>chapter</em></code><em>&nbsp;element that is linked with the first </em><code><em>item</em></code><em> in
+the table of contents:
+</em><pre><em>((sxpath/c "doc/item[1]/traverse::chapter")
+ (xlink:documents "</em><a href="http://modis.ispras.ru/Lizorkin/XML/doc.xml"><em>http://modis.ispras.ru/Lizorkin/XML/doc.xml</em></a><em>"))
+==&gt;
+(</em><em><b>(</b></em><em>chapter (@ (id "chap1"))
+   (title "Abstract")
+   (p "This document describes about XLink Engine...")</em><em><b>)</b></em><em>)</em></pre><em>
+Note that the link is described in a different place of the XML document than
+the </em><code><em>item</em></code><em>&nbsp;element being the starting resource of this link.
+</em></div><p><a name="hevea:sxml-match"></a>
+</p><!--TOC section SXML Match-->
+<h2 class="section"><!--SEC ANCHOR --><a name="htoc15">6</a>&nbsp;&nbsp;SXML Match</h2><!--SEC END --><p>Under construction</p><p><a href="http://celtic.benderweb.net/sxml-match/">http://celtic.benderweb.net/sxml-match/</a></p><pre>(<b>sxml-match</b>
+ (car ((sxpath "bib/book[1]")
+       (sxml:document "<a href="http://modis.ispras.ru/Lizorkin/XML/bib.xml">http://modis.ispras.ru/Lizorkin/XML/bib.xml</a>")))
+ [<b>(</b>book (@ (year ,publ-year))
+        (title ,book-title)
+        (author (last ,author-last-name)
+                (first ,author-first-name))
+        . ,rest-content<b>)</b>
+  (display "publ-year is bound to: ")
+  (pp publ-year)
+  (display "book-title is bound to: ")
+  (pp book-title)
+  (display "author-last-name is bound to: ")
+  (pp author-last-name)
+  (display "author-first-name is bound to: ")
+  (pp author-first-name)
+  (display "rest-content is bound to: ")
+  (pp rest-content)]
+ [,otherwise
+  (display "Match not found")])
+==&gt;
+; Produces the following output:
+publ-year is bound to: "1994"
+book-title is bound to: "TCP/IP Illustrated"
+author-last-name is bound to: "Stevens"
+author-first-name is bound to: "W."
+rest-content is bound to: ((publisher "Addison-Wesley") (price " 65.95"))</pre><p><a name="hevea:modif"></a>
+</p><!--TOC section SXML Modifications-->
+<h2 class="section"><!--SEC ANCHOR --><a name="htoc16">7</a>&nbsp;&nbsp;SXML Modifications</h2><!--SEC END --><p>
+<a name="modification"></a></p><p>SXML modification tool was designed in the spirit of&nbsp;[<a href="#Lehti">6</a>].</p><p>In this subsection, the following document will be used as an illustration:
+</p><pre>(sxml:document "<a href="http://modis.ispras.ru/Lizorkin/XML/po-short.xml">http://modis.ispras.ru/Lizorkin/XML/po-short.xml</a>")
+==&gt;
+(*TOP*
+ (*PI* xml "version='1.0'")
+ (purchaseOrder (@ (orderDate "07.23.2001"))
+   (recipient
+     (name "Dennis Scannell")
+     (street "175 Perry Lea Side Road"))
+   (order
+     (cd (@ (title "Little Lion") (artist "Brooks Williams"))))))</pre><p>Each update statement generally consists of two parts:
+</p><ul class="itemize"><li class="li-itemize">
+XPath location path that specifies the node(s) to be updated;
+</li><li class="li-itemize">an update operation to be performed over each of the node(s) selected;
+some update operations have additional parameters.
+</li></ul><!--TOC subsection Abbreviated syntax-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc17">7.1</a>&nbsp;&nbsp;Abbreviated syntax</h3><!--SEC END --><!--TOC subsubsection Deleting nodes-->
+<h4 class="subsubsection"><!--SEC ANCHOR --><a name="htoc18">7.1.1</a>&nbsp;&nbsp;Deleting nodes</h4><!--SEC END --><div class="theorem"><b>Example&nbsp;27</b>&nbsp;&nbsp;<em> 
+Delete the </em><code><em>recipient</em></code><em>&nbsp;element together with all its content:
+</em><pre><em>([</em><a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc7533"><em><b>sxml:modify</b></em></a><em>
+  '("purchaseOrder/recipient" </em><em><b>delete</b></em><em>)]
+ (sxml:document "</em><a href="http://modis.ispras.ru/Lizorkin/XML/po-short.xml"><em>http://modis.ispras.ru/Lizorkin/XML/po-short.xml</em></a><em>"))
+==&gt;
+(*TOP*
+ (*PI* xml "version='1.0'")
+ (purchaseOrder (@ (orderDate "07.23.2001"))
+   (order
+     (cd (@ (title "Little Lion") (artist "Brooks Williams"))))))</em></pre><em>
+</em></div><div class="theorem"><b>Example&nbsp;28</b>&nbsp;&nbsp;<em> 
+Delete the </em><code><em>recipient</em></code><em>&nbsp;element, while keeping its content:
+</em><pre><em>([sxml:modify
+  '("purchaseOrder/recipient" </em><em><b>delete-undeep</b></em><em>)]
+ (sxml:document "</em><a href="http://modis.ispras.ru/Lizorkin/XML/po-short.xml"><em>http://modis.ispras.ru/Lizorkin/XML/po-short.xml</em></a><em>"))
+==&gt;
+(*TOP*
+ (*PI* xml "version='1.0'")
+ (purchaseOrder (@ (orderDate "07.23.2001"))
+   (name "Dennis Scannell")
+   (street "175 Perry Lea Side Road")
+   (order
+     (cd (@ (title "Little Lion") (artist "Brooks Williams"))))))</em></pre><em>
+</em></div><p>A more elaborate example:</p><div class="theorem"><b>Example&nbsp;29</b>&nbsp;&nbsp;<em>
+Delete all whitespace text nodes from a document:
+</em><pre><em>([sxml:modify
+  '("/descendant::text()[not(</em><a href="http://www.w3.org/TR/xpath#function-translate"><em>translate</em></a><em>(., ' </em><em>\</em><em>r</em><em>\</em><em>n</em><em>\</em><em>t', &#8221;))]" delete)]
+ '(table "</em><em>\</em><em>n  "
+         (tr "</em><em>\</em><em>n</em><em>\</em><em>t"
+             (td "value")
+             "</em><em>\</em><em>n  ")
+         "</em><em>\</em><em>n"))
+==&gt;
+(table (tr (td "value")))</em></pre><em>
+The call to XPath </em><code><em>translate</em></code><em>&nbsp;function results in a string being a
+string-value of the text node with all the whitespace characters removed
+(i.e. with spacebar, return, newline and tabulation characters removed).
+For a whitespace text node, the latter results in an empty string, which is
+treated as a logical false value in XPath.
+</em></div><!--TOC subsubsection Inserting nodes-->
+<h4 class="subsubsection"><!--SEC ANCHOR --><a name="htoc19">7.1.2</a>&nbsp;&nbsp;Inserting nodes</h4><!--SEC END --><pre>([sxml:modify
+  '("purchaseOrder/recipient" <b>insert-into</b> <b>(postalCode "05676")</b>)]
+ (sxml:document "<a href="http://modis.ispras.ru/Lizorkin/XML/po-short.xml">http://modis.ispras.ru/Lizorkin/XML/po-short.xml</a>"))
+==&gt;
+(*TOP*
+ (*PI* xml "version='1.0'")
+ (purchaseOrder (@ (orderDate "07.23.2001"))
+   (recipient
+     (name "Dennis Scannell")
+     (street "175 Perry Lea Side Road")
+     <b>(postalCode "05676")</b>)
+   (order
+     (cd (@ (title "Little Lion") (artist "Brooks Williams"))))))</pre><p>Attribute nodes can be inserted as well as element nodes:
+</p><pre>([sxml:modify
+  '("purchaseOrder/recipient" insert-into
+                              <b>(@ (country "USA"))</b>)]
+ (sxml:document "<a href="http://modis.ispras.ru/Lizorkin/XML/po-short.xml">http://modis.ispras.ru/Lizorkin/XML/po-short.xml</a>"))
+==&gt;
+(*TOP*
+ (*PI* xml "version='1.0'")
+ (purchaseOrder (@ (orderDate "07.23.2001"))
+   (recipient <b>(@ (country "USA"))</b>
+     (name "Dennis Scannell")
+     (street "175 Perry Lea Side Road"))
+   (order (cd (@ (title "Little Lion") (artist "Brooks Williams"))))))</pre><p>Multiple nodes can be inserted with a single update statement as well:
+</p><pre>([sxml:modify
+  '("purchaseOrder/recipient" insert-into <b>(postalCode "05676")</b>
+                                          <b>(@ (country "USA"))</b>)]
+ (sxml:document "<a href="http://modis.ispras.ru/Lizorkin/XML/po-short.xml">http://modis.ispras.ru/Lizorkin/XML/po-short.xml</a>"))
+==&gt;
+(*TOP*
+ (*PI* xml "version='1.0'")
+ (purchaseOrder (@ (orderDate "07.23.2001"))
+   (recipient <b>(@ (country "USA"))</b>
+     (name "Dennis Scannell")
+     (street "175 Perry Lea Side Road")
+     <b>(postalCode "05676")</b>)
+   (order
+     (cd (@ (title "Little Lion") (artist "Brooks Williams"))))))</pre><p>
+Note that attribute nodes are inserted into the attribute-list of an element, the other
+nodes are inserted as element's last children.</p><!--TOC subsubsection Renaming nodes-->
+<h4 class="subsubsection"><!--SEC ANCHOR --><a name="htoc20">7.1.3</a>&nbsp;&nbsp;Renaming nodes</h4><!--SEC END --><div class="theorem"><b>Example&nbsp;30</b>&nbsp;&nbsp;<em> 
+Rename </em><code><em>recipient</em></code><em>&nbsp;element to a </em><code><em>customer</em></code><em>&nbsp;element:
+</em><pre><em>([sxml:modify
+  '("purchaseOrder/recipient" </em><em><b>rename</b></em><em> </em><em><b>customer</b></em><em>)]
+ (sxml:document "</em><a href="http://modis.ispras.ru/Lizorkin/XML/po-short.xml"><em>http://modis.ispras.ru/Lizorkin/XML/po-short.xml</em></a><em>"))
+==&gt;
+(*TOP*
+ (*PI* xml "version='1.0'")
+ (purchaseOrder (@ (orderDate "07.23.2001"))
+   (</em><em><b>customer</b></em><em>
+     (name "Dennis Scannell")
+     (street "175 Perry Lea Side Road"))
+   (order
+     (cd (@ (title "Little Lion") (artist "Brooks Williams"))))))</em></pre><em>
+</em></div><!--TOC subsubsection Replacing nodes-->
+<h4 class="subsubsection"><!--SEC ANCHOR --><a name="htoc21">7.1.4</a>&nbsp;&nbsp;Replacing nodes</h4><!--SEC END --><!--TOC subsection Predefined update handlers-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc22">7.2</a>&nbsp;&nbsp;Predefined update handlers</h3><!--SEC END --><!--TOC subsection Dependent update statements-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc23">7.3</a>&nbsp;&nbsp;Dependent update statements</h3><!--SEC END --><!--TOC subsection Custom handlers-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc24">7.4</a>&nbsp;&nbsp;Custom handlers</h3><!--SEC END --><p><a name="hevea:ddo"></a>
+</p><!--TOC section DDO SXPath: the Optimized XPath Implementation-->
+<h2 class="section"><!--SEC ANCHOR --><a name="htoc25">8</a>&nbsp;&nbsp;DDO SXPath: the Optimized XPath Implementation</h2><!--SEC END --><p>Under construction</p><p><a href="http://modis.ispras.ru/Lizorkin/ddo.html">http://modis.ispras.ru/Lizorkin/ddo.html</a></p><div class="theorem"><b>Example&nbsp;31</b>&nbsp;&nbsp;<em>
+Return all text nodes that follow the keyword </em>&#8220;XPointer&#8221;<em> and that are
+not descendants of the element&nbsp;</em><code><em>appendix</em></code><em>.
+</em><pre><em>((</em><a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc57643"><em><b>ddo:sxpath</b></em></a><em>
+  "//text()[</em><a href="http://www.w3.org/TR/xpath#function-contains"><em>contains</em></a><em>(., 'XPointer')]/
+   following::text()[not(./ancestor::appendix)]")
+ (sxml:document "</em><a href="http://modis.ispras.ru/Lizorkin/XML/doc.xml"><em>http://modis.ispras.ru/Lizorkin/XML/doc.xml</em></a><em>"))
+==&gt;
+("XPointer is the fragment identifier of documents having the mime-type..."
+ "Models for using XLink/XPointer "
+ "There are important keywords."
+ "samples"
+ "Conclusion"
+ "Thanks a lot.")</em></pre><em>
+</em></div><p><a name="hevea:lazy"></a>
+</p><!--TOC section Lazy SXML Processing-->
+<h2 class="section"><!--SEC ANCHOR --><a name="htoc26">9</a>&nbsp;&nbsp;Lazy SXML Processing</h2><!--SEC END --><p>Under construction</p><p>Lazy XML-to-SXML conversion:
+</p><pre>(define doc
+  [<a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc58012"><b>lazy:xml-&gt;sxml</b></a>
+    (<a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc60351">open-input-resource</a> "<a href="http://modis.ispras.ru/Lizorkin/XML/poem.xml">http://modis.ispras.ru/Lizorkin/XML/poem.xml</a>")
+    '()])
+doc
+==&gt;
+(*TOP*
+ (*PI* xml "version='1.0'")
+ (poem
+  (@ (title "The Lovesong of J. Alfred Prufrock") (poet "T. S. Eliot"))
+  (stanza (line "Let us go then, you and I,") <i>#&lt;promise&gt;</i>)
+  <i>#&lt;promise&gt;</i>))</pre><p>
+Please note Scheme promises as certain nodes of an SXML document; the promises
+correspond to not-yet-parsed subtrees of the requested XML document.
+Once promises are forced, XML document parsing continues, and the SXML
+representation for the corresponding branches is returned.</p><p>Querying a lazy SXML document, lazily:</p><div class="theorem"><b>Example&nbsp;32</b>&nbsp;&nbsp;<em>
+Obtain the first line in every poem stanza:
+</em><pre><em>(define res
+  ((</em><a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc13155"><em><b>lazy:sxpath</b></em></a><em> "poem/stanza/line[1]")
+   [lazy:xml-&gt;sxml
+    (open-input-resource "</em><a href="http://modis.ispras.ru/Lizorkin/XML/poem.xml"><em>http://modis.ispras.ru/Lizorkin/XML/poem.xml</em></a><em>")
+    '()]))
+res
+==&gt;
+((line "Let us go then, you and I,") </em><em><i>#&lt;promise&gt;</i></em><em>)</em></pre><p><em>Obtain the next portion of the result
+</em></p><pre><em>(force (cadr res))
+==&gt;
+((line "In the room the women come and go") </em><em><i>#&lt;promise&gt;</i></em><em>)</em></pre><p><em>Converting the lazy result to a conventional SXML nodeset
+</em></p><pre><em>(</em><a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc14988"><em><b>lazy:result-&gt;list</b></em></a><em> res)
+==&gt;
+((line "Let us go then, you and I,")
+ (line "In the room the women come and go"))</em></pre></div><p><a name="hevea:serializ"></a>
+</p><!--TOC section SXML Serialization-->
+<h2 class="section"><!--SEC ANCHOR --><a name="htoc27">10</a>&nbsp;&nbsp;SXML Serialization</h2><!--SEC END --><p>
+<a name="serialization"></a></p><p>The SXML serializer provides converting an SXML object (i.e. a node or a
+nodeset) into XML or HTML.
+The SXML serializer provides partial conformance with XSLT&nbsp;2.0 and XQuery&nbsp;1.0
+Serialization&nbsp;[<a href="#XQ-Serializ">7</a>].</p><p>For converting an SXML object to XML, the
+function&nbsp;<a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc15826"><b>srl:sxml-&gt;xml</b></a> is
+provided.
+The function takes an SXML object as its first mandatory argument.
+If the second argument is not supplied, the function returns a string that
+contains the serialized representation of the SXML object as XML:
+</p><pre>[<a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc15826"><b>srl:sxml-&gt;xml</b></a>
+ '(doc (title "Hello world"))]
+==&gt;
+"&lt;doc&gt;\n  &lt;title&gt;Hello world&lt;/title&gt;\n&lt;/doc&gt;"</pre><p>If the second optional argument is provided to the
+function&nbsp;<code>srl:sxml-&gt;xml</code>, and this second argument is a port, the
+serialized representation of the SXML object is output to this port:
+</p><pre>[srl:sxml-&gt;xml
+ '(doc (title "Hello world"))
+ (current-output-port)]
+==&gt;
+; Produces the following output:
+&lt;doc&gt;
+  &lt;title&gt;Hello world&lt;/title&gt;
+&lt;/doc&gt;</pre><p>If the function&nbsp;<code>srl:sxml-&gt;xml</code> is called with two arguments and the
+second argument being a string, the serialized representation of the SXML
+object is output to a file whose file name is that string:
+</p><pre>[srl:sxml-&gt;xml
+ '(doc (title "Hello world"))
+ "output.xml"]
+==&gt;
+; The file "output.xml" contains the serialized representation of the SXML object</pre><p>The SXML serializer supports different kinds of nodes, including comment
+nodes, processing instruction nodes, namespace nodes and entities produced by
+<a href="http://www.neilvandyke.org/htmlprag/">HtmlPrag</a>:
+</p><pre>[srl:sxml-&gt;xml
+  '(*TOP*
+    (@ (*NAMESPACES*
+        (foo "http://www.foo.net")))
+    (*PI* xml "version='1.0'")
+    (shipment (@ (weight 100) (unit "kg") (delivered))
+     (*COMMENT* "Comment node")      
+     (description "Shipment" (&amp; 32) "description")
+     (foo:empty)))
+  (current-output-port)]
+==&gt;
+; Produces the following output:
+&lt;?xml version='1.0'?&gt;
+&lt;shipment weight="100" unit="kg" delivered="delivered"&gt;
+  &lt;!&#8211;Comment node&#8211;&gt;
+  &lt;description&gt;Shipment&amp;#32;description&lt;/description&gt;
+  &lt;foo:empty xmlns:foo="http://www.foo.net"/&gt;
+&lt;/shipment&gt;</pre><p>It can be noted from the above examples that the
+function&nbsp;<code>srl:sxml-&gt;xml</code> produces nested XML elements with indentation
+that facilitates readability of the XML document by a human.
+However, in certain cases (e.g. producing XML documents for their consumption
+by machine) such indentation can be useless and ever undesirable, as it
+increases the size of the XML document being produced.
+For outputting an SXML object as XML without indentation, the
+function&nbsp;<a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc8829"><b>srl:sxml-&gt;xml-noindent</b></a>
+is provided.
+Its signature and the semantics of its arguments is the same as for the
+function&nbsp;<code>srl:sxml-&gt;xml</code> already discussed:
+</p><pre>[<a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc8829"><b>srl:sxml-&gt;xml-noindent</b></a>
+ '(doc (title "Hello world"))
+ (current-output-port)]
+==&gt;
+; Produces the following output:
+&lt;doc&gt;&lt;title&gt;Hello world&lt;/title&gt;&lt;/doc&gt;</pre><p>Following the similar interface, an SXML object can be serialized as HTML:
+</p><pre>[<a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc45251"><b>srl:sxml-&gt;html</b></a>
+ '(table (@ (border))
+    (tr (td "Item 1")
+        (td (@ (rowspan 2)) "Item 2")
+        (td "Item 3"))
+    (tr (td "Item 4") (td "Item 5")))
+ (current-output-port)]
+==&gt;
+; Produces the following output:
+&lt;table border&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Item 1&lt;/td&gt;
+    &lt;td rowspan="2"&gt;Item 2&lt;/td&gt;
+    &lt;td&gt;Item 3&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Item 4&lt;/td&gt;
+    &lt;td&gt;Item 5&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;</pre><p>Serializing an SXML object as HTML corresponds to HTML output
+method&nbsp;[<a href="#XQ-Serializ">7</a>].
+The difference between XML and HTML output methods is discussed in a more
+detail in Subsect.&nbsp;<a href="#output-methods">10.1.3</a> below.</p><p>Similarily to the function&nbsp;<code>srl:sxml-&gt;xml-noindent</code>, a function
+<a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc23464"><b>srl:sxml-&gt;html-noindent</b></a> is
+provided for serializing an SXML object into HTML without indentation.</p><!--TOC subsection Serialization parameters-->
+<h3 class="subsection"><!--SEC ANCHOR --><a name="htoc28">10.1</a>&nbsp;&nbsp;Serialization parameters</h3><!--SEC END --><p>The functions&nbsp;<code>srl:sxml-&gt;xml</code>, <code>srl:sxml-&gt;xml-noindent</code>,
+<code>srl:sxml-&gt;html</code> and&nbsp;<code>srl:sxml-&gt;html-noindent</code> described above
+provide a practical however fixed serializer behaviour.
+To give the application the full power of controlling serialization parameters
+that influence how serialization is performed&nbsp;[<a href="#XQ-Serializ">7</a>], the
+function&nbsp;<a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc29272"><b>srl:parameterizable</b></a>
+is provided.</p><p>The first two arguments of the function&nbsp;<code>srl:parameterizable</code> are the
+same as for the previously discussed&nbsp;<code>srl:sxml-&gt;xml</code> and the like:
+1)&nbsp;an SXML object to be serialized and 2)&nbsp;optionally, an output port or a
+file name.
+Additionally, the function&nbsp;<code>srl:parameterizable</code> takes one or more
+serialization parameter declarations.
+Each parameter declaration takes the form
+of&nbsp;<code>(cons  param-name  param-value)</code>, &nbsp;
+<code>param-name</code>&nbsp;being a Scheme symbol, and the type of
+<code>param-value</code>&nbsp;depends on the particular serialization parameter.
+Before going into details about each particular serialization parameter
+supported in the SXML serializer, let us consider an example of specifying
+serialization parameters:
+</p><pre>[<a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc29272"><b>srl:parameterizable</b></a>
+  '(tag (@ (attr1 "value1") (attr2 "value2"))
+     (nested "text node")
+     (empty))
+  (current-output-port)
+  '(method . xml)
+  '(indent . "    ")
+  '(omit-xml-declaration . #f)
+  '(standalone . #t)]
+==&gt;
+; Produces the following output:
+&lt;?xml version='1.0' standalone='yes'?&gt;
+&lt;tag attr1="value1" attr2="value2"&gt;
+    &lt;nested&gt;text node&lt;/nested&gt;
+    &lt;empty/&gt;
+&lt;/tag&gt;</pre><p>The description of serialization parameters and their semantics is given in
+the following subsections.</p><!--TOC subsubsection CDATA section elements-->
+<h4 class="subsubsection"><!--SEC ANCHOR --><a name="htoc29">10.1.1</a>&nbsp;&nbsp;CDATA section elements</h4><!--SEC END --><p>For certain text nodes of the SXML document being serialized, it is sometimes
+preferrable to output these text nodes as XML CDATA sections (e.g. for text
+nodes containing code in some scripting language).
+For outputting certain text nodes as CDATA sections, the 
+<code>cdata-section-elements</code>&nbsp;parameter is introduced&nbsp;[<a href="#XQ-Serializ">7</a>].
+The <code>cdata-section-elements</code>&nbsp;parameter contains a list of SXML element
+names.
+If the name of the parent of a text node is a member of the list, then the
+text node is output as a CDATA section&nbsp;[<a href="#XQ-Serializ">7</a>].</p><pre>[srl:parameterizable
+  '(Snippet
+    (Declarations
+      (Literal
+       (ID "name")
+       (Default "element")))
+    (<b>Code</b> (@ (Language "XML")) "&lt;$name$&gt;$selected$$end$&lt;/$name$&gt;"))
+   (current-output-port)
+   '(cdata-section-elements . <b>(Code)</b>)]
+==&gt;
+; Produces the following output:
+&lt;Snippet&gt;
+  &lt;Declarations&gt;
+    &lt;Literal&gt;
+      &lt;ID&gt;name&lt;/ID&gt;
+      &lt;Default&gt;element&lt;/Default&gt;
+    &lt;/Literal&gt;
+  &lt;/Declarations&gt;
+  &lt;Code Language="XML"&gt;<b>&lt;![CDATA[</b>&lt;$name$&gt;$selected$$end$&lt;/$name$&gt;<b>]]&gt;</b>&lt;/Code&gt;
+&lt;/Snippet&gt;</pre><p>Without using the CDATA section, the serialized content of the
+<code>Code</code>&nbsp;element for the above example looks somewhat human-unreadable
+due to character escaping:
+</p><pre>[srl:parameterizable
+  '(Snippet
+    (Declarations
+      (Literal
+       (ID "name")
+       (Default "element")))
+    (Code (@ (Language "XML")) "&lt;$name$&gt;$selected$$end$&lt;/$name$&gt;"))
+  (current-output-port)]
+==&gt;
+; Produces the following output:
+&lt;Snippet&gt;
+  &lt;Declarations&gt;
+    &lt;Literal&gt;
+      &lt;ID&gt;name&lt;/ID&gt;
+      &lt;Default&gt;element&lt;/Default&gt;
+    &lt;/Literal&gt;
+  &lt;/Declarations&gt;
+  &lt;Code Language="XML"&gt;<b>&amp;lt;</b>$name$<b>&amp;gt;</b>$selected$$end$<b>&amp;lt;</b>/$name$<b>&amp;gt;</b>&lt;/Code&gt;
+&lt;/Snippet&gt;</pre><!--TOC subsubsection Indentation-->
+<h4 class="subsubsection"><!--SEC ANCHOR --><a name="htoc30">10.1.2</a>&nbsp;&nbsp;Indentation</h4><!--SEC END --><p>Indentation (if any) produced for the output document is controlled by the
+<code>indent</code>&nbsp;parameter&nbsp;[<a href="#XQ-Serializ">7</a>].
+According to&nbsp;[<a href="#XQ-Serializ">7</a>], &#8220;if the <code>indent</code>&nbsp;parameter has the
+value&nbsp;<code>yes</code>, then the XML output method may output whitespace ... in
+order to indent the result so that a person will find it easier to read; if
+the <code>indent</code>&nbsp;parameter has the value&nbsp;<code>no</code>, it must not output any
+additional whitespace.&#8221;</p><p>Default indentation for the SXML serializer, corresponds to two-space
+indentation for each level of nested elements:
+</p><pre>[srl:parameterizable
+   (sxml:document "<a href="http://modis.ispras.ru/Lizorkin/XML/po-short.xml">http://modis.ispras.ru/Lizorkin/XML/po-short.xml</a>")
+   (current-output-port)
+   '(indent . <b>#t</b>)]
+==&gt;
+; Produces the following output:
+&lt;?xml version='1.0'?&gt;
+&lt;purchaseOrder orderDate="07.23.2001"&gt;
+  &lt;recipient&gt;
+    &lt;name&gt;Dennis Scannell&lt;/name&gt;
+    &lt;street&gt;175 Perry Lea Side Road&lt;/street&gt;
+  &lt;/recipient&gt;
+  &lt;order&gt;
+    &lt;cd title="Little Lion" artist="Brooks Williams"/&gt;
+  &lt;/order&gt;
+&lt;/purchaseOrder&gt;</pre><p>No indentation:
+</p><pre>[srl:parameterizable
+  (sxml:document "<a href="http://modis.ispras.ru/Lizorkin/XML/po-short.xml">http://modis.ispras.ru/Lizorkin/XML/po-short.xml</a>")
+  (current-output-port)
+  '(indent . <b>#f</b>)]
+==&gt;
+; Produces the following output (I manually inserted a couple of line breaks below
+; to avoid a long line):
+&lt;?xml version='1.0'?&gt;&lt;purchaseOrder orderDate="07.23.2001"&gt;&lt;recipient&gt;
+&lt;name&gt;Dennis Scannell&lt;/name&gt;&lt;street&gt;175 Perry Lea Side Road&lt;/street&gt;&lt;/recipient&gt;&lt;order&gt;
+&lt;cd title="Little Lion" artist="Brooks Williams"/&gt;&lt;/order&gt;&lt;/purchaseOrder&gt;</pre><p>In addition to values <code>#t</code> and <code>#f</code> for the <code>indent</code>&nbsp;parameter
+(and their semantical synonyms <code>'yes</code> and <code>'no</code> supported for
+conformance with&nbsp;[<a href="#XQ-Serializ">7</a>]), the SXML serializer also allows the
+value of the <code>indent</code>&nbsp;parameter to be a whitespace string.
+In the latter case, this whitespace string denotes a custom indentation
+to be applied for each level of element nesting.
+In the example below, the custom indentation is set to a single tabulation
+character:
+</p><pre>[srl:parameterizable
+  (sxml:document "<a href="http://modis.ispras.ru/Lizorkin/XML/po-short.xml">http://modis.ispras.ru/Lizorkin/XML/po-short.xml</a>")
+  (current-output-port)
+  '(indent . <b>"</b><b>\</b><b>t"</b>)]
+==&gt;
+; Produces the following output:
+&lt;?xml version='1.0'?&gt;
+&lt;purchaseOrder orderDate="07.23.2001"&gt;
+	&lt;recipient&gt;
+		&lt;name&gt;Dennis Scannell&lt;/name&gt;
+		&lt;street&gt;175 Perry Lea Side Road&lt;/street&gt;
+	&lt;/recipient&gt;
+	&lt;order&gt;
+		&lt;cd title="Little Lion" artist="Brooks Williams"/&gt;
+	&lt;/order&gt;
+&lt;/purchaseOrder&gt;</pre><p>Custom indentation&nbsp;&#8211; no additional whitespaces for nested elements, just line
+breaks:
+</p><pre>[srl:parameterizable
+  (sxml:document "<a href="http://modis.ispras.ru/Lizorkin/XML/po-short.xml">http://modis.ispras.ru/Lizorkin/XML/po-short.xml</a>")
+  (current-output-port)
+  '(indent . <b>""</b>)]
+==&gt;
+; Produces the following output:
+&lt;?xml version='1.0'?&gt;
+&lt;purchaseOrder orderDate="07.23.2001"&gt;
+&lt;recipient&gt;
+&lt;name&gt;Dennis Scannell&lt;/name&gt;
+&lt;street&gt;175 Perry Lea Side Road&lt;/street&gt;
+&lt;/recipient&gt;
+&lt;order&gt;
+&lt;cd title="Little Lion" artist="Brooks Williams"/&gt;
+&lt;/order&gt;
+&lt;/purchaseOrder&gt;</pre><!--TOC subsubsection Output method-->
+<h4 class="subsubsection"><!--SEC ANCHOR --><a name="htoc31">10.1.3</a>&nbsp;&nbsp;Output method</h4><!--SEC END --><p>
+<a name="output-methods"></a></p><p>Two output methods are supported by the SXML serializer: the XML output method
+and the HTML output method.</p><p>Some of the differences between the XML and HTML output methods
+are&nbsp;[<a href="#XQ-Serializ">7</a>]:
+</p><ul class="itemize"><li class="li-itemize">
+The HTML output method does not output an end-tag for empty HTML
+elements, such as&nbsp;<code>area</code>, <code>br</code>, <code>img</code>, etc.
+</li><li class="li-itemize">The HTML output method does not perform character escaping for the
+content of&nbsp;<code>script</code> and <code>style</code> elements.
+</li><li class="li-itemize">The HTML output method does not escape &#8220;<code>&lt;</code>&#8221;&nbsp;characters
+occurring in attribute values.
+</li><li class="li-itemize">The HTML output method does not add whitespaces inside a formatted
+element:&nbsp;<code>pre</code>, <code>textarea</code>, etc.
+</li><li class="li-itemize">The HTML output method outputs boolean attributes (i.e. attributes
+with a value that is equal to the name of the attribute) in minimized form.
+</li></ul><p>The choice of a particular output method is controlled by the
+<code>method</code>&nbsp;parameter&nbsp;[<a href="#XQ-Serializ">7</a>].
+The SXML serializer supports two values for the <code>method</code>&nbsp;parameter:
+<code>'xml</code> and&nbsp;<code>'html</code> which specify the XML and HTML output methods
+respectively.
+If the <code>method</code>&nbsp;parameter is omitted, the XML output method is used by
+default.</p><p>In the two examples below, the same SXML element is serialized using XML and
+HTML output methods respectively; the differences between the results produced
+are emphasized in bold:
+</p><pre>[srl:parameterizable
+ '(form (@ (action "http://cats.org/select") (method "post"))
+    (script (@ (type "text/javascript"))
+            "document.write('&lt;h1&gt;Cats&lt;/h1&gt;')")
+    (select (@ (name "cats") (multiple "multiple"))
+      (option (@ (value "1")) "Calico")
+      (option (@ (value "2")) "Tortie")
+      (option (@ (value "3") (selected)) "Siamese"))
+    (br)
+    (input (@ (type "submit") (value "Send"))))
+ (current-output-port)
+ '(method . <b>html</b>)]
+==&gt;
+; Produces the following output:
+&lt;form action="http://cats.org/select" method="post"&gt;
+  &lt;script type="text/javascript"&gt;document.write('<b>&lt;h1&gt;</b>Cats<b>&lt;/h1&gt;</b>')&lt;/script&gt;
+  &lt;select name="cats" <b>multiple</b>&gt;
+    &lt;option value="1"&gt;Calico&lt;/option&gt;
+    &lt;option value="2"&gt;Tortie&lt;/option&gt;
+    &lt;option value="3" <b>selected</b>&gt;Siamese&lt;/option&gt;
+  &lt;/select&gt;
+  &lt;br<b>&gt;</b>
+  &lt;input type="submit" value="Send"<b>&gt;</b>
+&lt;/form&gt;</pre><pre>[srl:parameterizable
+ '(form (@ (action "http://cats.org/select") (method "post"))
+    (script (@ (type "text/javascript"))
+            "document.write('&lt;h1&gt;Cats&lt;/h1&gt;')")
+    (select (@ (name "cats") (multiple "multiple"))
+      (option (@ (value "1")) "Calico")
+      (option (@ (value "2")) "Tortie")
+      (option (@ (value "3") (selected)) "Siamese"))
+    (br)
+    (input (@ (type "submit") (value "Send"))))
+ (current-output-port)
+ '(method . <b>xml</b>)]
+==&gt;
+; Produces the following output:
+&lt;form action="http://cats.org/select" method="post"&gt;
+  &lt;script type="text/javascript"&gt;document.write('<b>&amp;lt;</b>h1<b>&amp;gt;</b>Cats<b>&amp;lt;</b>/h1<b>&amp;gt;</b>')&lt;/script&gt;
+  &lt;select name="cats" <b>multiple="multiple"</b>&gt;
+    &lt;option value="1"&gt;Calico&lt;/option&gt;
+    &lt;option value="2"&gt;Tortie&lt;/option&gt;
+    &lt;option value="3" <b>selected="selected"</b>&gt;Siamese&lt;/option&gt;
+  &lt;/select&gt;
+  &lt;br<b>/&gt;</b>
+  &lt;input type="submit" value="Send"<b>/&gt;</b>
+&lt;/form&gt;</pre><!--TOC subsubsection Namespace prefix assignment-->
+<h4 class="subsubsection"><!--SEC ANCHOR --><a name="htoc32">10.1.4</a>&nbsp;&nbsp;Namespace prefix assignment</h4><!--SEC END --><p>The namespace prefix assignment parameter is specific for SXML and has no
+analogue in&nbsp;[<a href="#XQ-Serializ">7</a>].
+The <code>ns-prefix-assig</code>&nbsp;parameter is introduced in the SXML serializer due
+to <a href="http://okmij.org/ftp/Scheme/SXML.html#Namespaces">universal names</a>
+in SXML which by themselves give no notion about their original namespace
+prefix, unless this information is supplied by application.</p><p>The <code>ns-prefix-assig</code>&nbsp;parameter allows the application to specify the
+mapping between namespace URIs and the corresponding namespace prefixes to be
+used for serialization.
+The value of the <code>ns-prefix-assig</code>&nbsp;parameter takes the same form as the
+argument to <a href="http://modis.ispras.ru/Lizorkin/Apidoc/index.html#docfunc62346">high-level SSAX parser</a>
+with the same name.</p><pre>(srl:parameterizable
+  '(http://www.develop.com/student:student
+     (urn:schemas-develop-com:identifiers:id "3235329")
+     (name "Jeff Smith")
+     (urn:schemas-develop-com:programming-languages:language "C#")
+     (http://www.develop.com/student:rating "9.5"))
+  (current-output-port)
+  '[ns-prefix-assig
+     (<b>dev</b> . "http://www.develop.com/student")
+     (<b>i</b> . "urn:schemas-develop-com:identifiers")
+     (<b>pl</b> . "urn:schemas-develop-com:programming-languages")])
+==&gt;
+; Produces the following output:
+&lt;dev:student <b>xmlns:dev</b>="http://www.develop.com/student"&gt;
+  &lt;i:id <b>xmlns:i</b>="urn:schemas-develop-com:identifiers"&gt;3235329&lt;/i:id&gt;
+  &lt;name&gt;Jeff Smith&lt;/name&gt;
+  &lt;pl:language <b>xmlns:pl</b>="urn:schemas-develop-com:programming-languages"&gt;C#&lt;/pl:language&gt;
+  &lt;dev:rating&gt;9.5&lt;/dev:rating&gt;
+&lt;/dev:student&gt;</pre><p>When no namespace prefix assignment is provided for some namespace URI, the
+serializer generates an XML prefix name by himself.
+The prefix name generated follows the goal of avoiding prefix re-declarations
+within the XML document being produced:
+</p><pre>(srl:parameterizable
+  '(http://www.develop.com/student:student
+     (urn:schemas-develop-com:identifiers:id "3235329")
+     (name "Jeff Smith")
+     (urn:schemas-develop-com:programming-languages:language "C#")
+     (http://www.develop.com/student:rating "9.5"))
+   (current-output-port))
+==&gt;
+; Produces the following output:
+&lt;prfx1:student <b>xmlns:prfx1</b>="http://www.develop.com/student"&gt;
+  &lt;prfx2:id <b>xmlns:prfx2</b>="urn:schemas-develop-com:identifiers"&gt;3235329&lt;/prfx2:id&gt;
+  &lt;name&gt;Jeff Smith&lt;/name&gt;
+  &lt;prfx2:language <b>xmlns:prfx2</b>="urn:schemas-develop-com:programming-languages"&gt;C#&lt;/prfx2:language&gt;
+  &lt;prfx1:rating&gt;9.5&lt;/prfx1:rating&gt;
+&lt;/prfx1:student&gt;</pre><p>However, the SXML serializer has a set of built-in namespace prefix
+assignments for conventional namespace prefixes like&nbsp;<code>xsl</code>, <code>rdf</code>,
+etc. and their corresponding namespace&nbsp;URIs.
+There is thus no need for providing a namespace prefix assignment for a
+popular namespace URI (unless you wish to use a different prefix name for such
+a namespace in the serialized document).
+The idea is illustrated below by the example of serializing the SXML element
+from the XSLT namespace:
+</p><pre>[srl:parameterizable
+ '(<b>http://www.w3.org/1999/XSL/Transform</b>:stylesheet
+   (http://www.w3.org/1999/XSL/Transform:template (@ (match "/"))
+     (body
+      (p "Total Amount: "
+         (http://www.w3.org/1999/XSL/Transform:value-of
+           (@ (select "expense-report/total")))))))
+   (current-output-port)]
+==&gt;
+; Produces the following output:
+&lt;xsl:stylesheet <b>xmlns:xsl</b>="http://www.w3.org/1999/XSL/Transform"&gt;
+  &lt;xsl:template match="/"&gt;
+    &lt;body&gt;
+      &lt;p&gt;Total Amount: &lt;xsl:value-of select="expense-report/total"/&gt;&lt;/p&gt;
+    &lt;/body&gt;
+  &lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;</pre><!--TOC subsubsection XML declaration, standalone and version parameters-->
+<h4 class="subsubsection"><!--SEC ANCHOR --><a name="htoc33">10.1.5</a>&nbsp;&nbsp;XML declaration, standalone and version parameters</h4><!--SEC END --><pre>[srl:parameterizable
+  '(doc (title "Hello world"))
+  (current-output-port)
+  '(omit-xml-declaration . #f)
+  '(standalone . <b>yes</b>)
+  '(version . "<b>1.0</b>")]
+==&gt;
+; Produces the following output:
+&lt;?xml version='<b>1.0</b>' standalone='<b>yes</b>'?&gt;
+&lt;doc&gt;
+  &lt;title&gt;Hello world&lt;/title&gt;
+&lt;/doc&gt;</pre><pre>[srl:parameterizable
+  '(doc (title "Hello world"))
+  (current-output-port)
+  '(omit-xml-declaration . #f)
+  '(standalone . <b>omit</b>)
+  '(version . "1.0")]
+==&gt;
+; Produces the following output:
+&lt;?xml version='1.0'?&gt;
+&lt;doc&gt;
+  &lt;title&gt;Hello world&lt;/title&gt;
+&lt;/doc&gt;</pre><p>When the <code>omit-xml-declaration</code>&nbsp;parameter has the value&nbsp;<code>#t</code> (a
+default value for this parameter), no XML declaration is produced for an
+SXML document being serialized and the values of <code>standalone</code> and
+<code>version</code>&nbsp;parameters are ignored.</p><!--TOC section References-->
+<h2 class="section"><!--SEC ANCHOR -->References</h2><!--SEC END --><dl class="thebibliography"><dt class="dt-thebibliography">
+<a name="XPath"><font color="purple">[1]</font></a></dt><dd class="dd-thebibliography">
+The World Wide Web Consortium (W3C).
+XML Path Language (XPath) Version&nbsp;1.0&nbsp;:
+W3C recommendation&nbsp;/
+Clark J., DeRose S. (eds.)&nbsp;&#8211; 1999, 16&nbsp;Nov.<br>
+<a href="http://www.w3.org/TR/xpath">http://www.w3.org/TR/xpath</a></dd><dt class="dt-thebibliography"><a name="XPath-2"><font color="purple">[2]</font></a></dt><dd class="dd-thebibliography">
+The World Wide Web Consortium (W3C).
+XML Path Language (XPath)&nbsp;2.0&nbsp;:
+W3C working draft&nbsp;/
+Berglund A. et al. (eds.).&nbsp;&#8211; 2005, 04&nbsp;Apr.<br>
+<a href="http://www.w3.org/TR/2005/WD-xpath20-20050404/">http://www.w3.org/TR/2005/WD-xpath20-20050404/</a></dd><dt class="dt-thebibliography"><a name="Tatarinov"><font color="purple">[3]</font></a></dt><dd class="dd-thebibliography">
+Igor Tatarinov, Zachary G. Ives, Alon Y. Halevy, Daniel S. Weld.
+Updating XML&nbsp;:
+Proc. ACM SIGMOD int. conf. on Management of Data (SIGMOD'01), Santa
+Barbara, California, 21-24&nbsp;May, 2001&nbsp;//
+SIGMOD Conference&nbsp;/
+Aref&nbsp;W.G. (ed.).&nbsp;&#8211;
+New York: ACM Press, 2001.&nbsp;&#8211; pp.&nbsp;413-424.&nbsp;&#8211; ISBN&nbsp;1-58113-332-4.<br>
+<a href="http://www.cis.upenn.edu/%7Ezives/research/updatingXML.pdf">http://www.cis.upenn.edu/~zives/research/updatingXML.pdf</a></dd><dt class="dt-thebibliography"><a name="Elbib3"><font color="purple">[4]</font></a></dt><dd class="dd-thebibliography">
+Kirill Lisovsky, Dmitry Lizorkin.
+XML Path Language (XPath) and its functional implementation SXPath&nbsp;//
+Russian Digital Libraries Journal.&nbsp;&#8211; Moscow: IIS, 2003.&nbsp;&#8211;
+Vol. 6, No 4.&nbsp;&#8211; ISSN 1562-5419.<br>
+<a href="http://modis.ispras.ru/Lizorkin/publications.html#elbib3">http://modis.ispras.ru/Lizorkin/publications.html#elbib3</a></dd><dt class="dt-thebibliography"><a name="XQ-UC"><font color="purple">[5]</font></a></dt><dd class="dd-thebibliography">
+The World Wide Web Consortium (W3C).
+XML Query Use Cases&nbsp;:
+W3C working draft&nbsp;/
+Chamberlin D. et al. (eds.).&nbsp;&#8211; 2005, 04&nbsp;Apr.<br>
+<a href="http://www.w3.org/TR/2005/WD-xquery-use-cases-20050404/">http://www.w3.org/TR/2005/WD-xquery-use-cases-20050404/</a></dd><dt class="dt-thebibliography"><a name="Lehti"><font color="purple">[6]</font></a></dt><dd class="dd-thebibliography">
+Lehti P.
+Design and Implementation of a Data Manipulation Processor for a XML Query
+Language&nbsp;:
+Ph.D. thesis.&nbsp;&#8211; 2001, Aug.<br>
+<a href="http://www.ipsi.fraunhofer.de/%7Elehti/">http://www.ipsi.fraunhofer.de/~lehti/</a></dd><dt class="dt-thebibliography"><a name="XQ-Serializ"><font color="purple">[7]</font></a></dt><dd class="dd-thebibliography">
+The World Wide Web Consortium (W3C).
+XSLT 2.0 and XQuery 1.0 Serialization&nbsp;:
+W3C Candidate Recommendation&nbsp;/
+Boag&nbsp;S. et al. (eds.).&nbsp;&#8211; 2005, 3&nbsp;Nov.<br>
+<a href="http://www.w3.org/TR/2005/CR-xslt-xquery-serialization-20051103/">http://www.w3.org/TR/2005/CR-xslt-xquery-serialization-20051103/</a></dd></dl><p><br>
+
+<a href="http://modis.ispras.ru/Lizorkin/xml-functional.html"><em>Back to XML-Functional page</em></a></p><!--CUT END -->
+<!--HTMLFOOT-->
+<!--ENDHTML-->
+<!--FOOTER-->
+<hr size="2"><blockquote class="quote"><em>This document was translated from L<sup>A</sup>T<sub>E</sub>X by
+</em><a href="http://hevea.inria.fr/index.html"><em>H</em><em><font size="2"><sup>E</sup></font></em><em>V</em><em><font size="2"><sup>E</sup></font></em><em>A</em></a><em>.</em></blockquote>
+
+</body></html>
