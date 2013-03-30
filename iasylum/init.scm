@@ -379,5 +379,7 @@
 (require-extension (lib iasylum/jdbc))
 (require-extension (lib iasylum/json))
 
+(require-extension (lib iasylum/loop))
+
 (define magic-load load)
 (set! load original-load)

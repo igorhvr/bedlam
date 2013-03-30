@@ -1,0 +1,405 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<title>Loopy-loop - The Chicken Scheme wiki</title>
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="loop_files/chicken.css"></head>
+<body>
+<div id="menu">
+<ul>
+<li><a href="http://wiki.call-cc.org/" class="internal">Wiki</a></li>
+<li><a href="http://code.call-cc.org/" class="external">Download</a></li>
+<li><a href="http://wiki.call-cc.org/manual/index" class="internal">Manual</a></li>
+<li><a href="http://wiki.call-cc.org/eggs" class="internal">Eggs</a></li>
+<li><a href="http://api.call-cc.org/doc/" class="external">API</a></li>
+<li><a href="http://tests.call-cc.org/" class="external">Tests</a></li>
+<li><a href="http://bugs.call-cc.org/" class="external">Bugs</a></li></ul></div>
+<div id="search">
+<form action="/search">
+<div><label>free text<input name="text" type="text"></label><label>identifier<input name="ident" type="text"></label><input value="search" type="submit"><a href="http://wiki.call-cc.org/search-help">search help</a></div></form></div>
+<ul id="page-specific-links">
+<li><a href="http://wiki.call-cc.org/eggref/4/loopy-loop?action=show">show</a></li>
+<li><a href="http://wiki.call-cc.org/eggref/4/loopy-loop?action=edit" rel="nofollow">edit</a></li>
+<li><a href="http://wiki.call-cc.org/eggref/4/loopy-loop?action=history">history</a></li></ul>
+<div id="content">
+<ul class="tags">
+<li>egg</li></ul>
+<h2 id="loopy-loop">Loopy-loop</h2>
+<p>LOOP is a generalized iteration form supporting extensible iterator 
+macros, keyword updates, and full recursion.  The idea is to create a 
+loop as simple and close to natural Scheme as possible, while still 
+being extensible.</p>
+<div id="toc">
+<ol>
+<li><a href="#loopy-loop">Loopy-loop</a>
+<ol>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#bindings-and-scope">Bindings and scope</a></li>
+<li><a href="#iterators">Iterators</a>
+<ol>
+<li><a href="#in-list">in-list</a></li>
+<li><a href="#in-lists">in-lists</a></li>
+<li><a href="#in-string-in-string-reverse">in-string / in-string-reverse</a></li>
+<li><a href="#in-vector-in-vector-reverse">in-vector / in-vector-reverse</a></li>
+<li><a href="#in-port-in-file">in-port / in-file</a></li>
+<li><a href="#in-range-in-range-reverse">in-range / in-range-reverse</a></li>
+<li><a href="#in-random">in-random</a></li>
+<li><a href="#in-random-element">in-random-element</a></li>
+<li><a href="#in-permutations">in-permutations</a></li>
+<li><a href="#in-combinations">in-combinations</a></li>
+<li><a href="#in-cartesian-product">in-cartesian-product</a></li>
+<li><a href="#in-hash-table">in-hash-table</a></li>
+<li><a href="#collecting">collecting</a></li></ol></li>
+<li><a href="#implicit-matching">Implicit matching</a></li>
+<li><a href="#extending">Extending</a></li>
+<li><a href="#further-reading">Further reading</a></li>
+<li><a href="#requirements">Requirements</a></li>
+<li><a href="#license">License</a></li>
+<li><a href="#history">History</a></li></ol></li></ol></div>
+<h3 id="introduction">Introduction</h3>
+<p>In its most basic usage, LOOP can be used as a drop-in replacement 
+for named let (assuming the let name isn't passed as a first class 
+value). So, for example, the following definitions</p>
+<pre><tt class="highlight scheme-language">  <span class="paren1">(<span class="default"><i><span class="symbol">define</span></i> <span class="paren2">(<span class="default">fold kons knil ls</span>)</span>
+    <span class="paren2">(<span class="default"><i><span class="symbol">let</span></i> lp <span class="paren3">(<span class="default"><span class="paren4">(<span class="default">ls ls</span>)</span> <span class="paren4">(<span class="default">knil knil</span>)</span></span>)</span>
+      <span class="paren3">(<span class="default"><i><span class="symbol">if</span></i> <span class="paren4">(<span class="default">pair? ls</span>)</span>
+        <span class="paren4">(<span class="default">lp <span class="paren5">(<span class="default">cdr ls</span>)</span> <span class="paren5">(<span class="default">kons <span class="paren6">(<span class="default">car ls</span>)</span> knil</span>)</span></span>)</span>
+        knil</span>)</span></span>)</span></span>)</span></tt></pre>
+<p>and</p>
+<pre><tt class="highlight scheme-language">  <span class="paren1">(<span class="default"><i><span class="symbol">define</span></i> <span class="paren2">(<span class="default">fold kons knil ls</span>)</span>
+    <span class="paren2">(<span class="default"><i><span class="symbol">loop</span></i> lp <span class="paren3">(<span class="default"><span class="paren4">(<span class="default">ls ls</span>)</span> <span class="paren4">(<span class="default">knil knil</span>)</span></span>)</span>
+      <span class="paren3">(<span class="default"><i><span class="symbol">if</span></i> <span class="paren4">(<span class="default">pair? ls</span>)</span>
+        <span class="paren4">(<span class="default">lp <span class="paren5">(<span class="default">cdr ls</span>)</span> <span class="paren5">(<span class="default">kons <span class="paren6">(<span class="default">car ls</span>)</span> knil</span>)</span></span>)</span>
+        knil</span>)</span></span>)</span></span>)</span></tt></pre>
+<p>are equivalent.  We further allow automatic stepping of variables, as in the DO macro:</p>
+<pre><tt class="highlight scheme-language">  <span class="paren1">(<span class="default"><i><span class="symbol">define</span></i> <span class="paren2">(<span class="default">fold kons knil ls</span>)</span>
+    <span class="paren2">(<span class="default"><i><span class="symbol">loop</span></i> lp <span class="paren3">(<span class="default"><span class="paren4">(<span class="default">ls ls <span class="paren5">(<span class="default">cdr ls</span>)</span></span>)</span> <span class="paren4">(<span class="default">knil knil <span class="paren5">(<span class="default">kons <span class="paren6">(<span class="default">car ls</span>)</span> knil</span>)</span></span>)</span></span>)</span>
+      <span class="paren3">(<span class="default"><i><span class="symbol">if</span></i> <span class="paren4">(<span class="default">pair? ls</span>)</span>
+        <span class="paren4">(<span class="default">lp</span>)</span>
+        knil</span>)</span></span>)</span></span>)</span></tt></pre>
+<p>The parameters have default steps, so we don't need to pass them 
+explicitly anymore (though we can still do so if we wanted to override 
+the defaults).</p>
+<p>In addition, we provide extensible iterators to automatically handle 
+the logic of stepping, fetching, and checking termination on sequence 
+types.  To use an iterator, specify one or more variable names followed 
+by `&lt;-' followed by the iterator and any parameters:</p>
+<pre><tt> (x &lt;- in-foo bar baz qux)</tt></pre>
+<p>To iterate over a list, use the IN-LIST macro:</p>
+<pre><tt> (x &lt;- in-list ls)</tt></pre>
+<p>This will bind X to the successive elements of LS in the body of the loop.</p>
+<p>Now, when iterating automatically, the loop will also terminate 
+automatically if it encounters the end of its input.  In such a case you
+ may want to specify a return value.  You can do this by putting</p>
+<pre><tt> =&gt; &lt;expr&gt;</tt></pre>
+<p>right at the start of the loop body.  So our example now becomes:</p>
+<pre><tt class="highlight scheme-language">  <span class="paren1">(<span class="default"><i><span class="symbol">define</span></i> <span class="paren2">(<span class="default">fold kons knil ls</span>)</span>
+    <span class="paren2">(<span class="default"><i><span class="symbol">loop</span></i> lp <span class="paren3">(<span class="default"><span class="paren4">(<span class="default">x &lt;- in-list ls</span>)</span> <span class="paren4">(<span class="default">knil knil <span class="paren5">(<span class="default">kons x knil</span>)</span></span>)</span></span>)</span>
+        =&gt; knil
+      <span class="paren3">(<span class="default">lp</span>)</span></span>)</span></span>)</span></tt></pre>
+<p>Note we can still call, or not call, the loop itself in the body 
+according to whatever logic we want, and re-enter it possibly multiple 
+times.  However, in this common case where the entire body is reduced to
+ just calling the loop again, we can omit it by using an anonymous loop:</p>
+<pre><tt class="highlight scheme-language">  <span class="paren1">(<span class="default"><i><span class="symbol">define</span></i> <span class="paren2">(<span class="default">fold kons knil ls</span>)</span>
+    <span class="paren2">(<span class="default"><i><span class="symbol">loop</span></i> <span class="paren3">(<span class="default"><span class="paren4">(<span class="default">x &lt;- in-list ls</span>)</span> <span class="paren4">(<span class="default">knil knil <span class="paren5">(<span class="default">kons x knil</span>)</span></span>)</span></span>)</span>
+       =&gt; knil</span>)</span></span>)</span></tt></pre>
+<p>No flexibility is lost over named let, yet we've gained the 
+convenience of iterators.  If you wanted to change the above to work on 
+vectors, all you would need to do is change the iterator:</p>
+<pre><tt> (x &lt;- in-vector vec)</tt></pre>
+<p>and it works as expected.</p>
+<h3 id="bindings-and-scope">Bindings and scope</h3>
+<p>Iterator macros may introduce variables in three different lexical scopes:</p>
+<dl>
+<dt>Loop variables</dt>
+<dd>Analogous to the variables in a named let, these are initialized 
+once and updated on each iteration through the loop.  In the example 
+above, KNIL is a loop variable (as are all named let and DO-style 
+variables).</dd>
+<dt>Body variables</dt>
+<dd>Bound in the body, these are usually derived directly from loop 
+variables.  They can't be overridden (see below) and are not available 
+in the final expression.  In the example above, X is a body variable.</dd>
+<dt>Final variables</dt>
+<dd>Bound once in the return expression, these are sometimes used for some final computation such as reversing a consed up list.</dd></dl>
+<p>Within each of these three lexical scopes, all variables are updated 
+in parallel, and none are ever mutated (unless the programmer does so 
+manually).  This referential transparency is important to achieve full 
+non-tail recursion and re-entrancy.</p>
+<p>In many cases the loop variables will be implicit and unnamed.  For 
+instance, IN-LIST uses a loop variable to cdr down the list of pairs, 
+binding X to the successive cars.  However, in such cases the iterator 
+usually lets you explicitly name the loop variable if you want access to
+ it.</p>
+<p>Loop variables may be manually overridden on a recursive call.  You 
+can either use the original positional arguments, or specify individual 
+values by name with the &lt;- syntax, punning the initial binding.  Thus
+ in</p>
+<pre><tt>  (loop lp ((x ls &lt;- in-list ls)) ...)</tt></pre>
+<p>the recursive calls</p>
+<pre><tt>  (lp)
+  (lp (cdr ls))
+  (lp ls &lt;- (cdr ls))</tt></pre>
+<p>are all the same.  Note that we are binding the loop variable LS, not
+ X which is considered to be always derived from the loop variable. Note
+ also that there is no need to recurse on CDR - we could use CDDR, or a 
+completely unrelated list, or '() to force an early termination.</p>
+<p>The following example flattens a tree into a list, using minimal 
+conses and stack.  This serves as an example of naming implicit loop 
+variables, binding loop variables, and non-tail recursion.</p>
+<pre><tt class="highlight scheme-language">  <span class="paren1">(<span class="default"><i><span class="symbol">define</span></i> <span class="paren2">(<span class="default">flatten ls</span>)</span>
+    <span class="paren2">(<span class="default">reverse
+     <span class="paren3">(<span class="default"><i><span class="symbol">loop</span></i> lp <span class="paren4">(<span class="default"><span class="paren5">(<span class="default">x ls &lt;- in-list ls</span>)</span> <span class="paren5">(<span class="default">res '<span class="paren6">(<span class="default"></span>)</span></span>)</span></span>)</span>
+         =&gt; res
+       <span class="paren4">(<span class="default"><i><span class="symbol">if</span></i> <span class="paren5">(<span class="default">pair? x</span>)</span>
+           <span class="paren5">(<span class="default">lp res &lt;- <span class="paren6">(<span class="default">lp ls &lt;- x</span>)</span></span>)</span>
+           <span class="paren5">(<span class="default">lp res &lt;- <span class="paren6">(<span class="default">cons x res</span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></tt></pre>
+<p>The scope of the final expression will include all the final 
+variables, as well as all the last instances of all the loop variables, 
+at least one of which will correspond to a true termination condition 
+(you could manually check the others to see if the sequence lengths were
+ uneven).  The body variables are not bound, however the loop itself, if
+ named, is available so that you can restart the loop with all new 
+initial values if you want.</p>
+<h3 id="iterators">Iterators</h3>
+<h4 id="in-list">in-list</h4>
+<pre><tt>syntax: (&lt;element&gt; [&lt;pair&gt;] &lt;- in-list &lt;list&gt; [&lt;cdr&gt; [&lt;null?&gt;]])</tt></pre>
+<p>Iterates over the successive elements of a list.</p>
+<pre><tt class="highlight scheme-language">  <span class="comment">;;; Simple loop
+</span>  &gt; <span class="paren1">(<span class="default"><i><span class="symbol">loop</span></i> <span class="paren2">(<span class="default"><span class="paren3">(<span class="default">x &lt;- in-list '<span class="paren4">(<span class="default">a b c</span>)</span></span>)</span></span>)</span> <span class="paren2">(<span class="default">write x</span>)</span> <span class="paren2">(<span class="default">newline</span>)</span></span>)</span>
+  a
+  b
+  c
+
+  <span class="comment">;;; Reverse a list destructively.
+</span>  <span class="paren1">(<span class="default"><i><span class="symbol">define</span></i> <span class="paren2">(<span class="default">reverse! list</span>)</span>
+    <span class="paren2">(<span class="default"><i><span class="symbol">loop</span></i> <span class="paren3">(<span class="default"><span class="paren4">(<span class="default">elt pair &lt;- in-list list</span>)</span>
+           <span class="paren4">(<span class="default">tail '<span class="paren5">(<span class="default"></span>)</span> pair</span>)</span></span>)</span>
+        =&gt; tail
+      <span class="paren3">(<span class="default">set-cdr! pair tail</span>)</span></span>)</span></span>)</span>
+
+  <span class="comment">;;; Test for circularity
+</span>  <span class="paren1">(<span class="default"><i><span class="symbol">define</span></i> <span class="paren2">(<span class="default">cddr* ls</span>)</span> <span class="comment">; CL's cddr
+</span>    <span class="paren2">(<span class="default"><i><span class="symbol">if</span></i> <span class="paren3">(<span class="default">pair? <span class="paren4">(<span class="default">cdr ls</span>)</span></span>)</span> <span class="paren3">(<span class="default">cddr ls</span>)</span> '<span class="paren3">(<span class="default"></span>)</span></span>)</span></span>)</span>
+
+  <span class="paren1">(<span class="default"><i><span class="symbol">define</span></i> <span class="paren2">(<span class="default">circular-list? ls</span>)</span>
+    <span class="paren2">(<span class="default">and <span class="paren3">(<span class="default">pair? ls</span>)</span>
+         <span class="paren3">(<span class="default"><i><span class="symbol">loop</span></i> race <span class="paren4">(<span class="default"><span class="paren5">(<span class="default">tortoise &lt;- in-list ls</span>)</span>
+                     <span class="paren5">(<span class="default">hare &lt;- in-list <span class="paren6">(<span class="default">cdr ls</span>)</span> cddr*</span>)</span></span>)</span>
+             =&gt; #f
+           <span class="paren4">(<span class="default">or <span class="paren5">(<span class="default">eq? hare tortoise</span>)</span> <span class="paren5">(<span class="default">race</span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></tt></pre>
+<h4 id="in-lists">in-lists</h4>
+<pre><tt>syntax: (&lt;elements&gt; [&lt;pairs&gt;] &lt;- in-lists &lt;lol&gt; [&lt;cdr&gt; [&lt;null?&gt;]])</tt></pre>
+<p>Iterate over a list of lists.  &lt;elements&gt; is bound to the heads
+ of each of the lists in &lt;lol&gt;.  The CDR and NULL? options can be 
+specified as in IN-LIST.</p>
+<pre><tt class="highlight scheme-language">  <span class="paren1">(<span class="default"><i><span class="symbol">define</span></i> <span class="paren2">(<span class="default">any pred . lol</span>)</span>
+    <span class="paren2">(<span class="default"><i><span class="symbol">loop</span></i> lp <span class="paren3">(<span class="default"><span class="paren4">(<span class="default">elts &lt;- in-lists lol</span>)</span></span>)</span>
+        =&gt; #f
+      <span class="paren3">(<span class="default">or <span class="paren4">(<span class="default">apply pred elts</span>)</span> <span class="paren4">(<span class="default">lp</span>)</span></span>)</span></span>)</span></span>)</span></tt></pre>
+<h4 id="in-string-in-string-reverse">in-string / in-string-reverse</h4>
+<pre><tt>syntax: (&lt;element&gt; [&lt;index&gt;] &lt;- in-string &lt;str&gt; [&lt;start&gt; [&lt;end&gt; [&lt;step&gt;]]])
+syntax: (&lt;element&gt; [&lt;index&gt;] &lt;- in-string-reverse &lt;str&gt; [&lt;start&gt; [&lt;end&gt; [&lt;step&gt;]]])</tt></pre>
+<p>Iterate over the characters of a string.  Proceeds from 
+&lt;start&gt;, inclusive, to &lt;end&gt;, exclusive.  By default 
+&lt;start&gt; is 0 and &lt;end&gt; is the string length, thus iterating 
+over every character.</p>
+<p>You can specify a step other than the default 1, for example 2 to iterate over every other character.</p>
+<p>The reverse version steps from one less than the end, continuing 
+until you step below the start.  Thus with the same &lt;start&gt; and 
+&lt;end&gt; and a &lt;step&gt; of 1 (or any divisor of the difference), 
+the two forms will iterate over the same characters but in the reverse 
+order.</p>
+<p>Note this works correctly with the utf8 egg, but is not optimal in such cases because the use of numeric indexes is slow.</p>
+<h4 id="in-vector-in-vector-reverse">in-vector / in-vector-reverse</h4>
+<pre><tt>syntax: (&lt;element&gt; [&lt;index&gt;] &lt;- in-vector &lt;vec&gt; [&lt;start&gt; [&lt;end&gt; [&lt;step&gt;]]])
+syntax: (&lt;element&gt; [&lt;index&gt;] &lt;- in-vector-reverse &lt;vec&gt; [&lt;start&gt; [&lt;end&gt; [&lt;step&gt;]]])</tt></pre>
+<p>Analogues of the string iterators, but for vectors.  Note also all of
+ the SRFI-4 uniform vectors can iterated over as in-u8vector, etc.</p>
+<h4 id="in-port-in-file">in-port / in-file</h4>
+<pre><tt>syntax: (&lt;datum&gt; &lt;- in-port [&lt;port&gt; [&lt;reader&gt; [&lt;eof?&gt;]]])
+syntax: (&lt;datum&gt; &lt;- in-file &lt;path&gt; [&lt;reader&gt; [&lt;eof?&gt;]])</tt></pre>
+<p>Iterate over data read from a port, defaulting to 
+(CURRENT-INPUT-PORT) for IN-PORT, and a port opened by (OPEN-INPUT-FILE 
+&lt;path&gt;) for IN-FILE.  The reader defaults to READ-CHAR?, and the 
+termination test defaults to EOF-OBJECT?.</p>
+<p>The stateful nature of ports means that these are not referentially 
+transparent, and you can't save a loop iteration to go back to later. In
+ particular, IN-FILE will close its port on the first termination, 
+causing an error if you attempt to re-enter the same loop again.</p>
+<pre><tt class="highlight scheme-language">  <span class="paren1">(<span class="default"><i><span class="symbol">define</span></i> <span class="paren2">(<span class="default">read-mime-headers port</span>)</span>
+    <span class="paren2">(<span class="default"><i><span class="symbol">loop</span></i> lp <span class="paren3">(<span class="default"><span class="paren4">(<span class="default">line &lt;- in-port port read-line</span>)</span>
+              <span class="paren4">(<span class="default">res '<span class="paren5">(<span class="default"></span>)</span> <span class="paren5">(<span class="default">cons line res</span>)</span></span>)</span></span>)</span>
+        =&gt; <span class="paren3">(<span class="default">reverse res</span>)</span> <span class="comment">; eof case
+</span>      <span class="paren3">(<span class="default"><i><span class="symbol">if</span></i> <span class="paren4">(<span class="default">string-null? line</span>)</span>
+        <span class="paren4">(<span class="default">reverse res</span>)</span>
+        <span class="paren4">(<span class="default">lp</span>)</span></span>)</span></span>)</span></span>)</span>
+
+  <span class="comment">;; alternate version with a custom termination test
+</span>  <span class="paren1">(<span class="default"><i><span class="symbol">define</span></i> <span class="paren2">(<span class="default">read-mime-headers port</span>)</span>
+    <span class="paren2">(<span class="default"><i><span class="symbol">loop</span></i> lp <span class="paren3">(<span class="default"><span class="paren4">(<span class="default">line &lt;- in-port port read-line
+                       <span class="paren5">(<span class="default">disjoin eof-object? string-null?</span>)</span></span>)</span>
+              <span class="paren4">(<span class="default">res &lt;- collecting line</span>)</span></span>)</span>
+        =&gt; res</span>)</span></span>)</span>
+
+  <span class="paren1">(<span class="default"><i><span class="symbol">define</span></i> <span class="paren2">(<span class="default">file-&gt;sexp-list path</span>)</span>
+    <span class="paren2">(<span class="default"><i><span class="symbol">loop</span></i> <span class="paren3">(<span class="default"><span class="paren4">(<span class="default">x &lt;- in-file path read</span>)</span> <span class="paren4">(<span class="default">ls &lt;- collecting x</span>)</span></span>)</span> =&gt; x</span>)</span></span>)</span></tt></pre>
+<h4 id="in-range-in-range-reverse">in-range / in-range-reverse</h4>
+<pre><tt>syntax: (&lt;number&gt; &lt;- in-range [[&lt;from&gt;] &lt;to&gt; [&lt;step&gt;]])
+syntax: (&lt;number&gt; &lt;- in-range-reverse [[&lt;from&gt;] &lt;to&gt; [&lt;step&gt;]])</tt></pre>
+<p>Step through the real numbers beginning with &lt;from&gt; (default 
+0), until they would be greater than (less then in the -reverse case) or
+ equal to &lt;to&gt; (thus &lt;to&gt; is never included).  &lt;step&gt; 
+defaults to 1.</p>
+<p>Two arguments indicate &lt;from&gt; and &lt;to&gt;, so provide the 
+default &lt;from&gt; of 0 if you're only interested in &lt;to&gt; and 
+&lt;step&gt;.</p>
+<p>These macros are subject to change in the near future.</p>
+<h4 id="in-random">in-random</h4>
+<pre><tt>syntax: (&lt;number&gt; &lt;- in-random [&lt;range&gt; [&lt;low&gt;]])</tt></pre>
+<p>With no arguments, &lt;number&gt; is bound to a random inexact number
+ uniformly distributed over 0.0 and 1.0, inclusive, on each iteration.</p>
+<p>With a single argument, &lt;number&gt; is bound to a random integer uniformly distributed over 0..&lt;range&gt;-1, inclusive.</p>
+<p>With two arguments, &lt;number&gt; is bound to a random integer 
+uniformly distributed over &lt;low&gt;..&lt;low&gt;+&lt;range&gt;-1, 
+inclusive.</p>
+<p>These are conceptually infinite sequences, and themselves never cause the loop to terminate.</p>
+<h4 id="in-random-element">in-random-element</h4>
+<pre><tt>syntax: (&lt;element&gt; &lt;- in-random-element &lt;vector-or-list&gt;)</tt></pre>
+<p>On each iteration, &lt;element&gt; is bound a random object uniformly
+ chosen from the elements of the &lt;vector-or-list&gt; source.</p>
+<p>Elements may be repeated, so this is a conceptually infinite sequence.</p>
+<h4 id="in-permutations">in-permutations</h4>
+<pre><tt>syntax: (&lt;perm&gt; &lt;- in-permutations &lt;list&gt; [&lt;n&gt;])</tt></pre>
+<p>With one argument, &lt;perm&gt; is bound to the successive 
+permutations of the elements of &lt;list&gt; in lexicographic order.  No
+ assumptions about the elements are made - if &lt;list&gt; is a 
+multi-set, duplicate permutations will arise.</p>
+<p>This is very fast and mutation free.  It uses only O(k) space, where k
+ is the number of elements in &lt;list&gt;.  Beware that the number of 
+permutations of n elements is n!, which grows extremely fast.</p>
+<pre><tt class="highlight scheme-language">  &gt; <span class="paren1">(<span class="default"><i><span class="symbol">loop</span></i> <span class="paren2">(<span class="default"><span class="paren3">(<span class="default">p &lt;- in-permutations '<span class="paren4">(<span class="default">a b c</span>)</span> 2</span>)</span></span>)</span> <span class="paren2">(<span class="default">write p</span>)</span> <span class="paren2">(<span class="default">newline</span>)</span></span>)</span>
+  <span class="paren1">(<span class="default">a b</span>)</span>
+  <span class="paren1">(<span class="default">a c</span>)</span>
+  <span class="paren1">(<span class="default">b a</span>)</span>
+  <span class="paren1">(<span class="default">b c</span>)</span>
+  <span class="paren1">(<span class="default">c a</span>)</span>
+  <span class="paren1">(<span class="default">c b</span>)</span></tt></pre>
+<h4 id="in-combinations">in-combinations</h4>
+<pre><tt>syntax: (&lt;comb&gt; &lt;- in-combinations &lt;list&gt; &lt;n&gt;)</tt></pre>
+<p>Similar to IN-PERMUTATIONS, but iterates over all combinations of 
+&lt;n&gt; elements from &lt;list&gt; (i.e. order doesn't matter).</p>
+<pre><tt class="highlight scheme-language">  &gt; <span class="paren1">(<span class="default"><i><span class="symbol">loop</span></i> <span class="paren2">(<span class="default"><span class="paren3">(<span class="default">c &lt;- in-combinations '<span class="paren4">(<span class="default">a b c</span>)</span> 2</span>)</span></span>)</span> <span class="paren2">(<span class="default">write c</span>)</span> <span class="paren2">(<span class="default">newline</span>)</span></span>)</span>
+  <span class="paren1">(<span class="default">a b</span>)</span>
+  <span class="paren1">(<span class="default">a c</span>)</span>
+  <span class="paren1">(<span class="default">b c</span>)</span></tt></pre>
+<p>Using permutations and combinations can be a convenient way to build 
+very extensive (albeit brute-force) test suites, among other things.</p>
+<h4 id="in-cartesian-product">in-cartesian-product</h4>
+<pre><tt>syntax: (&lt;list&gt; &lt;- in-cartesian-product &lt;list-of-lists&gt;)</tt></pre>
+<p>Iterates over the full cartesian product (all joins) of 
+&lt;list-of-lists&gt;, lexicographically (the rightmost list changes 
+first).</p>
+<pre><tt class="highlight scheme-language">  &gt; <span class="paren1">(<span class="default"><i><span class="symbol">loop</span></i> <span class="paren2">(<span class="default"><span class="paren3">(<span class="default">x &lt;- in-cartesian-product '<span class="paren4">(<span class="default"><span class="paren5">(<span class="default">a b</span>)</span> <span class="paren5">(<span class="default">c d e</span>)</span></span>)</span></span>)</span></span>)</span> <span class="paren2">(<span class="default">write x</span>)</span> <span class="paren2">(<span class="default">newline</span>)</span></span>)</span>
+  <span class="paren1">(<span class="default">a c</span>)</span>
+  <span class="paren1">(<span class="default">a d</span>)</span>
+  <span class="paren1">(<span class="default">a e</span>)</span>
+  <span class="paren1">(<span class="default">b c</span>)</span>
+  <span class="paren1">(<span class="default">b d</span>)</span>
+  <span class="paren1">(<span class="default">b e</span>)</span></tt></pre>
+<h4 id="in-hash-table">in-hash-table</h4>
+<pre><tt>syntax: (&lt;key&gt; &lt;value&gt; &lt;- in-hash-table &lt;table&gt;)</tt></pre>
+<p>Iterate over the &lt;key&gt; and &lt;value&gt; pairs of a hash-table 
+&lt;table&gt;.  The current &lt;key&gt; being iterated over may be 
+deleted from the table or have its value in the table changed safely.</p>
+<p>The result is unspecified if you add or remove other values to the 
+table while it is being iterated over.  If you want to capture a safe 
+snapshot of the table first, you can convert it to an alist and iterate 
+over those values.</p>
+<pre><tt class="highlight scheme-language">  <span class="paren1">(<span class="default"><i><span class="symbol">define</span></i> <span class="paren2">(<span class="default">hash-table-purge! pred table</span>)</span>
+    <span class="paren2">(<span class="default"><i><span class="symbol">loop</span></i> <span class="paren3">(<span class="default"><span class="paren4">(<span class="default">k v &lt;- in-table table</span>)</span></span>)</span>
+      <span class="paren3">(<span class="default"><i><span class="symbol">if</span></i> <span class="paren4">(<span class="default">pred k v</span>)</span>
+        <span class="paren4">(<span class="default">hash-table-delete! table k</span>)</span></span>)</span></span>)</span></span>)</span></tt></pre>
+<h4 id="collecting">collecting</h4>
+<pre><tt>syntax: (&lt;list&gt; [&lt;rev&gt;] &lt;- collecting &lt;expr&gt; [&lt;cons&gt; [&lt;finalize&gt; [&lt;init&gt;]]])</tt></pre>
+<p>The only of the standard iterators that introduces a final variable. 
+&lt;list&gt; is bound only in the =&gt; final clause.  By default,</p>
+<ul>
+<li>a &lt;cons&gt; of APPEND-REVERSE will append all the &lt;expr&gt;'s into a list.</li>
+<li>a &lt;finalize&gt; of REVERSE-LIST-&gt;VECTOR will collect a vector, and IDENTITY will collect a reversed list.</li></ul>
+<p>By specifying all of &lt;cons&gt;, &lt;finalize&gt; and &lt;init&gt; you could collect into any data structure.</p>
+<p>The optional &lt;rev&gt; is a loop variable representing the 
+intermediate consed results.  You may override this manually to include 
+or exclude values, or even reset the collected results mid-loop.</p>
+<p>This is really just syntactic sugar over an accumulated list to save you the trouble of reversing manually at the end.</p>
+<h3 id="implicit-matching">Implicit matching</h3>
+<p>For any body variable (as described above, the ones derived from 
+iterators, e.g. the elements in a list), instead of a simple name you 
+can use any sexp, and it will be matched against the result as in 
+Common-Lisp's destructuring-bind, except using the <a href="http://wiki.call-cc.org/eggref/4/matchable" class="internal">matchable</a> syntax. So for example, to iterate nicely over the pairs in an alist, you just do</p>
+<pre><tt class="highlight scheme-language">  <span class="paren1">(<span class="default"><i><span class="symbol">loop</span></i> <span class="paren2">(<span class="default"><span class="paren3">(<span class="default"><span class="paren4">(<span class="default">k . v</span>)</span> &lt;- in-list alist</span>)</span></span>)</span>
+    <span class="paren2">(<span class="default">print <span class="string">"key: "</span> k <span class="string">" value: "</span> v</span>)</span></span>)</span></tt></pre>
+<p>This costs nothing if you don't use it, and is fast even if you do.</p>
+<h3 id="extending">Extending</h3>
+<p>Adding your own iterators is easy.  When a loop includes a binding such as</p>
+<pre><tt class="highlight scheme-language">  <span class="paren1">(<span class="default">left ... &lt;- in-iterator right ...</span>)</span></tt></pre>
+<p>then the iterator itself is called as a macro in the following form:</p>
+<pre><tt class="highlight scheme-language">  <span class="paren1">(<span class="default">in-iterator <span class="paren2">(<span class="default"><span class="paren3">(<span class="default">left ...</span>)</span> <span class="paren3">(<span class="default">right ...</span>)</span></span>)</span> next . rest</span>)</span></tt></pre>
+<p>where next and rest are the continuation.  The continuation expects 
+to be passed the appropriate information to insert in the loop, in the 
+following form:</p>
+<pre><tt class="highlight scheme-language">  <span class="paren1">(<span class="default">next <span class="paren2">(<span class="default"><span class="paren3">(<span class="default">temp-var value</span>)</span> ...</span>)</span>     <span class="comment">; one-time bindings outside the loop
+</span>        <span class="paren2">(<span class="default"><span class="paren3">(<span class="default">loop-var init step</span>)</span> ...</span>)</span> <span class="comment">; do-style description of loop variables
+</span>        <span class="paren2">(<span class="default">done? ...</span>)</span>                <span class="comment">; termination tests
+</span>        <span class="paren2">(<span class="default"><span class="paren3">(<span class="default">body-var value</span>)</span> ...</span>)</span>     <span class="comment">; body variables
+</span>        <span class="paren2">(<span class="default"><span class="paren3">(<span class="default">final-var value</span>)</span> ...</span>)</span>    <span class="comment">; final result bindings in =&gt; clause
+</span>        . rest</span>)</span></tt></pre>
+<p>Note that any or all of the terms may be empty lists - the iterator doesn't have to do anything.</p>
+<p>As an example, consider the following simplified implementation of IN-LIST:</p>
+<pre><tt class="highlight scheme-language">  <span class="paren1">(<span class="default"><i><span class="symbol">define-syntax</span></i> in-list
+    <span class="paren2">(<span class="default">syntax-rules <span class="paren3">(<span class="default"></span>)</span>
+      <span class="paren3">(<span class="default"><span class="paren4">(<span class="default">in-list <span class="paren5">(<span class="default"><span class="paren6">(<span class="default">elt</span>)</span> <span class="paren6">(<span class="default">init-list</span>)</span></span>)</span> next . rest</span>)</span>
+       <span class="comment">;; pass the info to next
+</span>       <span class="paren4">(<span class="default">next <span class="paren5">(<span class="default"></span>)</span>                              <span class="comment">; no outer let bindings
+</span>             <span class="paren5">(<span class="default"><span class="paren6">(<span class="default">ls init-list <span class="paren1">(<span class="default">cdr ls</span>)</span></span>)</span></span>)</span>       <span class="comment">; loop variable, init, step
+</span>             <span class="paren5">(<span class="default"><span class="paren6">(<span class="default">null? ls</span>)</span></span>)</span>                    <span class="comment">; termination tests
+</span>             <span class="paren5">(<span class="default"><span class="paren6">(<span class="default">elt <span class="paren1">(<span class="default">car ls</span>)</span></span>)</span></span>)</span>                <span class="comment">; body variables and values
+</span>             <span class="paren5">(<span class="default"></span>)</span>                              <span class="comment">; no final result bindings
+</span>             . rest</span>)</span></span>)</span></span>)</span></span>)</span></tt></pre>
+<p>This implementation of IN-LIST causes the code</p>
+<pre><tt class="highlight scheme-language">  <span class="paren1">(<span class="default"><i><span class="symbol">loop</span></i> <span class="paren2">(<span class="default"><span class="paren3">(<span class="default">x &lt;- in-list '<span class="paren4">(<span class="default">1 2 3</span>)</span></span>)</span></span>)</span>
+    <span class="paren2">(<span class="default">print x</span>)</span></span>)</span></tt></pre>
+<p>to expand to</p>
+<pre><tt class="highlight scheme-language">  <span class="paren1">(<span class="default"><i><span class="symbol">let</span></i> <span class="paren2">(<span class="default"><span class="paren3">(<span class="default">ls '<span class="paren4">(<span class="default">1 2 3</span>)</span></span>)</span></span>)</span>
+    <span class="paren2">(<span class="default"><i><span class="symbol">if</span></i> <span class="paren3">(<span class="default">null? ls</span>)</span>
+      <span class="paren3">(<span class="default"><i><span class="symbol">if</span></i> #f #f</span>)</span> <span class="comment">; unspecified value returned by default
+</span>      <span class="paren3">(<span class="default"><i><span class="symbol">let</span></i> <span class="paren4">(<span class="default"><span class="paren5">(<span class="default">x <span class="paren6">(<span class="default">car ls</span>)</span></span>)</span></span>)</span>
+        <span class="paren4">(<span class="default">print x</span>)</span>
+        <span class="paren4">(<span class="default">lp <span class="paren5">(<span class="default">cdr ls</span>)</span></span>)</span></span>)</span></span>)</span></span>)</span></tt></pre>
+<p>Note the outer let bindings are empty because we don't have anything 
+to remember - the loop just proceeds by cdr'ing down the LS loop 
+variable.  In an interator such as IN-VECTOR, where you repeatedly 
+VECTOR-REF the same vector, you'd want to bind the vector once so that 
+it's not evaluated multiple times.</p>
+<p>The final result bindings are also usually empty.  Currently it's 
+only used by COLLECTING to reverse the list that has been accumulated so
+ far.</p>
+<h3 id="further-reading">Further reading</h3>
+<p>See the article with message-id <a href="http://groups.google.com/group/comp.lang.scheme/msg/60dcac5ea812398" class="external">&lt;1157562097.001179.11470@i42g2000cwa.googlegroups.com&gt;</a> posted on comp.lang.scheme in September of 2006 for the original version and a brief history of Lisp iteration constructs.</p>
+<h3 id="requirements">Requirements</h3>
+<p><a href="http://wiki.call-cc.org/eggref/4/matchable" class="internal">matchable</a></p>
+<h3 id="license">License</h3>
+<p>public domain</p>
+<h3 id="history">History</h3>
+<dl>
+<dt>0.5</dt>
+<dd>srfi-4 uniform vectors and in-cartesian-product</dd>
+<dt>0.4</dt>
+<dd>fixing bug in IN-FILE</dd>
+<dt>0.3</dt>
+<dd>minor changes and cleanup</dd>
+<dt>0.2</dt>
+<dd>implicit matching</dd>
+<dt>0.1</dt>
+<dd>initial release</dd></dl></div></body></html>
