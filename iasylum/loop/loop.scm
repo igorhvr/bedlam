@@ -253,7 +253,7 @@
 (define-syntax in-random
   (syntax-rules ()
     ((in-random ((var) ()) next . rest)
-     (next () ((var (random-real) (random-real))) () () . rest))
+     (next () ((var (random-real) (random-real))) () () () . rest))
     ((in-random ((var) (n)) next . rest)
      (next ((tmp-n n))
            ((var (random-integer tmp-n) (random-integer tmp-n)))
