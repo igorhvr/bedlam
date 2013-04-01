@@ -2,6 +2,7 @@
 
 (require-extension (lib iasylum/srfi-89))
 (require-extension (lib iasylum/match))
+
 ;; TODO - Merge all pumps
 
 (module iasylum/iasylum
@@ -41,7 +42,15 @@
    xor
    ensure-zipped-copy
    vector-binary-search
+   function fn function* fn*
    )
+
+  ;; This makes scm scripts easier in the eyes of non-schemers.
+  (define-syntax function (identifier-syntax lambda))
+  (define-syntax function* (identifier-syntax lambda*))
+  (define-syntax fn (identifier-syntax lambda))
+  (define-syntax fn* (identifier-syntax lambda*))
+
   (import hashtable)
   (import file-manipulation)  ;; rglob uses this.
 
