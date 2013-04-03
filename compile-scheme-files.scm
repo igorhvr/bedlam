@@ -22,7 +22,8 @@
 (smart-compile "/home/igorhvr/idm/bedlam/iasylum/tmp.scm")
 (smart-compile "/home/igorhvr/idm/bedlam/iasylum/debug.scm")
 (smart-compile "/home/igorhvr/idm/bedlam/iasylum/match/match-cond-expand.scm")
-(smart-compile "/home/igorhvr/idm/bedlam/iasylum/iasylum.scm")
+;; TODO Debug - Disabling for now. (r "ls -lah") does not work with compiled version.
+;;(smart-compile "/home/igorhvr/idm/bedlam/iasylum/iasylum.scm")
 (smart-compile "/home/igorhvr/idm/bedlam/iasylum/i18n.scm")
 (smart-compile "/home/igorhvr/idm/bedlam/iasylum/schelog.scm")
 (smart-compile "/home/igorhvr/idm/bedlam/iasylum/email.scm")
