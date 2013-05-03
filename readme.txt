@@ -6,3 +6,5 @@ To use this code you should simply do (replace the directory entry below by the 
 
 under SISC 1.16.6 or later.
 
+Another option is simply including jars/bedlam-bundle.jar and the other .jar files in lib in your project and using the BedlamBundleInit java class.
+
