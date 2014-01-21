@@ -63,6 +63,7 @@
     (class-path-extension-append! (cons (string-append (iasylum-bedlam-location) "jars/" name) (class-path-extension)))))
 
 (add-lib "u/bsf.jar")
+(add-lib "u/guava-15.0.jar")
 (add-lib "u/js.jar")
 (add-lib "u/jdbc-postgresql.jar")
 (add-lib "jdbc/log4jdbc4-1.2.jar")
