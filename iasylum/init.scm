@@ -388,5 +388,7 @@
 
 (require-extension (lib iasylum/loop))
 
+(require-extension (lib iasylum/javascript))
+
 (define magic-load load)
 (set! load original-load)
