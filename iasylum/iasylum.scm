@@ -15,6 +15,7 @@
    iasylum-write-string
    d reset-d
    w reset-w
+   d/n
    beanshell-server
    first-n-or-less
    assert
@@ -559,5 +560,5 @@
   (reset-d)
   (reset-w)
   
-  ;; (define d (lambda p (for-each display p)))
+  (define d/n (lambda p (apply d (flatten (list "\n" p "\n\n")))))
 )
