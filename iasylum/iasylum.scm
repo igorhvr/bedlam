@@ -546,6 +546,8 @@
   (define d)
   (define w)
 
+  (define d/n (lambda p (apply d (flatten (list "\n" p "\n\n")))))
+
   (define (reset-d)
     (set! d (let ((m (mutex/new))) (lambda p (mutex/lock! m) (for-each display p) (mutex/unlock! m) (void)))))
 
@@ -558,7 +560,5 @@
   (define-generic-java-method available-permits)
   
   (reset-d)
-  (reset-w)
-  
-  (define d/n (lambda p (apply d (flatten (list "\n" p "\n\n")))))
+  (reset-w)  
 )
