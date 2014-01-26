@@ -13,3 +13,6 @@ export CLASSPATH=$CLASSPATH:/home/igorhvr/datomic-pro-0.8.3814/datomic-pro-0.8.3
 export CLASSPATH=$CLASSPATH:/home/igorhvr/idm/bedlam/jars/jdbc/mysql-connector-java-5.1.24-bin_and_src.jar
 
 export CLASSPATH=$CLASSPATH:/home/igorhvr/idm/bedlam/sisc/sisc-1.16.6/sisc.jar:/home/igorhvr/idm/bedlam/sisc/sisc-1.16.6/sisc-opt.jar:/home/igorhvr/idm/bedlam/sisc/sisc-1.16.6/sisc-lib.jar:/home/igorhvr/idm/bedlam/sisc/sisc-1.16.6/sisc.shp:/home/igorhvr/idm/bedlam/sisc/sisc-1.16.6/sisc-heap.jar:/home/igorhvr/idm/bedlam/jars/u/m.jar
+
+
+export CLASSPATH=$CLASSPATH:/home/igorhvr/idm/bedlam/jars/u/js.jar
