@@ -140,6 +140,8 @@
 (define (setup-classpath-url-handler)
   (j "iu.BedlamBundleInit.setupClasspathURLHandler();"))
 
+(setup-classpath-url-handler)
+
 (require-extension (lib iasylum/match))
 (require-extension (lib iasylum/random))
 (require-extension (lib iasylum/srfi-88))
