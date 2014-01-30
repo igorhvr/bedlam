@@ -74,3 +74,15 @@
    from
    (lambda (p)
      (deserialize p))))
+
+(define (base64-test tstring)
+  (let ((base64-encoded-str
+         (->scm-object
+          (j
+           "javax.xml.bind.DatatypeConverter.printBase64Binary(tstring.getBytes());"
+           `((tstring ,(->jstring tstring)))))))
+    (d/n "base64-encoded-str: " base64-encoded-str)
+    (let ((tbytes (j (quote-convert "javax.xml.bind.DatatypeConverter.parseBase64Binary(data);")
+                     `((data ,(->jstring base64-encoded-str))))))
+      (d/n "bytes: " tbytes)
+      (->scm-object (j "new String(tbytes);" `((tbytes ,tbytes)))))))
