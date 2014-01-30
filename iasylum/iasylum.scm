@@ -146,6 +146,13 @@
   (define to-string (lambda (f o) (with-output-to-string (lambda () (f o)))))
   
   (define display-string (lambda (o) (to-string display o)))
+
+
+  (define (string-append* . p)
+    (let ((strings-to-append
+           (map (lambda (v)
+                  (display-string v)) p)))
+      (apply string-append strings-to-append)))
   
   (define iasylum-write-string (lambda (o) (to-string write o)))
 
