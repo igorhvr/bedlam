@@ -1,0 +1,20 @@
+#! /usr/bin/env /base/bedlam/sisc/sisc-1.16.6/scheme-src/srfi-22/srfi-22.sh
+
+(define-syntax module-maker
+  (syntax-rules ()
+    ((_ <module> <code.scm> (scheme-lambda js-function) ...)
+
+     (let ((code-to-write-to-file 
+         '(module <module>
+            (include <code.scm>)
+            (export (scheme-lambda) ...)
+            (scheme2js-pragma
+             (create-body (JS js-function)) ...))))
+       (call-with-output-file
+           (string-append  (current-directory)
+            (symbol->string (syntax-object->datum (syntax <module>)))
+            ".scm")
+         (lambda (p) (write code-to-write-to-file p)))))))
+
+(define (main arguments) (for-each load (cdr arguments)))
+
