@@ -1,5 +1,4 @@
 ;;; Code by Igor Hjelmstrom Vinhas Ribeiro - this is licensed under GNU GPL v2.
-
 (require-extension (lib iasylum/jcode))
 (require-extension (lib iasylum/log))
 
@@ -15,9 +14,11 @@
   ;; (require-extension (lib iasylum/jcode))
   (define send-email
     (lambda (mailserver recipientemail recipientname senderemail sendername subject messagetext)
-      (log-debug 'send-email mailserver recipientemail recipientname senderemail sendername subject messagetext)
-      (j 
-       "import org.apache.commons.mail.SimpleEmail;
+      (log-debug 'send-email mailserver recipientemail recipientname 
+                 senderemail sendername subject messagetext)
+      (j  
+       "
+       import org.apache.commons.mail.SimpleEmail;
        SimpleEmail email = new SimpleEmail();
        email.setHostName(mailserver);
        email.addTo(recipientemail, recipientname);
@@ -33,6 +34,8 @@
          (subject ,(->jstring subject))
          (messagetext ,(->jstring messagetext))))))
 
+ 
+  
   ;;Test: (send-email "localhost" "igorhvr@iasylum.net" "igorhvr@iasylum.net" "igorhvr@iasylum.net" "igorhvr@iasylum.net" "assunto" "teste" )
 
 
