@@ -86,3 +86,9 @@
                      `((data ,(->jstring base64-encoded-str))))))
       (d/n "bytes: " tbytes)
       (->scm-object (j "new String(tbytes);" `((tbytes ,tbytes)))))))
+
+;; Example - how to get an sc-expanded version of the code in a given file.
+;; (sc-expand (call-with-input-string (file->string "/tmp/example.scm") (lambda (input) (read input)) ))
+
+;; match-let sample
+;;  (match-let ((#(("param1" . pu)("param2" . pd))data-to-be-matched))  (d/n "pu " pu " pd: " pd))
