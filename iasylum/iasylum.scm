@@ -13,6 +13,7 @@
    to-string
    display-string
    iasylum-write-string
+   string-append*
    d reset-d
    w reset-w
    d/n
