@@ -10,6 +10,7 @@
    hashtable/values
    nyi
    vunless
+   each-for
    to-string
    display-string
    iasylum-write-string
@@ -141,8 +142,8 @@
              (begin e1 e2 ...)
              test-value
              )))))
-
-
+  
+  (define (each-for arguments fn) (for-each fn arguments))
   
   (define to-string (lambda (f o) (with-output-to-string (lambda () (f o)))))
   
