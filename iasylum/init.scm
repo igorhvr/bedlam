@@ -140,7 +140,11 @@
 (define (setup-classpath-url-handler)
   (j "iu.BedlamBundleInit.setupClasspathURLHandler();"))
 
-(setup-classpath-url-handler)
+(with-failure-continuation 
+ (lambda (e p)
+   (list 'ignored-we-are-already-setup))
+ (lambda ()
+   (setup-classpath-url-handler)))
 
 (require-extension (lib iasylum/match))
 (require-extension (lib iasylum/random))
