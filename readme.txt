@@ -10,7 +10,7 @@ Another option is simply including jars/bedlam-bundle.jar and the other .jar fil
 
 Why?
 
-   This was developed during years and supports several production deployments of SISC. Sisc is a great Scheme implementation and having a big glob is wrappers and generally scheme utilities to use in multiple projects has proved very useful.
+   This was developed during years and supports several production deployments of SISC. Sisc is a great Scheme implementation and having a big glob of wrappers and general scheme utilities to use in multiple projects has proved very useful.
 
 What is supported?
 
@@ -35,9 +35,9 @@ Two examples (of use of jcode):
 
    * Excel parsing and spreadsheet generation in Scheme (used Apache Poi - http://poi.apache.org/ - underneath) - including list->spreadsheet, for-each-excel-sheet-data and converting excel's Dates to Scheme dates.
 
-   * Acess database reading using the Jackcess library.
+   * Access database reading using the Jackcess library.
 
-   * Misc utilities for dealing with jdbc in postgresql and java.(result-set->iterator; etc).
+   * Misc utilities for dealing with jdbc in postgresql and java.(result-set->iterator; etc). MySql support is also included.
 
    * Clojure: embedded interpreter, utilities for easily running clojure code inside strings.
 
@@ -53,7 +53,7 @@ Two examples (of use of jcode):
 
    * Dorai Sitaram's Schelog embedding of Prolog in Scheme http://www.ccs.neu.edu/home/dorai/schelog/schelog.html
 
-   * Aubrey Jaffer's Slib (http://people.csail.mit.edu/jaffer/SLIB) library.
+   * Aubrey Jaffer's Slib (http://people.csail.mit.edu/jaffer/SLIB) library which brings a LOT of functionality to scheme.
 
    * Olin Shivers' let-optionals (low-level / define-macro).
 
