@@ -396,5 +396,9 @@
 
 (require-extension (lib iasylum/javascript))
 
+; Let's not hide stack traces by default, which making this easy to revert.
+(define default-suppressed-stack-trace-source-kinds (make-parameter (suppressed-stack-trace-source-kinds)))
+(suppressed-stack-trace-source-kinds '())
+
 (define magic-load load)
 (set! load original-load)
