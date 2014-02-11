@@ -132,6 +132,13 @@
        ((integer? v) (if (or (< v -2147483648) (> v 2147483647)) (->jlong v) (->jint v)))
        ((number? v) (->jdouble v))
        ((date? v) (date->jdate v))
+       ((list? v)
+        (let ((resulting-list (j "new java.util.concurrent.ConcurrentLinkedQueue();")))
+          (pam
+           v
+           (lambda (element)
+             (j "linkedlist.add(elementn);" `((elementn ,(->jobject element)) (linkedlist ,resulting-list)))))
+          resulting-list))
        (else  (java-wrap v)) ; Ok. I give up.
        )))
 
