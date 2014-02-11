@@ -135,7 +135,7 @@
        ((list? v)
         (let ((resulting-list (j "new java.util.concurrent.ConcurrentLinkedQueue();")))
           (pam
-           v
+           (reverse v)
            (λ (element)
               (j "linkedlist.add(elementn);"
                  `((elementn ,(if (java-object? element) element (->jobject element)))
