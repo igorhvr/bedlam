@@ -46,7 +46,7 @@
    xor
    ensure-zipped-copy
    vector-binary-search
-   function fn function* fn* λ λ
+   function fn function* fn*
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -54,8 +54,6 @@
   (define-syntax function* (identifier-syntax lambda*))
   (define-syntax fn (identifier-syntax lambda))
   (define-syntax fn* (identifier-syntax lambda*))
-  (define-syntax λ (identifier-syntax lambda))
-  (define-syntax λ* (identifier-syntax lambda*))
 
   (import hashtable)
   (import file-manipulation)  ;; rglob uses this.
