@@ -135,6 +135,7 @@
      key-value->jmap
      key-jvalue->jmap
      map-jarray
+     jlist->jarray
    )
   (import s2j)
   (include "jcode-code.scm"))

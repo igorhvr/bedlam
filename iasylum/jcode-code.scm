@@ -144,6 +144,9 @@
        (else  (java-wrap v)) ; Ok. I give up.
        )))
 
+(define (jlist->jarray l)
+  (j "jlist.toArray();" `((jlist ,l))))
+
 (define-java-classes <java.util.concurrent.concurrent-hash-map>)
 
 ;; spec: (j "new java.util.concurrent.ConcurrentHashMap();")
