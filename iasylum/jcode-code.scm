@@ -134,12 +134,12 @@
        ((date? v) (date->jdate v))
        ((list? v)
         (let ((resulting-list (j "new java.util.concurrent.ConcurrentLinkedQueue();")))
-          (pam
-           (reverse v)
+          (map           
            (lambda (elementn)
               (j "linkedlist.add(elementnx);"
                  `((elementnx ,(->jobject elementn))
-                   (linkedlist ,resulting-list)))))
+                   (linkedlist ,resulting-list))))
+           (reverse v))
           resulting-list))
        (else  (java-wrap v)) ; Ok. I give up.
        )))
