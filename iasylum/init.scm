@@ -90,7 +90,7 @@
 (add-lib "u/commons-logging-1.1.jar")
 (add-lib "u/junit-3.8.1.jar")
 (add-lib "u/log4j-1.2.13.jar")
-(add-lib "u/bsh/bsh-2.2.0.jar")
+(add-lib "bsh/bsh-2.2.0.jar")
 (add-lib "u/m.jar")
 (add-lib "u/mail.jar")
 (add-lib "u/ssax-sxml.jar")
