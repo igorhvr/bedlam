@@ -136,11 +136,20 @@
         (let ((resulting-list (j "new java.util.concurrent.ConcurrentLinkedQueue();")))
           (map           
            (lambda (elementn)
-              (j "linkedlist.add(elementnx);"
-                 `((elementnx ,(->jobject elementn))
-                   (linkedlist ,resulting-list))))
+             (j "linkedlist.add(elementnx);"
+                `((elementnx ,(->jobject elementn))
+                  (linkedlist ,resulting-list))))
            (reverse v))
           resulting-list))
+       ((vector? v)
+        (let ((resulting-list (j "new java.util.concurrent.ConcurrentLinkedQueue();")))
+          (map           
+           (lambda (elementn)
+             (j "linkedlist.add(elementnx);"
+                `((elementnx ,(->jobject elementn))
+                  (linkedlist ,resulting-list))))
+           (reverse (vector->list v)))
+          (j "finalresult.toArray();" `((finalresult ,resulting-list)))))
        (else  (java-wrap v)) ; Ok. I give up.
        )))
 
