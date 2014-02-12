@@ -149,7 +149,7 @@
                 `((elementnx ,(->jobject elementn))
                   (linkedlist ,resulting-list))))
            (reverse (vector->list v)))
-          (j "finalresult.toArray();" `((finalresult ,resulting-list)))))
+          resulting-list))
        (else  (java-wrap v)) ; Ok. I give up.
        )))
 
