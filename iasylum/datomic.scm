@@ -2,6 +2,7 @@
 
 (module iasylum/datomic
   (datomic/query d/q
+   datomic/smart-query d/sq
    datomic/connection
    datomic/temp-id d/id
    datomic/transact d/t
@@ -17,6 +18,13 @@
        (j "datomic.Peer.q(qry, sources);" `((sources ,sources)
                                             (qry ,qry))))))
   
+  (define (datomic/smart-query qry . sources)
+    (let ((result (apply datomic/query (flatten (list qry sources)))))
+      (match result
+             [((tresult)) tresult]
+             [() #f]
+             [anything-else result])))
+
   (define* (datomic/connection uri (should-create? #t) (want-to-know-if-created? #f))
     (let ((did-I-create-it? (if should-create?
                                 (->boolean (j "datomic.Peer.createDatabase(uri);" `((uri ,(->jstring uri)))))
@@ -56,7 +64,7 @@
 
   (define (datomic/make-with-one-connection-included-query-function connection-retriever)
     (let ((db-retriever (datomic/make-latest-db-retriever connection-retriever)))
-      (cute datomic/query
+      (cute datomic/smart-query
             <> ; Query.
             (db-retriever) ; Recent db fetched.
             <...> ; Whatever other insanity and/or fixed parameters one may pass.
@@ -71,6 +79,7 @@
   
   
   (define d/q datomic/query)
+  (define d/sq datomic/smart-query)
   (define d/id datomic/temp-id)
   (define d/t datomic/transact)
   (define d/db datomic/db)
