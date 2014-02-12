@@ -139,7 +139,7 @@
              (j "linkedlist.add(elementnx);"
                 `((elementnx ,(->jobject elementn))
                   (linkedlist ,resulting-list))))
-           (reverse v))
+           v)
           resulting-list))
        ((vector? v)
         (let ((resulting-list (j "new java.util.concurrent.ConcurrentLinkedQueue();")))
@@ -148,7 +148,7 @@
              (j "linkedlist.add(elementnx);"
                 `((elementnx ,(->jobject elementn))
                   (linkedlist ,resulting-list))))
-           (reverse (vector->list v)))
+           (vector->list v))
           resulting-list))
        (else  (java-wrap v)) ; Ok. I give up.
        )))
