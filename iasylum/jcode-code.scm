@@ -154,7 +154,7 @@
        )))
 
 (define (jlist->jarray l)
-  (j "jlist.toArray();" `((jlist ,l))))
+  (j "jlist.toArray(new Object[jlist.size()]);" `((jlist ,l))))
 
 (define-java-classes <java.util.concurrent.concurrent-hash-map>)
 
