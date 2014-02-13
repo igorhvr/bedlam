@@ -64,7 +64,7 @@
 
   (define (datomic/make-with-one-connection-included-query-function connection-retriever)
     (let ((db-retriever (datomic/make-latest-db-retriever connection-retriever)))
-      (cute datomic/smart-query
+      (cut datomic/smart-query
             <> ; Query.
             (db-retriever) ; Recent db fetched.
             <...> ; Whatever other insanity and/or fixed parameters one may pass.
