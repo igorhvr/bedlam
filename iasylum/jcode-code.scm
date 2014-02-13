@@ -29,6 +29,8 @@
           result)
         current-value)))
 
+(define-generic-java-method to-string |toString|)
+
 (define (->scm-object v)
   (if (java-object? v)
       (if (java-null? v) '()
@@ -48,6 +50,7 @@
               (->number v))
              ((string=? obj-class "java.lang.Character") (->character v))
              ((string=? obj-class "java.lang.Boolean") (->boolean v))
+             ((string=? obj-class "java.util.UUID") (to-string v))
              ((->boolean (j "(tobj instanceof java.util.Date);" `((tobj ,v))) ) (jdate->date v))
              ((instance-of v "java.util.Collection")
               (let ((it (j "c.iterator();" `((c ,v)))))
