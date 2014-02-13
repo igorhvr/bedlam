@@ -392,9 +392,8 @@
 (require-extension (lib iasylum/match))
 (require-extension (lib iasylum/jdbc))
 (require-extension (lib iasylum/json))
-
 (require-extension (lib iasylum/loop))
-
+(require-extension (lib iasylum/math))
 (require-extension (lib iasylum/javascript))
 
 ; Let's not hide stack traces by default, which making this easy to revert.
