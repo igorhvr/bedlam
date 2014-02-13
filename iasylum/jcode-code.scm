@@ -65,9 +65,7 @@
              ((string=? obj-class "bsh.Primitive")
               (->scm-object (j "hhhhhhhhhh.getValue();" `((hhhhhhhhhh ,v))))
               )
-             (else  (begin
-                      ;;(display (string-append "\n[" obj-class "]\n"))
-                      (java-unwrap v)))))) ; Ok. I give up.         
+             (else v)))) ; Ok. I give up.
           v))
 
 
