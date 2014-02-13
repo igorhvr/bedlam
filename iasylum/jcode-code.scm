@@ -50,7 +50,7 @@
               (->number v))
              ((string=? obj-class "java.lang.Character") (->character v))
              ((string=? obj-class "java.lang.Boolean") (->boolean v))
-             ((string=? obj-class "java.util.UUID") (to-string v))
+             ((string=? obj-class "java.util.UUID") (->string (to-string v)))
              ((->boolean (j "(tobj instanceof java.util.Date);" `((tobj ,v))) ) (jdate->date v))
              ((instance-of v "java.util.Collection")
               (let ((it (j "c.iterator();" `((c ,v)))))
