@@ -68,6 +68,8 @@
              ((string=? obj-class "bsh.Primitive")
               (->scm-object (j "hhhhhhhhhh.getValue();" `((hhhhhhhhhh ,v))))
               )
+             ((instance-of v "sisc.data.Value")
+              (java-unwrap v))
              (else v)))) ; Ok. I give up.
           v))
 
