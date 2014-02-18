@@ -493,7 +493,7 @@
             (->number (available-permits inner-semaphore)])))))
 
   (define (jstream->tmp-file stream)
-  (j "jstreamtofile_result=java.io.File.createTempFile(\"jstream-to-file\",\"tmp\");
+  (j "jstreamtofile_result=java.io.File.createTempFile(\"jstream-to-file_\",\".tmp\");
       { 
 	jstreamtofile_out = new java.io.FileOutputStream(jstreamtofile_result);
  
