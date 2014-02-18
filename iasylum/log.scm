@@ -18,7 +18,8 @@
     (->string (j "new java.text.SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss.SSS\").format(new java.util.Date());")))
   
   (define make-mark-logger (lambda (mark) (lambda m (timestamped-log mark m))))
-  
+
+  (define log-trace (make-mark-logger "TRACE"))
   (define log-debug (make-mark-logger "DEBUG"))
   (define log-info (make-mark-logger "INFO"))
   (define log-warn (make-mark-logger "WARN"))
