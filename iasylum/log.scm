@@ -1,5 +1,7 @@
 ;;; Code by Igor Hjelmstrom Vinhas Ribeiro - this is licensed under GNU GPL v2.
 
+(require-extension (lib iasylum/iasylum))
+
 (module iasylum/log
   (log-o get-timestamp make-mark-logger timestamped-log
          log-trace log-debug log-info log-warn log-error log-fatal )
