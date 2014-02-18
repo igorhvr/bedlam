@@ -6,6 +6,11 @@
    (j "Object jso = manager.eval(\"javascript\", \"(java)\", 1, 1, code);
       jso.toString();" `((manager ,manager) (code ,(->jstring code))))))
 
+(define (run-js/o manager code)
+  (->string 
+   (j "Object jso = manager.eval(\"javascript\", \"(java)\", 1, 1, code);
+      jso;" `((manager ,manager) (code ,(->jstring code))))))
+
 ;; Example: (run-js/s (js-manager) "var f = function (what) { return 'hello, ' + what; }; f('Javascript');")
 
 
