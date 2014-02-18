@@ -72,17 +72,17 @@
         new-function))))
 
 (define (process-all-work proc queue continue-forever)
-  (if (continue-forever)
+  (if continue-forever
       (let r ()
-        (proc (queue 'take 'paused))
+        (proc (queue 'take))
         (r))
       (let ((v (queue 'poll)))
-        (if (not (eqv? v 'empty)) (begin (proc v) (process-all-work proc queue))))))
+        (if (not (eqv? v 'empty)) (begin (proc v) (process-all-work proc queue continue-forever))))))
 
 (define (process-all-work-forced proc queue ignored)
   (let ((q (queue 'inner-queue)))
     (let r ()
-      (proc (java-unwrap (take q)))
+      (proc (take q))
       (r))))
 
 (define get-next-worker-n
