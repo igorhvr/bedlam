@@ -172,11 +172,11 @@
 (require-extension (srfi 16)) ; case-lambda
 (require-extension (srfi 13))
 (require-extension (srfi 42)) ; Eager comprehensions.
-(require-extension (lib iasylum/email))
 (import siscweb/context)
 (import siscweb/html)
 (import siscweb/text)
 (require-extension (lib iasylum/log))
+(require-extension (lib iasylum/email))
 (require-extension (lib iasylum/work-queue))
 (require-extension (lib iasylum/excel))
 (require-extension (lib iasylum/i18n))
