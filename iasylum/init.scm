@@ -398,6 +398,7 @@
 (require-extension (lib iasylum/loop))
 (require-extension (lib iasylum/math))
 (require-extension (lib iasylum/javascript))
+(require-extension (lib iasylum/hornetq))
 
 ; Let's not hide stack traces by default, which making this easy to revert.
 (define default-suppressed-stack-trace-source-kinds (make-parameter (suppressed-stack-trace-source-kinds)))
