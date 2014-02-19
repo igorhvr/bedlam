@@ -354,6 +354,7 @@
 (require-library 'sisc/ssax-sxml/sxml-match)
 (require-library 'sisc/ssax-sxml/query)
 (import srfi-1-filter)
+(import logicops)
 (import string-io)
 (import myenv)
 (import util)
