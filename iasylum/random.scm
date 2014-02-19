@@ -4,7 +4,7 @@
 (require-extension (lib iasylum/srfi-89))
 
 (module iasylum/random
-  (random)
+  (random random-maker)
   (import s2j)
   (include "random-code.scm")
   )
