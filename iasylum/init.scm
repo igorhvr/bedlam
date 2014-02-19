@@ -279,7 +279,7 @@
       (if (and (eqv?  beanshell-httpd-port 3001) (eqv? beanshell-vanilla-port 3002)
                (eqv? clojure-nrepl-default-transport-port 6000) (eqv?  clojure-nrepl-tty-transport-port 6001))
           (begin (clojure/repl-start 6000)
-                 (j "iu.M.i(siscport, 3001);" `((siscport, sisc-repl-port)))
+                 (j "iu.M.i(siscport, 3001);" `((siscport ,(->jint sisc-repl-port))))
 
                  (string-append* "Starting repls at " sisc-repl-port "(SISC), 3001 (beanshell httpd), 3002 (beanshell), 6000 (clojure nrepl), 6001 (clojure tty transport)..." ))
           (error "nrepls: using any ports other than the default is not yet supported."))))
