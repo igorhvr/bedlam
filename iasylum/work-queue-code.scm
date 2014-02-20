@@ -95,24 +95,21 @@
         (mutex/unlock! m)
         result))))
 
-(define (now) (->string (j "new java.util.Date().toString();")))
-
 (define start-worker
   (lambda* (processor work-queue (continue-forever #f) (forced #f))
       (thread/spawn
        (lambda ()
          (with-failure-continuation
           (lambda (err cont)
-            (d "\nError " err " at " cont "\n"))
+            (log-error "Error " err " at " cont))
           (lambda ()
             (let ((n (get-next-worker-n)))
-              (d "\nStarting worker [w" n "]...\n")
+              (log-trace 'work-queue "Starting worker" n)
               ((if forced process-all-work-forced process-all-work)
                (lambda (v)
-                 (define (now) (->string (j "new java.util.Date().toString();")))
-                 ;;(d "\n   [w" n "] starting  work unit: " v " (now: " (now) ")\n")
+                 (log-trace 'work-queue n "Starting  work unit" v)
                  (let ((timings (time (processor v))))
-                   ;;(d "\n   [w" n "] completed work unit: " v " in " (cdr timings) "\n")
+                   (log-trace 'work-queue n "Completed work unit" v " in " (cdr timings))
                    #t
                    ))       
                work-queue

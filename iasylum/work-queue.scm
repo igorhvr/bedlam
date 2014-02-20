@@ -2,7 +2,8 @@
 
 (require-extension (lib iasylum/match))
 (require-extension (lib iasylum/jcode))
-(require-extension (lib iasylum/iasylum)) ; d to display progress messages.
+(require-extension (lib iasylum/log))
+(require-extension (lib iasylum/iasylum))
 
 (module iasylum/work-queue
   (make-queue
