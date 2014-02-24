@@ -402,6 +402,9 @@
 (require-extension (lib iasylum/hornetq))
 (require-extension (lib iasylum/jmx))
 
+(add-lib "u/scrypt-1.4.0.jar")
+(require-extension (lib iasylum/scrypt))
+
 ; Let's not hide stack traces by default, which making this easy to revert.
 (define default-suppressed-stack-trace-source-kinds (make-parameter (suppressed-stack-trace-source-kinds)))
 (suppressed-stack-trace-source-kinds '())
