@@ -11,6 +11,7 @@
    build-standard-queue-lambda
    build-producer-lambda
    build-consumer-lambda
+   hornetq->work-queue
    )
 
   
@@ -76,6 +77,13 @@
   (define build-consumer-lambda
     (lambda (standard-localhost-session-lambda standard-queue-lambda)
       (memoize (lambda () (hornetq-consumer (standard-localhost-session-lambda) (standard-queue-lambda))))))
+
+  (define (hornetq->work-queue hornetq-consumer work-queue)
+    (thread/spawn
+     (lambda () 
+       (let loop ()
+         (work-queue 'put-java (hornetq-receive hornetq-consumer #t))
+         (loop)))))
 
   ;; Example usage.
   ;;  (define localhost-session-lambda (build-standard-localhost-session-lambda))
