@@ -1,7 +1,7 @@
 (define (js-manager)
   (j "org.apache.bsf.BSFManager manager = new org.apache.bsf.BSFManager();   manager;"))
 
-(define (js-manager-no-optimization  (j "new javax.script.ScriptEngineManager().getEngineByName(\"javascript\");")))
+(define (js-manager-no-optimization)  (j "new javax.script.ScriptEngineManager().getEngineByName(\"javascript\");"))
 
 (define (run-js/s manager code)
   (->string 
