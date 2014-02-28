@@ -401,6 +401,7 @@
 (require-extension (lib iasylum/javascript))
 (require-extension (lib iasylum/hornetq))
 (require-extension (lib iasylum/jmx))
+(require-extension (lib iasylum/macros))
 
 (add-lib "u/scrypt-1.4.0.jar")
 (require-extension (lib iasylum/scrypt))
