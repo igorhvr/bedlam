@@ -16,7 +16,7 @@
         cx.setOptimizationLevel(-1);
         ourresult=\"\";
         try {
-           jso=new ScriptEngineManager().getEngineByName(\"javascript\").eval(code);
+           jso=manager.eval(code);
            if(jso!=null) ourresult=jso.toString();
         } finally {
            cx.exit();
