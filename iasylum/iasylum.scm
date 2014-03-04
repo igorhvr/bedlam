@@ -25,7 +25,8 @@
    alist->http-parameters-string
    run-remote-request
    pump-binary
-   pump_binary-input-port->character-output-port   
+   pump_binary-input-port->character-output-port
+   input-port->string
    r r-split r/s r/d r-base
    dp
    smart-compile
@@ -74,6 +75,21 @@
     (->string
      (j "in = new FileReader(filename);
       org.apache.bsf.util.IOUtils.getStringFromReader(in);" `((filename ,(->jstring fname))))))
+
+  (define (input-port->string input)
+    (define i (if (binary-input-port? input)
+                  (open-character-input-port input)
+                  input))
+    (define o (open-output-string))      
+    (define mbuffer (make-string 65000))
+    (define (loop)
+      (let ((a (read-string mbuffer 0 (string-length mbuffer) i)))
+        (if (eof-object? a) 'done 
+            (begin
+              (write-string mbuffer 0 a o)
+              (loop)))))
+    (loop)
+    (get-output-string o))
   
   ;; Sorting routine.
   (define (binarysort cmp-func L)
