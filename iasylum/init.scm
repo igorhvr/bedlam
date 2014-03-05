@@ -38,6 +38,8 @@
             (lambda ()
               (original-load name)))))))
 
+(define native-read-string read-string) ;; sxml will overwrite this, which is inconvenient in some instances.
+
 (require-extension (srfi 39)) ; make-parameter
 
 (define iasylum-bedlam-location
@@ -343,6 +345,7 @@
 
 
 ;; sxml bootstrap
+
 (require-library 'ssax/ssax)
 (require-library 'sxml/sxml-to-xml)
 (require-library 'ssax/ssax)
