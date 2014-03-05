@@ -38,7 +38,9 @@
             (lambda ()
               (original-load name)))))))
 
-(define native-read-string read-string) ;; sxml will overwrite this, which is inconvenient in some instances.
+;; sxml will overwrite both, which is inconvenient in some cases.
+(define native-read-string read-string) 
+(define native-write-string write-string)
 
 (require-extension (srfi 39)) ; make-parameter
 
