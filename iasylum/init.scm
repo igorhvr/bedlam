@@ -38,10 +38,6 @@
             (lambda ()
               (original-load name)))))))
 
-;; sxml will overwrite both, which is inconvenient in some cases.
-(define native-read-string read-string) 
-(define native-write-string write-string)
-
 (require-extension (srfi 39)) ; make-parameter
 
 (define iasylum-bedlam-location
@@ -367,7 +363,10 @@
 (import srfi-13)
 (import srfi-8)
 (import parse-error)
-(import input-parse)
+
+(define native-read-string (unbox (box read-string)))
+(define native-write-string write-string)
+;(import input-parse)
 (import look-for-str)
 (import char-encoding)
 (import ssax-code)
