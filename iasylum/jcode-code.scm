@@ -106,7 +106,8 @@
 
 (define (date->jdate the-date)
    (let ((t (date->time-utc the-date)))
-     (java-new <date> (->jlong (* 1000 (time-second t))))))
+     (java-new <date> (->jlong (+ (* 1000 (time-second t))
+                                  (* 1000000 (time-nanosecond t)))))))
 
 (define (jdate->date jd)
   (let ((vls (j "import java.util.Calendar;
