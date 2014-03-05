@@ -48,6 +48,7 @@
    ensure-zipped-copy
    vector-binary-search
    function fn function* fn*
+   times multiple-values->list
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -570,6 +571,18 @@
                       ((precedes? mid-value sought)
                        (loop (+ midpoint 1) stop))
                       (else #t))))))))
+
+  (define-syntax times
+    (syntax-rules ()
+      ((_ n <code> ...)
+       (let ((lambda-set (list-ec (: i n) (lambda () (list ((lambda () <code> ...)))))))
+         (apply append (multiple-values->list (apply parallel lambda-set)))))))
+         
+
+  (define-syntax multiple-values->list
+    (syntax-rules ()
+      ((_ <code> ...)
+       (call-with-values (lambda () <code> ...) list))))
   
   (define d)
   (define w)
