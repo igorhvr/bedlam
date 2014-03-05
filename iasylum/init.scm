@@ -360,6 +360,7 @@
 (import util)
 (import srfi-12)
 (import srfi-13)
+(import srfi-8)
 (import parse-error)
 (import input-parse)
 (import look-for-str)
