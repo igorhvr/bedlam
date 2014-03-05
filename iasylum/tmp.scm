@@ -92,3 +92,8 @@
 
 ;; match-let sample
 ;;  (match-let ((#(("param1" . pu)("param2" . pd))data-to-be-matched))  (d/n "pu " pu " pd: " pd))
+
+;; Interesting call-with-values example.
+(call-with-values (lambda () (parallel (lambda () (+ 3 4)) (lambda ()  (+ 5 7)))) string-append*)
+
+(loop lp ((n <- in-range 1 5 1)) (d/n n) (lp))
