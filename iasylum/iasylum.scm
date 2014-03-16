@@ -33,6 +33,7 @@
    flatten
    rglob
    file->string
+   iasylum-sort
    sort
    /*
    find-zipfiles
@@ -97,6 +98,7 @@
     (if (null? L) '()
         (traverse (btree L cmp-func))))
   
+  (define iasylum-sort binarysort)
   (define sort binarysort)
   
   (define (btree L cmp-func)
