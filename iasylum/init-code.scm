@@ -1,3 +1,5 @@
+(display "Loading Bedlam...")
+
 ;(begin (define iasylum-bedlam-location "/home/igorhvr/idm/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")))
 (require-extension (srfi 23)) ; error
 
@@ -417,3 +419,6 @@
 (set! load original-load)
 
 (define bedlam-loaded-and-ready-to-use #t)
+
+(d/n "100% Bedlam done!")
+
