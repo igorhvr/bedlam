@@ -1,11 +1,17 @@
 (define (js-manager)  (j "new javax.script.ScriptEngineManager().getEngineByName(\"javascript\");"))
 
+(define run-js/s
+  (lambda p
+    (let ((final-result (apply run-js p)))
+      (if (java-null? final-result)
+          ""
+          (->string (j "tfr.toString();" `((tfr ,final-result))))))))
+
 (define (run-js manager code . vars)
   (j                       
        "import javax.script.*;
         cx = org.mozilla.javascript.Context.enter();
-        cx.setOptimizationLevel(-1);
-        ourresult=\"\";"        
+        cx.setOptimizationLevel(-1);"        
        `((manager ,manager)))
   
   (when (= (length vars) 1)
@@ -23,10 +29,7 @@
   
 
    (j                       
-       "import javax.script.*;
-        cx = org.mozilla.javascript.Context.enter();
-        cx.setOptimizationLevel(-1);
-        ourresult=null;
+       "ourresult=null;
         try {           
            jso=manager.eval(code);
            if(jso!=null) ourresult=jso;

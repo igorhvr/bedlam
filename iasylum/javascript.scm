@@ -1,6 +1,6 @@
 (require-extension (lib iasylum/jcode))
 
 (module iasylum/javascript
-  (js-manager run-js)
+  (js-manager run-js run-js/s)
 
   (include "javascript-code.scm"))
