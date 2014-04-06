@@ -21,20 +21,20 @@
                            (jsobjectvalue ,(->jobject vvalue))))))))
      (car vars)))
   
-  (->string 
+
    (j                       
        "import javax.script.*;
         cx = org.mozilla.javascript.Context.enter();
         cx.setOptimizationLevel(-1);
-        ourresult=\"\";
+        ourresult=null;
         try {           
            jso=manager.eval(code);
-           if(jso!=null) ourresult=jso.toString();
+           if(jso!=null) ourresult=jso;
         } finally {
            cx.exit();
         }
         ourresult;"
-       `((manager ,manager) (code ,(->jstring code))))))
+       `((manager ,manager) (code ,(->jstring code)))))
 
 ;; Example: (run-js/s (js-manager) "var f = function (what) { return 'hello, ' + what; }; f('Javascript');")
 
