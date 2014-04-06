@@ -1,21 +1,33 @@
-(define (js-manager)
-  (j "manager = new org.apache.bsf.BSFManager();   manager;"))
+(define (js-manager)  (j "new javax.script.ScriptEngineManager().getEngineByName(\"javascript\");"))
 
-(define (js-manager-no-optimization)  (j "new javax.script.ScriptEngineManager().getEngineByName(\"javascript\");"))
-
-(define (run-js/s manager code)
-  (->string 
-   (j "Object jso = manager.eval(\"javascript\", \"(java)\", 1, 1, code);
-      jso.toString();" `((manager ,manager) (code ,(->jstring code))))))
-
-(define (run-js-no-optimization/s manager code)
+(define (run-js/s manager code . vars)
+  (j                       
+       "import javax.script.*;
+        cx = org.mozilla.javascript.Context.enter();
+        cx.setOptimizationLevel(-1);
+        ourresult=\"\";"        
+       `((manager ,manager)))
+  
+  (when (= (length vars) 1)
+    (for-each
+     (lambda (v)
+       (match-let ( ( (vname vvalue) v ) )
+                  (begin
+                    (let* ((sname (if (string? vname) vname (symbol->string vname)))
+                           (name (->jstring sname )))
+                      (j "manager.put(jsobjectname, jsobjectvalue);"
+                         `((manager ,manager)
+                           (jsobjectname ,(->jstring sname))
+                           (jsobjectvalue ,(->jobject vvalue))))))))
+     (car vars)))
+  
   (->string 
    (j                       
        "import javax.script.*;
         cx = org.mozilla.javascript.Context.enter();
         cx.setOptimizationLevel(-1);
         ourresult=\"\";
-        try {
+        try {           
            jso=manager.eval(code);
            if(jso!=null) ourresult=jso.toString();
         } finally {
