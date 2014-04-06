@@ -1,6 +1,6 @@
 (define (js-manager)  (j "new javax.script.ScriptEngineManager().getEngineByName(\"javascript\");"))
 
-(define (run-js/s manager code . vars)
+(define (run-js manager code . vars)
   (j                       
        "import javax.script.*;
         cx = org.mozilla.javascript.Context.enter();
