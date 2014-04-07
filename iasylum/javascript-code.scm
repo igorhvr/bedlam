@@ -1,5 +1,8 @@
 (define (js-manager)  (j "new javax.script.ScriptEngineManager().getEngineByName(\"javascript\");"))
 
+(define-generic-java-method get |get|)
+(define-generic-java-method set |set|)
+
 (define (create-thread-local-javascript-manager-retriever)
     (let ((tl
            (j "mtl=new ThreadLocal() {
