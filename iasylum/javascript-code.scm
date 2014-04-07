@@ -1,20 +1,32 @@
 (define (js-manager)  (j "new javax.script.ScriptEngineManager().getEngineByName(\"javascript\");"))
 
-(define run-js/s
-  (lambda p
-    (let ((final-result (apply run-js p)))
-      (if (java-null? final-result)
-          ""
-          (->string (j "tfr.toString();" `((tfr ,final-result))))))))
+(define (create-thread-local-javascript-manager-retriever)
+    (let ((tl
+           (j "mtl=new ThreadLocal() {
+                   protected synchronized Object initialValue() {                       
+                       return new javax.script.ScriptEngineManager().getEngineByName(\"javascript\");
+                   }
+               }; mtl;")))
+      (lambda ()
+        (let ((result (get tl)))
+          result))))
 
-(define (run-js manager code . vars)
-  (j                       
+(define get-local-javascript-manager)
+(define js)
+
+(set! get-local-javascript-manager (create-thread-local-javascript-manager-retriever))
+
+(set! js
+  (lambda*
+   (code (vars #f) (manager (get-local-javascript-manager)))
+
+   (j                       
        "import javax.script.*;
         cx = org.mozilla.javascript.Context.enter();
         cx.setOptimizationLevel(-1);"        
        `((manager ,manager)))
   
-  (when (= (length vars) 1)
+  (when vars
     (for-each
      (lambda (v)
        (match-let ( ( (vname vvalue) v ) )
@@ -25,9 +37,8 @@
                          `((manager ,manager)
                            (jsobjectname ,(->jstring sname))
                            (jsobjectvalue ,(->jobject vvalue))))))))
-     (car vars)))
+     vars))
   
-
    (j                       
        "ourresult=null;
         try {           
@@ -37,7 +48,7 @@
            cx.exit();
         }
         ourresult;"
-       `((manager ,manager) (code ,(->jstring code)))))
+       `((manager ,manager) (code ,(->jstring code))))))
 
 ;; Example: (run-js/s (js-manager) "var f = function (what) { return 'hello, ' + what; }; f('Javascript');")
 
