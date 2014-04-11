@@ -47,6 +47,8 @@
    ensure-zipped-copy
    vector-binary-search
    function fn function* fn*
+   list-of-type?
+   alist?
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -567,6 +569,23 @@
     (set! w (let ((m (mutex/new))) (lambda p (mutex/lock! m) (for-each write p) (mutex/unlock! m) (void)))))
 
   (define (uuid-string) (->string (j "new com.eaio.uuid.UUID().toString();")))
+
+  ;; Imported from MIT Scheme runtime/list.scm
+  (define (list-of-type? object predicate)
+    (let loop ((l1 object) (l2 object))
+      (if (pair? l1)
+          (and (predicate (car l1))
+               (let ((l1 (cdr l1)))
+                 (and (not (eq? l1 l2))
+                      (if (pair? l1)
+                          (and (predicate (car l1))
+                               (loop (cdr l1) (cdr l2)))
+                          (null? l1)))))
+          (null? l1))))
+
+  ;; Imported from MIT Scheme runtime/list.scm
+  (define (alist? object)
+    (list-of-type? object pair?))
   
   (define-generic-java-method release)
   (define-generic-java-method available-permits)
