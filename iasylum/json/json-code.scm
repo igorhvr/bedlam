@@ -152,7 +152,7 @@
 			  (define (jnumber-body starting-results)
 			    (let loop ((acc '()) (results starting-results))
 			      (let ((ch (parse-results-token-value results)))
-				(if (memv ch '(#\- #\+ #\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9 #\. #\e #\E))
+				(if (memv ch '(#\- #\+ #\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9 #\. #\e #\E #\/))
 				    (loop (cons ch acc) (parse-results-next results))
 				    (let ((n (string->number (list->string (reverse acc)))))
 				      (if n
