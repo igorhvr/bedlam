@@ -3,20 +3,11 @@
 (require-extension (srfi 23))
 (module iasylum/json
   (json-read json-write scheme->json json->scheme)
-  
-  (include "json/json-code.scm")
-  
-  (define (scheme->json structure)
-    (call-with-output-string
-     (lambda (output-port)
-       (json-write
-        structure
-        output-port))))
 
-  (define (decimal-to-fractions-inside-string s)  
+  (define (decimal-to-fractions-inside-string s)
     (irregex-replace/all '(seq
                            (submatch (? "-"))
-                           (submatch (+ digit))
+                           (submatch (* digit))
                            "."
                            (submatch (+ digit)))
                          s
@@ -26,16 +17,22 @@
                                  (afterdot (irregex-match-substring m 3)))
                              (number->string
                               (* (if (string=? "-" sign) -1 1)
-                                 (+ (string->number beforedot)
+                                 (+ (if (string=? "" beforedot) 0 (string->number beforedot))
                                     (/ (string->number afterdot) (expt 10 (string-length afterdot))))))))))
   
-  (define json->scheme
-    (lambda* (string (force-exact #f))
-             (call-with-input-string
-                 (if force-exact
-                     (decimal-to-fractions-inside-string string)
-                     string)
-               (lambda (input-port)
-                 (json-read input-port)))))
+  (include "json/json-code.scm")
+  
+  (define (scheme->json structure)
+    (call-with-output-string
+     (lambda (output-port)
+       (json-write
+        structure
+        output-port))))
+  
+  (define (json->scheme string)
+    (call-with-input-string
+        string
+      (lambda (input-port)
+        (json-read input-port))))
 
 )
