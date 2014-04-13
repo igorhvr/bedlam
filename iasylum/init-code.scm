@@ -133,7 +133,8 @@
   ;;; IAsylum scheme files.
 (class-path-extension-append! (cons (iasylum-bedlam-location) (class-path-extension)))
 
-(max-stack-trace-depth 16)
+;(max-stack-trace-depth 16)
+(max-stack-trace-depth 3)
 (import debugging)
 (require-extension (lib iasylum/jcode))
 
@@ -412,8 +413,8 @@
 (require-extension (lib iasylum/scrypt))
 
 ; Let's not hide stack traces by default, which making this easy to revert.
-(define default-suppressed-stack-trace-source-kinds (make-parameter (suppressed-stack-trace-source-kinds)))
-(suppressed-stack-trace-source-kinds '())
+;(define default-suppressed-stack-trace-source-kinds (make-parameter (suppressed-stack-trace-source-kinds)))
+;(suppressed-stack-trace-source-kinds '())
 
 (define magic-load load)
 (set! load original-load)
