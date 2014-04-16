@@ -2,7 +2,8 @@
 (require-extension (srfi 69))
 (require-extension (srfi 23))
 (module iasylum/json
-  (json-read json-write scheme->json json->scheme)
+  (json-read json-write scheme->json json->scheme
+   decimal-to-fractions-inside-string)
 
   (define (decimal-to-fractions-inside-string s)
     (irregex-replace/all '(seq
