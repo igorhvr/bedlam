@@ -52,6 +52,7 @@
    times multiple-values->list
    list-of-type?
    alist?
+   try-and-if-it-fails-object
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -617,6 +618,24 @@
   ;; Imported from MIT Scheme runtime/list.scm
   (define (alist? object)
     (list-of-type? object pair?))
+
+  ; This macro attempts to execute the given piece of code, and if it fails by throwing some kind of error/exception or returns false returns the provided <object> (the error itself is dropped).
+  ; E.g.: (try-and-if-it-fails-object ('whatever) (/ 5 x)) will return 5/x or 'whatever if x is zero.
+  (define-syntax try-and-if-it-fails-object
+    (syntax-rules ()
+      ((_ (<obj>) <code>  ...)
+       (begin
+         (let ((o (delay ( (lambda () <obj>) ))))
+           (with-failure-continuation
+            (lambda (a b) (force o))
+            (lambda ()
+              (let ((result  ((lambda () <code> ...))))
+                (let ((final-result
+                       (cond (((null? result) (force o))
+                              ((java-null? result) (force o))
+                              result)
+                             (force o))))
+                  final-result)))))))))
   
   (define-generic-java-method release)
   (define-generic-java-method available-permits)
