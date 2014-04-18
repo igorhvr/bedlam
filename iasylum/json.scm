@@ -1,25 +1,10 @@
 (require-extension (lib iasylum/packrat))
+(require-extension (lib iasylum/math)
 (require-extension (srfi 69))
 (require-extension (srfi 23))
-(module iasylum/json
-  (json-read json-write scheme->json json->scheme
-   decimal-to-fractions-inside-string)
 
-  (define (decimal-to-fractions-inside-string s)
-    (irregex-replace/all '(seq
-                           (submatch (? "-"))
-                           (submatch (* digit))
-                           "."
-                           (submatch (+ digit)))
-                         s
-                         (lambda (m)
-                           (let ((sign (irregex-match-substring m 1))
-                                 (beforedot (irregex-match-substring m 2))
-                                 (afterdot (irregex-match-substring m 3)))
-                             (number->string
-                              (* (if (string=? "-" sign) -1 1)
-                                 (+ (if (string=? "" beforedot) 0 (string->number beforedot))
-                                    (/ (string->number afterdot) (expt 10 (string-length afterdot))))))))))
+(module iasylum/json
+  (json-read json-write scheme->json json->scheme)  
   
   (include "json/json-code.scm")
   
