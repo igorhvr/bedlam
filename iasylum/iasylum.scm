@@ -631,10 +631,10 @@
             (lambda ()
               (let ((result  ((lambda () <code> ...))))
                 (let ((final-result
-                       (cond (((null? result) (force o))
+                       (cond ((null? result) (force o))
                               ((java-null? result) (force o))
-                              result)
-                             (force o))))
+                              ((eqv? #f result) (force o))
+                              (else result))))
                   final-result)))))))))
   
   (define-generic-java-method release)
