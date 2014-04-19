@@ -1,5 +1,5 @@
 (require-extension (lib iasylum/packrat))
-(require-extension (lib iasylum/math)
+(require-extension (lib iasylum/math))
 (require-extension (srfi 69))
 (require-extension (srfi 23))
 
