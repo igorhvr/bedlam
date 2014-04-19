@@ -1,4 +1,4 @@
-(require-extension (lib iasylum/irregex))
+;(require-extension (lib iasylum/irregex)) ; XXX Dependency exists, but proper require-extension fails currently.
 
 (module iasylum/math
   (fact log* mod exact-floor decimal-to-fractions-inside-string)
