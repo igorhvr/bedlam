@@ -97,3 +97,7 @@
 (call-with-values (lambda () (parallel (lambda () (+ 3 4)) (lambda ()  (+ 5 7)))) string-append*)
 
 (loop lp ((n <- in-range 1 5 1)) (d/n n) (lp))
+
+;(apply parallel (map (lambda (fn) (lambda () (try-and-if-it-fails-object (#f) (smart-compile fn)))) (find-scm-in-directory "/base/bedlam/iasylum")))
+
+;(map (lambda (fn) (try-and-if-it-fails-object (#f) (smart-compile fn))) (find-scm-in-directory "/base/bedlam/iasylum"))
