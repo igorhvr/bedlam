@@ -198,3 +198,16 @@
 
       (lambda maybe-port
 	(read-any (if (pair? maybe-port) (car maybe-port) (current-input-port))))))
+
+(define (scheme->json structure)
+  (call-with-output-string
+   (lambda (output-port)
+     (json-write
+      structure
+      output-port))))
+  
+(define (json->scheme string)
+  (call-with-input-string
+   string
+   (lambda (input-port)
+     (json-read input-port))))
