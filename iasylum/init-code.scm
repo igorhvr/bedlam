@@ -222,6 +222,9 @@
 (define (find-jars-in-directory dir)
   (map car (filter (lambda (v) (not (eqv? v '()))) (map (lambda (v) (irregex-extract (irregex '(seq (* any) ".jar")) v)) (rglob dir)))))
 
+(define (find-scm-in-directory dir)
+  (map car (filter (lambda (v) (not (eqv? v '()))) (map (lambda (v) (irregex-extract (irregex '(seq (* any) ".scm")) v)) (rglob dir)))))
+
 (define (add-jars-in-directory-to-classpath dir)
   (for-each
    extend-classpath
