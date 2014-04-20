@@ -96,6 +96,7 @@
      java-synchronized
      java-wrap
      java-unwrap
+     safe-java-unwrap
      java-null
      java-object?
      java-interface?

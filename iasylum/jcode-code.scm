@@ -201,6 +201,8 @@
           (cons (proc (java-array-ref v i)) (r (+ i 1)))
           '()))))
 
+(define (safe-java-unwrap o) (if (java-null? o) '() (java-unwrap o)))
+
 (define j)
 
 (define (startup-interpreter tint)
