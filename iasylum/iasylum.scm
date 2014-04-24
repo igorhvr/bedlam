@@ -654,6 +654,20 @@
        (eval `(,(string->symbol "define")
                ,(string->symbol string)
                <quasiquoted-body>)))))
+
+  ; TODO: Expand this to handle all cases that dynamic-define above does, and replace it.
+  (define-syntax dynamic-define-simple-string
+    (λ (x)
+       (syntax-case x ()
+         ((_ name-of-object-to-be-defined expr)
+          #t ; No fender. We use the underlying define validation.
+          (let* ((str-name (syntax-object->datum (syntax name-of-object-to-be-defined)))
+                 (symbolic-name (string->symbol str-name)))
+            (with-syntax ((symbolic-identifier (datum->syntax-object (syntax _) symbolic-name)))
+              (syntax
+               (begin
+                 (define symbolic-identifier expr)))))))))
+    
   
   (define-generic-java-method release)
   (define-generic-java-method available-permits)
