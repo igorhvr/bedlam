@@ -53,7 +53,6 @@
    list-of-type?
    alist?
    try-and-if-it-fails-object
-   dynamic-define
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -638,39 +637,6 @@
                               (else result))))
                   final-result)))))))))
 
-  ;;
-  ;; (dynamic-define "variable" 123)
-  ;;
-  ;; $ variable
-  ;; $ => 123
-  ;;
-  ;; (dynamic-define "variable" (+ 1 1))
-  ;; $ variable
-  ;; $ => 2
-  ;;
-  ;; (dynamic-define "variable" '(+ 1 1))
-  ;; $ variable
-  ;; $ => (+ 1 1)
-  ;;
-  (define-syntax dynamic-define
-    (syntax-rules ()
-      ((_ string <body>)
-       (eval `(define ,(string->symbol string) <body>)))))
-
-  ; TODO: Expand this to handle all cases that dynamic-define above does, and replace it.
-  (define-syntax dynamic-define-simple-string
-    (lambda (x)
-       (syntax-case x ()
-         ((_ name-of-object-to-be-defined expr)
-          #t ; No fender. We use the underlying define validation.
-          (let* ((str-name (syntax-object->datum (syntax name-of-object-to-be-defined)))
-                 (symbolic-name (string->symbol str-name)))
-            (with-syntax ((symbolic-identifier (datum->syntax-object (syntax _) symbolic-name)))
-              (syntax
-               (begin
-                 (define symbolic-identifier expr)))))))))
-    
-  
   (define-generic-java-method release)
   (define-generic-java-method available-permits)
   
