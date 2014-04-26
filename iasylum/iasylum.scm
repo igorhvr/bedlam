@@ -657,7 +657,7 @@
 
   ; TODO: Expand this to handle all cases that dynamic-define above does, and replace it.
   (define-syntax dynamic-define-simple-string
-    (λ (x)
+    (lambda (x)
        (syntax-case x ()
          ((_ name-of-object-to-be-defined expr)
           #t ; No fender. We use the underlying define validation.
