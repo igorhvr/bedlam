@@ -644,16 +644,18 @@
   ;; $ variable
   ;; $ => 123
   ;;
-  ;; (dynamic-define "variable" ,(+ 1 1))
+  ;; (dynamic-define "variable" (+ 1 1))
   ;; $ variable
   ;; $ => 2
   ;;
+  ;; (dynamic-define "variable" '(+ 1 1))
+  ;; $ variable
+  ;; $ => (+ 1 1)
+  ;;
   (define-syntax dynamic-define
     (syntax-rules ()
-      ((_ string <quasiquoted-body>)
-       (eval `(,(string->symbol "define")
-               ,(string->symbol string)
-               <quasiquoted-body>)))))
+      ((_ string <body>)
+       (eval `(define ,(string->symbol string) <body>)))))
 
   ; TODO: Expand this to handle all cases that dynamic-define above does, and replace it.
   (define-syntax dynamic-define-simple-string
