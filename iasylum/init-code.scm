@@ -133,8 +133,7 @@
   ;;; IAsylum scheme files.
 (class-path-extension-append! (cons (iasylum-bedlam-location) (class-path-extension)))
 
-;(max-stack-trace-depth 16)
-(max-stack-trace-depth 3)
+(max-stack-trace-depth 16)
 (import debugging)
 (require-extension (lib iasylum/jcode))
 
