@@ -619,21 +619,36 @@
   (define (alist? object)
     (list-of-type? object pair?))
 
-  ; This macro attempts to execute the given piece of code, and if it fails by throwing some kind of error/exception or returns false returns the provided <object> (the error itself is dropped).
-  ; E.g.: (try-and-if-it-fails-object ('whatever) (/ 5 x)) will return 5/x or 'whatever if x is zero.
+  ;;
+  ;; This macro attempts to execute the given piece of code, and if it fails by
+  ;; throwing some kind of error/exception or returns false returns the provided
+  ;; <object> (the error itself is dropped).
+  ;;
+  ;; E.g.: (try-and-if-it-fails-object ('whatever) (/ 5 x)) will
+  ;; return 5/x or 'whatever if x is zero.
+  ;;
+  ;; If you don't put <obj>, e.g.: (try-and-if-it-fails-object () (/5 x))
+  ;; the result is the error object.
+  ;;
   (define-syntax try-and-if-it-fails-object
     (syntax-rules ()
+      ((_ () <code> ...)
+       (try-and-if-it-fails-object ('the-error-object) <code> ...))
       ((_ (<obj>) <code>  ...)
        (begin
-         (let ((o (delay ( (lambda () <obj>) ))))
+         (let* ((o (delay ((lambda () <obj>))))
+                (force-result (lambda (error)
+                                (let ((obj (force o)))
+                                  (if (equal? obj 'the-error-object)
+                                      error obj)))))
            (with-failure-continuation
-            (lambda (a b) (force o))
+            (lambda (error b) (force-result error))
             (lambda ()
-              (let ((result  ((lambda () <code> ...))))
+              (let ((result ((lambda () <code> ...))))
                 (let ((final-result
-                       (cond ((null? result) (force o))
-                              ((java-null? result) (force o))
-                              ((eqv? #f result) (force o))
+                       (cond ((null? result) (force-result result))
+                              ((java-null? result) (force-result result))
+                              ((eqv? #f result) (force-result result))
                               (else result))))
                   final-result)))))))))
 
