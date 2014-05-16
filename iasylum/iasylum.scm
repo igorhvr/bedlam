@@ -54,6 +54,7 @@
    alist?
    try-and-if-it-fails-object
    dynamic-define
+   copy-functions
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -660,6 +661,14 @@
       ((_ string <body>)
        (eval `(define ,(string->symbol string) <body>)))))
 
+  ;; use like this:
+  ;; (copy-functions (+ -> plus) (- -> minus))
+  (define-syntax copy-functions
+    (syntax-rules (->)
+      ((_ (function -> copy) ...)
+       (begin
+         (define copy function) ...))))
+  
   (define-generic-java-method release)
   (define-generic-java-method available-permits)
   
