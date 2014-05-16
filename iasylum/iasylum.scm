@@ -53,6 +53,7 @@
    list-of-type?
    alist?
    try-and-if-it-fails-object
+   dynamic-define
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -651,6 +652,13 @@
                               ((eqv? #f result) (force-result result))
                               (else result))))
                   final-result)))))))))
+
+  ;; (dynamic-define "abc" 123)
+  ;; $ abc => 123
+  (define-syntax dynamic-define
+    (syntax-rules ()
+      ((_ string <body>)
+       (eval `(define ,(string->symbol string) <body>)))))
 
   (define-generic-java-method release)
   (define-generic-java-method available-permits)
