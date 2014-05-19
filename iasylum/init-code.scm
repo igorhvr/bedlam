@@ -136,6 +136,7 @@
 (max-stack-trace-depth 16)
 (import debugging)
 (require-extension (lib iasylum/jcode))
+;(suppressed-stack-trace-source-kinds '())
 
 ;; If this is called (j "new URL(\"classpath:iasylum/jdbc.scm\");") and similar things will work.
 (define (setup-classpath-url-handler)
