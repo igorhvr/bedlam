@@ -643,7 +643,7 @@
                                   (if (equal? obj 'the-error-object)
                                       error obj)))))
            (with-failure-continuation
-            (lambda (error b) (force-result error))
+            (lambda (error error-continuation) (force-result error))
             (lambda ()
               (let ((result ((lambda () <code> ...))))
                 (let ((final-result
