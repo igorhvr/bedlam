@@ -584,7 +584,6 @@
       ((_ n <code> ...)
        (let ((lambda-set (list-ec (: i n) (lambda () (list ((lambda () <code> ...)))))))
          (apply append (multiple-values->list (apply parallel lambda-set)))))))
-         
 
   (define-syntax multiple-values->list
     (syntax-rules ()
