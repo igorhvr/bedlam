@@ -22,7 +22,10 @@
 (require 'coerce)
 (require 'string-case)
 (require 'string-search)
-(require 'common-list-functions)
+;(require 'common-list-functions)       ; TODO XXX FIXME FIXXXME => This is incompatible with irregex
+                                        ; library. I don't know what is the implications commenting this.
+                                        ; Maybe the right thing to do is find another library to deal with
+                                        ; URL and URL encoding.
 (require-if 'compiling 'directory)	; path->uri uses current-directory
 
 ;;@code{(require 'uri)}
