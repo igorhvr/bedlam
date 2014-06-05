@@ -203,9 +203,6 @@
 ;; read-line.
 (load "iasylum/slib/3b2/lineio.scm")
 
-;; FIXME: I don't know if I can just do it like this.
-(load "iasylum/slib/3b2/uri.scm")
-
 ;(display "\n\nLOADED iasylum-bedlam.\n\n")
 
 (begin
