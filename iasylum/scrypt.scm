@@ -7,10 +7,13 @@
   (define scrypt-hash
     (match-lambda*
      ((passwd)
-      (scrypt-hash passwd 16384 8 1))
+      (scrypt-hash passwd (expt 2 14) 8 1))
+     ((passwd salt)
+      (scrypt-hash passwd salt (expt 2 14) 8 1))
      ((passwd N r p)
       (->string (j "com.lambdaworks.crypto.SCryptUtil.scrypt(passwd, n, r, p);" `((passwd ,(->jobject passwd)) (n ,(->jobject N)) (r ,(->jobject r)) (p ,(->jobject p))))))
-     ((passwd salt N r p)         
+     ((passwd salt N r p)
+      ;; TODO Understand why does it return larger than 79 bytes string for standard parameters.
       (->string (j "
 		 int log2(int n) {
 		     int log = 0;
