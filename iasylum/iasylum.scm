@@ -55,6 +55,7 @@
    try-and-if-it-fails-object
    dynamic-define
    copy-functions
+   to-csv-line
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -667,6 +668,16 @@
       ((_ (function -> copy) ...)
        (begin
          (define copy function) ...))))
+
+
+  (define (escape-double-quotes str)
+    (irregex-replace/all "\"" str "\\\""))
+
+  (define to-csv-line 
+    (match-lambda*
+     ((single-element) (string-append* "\"" (escape-double-quotes single-element) "\""))
+     ((first-element . rest) (string-append (to-csv-line  first-element) " , " (apply to-csv-line  rest)))
+     (anything (error "Invalid parameter to to-csv-line " anything))))
   
   (define-generic-java-method release)
   (define-generic-java-method available-permits)
