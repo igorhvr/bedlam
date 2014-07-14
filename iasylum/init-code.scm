@@ -424,6 +424,14 @@
 ;(suppressed-stack-trace-source-kinds '())
 
 (define magic-load load)
+
+(define (add-lib-recursively path)
+  (map (lambda (full-path-file)
+         (add-lib-fullpath (->string full-path-file)))
+       (->list (j (file->string "/base/bedlam/iasylum/extract-filepaths.java") `((input ,(->jstring path)))))))
+
+(add-lib-recursively "/base/app/WEB-INF/lib")
+
 (set! load original-load)
 
 (define bedlam-loaded-and-ready-to-use #t)
