@@ -57,10 +57,14 @@
 ;; Configuration files.
 (class-path-extension-append! (cons (string-append (iasylum-bedlam-location) "config/") (class-path-extension)))
 
-  ;;; Low level - java libraries.
+(define add-lib-fullpath
+  (lambda (full-path)
+    (class-path-extension-append! (cons full-path (class-path-extension)))))
+
+;;; Low level - java libraries.
 (define add-lib
   (lambda (name)
-    (class-path-extension-append! (cons (string-append (iasylum-bedlam-location) "jars/" name) (class-path-extension)))))
+    (add-lib-fullpath (string-append (iasylum-bedlam-location) "jars/" name))))
 
 (add-lib "u/bsf.jar")
 (add-lib "u/guava-15.0.jar")
