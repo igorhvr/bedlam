@@ -48,7 +48,7 @@
     param
     ))
 
-;;(compile-file "/home/igorhvr/idm/dupemgr/app/WEB-INF/scm/iasylum/jcode.scm" "/home/igorhvr/idm/dupemgr/app/WEB-INF/scm/iasylum/jcode.scc")
+;;(compile-file "/base/dupemgr/app/WEB-INF/scm/iasylum/jcode.scm" "/base/dupemgr/app/WEB-INF/scm/iasylum/jcode.scc")
 
 ;; IASylum
 
