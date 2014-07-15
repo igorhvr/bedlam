@@ -11,7 +11,7 @@
     (void))
   
   (define (get-timestamp)
-    (->string (j "new java.text.SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss.SSS\").format(new java.util.Date());")))
+    (->string (j "new java.text.SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss,SSS\").format(new java.util.Date());")))
   
   (define make-mark-logger (lambda (mark) (lambda m (timestamped-log mark m))))
 
