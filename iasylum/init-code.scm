@@ -433,7 +433,7 @@
        (->list (j (file->string "/base/bedlam/iasylum/extract-filepaths.java")
                   `((input ,(->jstring path)))))))
 
-(add-lib-recursively "/base/app/WEB-INF/lib")
+(add-lib-recursively "/base/bedlam/jars/web")
 
 (set! load original-load)
 
