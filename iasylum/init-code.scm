@@ -425,10 +425,13 @@
 
 (define magic-load load)
 
-(define (add-lib-recursively path)
+(define (add-lib-recursively path . except)
   (map (lambda (full-path-file)
-         (add-lib-fullpath (->string full-path-file)))
-       (->list (j (file->string "/base/bedlam/iasylum/extract-filepaths.java") `((input ,(->jstring path)))))))
+         (let ((full-path (->string full-path-file)))
+           (and (not (member full-path except))
+                (add-lib-fullpath full-path))))
+       (->list (j (file->string "/base/bedlam/iasylum/extract-filepaths.java")
+                  `((input ,(->jstring path)))))))
 
 (add-lib-recursively "/base/app/WEB-INF/lib")
 
