@@ -16,7 +16,7 @@
   (define make-mark-logger (lambda (mark) (lambda m (timestamped-log mark m))))
 
   (define (get-thread-info)
-    (string-append "[thread=" (number->string (->number (j "Thread.currentThread().getId();"))) "]"))
+    (->string (j "Thread.currentThread().getName();")))
   
   (define (timestamped-log mark m)
     (log-o (iasylum-write-string (list mark (get-thread-info) (get-timestamp) m))))
