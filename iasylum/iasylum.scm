@@ -56,6 +56,9 @@
    dynamic-define
    copy-functions
    to-csv-line
+   sha256
+   decimal->hex
+   decimal->maxradix
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -678,7 +681,19 @@
      ((single-element) (string-append* "\"" (escape-double-quotes single-element) "\""))
      ((first-element . rest) (string-append (to-csv-line  first-element) " , " (apply to-csv-line  rest)))
      (anything (error "Invalid parameter to to-csv-line " anything))))
-  
+
+  (define (sha256 string)
+    (->string (j (file->string "/base/bedlam/iasylum/sha256.java")
+                 `((input ,(->jstring string))))))
+
+  (define (decimal->hex decimal)
+    (->string (j "new java.math.BigInteger(input).toString(16);"
+                 `((input ,(->jstring (number->string decimal)))))))
+
+  (define (decimal->maxradix decimal)
+    (->string (j "new java.math.BigInteger(input).toString(java.lang.Character.MAX_RADIX);"
+                 `((input ,(->jstring (number->string decimal)))))))
+
   (define-generic-java-method release)
   (define-generic-java-method available-permits)
   
