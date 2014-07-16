@@ -163,6 +163,9 @@
 (define (jlist->jarray l)
   (j "jlist.toArray(new Object[jlist.size()]);" `((jlist ,l))))
 
+(define (string->juuid str)
+  (j "java.util.UUID.fromString(input);" `((input ,(->jstring str)))))
+
 (define-java-classes <java.util.concurrent.concurrent-hash-map>)
 
 ;; spec: (j "new java.util.concurrent.ConcurrentHashMap();")
@@ -274,3 +277,4 @@
 ;(->string (j "s(\"(genstr param)\") + to_concat1.toString() + to_concat2.toString() + to_concat1.getClass().getName().toString();"))
 ;(j "1+1;")
 ;
+

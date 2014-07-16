@@ -22,7 +22,8 @@
    
    date->jdate
    jdate->date
-
+   string->juuid
+ 
    instance-of
 
    iterable->list
