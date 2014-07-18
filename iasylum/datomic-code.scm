@@ -76,6 +76,12 @@
     (test/q "[:find ?eid :in $data ?targetemail  :where [$data ?eid :user-email ?targetemail]]"
             "nietzsche@CaballerosDeLaTristeFigura.net")))    
 
+;; partition is a symbol and can be ':walltime for example
+;; remember note: #db/id is a datomic macro
+(define* (datomic/id partition-symbol (id #f))
+  (clj (string-append* "#db/id [" partition-symbol
+                       (if id (string-append* " " id) "") "]")))
+
 ; shortcuts
 (define d/q datomic/query)
 (define d/sq datomic/smart-query)

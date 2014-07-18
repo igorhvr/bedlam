@@ -11,7 +11,8 @@
    datomic/db d/db
    datomic/make-latest-db-retriever
    datomic/make-with-one-connection-included-query-function
-   datomic/make-with-one-connection-included-transact-function)
+   datomic/make-with-one-connection-included-transact-function
+   datomic/id)
 
   (include "datomic-code.scm")
 )
