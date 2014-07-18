@@ -166,6 +166,12 @@
 (define (string->juuid str)
   (j "java.util.UUID.fromString(input);" `((input ,(->jstring str)))))
 
+(define (number->jbigdecimal number)
+  (let ((exact-number (inexact->exact number)))
+    (j "new java.math.BigDecimal(numerator).divide(new java.math.BigDecimal(denominator), java.math.MathContext.DECIMAL128);"
+       `((numerator ,(->jstring (number->string (numerator exact-number))))
+         (denominator ,(->jstring (number->string (denominator exact-number))))))))
+
 (define-java-classes <java.util.concurrent.concurrent-hash-map>)
 
 ;; spec: (j "new java.util.concurrent.ConcurrentHashMap();")
