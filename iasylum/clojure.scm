@@ -5,6 +5,10 @@
 (require-extension (lib iasylum/jcode))
 
 (module iasylum/clojure
-  (clojure/run clojure/repl-start clj)
+  (clojure/run
+   clojure/repl-start
+   clj
+   clojure/find-value-by-key
+   )
   
   (include "clojure-code.scm"))

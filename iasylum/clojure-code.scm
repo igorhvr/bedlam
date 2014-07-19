@@ -13,7 +13,11 @@
         "(start-server :transport-fn t/tty :port " (number->string tty-port)  ")"
         ))))
 
-
+;;
+;; clj-map is something like {:key1 value1 :key2 value2} and key is a string or symbol without the ":"
+;;
+(define (clojure/find-value-by-key clj-map key)
+  (clj "(val (find cljmap (keyword k)))" `((cljmap ,clj-map) (k ,(->jstring key)))))
 
 (define (create-runner)
   (j
