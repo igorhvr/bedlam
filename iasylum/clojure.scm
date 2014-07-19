@@ -9,6 +9,7 @@
    clojure/repl-start
    clj
    clojure/find-value-by-key
+   symbol->clj-keyword
    )
   
   (include "clojure-code.scm"))

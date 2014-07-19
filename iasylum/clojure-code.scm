@@ -21,6 +21,9 @@
 (define (clojure/find-value-by-key clj-map key)
   (clj "(val (find cljmap (keyword k)))" `((cljmap ,clj-map) (k ,(->jstring key)))))
 
+(define (symbol->clj-keyword symbol)
+  (clj "(keyword symbol)" `((symbol ,(->jstring symbol)))))
+
 (define (create-runner)
   (j
  "
