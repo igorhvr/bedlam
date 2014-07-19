@@ -56,7 +56,7 @@
          <...> ; Whatever other insanity and/or fixed parameters one may pass.
          )))
 
-(define (datomic/smart-transact conn tx param-alist)
+(define* (datomic/smart-transact conn tx (param-alist '()))
   (let ((final-param-alist (append param-alist `((conn ,conn)))))
     (clj (string-append "(use '[datomic.api :only [q db] :as d])
                          @(d/transact conn " tx ")")
@@ -65,8 +65,8 @@
 (define (datomic/make-with-one-connection-included-transact-function connection-retriever)
   (cut datomic/smart-transact
        (connection-retriever) ; Current connection
-       <> ; tx
-       <> ; param-alist
+       <>    ; tx
+       <...> ; param-alist (or nothing)
        ))
 
 ;; Usage example - test/q does not require a connection or anything besides what
