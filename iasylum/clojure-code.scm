@@ -14,7 +14,9 @@
         ))))
 
 ;;
-;; clj-map is something like {:key1 value1 :key2 value2} and key is a string or symbol without the ":"
+;; clj-map is something like (clj "{:key1 1 :key2 2}") and key is a string or symbol without the ":"
+;; example: (->scm-object (clojure/find-value-by-key (clj "{:key1 1 :key2 2}") 'key2))
+;; will return 2
 ;;
 (define (clojure/find-value-by-key clj-map key)
   (clj "(val (find cljmap (keyword k)))" `((cljmap ,clj-map) (k ,(->jstring key)))))
