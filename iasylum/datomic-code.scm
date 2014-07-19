@@ -69,6 +69,13 @@
        <...> ; param-alist (or nothing)
        ))
 
+(define (datomic/uuid)
+  (j "datomic.Peer.squuid()"))
+
+(define (datomic/extract-time-millis-from-uuid datomic-uuid)
+  (j "datomic.Peer.squuidTimeMillis(squuid)"
+     `((squuid ,datomic-uuid))))
+
 ;; Usage example - test/q does not require a connection or anything besides what
 ;; is required for the immediate task at hand.
 (define (test-query-parametrized connection)

@@ -12,7 +12,10 @@
    datomic/make-latest-db-retriever
    datomic/make-with-one-connection-included-query-function
    datomic/make-with-one-connection-included-transact-function
-   datomic/id)
+   datomic/id
+   datomic/uuid
+   datomic/extract-time-millis-from-uuid
+   )
 
   (include "datomic-code.scm")
 )
