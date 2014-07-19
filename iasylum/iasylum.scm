@@ -51,6 +51,7 @@
    function fn function* fn*
    times multiple-values->list
    list-of-type?
+   list-of
    alist?
    try-and-if-it-fails-object
    dynamic-define
@@ -624,6 +625,14 @@
   (define (alist? object)
     (list-of-type? object pair?))
 
+  ;; Example: (define list-of-string? (list-of string?))
+  ;;          (list-of-string? '("bla" "ble")) => #t
+  (define-syntax list-of
+    (syntax-rules ()
+      ((_ predicate)
+       (lambda (object)
+         (list-of-type? object predicate)))))
+    
   ;;
   ;; This macro attempts to execute the given piece of code, and if it fails by
   ;; throwing some kind of error/exception or returns false returns the provided
