@@ -19,7 +19,8 @@
    
    ->jobject
    ->scm-object
-   
+
+   time-millis->jdate
    date->jdate
    jdate->date
    string->juuid
