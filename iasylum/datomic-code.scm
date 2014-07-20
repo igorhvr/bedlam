@@ -2,6 +2,8 @@
   (->scm-object
    (let ((sources (jlist->jarray (->jobject sources)))
          (qry (if (string? qry) (->jstring qry) qry)))
+     (log-trace "Will execute query" (->string qry)
+                "with sources:" (jarray->string sources))
      (j "datomic.Peer.q(qry, sources);" `((sources ,sources)
                                           (qry ,qry))))))
 
@@ -58,6 +60,8 @@
 
 (define* (datomic/smart-transact conn tx (param-alist '()))
   (let ((final-param-alist (append param-alist `((conn ,conn)))))
+    (log-trace "Will execute transact" tx
+               "with params:" param-alist)
     (clj (string-append "(use '[datomic.api :only [q db] :as d])
                          @(d/transact conn " tx ")")
          final-param-alist)))
