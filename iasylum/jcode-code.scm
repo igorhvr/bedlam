@@ -34,8 +34,10 @@
 (define (->scm-object v)
   (if (java-object? v)
       (if (java-null? v) '()
-          (let ((obj-class (->string (j "v.getClass().getName();" `((v ,v))))))
+          (let ((obj-class (->string (j "v.getClass().getName();" `((v ,v)))))
+                (is-array? (->boolean (j "v.getClass().isArray();" `((v ,v))))))
             (cond
+             (is-array? (->scm-object (jarray->jlist v)))
              ((string=? obj-class "java.lang.String") (->string v))
              ((or
                (string=? obj-class "java.lang.Byte")
@@ -162,6 +164,12 @@
 
 (define (jlist->jarray l)
   (j "jlist.toArray(new Object[jlist.size()]);" `((jlist ,l))))
+
+(define (jarray->jlist a)
+  (j "Arrays.asList(a);" `((a ,a))))
+
+(define (jarray->string a)
+  (->string (j "java.util.Arrays.toString(a);" `((a ,a)))))
 
 (define (string->juuid str)
   (j "java.util.UUID.fromString(input);" `((input ,(->jstring str)))))

@@ -138,6 +138,8 @@
      key-jvalue->jmap
      map-jarray
      jlist->jarray
+     jarray->jlist
+     jarray->string
      number->jbigdecimal
    )
   (import s2j)
