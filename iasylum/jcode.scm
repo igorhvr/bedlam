@@ -142,6 +142,7 @@
      jarray->jlist
      jarray->string
      number->jbigdecimal
+     integer->jbigint
    )
   (import s2j)
   (include "jcode-code.scm"))

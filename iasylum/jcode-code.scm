@@ -183,6 +183,12 @@
        `((numerator ,(->jstring (number->string (numerator exact-number))))
          (denominator ,(->jstring (number->string (denominator exact-number))))))))
 
+(define (integer->jbigint number)
+  (if (not (integer? number))
+      (throw (make-error 'integer->jbigint "Integer expected: ~a" number))
+      (j "new java.math.BigInteger(number);"
+         `((number ,(->jstring (number->string number)))))))
+
 (define-java-classes <java.util.concurrent.concurrent-hash-map>)
 
 ;; spec: (j "new java.util.concurrent.ConcurrentHashMap();")
