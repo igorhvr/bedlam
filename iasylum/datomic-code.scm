@@ -96,6 +96,30 @@
   (clj (string-append* "#db/id [" partition-symbol
                        (if id (string-append* " " id) "") "]")))
 
+; TODO: the following is too utilitarian, should be here?
+
+(define-nongenerative-struct transaction-set a9c14080-0fb1-11e4-99e0-78ca39b1ca29
+  (transaction-string parameters))
+
+(define (datomic/make-empty-transaction-set)
+  (make-transaction-set "" '()))
+
+(define (datomic/push-transaction! transaction-set
+                                   transaction-string
+                                   parameters)
+  (set-transaction-set-transaction-string! transaction-set
+                                           (string-append (transaction-set-transaction-string transaction-set)
+                                                          transaction-string))
+  (set-transaction-set-parameters! transaction-set
+                                   (append (transaction-set-parameters transaction-set)
+                                           parameters))
+  transaction-set)
+
+(define (datomic/extract-transaction-and-parameters-pair transaction-set)
+  `(,(string-append "[" (transaction-set-transaction-string transaction-set) "]")
+    .
+    ,(transaction-set-parameters transaction-set)))
+
 ; shortcuts
 (define d/q datomic/query)
 (define d/sq datomic/smart-query)

@@ -15,6 +15,9 @@
    datomic/id
    datomic/uuid
    datomic/extract-time-millis-from-uuid
+   datomic/make-empty-transaction-set
+   datomic/push-transaction!
+   datomic/extract-transaction-and-parameters-pair
    )
 
   (include "datomic-code.scm")
