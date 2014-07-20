@@ -1,6 +1,7 @@
 ;;; Code by Igor Hjelmstrom Vinhas Ribeiro - this is licensed under GNU GPL v2.
 
 (define (clojure/run code)
+  (log-trace "Will run clojure code:" code)
   (j "clojure.lang.Compiler.load(new StringReader(s));" `((s ,(->jstring code)))))
 
 (define clojure/repl-start
