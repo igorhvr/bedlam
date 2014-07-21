@@ -101,14 +101,26 @@
   (clj (string-append* "#db/id [" partition-symbol
                        (if id (string-append* " " id) "") "]")))
 
-; TODO: the following is too utilitarian, should be here?
-
 (define-nongenerative-struct transaction-set a9c14080-0fb1-11e4-99e0-78ca39b1ca29
   (transaction-string parameters))
 
+;;
+;; It is a composition of a tx in string format (starts with empty string)
+;; and a list of parameters (starts with empty list).
+;; @see datomic/push-transaction! datomic/extract-transaction-and-parameters-pair
+;;
 (define (datomic/make-empty-transaction-set)
   (make-transaction-set "" '()))
 
+;;
+;; Adds a trasanction (in string format) and a list of parameters into a transaction-set.
+;; The transaction-string would be a clojure map or list like "{:key value :key2 value2}"
+;; or "[:fn p1 p2 ...]".
+;;
+;; parameters should be something like `((key ,value) (key2 ,value2)) - it is the same
+;; input as datomic/smart-transact except by in datomic/smart-transact the tx should be
+;; a list of maps or lists.
+;;
 (define (datomic/push-transaction! transaction-set
                                    transaction-string
                                    parameters)
@@ -120,6 +132,12 @@
                                            parameters))
   transaction-set)
 
+;;
+;; Transform the final string into a list (just add [ ] around) and return
+;; the pair formed by tx string + params, so (car (datomic/extract-transaction-and-parameters-pair ...))
+;; is the first parameter of datomic/smart-transact and (cdr (datomic/extract-transaction-and-parameters-pair ...))
+;; is the second one.
+;;
 (define (datomic/extract-transaction-and-parameters-pair transaction-set)
   `(,(string-append "[" (transaction-set-transaction-string transaction-set) "]")
     .
