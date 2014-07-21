@@ -69,7 +69,7 @@
 (define* (datomic/smart-transact conn tx (param-alist '()))
   (let ((final-param-alist (append param-alist `((conn ,conn)))))
     (log-trace "Will execute transact" tx
-               "with params:" param-alist)
+               "with params:" (iasylum-write-string param-alist))
     (clj (string-append "(use '[datomic.api :only [q db] :as d])
                          @(d/transact conn " tx ")")
          final-param-alist)))
