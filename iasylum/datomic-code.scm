@@ -1,6 +1,7 @@
-;; TODO: smart-query convert the sources to ->jobject but smart-transact don't.
-;;       make smart-transact convert the parameters and return too.
-
+;;
+;; Automatically convert input (sources) to jobject
+;; and output to scm-object.
+;;
 (define (datomic/query qry . sources)
   (->scm-object
    (let ((sources (jlist->jarray (->jobject sources)))
@@ -61,6 +62,10 @@
          <...> ; Whatever other insanity and/or fixed parameters one may pass.
          )))
 
+;;
+;; Differently of smart-query, this DOES NOT convert input (params) to jobject
+;; and output to scm-object. You have to send java objects in params.
+;;
 (define* (datomic/smart-transact conn tx (param-alist '()))
   (let ((final-param-alist (append param-alist `((conn ,conn)))))
     (log-trace "Will execute transact" tx
