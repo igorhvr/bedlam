@@ -2,14 +2,18 @@
 ;; Automatically convert input (sources) to jobject
 ;; and output to scm-object.
 ;;
-(define (datomic/query qry . sources)
+(define (datomic/query qry-input . sources)
   (->scm-object
    (let ((sources (jlist->jarray (->jobject sources)))
-         (qry (if (string? qry) (->jstring qry) qry)))
+         (qry (if (string? qry-input)
+                  (->jstring qry-input)
+                  qry-input)))
      (log-trace "Will execute query" (->string qry)
                 "with sources:" (jarray->string sources))
-     (j "datomic.Peer.q(qry, sources);" `((sources ,sources)
-                                          (qry ,qry))))))
+     (let ((result (j "datomic.Peer.q(qry, sources);" `((sources ,sources)
+                                                        (qry ,qry)))))
+       (log-trace "=> Query result: " (iasylum-write-string result))
+       result))))
 
 (define (datomic/smart-query qry . sources)
   (let ((result (apply datomic/query (flatten (list qry sources)))))
@@ -70,9 +74,11 @@
   (let ((final-param-alist (append param-alist `((conn ,conn)))))
     (log-trace "Will execute transact" tx
                "with params:" (iasylum-write-string param-alist))
-    (clj (string-append "(use '[datomic.api :only [q db] :as d])
-                         @(d/transact conn " tx ")")
-         final-param-alist)))
+    (let ((result (clj (string-append "(use '[datomic.api :only [q db] :as d])
+                                       @(d/transact conn " tx ")")
+                       final-param-alist)))
+      (log-trace "=> Transaction result " (iasylum-write-string result))
+      result)))
 
 (define (datomic/make-with-one-connection-included-transact-function connection-retriever)
   (cut datomic/smart-transact
