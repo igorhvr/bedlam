@@ -31,10 +31,10 @@
           (list did-I-create-it? connection-result)
           connection-result))))
 
-(define (datomic/temp-id)
-  (define-java-classes (<datomic.peer> |datomic.Peer|))    
+(define (datomic/temp-id-native)
+  (define-java-classes (<datomic.peer> |datomic.Peer|))
   (define-generic-java-method tempid)
-
+  
   (let ((<datomic.peer>-java-null (java-null <datomic.peer>)))
     ;; spec: (j "temp_id = datomic.Peer.tempid(\":db.part/user\");")
     (tempid <datomic.peer>-java-null partition)))
@@ -94,17 +94,30 @@
   (j "datomic.Peer.squuidTimeMillis(squuid)"
      `((squuid ,datomic-uuid))))
 
+;;
 ;; Usage example - test/q does not require a connection or anything besides what
 ;; is required for the immediate task at hand.
+;;
 (define (test-query-parametrized connection)
   (let ((test/q (datomic/make-with-one-connection-included-query-function (connection))))
     (test/q "[:find ?eid :in $data ?targetemail  :where [$data ?eid :user-email ?targetemail]]"
             "nietzsche@CaballerosDeLaTristeFigura.net")))    
 
-;; partition is a symbol and can be ':walltime for example
-;; remember note: #db/id is a datomic macro
-(define* (datomic/id partition-symbol (id #f))
-  (clj (string-append* "#db/id [" partition-symbol
+;; partition-symbol CANNOT include the colon ":" in the symbol/keyword
+;; example:
+;; (datomic/id 'example)
+;;
+;; id -1 to -1000000, inclusive, are reserved for
+;; user-created tempids. Use other negative number or just don't
+;; pass the ID to create a new secure fresh one.
+;;
+;; partition-symbol is option only to backward compatibility, it SHOULD be defined
+;; otherwise an ERROR is logged.
+;;
+(define* (datomic/temp-id (partition-symbol 'db.part/user) (id #f))
+  (if (equal? partition-symbol 'db.part/user)
+      (log-error "*** Please use it ONLY FOR TESTS! Define a partition explicitly. db.part/user is only for TESTS purposes."))
+  (clj (string-append* "#db/id [:" partition-symbol
                        (if id (string-append* " " id) "") "]")))
 
 (define-nongenerative-struct transaction-set a9c14080-0fb1-11e4-99e0-78ca39b1ca29

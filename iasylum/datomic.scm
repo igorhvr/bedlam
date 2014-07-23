@@ -6,13 +6,13 @@
    datomic/smart-transact d/st
    datomic/connection
    datomic/temp-id d/id
+   datomic/temp-id-native
    datomic/transact d/t
    datomic/transact-async
    datomic/db d/db
    datomic/make-latest-db-retriever
    datomic/make-with-one-connection-included-query-function
    datomic/make-with-one-connection-included-transact-function
-   datomic/id
    datomic/uuid
    datomic/extract-time-millis-from-uuid
    datomic/make-empty-transaction-set
