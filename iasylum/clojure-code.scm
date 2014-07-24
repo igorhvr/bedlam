@@ -81,30 +81,41 @@
                            (error "\nFetching full environment not yet supported.\n")) )
                        (  (eqv? vars #f)
                           (begin
-                            (set! result (j "ClojureScriptRunner.runClosureScript(new java.util.concurrent.ConcurrentHashMap(), str);" `((str ,(->jstring str)))))) )
-                       ( (list? vars)
-                         (begin
-                           (let ((parameters-map (j "params=new java.util.concurrent.ConcurrentHashMap();")))
-                             (for-each
-                              (lambda (v)
-                                (match-let ( ( (vname vvalue) v ) )
-                                           (begin
-                                             (let* ((sname (if (string? vname) vname (symbol->string vname)))
-                                                    (name (->jstring sname )))
-                                               (j "params.put(vname, vvalue);"
-                                                  `((vname ,name)
-                                                    (vvalue ,vvalue)))
-                                               (j "iu.M.d.put(vname, vvalue);"
-                                                  `((vname ,name)
-                                                    (vvalue ,vvalue)))
-                                               (let ((clj-cmd (string-append " (def " sname " (.get iu.M/d \"" sname "\")) ")))
-                                                 (clj clj-cmd))))))
+                            (set! result (j "ClojureScriptRunner.runClosureScript(new java.util.concurrent.ConcurrentHashMap(), str);"
+                                            `((str ,(->jstring str)))))) )
+                       [ (list? vars)
 
-                              
-                              vars)
-                             
-                             ;;(set! result (j "ClojureScriptRunner.runClosureScript(params, str);" `((str ,(->jstring str)) (params ,parameters-map))))
-                             (set! result (j "ClojureScriptRunner.runClosureScript(new java.util.concurrent.ConcurrentHashMap(), str);"
-                                             `((str ,(->jstring str))))))) ))
+                         (let* ((random-string-to-avoid-thread-conflict (string-append* (random) (random) (random)))
+
+                                (clj-let-declaration (reduce string-append* ""
+                                                             (map (lambda (key-value-pair)
+                                                                    (let ((java-map-key (->jstring (string-append*
+                                                                                                    (car key-value-pair)
+                                                                                                    random-string-to-avoid-thread-conflict))))
+                                                                      (j "iu.M.d.put(k, v);"
+                                                                         `((k ,java-map-key)
+                                                                           (v ,(cadr key-value-pair))))
+
+                                                                      (string-append* " "
+                                                                                      (car key-value-pair)
+                                                                                      " "
+                                                                                      "(.get iu.M/d \"" (->string java-map-key) "\")")))
+                                                                  vars)))
+
+                                (final-command (string-append* "(let ["
+                                                               clj-let-declaration
+                                                               "] " str ")")))
+
+                           (set! result (j "ClojureScriptRunner.runClosureScript(new java.util.concurrent.ConcurrentHashMap(), finalcommand);"
+                                           `((finalcommand ,(->jstring final-command)))))
+
+                           ; clear memory
+                           (for-each (lambda (key-value-pair)
+                                       (j "iu.M.d.remove(k);" `((k ,(->jstring (string-append*
+                                                                                (car key-value-pair)
+                                                                                random-string-to-avoid-thread-conflict))))))
+                                     vars))
+
+                         ])
 
                  result)))
