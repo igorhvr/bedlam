@@ -114,11 +114,15 @@
 ;; partition-symbol is option only to backward compatibility, it SHOULD be defined
 ;; otherwise an ERROR is logged.
 ;;
+;; note: #db/id[<partition> [<id>]] macro also creates a tempid, it was used before (see history).
+;;
 (define* (datomic/temp-id (partition-symbol 'db.part/user) (id #f))
   (if (equal? partition-symbol 'db.part/user)
       (log-error "*** Please use it ONLY FOR TESTS! Define a partition explicitly. db.part/user is only for TESTS purposes."))
-  (clj (string-append* "#db/id [:" partition-symbol
-                       (if id (string-append* " " id) "") "]")))
+  (let ((params `((partition ,(symbol->clj-keyword partition-symbol)))))
+    (if (not id)
+        (clj "(d/tempid partition)" params)
+        (clj "(d/tempid partition id)" (append params `((id ,(->jlong id))))))))
 
 (define-nongenerative-struct transaction-set a9c14080-0fb1-11e4-99e0-78ca39b1ca29
   (transaction-string parameters))
