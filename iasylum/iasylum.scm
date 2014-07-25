@@ -55,7 +55,7 @@
    alist?
    try-and-if-it-fails-object
    dynamic-define
-   copy-functions
+   create-shortcuts
    to-csv-line
    sha256
    decimal->hex
@@ -674,8 +674,8 @@
        (eval `(define ,(string->symbol string) <body>)))))
 
   ;; use like this:
-  ;; (copy-functions (+ -> plus) (- -> minus))
-  (define-syntax copy-functions
+  ;; (create-shortcuts (+ -> plus) (- -> minus))
+  (define-syntax create-shortcuts
     (syntax-rules (->)
       ((_ (function -> copy) ...)
        (begin
