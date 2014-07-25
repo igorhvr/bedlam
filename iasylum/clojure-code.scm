@@ -23,8 +23,7 @@
   (clj "(val (find cljmap (keyword k)))" `((cljmap ,clj-map) (k ,(->jstring key)))))
 
 (define (symbol->clj-keyword symbol)
-  (clj "(keyword n4w2oy2bqwwqcn6snuc2rfvz0dj5bh6vlg8kq44hr6xsty209au)"
-       `((n4w2oy2bqwwqcn6snuc2rfvz0dj5bh6vlg8kq44hr6xsty209au ,(->jstring symbol)))))
+  (clj "(keyword symbol)" `((symbol ,(->jstring symbol)))))
 
 (define (create-runner)
   (j
