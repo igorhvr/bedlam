@@ -162,10 +162,10 @@
     .
     ,(transaction-set-parameters transaction-set)))
 
-; shortcuts
-(define d/q datomic/query)
-(define d/sq datomic/smart-query)
-(define d/id datomic/temp-id)
-(define d/t datomic/transact)
-(define d/db datomic/db)
-(define d/st datomic/smart-transact)
+(create-shortcuts (datomic/query -> d/q)
+                  (datomic/smart-query -> d/sq)
+                  (datomic/temp-id -> d/id)
+                  (datomic/transact -> d/t)
+                  (datomic/db -> d/db)
+                  (datomic/smart-transact -> d/st))
+
