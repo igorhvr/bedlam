@@ -10,6 +10,8 @@
    clj
    clojure/find-value-by-key
    symbol->clj-keyword
+   clj-keyword->symbol
+   clj-keyword->string
    )
   
   (include "clojure-code.scm"))

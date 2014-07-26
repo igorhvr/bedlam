@@ -25,6 +25,18 @@
 (define (symbol->clj-keyword symbol)
   (clj "(keyword symbol)" `((symbol ,(->jstring symbol)))))
 
+;;
+;; BE CAREFUL HERE: a keyword is composed by namespace and name (see clojure spec).
+;; This function simply drop the keyword namespace, so (clj-keyword->symbol (symbol->clj-keyword 'namespace/name))
+;; is only 'name. If you want the string representation of a keyword (usually something like :namespace/name)
+;; use clj-keyword->string
+;;
+(define (clj-keyword->symbol keyword)
+  (->symbol (clj "(name keyword)" `((keyword ,keyword)))))
+
+(define (clj-keyword->string keyword)
+  (->string keyword))
+
 (define (create-runner)
   (j
  "
