@@ -166,6 +166,16 @@
     .
     ,(transaction-set-parameters transaction-set)))
 
+;;
+;; The input must be a list with lists of two elements being the first one
+;; a clojure keyword and the second one the value.
+;;
+(define (datomic/query-result->alist input)
+  (map (lambda (element)
+         (cons (clj-keyword->symbol (car element))
+               (cadr element)))
+       input))
+
 (create-shortcuts (datomic/query -> d/q)
                   (datomic/smart-query -> d/sq)
                   (datomic/temp-id -> d/id)

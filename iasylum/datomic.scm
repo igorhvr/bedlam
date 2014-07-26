@@ -18,6 +18,7 @@
    datomic/make-empty-transaction-set
    datomic/push-transaction!
    datomic/extract-transaction-and-parameters-pair
+   datomic/query-result->alist
    )
 
   (include "datomic-code.scm")
