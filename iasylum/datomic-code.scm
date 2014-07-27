@@ -8,7 +8,7 @@
          (qry (if (string? qry-input)
                   (->jstring qry-input)
                   qry-input)))
-     (log-trace "Will execute query" (->string qry)
+     (log-trace "Will execute query: " (->string qry)
                 "with sources:" (jarray->string sources))
      (let ((result (j "datomic.Peer.q(qry, sources);" `((sources ,sources)
                                                         (qry ,qry)))))
