@@ -15,12 +15,50 @@
        (log-trace "=> Query result: " (iasylum-write-string result))
        result))))
 
+;;
+;; This is deprecated because it's TOO DANGEROUS when the caller is expecting
+;; many results as response. When the list has only one single element or nothing
+;; this function simply change its behavior. The only element is returned instead the list,
+;; and no result is converted to #f.
+;;
+;; If the caller is expecting more than one element, it forces the (unaware) caller to
+;; treat different and check if the result has one element. A simple example:
+;;
+;; (map (lambda (e) (display e)) (datomic/smart-query ...)) would fail miserably
+;; (and probably silently and late) when the result has only one or no element.
+;;
 (define (datomic/smart-query qry . sources)
+  (log-warn "datomic/smart-query **IS DEPRECATED!** Please use datomic/smart-query-single or datomic/smart-query-multiple instead!")
   (let ((result (apply datomic/query (flatten (list qry sources)))))
     (match result
       [((tresult)) tresult]
       [() #f]
       [anything-else result])))
+
+;;
+;; Expect only one result and return this only single element or #f if it is not present.
+;; This is useful if you are searching by a specific ID for example.
+;;
+;; If the query is searching for only one attribute so return the value of this attribute,
+;; otherwise a list with the specified attributes in the query.
+;;
+;; Example: (datomic/smart-query-single "[:find ?v :where ?e :att ?v]" db) will return ?v and
+;;          (datomic/smart-query-single "[:find ?e ?v :where ?e :att ?v]" db) will return (list ?e ?v)
+;;
+(define (datomic/smart-query-single qry . sources)
+  (let ((result (apply datomic/query (flatten (list qry sources)))))
+    (match result
+      [((single-result-only-att)) single-result-only-att]
+      [(tuple) tuple]
+      [() #f]
+      [else (throw (make-error 'datomic/smart-query "Multiple results are not expected here.
+Please use datomic/smart-query-multiple instead if multiple results are expected. This is probably a collateral bug: do you have duplicated ids?"))])))
+
+;;
+;; Always will return a list of results. Use this when the result can be a set of elements.
+;;
+(define (datomic/smart-query-multiple qry . sources)
+  (apply datomic/query (flatten (list qry sources))))
 
 (define* (datomic/connection uri (should-create? #t) (want-to-know-if-created? #f))
   (let ((did-I-create-it? (if should-create?
@@ -58,9 +96,21 @@
   (lambda ()
     (datomic/db (connection-retriever))))
 
+;;
+;; This is deprecated: see datomic/smart-query to more information.
+;; Use datomic/make-query-function-with-one-connection-included instead.
+;;
 (define (datomic/make-with-one-connection-included-query-function connection-retriever)
+  (log-warn "datomic/make-with-one-connection-included-query-function **IS DEPRECATED!** Please read the doc for more info. Use datomic/make-query-function-with-one-connection-included instead.")
+  (datomic/make-query-function-with-one-connection-included datomic/smart-query connection-retriever))
+
+;;
+;; - smart-query-lambda can be datomic/smart-query-multiple or datomic/smart-query-single depending on
+;;                      what kind of result are expected.
+;;
+(define (datomic/make-query-function-with-one-connection-included smart-query-lambda connection-retriever)
   (let ((db-retriever (datomic/make-latest-db-retriever connection-retriever)))
-    (cut datomic/smart-query
+    (cut smart-query-lambda
          <> ; Query.
          (db-retriever) ; Recent db fetched.
          <...> ; Whatever other insanity and/or fixed parameters one may pass.
@@ -177,7 +227,7 @@
        input))
 
 (create-shortcuts (datomic/query -> d/q)
-                  (datomic/smart-query -> d/sq)
+                  (datomic/smart-query -> d/sq) ; <-- deprecated!
                   (datomic/temp-id -> d/id)
                   (datomic/transact -> d/t)
                   (datomic/db -> d/db)
