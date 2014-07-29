@@ -80,7 +80,7 @@
       (log-trace "=> Transaction result " (iasylum-write-string result))
       result)))
 
-(define (datomic/make-with-one-connection-included-transact-function connection-retriever)
+(define (datomic/make-transact-function-with-one-connection-included connection-retriever)
   (cut datomic/smart-transact
        (connection-retriever) ; Current connection
        <>    ; tx
