@@ -177,6 +177,12 @@
 (define (string->juuid str)
   (j "java.util.UUID.fromString(input);" `((input ,(->jstring str)))))
 
+(define (string->jbigdecimal string)
+  (j "new java.math.BigDecimal(number);" `((number ,(->jstring string)))))
+
+(define (string->jbigint string)
+  (j "new java.math.BigInteger(number);" `((number ,(->jstring string)))))
+
 (define (number->jbigdecimal number)
   (let ((exact-number (inexact->exact number)))
     (j "new java.math.BigDecimal(numerator).divide(new java.math.BigDecimal(denominator), java.math.MathContext.DECIMAL128);"

@@ -143,6 +143,8 @@
      jarray->string
      number->jbigdecimal
      integer->jbigint
+     string->jbigdecimal
+     string->jbigint
    )
   (import s2j)
   (include "jcode-code.scm"))
