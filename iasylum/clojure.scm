@@ -8,10 +8,13 @@
   (clojure/run
    clojure/repl-start
    clj
+
+   ; aux:
    clojure/find-value-by-key
    symbol->clj-keyword
    clj-keyword->symbol
    clj-keyword->string
+   clj-number->number
    )
   
   (include "clojure-code.scm"))
