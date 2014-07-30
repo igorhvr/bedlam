@@ -2,8 +2,10 @@
 
 (module iasylum/datomic
   (datomic/query d/q
-   datomic/smart-query d/sq
+   datomic/smart-query-single d/sq1
+   datomic/smart-query-multiple d/sqm
    datomic/smart-transact d/st
+   
    datomic/connection
    datomic/temp-id d/id
    datomic/temp-id-native
@@ -21,6 +23,7 @@
    datomic/query-result->alist
 
    ; deprecated:
+   datomic/smart-query d/sq
    datomic/make-with-one-connection-included-query-function
    )
 

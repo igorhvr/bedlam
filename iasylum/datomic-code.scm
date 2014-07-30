@@ -228,6 +228,8 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 
 (create-shortcuts (datomic/query -> d/q)
                   (datomic/smart-query -> d/sq) ; <-- deprecated!
+                  (datomic/smart-query-single -> d/sq1)
+                  (datomic/smart-query-multiple -> d/sqm)
                   (datomic/temp-id -> d/id)
                   (datomic/transact -> d/t)
                   (datomic/db -> d/db)
