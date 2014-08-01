@@ -660,10 +660,10 @@
             (lambda ()
               (let ((result ((lambda () <code> ...))))
                 (let ((final-result
-                       (cond ((null? result) (force-result result))
-                              ((java-null? result) (force-result result))
-                              ((eqv? #f result) (force-result result))
-                              (else result))))
+                       (cond [(null? result) (force-result result)]
+                             [(java-null? result) (force-result result)]
+                             [(eqv? #f result) (force-result result)]
+                             [else result])))
                   final-result)))))))))
 
   ;; (dynamic-define "abc" 123)
