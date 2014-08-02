@@ -60,6 +60,7 @@
    sha256
    decimal->hex
    decimal->maxradix
+   vector->list_deeply
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -680,6 +681,12 @@
        (begin
          (define copy function) ...))))
 
+  (define (vector->list_deeply obj)
+    (cond [(list? obj) (map (lambda (element)
+                              (vector->list_deeply element))
+                            obj)]
+          [(vector? obj) (vector->list_deeply (vector->list obj))]
+          [else obj]))
 
   (define (escape-double-quotes str)
     (irregex-replace/all "\"" str "\\\""))
