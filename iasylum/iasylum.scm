@@ -699,7 +699,11 @@
      (anything (error "Invalid parameter to to-csv-line " anything))))
 
   (define (sha256 string)
-    (->string (j (file->string "/base/bedlam/iasylum/sha256.java")
+    (->string (j 
+               "md = java.security.MessageDigest.getInstance(\"SHA-256\");
+                md.update(input.getBytes(\"UTF-8\"));
+                digest = md.digest();
+                new java.math.BigInteger(1, digest).toString(16);" 
                  `((input ,(->jstring string))))))
 
   (define (decimal->hex decimal)
