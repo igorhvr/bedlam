@@ -61,6 +61,7 @@
    decimal->hex
    decimal->maxradix
    vector->list_deeply
+   alist-to-url-query-string
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -709,6 +710,17 @@
     (->string (j "new java.math.BigInteger(input).toString(java.lang.Character.MAX_RADIX);"
                  `((input ,(->jstring (number->string decimal)))))))
 
+  (define (alist-to-url-query-string raw-alist)
+    (define join-parameters
+      (match-lambda
+       ((element) element)
+       ((first-element . rest) (string-append* first-element "&" (join-parameters rest)))))
+    
+    (let* ((alist (pam raw-alist (lambda (v) (match-let (((key . value) v)) `(,(-to_ key) . ,(->string (j "java.net.URLEncoder.encode(v, \"ISO-8859-1\");" `((v ,(->jstring value))))))))))         
+           (individual-parameters (map (lambda (v) 
+                                         (match-let (((key . value) v)) (string-append* key "=" value))) alist)))
+      (join-parameters individual-parameters)))
+  
   (define-generic-java-method release)
   (define-generic-java-method available-permits)
   
