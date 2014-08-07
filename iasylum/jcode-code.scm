@@ -132,7 +132,7 @@
           (year (->number (java-array-ref vls 6))))
         (let ((month-of-year (+ 1 orig-month-of-year)))
           ;;make-date nanosecond second minute hour day month year zone-offset
-           (make-date (* 1000 milliseconds) seconds minutes hours day-of-month month-of-year year 0)))))
+           (make-date (* 1000000 milliseconds) seconds minutes hours day-of-month month-of-year year 0)))))
 
 
 (define (->jobject v)
