@@ -21,6 +21,7 @@
    ->scm-object
 
    time-millis->jdate
+   jdate->time-millis
    date->jdate
    jdate->date
    string->juuid

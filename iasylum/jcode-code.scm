@@ -109,6 +109,9 @@
 (define (time-millis->jdate time-millis)
   (j "new java.util.Date(input);" `((input ,(->jint time-millis)))))
 
+(define (jdate->time-millis jdate)
+  (j "jdate.getTime();" `((jdate ,jdate))))
+
 (define (date->jdate the-date)
    (let ((t (date->time-utc the-date)))
      (java-new <date> (->jlong (+ (* 1000 (time-second t))
