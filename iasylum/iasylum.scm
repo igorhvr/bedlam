@@ -53,7 +53,7 @@
    list-of-type?
    list-of
    alist?
-   try-and-if-it-fails-object
+   try-and-if-it-fails-or-empty-or-java-null-return-object
    dynamic-define
    create-shortcuts
    to-csv-line
@@ -646,7 +646,7 @@
   ;; If you don't put <obj>, e.g.: (try-and-if-it-fails-object () (/5 x))
   ;; the result is the error object.
   ;;
-  (define-syntax try-and-if-it-fails-object
+  (define-syntax try-and-if-it-fails-or-empty-or-java-null-return-object
     (syntax-rules ()
       ((_ () <code> ...)
        (try-and-if-it-fails-object ('the-error-object) <code> ...))
@@ -663,6 +663,7 @@
               (let ((result ((lambda () <code> ...))))
                 (let ((final-result
                        (cond [(java-null? result) (force-result result)]
+                             [(null? result) (force-result result)]
                              [(eqv? #f result) (force-result result)]
                              [else result])))
                   final-result)))))))))
