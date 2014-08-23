@@ -66,6 +66,8 @@
    vector->list_deeply
    alist-to-url-query-string
    make-parameter*
+   add-between-elements
+   remove-duplicates
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -774,6 +776,17 @@
          (case-lambda
            (() (calculate-result #f))
            ((init) (calculate-result init)))))))
+
+  (define (add-between-elements what list-of-elements)
+    (if (<= (length list-of-elements) 1)
+        list-of-elements
+        (append (list (car list-of-elements) what)
+                (add-between-elements what (cdr list-of-elements)))))
+
+  ; Adapted from http://stackoverflow.com/a/8651932/450148
+  (define (remove-duplicates lst)
+    (fold-right (lambda (f r)
+                  (cons f (filter (lambda (x) (not (equal? x f))) r))) '() lst))
   
   (define-generic-java-method release)
   (define-generic-java-method available-permits)
