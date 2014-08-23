@@ -21,7 +21,6 @@
    d/n
    beanshell-server
    first-n-or-less
-   assert
    alist->http-parameters-string
    run-remote-request
    pump-binary
@@ -203,9 +202,6 @@
     (if (or (eqv? '() l) (= n 0)) '()
         (cons (car l) (first-n-or-less (cdr l) (- n 1)))))
   
-  (define (assert v m)
-    (unless v (error m)) v)
-
   (define alist->http-parameters-string
     (lambda (alist)   
       (define me
