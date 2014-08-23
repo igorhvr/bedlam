@@ -5,7 +5,8 @@
 
   ; (http-call-get/string "http://news.ycombinator.com") retrieves those page contents as a string.
   (define (http-call-get/string destinationUrl)
-    (j "httpclient = org.apache.http.impl.client.HttpClients.createDefault();
+    (->string
+     (j "httpclient = org.apache.http.impl.client.HttpClients.createDefault();
         httpget = new org.apache.http.client.methods.HttpGet(destinationurl);
         response = httpclient.execute(httpget);
         result=\"\";
@@ -19,7 +20,7 @@
         }
 
         result;"
-       `((destinationurl ,(->jstring destinationUrl)))))
+        `((destinationurl ,(->jstring destinationUrl))))))
   )
 
   
