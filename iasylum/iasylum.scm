@@ -54,7 +54,9 @@
    list-of-type?
    list-of
    alist?
+   try-and-if-it-fails-object
    try-and-if-it-fails-or-empty-or-java-null-return-object
+   try-and-if-it-throws-object
    dynamic-define
    create-shortcuts
    to-csv-line
@@ -637,40 +639,68 @@
       ((_ predicate)
        (lambda (object)
          (list-of-type? object predicate)))))
-    
+
   ;;
-  ;; This macro attempts to execute the given piece of code, and if it fails by
-  ;; throwing some kind of error/exception or returns false returns the provided
-  ;; <object> (the error itself is dropped).
+  ;; This macro attempts to execute the given piece of code, and if it fails
+  ;; throwing some kind of error/exception or the "predicate-fail-condition?"
+  ;; (a lambda with a single parameter) is true, returns the provided <object>
+  ;; (the error itself is dropped).
   ;;
   ;; E.g.: (try-and-if-it-fails-object ('whatever) (/ 5 x)) will
   ;; return 5/x or 'whatever if x is zero.
   ;;
   ;; If you don't put <obj>, e.g.: (try-and-if-it-fails-object () (/5 x))
-  ;; the result is the error object.
+  ;; the result is the error object itself.
   ;;
-  (define-syntax try-and-if-it-fails-or-empty-or-java-null-return-object
+  (define-syntax define-custom-try-and-if-it-fails-return-object
     (syntax-rules ()
-      ((_ () <code> ...)
-       (try-and-if-it-fails-object ('the-error-object) <code> ...))
-      ((_ (<obj>) <code>  ...)
+      ((_ macro-name predicate-fail-condition?)
        (begin
-         (let* ((o (delay ((lambda () <obj>))))
-                (force-result (lambda (error)
-                                (let ((obj (force o)))
-                                  (if (equal? obj 'the-error-object)
-                                      error obj)))))
-           (with-failure-continuation
-            (lambda (error error-continuation) (force-result error))
-            (lambda ()
-              (let ((result ((lambda () <code> ...))))
-                (let ((final-result
-                       (cond [(java-null? result) (force-result result)]
-                             [(null? result) (force-result result)]
-                             [(eqv? #f result) (force-result result)]
-                             [else result])))
-                  final-result)))))))))
+         (define-syntax macro-name
+           (syntax-rules ()
+             ((_ () <code> (... ...))
+              (macro-name ('the-error-object) <code> (... ...)))
+             ((_ (<obj>) <code> (... ...))
+              (begin
+                (call-with-current-continuation
+                 (lambda (restart-continuation)
+                   (let* ((o (delay ((lambda () <obj>))))
+                          (force-result (lambda (error error-continuation)
+                                          (let ((obj (force o)))
+                                            (if (equal? obj 'the-error-object)
+                                                (make-exception
+                                                 error
+                                                 (or error-continuation restart-continuation))
+                                                obj)))))
+                     (with-failure-continuation
+                      (lambda (error error-continuation) (force-result error error-continuation))
+                      (lambda ()
+                        (let ((result ((lambda () <code> (... ...)))))
+                          (let ((final-result
+                                 (cond [(predicate-fail-condition? result) (force-result result #f)]
+                                       [else result])))
+                            final-result)))))))))))))))
 
+  ;; Check error, exception, java null, empty list and #f
+  (define-custom-try-and-if-it-fails-return-object
+    try-and-if-it-fails-or-empty-or-java-null-return-object
+    (lambda (result)
+      (or (java-null? result)
+          (null? result)
+          (eqv? #f result))))
+
+  ;; Check error, exception, java null and #f
+  (define-custom-try-and-if-it-fails-return-object
+    try-and-if-it-fails-object
+    (lambda (result)
+      (or (java-null? result)
+          (eqv? #f result))))
+
+  ;; Check only for error or exception
+  (define-custom-try-and-if-it-fails-return-object
+    try-and-if-it-throws-object
+    (lambda (result) #f))
+  
   ;; (dynamic-define "abc" 123)
   ;; $ abc => 123
   (define-syntax dynamic-define
