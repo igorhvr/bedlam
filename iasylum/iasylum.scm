@@ -41,6 +41,7 @@
    for-each-row-in-a-spreadsheet-in-a-zipfile
    concurrent-semaphore
    uuid-string
+   uuid?
    get-all-jstreams
    jstream->tmp-file
    string-drop-both
@@ -606,7 +607,8 @@
     (set! w (let ((m (mutex/new))) (lambda p (mutex/lock! m) (for-each write p) (mutex/unlock! m) (void)))))
 
   (define (uuid-string) (->string (j "new com.eaio.uuid.UUID().toString();")))
-
+  (define (uuid? uuid) (try-and-if-it-fails-object (#f) (string->juuid uuid)))
+  
   ;; Imported from MIT Scheme runtime/list.scm
   (define (list-of-type? object predicate)
     (let loop ((l1 object) (l2 object))
