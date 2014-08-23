@@ -730,6 +730,7 @@
                               (vector->list_deeply element))
                             obj)]
           [(vector? obj) (vector->list_deeply (vector->list obj))]
+          [(pair? obj) (cons (vector->list_deeply (car obj)) (vector->list_deeply (cdr obj)))]
           [else obj]))
 
   (define (escape-double-quotes str)
