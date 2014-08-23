@@ -62,6 +62,7 @@
    decimal->maxradix
    vector->list_deeply
    alist-to-url-query-string
+   make-parameter*
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -725,6 +726,22 @@
            (individual-parameters (map (lambda (v) 
                                          (match-let (((key . value) v)) (string-append* key "=" value))) alist)))
       (join-parameters individual-parameters)))
+
+  ; Generates parameters that work and are safe across threads.
+  (define (make-parameter* init)
+    (let ((storage (j "new java.util.concurrent.ConcurrentHashMap();")))
+      (j "tmap.put(\"SINGLEKEY\", value);" `((value ,(java-wrap init)) (tmap ,storage)))
+      ((lambda ()
+         (define calculate-result
+           (lambda (value)
+             (if (not value)
+                 (safe-java-unwrap (j "tmap.get(\"SINGLEKEY\");" `((tmap ,storage))))
+                 (let ((result (calculate-result #f)))
+                   (j "tmap.put(\"SINGLEKEY\", value);" `((value ,(java-wrap value)) (tmap ,storage)))
+                   result))))
+         (case-lambda
+           (() (calculate-result #f))
+           ((init) (calculate-result init)))))))
   
   (define-generic-java-method release)
   (define-generic-java-method available-permits)
