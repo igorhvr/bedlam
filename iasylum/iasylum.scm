@@ -43,6 +43,7 @@
    uuid-string
    uuid?
    get-all-jstreams
+   create-temporary-directory
    jstream->tmp-file
    string-drop-both
    xor
@@ -520,6 +521,9 @@
             inner-semaphore]
            [()
             (->number (available-permits inner-semaphore)])))))
+
+  (define (create-temporary-directory)
+    (->string (j "java.nio.file.Files.createTempDirectory(\"bedlamTempDirectory\").toAbsolutePath().toString();")))
 
   (define (jstream->tmp-file stream)
   (j "jstreamtofile_result=java.io.File.createTempFile(\"jstream-to-file_\",\".tmp\");
