@@ -66,6 +66,7 @@
    vector->list_deeply
    alist-to-url-query-string
    make-parameter*
+   start-async-json-engine-with-status-retriever
    add-between-elements
    remove-duplicates
    )
@@ -785,7 +786,40 @@
          (case-lambda
            (() (calculate-result #f))
            ((init) (calculate-result init)))))))
-
+  
+  (define (start-async-json-engine-with-status-retriever engine-thunk should-stop?-thunk seconds-between-executions)
+    (define last-execution-result (make-parameter* '#((status . "NEVER_EXECUTED"))))
+    (define last-execution-when (make-parameter* #f))
+    
+    (thread/spawn
+     (lambda ()     
+       (let loop ()
+         (if (should-stop?-thunk)
+             'stopped
+             (begin
+               (last-execution-result
+                (let ((rv (try-and-if-it-throws-object () (engine-thunk))))
+                  (if (exception? rv)
+                      `#((status . ,(string-append "Error: "
+                                                   (or (error-message (exception-error rv)) "UnspecifiedError"))))
+                      rv)))
+               (last-execution-when (current-time time-utc))
+               (sleep (* 1000 seconds-between-executions))
+               (loop))))))
+    
+    (lambda ()
+      (let* ((when (last-execution-when))
+             (result (last-execution-result))
+             (time-elapsed
+              (or (and when (time-second (time-difference (current-time time-utc) when))) -1)))
+        
+        (list->vector
+         (append
+          (vector->list result)
+          `(
+            (time-elapsed-since-last-updated-seconds . ,time-elapsed)
+            (last-updated . ,(if when (date->string (time-utc->date when 0) "~4") "NEVER"))))))))
+  
   (define (add-between-elements what list-of-elements)
     (if (<= (length list-of-elements) 1)
         list-of-elements
