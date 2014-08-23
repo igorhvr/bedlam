@@ -707,8 +707,15 @@
   ;; $ abc => 123
   (define-syntax dynamic-define
     (syntax-rules ()
-      ((_ string <body>)
-       (eval `(define ,(string->symbol string) <body>)))))
+      ((_ non-evaluated-what <body>)
+       (let ((what non-evaluated-what))
+         (cond ((string? what) (eval `(define ,(string->symbol string) <body>)))
+               ((symbol? what) (eval `(define ,what <body>)))
+               (else
+                (throw
+                 (make-error
+                  (string-append
+                   "Failure to define using handle " (iasylum-wring-string what) " - not a symbol nor a string.")))))))))
 
   ;; use like this:
   ;; (create-shortcuts (+ -> plus) (- -> minus))
