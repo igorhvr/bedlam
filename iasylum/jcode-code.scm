@@ -236,6 +236,10 @@
           (cons (proc (java-array-ref v i)) (r (+ i 1)))
           '()))))
 
+(define (java-equals? obj1 obj2)
+  (->scm-object (j "obj1.equals(obj2);" `((obj1 ,obj1)
+                                          (obj2 ,obj2)))))
+
 (define (safe-java-unwrap o) (if (java-null? o) '() (java-unwrap o)))
 
 (define j)

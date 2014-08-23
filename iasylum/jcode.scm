@@ -146,6 +146,7 @@
      integer->jbigint
      string->jbigdecimal
      string->jbigint
+     java-equals?
    )
   (import s2j)
   (include "jcode-code.scm"))
