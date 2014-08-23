@@ -7,7 +7,7 @@
   (jdbc/load-drivers jdbc/map-result-set jdbc/get-connection jdbc/for-each-result-set
                      result-set->iterator
                      execute-jdbc-query
-                     get-data
+                     get-data get-data-with-headers-at-each-line
                      for-each-data
                      map-each-data
                      jdbc/for-each-triple
@@ -188,6 +188,15 @@
       (let ((rs-md (read-metadata (get-meta-data rs)))
             (data (iterable->list (result-set->iterator rs) (lambda (v) (->scm-object v)))))
             (cons rs-md data))))
+
+  (define (get-data-with-headers-at-each-line connection query)
+    (let* ((data (get-data connection query))
+           (headers (car data))
+           (the-data (cdr data)))
+      (pam the-data
+           (lambda (v)
+             (zip headers v)))))
+      
 
   (define (for-each-data connection query proc)
     (define (read-metadata p)
