@@ -7,7 +7,7 @@
   (jdbc/load-drivers jdbc/map-result-set jdbc/get-connection jdbc/for-each-result-set
                      result-set->iterator
                      execute-jdbc-query
-                     get-data get-data-with-headers-at-each-line
+                     get-data get-data-with-headers-at-each-line data-with-headers-at-each-line->json
                      for-each-data
                      map-each-data
                      jdbc/for-each-triple
@@ -196,6 +196,19 @@
       (pam the-data
            (lambda (v)
              (zip headers v)))))
+
+  (define (data-with-headers-at-each-line->json sd)
+    (scheme->json
+     `#((result . ,(pam sd (lambda (v)
+                             (list->vector
+                              (pam v
+                                   (match-lambda
+                                    (((fieldname . fieldtype) fieldvalue)
+                                     (cons fieldname
+                                           (if (date? fieldvalue)
+                                               (date->string fieldvalue "~4")
+                                               fieldvalue)
+                                           )))))))))))
       
 
   (define (for-each-data connection query proc)
