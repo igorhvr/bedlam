@@ -1,4 +1,5 @@
 (require-extension (lib iasylum/jcode))
+(require-extension (lib iasylum/json))
 (require-extension (srfi 19)) ; date & time
 (require-extension (lib sql/query))
 (require-extension (lib sql/jdbc))
