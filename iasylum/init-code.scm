@@ -408,7 +408,10 @@
 
 (require-extension (lib iasylum/match))
 (require-extension (lib iasylum/jdbc))
+
 (require-extension (lib iasylum/json))
+(add-lib "u/json-io-2.7.2-SNAPSHOT-everything.jar")
+
 (require-extension (lib iasylum/loop))
 (require-extension (lib iasylum/math))
 (require-extension (lib iasylum/javascript))

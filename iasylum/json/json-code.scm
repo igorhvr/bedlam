@@ -211,3 +211,5 @@
    string
    (lambda (input-port)
      (json-read input-port))))
+
+(define (beautify-json st) (->string (j "com.cedarsoftware.util.io.JsonWriter.formatJson(jsonst);" `((jsonst ,(->jstring st))))))
