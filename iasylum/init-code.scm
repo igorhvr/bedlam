@@ -468,6 +468,11 @@
 (add-lib "net/httpcore-4.3.2.jar")
 (add-lib "net/httpclient-4.3.4.jar")
 
+;; Incanter is a R-like environment for clojure that allows stuff similar to:
+;; (clj "(use '(incanter core charts pdf)) (save-pdf (function-plot sin -4 4) \"./pdf-chart.pdf\")")
+;; to be performed.
+(add-lib "u/incanter-1.5.6-SNAPSHOT-standalone.jar")
+
 (require-extension (lib iasylum/net))
 
 (set! load original-load)
