@@ -70,9 +70,9 @@ http://en.wikipedia.org/wiki/Exponential_smoothing
     (.toByteArray out)))
 
 
-(pdf [{} [:table 
-          [[:image (test-plotx)]                               [:image (chart-to-byte-array-png-image sp 500 500) ]]
+(pdf [{:title "Data" :size :b0 } [:table 
+          [[:image (test-plotx)]                               [:image (chart-to-byte-array-png-image sp 500 500) b]]
           [[:image (test-plotx)]                               [:image (chart-to-byte-array-png-image sp 350 350) ]]
           [[:image (chart-to-byte-array-png-image sp 350 350) ][:image (test-plotx)]]
           ]]
-     "/tmp/test6.pdf")
+     "/tmp/test7.pdf")
