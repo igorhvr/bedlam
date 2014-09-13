@@ -1,3 +1,4 @@
+; From https://gist.github.com/pingles/1160386
 (defn exponential-smooth
 	"
 Smooths a sequence with an exponentially decreasing weight.
