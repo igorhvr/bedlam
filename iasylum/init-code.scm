@@ -473,6 +473,8 @@
 ;; to be performed.
 (add-lib "u/incanter-1.5.6-SNAPSHOT-standalone.jar")
 
+(add-lib "u/clj-pdf-1.11.21-standalone.jar")
+
 (require-extension (lib iasylum/net))
 
 (set! load original-load)
