@@ -27,10 +27,10 @@ http://en.wikipedia.org/wiki/Exponential_smoothing
 		 (* (- 1 alpha) (last st)))))]
   (reduce (partial smooth f) [(first x)] (rest x))))
 
-(use '(incanter core charts pdf stats))
+(use '(incanter core charts pdf stats io datasets))
 
 (def zero '(0))
-(def sp (xy-plot zero zero :title "Graph" :x-label "X" :y-label "Y" :series-label "" :legend true :points true ))
+(def sp (xy-plot zero zero :title "Graph" :x-label "X" :y-label "Y" :series-label "Origin" :legend true :points true ))
 (add-lines sp '(1 2 3) '(40 50 60) :series-label "Big")
 (add-lines sp '(1 2 3) (exponential-smooth '(40 50 60) 0.9) :series-label "Big Smooth")
 (add-lines sp '(1 2 3 17) '(20 55 60 18) :series-label "Small")
@@ -47,3 +47,32 @@ http://en.wikipedia.org/wiki/Exponential_smoothing
 ;;(def lm (linear-model x y))(add-lines sp x (:fitted lm) :series-label "brlm")
 (view sp)
 
+(use '(clj-pdf [core :as clj-pdf-core]
+               [svg :as clj-pdf-svg]
+               [charting :as clj-pdf-charting]
+               [graphics-2d :as clj-pdf-graphics-2d]))
+               
+;;;       core  as svg charting graphics-2d))
+
+(defn test-plotx
+ []
+ (let [x '(1 2 3 4)
+       y '(1 3 5 7)
+       plot1 (scatter-plot x y)
+       out (new java.io.ByteArrayOutputStream)]
+    (org.jfree.chart.ChartUtilities/writeScaledChartAsPNG out plot1 300 200 1 1)    
+    (.toByteArray out)))
+
+(defn chart-to-byte-array-png-image 
+  [crt width height]
+  (let [out (new java.io.ByteArrayOutputStream)]
+    (org.jfree.chart.ChartUtilities/writeScaledChartAsPNG out crt width height 1 1)
+    (.toByteArray out)))
+
+
+(pdf [{} [:table 
+          [[:image (test-plotx)]                               [:image (chart-to-byte-array-png-image sp 500 500) ]]
+          [[:image (test-plotx)]                               [:image (chart-to-byte-array-png-image sp 350 350) ]]
+          [[:image (chart-to-byte-array-png-image sp 350 350) ][:image (test-plotx)]]
+          ]]
+     "/tmp/test6.pdf")
