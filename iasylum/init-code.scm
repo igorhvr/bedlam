@@ -458,8 +458,6 @@
 		"
                   `((input ,(->jstring path)))))))
 
-(add-lib-recursively "/base/bedlam/jars/web")
-
 (add-lib "net/commons-codec-1.6.jar")
 (add-lib "net/commons-logging-1.1.3.jar")
 (add-lib "net/fluent-hc-4.3.4.jar")
