@@ -112,6 +112,14 @@
   (define new-statement
     (lambda (connection)
       (create-statement connection)))
+
+  (define-generic-java-method prepare-statement)
+  (define-java-class <java.sql.result-set>)  
+  (define-generic-java-field-accessor :TYPE_FORWARD_ONLY |TYPE_FORWARD_ONLY|)
+  (define-generic-java-field-accessor :CONCUR_READ_ONLY |CONCUR_READ_ONLY|)
+  (define new-prepared-statement
+    (lambda (connection sql)
+      (prepare-statement connection sql (:TYPE_FORWARD_ONLY (java-null <java.sql.result-set>)) (:CONCUR_READ_ONLY (java-null <java.sql.result-set>)))))
   
 
 
@@ -172,31 +180,48 @@
   (define-generic-java-method set-fetch-size)
   
   (define execute-jdbc-query
-    (lambda* (connection query (fetch-size #f))
-        (let ((stmt (new-statement connection)))
-          (when fetch-size (set-fetch-size stmt (->jint fetch-size)))
-          (execute-query  stmt (->jstring query)))))
-  
-  (define (get-data connection query)
-    (define (read-metadata p)
-      (let l ((i 1) (m (->number (get-column-count p))))
-        (if (> i m) '()
-            (cons
-             (cons (->scm-object (get-column-name p (->jint i)))
-                   (->scm-object (get-column-type-name p (->jint i))))
-             (l (+ i 1) m)))))
-    (let ((rs (execute-jdbc-query connection query) ))
-      (let ((rs-md (read-metadata (get-meta-data rs)))
-            (data (iterable->list (result-set->iterator rs) (lambda (v) (->scm-object v)))))
-            (cons rs-md data))))
+    (lambda* (connection query (vars #f) (fetch-size #f))
+             (let ((stmt (if vars
+                             (new-prepared-statement connection (->jstring query))
+                             (new-statement connection))))
+               (when fetch-size (set-fetch-size stmt (->jint fetch-size)))
+               
+               (if vars
+                   (begin
+                     (for-each
+                      (lambda (v)
+                        (match-let ( ( (tindex tvalue) v ) )
+                                   (begin
+                                     (j "stmt.setObject(objectindex, objectvalue);"
+                                        `((stmt ,stmt)
+                                          (objectindex ,(->jobject tindex))
+                                          (objectvalue ,(->jobject tvalue)))))))
+                      vars)
+                     (execute-query  stmt))
+                   (execute-query  stmt (->jstring query))))))
 
-  (define (get-data-with-headers-at-each-line connection query)
-    (let* ((data (get-data connection query))
-           (headers (car data))
-           (the-data (cdr data)))
-      (pam the-data
-           (lambda (v)
-             (zip headers v)))))
+  (define get-data
+    (lambda* (connection query (vars #f))
+             (define (read-metadata p)
+               (let l ((i 1) (m (->number (get-column-count p))))
+                 (if (> i m) '()
+                     (cons
+                      (cons (->scm-object (get-column-name p (->jint i)))
+                            (->scm-object (get-column-type-name p (->jint i))))
+                      (l (+ i 1) m)))))
+             (let ((rs (execute-jdbc-query connection query vars) ))
+               (let ((rs-md (read-metadata (get-meta-data rs)))
+                     (data (iterable->list (result-set->iterator rs) (lambda (v) (->scm-object v)))))
+                 (cons rs-md data)))))
+
+  (define get-data-with-headers-at-each-line
+    (lambda* (connection query (vars #f))
+             (let* ((data (get-data connection query))
+                    (headers (car data))
+                    (the-data (cdr data)))
+               (pam the-data
+                    (lambda (v)
+                      (zip headers v))))))
 
   (define (data-with-headers-at-each-line->json sd)
     (scheme->json
@@ -212,7 +237,7 @@
                                            )))))))))))
       
 
-  (define (for-each-data connection query proc)
+  (define (for-each-data connection query vars proc)
     (define (read-metadata p)
       (let l ((i 1) (m (->number (get-column-count p))))
         (if (> i m) '()
@@ -220,15 +245,15 @@
              (cons (->scm-object (get-column-name p (->jint i)))
                    (->scm-object (get-column-type-name p (->jint i))))
              (l (+ i 1) m)))))
-    (let ((rs (execute-jdbc-query connection query) ))
+    (let ((rs (execute-jdbc-query connection query vars) ))
       (let ((rs-md (read-metadata (get-meta-data rs))))
             (for-each-iterable (result-set->iterator rs) (lambda (v) (proc (list rs-md (->scm-object v))))))))
 
-  (define (map-each-data connection query proc)
+  (define (map-each-data connection query vars proc)
     (define result (list))
     (define (proc v)
       (set! result (cons v result)))
-    (for-each-data connection query proc)
+    (for-each-data connection query vars proc)
     result)
 
   ;;; Triples with column name, column type and unwrapped column value.
