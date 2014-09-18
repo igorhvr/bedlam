@@ -1,6 +1,0 @@
-(compile -host -s -O2 -d0 matchable.scm -j matchable)
-(compile -host -s -O2 -d0 matchable.import.scm)
-
-(install-extension 'matchable
- '("matchable.so" "matchable.import.so")
- '((version "2.4.2")))

@@ -1,9 +1,0 @@
-;;; matchable.meta -*- Hen -*-
-
-((egg "matchable.egg")
- (synopsis "Hygienic MATCH replacement")
- (license "Public Domain")
- (category lang-exts)
- (author "Alex Shinn")
- (doc-from-wiki)
- (files "matchable.setup" "matchable.scm"))
