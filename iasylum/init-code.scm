@@ -474,6 +474,7 @@
 (add-lib "u/clj-pdf-1.11.21-standalone.jar")
 
 (require-extension (lib iasylum/net))
+(require-extension (lib iasylum/debug)) ;; save-to-somewhere and other utilities.
 
 (set! load original-load)
 

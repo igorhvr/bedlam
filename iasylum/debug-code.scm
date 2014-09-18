@@ -33,5 +33,9 @@
         (lambda (block-k)
           (with-failure-continuation  (lambda (error-record error-k) (debug error-record error-k block-k))
                                       (lambda () (begin expressions ...))))))))
+  (define (save-to-somewhere data)
+    (let ((where-to-save (gensym)))
+      (putprop where-to-save data)
+      where-to-save))
 
   (call/cc (lambda (c) (set! iasylum-debug-nothing-continuation c)))
