@@ -54,6 +54,7 @@
    list-of-type?
    list-of
    alist?
+   pure-alist?
    try-and-if-it-fails-object
    try-and-if-it-fails-or-empty-or-java-null-return-object
    try-and-if-it-throws-object
@@ -69,6 +70,13 @@
    start-async-json-engine-with-status-retriever
    add-between-elements
    remove-duplicates
+   complete-with-zeroes
+   add-between
+   add-spaces-between
+   get
+   avg
+   average
+   not-buggy-exact->inexact
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -605,6 +613,13 @@
   (define (alist? object)
     (list-of-type? object pair?))
 
+  ;; Imported from MIT Scheme runtime/list.scm
+  ;; and adapted to check if the elements are pair and not list
+  ;; at the same time; this confusion is because a list fits pair? predicate.
+  (define (pure-alist? object)
+    (list-of-type? object (lambda (o)
+                            (and (pair? o) (not (list? o))))))
+
   ;; Example: (define list-of-string? (list-of string?))
   ;;          (list-of-string? '("bla" "ble")) => #t
   (define-syntax list-of
@@ -800,7 +815,64 @@
   (define (remove-duplicates lst)
     (fold-right (lambda (f r)
                   (cons f (filter (lambda (x) (not (equal? x f))) r))) '() lst))
-  
+
+  ;;
+  ;; (complete-with-zeroes "56" 7)
+  ;; => "0000056"
+  ;;
+  (define (complete-with-zeroes string zeroes)
+    (string-pad string zeroes #\0))
+
+  ;;
+  ;; (add-between "," 1 2 3) => "1,2,3"
+  ;;
+  (define add-between
+    (lambda (what . params)
+      (if (null? params) ""
+          (let ((param (car params)))
+            (if (null? (cdr params))
+                (or param "")
+                (string-append* (if param
+                                    (string-append* param what) "")
+                                (apply add-between
+                                       (append (list what)
+                                               (cdr params)))))))))
+
+  ;;
+  ;; (add-spaces-between 1 2 3) => "1 2 3"
+  ;;
+  (define add-spaces-between
+    (lambda params
+      (apply add-between (append (list " ") params))))
+
+  ;;
+  ;; (define alist '((a . 1) (b . 3)))
+  ;; (get 'b alist) => 3
+  ;; (get 'c alist) => #f
+  ;; (get 'c alist 123) => 123
+  ;;
+  (define* (get property alist (default-value #f))
+    (or (let ((pair (assoc property alist)))
+          (and pair (cdr pair)))
+        default-value))
+
+  (define (avg . numbers)  
+    (/ (apply + numbers) (length numbers)))
+
+  ;;
+  ;; There is a bug on SISC that when you try to format numbers like
+  ;; 282457054241909808547136319475365783206389579211833163126981837752475980274261722819705041556589987183902148854677474937212682452658934957606996941102010807245608033464985202685067640880869257553850446454726752603027573191148813419329621578462766074442169646855371987045338851099884530056618741223228936994941553896821661753734605673855194130883776944673309108647011130597/1001509038269881690964475821585963181094481778952714378880702564640950073238802107511786471142177771710461016835321271186203812012260492331963455165457486865903556624479070974292666405020019403147541868610286679558199714122163490068271002294617295514046193024960538970649724427145698755641672350937606977382278465505350339120293706504726356045515482771243984000000000000000
+  ;; the format fn throws Error in round: <java.lang.NumberFormatException>: Infinite or NaN
+  ;; because this huge number converted to inexact number is nan.0 (using exact->inexact).
+  ;;
+  ;; Now, if you want to format huge numbers like this, use (format "~0,8F" (not-buggy-exact->inexact <huge-number>))
+  ;; instead (format "~0,8F" <huge-number>) directly.
+  ;;
+  (define (not-buggy-exact->inexact number)
+    (string->number (->string (number->jbigdecimal number))))
+
+  (create-shortcuts (avg -> average))
+
   (define-generic-java-method release)
   (define-generic-java-method available-permits)
   
