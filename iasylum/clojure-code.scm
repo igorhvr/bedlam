@@ -27,13 +27,19 @@
 
 ;;
 ;; BE CAREFUL HERE: a keyword is composed by namespace and name (see clojure spec).
-;; This function simply drop the keyword namespace, so (clj-keyword->symbol (symbol->clj-keyword 'namespace/name))
-;; is only 'name. If you want the string representation of a keyword (usually something like :namespace/name)
+;; This function simply drop the keyword namespace (and also the :),
+;; so (clj-keyword->symbol (symbol->clj-keyword 'namespace/name))
+;; is only 'name.
+;;
+;; Note: If you want the string representation of a keyword (usually something like :namespace/name)
 ;; use clj-keyword->string
 ;;
 (define (clj-keyword->symbol keyword)
   (->symbol (clj "(name keyword)" `((keyword ,keyword)))))
 
+;;
+;; Different of clj-keyword->symbol it will keep the namespace AND the : in front of string.
+;;
 (define (clj-keyword->string keyword)
   (->string keyword))
 
@@ -41,6 +47,9 @@
 ;; (/ (->scm-object (j "n.numerator" `((n ,clojure-ratio)))) (->scm-object (j "n.denominator" `((n ,clojure-ratio))))))
 (define (clj-number->number clojure-number)
   (string->number (->string clojure-number)))
+
+(define (list->persistent-vector scheme-list)
+  (j "clojure.lang.PersistentVector.create(lst);" `((lst ,(jlist->jarray (->jobject scheme-list))))))
 
 (define (create-runner)
   (j

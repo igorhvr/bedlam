@@ -15,6 +15,7 @@
    clj-keyword->symbol
    clj-keyword->string
    clj-number->number
+   list->persistent-vector
    )
   
   (include "clojure-code.scm"))
