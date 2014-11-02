@@ -136,6 +136,11 @@
     (lambda (ht)
       (hashtable/map (lambda (k v) v) ht)))
 
+  ;;
+  ;; Example: (nyi function-not-implemented [value])
+  ;; it will define "function-not-implemented" as a lambda that will
+  ;; return the value "value" (optional) or #t if the value is not defined.
+  ;;
   (define-syntax nyi
     (lambda (x)    
       (syntax-case x ()
