@@ -20,7 +20,11 @@
    datomic/make-empty-transaction-set
    datomic/push-transaction!
    datomic/extract-transaction-and-parameters-pair
-   datomic/query-result->alist
+   datomic/get-filled-entity
+   datomic/db-history
+   datomic/get-history
+   datomic/travel-machine
+   datomic/tx->t
 
    ; deprecated:
    datomic/smart-query d/sq

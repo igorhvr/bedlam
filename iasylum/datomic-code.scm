@@ -16,7 +16,7 @@
        result))))
 
 ;;
-;; This is deprecated because it's TOO DANGEROUS when the caller is expecting
+;; DEPRECATED: This is deprecated because it's TOO DANGEROUS when the caller is expecting
 ;; many results as response. When the list has only one single element or nothing
 ;; this function simply change its behavior. The only element is returned instead the list,
 ;; and no result is converted to #f.
@@ -92,6 +92,13 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 (define (datomic/db cn)
   (j "connection.db();" `((connection ,cn))))
 
+(define (datomic/db-history db)
+  (j "db.history();" `((db ,db))))
+
+(define (datomic/as-of db t)
+  (j "db.asOf(t);" `((db ,db)
+                     (t ,(->jobject t)))))
+
 (define (datomic/make-latest-db-retriever connection-retriever)
   (lambda ()
     (datomic/db (connection-retriever))))
@@ -144,6 +151,9 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
   (j "datomic.Peer.squuidTimeMillis(squuid)"
      `((squuid ,datomic-uuid))))
 
+(define (datomic/tx->t tx)
+  (->scm-object (j "datomic.Peer.toT(tx);" `((tx ,(->jlong tx))))))
+
 ;;
 ;; Usage example - test/q does not require a connection or anything besides what
 ;; is required for the immediate task at hand.
@@ -180,7 +190,8 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 ;;
 ;; It is a composition of a tx in string format (starts with empty string)
 ;; and a list of parameters (starts with empty list).
-;; @see datomic/push-transaction! datomic/extract-transaction-and-parameters-pair
+;;
+;; See datomic/push-transaction! and datomic/extract-transaction-and-parameters-pair
 ;;
 (define (datomic/make-empty-transaction-set)
   (make-transaction-set "" '()))
@@ -193,6 +204,9 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 ;; parameters should be something like `((key ,value) (key2 ,value2)) - it is the same
 ;; input as datomic/smart-transact except by in datomic/smart-transact the tx should be
 ;; a list of maps or lists.
+;;
+;; See also datomic/extract-transaction-and-parameters-pair
+;; and datomic/make-empty-transaction-set
 ;;
 (define (datomic/push-transaction! transaction-set
                                    transaction-string
@@ -211,6 +225,8 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 ;; is the first parameter of datomic/smart-transact and (cdr (datomic/extract-transaction-and-parameters-pair ...))
 ;; is the second one.
 ;;
+;; See datomic/push-transaction!
+;;
 (define (datomic/extract-transaction-and-parameters-pair transaction-set)
   `(,(string-append "[" (transaction-set-transaction-string transaction-set) "]")
     .
@@ -220,11 +236,68 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 ;; The input must be a list with lists of two elements being the first one
 ;; a clojure keyword and the second one the value.
 ;;
-(define (datomic/query-result->alist input)
+;; used in datomic/fill-entity
+;;
+(define (datomic/query-result->alist database input follow-references)
   (map (lambda (element)
-         (cons (clj-keyword->symbol (car element))
-               (cadr element)))
+         (let ((key (first element))
+               (value (second element))
+               (type (third element)))
+           (cons (clj-keyword->symbol key) (if (or (not follow-references)
+                                                   (not (equal? 'ref (clj-keyword->symbol type))))
+                                               value
+                                               (datomic/get-filled-entity database
+                                                                          value
+                                                                          'follow-references: follow-references)))))
        input))
+
+;;
+;; Return an alist of attribute name and value.
+;;
+(define* (datomic/get-filled-entity database entity-id
+                                    (follow-references: follow-references #f))
+  (datomic/query-result->alist database
+                               (datomic/smart-query-multiple
+                                "[:find ?attname ?value ?type-name
+                                  :in $ ?e
+                                  :where [?e ?att ?value]
+                                         [?att :db/valueType ?type]
+                                         [?type :fressian/tag ?type-name]
+                                         [?att :db/ident ?attname]]" database entity-id)
+                               follow-references))
+
+;;
+;; Return a list of datomic tx ids of an specific entity sorted
+;; by the most recent to the oldest one.
+;;
+(define (datomic/get-history connection-retriever entity-id)
+  (sort < (flatten (datomic/smart-query-multiple
+                    "[:find ?tx
+                      :in $ ?e
+                      :where [?e _ _ ?tx]]"
+                    (datomic/db-history (datomic/db (connection-retriever))) entity-id))))
+
+;;
+;; Get past versions of an entity.
+;;
+;; If depth is zero get the current value. If 1, the one before, and so on.
+;;
+(define* (datomic/travel-machine connection-retriever
+                                 entity-history
+                                 entity-id
+                                 depth
+                                 (follow-references: follow-references #f))
+  (let ((entity-history-length (length entity-history)))
+    (cond [(< depth 0)
+           (throw (make-error 'datomic/time-machine "depth should be greater than zero: ~a" depth))]
+
+          [(>= depth entity-history-length)
+           (throw (make-error 'datomic/time-machine "depth should be less than ~a: ~a" entity-history-length depth))]
+
+          [else (datomic/get-filled-entity
+                 (datomic/as-of (datomic/db (connection-retriever))
+                                (datomic/tx->t (list-ref entity-history depth)))
+                 entity-id 'follow-references: follow-references)])))
 
 (create-shortcuts (datomic/query -> d/q)
                   (datomic/smart-query -> d/sq) ; <-- deprecated!
