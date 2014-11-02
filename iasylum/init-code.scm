@@ -476,6 +476,8 @@
 (require-extension (lib iasylum/net))
 (require-extension (lib iasylum/debug)) ;; save-to-somewhere and other utilities.
 
+(require-extension (lib iasylum/incanter))
+
 (set! load original-load)
 
 (define bedlam-loaded-and-ready-to-use #t)
