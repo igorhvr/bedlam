@@ -25,6 +25,7 @@
    date->jdate
    jdate->date
    string->juuid
+   list->jset
  
    instance-of
 
@@ -147,6 +148,10 @@
      string->jbigdecimal
      string->jbigint
      java-equals?
+     make-atomic-boolean
+     compare-and-set-atomic-boolean!
+     set-atomic-boolean!
+     get-atomic-boolean
    )
   (import s2j)
   (include "jcode-code.scm"))

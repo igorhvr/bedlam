@@ -188,6 +188,10 @@
 (define (string->juuid str)
   (j "java.util.UUID.fromString(input);" `((input ,(->jstring str)))))
 
+(define (list->jset list)
+  (j "newhs = new HashSet(); newhs.addAll(input); return newhs;"
+     `((input ,(->jobject list)))))
+
 (define (string->jbigdecimal string)
   (j "new java.math.BigDecimal(number);" `((number ,(->jstring string)))))
 
@@ -243,6 +247,21 @@
       (if (< i size)
           (cons (proc (java-array-ref v i)) (r (+ i 1)))
           '()))))
+
+(define (make-atomic-boolean initial-value)
+  (j "new java.util.concurrent.atomic.AtomicBoolean(initial);" `((initial ,(->jobject initial-value)))))
+
+(define (compare-and-set-atomic-boolean! atomic-boolean-java-object expect update)
+  (->scm-object (j "obj.compareAndSet(expect, update);" `((obj ,atomic-boolean-java-object)
+                                                          (expect ,(->jobject expect))
+                                                          (update ,(->jobject update))))))
+
+(define (set-atomic-boolean! atomic-boolean-java-object new-value)
+  (->scm-object (j "obj.set(update);" `((obj ,atomic-boolean-java-object)
+                                        (update ,(->jobject new-value))))))
+
+(define (get-atomic-boolean atomic-boolean-java-object)
+  (->scm-object (j "obj.get();" `((obj ,atomic-boolean-java-object)))))
 
 (define (java-equals? obj1 obj2)
   (->scm-object (j "obj1.equals(obj2);" `((obj1 ,obj1)
