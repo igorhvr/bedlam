@@ -160,6 +160,10 @@
                   (linkedlist ,resulting-list))))
            v)
           resulting-list))
+       ((pair? v)
+        (j "new java.util.AbstractMap.SimpleEntry(first, second);"
+           `((first ,(->jobject (car v)))
+             (second ,(->jobject (cdr v))))))
        ((vector? v)
         (let ((resulting-list (j "new java.util.concurrent.ConcurrentLinkedQueue();")))
           (map           
