@@ -642,7 +642,7 @@
   ;; E.g.: (try-and-if-it-fails-object ('whatever) (/ 5 x)) will
   ;; return 5/x or 'whatever if x is zero.
   ;;
-  ;; If you don't put <obj>, e.g.: (try-and-if-it-fails-object () (/5 x))
+  ;; If you don't put <obj>, e.g.: (try-and-if-it-fails-object () (/ 5 x))
   ;; the result is the error object itself.
   ;;
   (define-syntax define-custom-try-and-if-it-fails-return-object
