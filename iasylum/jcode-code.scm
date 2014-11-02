@@ -107,15 +107,18 @@
 (define-java-classes (<date> |java.util.Date|))
 
 (define (time-millis->jdate time-millis)
-  (j "new java.util.Date(input);" `((input ,(->jint time-millis)))))
+  (j "new java.util.Date(input);" `((input ,(->jlong time-millis)))))
 
 (define (jdate->time-millis jdate)
   (j "jdate.getTime();" `((jdate ,jdate))))
 
+(define (time->jdate t)
+  (java-new <date> (->jlong (+ (* 1000 (time-second t))
+                               (/ (time-nanosecond t) 1000000)))))
+
 (define (date->jdate the-date)
    (let ((t (date->time-utc the-date)))
-     (java-new <date> (->jlong (+ (* 1000 (time-second t))
-                                  (/ (time-nanosecond t) 1000000))))))
+     (time->jdate t)))
 
 (define (jdate->date jd)
   (let ((vls (j "import java.util.Calendar;
@@ -147,6 +150,7 @@
        ((integer? v) (if (or (< v -2147483648) (> v 2147483647)) (->jlong v) (->jint v)))
        ((number? v) (->jdouble v))
        ((date? v) (date->jdate v))
+       ((time? v) (time->jdate v))
        ((list? v)
         (let ((resulting-list (j "new java.util.concurrent.ConcurrentLinkedQueue();")))
           (map           
