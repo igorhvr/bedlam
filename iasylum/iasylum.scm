@@ -111,42 +111,12 @@
               (loop)))))
     (loop)
     (get-output-string o))
-  
-  ;; Sorting routine.
-  (define (binarysort cmp-func L)
-    (if (null? L) '()
-        (traverse (btree L cmp-func))))
-  
-  (define iasylum-sort binarysort)
-  (define sort binarysort)
-  
-  (define (btree L cmp-func)
-    (if (= (length L) 1) (leaf (car L))
-        (binsert (btree (cdr L) cmp-func) (car L) cmp-func)))
-  
-  (define (binsert T A cmp-func)     ; insert A into the tree
-    (cond  ( (null? T) (leaf A) )        ; insert here
-           ( (cmp-func (car T) A) (list (car T) 
-                                        (binsert (car (cdr T)) A cmp-func)
-                                        (car (cdr (cdr T)))))  ; left subtree 
-           ( else (list (car T)
-                        (car (cdr T)) 
-                        (binsert (car (cdr (cdr T))) A cmp-func))))); right subtree
-  
-                                        ; add a leaf to the tree (A ()())
-  (define (leaf A) (list A '() '()))
-  
-                                        ; output sorted list by traversing the tree 
-  (define (traverse L)   
-    (cond ( (null? L) L)
-          ( else
-            (append (traverse (car (cdr L)))
-                    (cons (car L)(traverse (car (cdr (cdr L)))))))))
-  
-  (define (length L)
-    (if (null? L) 0
-        (+ 1 (length (cdr L)))))
-  
+
+  (include "mergesort.scm")
+
+  (define iasylum-sort merge-sort)
+  (define sort merge-sort)
+
   (define (smart-compile fname)
     (for-each display (list "\n\n(smart-compile \"" fname "\")..."))
     (let ((data-match (irregex-search
