@@ -848,18 +848,13 @@
 
   ;;
   ;; (add-between "," 1 2 3) => "1,2,3"
-  ;;
+  ;;  
   (define add-between
-    (lambda (what . params)
-      (if (null? params) ""
-          (let ((param (car params)))
-            (if (null? (cdr params))
-                (or param "")
-                (string-append* (if param
-                                    (string-append* param what) "")
-                                (apply add-between
-                                       (append (list what)
-                                               (cdr params)))))))))
+    (match-lambda*
+     ((what) "")
+     ((what single-element) (string-append* single-element))
+     ((what first-element . rest) (string-append* first-element what (apply add-between (cons what rest))))
+     (anything (error "Invalid parameter to to-csv-line " anything))))
 
   ;;
   ;; (add-spaces-between 1 2 3) => "1 2 3"
