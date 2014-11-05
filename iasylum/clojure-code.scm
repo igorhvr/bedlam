@@ -43,6 +43,7 @@
 (define (clj-keyword->string keyword)
   (->string keyword))
 
+;;
 ;; another way to convert clojure.lang.Ratio into scheme exact number:
 ;; (/ (->scm-object (j "n.numerator" `((n ,clojure-ratio)))) (->scm-object (j "n.denominator" `((n ,clojure-ratio))))))
 (define (clj-number->number clojure-number)
