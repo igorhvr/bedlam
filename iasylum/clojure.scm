@@ -15,6 +15,7 @@
    clj-keyword->symbol
    clj-keyword->string
    clj-number->number
+   number->clj-number
    list->persistent-vector
    )
   

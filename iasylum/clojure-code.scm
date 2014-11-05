@@ -49,6 +49,19 @@
 (define (clj-number->number clojure-number)
   (string->number (->string clojure-number)))
 
+;;
+;; to extract numerator and denominator of ANY type of clojure number (the result of this function)
+;; use like this: (clj "(numerator (clojure.lang.Numbers/toRatio (rationalize a)))" `((a ,(number->clj-number 3323/123))))
+;;                (clj "(denominator (clojure.lang.Numbers/toRatio (rationalize a)))" `((a ,(number->clj-number 3323/123))))
+;;
+;; results in 3323 and 123. See why this is necessary:
+;; https://stackoverflow.com/questions/25194809/how-to-convert-a-number-to-a-clojure-lang-ratio-type-in-clojure
+;;
+(define (number->clj-number scm-number)
+  (let ((scm-number (inexact->exact scm-number)))
+    (clj "(/ a b)" `((a ,(integer->jbigint (numerator scm-number)))
+                     (b ,(integer->jbigint (denominator scm-number)))))))
+
 (define (list->persistent-vector scheme-list)
   (j "clojure.lang.PersistentVector.create(lst);" `((lst ,(jlist->jarray (->jobject scheme-list))))))
 
