@@ -809,6 +809,13 @@
           `(
             (time-elapsed-since-last-updated-seconds . ,time-elapsed)
             (last-updated . ,(if when (date->string (time-utc->date when 0) "~4") "NEVER"))))))))
+
+(define subtract-dates
+  (match-lambda*
+   (()
+    (string-append* "Sample usage: " (iasylum-write-string `(subtract-dates "2014-11-05T10:21:00Z" "2014-11-04T15:15:00Z"))))
+   ((later earlier)
+    (time-difference (date->time-utc (string->date later "~Y-~m-~dT~k:~M:~S~z"))  (date->time-utc (string->date earlier "~Y-~m-~dT~k:~M:~S~z"))))))
   
   (define (add-between-elements what list-of-elements)
     (if (<= (length list-of-elements) 1)
