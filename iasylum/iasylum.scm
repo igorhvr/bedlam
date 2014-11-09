@@ -70,7 +70,6 @@
    make-parameter*
    start-async-json-engine-with-status-retriever
    add-between-elements
-   remove-duplicates
    complete-with-zeroes
    add-between
    add-spaces-between
@@ -833,11 +832,6 @@
         list-of-elements
         (append (list (car list-of-elements) what)
                 (add-between-elements what (cdr list-of-elements)))))
-
-  ; Adapted from http://stackoverflow.com/a/8651932/450148
-  (define (remove-duplicates lst)
-    (fold-right (lambda (f r)
-                  (cons f (filter (lambda (x) (not (equal? x f))) r))) '() lst))
 
   ;;
   ;; (complete-with-zeroes "56" 7)
