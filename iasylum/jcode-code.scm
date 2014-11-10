@@ -165,14 +165,7 @@
            `((first ,(->jobject (car v)))
              (second ,(->jobject (cdr v))))))
        ((vector? v)
-        (let ((resulting-list (j "new java.util.concurrent.ConcurrentLinkedQueue();")))
-          (map           
-           (lambda (elementn)
-             (j "linkedlist.add(elementnx);"
-                `((elementnx ,(->jobject elementn))
-                  (linkedlist ,resulting-list))))
-           (vector->list v))
-          resulting-list))
+        (->jobject (vector->list v)))
        (else  (java-wrap v)) ; Ok. I give up.
        )))
 
