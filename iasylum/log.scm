@@ -10,7 +10,8 @@
    get-global-logger-to-this-thread
    set-global-logger-to-this-thread!
    with-logger
-   
+
+   get-thread-info
    log-o
    get-timestamp
    make-mark-logger
@@ -104,8 +105,10 @@
            (if (>= (hashtable/get level-hash level 0)
                    (hashtable/get level-hash min-level 0))
                (apply d (add-between-elements "\n" (append (list (string-append* "______ "
-                                                                                 (string-append* (string-upcase (symbol->string level)))
-                                                                                 " ________________________\n"))
+                                                                                 (string-upcase (symbol->string level))
+                                                                                 " ________________________"
+                                                                                 " (" (get-thread-info) ")"
+                                                                                 "\n"))
                                                            message (list "\n"))))))))))
 
   (define (make-empty-logger)
