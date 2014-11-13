@@ -239,30 +239,47 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 ;; used in datomic/fill-entity
 ;;
 (define (datomic/query-result->alist database input follow-references)
-  (map (lambda (element)
-         (let ((key (first element))
-               (value (second element))
-               (type (third element)))
-           (cons (clj-keyword->symbol key) (if (or (not follow-references)
-                                                   (not (equal? 'ref (clj-keyword->symbol type))))
-                                               value
-                                               (datomic/get-filled-entity database
-                                                                          value
-                                                                          'follow-references: follow-references)))))
-       input))
+  (let ((result '())
+        (make-pair (lambda (key value type)
+                     (cons key (if (or (not follow-references)
+                                       (not (equal? 'ref (clj-keyword->symbol type))))
+                                   value
+                                   (datomic/get-filled-entity database
+                                                              value
+                                                              'follow-references: follow-references))))))
+    (for-each (lambda (element)
+                (let ((key (clj-keyword->symbol (first element)))
+                      (value (second element))
+                      (type (third element))
+                      (many (equal? (clj-keyword->symbol (fourth element))
+                                    'many)))
+                  (if (not many)
+                      (set! result (cons (make-pair key value type) result))                      
+                      (let ((current-list (get key result '()))
+                            (keypair (make-pair key value type)))
+                        (set! current-list (cons (cdr keypair) current-list))
+                        (let ((assoc-pair (assoc key result)))
+                          (if assoc-pair
+                              (set-cdr! assoc-pair current-list)
+                              (set! result (cons (cons key current-list) result))))))))
+              input)
+    result))
 
 ;;
 ;; Return an alist of attribute name and value.
 ;;
 (define* (datomic/get-filled-entity database entity-id
                                     (follow-references: follow-references #f))
+  (assert (integer? entity-id))
   (datomic/query-result->alist database
                                (datomic/smart-query-multiple
-                                "[:find ?attname ?value ?type-name
+                                "[:find ?attname ?value ?type-name ?cardinality
                                   :in $ ?e
                                   :where [?e ?att ?value]
                                          [?att :db/valueType ?type]
                                          [?type :fressian/tag ?type-name]
+                                         [?att :db/cardinality ?card]
+                                         [?card :db/ident ?cardinality]
                                          [?att :db/ident ?attname]]" database entity-id)
                                follow-references))
 
