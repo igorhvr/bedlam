@@ -53,6 +53,7 @@
    function fn function* fn*
    times multiple-values->list
    sleep-milliseconds sleep-seconds sleep-minutes sleep-hours
+   current-date-utc current-date-utc-less-one-hour
    list-of-type?
    list-of
    alist?
@@ -98,6 +99,13 @@
   (define sleep-seconds (lambda (t) (sleep-milliseconds (* 1000 t))))
   (define sleep-minutes (lambda (t) (sleep-seconds (* 60 t))))
   (define sleep-hours (lambda (t) (sleep-minutes (* 60 t))))
+
+  (define (current-date-utc)
+    (current-date 0))
+
+  (define (current-date-utc-less-one-hour)
+    (time-utc->date (subtract-duration (date->time-utc (current-date-utc)) (make-time 'time-duration 0 (* 60 60)))
+                    0))
 
   (import hashtable)
   (import file-manipulation)  ;; rglob uses this.
