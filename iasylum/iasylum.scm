@@ -52,6 +52,7 @@
    vector-binary-search
    function fn function* fn*
    times multiple-values->list
+   sleep-milliseconds sleep-seconds sleep-minutes sleep-hours
    list-of-type?
    list-of
    alist?
@@ -92,7 +93,12 @@
     (lambda (h)
       ((lambda (x) (h (lambda (a) ((x x) a))))
        (lambda (x) (h (lambda (a) ((x x) a)))))))
-  
+
+  (define sleep-milliseconds sleep)
+  (define sleep-seconds (lambda (t) (sleep-milliseconds (* 1000 t))))
+  (define sleep-minutes (lambda (t) (sleep-seconds (* 60 t))))
+  (define sleep-hours (lambda (t) (sleep-minutes (* 60 t))))
+
   (import hashtable)
   (import file-manipulation)  ;; rglob uses this.
 
