@@ -1,0 +1,8 @@
+#!/bin/sh
+
+export CMD="java -jar /base/bedlam/scheme2js/scheme2js-20110717.jar --constant-runtime --bigloo-modules --statics-suffix _bedlam --js-dot-notation --allow-unresolved --encapsulate-modules --js-this --js-return --indent 4 --correct-modulo --trampoline --max-tail-depth 8 $1.scm -o $1.js"
+
+echo Running:
+echo $CMD
+echo " "
+$CMD
