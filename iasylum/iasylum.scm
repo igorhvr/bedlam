@@ -85,6 +85,9 @@
   (define-syntax fn (identifier-syntax lambda))
   (define-syntax fn* (identifier-syntax lambda*))
 
+  ;; Saving some typing...
+  (define-syntax def (identifier-syntax define))
+
   (import hashtable)
   (import file-manipulation)  ;; rglob uses this.
 
