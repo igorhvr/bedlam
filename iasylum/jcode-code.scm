@@ -54,6 +54,8 @@
              ((string=? obj-class "java.lang.Boolean") (->boolean v))
              ((string=? obj-class "java.util.UUID") (->string (to-string v)))
              ((->boolean (j "(tobj instanceof java.util.Date);" `((tobj ,v))) ) (jdate->date v))
+             ((instance-of v "java.math.BigDecimal")
+              (jbigdecimal->number v))
              ((instance-of v "java.util.Collection")
               (let ((it (j "c.iterator();" `((c ,v)))))
                 (map ->scm-object (iterable->list it))))
@@ -187,6 +189,10 @@
 
 (define (string->jbigdecimal string)
   (j "new java.math.BigDecimal(number);" `((number ,(->jstring string)))))
+
+(define (jbigdecimal->number jbigdecimal)
+  (string->number (decimal-to-fractions-inside-string
+                   (->string (j "jbig.toString();" `((jbig ,jbigdecimal)))))))
 
 (define (string->jbigint string)
   (j "new java.math.BigInteger(number);" `((number ,(->jstring string)))))
