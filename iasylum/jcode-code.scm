@@ -46,7 +46,6 @@
                (string=? obj-class "java.lang.Long")
                (string=? obj-class "java.lang.Float")
                (string=? obj-class "java.lang.Double")
-               (string=? obj-class "java.math.BigDecimal")
                (string=? obj-class "java.math.BigInteger")
                )
               (->number v))

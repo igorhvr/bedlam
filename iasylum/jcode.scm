@@ -4,6 +4,7 @@
 
 (require-extension (lib iasylum/srfi-89))
 (require-extension (lib iasylum/match))
+(require-extension (lib iasylum/math))
 (require-extension (srfi 19)) ; date & time
 
 (module iasylum/jcode
