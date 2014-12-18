@@ -7,7 +7,7 @@
 (module iasylum/jdbc
   (jdbc/load-drivers jdbc/map-result-set jdbc/get-connection jdbc/for-each-result-set
                      result-set->iterator
-                     execute-jdbc-query
+                     execute-jdbc-query execute-jdbc-update execute-jdbc-something
                      get-data get-data-with-headers-at-each-line data-with-headers-at-each-line->json
                      for-each-data
                      map-each-data
@@ -177,10 +177,20 @@
 
 
   (define-generic-java-method execute-query)
+  (define-generic-java-method execute-update)
   (define-generic-java-method set-fetch-size)
-  
+
   (define execute-jdbc-query
     (lambda* (connection query (vars #f) (fetch-size #f))
+             (execute-jdbc-something execute-query connection query vars fetch-size)))
+
+  ;; execute-jdbc-update is a draft. You should still probably use sql/execute-update instead.
+  (define execute-jdbc-update
+    (lambda* (connection query (vars #f) (fetch-size #f))
+             (execute-jdbc-something execute-update connection query vars fetch-size)))
+  
+  (define execute-jdbc-something
+    (lambda* (something connection query (vars #f) (fetch-size #f))
              (let ((stmt (if vars
                              (new-prepared-statement connection (->jstring query))
                              (new-statement connection))))
@@ -197,8 +207,8 @@
                                           (objectindex ,(->jobject tindex))
                                           (objectvalue ,(->jobject tvalue)))))))
                       vars)
-                     (execute-query  stmt))
-                   (execute-query  stmt (->jstring query))))))
+                     (something stmt))
+                   (something stmt (->jstring query))))))
 
   (define get-data
     (lambda* (connection query (vars #f))
