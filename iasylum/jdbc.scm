@@ -188,6 +188,24 @@
   (define execute-jdbc-update
     (lambda* (connection query (vars #f) (fetch-size #f))
              (execute-jdbc-something execute-update connection query vars fetch-size)))
+
+  (define-java-classes
+    (<sql-date> |java.sql.Date|)
+    (<jobject> |java.lang.Object|)
+    (<sql-timestamp> |java.sql.Timestamp|))
+  
+  (define (jdbc/->jobject value)
+    (cond 
+     ((date? value)
+      (let ((t (date->time-utc value)))
+        ;(java-new <sql-date> (->jlong (* 1000 (time-second t))))
+        (java-new <sql-timestamp> (->jlong (* 1000 (time-second t))))
+        ))
+     ((time? value)
+      (java-new <sql-timestamp> (->jlong (* 1000 (time-second value)))))
+     ((null? value)
+      (java-null <jobject>))
+     (else (->jobject value))))
   
   (define execute-jdbc-something
     (lambda* (something connection query (vars #f) (fetch-size #f))
@@ -202,10 +220,12 @@
                       (lambda (v)
                         (match-let ( ( (tindex tvalue) v ) )
                                    (begin
-                                     (j "stmt.setObject(objectindex, objectvalue);"
-                                        `((stmt ,stmt)
-                                          (objectindex ,(->jobject tindex))
-                                          (objectvalue ,(->jobject tvalue)))))))
+                                     (let ((objectindex (->jobject tindex))
+                                           (objectvalue (jdbc/->jobject tvalue)))
+                                       (j "stmt.setObject(objectindex, objectvalue);"
+                                          `((stmt ,stmt)
+                                            (objectindex ,objectindex)
+                                            (objectvalue ,objectvalue)))))))
                       vars)
                      (something stmt))
                    (something stmt (->jstring query))))))
