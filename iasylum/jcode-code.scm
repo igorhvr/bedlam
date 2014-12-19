@@ -190,8 +190,8 @@
   (j "new java.math.BigDecimal(number);" `((number ,(->jstring string)))))
 
 (define (jbigdecimal->number jbigdecimal)
-  (string->number (decimal-to-fractions-inside-string
-                   (->string (j "jbig.toString();" `((jbig ,jbigdecimal)))))))
+  (inexact->exact (string->number (decimal-to-fractions-inside-string
+                                   (->string (j "jbig.toString();" `((jbig ,jbigdecimal))))))))
 
 (define (string->jbigint string)
   (j "new java.math.BigInteger(number);" `((number ,(->jstring string)))))
