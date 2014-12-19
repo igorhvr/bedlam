@@ -145,6 +145,7 @@
      jarray->jlist
      jarray->string
      number->jbigdecimal
+     jbigdecimal->number
      integer->jbigint
      string->jbigdecimal
      string->jbigint
