@@ -1,3 +1,5 @@
+; Scratchpad / random examples, complete mess.
+
 ; Naive version.
 ;(define (flatten l)
 ;  (cond ((null? l) '())
@@ -101,3 +103,11 @@
 ;(apply parallel (map (lambda (fn) (lambda () (try-and-if-it-fails-object (#f) (smart-compile fn)))) (find-scm-in-directory "/base/bedlam/iasylum")))
 
 ;(map (lambda (fn) (try-and-if-it-fails-object (#f) (smart-compile fn))) (find-scm-in-directory "/base/bedlam/iasylum"))
+
+; Fun match sample.
+((lambda (p) (letrec ((fn (match-lambda ((lonely-element-in-a-list) lonely-element-in-a-list) ((first . rest) (string-append* first "," (fn rest)))))) (fn p))) '(1 2 3 4))
+
+(letrec ((fn (match-lambda ((lonely-element-in-a-list)
+                       lonely-element-in-a-list)
+                      ((first . rest) (string-append* first "," (fn rest))))))
+  (fn p))
