@@ -2,7 +2,7 @@
 
 (define-java-classes <java.util.concurrent.linked-blocking-queue> <java.util.concurrent.array-blocking-queue>)
 
-(define-generic-java-methods put take)
+(define-generic-java-methods put take size peek)
 
  ;; Specification:
  ;; (if capacity (j "new java.util.concurrent.ArrayBlockingQueue(capacity);" `((capacity ,(->jint capacity)))) (j "new java.util.concurrent.LinkedBlockingQueue();"))
@@ -66,6 +66,15 @@
                                (set! paused #t) (void)]
                               [('resume)
                                (set! paused #f) (void)]
+                              [('size)
+                                (->number (size inner-queue))]
+                              [('peek return-when-empty)
+                               (if (not paused)
+                                   (let ((result (peek inner-queue)))
+                                     (if (java-null? result) return-when-empty (java-unwrap result)))
+                                   return-when-empty)]
+                              [('peek)
+                               (new-function 'peek 'empty)]
                               [('inner-queue)
                                inner-queue]
                               )))
