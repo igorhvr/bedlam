@@ -5,6 +5,8 @@ export CLASSPATH=$CLASSPATH:/base/bedlam/jars/clojure/tools.nrepl-0.2.0-SNAPSHOT
 
 export CLASSPATH=$CLASSPATH:/base/bedlam/jars/jdbc/jtds-1.2.5.jar
 
+export CLASSPATH=$CLASSPATH:/base/bedlam/jars/jdbc/log4jdbc4-1.2.jar
+
 export CLASSPATH=$CLASSPATH:/home/igorhvr/datomic/bin:/base/xmpp/www.igniterealtime.org/bin/smack_3_2_2/smack.jar:/base/xmpp/www.igniterealtime.org/bin/smack_3_2_2/smackx.jar:/base/xmpp/www.igniterealtime.org/bin/smack_3_2_2/smackx-jingle.jar:/base/xmpp/www.igniterealtime.org/bin/smack_3_2_2/smackx-debug.jar:/home/igorhvr/squirrel-sql/lib/jtds-1.2.5.jar
 
 export CLASSPATH=$CLASSPATH:/home/igorhvr/datomic/bin
