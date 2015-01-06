@@ -7,6 +7,7 @@
 
 (module iasylum/iasylum
   (
+   y-combinator
    hashtable/values
    nyi
    vunless
@@ -88,6 +89,11 @@
   ;; Saving some typing...
   (define-syntax def (identifier-syntax define))
 
+  (define y-combinator
+    (lambda (h)
+      ((lambda (x) (h (lambda (a) ((x x) a))))
+       (lambda (x) (h (lambda (a) ((x x) a)))))))
+  
   (import hashtable)
   (import file-manipulation)  ;; rglob uses this.
 
