@@ -70,6 +70,7 @@
    vector->list_deeply
    alist-to-url-query-string
    make-parameter*
+   subtract-dates
    start-async-json-engine-with-status-retriever
    add-between-elements
    complete-with-zeroes
