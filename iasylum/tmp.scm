@@ -111,3 +111,6 @@
                        lonely-element-in-a-list)
                       ((first . rest) (string-append* first "," (fn rest))))))
   (fn p))
+
+(define (force-integer-to-digits number digits)
+  (fmt #f (pad-char #\0  (pad/left digits (num number)))))
