@@ -1,1 +1,1 @@
-sudo docker build -t igorhvr/bedlam:2014-12-25_20h21m_49s .
+sudo docker build -t igorhvr/bedlam .
