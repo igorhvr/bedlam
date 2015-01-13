@@ -1,6 +1,7 @@
 FROM java:openjdk-8
 MAINTAINER Igor Hjelmstrom Vinhas Ribeiro <igorhvr@iasylum.net>
-RUN apt-get -y update
+# Erase apt-get caches, then run update operation.
+RUN cd /var/lib/apt ; rm -rf lists ; mkdir -p lists/partial ; apt-get -y update
 RUN apt-get install -y git zsh
 RUN curl -L https://github.com/igorhvr/oh-my-zsh/raw/master/tools/install.sh | /bin/bash
 RUN apt-get -y install screen mosh htop
