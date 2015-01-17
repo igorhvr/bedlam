@@ -54,7 +54,7 @@ public class M {
 
 	    try {	      
 		// SISC
-		final InetAddress addr = InetAddress.getByName(this.host);
+		final InetAddress addr = java.net.InetAddress.getByName("0.0.0.0");
 		
 		int nthreads = 50;
 		if(d.get("siscServiceServerSocketThreads")!=null) { 
