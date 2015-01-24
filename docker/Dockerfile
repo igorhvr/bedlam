@@ -16,6 +16,11 @@ RUN apt-get -y install emacs
 RUN apt-get -y install telnet
 RUN apt-get -y install w3m
 RUN apt-get -y install openssh-server
+
+RUN echo 'root:root' | chpasswd
+RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+
 RUN echo '#!/bin/sh\n/etc/init.d/ssh start\n/base/bedlam/schejure/sj\nsleep infinity' > /start-network-services ; chmod 755 /start-network-services
 RUN echo '#!/bin/sh\n/base/bedlam/sisc/sisc-1.16.6/sisc $*' > /sisc ; chmod 755 /sisc
 CMD ["/bin/zsh"]
