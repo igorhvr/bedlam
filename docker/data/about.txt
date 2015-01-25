@@ -1,0 +1,1 @@
+The /base/bedlam/docker/rsync_data_to_container will sync this to inside the container. /base/bedlam/docker/rsync_data_from_container will bring the container contents to the host.
