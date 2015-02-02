@@ -14,6 +14,8 @@
                      jdbc/for-each-triple
                      create-thread-local-jdbc/get-connection-function
                      pool-datasource
+                     datasource/get-connection-function
+                     jdbc-connection-close
                      )
 
   
@@ -74,6 +76,15 @@
 
         new com.zaxxer.hikari.HikariDataSource(config);"
        `((jdbcurl ,(->jstring jdbc-url)) (tuser ,(->jstring user)) (tpassword ,(->jstring password)))))
+
+  (define (datasource/get-connection-function ds)
+    (lambda ()
+      (j "ds.getConnection();" `((ds ,ds)))))
+  
+  (define-generic-java-method close)
+
+  (define (jdbc-connection-close conn)
+    (close conn))
 
   (define-generic-java-method gmd |getMetaData|)
   
