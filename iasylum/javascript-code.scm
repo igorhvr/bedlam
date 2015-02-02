@@ -22,7 +22,8 @@
 (set! js
   (lambda*
    (code (vars #f) (manager (get-local-javascript-manager)))
-
+   ;(d/n "Will run code: (((((" code "))))) saved to " (save-to-somewhere code))
+   ;(d/n "vars: " vars)
    (j                       
        "import javax.script.*;
         cx = org.mozilla.javascript.Context.enter();
@@ -36,12 +37,14 @@
                   (begin
                     (let* ((sname (if (string? vname) vname (symbol->string vname)))
                            (name (->jstring sname )))
+                      ;(d/n "saving " sname " to " (save-to-somewhere vvalue))
                       (j "manager.put(jsobjectname, jsobjectvalue);"
                          `((manager ,manager)
                            (jsobjectname ,(->jstring sname))
                            (jsobjectvalue ,(->jobject vvalue))))))))
      vars))
-  
+
+  (let ((final-result
    (j                       
        "ourresult=null;
         try {           
@@ -52,6 +55,9 @@
         }
         ourresult;"
        `((manager ,manager) (code ,(->jstring code))))))
+    ;(d/n "final-result: " (save-to-somewhere final-result))
+    final-result
+    )))
 
 ;; Example: (run-js/s (js-manager) "var f = function (what) { return 'hello, ' + what; }; f('Javascript');")
 
