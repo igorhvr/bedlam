@@ -13,6 +13,7 @@
                      map-each-data
                      jdbc/for-each-triple
                      create-thread-local-jdbc/get-connection-function
+                     pool-datasource
                      )
 
   
@@ -57,6 +58,22 @@
           (when (java-null? result) (set tl (jdbc/get-connection url username password)))
           (let ((to-return (get tl)))            
             to-return)))))
+
+  ;; Sample usage: (pool-datasource "jdbc:postgresql://somehostsomewhere:5432/databasename" "username" "password")
+  ;; Use http://docs.oracle.com/javase/7/docs/api/javax/sql/DataSource.html#getConnection%28%29 later to retrieve a connection
+  ;; from this pool. And close it to return it to the pool.
+  (define (pool-datasource jdbc-url user password)
+    (j "config = new com.zaxxer.hikari.HikariConfig();
+        config.setJdbcUrl(jdbcurl);
+        config.setUsername(tuser);
+        config.setPassword(tpassword);
+        config.addDataSourceProperty(\"cachePrepStmts\", \"true\");
+        config.addDataSourceProperty(\"prepStmtCacheSize\", \"250\");
+        config.addDataSourceProperty(\"prepStmtCacheSqlLimit\", \"2048\");
+        config.addDataSourceProperty(\"useServerPrepStmts\", \"true\");
+
+        new com.zaxxer.hikari.HikariDataSource(config);"
+       `((jdbcurl ,(->jstring jdbc-url)) (tuser ,(->jstring user)) (tpassword ,(->jstring password)))))
 
   (define-generic-java-method gmd |getMetaData|)
   
