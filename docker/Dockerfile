@@ -1,7 +1,7 @@
 FROM java:openjdk-8
 MAINTAINER Igor Hjelmstrom Vinhas Ribeiro <igorhvr@iasylum.net>
 # Erase apt-get caches, then run update operation.
-RUN echo "2015-01-17" > /last_apt-get_update
+RUN echo "2015-02-06" > /last_apt-get_update
 RUN cd /var/lib/apt ; rm -rf * 
 RUN apt-get -y update --fix-missing
 RUN apt-get install -y git
