@@ -486,6 +486,8 @@
 
 (require-extension (lib iasylum/incanter))
 
+(require-extension (lib iasylum/crypto))
+
 (set! load original-load)
 
 (define bedlam-loaded-and-ready-to-use #t)
