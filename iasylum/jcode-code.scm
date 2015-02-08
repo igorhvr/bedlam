@@ -196,6 +196,13 @@
 (define (string->jbigint string)
   (j "new java.math.BigInteger(number);" `((number ,(->jstring string)))))
 
+(define (string->java.io.File s)
+  (let* ((input-port (open-input-string s))
+        (jreader (->jreader input-port))
+        (jstream (j "new org.apache.commons.io.input.ReaderInputStream(reader);" `((reader ,jreader))))
+        (tmp-file (jstream->tmp-file jstream)))
+    tmp-file))
+
 (define (number->jbigdecimal number)
   (let ((exact-number (inexact->exact number)))
     (j "new java.math.BigDecimal(numerator).divide(new java.math.BigDecimal(denominator), java.math.MathContext.DECIMAL128);"

@@ -149,6 +149,7 @@
      integer->jbigint
      string->jbigdecimal
      string->jbigint
+     string->java.io.File
      java-equals?
      make-atomic-boolean
      compare-and-set-atomic-boolean!
