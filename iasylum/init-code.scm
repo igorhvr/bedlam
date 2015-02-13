@@ -91,7 +91,7 @@
 (add-lib "u/commons-email-1.2.jar")
 (add-lib "u/commons-fileupload-1.2.1.jar")
 (add-lib "u/commons-io-2.0.1.jar")
-(add-lib "u/commons-logging-1.1.jar")
+(add-lib "u/commons-logging-1.1.3.jar")
 (add-lib "u/junit-3.8.1.jar")
 (add-lib "jdbc/log4j-1.2.17.jar")
 (add-lib "bsh/bsh-2.2.0.jar")
@@ -461,7 +461,6 @@
                   `((input ,(->jstring path)))))))
 
 (add-lib "net/commons-codec-1.6.jar")
-(add-lib "net/commons-logging-1.1.3.jar")
 (add-lib "net/fluent-hc-4.3.4.jar")
 (add-lib "net/httpclient-cache-4.3.4.jar")
 (add-lib "net/httpmime-4.3.4.jar")
