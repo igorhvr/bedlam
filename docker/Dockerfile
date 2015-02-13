@@ -29,7 +29,7 @@ RUN echo '#!/bin/sh\n/base/bedlam/sisc/sisc-1.16.6/sisc $*' > /sisc ; chmod 755 
 ADD data/ /data
 
 RUN echo "2015-02-13_17h31mUTC" > /last_git_pull
-RUN cd /base/bedlam ; git pull
+RUN cd /base/bedlam ; git reset --hard HEAD ; git pull
 CMD ["/bin/zsh"]
 
 # ssh
