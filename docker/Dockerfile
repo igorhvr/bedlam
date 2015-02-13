@@ -23,10 +23,13 @@ RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/ss
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 ADD id_rsa.pub /root/.ssh/authorized_keys
 RUN chmod -R 700 /root/.ssh/
-ADD data/ /data
 
 RUN echo '#!/bin/sh\n/etc/init.d/ssh start\n/base/bedlam/schejure/sj\nsleep infinity' > /start-network-services ; chmod 755 /start-network-services
 RUN echo '#!/bin/sh\n/base/bedlam/sisc/sisc-1.16.6/sisc $*' > /sisc ; chmod 755 /sisc
+ADD data/ /data
+
+RUN echo "2015-02-13" > /last_git_pull
+RUN cd /base/bedlam ; git pull
 CMD ["/bin/zsh"]
 
 # ssh
