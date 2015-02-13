@@ -28,7 +28,7 @@ RUN echo '#!/bin/sh\n/etc/init.d/ssh start\n/base/bedlam/schejure/sj\nsleep infi
 RUN echo '#!/bin/sh\n/base/bedlam/sisc/sisc-1.16.6/sisc $*' > /sisc ; chmod 755 /sisc
 ADD data/ /data
 
-RUN echo "2015-02-13" > /last_git_pull
+RUN echo "2015-02-13_17h31mUTC" > /last_git_pull
 RUN cd /base/bedlam ; git pull
 CMD ["/bin/zsh"]
 
