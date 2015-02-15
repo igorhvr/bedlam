@@ -152,6 +152,7 @@
        ((number? v) (->jdouble v))
        ((date? v) (date->jdate v))
        ((time? v) (time->jdate v))
+       ((alist? v) (->jmap v))
        ((list? v)
         (let ((resulting-list (j "new java.util.concurrent.ConcurrentLinkedQueue();")))
           (map           
