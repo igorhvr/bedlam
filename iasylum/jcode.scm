@@ -140,6 +140,7 @@
      display-java-stack-trace
      key-value->jmap
      key-jvalue->jmap
+     ->jmap
      map-jarray
      jlist->jarray
      jarray->jlist

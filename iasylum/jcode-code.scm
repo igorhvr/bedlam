@@ -245,6 +245,27 @@
      m)
     result))
 
+(define (->jmap m)
+  (let ((result (create-concurrent-hash-map)))
+    (for-each
+     (match-lambda
+      
+      ((key value)
+       ;; (j "map.put(key, value);" `((map ,result) (key ,(->jstring key)) (value ,(->jobject value))))
+       (put result (->jobject key) (->jobject value)))
+
+      ((key . value)
+       ;; (j "map.put(key, value);" `((map ,result) (key ,(->jstring key)) (value ,(->jobject value))))
+       (put result (->jobject key) (->jobject value)))
+
+      (#(key value)
+       ;; (j "map.put(key, value);" `((map ,result) (key ,(->jstring key)) (value ,(->jobject value))))
+       (put result (->jobject key) (->jobject value)))
+      
+      )
+     m)
+    result))
+
 ;; Usage: (map-jarray (lambda (v) (->scm-object v)) (j "new int[]{1,2,3}")) === Returns ===> (1 2 3)
 (define (map-jarray proc v)
   (let ((size (java-array-length v)))
