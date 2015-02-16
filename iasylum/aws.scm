@@ -20,7 +20,7 @@
 
    (define (aws/sqs-send-message sqs-client message) (j "sqs.sendMessage(message);" `((sqs ,sqs-client) (message ,message))))
 
-   (define (aws/sqs-receive-message sqs-client queue-url) (->scm-object (j "result=sqs.receiveMessage(new com.amazonaws.services.sqs.model.ReceiveMessageRequest(queueurl).withMaxNumberOfMessages(1)).getMessages();finalresult=null; if (result != null && result.size() > 0) { result=result.get(0); finalresult=result.getBody(); receipt=result.getReceiptHandle(); sqs.deleteMessage(new com.amazonaws.services.sqs.model.DeleteMessageRequest(queueurl, receipt));  } ; finalresult; " `((queueurl ,(->jstring queue-url)) (sqs ,sqs-client)))))
+   (define aws/sqs-receive-message (lambda* (sqs-client queue-url (wait-time-seconds: wait-time-seconds 0)) (->scm-object (j "receiverequest=new com.amazonaws.services.sqs.model.ReceiveMessageRequest(queueurl);if(waittimeseconds!=0)receiverequest.setWaitTimeSeconds(waittimeseconds);result=sqs.receiveMessage(receiverequest.withMaxNumberOfMessages(1)).getMessages();finalresult=null; if (result != null && result.size() > 0) { result=result.get(0); finalresult=result.getBody(); receipt=result.getReceiptHandle(); sqs.deleteMessage(new com.amazonaws.services.sqs.model.DeleteMessageRequest(queueurl, receipt));  } ; finalresult; " `((queueurl ,(->jstring queue-url)) (sqs ,sqs-client) (waittimeseconds ,(->jobject wait-time-seconds)))))))
    
    (define (aws/make-dynamodb-client credentials) (j "new com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient(credentials);" `((credentials ,credentials))))
 
