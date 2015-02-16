@@ -487,6 +487,8 @@
 
 (require-extension (lib iasylum/crypto))
 
+(require-extension (lib iasylum/aws))
+
 (add-lib "aws-java-sdk-1.9.19/aspectj-1.6/aspectjrt.jar")
 (add-lib "aws-java-sdk-1.9.19/aspectj-1.6/aspectjweaver.jar")
 (add-lib "aws-java-sdk-1.9.19/aws-java-sdk-1.9.19-javadoc.jar")
