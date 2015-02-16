@@ -6,6 +6,7 @@
 (require-extension (lib iasylum/match))
 (require-extension (lib iasylum/math))
 (require-extension (srfi 19)) ; date & time
+(require-extension (srfi 1))
 
 (module iasylum/jcode
   (j

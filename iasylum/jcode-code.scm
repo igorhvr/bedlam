@@ -141,6 +141,8 @@
           ;;make-date nanosecond second minute hour day month year zone-offset
            (make-date (* 1000000 milliseconds) seconds minutes hours day-of-month month-of-year year 0)))))
 
+(define (alist? p)
+  (every pair? p))
 
 (define (->jobject v)
   (if (java-object? v) v
@@ -152,16 +154,17 @@
        ((number? v) (->jdouble v))
        ((date? v) (date->jdate v))
        ((time? v) (time->jdate v))
-       ((alist? v) (->jmap v))
        ((list? v)
-        (let ((resulting-list (j "new java.util.concurrent.ConcurrentLinkedQueue();")))
-          (map           
-           (lambda (elementn)
-             (j "linkedlist.add(elementnx);"
-                `((elementnx ,(->jobject elementn))
-                  (linkedlist ,resulting-list))))
-           v)
-          resulting-list))
+        (if (alist? v)
+            (->jmap v)
+            (let ((resulting-list (j "new java.util.concurrent.ConcurrentLinkedQueue();")))
+              (map           
+               (lambda (elementn)
+                 (j "linkedlist.add(elementnx);"
+                    `((elementnx ,(->jobject elementn))
+                      (linkedlist ,resulting-list))))
+               v)
+              resulting-list)))
        ((pair? v)
         (j "new java.util.AbstractMap.SimpleEntry(first, second);"
            `((first ,(->jobject (car v)))
