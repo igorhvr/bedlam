@@ -200,6 +200,24 @@
 (define (string->jbigint string)
   (j "new java.math.BigInteger(number);" `((number ,(->jstring string)))))
 
+(define (jstream->tmp-file stream)
+  (j "jstreamtofile_result=java.io.File.createTempFile(\"jstream-to-file_\",\".tmp\");
+      { 
+	jstreamtofile_out = new java.io.FileOutputStream(jstreamtofile_result);
+ 
+	jstreamtofile_read = 0;
+	jstreamtofile_bytes = new byte[1024];
+ 
+	while ((jstreamtofile_read = inputstream.read(jstreamtofile_bytes)) != -1) {
+		jstreamtofile_out.write(jstreamtofile_bytes, 0, jstreamtofile_read);
+	}
+ 	
+	jstreamtofile_out.flush();
+	jstreamtofile_out.close();
+      }
+      jstreamtofile_result;"
+     `((inputstream ,stream))))
+
 (define (string->java.io.File s)
   (let* ((input-port (open-input-string s))
         (jreader (->jreader input-port))

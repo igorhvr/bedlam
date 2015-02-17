@@ -45,7 +45,6 @@
    uuid?
    get-all-jstreams
    create-temporary-directory
-   jstream->tmp-file
    string-drop-both
    xor
    ensure-zipped-copy
@@ -535,24 +534,6 @@
 
   (define (create-temporary-directory)
     (->string (j "java.nio.file.Files.createTempDirectory(\"bedlamTempDirectory\").toAbsolutePath().toString();")))
-
-  (define (jstream->tmp-file stream)
-  (j "jstreamtofile_result=java.io.File.createTempFile(\"jstream-to-file_\",\".tmp\");
-      { 
-	jstreamtofile_out = new java.io.FileOutputStream(jstreamtofile_result);
- 
-	jstreamtofile_read = 0;
-	jstreamtofile_bytes = new byte[1024];
- 
-	while ((jstreamtofile_read = inputstream.read(jstreamtofile_bytes)) != -1) {
-		jstreamtofile_out.write(jstreamtofile_bytes, 0, jstreamtofile_read);
-	}
- 	
-	jstreamtofile_out.flush();
-	jstreamtofile_out.close();
-      }
-      jstreamtofile_result;"
-     `((inputstream ,stream))))
 
   (define (string-drop-both s left-n right-n)
     (string-drop (string-drop-right s right-n) left-n))
