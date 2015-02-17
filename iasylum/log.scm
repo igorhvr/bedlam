@@ -51,9 +51,16 @@
       (define-log-fn log-warn 'warn)
       (define-log-fn log-error 'error)
       (define-log-fn log-fatal 'fatal)))
-  
+
   (define (get-global-logger-to-this-thread)
-    (->scm-object (j "iu.M.d.get(\"logger-global_48729\").get();")))
+    (let ((global-logger (j "iu.M.d.get(\"logger-global_48729\");")))
+      (if (equal? (j "null")
+                  global-logger)
+          (begin
+            (set-default-global-logger!)
+            (get-global-logger-to-this-thread))
+          (->scm-object (j "globall.get();"
+                           `((globall ,global-logger)))))))
 
   (define (set-global-logger-to-this-thread! logger)
     (j "iu.M.d.get(\"logger-global_48729\").set(newlogger);"
@@ -107,7 +114,8 @@
                (apply d (add-between-elements "\n" (append (list (string-append* "______ "
                                                                                  (string-upcase (symbol->string level))
                                                                                  " ________________________"
-                                                                                 " (" (get-thread-info) ")"
+                                                                                 " (" (get-thread-info) ") "
+                                                                                 (get-timestamp)
                                                                                  "\n"))
                                                            message (list "\n"))))))))))
 
@@ -122,14 +130,16 @@
                        (lambda () body ...)
                        (lambda () (set-global-logger-to-this-thread! old-logger)))))))
 
-  (j "globalLogger = new ThreadLocal() {
-             protected Object initialValue() {
-                 return defaultlogger;
-             }
-      };
+  (define (set-default-global-logger!)
+    (j "globalLogger = new ThreadLocal() {
+            protected Object initialValue() {
+                return defaultlogger;
+            }
+        };
 
-      iu.M.d.putIfAbsent(\"logger-global_48729\", globalLogger);"
-     `((defaultlogger ,(->jobject (make-logger)))))
-  
+        iu.M.d.putIfAbsent(\"logger-global_48729\", globalLogger);"
+       `((defaultlogger ,(->jobject (make-logger))))))
+
+  (set-default-global-logger!)
+
   )
-  
