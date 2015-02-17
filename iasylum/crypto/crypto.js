@@ -60,7 +60,7 @@ var iasylum_crypto = {
 		var curve = sjcl.ecc.curves.c192;
 		var bigNumber = sjcl.bn.fromBits(serializedPrivateKey);
 		return new sjcl.ecc.elGamal['secretKey'](curve, bigNumber);
-	    }
+	    };
 	    
 	    var underlying_key = key['body'];
 
