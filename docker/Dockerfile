@@ -17,6 +17,7 @@ RUN apt-get -y install telnet
 RUN apt-get -y install w3m
 RUN apt-get -y install openssh-server
 RUN apt-get -y install rsync
+RUN apt-get -y install less
 
 RUN echo 'root:root' | chpasswd
 RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
