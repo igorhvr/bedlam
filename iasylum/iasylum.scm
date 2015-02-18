@@ -35,6 +35,7 @@
    file->string
    iasylum-sort
    sort
+   avector-alphanumeric-sort
    /*
    find-zipfiles
    get-streams-in-zipfile
@@ -146,6 +147,16 @@
 
   (define iasylum-sort merge-sort)
   (define sort merge-sort)
+
+  ;; an "avector" is a set of key-values relationships
+  ;; (created using (cons key value)), and very similar
+  ;; to an alist, except that the enclosing structure
+  ;; is a vector.
+  (define (avector-alphanumeric-sort v)
+    (list->vector
+     (sort (lambda (e1 e2)
+             (string< (car e1) (car e2)))
+           (vector->list v))))
 
   (define (smart-compile fname)
     (for-each display (list "\n\n(smart-compile \"" fname "\")..."))
