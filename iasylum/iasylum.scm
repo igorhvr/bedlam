@@ -36,6 +36,7 @@
    iasylum-sort
    sort
    avector-lexicographic-sort
+   alist-lexicographic-sort
    /*
    find-zipfiles
    get-streams-in-zipfile
@@ -158,6 +159,9 @@
              (string< (display-string (car e1)) (display-string (car e2))))
            (vector->list v))))
 
+  (define (alist-lexicographic-sort v)
+    (sort (lambda (e1 e2) (string< (display-string (car e1)) (display-string (car e2)))) v))
+          
   (define (smart-compile fname)
     (for-each display (list "\n\n(smart-compile \"" fname "\")..."))
     (let ((data-match (irregex-search
