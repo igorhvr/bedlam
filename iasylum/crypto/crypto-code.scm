@@ -27,7 +27,7 @@
            (when string-to-generate-deterministically-from
              (and-let* (
                         ((js (sjcl.js-unsafe)))
-                        (seed (get-seed-for string-to-generate-deterministically-from))
+                        (seed (get-seed-from string-to-generate-deterministically-from))
                         (random-function (random-maker seed))
                         (pseudo-random-number (random-function (expt 10 12))))
 
