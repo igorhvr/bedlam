@@ -41,7 +41,7 @@ var iasylum_crypto = {
 	    var underlying_key = key['body'];
 
 	    // FIXXXME: Padding data to multiple-of-4, to avoid issues decrypting.
-	    var padderlength=(4-(data.length()%4));
+	    var padderlength=(4-(data.length%4));
 	    var padder='';
 	    for(var i=0;i<padderlength;i++)padder+=' ';
 
