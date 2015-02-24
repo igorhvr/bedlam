@@ -1,6 +1,8 @@
 (require-extension (lib iasylum/jcode))
+(require-extension (lib iasylum/net))
 
 (module iasylum/javascript
-  (js-manager create-thread-local-javascript-manager-retriever get-local-javascript-manager js)
+  (js-manager create-thread-local-javascript-manager-retriever get-local-javascript-manager js
+   nodejs)
 
   (include "javascript-code.scm"))

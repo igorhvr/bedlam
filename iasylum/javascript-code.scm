@@ -1,3 +1,8 @@
+(define (nodejs code)
+  (try-and-if-it-throws-object
+   (#f)
+   (json->scheme (http-call-post-string/string "http://js:27429/" code))))
+
 (define (js-manager)  (j "new javax.script.ScriptEngineManager().getEngineByName(\"javascript\");"))
 
 (define-generic-java-method get |get|)
@@ -60,5 +65,3 @@
     )))
 
 ;; Example: (run-js/s (js-manager) "var f = function (what) { return 'hello, ' + what; }; f('Javascript');")
-
-
