@@ -1,7 +1,9 @@
 (require-extension (lib iasylum/jcode))
 
 (module iasylum/net
-  (http-call-get/string)
+  (http-call-get/string
+   http-call-post-string/string
+   )
 
   ; (http-call-get/string "http://news.ycombinator.com") retrieves those page contents as a string.
   (define (http-call-get/string destinationUrl)
