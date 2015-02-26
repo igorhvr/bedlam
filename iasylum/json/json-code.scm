@@ -213,3 +213,18 @@
      (json-read input-port))))
 
 (define (beautify-json st) (->string (j "com.cedarsoftware.util.io.JsonWriter.formatJson(jsonst);" `((jsonst ,(->jstring st))))))
+
+(define (json->sxml e)
+  (let ((structure (json->scheme e)))
+    `(*TOP*
+      ,@(json->sxml-block structure))))
+
+(define (json->sxml-block structure)
+  (match structure
+         ( #( ( (? string? a) . b ) ...) (=> fail)
+           (map (lambda (a b) (cond ( (or (string? b) (number? b) (boolean? b))  `(,(string->symbol a)  ,b))
+                               ( (vector? b)                                `(,(string->symbol a) . ,(json->sxml-block b)))
+                               (else (fail))))
+                a b))
+         
+         ( whatever (throw (make-error (string-append* "Support not yet implemented in json->sxml-block for structure: ===" whatever "=== ."))))))
