@@ -10,7 +10,12 @@
    aws/make-dynamodb-client
    aws/make-dynamodb-attribute aws/ensure-dynamodb-attribute aws/ensure-dynamodb-jmap
    aws/make-dynamodb-put-item-request aws/make-dynamodb-get-item-request aws/make-dynamodb-delete-item-request
-   aws/dynamodb-get-item aws/dynamodb-put-item aws/dynamodb-delete-item)
+   aws/dynamodb-get-item aws/dynamodb-put-item aws/dynamodb-delete-item
+
+   aws/make-dynamodb-simple-eq-key-condition
+   aws/make-dynamodb-simple-eq-key-query-request
+   aws/dynamodb-simple-eq-key-query
+   )
    
    (define (aws/make-credentials access-key secret-key) (j "new com.amazonaws.auth.BasicAWSCredentials(accesskey, secretkey);" `((accesskey ,(->jstring access-key)) (secretkey ,(->jstring secret-key)))))
 
@@ -61,4 +66,27 @@
    (define (aws/dynamodb-delete-item dynamodb-client table-name key-details)
      (->scm-object (j "dyn.deleteItem(req).getAttributes();" `((dyn ,dynamodb-client) (req ,(aws/make-dynamodb-delete-item-request table-name key-details))))))
 
+   (define (aws/make-dynamodb-simple-eq-key-condition attribute-name value)
+     (let* ((cnd (j "new com.amazonaws.services.dynamodbv2.model.Condition().withComparisonOperator(com.amazonaws.services.dynamodbv2.model.ComparisonOperator.EQ).withAttributeValueList(av);" `((av ,(aws/ensure-dynamodb-attribute value))))))
+       (->jmap `((,attribute-name . ,cnd)))))
+   
+   (define aws/make-dynamodb-simple-eq-key-query-request
+     (lambda* (table-name attribute-name attribute-value (strongly-consistent-read: strongly-consistent-read #t))
+              (j "new com.amazonaws.services.dynamodbv2.model.QueryRequest(tablename).withKeyConditions(kc).withConsistentRead(consistent);"
+                 `((kc ,(aws/make-dynamodb-simple-eq-key-condition attribute-name attribute-value))
+                   (tablename ,(->jstring table-name))
+                   (consistent ,(->jboolean strongly-consistent-read))))))
+   
+   ;; Sample usage: (aws/dynamodb-simple-eq-key-query dynamodb-client "dyn-table-name" "id" "c8832de0-bde8-11e4-91a6-56847afe9799")
+   (define (aws/dynamodb-simple-eq-key-query dynamodb-client table-name attribute-name attribute-value)
+     (map (lambda (individual-map)
+            (let ((scheme-map (jmap->alist individual-map)))
+              (map (lambda (entry)
+                     (match entry ( (k . v) `(,k . ,(->scm-object (j "v.getS();" `((v ,v))))))))
+                   scheme-map)))
+          (iterable->list
+           (j "dyn.query(req).getItems();" `((dyn ,dynamodb-client)
+                                             (req ,(aws/make-dynamodb-simple-eq-key-query-request table-name attribute-name attribute-value
+                                                                                                  'strongly-consistent-read: #t)))))))
+   
 )
