@@ -114,3 +114,9 @@
 
 (define (force-integer-to-digits number digits)
   (fmt #f (pad-char #\0  (pad/left digits (num number)))))
+
+;(ssax:xml->sxml (open-input-string "<?xml?><cat a=\"b\"></cat>") '()) ===> (*top* (*pi* xml "") (cat (|@| (a "b"))))
+
+(define sample-text "{ \"father\": { \"second-father\": { \"third-father\": \"someValueHere\"} } }")
+(match ((sxpath "/father/second-father/third-father") (json->sxml sample-text)) (((_ d)) d))
+
