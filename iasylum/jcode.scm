@@ -142,6 +142,7 @@
      key-value->jmap
      key-jvalue->jmap
      ->jmap
+     jmap->alist
      map-jarray
      jlist->jarray
      jarray->jlist

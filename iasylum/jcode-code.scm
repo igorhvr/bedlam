@@ -288,6 +288,14 @@
      m)
     result))
 
+(define (jmap->alist c)
+  (let ((it (j "c.entrySet().iterator();" `((c ,c)))))
+    (map (lambda (e)
+           (cons
+            (->scm-object (j "e.getKey();" `((e ,e))))
+            (->scm-object (j "e.getValue();" `((e ,e))))))
+         (iterable->list it))))
+
 ;; Usage: (map-jarray (lambda (v) (->scm-object v)) (j "new int[]{1,2,3}")) === Returns ===> (1 2 3)
 (define (map-jarray proc v)
   (let ((size (java-array-length v)))
