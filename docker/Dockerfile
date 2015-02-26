@@ -1,7 +1,7 @@
 FROM java:openjdk-8
 MAINTAINER Igor Hjelmstrom Vinhas Ribeiro <igorhvr@iasylum.net>
 # Erase apt-get caches, then run update operation.
-RUN echo "2015-02-06" > /last_apt-get_update
+RUN echo "2015-02-26" > /last_apt-get_update
 RUN cd /var/lib/apt ; rm -rf * 
 RUN apt-get -y update --fix-missing
 RUN apt-get install -y git
@@ -18,6 +18,7 @@ RUN apt-get -y install w3m
 RUN apt-get -y install openssh-server
 RUN apt-get -y install rsync
 RUN apt-get -y install less
+RUN apt-get -y install ntpdate
 
 RUN echo 'root:root' | chpasswd
 RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
@@ -29,7 +30,7 @@ RUN echo '#!/bin/sh\n/etc/init.d/ssh start\n/base/bedlam/schejure/sj\nsleep infi
 RUN echo '#!/bin/sh\n/base/bedlam/sisc/sisc-1.16.6/sisc $*' > /sisc ; chmod 755 /sisc
 ADD data/ /data
 
-RUN echo "2015-02-13_17h31mUTC" > /last_git_pull
+RUN echo "2015-02-26_02h13mUTC" > /last_git_pull
 RUN cd /base/bedlam ; git reset --hard HEAD ; git pull
 CMD ["/bin/zsh"]
 
