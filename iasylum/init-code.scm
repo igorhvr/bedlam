@@ -128,6 +128,7 @@
 (add-lib "hornetq/2.4.0_Final/jboss-jms-api.jar")
 (add-lib "hornetq/2.4.0_Final/netty.jar")
 (add-lib "hornetq/2.4.0_Final/hornetq-commons.jar")
+(add-lib "hornetq/2.4.0_Final/jnp-client.jar")
 
 (import os)
 (import java-io)
