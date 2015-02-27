@@ -7,6 +7,7 @@
    hornetq-queue
    hornetq-producer hornetq-consumer
    hornetq-send hornetq-receive
+   hornetq-get-message-object hornetq-get-message-jobject hornetq-get-message-properties
    build-standard-localhost-session-lambda
    build-standard-queue-lambda
    build-producer-lambda
@@ -74,10 +75,23 @@
 
   (define hornetq-receive
     (lambda* (consumer (block #f))
-        (cond ((and block (boolean? block)) (j "c.receive().getObject();" `((c ,consumer))))
-              ((and block (number? block)) (j "c.receive(timeout).getObject();" `((c ,consumer)
+        (cond ((and block (boolean? block)) (j "c.receive();" `((c ,consumer))))
+              ((and block (number? block)) (j "c.receive(timeout).;" `((c ,consumer)
                                                                                    (timeout ,(->jlong block)))))
-              (else (j "c.receiveNoWait().getObject();" `((c ,consumer)))))))
+              (else (j "c.receiveNoWait();" `((c ,consumer)))))))
+  
+  (define (hornetq-get-message-jobject m)
+    (j "m.getObject();" `((m ,m))))
+
+  (define (hornetq-get-message-object m)
+    (->scm-object (hornetq-get-message-jobject m)))
+
+  (define (hornetq-get-message-properties obj)
+    (let ((property-names (iterable->list (j "Collections.list(obj.getPropertyNames());" `((obj ,obj))))))
+      (map cons
+           (map ->string property-names)
+           (pam property-names (lambda (property-name)
+                                 (->scm-object (j "o.getObjectProperty(pname);" `((o ,obj) (pname ,property-name)))))))))
   
   (define build-standard-localhost-session-lambda
     (lambda ()
