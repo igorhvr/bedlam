@@ -7,7 +7,7 @@
    hornetq-queue
    hornetq-producer hornetq-consumer
    hornetq-send hornetq-receive
-   hornetq-get-message-object hornetq-get-message-jobject hornetq-get-message-properties
+   hornetq-get-message-object hornetq-get-message-jobject hornetq-get-message-body-buffer-as-string hornetq-get-message-properties
    build-standard-localhost-session-lambda
    build-standard-queue-lambda
    build-producer-lambda
@@ -86,6 +86,9 @@
   (define (hornetq-get-message-object m)
     (->scm-object (hornetq-get-message-jobject m)))
 
+  (define (hornetq-get-message-body-buffer-as-string m)
+    (->string (j "m.getCoreMessage().getBodyBuffer().readString();" `((m ,m)))))
+  
   (define (hornetq-get-message-properties obj)
     (let ((property-names (iterable->list (j "Collections.list(obj.getPropertyNames());" `((obj ,obj))))))
       (map cons
