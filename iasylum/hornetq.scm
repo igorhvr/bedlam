@@ -23,16 +23,23 @@
           new org.hornetq.api.core.TransportConfiguration(org.hornetq.core.remoting.impl.netty.NettyConnectorFactory.class.getName(), map);"
          `((myhost ,(->jstring host))
            (myport ,(->jint port))))))
+
+  (define-java-class <org.hornetq.api.core.TransportConfiguration> |org.hornetq.api.core.TransportConfiguration|)
   
-  (define (hornetq-session transports)
-    (define-java-class <org.hornetq.api.core.TransportConfiguration> |org.hornetq.api.core.TransportConfiguration|)
-    
-    (j "cf = org.hornetq.api.jms.HornetQJMSClient.createConnectionFactoryWithHA(org.hornetq.api.jms.JMSFactoryType.CF, transportsarray);
-      connection = cf.createConnection();
-      connection.start();
-      session = connection.createSession(false, javax.jms.Session.DUPS_OK_ACKNOWLEDGE);"
+  (define hornetq-session
+    (lambda* (transports (username: username "") (password: password ""))
+        (j "cf = org.hornetq.api.jms.HornetQJMSClient.createConnectionFactoryWithHA(org.hornetq.api.jms.JMSFactoryType.CF, transportsarray);
+            if(\"\".equals(tusername) && \"\".equals(tpassword)) {
+                connection = cf.createConnection();
+            } else {
+                connection = cf.createConnection(tusername,tpassword);
+            }
+            connection.start();
+            session = connection.createSession(false, javax.jms.Session.DUPS_OK_ACKNOWLEDGE);"
        
-       `((transportsarray ,(->jarray transports <org.hornetq.api.core.TransportConfiguration>)))))
+            `((transportsarray ,(->jarray transports <org.hornetq.api.core.TransportConfiguration>))
+              (tusername ,(->jstring username))
+              (tpassword ,(->jstring password))))))
   
   (define (hornetq-queue queue-name)
     (j "orderQueue = org.hornetq.api.jms.HornetQJMSClient.createQueue(queuename);" `((queuename ,(->jstring queue-name)))))
