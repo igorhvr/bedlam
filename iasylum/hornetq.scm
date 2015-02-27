@@ -95,8 +95,8 @@
   ;; Example usage.
   ;;  (define localhost-session-lambda (build-standard-localhost-session-lambda))
   ;;  (define standard-queue-lambda (build-standard-queue-lambda))
-  ;;  (define p (build-p-lambda localhost-session-lambda standard-queue-lambda))
-  ;;  (define c (build-c-lambda localhost-session-lambda standard-queue-lambda))
+  ;;  (define p (build-producer-lambda localhost-session-lambda standard-queue-lambda))
+  ;;  (define c (build-consumer-lambda localhost-session-lambda standard-queue-lambda))
   ;;  
   ;;  (hornetq-send (localhost-session-lambda) (p) (->jobject (lambda (p) (+ 4 p))))
   ;;  (->scm-object (hornetq-receive (c)))
