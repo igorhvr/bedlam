@@ -54,12 +54,24 @@
           (queue (if (procedure? queue) (queue) queue)))
       (j "session.createConsumer(queue);" `((session ,session) (queue ,queue)))))
   
-  (define (hornetq-send session producer message)  
-    (j "p.send(m);" `((p ,producer)
-                      (m ,(j "r=session.createObjectMessage();
-                            r.setObject(message);
-                            r;" `((session ,session) (message ,message)))))))
-  
+  (define hornetq-send
+    (lambda* (session producer (object: object #f) (properties: properties '()))
+             (let ((message
+                    (cond (object
+                           (j "r=session.createObjectMessage();
+                            r.setObject(obj);
+                            r;" `((session ,session) (obj ,(->jobject object)))))
+                          (else
+                           (j "r=session.createMessage();
+                               r;" `((session ,session)))))))
+               
+               (pam properties
+                    (match-lambda ((key . value)
+                              (j "message.setObjectProperty(pname, pvalue);" `((message ,message) (pname ,(->jstring key)) (pvalue ,(->jobject value)))))))
+                        
+               (j "p.send(m);" `((p ,producer)
+                                 (m ,message))))))
+
   (define hornetq-receive
     (lambda* (consumer (block #f))
         (cond ((and block (boolean? block)) (j "c.receive().getObject();" `((c ,consumer))))
