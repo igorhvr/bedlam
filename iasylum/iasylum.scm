@@ -27,6 +27,7 @@
    pump-binary
    pump_binary-input-port->character-output-port
    input-port->string
+   watched/spawn
    r r-split r/s r/d r-base
    dp
    smart-compile
@@ -294,6 +295,19 @@
               (loop)))))
     (loop))
 
+  (define (syserr-log p) (j "System.err.print(m); System.err.flush();" `((m ,(->jobject p)))))
+  
+  (define watched/spawn
+    (lambda* (p (error-handler: error-handler
+                           (lambda p (map syserr-log `("Error - will stop thread - details saved at " ,(save-to-somewhere p) " - " ,p "\n")))))
+
+        
+        (thread/spawn
+         (lambda ()
+           (with/fc
+            error-handler
+            p)))))
+  
   (define r
     (lambda* (cmd-string (get-return-code #f))
         (define process-return-code)
