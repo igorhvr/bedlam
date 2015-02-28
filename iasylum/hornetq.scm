@@ -56,12 +56,16 @@
       (j "session.createConsumer(queue);" `((session ,session) (queue ,queue)))))
   
   (define hornetq-send
-    (lambda* (session producer (object: object #f) (properties: properties '()))
+    (lambda* (session producer (object: object #f) (text: text #f) (properties: properties '()))
              (let ((message
                     (cond (object
                            (j "r=session.createObjectMessage();
                             r.setObject(obj);
                             r;" `((session ,session) (obj ,(->jobject object)))))
+                          (text
+                           (j "r=session.createTextMessage();
+                            r.setText(text);
+                            r;" `((session ,session) (obj ,(->jstring text)))))
                           (else
                            (j "r=session.createMessage();
                                r;" `((session ,session)))))))
