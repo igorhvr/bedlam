@@ -65,7 +65,7 @@
                           (text
                            (j "r=session.createTextMessage();
                             r.setText(text);
-                            r;" `((session ,session) (obj ,(->jstring text)))))
+                            r;" `((session ,session) (text ,(->jstring text)))))
                           (else
                            (j "r=session.createMessage();
                                r;" `((session ,session)))))))
