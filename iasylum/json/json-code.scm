@@ -223,6 +223,7 @@
   (match structure
          ( #( ( (? string? a) . b ) ...) (=> fail)
            (map (lambda (a b) (cond ( (or (string? b) (number? b) (boolean? b))  `(,(string->symbol a)  ,b))
+                               ( (void? b)                                  `(,(string->symbol a)    ))
                                ( (vector? b)                                `(,(string->symbol a) . ,(json->sxml-block b)))
                                (else (fail))))
                 a b))
