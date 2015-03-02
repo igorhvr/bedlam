@@ -29,50 +29,46 @@
   
   (define hornetq-session
     (lambda* (transports (username: username "") (password: password ""))
-        (j "cf = org.hornetq.api.jms.HornetQJMSClient.createConnectionFactoryWithHA(org.hornetq.api.jms.JMSFactoryType.CF, transportsarray);
-            if(\"\".equals(tusername) && \"\".equals(tpassword)) {
-                connection = cf.createConnection();
-            } else {
-                connection = cf.createConnection(tusername,tpassword);
-            }
-            connection.start();
-            session = connection.createSession(false, javax.jms.Session.DUPS_OK_ACKNOWLEDGE);"
+        (j "
+            locator = org.hornetq.api.core.client.HornetQClient.createServerLocatorWithHA(transportsarray);
+            factory = locator.createSessionFactory();
+            session = factory.createSession(tusername, tpassword, false, true, true, false, org.hornetq.api.core.client.HornetQClient.DEFAULT_ACK_BATCH_SIZE);
+            session.start();
+            session;
+            "
        
             `((transportsarray ,(->jarray transports <org.hornetq.api.core.TransportConfiguration>))
               (tusername ,(->jstring username))
               (tpassword ,(->jstring password))))))
   
-  (define (hornetq-queue queue-name)
-    (j "orderQueue = org.hornetq.api.jms.HornetQJMSClient.createQueue(queuename);" `((queuename ,(->jstring queue-name)))))
+  (define (hornetq-queue session queue-name)
+    (j "responsequeue = session.queueQuery(new org.hornetq.api.core.SimpleString(queuename)); responsequeue;" `((queuename ,(->jstring queue-name))
+                                                                                           (session ,session))))
+      
   
   (define (hornetq-producer session queue)
     (let ((session (if (procedure? session) (session) session))
           (queue (if (procedure? queue) (queue) queue)))
-      (j "session.createProducer(queue);" `((session ,session) (queue ,queue)))))
+      (j "session.createProducer(queue.getAddress());" `((session ,session) (queue ,queue)))))
   
   (define (hornetq-consumer session queue)
     (let ((session (if (procedure? session) (session) session))
           (queue (if (procedure? queue) (queue) queue)))
-      (j "session.createConsumer(queue);" `((session ,session) (queue ,queue)))))
+      (j "session.createConsumer(queue.getAddress());" `((session ,session) (queue ,queue)))))
   
   (define hornetq-send
     (lambda* (session producer (object: object #f) (text: text #f) (properties: properties '()))
              (let ((message
-                    (cond (object
-                           (j "r=session.createObjectMessage();
-                            r.setObject(obj);
-                            r;" `((session ,session) (obj ,(->jobject object)))))
-                          (text
-                           (j "r=session.createTextMessage();
-                            r.setText(text);
-                            r;" `((session ,session) (text ,(->jstring text)))))
-                          (else
-                           (j "r=session.createMessage();
-                               r;" `((session ,session)))))))
-               
+                    (j "r=session.createMessage(true);
+                        r;" `((session ,session)))))
+
+               (when text (j "message.getBodyBuffer().writeString(text);" `((text ,(->jstring text))
+                                                                            (message ,message))))
+                             
+    
                (pam properties
                     (match-lambda ((key . value)
-                              (j "message.setObjectProperty(pname, pvalue);" `((message ,message) (pname ,(->jstring key)) (pvalue ,(->jobject value)))))))
+                              (j "message.putObjectProperty(pname, pvalue);" `((message ,message) (pname ,(->jstring key)) (pvalue ,(->jobject value)))))))
                         
                (j "p.send(m);" `((p ,producer)
                                  (m ,message))))))
@@ -82,7 +78,7 @@
         (cond ((and block (boolean? block)) (j "c.receive();" `((c ,consumer))))
               ((and block (number? block)) (j "c.receive(timeout).;" `((c ,consumer)
                                                                                    (timeout ,(->jlong block)))))
-              (else (j "c.receiveNoWait();" `((c ,consumer)))))))
+              (else (j "c.receiveImmediate();" `((c ,consumer)))))))
   
   (define (hornetq-get-message-jobject m)
     (j "m.getObject();" `((m ,m))))
@@ -91,14 +87,18 @@
     (->scm-object (hornetq-get-message-jobject m)))
 
   (define (hornetq-get-message-body-buffer-as-string m)
-    (->string (j "m.getCoreMessage().getBodyBuffer().readString();" `((m ,m)))))
-  
+    (->string (j "m.getBodyBuffer().readString();" `((m ,m)))))
+
+  (define-generic-java-method to-string)
   (define (hornetq-get-message-properties obj)
-    (let ((property-names (iterable->list (j "Collections.list(obj.getPropertyNames());" `((obj ,obj))))))
+    (let ((property-names (iterable->list (j "obj.getPropertyNames();" `((obj ,obj))))))
       (map cons
            (map ->string property-names)
            (pam property-names (lambda (property-name)
-                                 (->scm-object (j "o.getObjectProperty(pname);" `((o ,obj) (pname ,property-name)))))))))
+                                 (let ((data (j "o.getObjectProperty(pname);" `((o ,obj) (pname ,property-name)))))
+                                   (if (instance-of data "org.hornetq.api.core.SimpleString")
+                                       (->string (to-string data))
+                                       (->scm-object data ))))))))
   
   (define build-standard-localhost-session-lambda
     (lambda ()
