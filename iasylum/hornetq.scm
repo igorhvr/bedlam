@@ -74,11 +74,14 @@
                                  (m ,message))))))
 
   (define hornetq-receive
-    (lambda* (consumer (block #f))
-        (cond ((and block (boolean? block)) (j "c.receive();" `((c ,consumer))))
-              ((and block (number? block)) (j "c.receive(timeout).;" `((c ,consumer)
+    (lambda* (consumer (block #f) (acknowledge: acknowledge #t))
+             (let ((result
+                    (cond ((and block (boolean? block)) (j "c.receive();" `((c ,consumer))))
+                          ((and block (number? block)) (j "c.receive(timeout).;" `((c ,consumer)
                                                                                    (timeout ,(->jlong block)))))
-              (else (j "c.receiveImmediate();" `((c ,consumer)))))))
+                          (else (j "c.receiveImmediate();" `((c ,consumer)))))))
+               (try-and-if-it-fails-or-empty-or-java-null-return-object () (j "result.acknowledge();"))
+               result)))
   
   (define (hornetq-get-message-jobject m)
     (j "m.getObject();" `((m ,m))))
