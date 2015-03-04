@@ -763,7 +763,7 @@
 
   (define to-csv-line 
     (match-lambda*
-     ((single-element) (string-append* "\"" (escape-double-quotes single-element) "\""))
+     ((single-element) (string-append* "\"" (escape-double-quotes (display-string single-element)) "\""))
      ((first-element . rest) (string-append (to-csv-line  first-element) " , " (apply to-csv-line  rest)))
      (anything (error "Invalid parameter to to-csv-line " anything))))
 
