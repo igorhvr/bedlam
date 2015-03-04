@@ -28,18 +28,19 @@
   (define-java-class <org.hornetq.api.core.TransportConfiguration> |org.hornetq.api.core.TransportConfiguration|)
   
   (define hornetq-session
-    (lambda* (transports (username: username "") (password: password ""))
+    (lambda* (transports (username: username "") (password: password "") (batch-size: batch-size (->number (j "org.hornetq.api.core.client.HornetQClient.DEFAULT_ACK_BATCH_SIZE"))))
         (j "
             locator = org.hornetq.api.core.client.HornetQClient.createServerLocatorWithHA(transportsarray);
             factory = locator.createSessionFactory();
-            session = factory.createSession(tusername, tpassword, false, true, true, false, org.hornetq.api.core.client.HornetQClient.DEFAULT_ACK_BATCH_SIZE);
+            session = factory.createSession(tusername, tpassword, false, true, true, false, batchsize);
             session.start();
             session;
             "
        
             `((transportsarray ,(->jarray transports <org.hornetq.api.core.TransportConfiguration>))
               (tusername ,(->jstring username))
-              (tpassword ,(->jstring password))))))
+              (tpassword ,(->jstring password))
+              (batchsize ,(->jint batch-size))))))
   
   (define (hornetq-queue session queue-name)
     (j "responsequeue = session.queueQuery(new org.hornetq.api.core.SimpleString(queuename)); responsequeue;" `((queuename ,(->jstring queue-name))
