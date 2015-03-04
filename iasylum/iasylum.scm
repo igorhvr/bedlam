@@ -2,6 +2,7 @@
 
 (require-extension (lib iasylum/srfi-89))
 (require-extension (lib iasylum/match))
+(require-extension (lib iasylum/jcode))
 
 ;; TODO - Merge all pumps
 
