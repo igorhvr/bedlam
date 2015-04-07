@@ -105,7 +105,7 @@
         result))))
 
 (define start-worker
-  (lambda* (processor work-queue (continue-forever: continue-forever #t) (inner-queue-forced: inner-queue-forced #f))
+  (lambda* (processor work-queue (continue-forever: continue-forever #t) (inner-queue-forced: inner-queue-forced #f) (log-trace-execution: log-trace-execution (make-parameter* #t)) )
       (thread/spawn
        (lambda ()
          (with-failure-continuation
@@ -113,12 +113,12 @@
             (log-error "Error " err " at " cont))
           (lambda ()
             (let ((n (get-next-worker-n)))
-              (log-trace 'work-queue "Starting worker" n)
+              (when (log-trace-execution) (log-trace 'work-queue "Starting worker" n))
               ((if inner-queue-forced process-all-work-forced process-all-work)
                (lambda (v)
-                 (log-trace 'work-queue n "Starting  work unit" v)
+                 (when (log-trace-execution) (log-trace 'work-queue n "Starting  work unit" v))
                  (let ((timings (time (processor v))))
-                   (log-trace 'work-queue n "Completed work unit" v " in " (cdr timings))
+                   (when (log-trace-execution) (log-trace 'work-queue n "Completed work unit" v " in " (cdr timings)))
                    #t
                    ))       
                work-queue
