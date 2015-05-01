@@ -17,12 +17,7 @@ var iasylum_crypto = {
     },
 
     'symmetric_encrypt': function (key, data) {
-        // FIXXXME: Padding data to multiple-of-4, to avoid issues decrypting.
-        var padderlength = (4 - (data.length % 4));
-        var padder = '';
-        for (var i = 0; i < padderlength; i++)padder += ' ';
-
-        return sjcl.encrypt(key, data + padder);
+        return sjcl.encrypt(key, data);
     },
 
     'symmetric_decrypt': function (key, data) {
@@ -45,12 +40,7 @@ var iasylum_crypto = {
 
             var underlying_key = key['body'];
 
-            // FIXXXME: Padding data to multiple-of-4, to avoid issues decrypting.
-            var padderlength = (4 - (data.length % 4));
-            var padder = '';
-            for (var i = 0; i < padderlength; i++)padder += ' ';
-
-            return sjcl.encrypt(buildSJCLKeyObject(underlying_key['pub']), data + padder);
+            return sjcl.encrypt(buildSJCLKeyObject(underlying_key['pub']), data);
         } else {
             throw 'unsupported key: ' + key;
         }

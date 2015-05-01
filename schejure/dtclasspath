@@ -30,3 +30,4 @@ export CLASSPATH=$CLASSPATH:/base/bedlam/sisc/sisc-1.16.6/sisc.jar:/base/bedlam/
 
 
 export CLASSPATH=$CLASSPATH:/base/bedlam/jars/u/js.jar
+export CLASSPATH=$CLASSPATH:/base/bedlam/jars/u/js-engine.jar

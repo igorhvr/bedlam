@@ -3,7 +3,7 @@
    (#f)
    (json->scheme (http-call-post-string/string "http://js:27429/" code))))
 
-(define (js-manager)  (j "new javax.script.ScriptEngineManager().getEngineByName(\"javascript\");"))
+(define (js-manager)  (j "new javax.script.ScriptEngineManager().getEngineByName(\"rhino\");"))
 
 (define-generic-java-method get |get|)
 (define-generic-java-method set |set|)
@@ -12,7 +12,7 @@
     (let ((tl
            (j "mtl=new ThreadLocal() {
                    protected synchronized Object initialValue() {                       
-                       return new javax.script.ScriptEngineManager().getEngineByName(\"javascript\");
+                       return new javax.script.ScriptEngineManager().getEngineByName(\"rhino\");
                    }
                }; mtl;")))
       (lambda ()

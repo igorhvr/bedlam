@@ -1,11 +1,11 @@
-;(begin (define iasylum-bedlam-location "/home/igorhvr/idm/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")))
+;(begin (define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")))
 (require-extension (srfi 23)) ; error
 
 ;;(with-failure-continuation 
 ;; (lambda (e p)
 ;;   (display "\n\nSince we cannot find bedlam in the classpath, the variable iasylum-bedlam-location must be defined and initialized to the location of the library.\n")
 ;;   (display "\nExample of code to use this library.: \n")
-;;   (display "   (begin (define iasylum-bedlam-location \"/home/igorhvr/idm/bedlam/\") (load (string-append iasylum-bedlam-location \"iasylum/init.scm\")))\n\n\n")
+;;   (display "   (begin (define iasylum-bedlam-location \"/base/bedlam/\") (load (string-append iasylum-bedlam-location \"iasylum/init.scm\")))\n\n\n")
 ;;   (throw e))
 ;; (lambda ()
 ;;   (define tmp iasylum-bedlam-location)
@@ -67,6 +67,7 @@
 (add-lib "u/bsf.jar")
 (add-lib "u/guava-15.0.jar")
 (add-lib "u/js.jar")
+(add-lib "u/js-engine.jar")
 (add-lib "u/jdbc-postgresql.jar")
 (add-lib "jdbc/log4jdbc4-1.2.jar")
 (add-lib "jdbc/slf4j-api-1.7.9.jar")
