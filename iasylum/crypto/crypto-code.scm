@@ -15,7 +15,7 @@
 (define generate-keypair
   (lambda* (type (string-to-generate-deterministically-from: string-to-generate-deterministically-from #f))
   ;; We only support this type of keypair for now.
-           (assert (eqv? type 'sjcl_el_gammal_ecc_c192_key))
+           (assert (eqv? type 'sjcl_el_gammal_ecc_c256_key))
   
            (js (sjcl.js-unsafe)) (js (iasylum.js)) (js (crypto.js))
 
@@ -35,7 +35,7 @@
                    `((prn ,pseudo-random-number)))))
            
            (match
-            (json->scheme (->string (js "iasylum.crypto.generate_sjcl_el_gammal_ecc_c192_keypair();")))
+            (json->scheme (->string (js "iasylum.crypto.generate_sjcl_el_gammal_ecc_c256_keypair();")))
             (#( ( "publicKey" . the-public-key )
                 ( "secretKey" . the-secret-key ) ) `(,(scheme->json the-public-key) ,(scheme->json the-secret-key))))))
 
@@ -57,4 +57,4 @@
 
 
 ;; Sample usage:
-;; (load "/base/bedlam/iasylum/crypto/crypto-code.scm") (define keypair (generate-keypair 'sjcl_el_gammal_ecc_c192_key))(define keypair-pub (match keypair ((public secret) public)))(define keypair-sec (match keypair ((public secret) secret))) (asymmetric-decrypt keypair-sec (asymmetric-encrypt keypair-pub "1234567"))
+;; (load "/base/bedlam/iasylum/crypto/crypto-code.scm") (define keypair (generate-keypair 'sjcl_el_gammal_ecc_c256_key))(define keypair-pub (match keypair ((public secret) public)))(define keypair-sec (match keypair ((public secret) secret))) (asymmetric-decrypt keypair-sec (asymmetric-encrypt keypair-pub "1234567"))
