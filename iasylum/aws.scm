@@ -94,7 +94,7 @@
    (define (aws/make-s3-client credentials)
      (j "new com.amazonaws.services.s3.AmazonS3Client(cred);" `((cred ,credentials))))
 
-   (define (aws/s3-put-string bucket object string)
-     (j "s3.putObject(bucket, objname, fl);" `((bucket ,(->jstring bucket)) (objname ,(->jstring object)) (fl ,(string->java.io.File string)))))
+   (define (aws/s3-put-string s3-client bucket object string)
+     (j "s3.putObject(bucket, objname, fl);" `((bucket ,(->jstring bucket)) (objname ,(->jstring object)) (fl ,(string->java.io.File string)) (s3 ,s3-client))))
    
 )
