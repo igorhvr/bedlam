@@ -15,6 +15,9 @@
    aws/make-dynamodb-simple-eq-key-condition
    aws/make-dynamodb-simple-eq-key-query-request
    aws/dynamodb-simple-eq-key-query
+
+   aws/make-s3-client
+   aws/s3-put-string
    )
    
    (define (aws/make-credentials access-key secret-key) (j "new com.amazonaws.auth.BasicAWSCredentials(accesskey, secretkey);" `((accesskey ,(->jstring access-key)) (secretkey ,(->jstring secret-key)))))
@@ -88,5 +91,10 @@
            (j "dyn.query(req).getItems();" `((dyn ,dynamodb-client)
                                              (req ,(aws/make-dynamodb-simple-eq-key-query-request table-name attribute-name attribute-value
                                                                                                   'strongly-consistent-read: #t)))))))
+   (define (aws/make-s3-client credentials)
+     (j "new com.amazonaws.services.s3.AmazonS3Client(cred);" `((cred ,credentials))))
+
+   (define (aws/s3-put-string bucket object string)
+     (j "s3.putObject(bucket, objname, fl);" `((bucket ,(->jstring bucket)) (objname ,(->jstring object)) (fl ,(string->java.io.File string)))))
    
 )
