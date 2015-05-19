@@ -96,11 +96,12 @@
 
    (define aws/s3-put-string
      (lambda* (s3-client bucket object string (public-read: public-read #f))
-              (let ((aclv (if public-read "public-read" "private")))
-                (j "omd = new com.amazonaws.services.s3.model.ObjectMetadata();
-                    omd.addUserMetadata(\"acl\", aclv);
-                    s3.putObject(bucket, objname, fl, omd);"
-                   `((bucket ,(->jstring bucket)) (objname ,(->jstring object)) (fl ,(string->java.io.InputStream string)) (s3 ,s3-client) (aclv ,(->jstring aclv)))))))
+              (let ((aclv (if public-read
+                              (j "com.amazonaws.services.s3.model.CannedAccessControlList.PublicRead")
+                              (j "com.amazonaws.services.s3.model.CannedAccessControlList.Private"))))
+                (j "omd = new com.amazonaws.services.s3.model.ObjectMetadata();                   
+                    s3.putObject(new com.amazonaws.services.s3.model.PutObjectRequest(bucket, objname, fl, omd).withCannedAcl(aclv));"
+                   `((bucket ,(->jstring bucket)) (objname ,(->jstring object)) (fl ,(string->java.io.InputStream string)) (s3 ,s3-client) (aclv ,aclv))))))
 
                   
    
