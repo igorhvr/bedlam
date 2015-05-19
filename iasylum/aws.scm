@@ -94,7 +94,14 @@
    (define (aws/make-s3-client credentials)
      (j "new com.amazonaws.services.s3.AmazonS3Client(cred);" `((cred ,credentials))))
 
-   (define (aws/s3-put-string s3-client bucket object string)
-     (j "s3.putObject(bucket, objname, fl);" `((bucket ,(->jstring bucket)) (objname ,(->jstring object)) (fl ,(string->java.io.File string)) (s3 ,s3-client))))
+   (define aws/s3-put-string
+     (lambda* (s3-client bucket object string (public-read: public-read #f))
+              (let ((aclv (if public-read "public-read" "private")))
+                (j "omd = new com.amazonaws.services.s3.model.ObjectMetadata();
+                    omd.addUserMetadata(\"acl\", aclv);
+                    s3.putObject(bucket, objname, fl, omd);"
+                   `((bucket ,(->jstring bucket)) (objname ,(->jstring object)) (fl ,(string->java.io.File string)) (s3 ,s3-client) (aclv ,(->jstring aclv)))))))
+
+                  
    
 )
