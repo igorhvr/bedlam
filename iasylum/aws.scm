@@ -100,7 +100,7 @@
                 (j "omd = new com.amazonaws.services.s3.model.ObjectMetadata();
                     omd.addUserMetadata(\"acl\", aclv);
                     s3.putObject(bucket, objname, fl, omd);"
-                   `((bucket ,(->jstring bucket)) (objname ,(->jstring object)) (fl ,(string->java.io.File string)) (s3 ,s3-client) (aclv ,(->jstring aclv)))))))
+                   `((bucket ,(->jstring bucket)) (objname ,(->jstring object)) (fl ,(string->java.io.InputStream string)) (s3 ,s3-client) (aclv ,(->jstring aclv)))))))
 
                   
    
