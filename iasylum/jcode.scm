@@ -153,6 +153,7 @@
      string->jbigdecimal
      string->jbigint
      jstream->tmp-file
+     string->java.io.InputStream
      string->java.io.File
      java-equals?
      make-atomic-boolean

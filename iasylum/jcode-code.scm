@@ -218,12 +218,14 @@
       jstreamtofile_result;"
      `((inputstream ,stream))))
 
-(define (string->java.io.File s)
+(define (string->java.io.InputStream s)
   (let* ((input-port (open-input-string s))
-        (jreader (->jreader input-port))
-        (jstream (j "new org.apache.commons.io.input.ReaderInputStream(reader);" `((reader ,jreader))))
-        (tmp-file (jstream->tmp-file jstream)))
-    tmp-file))
+         (jreader (->jreader input-port))
+         (jstream (j "new org.apache.commons.io.input.ReaderInputStream(reader);" `((reader ,jreader)))))
+    jstream))
+
+(define (string->java.io.File s)
+  (jstream->tmp-file (string->java.io.InputStream s)))
 
 (define (number->jbigdecimal number)
   (let ((exact-number (inexact->exact number)))
