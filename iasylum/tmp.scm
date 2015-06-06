@@ -120,3 +120,13 @@
 (define sample-text "{ \"father\": { \"second-father\": { \"third-father\": \"someValueHere\"} } }")
 (match ((sxpath "/father/second-father/third-father") (json->sxml sample-text)) (((_ d)) d))
 
+;; I just *had* to have a y-combinator example here. ;-)
+;; You should probably use (fold (cute string-append <> "," <>) "" list) instead...
+(define email-list->destination-string 
+  (y-combinator
+   (lambda (recur)
+     (match-lambda
+      (() "")
+      ((e . ()) e)
+      ((e . rest) (string-append e " , " (recur rest)))
+      (anything (error "Invalid parameter:" anything))))))
