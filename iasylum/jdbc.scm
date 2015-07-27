@@ -289,10 +289,13 @@
                                    (match-lambda
                                     (((fieldname . fieldtype) fieldvalue)
                                      (cons fieldname
-                                           (if (date? fieldvalue)
-                                               (date->string fieldvalue "~4")
-                                               fieldvalue)
-                                           )))))))))))
+                                           (cond ((date? fieldvalue)
+                                                  (date->string fieldvalue "~4"))
+                                                 ((null? fieldvalue)
+                                                  (void))
+                                                 ((number? fieldvalue)
+                                                  (exact->inexact fieldvalue))
+                                                 (else fieldvalue)))))))))))))
       
 
   (define (for-each-data connection query vars proc)
