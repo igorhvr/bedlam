@@ -876,6 +876,15 @@
      ((what first-element . rest) (string-append* first-element what (apply add-between (cons what rest))))
      (anything (error "Invalid parameter to to-csv-line " anything))))
 
+  (define (add-between-list what l)
+    (assert (list? l))
+    (letrec ((workhorse  (match-lambda
+                      (() ())
+                      ((single-element) (list single-element))
+                      ((first-element . rest) (cons first-element (cons what (workhorse rest))))
+                      (anything (throw (make-error (string-append* "Invalid parameter" anything)))))))
+      (workhorse l)))
+
   ;;
   ;; (add-spaces-between 1 2 3) => "1 2 3"
   ;;
