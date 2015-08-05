@@ -89,6 +89,14 @@
       (d/n "bytes: " tbytes)
       (->scm-object (j "new String(tbytes);" `((tbytes ,tbytes)))))))
 
+(define (base64-encode o) (j "javax.xml.bind.DatatypeConverter.printBase64Binary(data.toString().getBytes());" `((data ,(->jobject o)))))
+
+(define (base64-decode o) (j "new String(javax.xml.bind.DatatypeConverter.parseBase64Binary(data.toString()));" `((data ,(->jobject o)))))
+
+(define (url-encode o) (->scm-object (j "java.net.URLEncoder.encode(data.toString(),\"UTF-8\");" `((data ,(->jobject o))))))
+
+(define (url-decode o) (->scm-object (j "java.net.URLDecoder.decode(data.toString(),\"UTF-8\");" `((data ,(->jobject o))))))
+
 ;; Example - how to get an sc-expanded version of the code in a given file.
 ;; (sc-expand (call-with-input-string (file->string "/tmp/example.scm") (lambda (input) (read input)) ))
 
