@@ -78,6 +78,7 @@
    add-between-elements
    complete-with-zeroes
    add-between
+   add-between-list
    add-spaces-between
    get
    avg
