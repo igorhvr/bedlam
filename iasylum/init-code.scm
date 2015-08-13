@@ -141,6 +141,11 @@
 
 (max-stack-trace-depth 16)
 (import debugging)
+
+;; assert & other utilities.
+(load "siscweb/siscweb-src-0.5/opt/sxml/scm/ssax/myenv-sisc.scm")
+(require-extension (lib iasylum/assert))
+
 (require-extension (lib iasylum/jcode))
 ;(suppressed-stack-trace-source-kinds '())
 
