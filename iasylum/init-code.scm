@@ -196,6 +196,11 @@
 (import binary-io)
 (import custom-io)
 (import file-manipulation)
+
+;; and-let*. e.g.:
+;; (and-let* ((v (assoc  "subscription_id" '(("subscription_id" ":db/unique    :db.unique/identity")) ))) (cdr v))
+(require-extension (srfi 2))
+
 (require-extension (lib iasylum/iasylum))
 
 ;; irregex
@@ -326,10 +331,6 @@
                       }
                   }
               }.start();" `((serversocket ,server-socket)))))
-          
-;; and-let*. e.g.:
-;; (and-let* ((v (assoc  "subscription_id" '(("subscription_id" ":db/unique    :db.unique/identity")) ))) (cdr v))
-(require-extension (srfi 2))
 
 ;; Irresistibly horrible.
 ;; Source: http://okmij.org/ftp/Scheme/setf.txt
