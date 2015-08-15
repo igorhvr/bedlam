@@ -3,6 +3,6 @@
 
 (module iasylum/javascript
   (js-manager create-thread-local-javascript-manager-retriever get-local-javascript-manager js
-   nodejs)
+   nodejs nodejs-global)
 
   (include "javascript-code.scm"))

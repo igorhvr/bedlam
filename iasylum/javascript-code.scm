@@ -1,7 +1,28 @@
-(define (nodejs code)
-  (try-and-if-it-throws-object
-   (#f)
-   (json->scheme (http-call-post-string/string "http://js:27429/" code))))
+(define (nodejs-global code)
+  (log-trace "About to execute js code" code)
+  (let ((result (http-call-post-string/string "http://js:27429/" code)))
+    (log-trace "Result" result)
+    (if (and result
+             (not (string=? "" result)))
+        (json->scheme result)
+        #f)))
+
+(define* (nodejs code (vars '()))
+  (let* ((names-and-values-pair (call-with-values
+                                    (lambda () (unzip2 vars))
+                                  (lambda (names values) (cons names values))))
+         (names (car names-and-values-pair))
+         (values (cdr names-and-values-pair))
+         (code (format "(function(~a) { return ~a })(~a);"
+                       (apply add-between (cons "," names))
+                       code
+                       (apply add-between (cons "," (map (lambda (v)
+                                                           (cond [(number? v)
+                                                                  (number->string v)]
+                                                                 [else
+                                                                  (string-append* "\"" v "\"")]))
+                                                         values))))))
+    (node-js-global code)))
 
 (define (js-manager)  (j "new javax.script.ScriptEngineManager().getEngineByName(\"rhino\");"))
 
