@@ -69,6 +69,7 @@
    create-shortcuts
    to-csv-line
    sha256
+   hex->decimal
    decimal->hex
    decimal->maxradix
    vector->list_deeply
@@ -85,6 +86,8 @@
    avg
    average
    not-buggy-exact->inexact
+   apply*
+   let-parallel
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -777,6 +780,9 @@
                 new java.math.BigInteger(1, digest).toString(16);" 
                  `((input ,(->jstring string))))))
 
+  (define (hex->decimal hex)
+    (string->number (->string (j "new java.math.BigInteger(hex, 16).toString();" `((hex ,(->jstring hex)))))))
+  
   (define (decimal->hex decimal)
     (->string (j "new java.math.BigInteger(input).toString(16);"
                  `((input ,(->jstring (number->string decimal)))))))
@@ -919,6 +925,41 @@
   ;;
   (define (not-buggy-exact->inexact number)
     (string->number (->string (number->jbigdecimal number))))
+
+  ;;
+  ;; (define a +)
+  ;; (apply a '(1 1)) => 2
+  ;; (apply* a '(1 1)) => 2
+  ;; (apply* "a" '(1 1)) => 2
+  ;; (apply* 'a '(1 1)) => 2
+  ;;
+  (define (apply* fn-name param-list)
+    (if (procedure? fn-name)
+        (apply fn-name param-list)
+        (let ((fn (getprop (string->symbol (string-append* fn-name)) (interaction-environment))))
+          (if (not fn)
+              (throw (make-error (format "Function \"~a\" not found!" fn-name)))
+              (apply fn param-list)))))
+
+  ;;
+  ;; A let-like utility that runs the code to define each binding in parallel.
+  ;;
+  ;; Example:
+  ;; (time (let-parallel [(a (begin (sleep 1000) (+ 1 1))) (b (begin (sleep 500) (+ 2 2)))] (+ a b)))
+  ;; => (6 (1001 ms))
+  ;;
+  ;; (time (let [(a (begin (sleep 1000) (+ 1 1))) (b (begin (sleep 500) (+ 2 2)))] (+ a b)))
+  ;; => (6 (1500 ms))
+  ;;
+  (define-syntax let-parallel
+    (syntax-rules ()
+      ((_ [(var-name value) ...] body ...)
+       (call-with-values
+           (lambda ()
+             (parallel (lambda ()
+                         value) ...))
+           (lambda (var-name ...)
+             body ...)))))
 
   (create-shortcuts (avg -> average))
 
