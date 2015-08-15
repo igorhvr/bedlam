@@ -615,6 +615,10 @@
                        (loop (+ midpoint 1) stop))
                       (else #t))))))))
 
+  ;;
+  ;; (times 2 (random))
+  ;; => (754466479064 851410907158)
+  ;;
   (define-syntax times
     (syntax-rules ()
       ((_ n <code> ...)
