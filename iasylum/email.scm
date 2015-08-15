@@ -8,7 +8,20 @@
 ;;    iasylum/jcode
 (module iasylum/email
   (send-email)
-  
+
+
+  ;;(send-email
+  ;;  'smtp-server:  "smtp.test.net"
+  ;;  'to:  '(("j@t.net" ""))
+  ;;  'sender-email:  "s@s.net"
+  ;;  'sender-name:  "s"
+  ;;  'cc:  '(("w@w.net" "w"))
+  ;;  'subject:  "bla"
+  ;;  'use-ssl:  #t
+  ;;  'authentication-login:  "s@s.net"
+  ;;  'authentication-password:  "fk*fjlanP"
+  ;;  'message-text:  "Uamsg"
+  ;; )
   (define send-email
     (lambda* ((smtp-server: mailserver "localhost")
          (to: to #f)
