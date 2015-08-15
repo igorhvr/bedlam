@@ -28,6 +28,7 @@
    jdate->date
    string->juuid
    list->jset
+   time->jdate
  
    instance-of
 
