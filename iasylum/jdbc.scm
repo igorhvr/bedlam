@@ -274,7 +274,7 @@
 
   (define get-data-with-headers-at-each-line
     (lambda* (connection query (vars #f))
-             (let* ((data (get-data connection query))
+             (let* ((data (get-data connection query vars))
                     (headers (car data))
                     (the-data (cdr data)))
                (pam the-data
