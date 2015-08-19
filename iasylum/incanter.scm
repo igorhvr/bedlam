@@ -1,6 +1,7 @@
 ;;; Code by Igor Hjelmstrom Vinhas Ribeiro - this is licensed under GNU GPL v2.
 
 (require-extension (lib iasylum/jcode))
+(require-extension (lib iasylum/clojure))
 
 (module iasylum/incanter
   (empty-plot
