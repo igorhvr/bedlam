@@ -292,9 +292,7 @@
                                            (cond ((date? fieldvalue)
                                                   (date->string fieldvalue "~4"))
                                                  ((null? fieldvalue)
-                                                  (void))
-                                                 ((number? fieldvalue)
-                                                  (exact->inexact fieldvalue))
+                                                  (void))                                                 
                                                  (else fieldvalue)))))))))))))
       
 

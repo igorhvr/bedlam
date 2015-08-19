@@ -70,8 +70,13 @@
 	 ((vector? x) (write-ht x p))
 	 ((list? x) (write-array x p))
 	 ((symbol? x) (write (symbol->string x) p)) ;; for convenience
-	 ((or (string? x)
-	      (number? x)) (write x p))
+	 ((string? x) (write x p))
+         ((number? x)
+          (let ((to-write
+                 (if (and (exact? x) (= 1 (denominator x)))
+                     x
+                     (exact->inexact x))))
+            (write to-write p)))
 	 ((boolean? x) (display (if x "true" "false") p))
 	 ((eq? x (void)) (display "null" p))
 	 (else (error "Invalid JSON object in json-write" x))))
