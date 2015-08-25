@@ -64,18 +64,21 @@
   ;; Sample usage: (pool-datasource "jdbc:postgresql://somehostsomewhere:5432/databasename" "username" "password")
   ;; Use http://docs.oracle.com/javase/7/docs/api/javax/sql/DataSource.html#getConnection%28%29 later to retrieve a connection
   ;; from this pool. And close it to return it to the pool.
-  (define (pool-datasource jdbc-url user password)
-    (j "config = new com.zaxxer.hikari.HikariConfig();
-        config.setJdbcUrl(jdbcurl);
-        config.setUsername(tuser);
-        config.setPassword(tpassword);
-        config.addDataSourceProperty(\"cachePrepStmts\", \"true\");
-        config.addDataSourceProperty(\"prepStmtCacheSize\", \"250\");
-        config.addDataSourceProperty(\"prepStmtCacheSqlLimit\", \"2048\");
-        config.addDataSourceProperty(\"useServerPrepStmts\", \"true\");
-
-        new com.zaxxer.hikari.HikariDataSource(config);"
-       `((jdbcurl ,(->jstring jdbc-url)) (tuser ,(->jstring user)) (tpassword ,(->jstring password)))))
+  (define pool-datasource
+    (lambda* (jdbc-url user password (maximumPoolSize: maximumPoolSize 10))
+             (j "config = new com.zaxxer.hikari.HikariConfig();
+                 config.setJdbcUrl(jdbcurl);
+                 config.setUsername(tuser);
+                 config.setPassword(tpassword);
+                 config.setMaximumPoolSize(mps);
+                 config.addDataSourceProperty(\"cachePrepStmts\", \"true\");
+                 config.addDataSourceProperty(\"prepStmtCacheSize\", \"250\");
+                 config.addDataSourceProperty(\"prepStmtCacheSqlLimit\", \"2048\");
+                 config.addDataSourceProperty(\"useServerPrepStmts\", \"true\");
+         
+                 new com.zaxxer.hikari.HikariDataSource(config);"
+                `((jdbcurl ,(->jstring jdbc-url)) (tuser ,(->jstring user)) (tpassword ,(->jstring password))
+                  (mps ,(->jobject maximumPoolSize))))))
 
   (define (datasource/get-connection-function ds)
     (lambda ()
