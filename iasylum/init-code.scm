@@ -230,7 +230,7 @@
 (add-lib "u/junrar-0.7-SNAPSHOT.jar")
 
 (add-lib "clojure/clojure-1.5.1.jar")
-(add-lib "clojure/tools.nrepl-0.2.0-SNAPSHOT.jar")
+(add-lib "clojure/tools.nrepl-0.2.10.jar")
 
 (define (extend-classpath i)
   (class-path-extension-append! (cons i (class-path-extension))))

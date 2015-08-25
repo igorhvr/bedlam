@@ -5,7 +5,7 @@ export CURRENT_DIRECTORY=`pwd`
 export CLASSPATH=""
 
 export CLASSPATH=$CLASSPATH:$CURRENT_DIRECTORY/idm/bedlam/jars/clojure/clojure-1.4.0.jar
-export CLASSPATH=$CLASSPATH:$CURRENT_DIRECTORY/idm/bedlam/jars/clojure/tools.nrepl-0.2.0-SNAPSHOT.jar
+export CLASSPATH=$CLASSPATH:$CURRENT_DIRECTORY/idm/bedlam/jars/clojure/tools.nrepl-0.2.10.jar
 
 export CLASSPATH=$CLASSPATH:$CURRENT_DIRECTORY/datomic/bin:$CURRENT_DIRECTORY/idm/xmpp/www.igniterealtime.org/bin/smack_3_2_2/smack.jar:$CURRENT_DIRECTORY/idm/xmpp/www.igniterealtime.org/bin/smack_3_2_2/smackx.jar:$CURRENT_DIRECTORY/idm/xmpp/www.igniterealtime.org/bin/smack_3_2_2/smackx-jingle.jar:$CURRENT_DIRECTORY/idm/xmpp/www.igniterealtime.org/bin/smack_3_2_2/smackx-debug.jar:$CURRENT_DIRECTORY/squirrel-sql/lib/jtds-1.2.5.jar
 
