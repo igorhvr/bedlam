@@ -138,3 +138,5 @@
       ((e . ()) e)
       ((e . rest) (string-append e " , " (recur rest)))
       (anything (error "Invalid parameter:" anything))))))
+
+;Generates lines to compile each scheme file.... (each-for (filter (lambda (v) (irregex-search "scm$" v)) (rglob "/home/igorhvr/idm/bedlam/iasylum")) (lambda (v) (d/n (string-append* "/base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location \"/base/bedlam/\") (load (string-append iasylum-bedlam-location \"iasylum/init.scm\")) (d/n \"Will compile\" \"" v "\")(smart-compile \"" v "\")(j \"System.exit(0);\")'"))))
