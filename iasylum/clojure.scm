@@ -3,6 +3,7 @@
 ;;; This allows one to easily call Clojure code from inside Scheme code.
 
 (require-extension (lib iasylum/jcode))
+(require-extension (lib iasylum/random))
 
 (module iasylum/clojure
   (clojure/run
