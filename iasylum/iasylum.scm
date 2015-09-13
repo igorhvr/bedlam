@@ -69,6 +69,7 @@
    create-shortcuts
    to-csv-line
    sha256
+   sha256+
    hex->decimal
    decimal->hex
    decimal->maxradix
@@ -775,6 +776,10 @@
      ((single-element) (string-append* "\"" (escape-double-quotes (display-string single-element)) "\""))
      ((first-element . rest) (string-append (to-csv-line  first-element) " , " (apply to-csv-line  rest)))
      (anything (error "Invalid parameter to to-csv-line " anything))))
+
+  (define sha256+
+    (lambda elements
+      (sha256 (apply add-between (cons ":" elements)))))
 
   (define (sha256 string)
     (->string (j              
