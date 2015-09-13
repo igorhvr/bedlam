@@ -777,11 +777,11 @@
      (anything (error "Invalid parameter to to-csv-line " anything))))
 
   (define (sha256 string)
-    (->string (j 
+    (->string (j              
                "md = java.security.MessageDigest.getInstance(\"SHA-256\");
                 md.update(input.getBytes(\"UTF-8\"));
                 digest = md.digest();
-                new java.math.BigInteger(1, digest).toString(16);" 
+                return String.format(\"%064x\", new java.math.BigInteger(1, digest));"
                  `((input ,(->jstring string))))))
 
   (define (hex->decimal hex)
