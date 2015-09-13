@@ -92,7 +92,7 @@
                      (let ((data-for-insertion (prepare-transaction v)))
                        (d/transact-async dc data-for-insertion)))))
     (j "Thread.sleep(1000);")
-    (for-each (lambda (discard) (start-worker consumer work-queue #t #t)) (iota threads))
+    (for-each (lambda (discard) (start-worker consumer work-queue 'continue-forever: #t 'inner-queue-forced: #t)) (iota threads))
     (let r ()      
       (j "Thread.sleep(1000);") (r))))
 
