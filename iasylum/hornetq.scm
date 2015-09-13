@@ -23,9 +23,7 @@
           map.put(\"port\", myport);
           new org.hornetq.api.core.TransportConfiguration(org.hornetq.core.remoting.impl.netty.NettyConnectorFactory.class.getName(), map);"
          `((myhost ,(->jstring host))
-           (myport ,(->jint port))))))
-
-  (define-java-class <org.hornetq.api.core.TransportConfiguration> |org.hornetq.api.core.TransportConfiguration|)
+           (myport ,(->jint port))))))  
   
   (define hornetq-session
     (lambda* (transports (username: username "") (password: password "") (batch-size: batch-size (->number (j "org.hornetq.api.core.client.HornetQClient.DEFAULT_ACK_BATCH_SIZE"))))
@@ -37,7 +35,7 @@
             session;
             "
        
-            `((transportsarray ,(->jarray transports <org.hornetq.api.core.TransportConfiguration>))
+            `((transportsarray ,(->jarray transports (java-class |org.hornetq.api.core.TransportConfiguration|)))
               (tusername ,(->jstring username))
               (tpassword ,(->jstring password))
               (batchsize ,(->jint batch-size))))))
