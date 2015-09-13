@@ -89,6 +89,8 @@
    not-buggy-exact->inexact
    apply*
    let-parallel
+   get-day-index-utc
+   atomic-execution
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -969,6 +971,30 @@
                          value) ...))
            (lambda (var-name ...)
              body ...)))))
+
+  ;;
+  ;; Return a string representing today.
+  ;; It changes every day after 00:00 UTC.
+  ;;
+  (define (get-day-index-utc)
+    (let ((today (current-date 0)))
+      (sha256+ (date-year-day today)
+               (date-year today))))
+
+  ;;
+  ;; Use like this:
+  ;;
+  ;; (atomic-exection "lock name" body ...)
+  ;;
+  (define-syntax atomic-execution
+    (syntax-rules ()
+      ((_ lock-name body ...)
+       (dynamic-wind (lambda ()
+                       (mutex/lock! (mutex-of lock-name)))
+                     (lambda ()
+                       body ...)
+                     (lambda ()
+                       (mutex/unlock! (mutex-of lock-name)))))))
 
   (create-shortcuts (avg -> average))
 
