@@ -5,6 +5,7 @@
   (generate-keypair
    get-seed-from
    asymmetric-encrypt asymmetric-decrypt
-   symmetric-encrypt symmetric-decrypt)
+   symmetric-encrypt symmetric-decrypt
+   hmac)
 
   (include "crypto/crypto-code.scm"))

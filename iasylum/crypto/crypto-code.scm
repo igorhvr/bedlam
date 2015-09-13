@@ -55,6 +55,13 @@
   (js (sjcl.js-unsafe)) (js (iasylum.js)) (js (crypto.js))
   (->string (js "iasylum.crypto.symmetric_decrypt(key, data);" `((key ,(->jstring key)) (data ,(->jstring data))))))
 
+(define (hmac key data)
+  (js (sjcl.js-unsafe))
+  (js (iasylum.js))
+  (js (crypto.js))
+  (->string (js "iasylum.crypto.hmac(key, data);" `((key ,(->jstring key))
+                                                    (data ,(->jstring data))))))
+
 
 ;; Sample usage:
 ;; (load "/base/bedlam/iasylum/crypto/crypto-code.scm") (define keypair (generate-keypair 'sjcl_el_gammal_ecc_c256_key))(define keypair-pub (match keypair ((public secret) public)))(define keypair-sec (match keypair ((public secret) secret))) (asymmetric-decrypt keypair-sec (asymmetric-encrypt keypair-pub "1234567"))

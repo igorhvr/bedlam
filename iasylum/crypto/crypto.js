@@ -63,6 +63,13 @@ var iasylum_crypto = {
         } else {
             throw 'unsupported key: ' + key;
         }
+    },
+
+    'hmac' : function(stringKey, data) {
+        var key = sjcl.codec.utf8String.toBits(stringKey);
+        var out = (new sjcl.misc.hmac(key, sjcl.hash.sha256)).mac(data);
+        var hmac = sjcl.codec.hex.fromBits(out);
+        return hmac;
     }
 
 };
