@@ -1,22 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration> <!-- add status="trace" to enable debug mode -->
+  <Properties>
+    <Property name="pattern">(&quot;%p&quot; &quot;%thread&quot; &quot;%d{ISO8601}&quot; (&quot;%enc{%m}&quot; &quot;%C(%M)&quot;)%n</Property>
+  </Properties>
   <Appenders>
     <Console name="STDOUT" target="SYSTEM_OUT">
-      <PatternLayout pattern="(&quot;%p&quot; &quot;%thread&quot; &quot;%d{ISO8601}&quot; (&quot;%enc{%m}&quot; &quot;%C(%M)&quot;)%n"/>
+      <PatternLayout pattern="${pattern}"/>
     </Console>
+    <RollingFile name="FILE" fileName="/base/walltime/logs/wt.log"
+                 filePattern="/base/walltime/logs/$${date:yyyy-MM}/wt-%d{yyyy-MM-dd}-%i.log.gz">
+      <PatternLayout pattern="${pattern}"/>
+      <Policies>
+        <TimeBasedTriggeringPolicy /><!-- Rotated everyday -->
+        <SizeBasedTriggeringPolicy size="100 MB"/> <!-- Or every 100 MB -->
+      </Policies>
+    </RollingFile>
   </Appenders>
-  <Loggers>  
-    <Root level="info">
+
+  <Loggers>
+    <Logger name="org.apache.log4j.xml" level="info" additivity="false">
+      <AppenderRef ref="FILE"/>
+    </Logger>
+
+    <Logger name="datomic" level="info" additivity="false">
+      <AppenderRef ref="FILE"/>
+    </Logger>
+    
+    <Logger name="org.hornetq" level="warn" additivity="false">
+      <AppenderRef ref="FILE"/>
+    </Logger>
+    
+    <Logger name="org.jboss.logging" level="warn" additivity="false">
+      <AppenderRef ref="FILE"/>
+    </Logger>
+    
+    <Logger name="org.quartz" level="info" additivity="false">
+      <AppenderRef ref="FILE"/>
+    </Logger>
+    
+    <Logger name="closureJobLogger" level="warn" additivity="false">
+      <AppenderRef ref="FILE"/>
+    </Logger>
+    
+    <Logger name="com.healthmarketscience.jackcess.PageChannel" level="warn" additivity="false">
+      <AppenderRef ref="FILE"/>
+    </Logger>
+
+    <Root level="warn">
+      <AppenderRef ref="FILE"/>
       <AppenderRef ref="STDOUT"/>
     </Root>
-
-    <Logger name="org.apache.log4j.xml" level="info"/>
-    <Logger name="datomic" level="info"/>
-    <Logger name="org.hornetq" level="warn"/>
-    <Logger name="org.jboss.logging" level="warn"/>
-    <Logger name="org.quartz" level="info"/>
-    <Logger name="closureJobLogger" level="warn"/>
-    <Logger name="com.healthmarketscience.jackcess.PageChannel" level="warn"/>
 
   </Loggers>
 </Configuration>
