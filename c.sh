@@ -1,5 +1,33 @@
 #!/bin/sh
 
+# Compilation prior to running speeds things up *a lot*.
+#
+# Simple tests without compiled version of bedlam:
+#   igorhvr@nbdasylum:~/idm/i$ time /base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (j "System.exit(0);")'
+#   
+#   real	0m14.645s
+#   user	0m20.238s
+#   sys	0m3.624s
+#   igorhvr@nbdasylum:~/idm/i$ time /base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (j "System.exit(0);")'
+#   
+#   real	0m15.153s
+#   user	0m21.759s
+#   sys	0m3.822s
+#
+# Same tests, now with the compiled version:
+#
+#   igorhvr@nbdasylum:~/idm/i$ time /base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (j "System.exit(0);")'
+#   
+#   real	0m3.082s
+#   user	0m8.303s
+#   sys	0m0.942s
+#   igorhvr@nbdasylum:~/idm/i$ time /base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (j "System.exit(0);")'
+#   
+#   real	0m2.985s
+#   user	0m8.393s
+#   sys	0m0.731s
+
+
 /base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (d/n "Will compile" "/home/igorhvr/idm/bedlam/iasylum/work-queue.scm")(with/fc (lambda p (display p) (j "System.exit(0);")) (lambda () (smart-compile "/home/igorhvr/idm/bedlam/iasylum/work-queue.scm")))(j "System.exit(0);")'
 
 
