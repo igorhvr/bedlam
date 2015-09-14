@@ -1,4 +1,5 @@
 #!/bin/sh
+
 /base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (d/n "Will compile" "/home/igorhvr/idm/bedlam/iasylum/work-queue.scm")(with/fc (lambda p (display p) (j "System.exit(0);")) (lambda () (smart-compile "/home/igorhvr/idm/bedlam/iasylum/work-queue.scm")))(j "System.exit(0);")'
 
 
@@ -9,6 +10,9 @@
 
 
 /base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (d/n "Will compile" "/home/igorhvr/idm/bedlam/iasylum/memoize.scm")(with/fc (lambda p (display p) (j "System.exit(0);")) (lambda () (smart-compile "/home/igorhvr/idm/bedlam/iasylum/memoize.scm")))(j "System.exit(0);")'
+
+
+/base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (d/n "Will compile" "/home/igorhvr/idm/bedlam/iasylum/srfi-89.scm")(with/fc (lambda p (display p) (j "System.exit(0);")) (lambda () (smart-compile "/home/igorhvr/idm/bedlam/iasylum/srfi-89.scm")))(j "System.exit(0);")'
 
 
 /base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (d/n "Will compile" "/home/igorhvr/idm/bedlam/iasylum/password-code.scm")(with/fc (lambda p (display p) (j "System.exit(0);")) (lambda () (smart-compile "/home/igorhvr/idm/bedlam/iasylum/password-code.scm")))(j "System.exit(0);")'
@@ -122,6 +126,9 @@
 /base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (d/n "Will compile" "/home/igorhvr/idm/bedlam/iasylum/fmt/fmt-0.8.1/make-eq-table.scm")(with/fc (lambda p (display p) (j "System.exit(0);")) (lambda () (smart-compile "/home/igorhvr/idm/bedlam/iasylum/fmt/fmt-0.8.1/make-eq-table.scm")))(j "System.exit(0);")'
 
 
+/base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (d/n "Will compile" "/home/igorhvr/idm/bedlam/iasylum/fmt/fmt-0.8.1/fmt-c.scm")(with/fc (lambda p (display p) (j "System.exit(0);")) (lambda () (smart-compile "/home/igorhvr/idm/bedlam/iasylum/fmt/fmt-0.8.1/fmt-c.scm")))(j "System.exit(0);")'
+
+
 /base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (d/n "Will compile" "/home/igorhvr/idm/bedlam/iasylum/fmt/fmt-0.8.1/fmt-c-chicken.scm")(with/fc (lambda p (display p) (j "System.exit(0);")) (lambda () (smart-compile "/home/igorhvr/idm/bedlam/iasylum/fmt/fmt-0.8.1/fmt-c-chicken.scm")))(j "System.exit(0);")'
 
 
@@ -162,6 +169,9 @@
 
 
 /base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (d/n "Will compile" "/home/igorhvr/idm/bedlam/iasylum/packrat/chicken_scheme_files/doc.scm")(with/fc (lambda p (display p) (j "System.exit(0);")) (lambda () (smart-compile "/home/igorhvr/idm/bedlam/iasylum/packrat/chicken_scheme_files/doc.scm")))(j "System.exit(0);")'
+
+
+/base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (d/n "Will compile" "/home/igorhvr/idm/bedlam/iasylum/srfi-88.scm")(with/fc (lambda p (display p) (j "System.exit(0);")) (lambda () (smart-compile "/home/igorhvr/idm/bedlam/iasylum/srfi-88.scm")))(j "System.exit(0);")'
 
 
 /base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (d/n "Will compile" "/home/igorhvr/idm/bedlam/iasylum/net.scm")(with/fc (lambda p (display p) (j "System.exit(0);")) (lambda () (smart-compile "/home/igorhvr/idm/bedlam/iasylum/net.scm")))(j "System.exit(0);")'
@@ -368,6 +378,9 @@
 /base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (d/n "Will compile" "/home/igorhvr/idm/bedlam/iasylum/aws.scm")(with/fc (lambda p (display p) (j "System.exit(0);")) (lambda () (smart-compile "/home/igorhvr/idm/bedlam/iasylum/aws.scm")))(j "System.exit(0);")'
 
 
+/base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (d/n "Will compile" "/home/igorhvr/idm/bedlam/iasylum/slib/iasylum-sisc.init.scm")(with/fc (lambda p (display p) (j "System.exit(0);")) (lambda () (smart-compile "/home/igorhvr/idm/bedlam/iasylum/slib/iasylum-sisc.init.scm")))(j "System.exit(0);")'
+
+
 /base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (d/n "Will compile" "/home/igorhvr/idm/bedlam/iasylum/slib/3b2/trnscrpt.scm")(with/fc (lambda p (display p) (j "System.exit(0);")) (lambda () (smart-compile "/home/igorhvr/idm/bedlam/iasylum/slib/3b2/trnscrpt.scm")))(j "System.exit(0);")'
 
 
@@ -415,6 +428,8 @@
 
 /base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (d/n "Will compile" "/home/igorhvr/idm/bedlam/iasylum/slib/3b2/priorque.scm")(with/fc (lambda p (display p) (j "System.exit(0);")) (lambda () (smart-compile "/home/igorhvr/idm/bedlam/iasylum/slib/3b2/priorque.scm")))(j "System.exit(0);")'
 
+
+/base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (d/n "Will compile" "/home/igorhvr/idm/bedlam/iasylum/slib/3b2/selfset.scm")(with/fc (lambda p (display p) (j "System.exit(0);")) (lambda () (smart-compile "/home/igorhvr/idm/bedlam/iasylum/slib/3b2/selfset.scm")))(j "System.exit(0);")'
 
 
 /base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (d/n "Will compile" "/home/igorhvr/idm/bedlam/iasylum/slib/3b2/getparam.scm")(with/fc (lambda p (display p) (j "System.exit(0);")) (lambda () (smart-compile "/home/igorhvr/idm/bedlam/iasylum/slib/3b2/getparam.scm")))(j "System.exit(0);")'
@@ -472,6 +487,9 @@
 
 
 /base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (d/n "Will compile" "/home/igorhvr/idm/bedlam/iasylum/slib/3b2/ppfile.scm")(with/fc (lambda p (display p) (j "System.exit(0);")) (lambda () (smart-compile "/home/igorhvr/idm/bedlam/iasylum/slib/3b2/ppfile.scm")))(j "System.exit(0);")'
+
+
+/base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (d/n "Will compile" "/home/igorhvr/idm/bedlam/iasylum/slib/3b2/mwexpand.scm")(with/fc (lambda p (display p) (j "System.exit(0);")) (lambda () (smart-compile "/home/igorhvr/idm/bedlam/iasylum/slib/3b2/mwexpand.scm")))(j "System.exit(0);")'
 
 
 /base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (d/n "Will compile" "/home/igorhvr/idm/bedlam/iasylum/slib/3b2/randinex.scm")(with/fc (lambda p (display p) (j "System.exit(0);")) (lambda () (smart-compile "/home/igorhvr/idm/bedlam/iasylum/slib/3b2/randinex.scm")))(j "System.exit(0);")'
@@ -890,8 +908,8 @@
 
 /base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (d/n "Will compile" "/home/igorhvr/idm/bedlam/iasylum/datomic-code.scm")(with/fc (lambda p (display p) (j "System.exit(0);")) (lambda () (smart-compile "/home/igorhvr/idm/bedlam/iasylum/datomic-code.scm")))(j "System.exit(0);")'
 
-/base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (d/n "Will compile" "/home/igorhvr/idm/bedlam/iasylum/clojure.scm")(with/fc (lambda p (display p) (j "System.exit(0);")) (lambda () (smart-compile "/home/igorhvr/idm/bedlam/iasylum/clojure.scm")))(j "System.exit(0);")'
 
 /base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (d/n "Will compile" "/home/igorhvr/idm/bedlam/iasylum/srfi-88-code.scm")(with/fc (lambda p (display p) (j "System.exit(0);")) (lambda () (smart-compile "/home/igorhvr/idm/bedlam/iasylum/srfi-88-code.scm")))(j "System.exit(0);")'
 
 
+/base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")) (d/n "Will compile" "/home/igorhvr/idm/bedlam/iasylum/clojure.scm")(with/fc (lambda p (display p) (j "System.exit(0);")) (lambda () (smart-compile "/home/igorhvr/idm/bedlam/iasylum/clojure.scm")))(j "System.exit(0);")'
