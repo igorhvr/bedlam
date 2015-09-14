@@ -21,7 +21,7 @@
   (let ((lib-path
 	 (string-append
 	  (or
-              (string-append (iasylum-bedlam-location) "iasylum/slib/3b2")
+              (string-append (iasylum-bedlam-location-parameter) "iasylum/slib/3b2")
               (getenv "sisc.slib")
 	      (getenv "sisc.lib")
 	      (error "You must define the sisc.slib or sisc.lib property"))
@@ -32,7 +32,7 @@
   (let ((impl-path
 	 (string-append         
 	  (or
-              (string-append (iasylum-bedlam-location) "iasylum/slib/implementation-vicinity/")
+              (string-append (iasylum-bedlam-location-parameter) "iasylum/slib/implementation-vicinity/")
               (getenv "sisc.home")
 	      (error "You must define the sisc.home property"))
 	  "/")))
