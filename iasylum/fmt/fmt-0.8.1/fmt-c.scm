@@ -1,3 +1,4 @@
+(include "fmt.scm")
 ;;;; fmt-c.scm -- fmt module for emitting/pretty-printing C code
 ;;
 ;; Copyright (c) 2007 Alex Shinn.  All rights reserved.
