@@ -173,11 +173,17 @@
     (sort (lambda (e1 e2) (string< (display-string (car e1)) (display-string (car e2)))) v))
           
   (define (smart-compile fname)
-    (for-each display (list "\n\n(smart-compile \"" fname "\")..."))
+    (for-each display (list "\n(smart-compile \"" fname "\") ..."))
     (let ((data-match (irregex-search
                   '(seq (submatch-named file-name (+ any)) ".scm") fname)))
       (let ((fn-prefix (irregex-match-substring data-match 'file-name)))
-        (compile-file fname (string-append fn-prefix ".scc")))))
+        (let ((destination-fn (string-append fn-prefix ".scc")))
+          (with/fc (lambda (error-record error-k)
+                     (file-delete! destination-fn)
+                     (throw error-record error-k))
+                   (lambda () 
+                     (compile-file fname destination-fn)))))))
+
   
   (define hashtable/values
     (lambda (ht)
