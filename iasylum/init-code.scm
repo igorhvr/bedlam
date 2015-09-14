@@ -38,7 +38,7 @@
 
 (require-extension (srfi 39)) ; make-parameter
 
-(define iasylum-bedlam-location
+(define iasylum-bedlam-location-parameter
   (let ((param (make-parameter #f)))
     (with-failure-continuation 
      (lambda (e p) (param ""))
@@ -50,10 +50,10 @@
 
 ;; IASylum
 
-(class-path-extension-append! (cons (string-append (iasylum-bedlam-location) "java-base/") (class-path-extension)))
+(class-path-extension-append! (cons (string-append (iasylum-bedlam-location-parameter) "java-base/") (class-path-extension)))
 
 ;; Configuration files.
-(class-path-extension-append! (cons (string-append (iasylum-bedlam-location) "config/") (class-path-extension)))
+(class-path-extension-append! (cons (string-append (iasylum-bedlam-location-parameter) "config/") (class-path-extension)))
 
 (define add-lib-fullpath
   (lambda (full-path)
@@ -62,7 +62,7 @@
 ;;; Low level - java libraries.
 (define add-lib
   (lambda (name)
-    (add-lib-fullpath (string-append (iasylum-bedlam-location) "jars/" name))))
+    (add-lib-fullpath (string-append (iasylum-bedlam-location-parameter) "jars/" name))))
 
 (add-lib "u/bsf.jar")
 (add-lib "u/guava-15.0.jar")
@@ -137,13 +137,14 @@
 (import networking) (import binary-io) (import custom-io)
 (import threading) 
   ;;; IAsylum scheme files.
-(class-path-extension-append! (cons (iasylum-bedlam-location) (class-path-extension)))
+(class-path-extension-append! (cons (iasylum-bedlam-location-parameter) (class-path-extension)))
 
 (max-stack-trace-depth 16)
 (import debugging)
 
 ;; assert & other utilities.
-(load "siscweb/siscweb-src-0.5/opt/sxml/scm/ssax/myenv-sisc.scm")
+(require-library 'siscweb/siscweb-src-0.5/opt/sxml/scm/ssax/myenv-sisc)
+
 (require-extension (lib iasylum/assert))
 
 (require-extension (lib iasylum/jcode))
@@ -204,20 +205,20 @@
 (require-extension (lib iasylum/iasylum))
 
 ;; irregex
-(load "iasylum/irregex.scc")
+(require-library 'iasylum/irregex)
 
 ;; let-optionals
-(load "iasylum/let-optionals/let-optionals.scm")
+(require-library 'iasylum/let-optionals/let-optionals)
 
 ;; SLIB.
 ;;(load "iasylum/slib.scm")
-(load "iasylum/slib/iasylum-sisc.init")
+(require-library 'iasylum/slib/iasylum-sisc.init)
 ;;(require 'new-catalog)
 
 ;; FIXXXME I am not sure with require 'line-i/o does not work, even after line-i/o
 ;; was added to supported features. This will do for now, providing the very useful
 ;; read-line.
-(load "iasylum/slib/3b2/lineio.scm")
+(require-library 'iasylum/slib/3b2/lineio)
 
 ;(display "\n\nLOADED iasylum-bedlam.\n\n")
 
@@ -261,18 +262,18 @@
 ;; and similar issues, still to be debugged.
 
  (define (force-fmt-load)
-    (load "iasylum/fmt/fmt-0.8.1/let-optionals.scm")  ; if you don't have LET-OPTIONALS*
-    (load "iasylum/fmt/fmt-0.8.1/read-line.scm")      ; if you don't have READ-LINE
-    (load "iasylum/fmt/fmt-0.8.1/string-ports.scm")   ; if you don't have CALL-WITH-OUTPUT-STRING
-    (load "iasylum/fmt/fmt-0.8.1/make-eq-table.scm")
-    (load "iasylum/fmt/fmt-0.8.1/mantissa.scm")
-    (load "iasylum/fmt/fmt-0.8.1/fmt.scm")
-    (load "iasylum/fmt/fmt-0.8.1/fmt-pretty.scm")     ; optional pretty printing
-    (load "iasylum/fmt/fmt-0.8.1/fmt-column.scm")     ; optional columnar output
-    (load "iasylum/fmt/fmt-0.8.1/fmt-c.scm")          ; optional C formatting utilities
-    (load "iasylum/fmt/fmt-0.8.1/fmt-color.scm")      ; optional color utilities
-    (load "iasylum/fmt/fmt-0.8.1/fmt-js.scm")         ; javascript utilities. 
-    (load "iasylum/fmt/fmt-0.8.1/fmt-unicode.scm"))         ; javascript utilities.
+    (require-library 'iasylum/fmt/fmt-0.8.1/let-optionals)  ; if you don't have LET-OPTIONALS*
+    (require-library 'iasylum/fmt/fmt-0.8.1/read-line)      ; if you don't have READ-LINE
+    (require-library 'iasylum/fmt/fmt-0.8.1/string-ports)   ; if you don't have CALL-WITH-OUTPUT-STRING
+    (require-library 'iasylum/fmt/fmt-0.8.1/make-eq-table)
+    (require-library 'iasylum/fmt/fmt-0.8.1/mantissa)
+    (require-library 'iasylum/fmt/fmt-0.8.1/fmt)
+    (require-library 'iasylum/fmt/fmt-0.8.1/fmt-pretty)     ; optional pretty printing
+    (require-library 'iasylum/fmt/fmt-0.8.1/fmt-column)     ; optional columnar output
+    (require-library 'iasylum/fmt/fmt-0.8.1/fmt-c)          ; optional C formatting utilities
+    (require-library 'iasylum/fmt/fmt-0.8.1/fmt-color)      ; optional color utilities
+    (require-library 'iasylum/fmt/fmt-0.8.1/fmt-js)         ; javascript utilities. 
+    (require-library 'iasylum/fmt/fmt-0.8.1/fmt-unicode))         ; javascript utilities.
 
 ;; FIXXXME Hack that will be used until I debug the naked left-hand reference issues above.
 (force-fmt-load)

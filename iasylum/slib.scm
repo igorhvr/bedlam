@@ -1,1 +1,1 @@
-(load "slib/iasylum-sisc.init")
+(require-library 'slib/iasylum-sisc.init)
