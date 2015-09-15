@@ -34,6 +34,7 @@
       (j 
        "import org.apache.commons.mail.SimpleEmail;
        email = new SimpleEmail();
+       email.setCharset(\"utf-8\");
        email.setHostName(mailserver);"
        `((mailserver ,(->jstring mailserver))
          (usessl ,(->jboolean use-ssl))
