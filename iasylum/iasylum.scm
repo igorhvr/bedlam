@@ -30,7 +30,8 @@
    pump_binary-input-port->character-output-port
    input-port->string
    watched/spawn
-   r r-split r/s r/d r-base
+   r r-split r/s r/d r-base ; it is dangerous, see almost-safe-bash-run
+   almost-safe-bash-run
    dp
    smart-compile
    flatten
@@ -1001,6 +1002,42 @@
                        body ...)
                      (lambda ()
                        (mutex/unlock! (mutex-of lock-name)))))))
+
+  ;;
+  ;; This is *much* safer than r-base and derived like r/s and r/d.
+  ;;
+  ;; This fn filters a lot of code injections possibilities, but it is not *perfect* yet.
+  ;;
+  ;; If any command (first argument) can be from an user input, it still necessary to filter the user
+  ;; input. If you can avoid to use this, like calling a directly library in Java, please do it.
+  ;;
+  ;; Use like this: (almost-safe-bash-run "ls" "-lath")
+  ;;
+  ;; (almost-safe-bash-run <command> <arg1> <arg2> ...)
+  ;;
+  (define almost-safe-bash-run
+    (lambda command-and-args
+      (->string
+       (j "String[] args = java.util.Arrays.copyOf(cmdparams, cmdparams.length, String[].class);
+           // System.out.println(java.util.Arrays.deepToString(args));
+           ProcessBuilder pb = new ProcessBuilder(args);
+           pb.redirectErrorStream(true);
+           Process p = pb.start();
+           int errCode = p.waitFor();
+           java.io.BufferedReader reader = new java.io.BufferedReader(
+                   new java.io.InputStreamReader(p.getInputStream()));
+
+           StringBuilder builder = new StringBuilder();
+           String line = null;
+           while ( (line = reader.readLine()) != null) {
+               builder.append(line);
+               builder.append(System.lineSeparator());
+           }
+           String result = builder.toString();
+           return result;"
+          `((cmdparams ,(jlist->jarray (->jobject (map (lambda (value)
+                                                         (->jstring value))
+                                                       command-and-args)))))))))
 
   (create-shortcuts (avg -> average))
 
