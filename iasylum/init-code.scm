@@ -124,12 +124,11 @@
 
 (add-lib "u/quartz-all-1.7.3.jar")
 
-(add-lib "hornetq/2.4.0_Final/hornetq-core-client.jar")
-(add-lib "hornetq/2.4.0_Final/hornetq-jms-client.jar")
-(add-lib "hornetq/2.4.0_Final/jboss-jms-api.jar")
-(add-lib "hornetq/2.4.0_Final/netty.jar")
-(add-lib "hornetq/2.4.0_Final/hornetq-commons.jar")
-(add-lib "hornetq/2.4.0_Final/jnp-client.jar")
+(add-lib "hornetq/hornetq-commons-2.3.17.Final.jar")
+(add-lib "hornetq/hornetq-core-client-2.3.17.Final.jar")
+(add-lib "hornetq/hornetq-journal-2.3.17.Final.jar")
+(add-lib "hornetq/hornetq-server-2.3.17.Final.jar")
+
 
 (import os)
 (import java-io)

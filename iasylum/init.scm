@@ -8,4 +8,4 @@
 (define @r5rs::list list)
 
 (if (not (getprop 'bedlam-loaded-and-ready-to-use (interaction-environment)))
-    (load "init-code.scc"))
+    (with/fc (lambda p (load "init-code.scm")) (lambda () (load "init-code.scc"))))
