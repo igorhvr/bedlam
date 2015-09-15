@@ -1018,22 +1018,22 @@
   (define almost-safe-bash-run
     (lambda command-and-args
       (->string
-       (j "String[] args = java.util.Arrays.copyOf(cmdparams, cmdparams.length, String[].class);
+       (j "args = java.util.Arrays.copyOf(cmdparams, cmdparams.length, String[].class);
            // System.out.println(java.util.Arrays.deepToString(args));
-           ProcessBuilder pb = new ProcessBuilder(args);
+           pb = new ProcessBuilder(args);
            pb.redirectErrorStream(true);
-           Process p = pb.start();
+           p = pb.start();
            int errCode = p.waitFor();
-           java.io.BufferedReader reader = new java.io.BufferedReader(
+           reader = new java.io.BufferedReader(
                    new java.io.InputStreamReader(p.getInputStream()));
 
-           StringBuilder builder = new StringBuilder();
-           String line = null;
+           builder = new StringBuilder();
+           line = null;
            while ( (line = reader.readLine()) != null) {
                builder.append(line);
                builder.append(System.lineSeparator());
            }
-           String result = builder.toString();
+           result = builder.toString();
            return result;"
           `((cmdparams ,(jlist->jarray (->jobject (map (lambda (value)
                                                          (->jstring value))
