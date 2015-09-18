@@ -90,6 +90,7 @@
    not-buggy-exact->inexact
    apply*
    let-parallel
+   map-parallel
    get-day-index-utc
    atomic-execution
    )
@@ -978,6 +979,24 @@
                          value) ...))
            (lambda (var-name ...)
              body ...)))))
+
+  ;;
+  ;; A version of map that runs the code in parallel.
+  ;;
+  ;; Example:
+  ;; (time (map-parallel (lambda (a)
+  ;;          (begin
+  ;;            (sleep 1000)
+  ;;            (+ 1 a)))
+  ;;       '(1 2 3 4 5)))
+  ;; => ((2 3 4 5 6) (1000 ms))
+  ;;
+  (define map-parallel (match-lambda* [((? procedure? fn)
+                                        (element ___))
+                                       (multiple-values->list
+                                        (apply parallel (map (lambda (i)
+                                                               (delay (fn i)))
+                                                             element)))]))
 
   ;;
   ;; Return a string representing today.
