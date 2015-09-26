@@ -27,7 +27,7 @@
            (unless string-to-generate-deterministically-from
              (js "sjcl.random.addEntropy(prn, 1024, 'nativeprgn-secure-random');"
                  `((prn ,(j "r=new byte[128]; java.security.SecureRandom.getInstance(\"NativePRNG\").nextBytes(r);Arrays.toString(r);")))))
-
+           
            (when string-to-generate-deterministically-from
              (and-let* (
                         (seed (get-seed-from string-to-generate-deterministically-from))
@@ -36,6 +36,8 @@
 
                (js "sjcl.random.addEntropy(prn, 1024, 'string-sourced-deterministic-pseudo-random-number');"
                    `((prn ,(string-append* pseudo-random-number string-to-generate-deterministically-from))))))
+           ;; TODO - allow non-unsafe generation of keys from strings using something similar to:
+           ;;(js "sjcl.ecc.elGamal.generateKeys(sjcl.ecc.curves['c256'], 10, 0xa0a0bc893f1681c0eb5fad86bac1d784ccdb2cebe68a13362b4c0c8495ee9cd0 ).sec.get;")
            
            (match
             (json->scheme (->string (js "iasylum.crypto.generate_sjcl_el_gammal_ecc_c256_keypair();")))
