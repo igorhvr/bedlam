@@ -157,10 +157,9 @@
      string->java.io.InputStream
      string->java.io.File
      java-equals?
-     make-atomic-boolean
-     compare-and-set-atomic-boolean!
-     set-atomic-boolean!
-     get-atomic-boolean
+     make-atomic-boolean compare-and-set-atomic-boolean! set-atomic-boolean! get-atomic-boolean
+     make-atomic-long compare-and-set-atomic-long! set-atomic-long! get-atomic-long
+     inc-and-get-atomic-long! get-and-inc-atomic-long!
    )
   (import s2j)
   (include "jcode-code.scm"))

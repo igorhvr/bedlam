@@ -321,6 +321,27 @@
 (define (get-atomic-boolean atomic-boolean-java-object)
   (->scm-object (j "obj.get();" `((obj ,atomic-boolean-java-object)))))
 
+(define (make-atomic-long initial-value)
+  (j "new java.util.concurrent.atomic.AtomicLong(initial);" `((initial ,(->jlong initial-value)))))
+
+(define (compare-and-set-atomic-long! atomic-long-java-object expect update)
+  (->scm-object (j "obj.compareAndSet(expect, update);" `((obj ,atomic-long-java-object)
+                                                          (expect ,(->jlong expect))
+                                                          (update ,(->jlong update))))))
+
+(define (set-atomic-long! atomic-long-java-object new-value)
+  (->scm-object (j "obj.set(update);" `((obj ,atomic-long-java-object)
+                                        (update ,(->jlong new-value))))))
+
+(define (get-atomic-long atomic-long-java-object)
+  (->scm-object (j "obj.get();" `((obj ,atomic-long-java-object)))))
+
+(define (inc-and-get-atomic-long! atomic-long-java-object)
+  (->scm-object (j "obj.incrementAndGet();" `((obj ,atomic-long-java-object)))))
+
+(define (get-and-inc-atomic-long! atomic-long-java-object)
+  (->scm-object (j "obj.getAndIncrement();" `((obj ,atomic-long-java-object)))))
+
 (define (java-equals? obj1 obj2)
   (->scm-object (j "obj1.equals(obj2);" `((obj1 ,obj1)
                                           (obj2 ,obj2)))))
