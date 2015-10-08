@@ -123,6 +123,7 @@
 (add-lib "tomcat/standard.jar")
 
 (add-lib "u/quartz-all-1.7.3.jar")
+(add-lib "u/cron4j-2.2.5.jar")
 
 (add-lib "hornetq/hornetq-commons-2.3.17.Final.jar")
 (add-lib "hornetq/hornetq-core-client-2.3.17.Final.jar")
