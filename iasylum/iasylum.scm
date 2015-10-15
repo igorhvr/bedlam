@@ -1065,7 +1065,8 @@
   ;; (select-sublist '(a b c d e) 10 1) => ()
   ;;
   (define (select-sublist lst initial-index end-index)
-    (or (and (> initial-index end-index)
+    (or (and (or (> initial-index end-index)
+                 (null? lst))
              '())
         (let* ((size (length lst))
                (last-index (- size 1))
