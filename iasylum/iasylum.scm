@@ -93,6 +93,7 @@
    map-parallel
    get-day-index-utc
    atomic-execution
+   select-sublist
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -1057,6 +1058,21 @@
           `((cmdparams ,(jlist->jarray (->jobject (map (lambda (value)
                                                          (->jstring value))
                                                        command-and-args)))))))))
+
+  ;;
+  ;; (select-sublist '(a b c d e) 1 3) => (b c d)
+  ;; (select-sublist '(a b c d e) 1 10) => (b c d e)
+  ;; (select-sublist '(a b c d e) 10 1) => ()
+  ;;
+  (define (select-sublist lst initial-index end-index)
+    (or (and (> initial-index end-index)
+             '())
+        (let* ((size (length lst))
+               (last-index (- size 1))
+               (end-index (max 0 (min end-index last-index)))
+               (initial-index (min (max 0 initial-index) size)))
+          (drop-right (drop lst initial-index)
+                      (- last-index end-index)))))
 
   (create-shortcuts (avg -> average))
 
