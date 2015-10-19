@@ -30,8 +30,8 @@
    pump_binary-input-port->character-output-port
    input-port->string
    watched/spawn
-   r r-split r/s r/d r-base ; it is dangerous, see almost-safe-bash-run
-   almost-safe-bash-run
+   r r-split r/s r/d r-base ; it is dangerous, see safe-bash-run
+   safe-bash-run
    dp
    smart-compile
    flatten
@@ -390,6 +390,41 @@
 
   (define r/s (lambda p (r (apply string-append p))))
 
+  ;;
+  ;; This is safer than r-base and derived like r/s and r/d. This fn filters a lot
+  ;; of code injections possibilities.
+  ;;
+  ;; If any command (first argument) can be from an user input, it still necessary to filter the user
+  ;; input. If you can avoid to use this, like calling a directly library in Java, please do it.
+  ;;
+  ;; Use like this: (safe-bash-run "ls" "-lath")
+  ;;
+  ;; (safe-bash-run <command> <arg1> <arg2> ...)
+  ;;
+  (define safe-bash-run
+    (lambda command-and-args
+      (->string
+       (j "args = java.util.Arrays.copyOf(cmdparams, cmdparams.length, String[].class);
+           // System.out.println(java.util.Arrays.deepToString(args));
+           pb = new ProcessBuilder(args);
+           pb.redirectErrorStream(true);
+           p = pb.start();
+           int errCode = p.waitFor();
+           reader = new java.io.BufferedReader(
+                   new java.io.InputStreamReader(p.getInputStream()));
+
+           builder = new StringBuilder();
+           line = null;
+           while ( (line = reader.readLine()) != null) {
+               builder.append(line);
+               builder.append(System.lineSeparator());
+           }
+           result = builder.toString();
+           return result;"
+          `((cmdparams ,(jlist->jarray (->jobject (map (lambda (value)
+                                                         (->jstring value))
+                                                       command-and-args)))))))))
+  
    ;; Defines a parameter.
   (define-syntax dp
     (lambda (x)    
@@ -1022,42 +1057,6 @@
                        body ...)
                      (lambda ()
                        (mutex/unlock! (mutex-of lock-name)))))))
-
-  ;;
-  ;; This is *much* safer than r-base and derived like r/s and r/d.
-  ;;
-  ;; This fn filters a lot of code injections possibilities, but it is not *perfect* yet.
-  ;;
-  ;; If any command (first argument) can be from an user input, it still necessary to filter the user
-  ;; input. If you can avoid to use this, like calling a directly library in Java, please do it.
-  ;;
-  ;; Use like this: (almost-safe-bash-run "ls" "-lath")
-  ;;
-  ;; (almost-safe-bash-run <command> <arg1> <arg2> ...)
-  ;;
-  (define almost-safe-bash-run
-    (lambda command-and-args
-      (->string
-       (j "args = java.util.Arrays.copyOf(cmdparams, cmdparams.length, String[].class);
-           // System.out.println(java.util.Arrays.deepToString(args));
-           pb = new ProcessBuilder(args);
-           pb.redirectErrorStream(true);
-           p = pb.start();
-           int errCode = p.waitFor();
-           reader = new java.io.BufferedReader(
-                   new java.io.InputStreamReader(p.getInputStream()));
-
-           builder = new StringBuilder();
-           line = null;
-           while ( (line = reader.readLine()) != null) {
-               builder.append(line);
-               builder.append(System.lineSeparator());
-           }
-           result = builder.toString();
-           return result;"
-          `((cmdparams ,(jlist->jarray (->jobject (map (lambda (value)
-                                                         (->jstring value))
-                                                       command-and-args)))))))))
 
   ;;
   ;; (select-sublist '(a b c d e) 1 3) => (b c d)
