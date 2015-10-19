@@ -937,7 +937,7 @@
      ((what) "")
      ((what single-element) (string-append* single-element))
      ((what first-element . rest) (string-append* first-element what (apply add-between (cons what rest))))
-     (anything (error "Invalid parameter to to-csv-line " anything))))
+     (anything (error "Invalid parameter to add-between " anything))))
 
   (define (add-between-list what l)
     (assert (list? l))
