@@ -88,9 +88,8 @@
    avg average
    not-buggy-exact->inexact
    apply*
-   let-parallel
-   map-parallel
-   get-day-index-utc
+   let-parallel map-parallel
+   get-day-index get-day-index-utc
    atomic-execution
    select-sublist
    )
@@ -1034,13 +1033,19 @@
                                                              element)))]))
 
   ;;
+  ;; Example of use: (get-day-index (current-date 0))
+  ;; If you want to get the current day index in UTC, use (get-day-index-utc)
+  ;;
+  (define (get-day-index date)
+    (sha256+ (date-year-day date)
+             (date-year date)))
+
+  ;;
   ;; Return a string representing today.
   ;; It changes every day after 00:00 UTC.
   ;;
   (define (get-day-index-utc)
-    (let ((today (current-date 0)))
-      (sha256+ (date-year-day today)
-               (date-year today))))
+    (get-day-index (current-date 0)))
 
   ;;
   ;; Use like this:
