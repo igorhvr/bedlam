@@ -85,8 +85,7 @@
    add-between-list
    add-spaces-between
    get
-   avg
-   average
+   avg average
    not-buggy-exact->inexact
    apply*
    let-parallel
