@@ -1,0 +1,9 @@
+#! /usr/bin/env /base/bedlam/bin/bedlam-script
+;; -*- mode: scheme; -*-
+
+(define (main p)
+  (let* ((bedlam-port (irregex-match-substring (irregex-search '(seq ipv4-address ":" (submatch-named bedlam-port (+ digit)) "->3000/tcp")
+                                                                   (r/s "sudo docker ps|grep bedlam")) 'bedlam-port))
+         (command (string-append* "echo " bedlam-port )))
+    (r/d command)))
+

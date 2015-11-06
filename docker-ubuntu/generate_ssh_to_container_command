@@ -1,0 +1,11 @@
+#! /usr/bin/env /base/bedlam/sisc/sisc-1.16.6/scheme-src/srfi-22/srfi-22.sh
+;; -*- mode: scheme; -*-
+
+(begin (define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")))
+
+(define (main p)
+  (let* ((bedlam-ssh-port (irregex-match-substring (irregex-search '(seq ipv4-address ":" (submatch-named bedlam-ssh-port (+ digit)) "->22/tcp")
+                                                                   (r/s "sudo docker ps|grep bedlam")) 'bedlam-ssh-port))
+         (command (string-append* "echo  ssh -oUserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no -p " bedlam-ssh-port " root@localhost")))
+    (r/d command)))
+
