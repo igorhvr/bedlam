@@ -8,6 +8,8 @@ under SISC 1.16.6 or later.
 
 Another option is simply including jars/bedlam-bundle.jar and the other .jar files in lib in your project and using the BedlamBundleInit java class.
 
+Finally, docker images are provided. See docker/ and docker-ubuntu/.
+
 Why?
 
    This was developed during years and supports several production deployments of SISC. Sisc is a great Scheme implementation and having a big glob of wrappers and general scheme utilities to use in multiple projects has proved very useful.
