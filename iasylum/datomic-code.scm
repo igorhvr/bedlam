@@ -99,6 +99,10 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
   (j "db.asOf(t);" `((db ,db)
                      (t ,(->jobject t)))))
 
+(define (datomic/since db t)
+  (j "db.since(t);" `((db ,db)
+                      (t ,(->jobject t)))))
+
 (define (datomic/make-latest-db-retriever connection-retriever)
   (lambda ()
     (datomic/db (connection-retriever))))
@@ -115,11 +119,32 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 ;; - smart-query-lambda can be datomic/smart-query-multiple or datomic/smart-query-single depending on
 ;;                      what kind of result are expected.
 ;;
-(define (datomic/make-query-function-with-one-connection-included smart-query-lambda connection-retriever)
-  (let ((db-retriever (datomic/make-latest-db-retriever connection-retriever)))
+;; - snapshot: a "t" INCLUSIVE to a snapshot of the database in past.
+;; - since: a "t" EXCLUSIVE to exclude all tx before this date.
+;;
+;; t can be a date scheme or a java.util.Date java object.
+;;
+(define* (datomic/make-query-function-with-one-connection-included smart-query-lambda
+                                                                   connection-retriever
+                                                                   (snapshot: snapshot #f)
+                                                                   (since: since #f))
+  (let* ((db-retriever (datomic/make-latest-db-retriever connection-retriever))         
+         (db-retriever (cond [(and snapshot
+                                   since)
+                              (lambda ()
+                                (datomic/as-of (datomic/since (db-retriever)
+                                                              since)
+                                               snapshot))]
+                             [snapshot (lambda ()
+                                         (datomic/as-of (db-retriever)
+                                                        snapshot))]
+                             [since (lambda ()
+                                      (datomic/since (db-retriever)
+                                                     since))]
+                             [else db-retriever])))
     (cut smart-query-lambda
          <> ; Query.
-         (db-retriever) ; Recent db fetched.
+         (db-retriever)
          <...> ; Whatever other insanity and/or fixed parameters one may pass.
          )))
 
