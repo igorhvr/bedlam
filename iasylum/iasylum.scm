@@ -92,6 +92,7 @@
    get-day-index get-day-index-utc
    atomic-execution
    select-sublist
+   time->millis
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -1077,6 +1078,13 @@
                (initial-index (min (max 0 initial-index) size)))
           (drop-right (drop lst initial-index)
                       (- last-index end-index)))))
+
+  ;;
+  ;; It returns an exact number. Use (floor ...) to make it an integer.
+  ;;
+  (define (time->millis t)
+    (+ (* 1000 (time-second t))
+       (/ (time-nanosecond t) 1000000)))
 
   (create-shortcuts (avg -> average))
 
