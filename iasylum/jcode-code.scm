@@ -114,8 +114,7 @@
   (j "jdate.getTime();" `((jdate ,jdate))))
 
 (define (time->jdate t)
-  (java-new <date> (->jlong (+ (* 1000 (time-second t))
-                               (/ (time-nanosecond t) 1000000)))))
+  (java-new <date> (->jlong (+ (time->millis t)))))
 
 (define (date->jdate the-date)
    (let ((t (date->time-utc the-date)))
