@@ -119,25 +119,24 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 ;; - smart-query-lambda can be datomic/smart-query-multiple or datomic/smart-query-single depending on
 ;;                      what kind of result are expected.
 ;;
-;; - snapshot: a "t" INCLUSIVE to a snapshot of the database in past.
 ;; - since: a "t" EXCLUSIVE to exclude all tx before this date.
+;; - until: a "t" INCLUSIVE to exclude all tx after this date.
 ;;
 ;; t can be a date scheme or a java.util.Date java object.
 ;;
 (define* (datomic/make-query-function-with-one-connection-included smart-query-lambda
                                                                    connection-retriever
-                                                                   (snapshot: snapshot #f)
-                                                                   (since: since #f))
+                                                                   (since: since #f)
+                                                                   (until: until #f))
   (let* ((db-retriever (datomic/make-latest-db-retriever connection-retriever))         
-         (db-retriever (cond [(and snapshot
-                                   since)
+         (db-retriever (cond [(and since until)
                               (lambda ()
                                 (datomic/as-of (datomic/since (db-retriever)
                                                               since)
-                                               snapshot))]
-                             [snapshot (lambda ()
-                                         (datomic/as-of (db-retriever)
-                                                        snapshot))]
+                                               until))]
+                             [until (lambda ()
+                                      (datomic/as-of (db-retriever)
+                                                     until))]
                              [since (lambda ()
                                       (datomic/since (db-retriever)
                                                      since))]
