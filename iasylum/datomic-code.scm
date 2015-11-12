@@ -124,28 +124,42 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 ;;
 ;; t can be a date scheme or a java.util.Date java object.
 ;;
+;; DISCLAIMER: using "since" is not so easy as it sounds: the problem is that the lockup
+;;             info is created at the moment of the tx, so if you exclude the beginning you lost this
+;;             info and probably your query will return nil. You HAVE to lockup only by ID, so the solution
+;;             is find the ID in the most recent db and then use since to get the entity info.
+;;             See http://docs.datomic.com/filters.html for more info.
+;;             If you use "since" param, please notice that this fn send the most recent db
+;;             as first source and the since as second one. Your query have to look something like this:
+;;
+;;             [:find ?count 
+;;              :in $ $since ?id 
+;;              :where [$ ?e :item/id ?id]
+;;                     [$since ?e :item/count ?count]]
+;;
 (define* (datomic/make-query-function-with-one-connection-included smart-query-lambda
                                                                    connection-retriever
                                                                    (since: since #f)
                                                                    (until: until #f))
-  (let* ((db-retriever (datomic/make-latest-db-retriever connection-retriever))         
-         (db-retriever (cond [(and since until)
-                              (lambda ()
-                                (datomic/as-of (datomic/since (db-retriever)
-                                                              since)
-                                               until))]
-                             [until (lambda ()
-                                      (datomic/as-of (db-retriever)
-                                                     until))]
-                             [since (lambda ()
-                                      (datomic/since (db-retriever)
-                                                     since))]
-                             [else db-retriever])))
-    (cut smart-query-lambda
-         <> ; Query.
-         (db-retriever)
-         <...> ; Whatever other insanity and/or fixed parameters one may pass.
-         )))
+  (let* ((current-db-retriever (datomic/make-latest-db-retriever connection-retriever))
+         (last-db-retriever (if (not until)
+                                current-db-retriever
+                                (lambda ()
+                                  (datomic/as-of (current-db-retriever)
+                                                 until)))))
+    (if (not since)
+        (cut smart-query-lambda
+             <> ; Query.
+             (last-db-retriever)
+             <...> ; Whatever other insanity and/or fixed parameters one may pass.
+             )
+        (cut smart-query-lambda
+             <> ; Query.
+             (last-db-retriever)
+             (datomic/since (last-db-retriever)
+                            since)
+             <...> ; other params
+             ))))
 
 ;;
 ;; Differently of smart-query, this DOES NOT convert input (params) to jobject
