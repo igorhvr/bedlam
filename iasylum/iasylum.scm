@@ -755,7 +755,10 @@
                                                  (or error-continuation restart-continuation))
                                                 obj)))))
                      (with-failure-continuation
-                      (lambda (error error-continuation) (force-result error error-continuation))
+                      (lambda (error error-continuation)
+                        (log-warn "Maybe this error is being purposely ignored:" error)
+                        (print-stack-trace error-continuation)
+                        (force-result error error-continuation))
                       (lambda ()
                         (let ((result ((lambda () <code> (... ...)))))
                           (let ((final-result
