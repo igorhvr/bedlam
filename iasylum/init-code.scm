@@ -508,7 +508,7 @@
 (add-lib "aws-java-sdk-1.9.19/httpcomponents-client-4.3/httpclient-4.3.jar")
 (add-lib "aws-java-sdk-1.9.19/httpcomponents-client-4.3/httpcore-4.3.jar")
 (add-lib "aws-java-sdk-1.9.19/javax-mail-1.4.6/javax.mail-api-1.4.6.jar")
-(add-lib "aws-java-sdk-1.9.19/joda-time-2.2/joda-time-2.2.jar")
+(add-lib "joda/joda-time-2.9.jar")
 (add-lib "aws-java-sdk-1.9.19/spring-3.0/spring-beans-3.0.7.jar")
 (add-lib "aws-java-sdk-1.9.19/spring-3.0/spring-context-3.0.7.jar")
 (add-lib "aws-java-sdk-1.9.19/spring-3.0/spring-core-3.0.7.jar")
