@@ -6,6 +6,7 @@
    aws/make-sqs-client
    aws/make-sqs-send-message-request
    aws/sqs-send-message aws/sqs-receive-message
+   aws/sqs-create-queue
 
    aws/make-dynamodb-client
    aws/make-dynamodb-attribute aws/ensure-dynamodb-attribute aws/ensure-dynamodb-jmap
@@ -29,6 +30,32 @@
    (define (aws/sqs-send-message sqs-client message) (j "sqs.sendMessage(message);" `((sqs ,sqs-client) (message ,message))))
 
    (define aws/sqs-receive-message (lambda* (sqs-client queue-url (wait-time-seconds: wait-time-seconds 0)) (->scm-object (j "receiverequest=new com.amazonaws.services.sqs.model.ReceiveMessageRequest(queueurl);if(waittimeseconds!=0)receiverequest.setWaitTimeSeconds(waittimeseconds);result=sqs.receiveMessage(receiverequest.withMaxNumberOfMessages(1)).getMessages();finalresult=null; if (result != null && result.size() > 0) { result=result.get(0); finalresult=result.getBody(); receipt=result.getReceiptHandle(); sqs.deleteMessage(new com.amazonaws.services.sqs.model.DeleteMessageRequest(queueurl, receipt));  } ; finalresult; " `((queueurl ,(->jstring queue-url)) (sqs ,sqs-client) (waittimeseconds ,(->jobject wait-time-seconds)))))))
+
+   ;; DelaySeconds - The time in seconds that the delivery of all messages in the queue will be delayed. An integer from 0 to 900 (15 minutes). The default for this attribute is 0 (zero).
+;; MaximumMessageSize - The limit of how many bytes a message can contain before Amazon SQS rejects it. An integer from 1024 bytes (1 KiB) up to 262144 bytes (256 KiB). The default for this attribute is 262144 (256 KiB).
+;; MessageRetentionPeriod - The number of seconds Amazon SQS retains a message. Integer representing seconds, from 60 (1 minute) to 1209600 (14 days). The default for this attribute is 345600 (4 days).
+;; Policy - The queue's policy. A valid AWS policy. For more information about policy structure, see Overview of AWS IAM Policies in the Amazon IAM User Guide.
+;; ReceiveMessageWaitTimeSeconds - The time for which a ReceiveMessage call will wait for a message to arrive. An integer from 0 to 20 (seconds). The default for this attribute is 0.
+;; VisibilityTimeout - The visibility timeout for the queue. An integer from 0 to 43200 (12 hours). The default for this attribute is 30. For more information about visibility timeout, see Visibility Timeout in the Amazon SQS Developer Guide.
+;; RedrivePolicy - The parameters for dead letter queue functionality of the source queue. For more information about RedrivePolicy and dead letter queues, see Using Amazon SQS Dead Letter Queues in the Amazon SQS Developer Guide.
+   (define aws/sqs-create-queue
+     (lambda* (sqs-client queue-name (DelaySeconds: DelaySeconds 0) (MaximumMessageSize: MaximumMessageSize 262144) (MessageRetentionPeriod: MessageRetentionPeriod 1209600) (Policy: Policy #f) (ReceiveMessageWaitTimeSeconds: ReceiveMessageWaitTimeSeconds 0) (VisibilityTimeout: VisibilityTimeout 30) (RedrivePolicy: RedrivePolicy #f))
+              (let ((parameters-map
+                     (->jmap (filter identity
+                                     `(("DelaySeconds" . ,(number->string DelaySeconds))
+                                       ("MaximumMessageSize" . ,(number->string MaximumMessageSize))
+                                       ("MessageRetentionPeriod" . ,(number->string MessageRetentionPeriod))
+                                       ,(if Policy `("Policy" . ,(->jobject Policy)) #f)
+                                       ("ReceiveMessageWaitTimeSeconds" . ,(number->string ReceiveMessageWaitTimeSeconds))
+                                       ("VisibilityTimeout" . ,(number->string VisibilityTimeout))
+                                       ,(if RedrivePolicy `("RedrivePolicy" . (->jobject RedrivePolicy)) #f))))))
+                (->scm-object
+                 (j "url=sqsclient.createQueue(queuename).getQueueUrl();
+                     sqsclient.setQueueAttributes(url,attr);
+                     url;"
+                    `((sqsclient ,sqs-client)
+                      (queuename ,(->jstring queue-name))
+                      (attr ,parameters-map)))))))
    
    (define (aws/make-dynamodb-client credentials) (j "new com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient(credentials);" `((credentials ,credentials))))
 
