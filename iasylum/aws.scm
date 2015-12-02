@@ -20,6 +20,12 @@
    aws/make-region
    aws/make-s3-client
    aws/s3-put-string
+
+   aws/s3-make-allow-GET-from-anywhere-CORS-rules
+   aws/s3-set-CORS
+   aws/s3-create-bucket
+   aws/s3-set-bucket-website-configuration
+   aws/s3-add-bucket-autoerasing-rule
    )
    
    (define (aws/make-credentials access-key secret-key) (j "new com.amazonaws.auth.BasicAWSCredentials(accesskey, secretkey);" `((accesskey ,(->jstring access-key)) (secretkey ,(->jstring secret-key)))))
@@ -140,7 +146,53 @@
                 (j "omd = new com.amazonaws.services.s3.model.ObjectMetadata();                   
                     s3.putObject(new com.amazonaws.services.s3.model.PutObjectRequest(bucket, objname, fl, omd).withCannedAcl(aclv));"
                    `((bucket ,(->jstring bucket)) (objname ,(->jstring object)) (fl ,(string->java.io.InputStream string)) (s3 ,s3-client) (aclv ,aclv))))))
+   
+   (define (aws/s3-make-allow-GET-from-anywhere-CORS-rules)
+     (j "rule1 = new com.amazonaws.services.s3.model.CORSRule()
+        .withId(\"CORSRule1\")
+        .withAllowedMethods(Arrays.asList(new com.amazonaws.services.s3.model.CORSRule.AllowedMethods[] { 
+            com.amazonaws.services.s3.model.CORSRule.AllowedMethods.GET}))
+        .withAllowedOrigins(Arrays.asList(new String[] {\"*\"}));
+         Arrays.asList(new com.amazonaws.services.s3.model.CORSRule[] {rule1});"))
+     
 
-                  
+   (define (aws/s3-set-CORS s3-client bucket-name rules)
+     (j 
+      "configuration = new com.amazonaws.services.s3.model.BucketCrossOriginConfiguration();
+       configuration.setRules(rules);
+       client.setBucketCrossOriginConfiguration(bucketname, configuration);"
+      `((client ,s3-client)
+        (bucketname ,(->jstring bucket-name))
+        (rules ,rules))))
+   
+   (define (aws/s3-create-bucket s3-client name)
+     (j "s3client.createBucket(new com.amazonaws.services.s3.model.CreateBucketRequest(bucketname));" `((bucketname ,(->jstring name)) (s3client ,s3-client))))
+   
+   (define (aws/s3-set-bucket-website-configuration s3-client bucket-name index-doc error-doc)
+     (j "s3client.setBucketWebsiteConfiguration(bucketname, new com.amazonaws.services.s3.model.BucketWebsiteConfiguration(indexdoc, errordoc));"
+        `((indexdoc ,(->jstring index-doc)) (errordoc ,(->jstring error-doc)) (bucketname ,(->jstring bucket-name))
+          (s3client ,s3-client))))
+   
+   (define (aws/s3-add-bucket-autoerasing-rule s3-client bucket-name id days prefix)
+     (j "configuration=s3client.getBucketLifecycleConfiguration(bucketname);
+      if(configuration==null) configuration=new com.amazonaws.services.s3.model.BucketLifecycleConfiguration();
+      newrule=new com.amazonaws.services.s3.model.BucketLifecycleConfiguration.Rule()
+                        .withId(id)
+                        .withPrefix(prefix)
+                        .withExpirationInDays(days)
+                        .withStatus(com.amazonaws.services.s3.model.BucketLifecycleConfiguration.ENABLED.toString());
+      if(configuration.getRules()==null) {
+         configuration.setRules(
+                    Arrays.asList(
+                      new com.amazonaws.services.s3.model.BucketLifecycleConfiguration.Rule[] {newrule}));
+      } else {
+         configuration.getRules().add(newrule);
+      }
+      s3client.setBucketLifecycleConfiguration(bucketname, configuration);"
+        `((prefix ,(->jstring prefix))
+          (id ,(->jstring id))
+          (days ,(->jobject days))
+          (bucketname ,(->jstring bucket-name))
+          (s3client ,s3-client))))
    
 )
