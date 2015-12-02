@@ -17,6 +17,7 @@
    aws/make-dynamodb-simple-eq-key-query-request
    aws/dynamodb-simple-eq-key-query
 
+   aws/make-region
    aws/make-s3-client
    aws/s3-put-string
    )
@@ -118,8 +119,18 @@
            (j "dyn.query(req).getItems();" `((dyn ,dynamodb-client)
                                              (req ,(aws/make-dynamodb-simple-eq-key-query-request table-name attribute-name attribute-value
                                                                                                   'strongly-consistent-read: #t)))))))
-   (define (aws/make-s3-client credentials)
-     (j "new com.amazonaws.services.s3.AmazonS3Client(cred);" `((cred ,credentials))))
+
+   ;; Valid regions (as of 2015-12-01) 
+   ;; AP_NORTHEAST_1 / AP_SOUTHEAST_1 / AP_SOUTHEAST_2 / CN_NORTH_1 / EU_CENTRAL_1
+   ;; EU_WEST_1 / GovCloud / SA_EAST_1 / US_EAST_1 / US_WEST_1 / US_WEST_2 
+   (define (aws/make-region region-name)
+     (j "com.amazonaws.regions.Regions.valueOf(regionname);" `((regionname ,(->jstring region-name)))))
+
+   (define aws/make-s3-client
+     (lambda* (credentials (region: region #f))
+              (let ((result (j "ns3c=new com.amazonaws.services.s3.AmazonS3Client(cred);" `((cred ,credentials)))))
+                (when region (j "s3client.setRegion(region);" `((s3client ,result) (region ,region))))
+                result)))
 
    (define aws/s3-put-string
      (lambda* (s3-client bucket object string (public-read: public-read #f))
