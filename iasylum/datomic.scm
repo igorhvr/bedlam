@@ -22,6 +22,8 @@
    datomic/extract-transaction-and-parameters-pair
    datomic/get-filled-entity
    datomic/db-history
+   datomic/as-of
+   datomic/since
    datomic/get-history
    datomic/travel-machine
    datomic/tx->t
