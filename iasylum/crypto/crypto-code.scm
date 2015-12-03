@@ -19,7 +19,8 @@
            (assert (eqv? type 'sjcl_el_gammal_ecc_c256_key))
 
            (if (not string-to-generate-deterministically-from)
-               (js (sjcl.js))
+;               (js (sjcl.js))
+               (js (sjcl.js-unsafe))
                (js (sjcl.js-unsafe)))
 
            (js (iasylum.js)) (js (crypto.js))
