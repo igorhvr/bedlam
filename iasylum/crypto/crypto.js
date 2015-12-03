@@ -16,6 +16,17 @@ var iasylum_crypto = {
         return JSON.stringify({'publicKey': finalresultpub, 'secretKey': finalresultsec});
     },
 
+    'generate_unsafe_sjcl_el_gammal_ecc_c256_keypair': function () {
+        var keypair = sjcl.ecc.elGamal.generateKeys(sjcl.ecc.curves['c256'], 0);
+        var resultpub = {};
+        var resultsec = {};
+        resultpub['pub'] = JSON.parse(JSON.stringify(keypair.pub.get()));
+        resultsec['sec'] = JSON.parse(JSON.stringify(keypair.sec.get()));
+        var finalresultpub = {'type': 'sjcl_el_gammal_ecc_c256_key', 'body': resultpub};
+        var finalresultsec = {'type': 'sjcl_el_gammal_ecc_c256_key', 'body': resultsec};
+        return JSON.stringify({'publicKey': finalresultpub, 'secretKey': finalresultsec});
+    },
+
     'symmetric_encrypt': function (key, data) {
         return sjcl.encrypt(key, data);
     },

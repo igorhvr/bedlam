@@ -40,7 +40,9 @@
            ;;(js "sjcl.ecc.elGamal.generateKeys(sjcl.ecc.curves['c256'], 10, 0xa0a0bc893f1681c0eb5fad86bac1d784ccdb2cebe68a13362b4c0c8495ee9cd0 ).sec.get;")
            
            (match
-            (json->scheme (->string (js "iasylum.crypto.generate_sjcl_el_gammal_ecc_c256_keypair();")))
+            (json->scheme (->string (if (not string-to-generate-deterministically-from)
+                                        (js "iasylum.crypto.generate_sjcl_el_gammal_ecc_c256_keypair();")
+                                        (js "iasylum.crypto.generate_unsafe_sjcl_el_gammal_ecc_c256_keypair();"))))
             (#( ( "publicKey" . the-public-key )
                 ( "secretKey" . the-secret-key ) ) `(,(scheme->json the-public-key) ,(scheme->json the-secret-key))))))
 
