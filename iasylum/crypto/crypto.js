@@ -6,7 +6,7 @@ if (!iasylum) {
 
 var iasylum_crypto = {
     'generate_sjcl_el_gammal_ecc_c256_keypair': function () {
-        var keypair = sjcl.ecc.elGamal.generateKeys(sjcl.ecc.curves['c256'], 10);
+        var keypair = sjcl.ecc.elGamal.generateKeys(sjcl.ecc.curves['c256'], 0);//10
         var resultpub = {};
         var resultsec = {};
         resultpub['pub'] = JSON.parse(JSON.stringify(keypair.pub.get()));
