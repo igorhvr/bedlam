@@ -29,7 +29,9 @@
    pump-binary
    pump_binary-input-port->character-output-port
    input-port->string
-   watched/spawn
+   watched-parallel
+   debug-watched-parallel
+   watched-thread/spawn
    r r-split r/s r/d r-base ; it is dangerous, see safe-bash-run
    safe-bash-run
    dp
@@ -313,17 +315,40 @@
     (loop))
 
   (define (syserr-log p) (j "System.err.print(m); System.err.flush();" `((m ,(->jobject p)))))
-  
-  (define watched/spawn
-    (lambda* (p (error-handler: error-handler
-                           (lambda p (map syserr-log `("Error - will stop thread - details saved at " ,(save-to-somewhere p) " - " ,p "\n")))))
 
-        
+  (define debug-standard-thread-error-handler
+    (lambda (error error-continuation)
+      (map syserr-log `("Error - will stop thread - details saved at " ,(save-to-somewhere (list error error-continuation)) " - " ,error ,error-continuation "\n"))
+      (print-stack-trace error-continuation)))
+
+  (define standard-thread-error-handler
+    (lambda (error error-continuation)
+      (map syserr-log `("Error - will stop thread: " ,error ,error-continuation "\n"))
+      (print-stack-trace error-continuation)))
+  
+  (define watched-parallel
+    (lambda fn-set
+      (apply parallel (pam fn-set (lambda (fn) (delay (with/fc standard-thread-error-handler fn)))))))
+  
+  (define debug-watched-parallel
+    (lambda fn-set
+      (apply parallel (pam fn-set (lambda (fn) (delay (with/fc debug-standard-thread-error-handler fn)))))))
+  
+  (define watched-thread/spawn
+    (lambda* (p (error-handler: error-handler standard-thread-error-handler))
         (thread/spawn
          (lambda ()
            (with/fc
             error-handler
             p)))))
+
+  (define debug-watched-thread/spawn
+    (lambda* (p (error-handler: error-handler debug-standard-thread-error-handler))
+             (thread/spawn
+              (lambda ()
+                (with/fc
+                 error-handler
+                 p)))))
   
   (define r
     (lambda* (cmd-string (get-return-code #f))
@@ -669,7 +694,7 @@
     (syntax-rules ()
       ((_ n <code> ...)
        (let ((lambda-set (list-ec (: i n) (lambda () (list ((lambda () <code> ...)))))))
-         (apply append (multiple-values->list (apply parallel lambda-set)))))))
+         (apply append (multiple-values->list (apply watched-parallel lambda-set)))))))
 
   (define-syntax multiple-values->list
     (syntax-rules ()
@@ -1013,7 +1038,7 @@
       ((_ [(var-name value) ...] body ...)
        (call-with-values
            (lambda ()
-             (parallel (lambda ()
+             (watched-parallel (lambda ()
                          value) ...))
            (lambda (var-name ...)
              body ...)))))
@@ -1032,7 +1057,7 @@
   (define map-parallel (match-lambda* [((? procedure? fn)
                                         (element ___))
                                        (multiple-values->list
-                                        (apply parallel (map (lambda (i)
+                                        (apply watched-parallel (map (lambda (i)
                                                                (delay (fn i)))
                                                              element)))]))
 
