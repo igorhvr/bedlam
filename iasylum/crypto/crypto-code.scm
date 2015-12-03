@@ -19,7 +19,6 @@
            (assert (eqv? type 'sjcl_el_gammal_ecc_c256_key))
 
            (if (not string-to-generate-deterministically-from)
-;               (js (sjcl.js))
                (js (sjcl.js-unsafe))
                (js (sjcl.js-unsafe)))
 
@@ -35,7 +34,7 @@
                         (random-function (random-maker seed))
                         (pseudo-random-number (random-function (expt 10 12))))
 
-               (js "sjcl.random.addEntropy(prn, 1024, 'string-sourced-deterministic-pseudo-random-number');"
+               (js "sjcl.random.addEntropy(prn, 1048576, 'string-sourced-deterministic-pseudo-random-number');"
                    `((prn ,(string-append* pseudo-random-number string-to-generate-deterministically-from))))))
            ;; TODO - allow non-unsafe generation of keys from strings using something similar to:
            ;;(js "sjcl.ecc.elGamal.generateKeys(sjcl.ecc.curves['c256'], 10, 0xa0a0bc893f1681c0eb5fad86bac1d784ccdb2cebe68a13362b4c0c8495ee9cd0 ).sec.get;")
