@@ -29,8 +29,11 @@
    pump-binary
    pump_binary-input-port->character-output-port
    input-port->string
-   watched/spawn
-   r r-split r/s r/d r-base
+   watched-parallel
+   debug-watched-parallel
+   watched-thread/spawn
+   r r-split r/s r/d r-base ; it is dangerous, see safe-bash-run
+   safe-bash-run
    dp
    smart-compile
    flatten
@@ -84,13 +87,14 @@
    add-between-list
    add-spaces-between
    get
-   avg
-   average
+   avg average
    not-buggy-exact->inexact
    apply*
-   let-parallel
-   get-day-index-utc
+   let-parallel map-parallel
+   get-day-index get-day-index-utc
    atomic-execution
+   select-sublist
+   time->millis
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -311,17 +315,40 @@
     (loop))
 
   (define (syserr-log p) (j "System.err.print(m); System.err.flush();" `((m ,(->jobject p)))))
-  
-  (define watched/spawn
-    (lambda* (p (error-handler: error-handler
-                           (lambda p (map syserr-log `("Error - will stop thread - details saved at " ,(save-to-somewhere p) " - " ,p "\n")))))
 
-        
+  (define debug-standard-thread-error-handler
+    (lambda (error error-continuation)
+      (map syserr-log `("Error - will stop thread - details saved at " ,(save-to-somewhere (list error error-continuation)) " - " ,error ,error-continuation "\n"))
+      (print-stack-trace error-continuation)))
+
+  (define standard-thread-error-handler
+    (lambda (error error-continuation)
+      (map syserr-log `("Error - will stop thread: " ,error ,error-continuation "\n"))
+      (print-stack-trace error-continuation)))
+  
+  (define watched-parallel
+    (lambda fn-set
+      (apply parallel (pam fn-set (lambda (fn) (delay (with/fc standard-thread-error-handler fn)))))))
+  
+  (define debug-watched-parallel
+    (lambda fn-set
+      (apply parallel (pam fn-set (lambda (fn) (delay (with/fc debug-standard-thread-error-handler fn)))))))
+  
+  (define watched-thread/spawn
+    (lambda* (p (error-handler: error-handler standard-thread-error-handler))
         (thread/spawn
          (lambda ()
            (with/fc
             error-handler
             p)))))
+
+  (define debug-watched-thread/spawn
+    (lambda* (p (error-handler: error-handler debug-standard-thread-error-handler))
+             (thread/spawn
+              (lambda ()
+                (with/fc
+                 error-handler
+                 p)))))
   
   (define r
     (lambda* (cmd-string (get-return-code #f))
@@ -387,6 +414,41 @@
 
   (define r/s (lambda p (r (apply string-append p))))
 
+  ;;
+  ;; This is safer than r-base and derived like r/s and r/d. This fn filters a lot
+  ;; of code injections possibilities.
+  ;;
+  ;; If any command (first argument) can be from an user input, it still necessary to filter the user
+  ;; input. If you can avoid to use this, like calling a directly library in Java, please do it.
+  ;;
+  ;; Use like this: (safe-bash-run "ls" "-lath")
+  ;;
+  ;; (safe-bash-run <command> <arg1> <arg2> ...)
+  ;;
+  (define safe-bash-run
+    (lambda command-and-args
+      (->string
+       (j "args = java.util.Arrays.copyOf(cmdparams, cmdparams.length, String[].class);
+           // System.out.println(java.util.Arrays.deepToString(args));
+           pb = new ProcessBuilder(args);
+           pb.redirectErrorStream(true);
+           p = pb.start();
+           int errCode = p.waitFor();
+           reader = new java.io.BufferedReader(
+                   new java.io.InputStreamReader(p.getInputStream()));
+
+           builder = new StringBuilder();
+           line = null;
+           while ( (line = reader.readLine()) != null) {
+               builder.append(line);
+               builder.append(System.lineSeparator());
+           }
+           result = builder.toString();
+           return result;"
+          `((cmdparams ,(jlist->jarray (->jobject (map (lambda (value)
+                                                         (->jstring value))
+                                                       command-and-args)))))))))
+  
    ;; Defines a parameter.
   (define-syntax dp
     (lambda (x)    
@@ -632,7 +694,7 @@
     (syntax-rules ()
       ((_ n <code> ...)
        (let ((lambda-set (list-ec (: i n) (lambda () (list ((lambda () <code> ...)))))))
-         (apply append (multiple-values->list (apply parallel lambda-set)))))))
+         (apply append (multiple-values->list (apply watched-parallel lambda-set)))))))
 
   (define-syntax multiple-values->list
     (syntax-rules ()
@@ -718,7 +780,10 @@
                                                  (or error-continuation restart-continuation))
                                                 obj)))))
                      (with-failure-continuation
-                      (lambda (error error-continuation) (force-result error error-continuation))
+                      (lambda (error error-continuation)
+                        (log-warn "Maybe this error is being purposely ignored:" error)
+                        (print-stack-trace error-continuation)
+                        (force-result error error-continuation))
                       (lambda ()
                         (let ((result ((lambda () <code> (... ...)))))
                           (let ((final-result
@@ -899,7 +964,7 @@
      ((what) "")
      ((what single-element) (string-append* single-element))
      ((what first-element . rest) (string-append* first-element what (apply add-between (cons what rest))))
-     (anything (error "Invalid parameter to to-csv-line " anything))))
+     (anything (error "Invalid parameter to add-between " anything))))
 
   (define (add-between-list what l)
     (assert (list? l))
@@ -973,19 +1038,43 @@
       ((_ [(var-name value) ...] body ...)
        (call-with-values
            (lambda ()
-             (parallel (lambda ()
+             (watched-parallel (lambda ()
                          value) ...))
            (lambda (var-name ...)
              body ...)))))
+
+  ;;
+  ;; A version of map that runs the code in parallel.
+  ;;
+  ;; Example:
+  ;; (time (map-parallel (lambda (a)
+  ;;          (begin
+  ;;            (sleep 1000)
+  ;;            (+ 1 a)))
+  ;;       '(1 2 3 4 5)))
+  ;; => ((2 3 4 5 6) (1000 ms))
+  ;;
+  (define map-parallel (match-lambda* [((? procedure? fn)
+                                        (element ___))
+                                       (multiple-values->list
+                                        (apply watched-parallel (map (lambda (i)
+                                                               (delay (fn i)))
+                                                             element)))]))
+
+  ;;
+  ;; Example of use: (get-day-index (current-date 0))
+  ;; If you want to get the current day index in UTC, use (get-day-index-utc)
+  ;;
+  (define (get-day-index date)
+    (sha256+ (date-year-day date)
+             (date-year date)))
 
   ;;
   ;; Return a string representing today.
   ;; It changes every day after 00:00 UTC.
   ;;
   (define (get-day-index-utc)
-    (let ((today (current-date 0)))
-      (sha256+ (date-year-day today)
-               (date-year today))))
+    (get-day-index (current-date 0)))
 
   ;;
   ;; Use like this:
@@ -1001,6 +1090,29 @@
                        body ...)
                      (lambda ()
                        (mutex/unlock! (mutex-of lock-name)))))))
+
+  ;;
+  ;; (select-sublist '(a b c d e) 1 3) => (b c d)
+  ;; (select-sublist '(a b c d e) 1 10) => (b c d e)
+  ;; (select-sublist '(a b c d e) 10 1) => ()
+  ;;
+  (define (select-sublist lst initial-index end-index)
+    (or (and (or (> initial-index end-index)
+                 (null? lst))
+             '())
+        (let* ((size (length lst))
+               (last-index (- size 1))
+               (end-index (max 0 (min end-index last-index)))
+               (initial-index (min (max 0 initial-index) size)))
+          (drop-right (drop lst initial-index)
+                      (- last-index end-index)))))
+
+  ;;
+  ;; It returns an exact number. Use (floor ...) to make it an integer.
+  ;;
+  (define (time->millis t)
+    (+ (* 1000 (time-second t))
+       (/ (time-nanosecond t) 1000000)))
 
   (create-shortcuts (avg -> average))
 
