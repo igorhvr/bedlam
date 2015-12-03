@@ -38,7 +38,7 @@
                    `((prn ,(string-append* pseudo-random-number string-to-generate-deterministically-from))))))
            ;; TODO - allow non-unsafe generation of keys from strings using something similar to:
            ;;(js "sjcl.ecc.elGamal.generateKeys(sjcl.ecc.curves['c256'], 10, 0xa0a0bc893f1681c0eb5fad86bac1d784ccdb2cebe68a13362b4c0c8495ee9cd0 ).sec.get;")
-           (d/n "ARGH!\nARGH!\nARGH!\nARGH!\nARGH!\nARGH!\nARGH!\nARGH!\nARGH!=" string-to-generate-deterministically-from "\n\n")
+           (d/n "NUKBERARGH!\nARGH!\nARGH!\nARGH!\nARGH!\nARGH!\nARGH!\nARGH!\nARGH!=" string-to-generate-deterministically-from "\n\n")
            
            (match
             (json->scheme (->string (if (not string-to-generate-deterministically-from)
