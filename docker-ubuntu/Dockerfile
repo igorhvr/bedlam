@@ -32,6 +32,9 @@ ADD data/ /data
 
 RUN echo "2015-02-26_02h13mUTC" > /last_git_pull
 RUN cd /base/bedlam ; git reset --hard HEAD ; git pull
+
+ENV LANG C.UTF-8
+
 CMD ["/bin/zsh"]
 
 # ssh
