@@ -27,28 +27,22 @@
            (unless string-to-generate-deterministically-from
              (js "sjcl.random.addEntropy(prn, 1024, 'nativeprgn-secure-random');"
                  `((prn ,(j "r=new byte[128]; java.security.SecureRandom.getInstance(\"NativePRNG\").nextBytes(r);Arrays.toString(r);")))))
-           
+
            (when string-to-generate-deterministically-from
              (and-let* (
                         (seed (get-seed-from string-to-generate-deterministically-from))
                         (random-function (random-maker seed))
                         (pseudo-random-number (random-function (expt 10 12))))
 
-               (js "sjcl.random.addEntropy(prn, 1048576, 'string-sourced-deterministic-pseudo-random-number');"
+               (js "sjcl.random.addEntropy(prn, 1024, 'string-sourced-deterministic-pseudo-random-number');"
                    `((prn ,(string-append* pseudo-random-number string-to-generate-deterministically-from))))))
            ;; TODO - allow non-unsafe generation of keys from strings using something similar to:
            ;;(js "sjcl.ecc.elGamal.generateKeys(sjcl.ecc.curves['c256'], 10, 0xa0a0bc893f1681c0eb5fad86bac1d784ccdb2cebe68a13362b4c0c8495ee9cd0 ).sec.get;")
-           (d/n "NUKBERARGH!\nARGH!\nARGH!\nARGH!\nARGH!\nARGH!\nARGH!\nARGH!\nARGH!=" string-to-generate-deterministically-from "\n\n")
-           
+
            (match
             (json->scheme (->string (if (not string-to-generate-deterministically-from)
-                                        (begin
-                                          (d/n "SECURE")
-                                          (js "iasylum.crypto.generate_sjcl_el_gammal_ecc_c256_keypair();"))
-                                        (begin
-                                          (d/n "INSECURE")
-                                          (js "iasylum.crypto.generate_unsafe_sjcl_el_gammal_ecc_c256_keypair();")
-                                          ))))
+                                        (js "iasylum.crypto.generate_sjcl_el_gammal_ecc_c256_keypair();")
+                                        (js "iasylum.crypto.generate_unsafe_sjcl_el_gammal_ecc_c256_keypair();"))))
             (#( ( "publicKey" . the-public-key )
                 ( "secretKey" . the-secret-key ) ) `(,(scheme->json the-public-key) ,(scheme->json the-secret-key))))))
 
