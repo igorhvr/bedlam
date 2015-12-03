@@ -132,6 +132,13 @@
 (add-lib "hornetq/2.4.0_Final/hornetq-commons.jar")
 (add-lib "hornetq/2.4.0_Final/jnp-client.jar")
 
+;; Only one version of hornetq libraries should be in the classpath.
+(add-lib "hornetq/hornetq-commons-2.3.17.Final.jar")
+(add-lib "hornetq/hornetq-core-client-2.3.17.Final.jar")
+(add-lib "hornetq/hornetq-journal-2.3.17.Final.jar")
+(add-lib "hornetq/hornetq-server-2.3.17.Final.jar")
+
+
 (import os)
 (import java-io)
 (import serial-io)
