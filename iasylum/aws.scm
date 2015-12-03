@@ -6,6 +6,7 @@
    aws/make-sqs-client
    aws/make-sqs-send-message-request
    aws/sqs-send-message aws/sqs-receive-message
+   aws/sqs-create-queue
 
    aws/make-dynamodb-client
    aws/make-dynamodb-attribute aws/ensure-dynamodb-attribute aws/ensure-dynamodb-jmap
@@ -16,8 +17,15 @@
    aws/make-dynamodb-simple-eq-key-query-request
    aws/dynamodb-simple-eq-key-query
 
+   aws/make-region
    aws/make-s3-client
    aws/s3-put-string
+
+   aws/s3-make-allow-GET-from-anywhere-CORS-rules
+   aws/s3-set-CORS
+   aws/s3-create-bucket
+   aws/s3-set-bucket-website-configuration
+   aws/s3-add-bucket-autoerasing-rule
    )
    
    (define (aws/make-credentials access-key secret-key) (j "new com.amazonaws.auth.BasicAWSCredentials(accesskey, secretkey);" `((accesskey ,(->jstring access-key)) (secretkey ,(->jstring secret-key)))))
@@ -29,6 +37,32 @@
    (define (aws/sqs-send-message sqs-client message) (j "sqs.sendMessage(message);" `((sqs ,sqs-client) (message ,message))))
 
    (define aws/sqs-receive-message (lambda* (sqs-client queue-url (wait-time-seconds: wait-time-seconds 0)) (->scm-object (j "receiverequest=new com.amazonaws.services.sqs.model.ReceiveMessageRequest(queueurl);if(waittimeseconds!=0)receiverequest.setWaitTimeSeconds(waittimeseconds);result=sqs.receiveMessage(receiverequest.withMaxNumberOfMessages(1)).getMessages();finalresult=null; if (result != null && result.size() > 0) { result=result.get(0); finalresult=result.getBody(); receipt=result.getReceiptHandle(); sqs.deleteMessage(new com.amazonaws.services.sqs.model.DeleteMessageRequest(queueurl, receipt));  } ; finalresult; " `((queueurl ,(->jstring queue-url)) (sqs ,sqs-client) (waittimeseconds ,(->jobject wait-time-seconds)))))))
+
+   ;; DelaySeconds - The time in seconds that the delivery of all messages in the queue will be delayed. An integer from 0 to 900 (15 minutes). The default for this attribute is 0 (zero).
+;; MaximumMessageSize - The limit of how many bytes a message can contain before Amazon SQS rejects it. An integer from 1024 bytes (1 KiB) up to 262144 bytes (256 KiB). The default for this attribute is 262144 (256 KiB).
+;; MessageRetentionPeriod - The number of seconds Amazon SQS retains a message. Integer representing seconds, from 60 (1 minute) to 1209600 (14 days). The default for this attribute is 345600 (4 days).
+;; Policy - The queue's policy. A valid AWS policy. For more information about policy structure, see Overview of AWS IAM Policies in the Amazon IAM User Guide.
+;; ReceiveMessageWaitTimeSeconds - The time for which a ReceiveMessage call will wait for a message to arrive. An integer from 0 to 20 (seconds). The default for this attribute is 0.
+;; VisibilityTimeout - The visibility timeout for the queue. An integer from 0 to 43200 (12 hours). The default for this attribute is 30. For more information about visibility timeout, see Visibility Timeout in the Amazon SQS Developer Guide.
+;; RedrivePolicy - The parameters for dead letter queue functionality of the source queue. For more information about RedrivePolicy and dead letter queues, see Using Amazon SQS Dead Letter Queues in the Amazon SQS Developer Guide.
+   (define aws/sqs-create-queue
+     (lambda* (sqs-client queue-name (DelaySeconds: DelaySeconds 0) (MaximumMessageSize: MaximumMessageSize 262144) (MessageRetentionPeriod: MessageRetentionPeriod 1209600) (Policy: Policy #f) (ReceiveMessageWaitTimeSeconds: ReceiveMessageWaitTimeSeconds 0) (VisibilityTimeout: VisibilityTimeout 30) (RedrivePolicy: RedrivePolicy #f))
+              (let ((parameters-map
+                     (->jmap (filter identity
+                                     `(("DelaySeconds" . ,(number->string DelaySeconds))
+                                       ("MaximumMessageSize" . ,(number->string MaximumMessageSize))
+                                       ("MessageRetentionPeriod" . ,(number->string MessageRetentionPeriod))
+                                       ,(if Policy `("Policy" . ,(->jobject Policy)) #f)
+                                       ("ReceiveMessageWaitTimeSeconds" . ,(number->string ReceiveMessageWaitTimeSeconds))
+                                       ("VisibilityTimeout" . ,(number->string VisibilityTimeout))
+                                       ,(if RedrivePolicy `("RedrivePolicy" . (->jobject RedrivePolicy)) #f))))))
+                (->scm-object
+                 (j "url=sqsclient.createQueue(queuename).getQueueUrl();
+                     sqsclient.setQueueAttributes(url,attr);
+                     url;"
+                    `((sqsclient ,sqs-client)
+                      (queuename ,(->jstring queue-name))
+                      (attr ,parameters-map)))))))
    
    (define (aws/make-dynamodb-client credentials) (j "new com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient(credentials);" `((credentials ,credentials))))
 
@@ -91,8 +125,18 @@
            (j "dyn.query(req).getItems();" `((dyn ,dynamodb-client)
                                              (req ,(aws/make-dynamodb-simple-eq-key-query-request table-name attribute-name attribute-value
                                                                                                   'strongly-consistent-read: #t)))))))
-   (define (aws/make-s3-client credentials)
-     (j "new com.amazonaws.services.s3.AmazonS3Client(cred);" `((cred ,credentials))))
+
+   ;; Valid regions (as of 2015-12-01) 
+   ;; AP_NORTHEAST_1 / AP_SOUTHEAST_1 / AP_SOUTHEAST_2 / CN_NORTH_1 / EU_CENTRAL_1
+   ;; EU_WEST_1 / GovCloud / SA_EAST_1 / US_EAST_1 / US_WEST_1 / US_WEST_2 
+   (define (aws/make-region region-name)
+     (j "com.amazonaws.regions.Regions.valueOf(regionname);" `((regionname ,(->jstring region-name)))))
+
+   (define aws/make-s3-client
+     (lambda* (credentials (region: region #f))
+              (let ((result (j "ns3c=new com.amazonaws.services.s3.AmazonS3Client(cred);" `((cred ,credentials)))))
+                (when region (j "s3client.setRegion(region);" `((s3client ,result) (region ,region))))
+                result)))
 
    (define aws/s3-put-string
      (lambda* (s3-client bucket object string (public-read: public-read #f))
@@ -102,7 +146,53 @@
                 (j "omd = new com.amazonaws.services.s3.model.ObjectMetadata();                   
                     s3.putObject(new com.amazonaws.services.s3.model.PutObjectRequest(bucket, objname, fl, omd).withCannedAcl(aclv));"
                    `((bucket ,(->jstring bucket)) (objname ,(->jstring object)) (fl ,(string->java.io.InputStream string)) (s3 ,s3-client) (aclv ,aclv))))))
+   
+   (define (aws/s3-make-allow-GET-from-anywhere-CORS-rules)
+     (j "rule1 = new com.amazonaws.services.s3.model.CORSRule()
+        .withId(\"CORSRule1\")
+        .withAllowedMethods(Arrays.asList(new com.amazonaws.services.s3.model.CORSRule.AllowedMethods[] { 
+            com.amazonaws.services.s3.model.CORSRule.AllowedMethods.GET}))
+        .withAllowedOrigins(Arrays.asList(new String[] {\"*\"}));
+         Arrays.asList(new com.amazonaws.services.s3.model.CORSRule[] {rule1});"))
+     
 
-                  
+   (define (aws/s3-set-CORS s3-client bucket-name rules)
+     (j 
+      "configuration = new com.amazonaws.services.s3.model.BucketCrossOriginConfiguration();
+       configuration.setRules(rules);
+       client.setBucketCrossOriginConfiguration(bucketname, configuration);"
+      `((client ,s3-client)
+        (bucketname ,(->jstring bucket-name))
+        (rules ,rules))))
+   
+   (define (aws/s3-create-bucket s3-client name)
+     (j "s3client.createBucket(new com.amazonaws.services.s3.model.CreateBucketRequest(bucketname));" `((bucketname ,(->jstring name)) (s3client ,s3-client))))
+   
+   (define (aws/s3-set-bucket-website-configuration s3-client bucket-name index-doc error-doc)
+     (j "s3client.setBucketWebsiteConfiguration(bucketname, new com.amazonaws.services.s3.model.BucketWebsiteConfiguration(indexdoc, errordoc));"
+        `((indexdoc ,(->jstring index-doc)) (errordoc ,(->jstring error-doc)) (bucketname ,(->jstring bucket-name))
+          (s3client ,s3-client))))
+   
+   (define (aws/s3-add-bucket-autoerasing-rule s3-client bucket-name id days prefix)
+     (j "configuration=s3client.getBucketLifecycleConfiguration(bucketname);
+      if(configuration==null) configuration=new com.amazonaws.services.s3.model.BucketLifecycleConfiguration();
+      newrule=new com.amazonaws.services.s3.model.BucketLifecycleConfiguration.Rule()
+                        .withId(id)
+                        .withPrefix(prefix)
+                        .withExpirationInDays(days)
+                        .withStatus(com.amazonaws.services.s3.model.BucketLifecycleConfiguration.ENABLED.toString());
+      if(configuration.getRules()==null) {
+         configuration.setRules(
+                    Arrays.asList(
+                      new com.amazonaws.services.s3.model.BucketLifecycleConfiguration.Rule[] {newrule}));
+      } else {
+         configuration.getRules().add(newrule);
+      }
+      s3client.setBucketLifecycleConfiguration(bucketname, configuration);"
+        `((prefix ,(->jstring prefix))
+          (id ,(->jstring id))
+          (days ,(->jobject days))
+          (bucketname ,(->jstring bucket-name))
+          (s3client ,s3-client))))
    
 )

@@ -125,6 +125,14 @@
 (add-lib "u/quartz-all-1.7.3.jar")
 (add-lib "u/cron4j-2.2.5.jar")
 
+(add-lib "hornetq/2.4.0_Final/hornetq-core-client.jar")
+(add-lib "hornetq/2.4.0_Final/hornetq-jms-client.jar")
+(add-lib "hornetq/2.4.0_Final/jboss-jms-api.jar")
+(add-lib "hornetq/2.4.0_Final/netty.jar")
+(add-lib "hornetq/2.4.0_Final/hornetq-commons.jar")
+(add-lib "hornetq/2.4.0_Final/jnp-client.jar")
+
+;; Only one version of hornetq libraries should be in the classpath.
 (add-lib "hornetq/hornetq-commons-2.3.17.Final.jar")
 (add-lib "hornetq/hornetq-core-client-2.3.17.Final.jar")
 (add-lib "hornetq/hornetq-journal-2.3.17.Final.jar")
@@ -508,7 +516,7 @@
 (add-lib "aws-java-sdk-1.9.19/httpcomponents-client-4.3/httpclient-4.3.jar")
 (add-lib "aws-java-sdk-1.9.19/httpcomponents-client-4.3/httpcore-4.3.jar")
 (add-lib "aws-java-sdk-1.9.19/javax-mail-1.4.6/javax.mail-api-1.4.6.jar")
-(add-lib "aws-java-sdk-1.9.19/joda-time-2.2/joda-time-2.2.jar")
+(add-lib "joda/joda-time-2.9.jar")
 (add-lib "aws-java-sdk-1.9.19/spring-3.0/spring-beans-3.0.7.jar")
 (add-lib "aws-java-sdk-1.9.19/spring-3.0/spring-context-3.0.7.jar")
 (add-lib "aws-java-sdk-1.9.19/spring-3.0/spring-core-3.0.7.jar")
