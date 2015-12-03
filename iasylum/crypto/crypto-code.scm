@@ -43,7 +43,9 @@
            (match
             (json->scheme (->string (if (not string-to-generate-deterministically-from)
                                         (js "iasylum.crypto.generate_sjcl_el_gammal_ecc_c256_keypair();")
-                                        (js "iasylum.crypto.generate_unsafe_sjcl_el_gammal_ecc_c256_keypair();"))))
+                                        (begin
+                                          (d/n "mflfdslfdsUNSAFEEEEEEEEE")
+                                          (js "iasylum.crypto.generate_unsafe_sjcl_el_gammal_ecc_c256_keypair();"))))
             (#( ( "publicKey" . the-public-key )
                 ( "secretKey" . the-secret-key ) ) `(,(scheme->json the-public-key) ,(scheme->json the-secret-key))))))
 
