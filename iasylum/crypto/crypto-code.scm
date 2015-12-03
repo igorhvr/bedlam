@@ -4,6 +4,11 @@
 (define iasylum.js (memoize (lambda () (file->string "/base/bedlam/iasylum/iasylum.js"))))
 (define crypto.js (memoize (lambda () (file->string "/base/bedlam/iasylum/crypto/crypto.js"))))
 
+(define (load-safe-sjcl-and-add-entropy)
+  (js (sjcl.js))
+  (js "sjcl.random.addEntropy(prn, 1024, 'nativeprgn-secure-random');"
+      `((prn ,(j "r=new byte[128]; java.security.SecureRandom.getInstance(\"NativePRNG\").nextBytes(r);Arrays.toString(r);")))))
+
 (define (get-seed-from str-p)
   (let* ( (str (sha256 str-p))
           (magic-str-tied-number           
@@ -19,7 +24,7 @@
            (assert (eqv? type 'sjcl_el_gammal_ecc_c256_key))
 
            (if (not string-to-generate-deterministically-from)
-               (js (sjcl.js))
+               (load-safe-sjcl-and-add-entropy)
                (js (sjcl.js-unsafe)))
 
            (js (iasylum.js)) (js (crypto.js))
@@ -47,35 +52,25 @@
                 ( "secretKey" . the-secret-key ) ) `(,(scheme->json the-public-key) ,(scheme->json the-secret-key))))))
 
 (define (asymmetric-encrypt key data)
-  (js (sjcl.js)) (js (iasylum.js)) (js (crypto.js))
-  (js "sjcl.random.addEntropy(prn, 1024, 'nativeprgn-secure-random');"
-                 `((prn ,(j "r=new byte[128]; java.security.SecureRandom.getInstance(\"NativePRNG\").nextBytes(r);Arrays.toString(r);"))))
+  (load-safe-sjcl-and-add-entropy) (js (iasylum.js)) (js (crypto.js))
   (->string (js "iasylum.crypto.asymmetric_encrypt(key, data);" `((key ,(->jstring key)) (data ,(->jstring data))))))
 
 (define (asymmetric-decrypt key data)
-  (js (sjcl.js)) (js (iasylum.js)) (js (crypto.js))
-  (js "sjcl.random.addEntropy(prn, 1024, 'nativeprgn-secure-random');"
-                 `((prn ,(j "r=new byte[128]; java.security.SecureRandom.getInstance(\"NativePRNG\").nextBytes(r);Arrays.toString(r);"))))
+  (load-safe-sjcl-and-add-entropy) (js (iasylum.js)) (js (crypto.js))
   (->string (js "iasylum.crypto.asymmetric_decrypt(key, data);" `((key ,(->jstring key)) (data ,(->jstring data))))))
 
 (define (symmetric-encrypt key data)
-  (js (sjcl.js)) (js (iasylum.js)) (js (crypto.js))
-  (js "sjcl.random.addEntropy(prn, 1024, 'nativeprgn-secure-random');"
-                 `((prn ,(j "r=new byte[128]; java.security.SecureRandom.getInstance(\"NativePRNG\").nextBytes(r);Arrays.toString(r);"))))
+  (load-safe-sjcl-and-add-entropy) (js (iasylum.js)) (js (crypto.js))
   (->string (js "iasylum.crypto.symmetric_encrypt(key, data);" `((key ,(->jstring key)) (data ,(->jstring data))))))
 
 (define (symmetric-decrypt key data)
-  (js (sjcl.js)) (js (iasylum.js)) (js (crypto.js))
-  (js "sjcl.random.addEntropy(prn, 1024, 'nativeprgn-secure-random');"
-                 `((prn ,(j "r=new byte[128]; java.security.SecureRandom.getInstance(\"NativePRNG\").nextBytes(r);Arrays.toString(r);"))))
+  (load-safe-sjcl-and-add-entropy) (js (iasylum.js)) (js (crypto.js))
   (->string (js "iasylum.crypto.symmetric_decrypt(key, data);" `((key ,(->jstring key)) (data ,(->jstring data))))))
 
 (define (hmac key data)
-  (js (sjcl.js))
+  (load-safe-sjcl-and-add-entropy)
   (js (iasylum.js))
   (js (crypto.js))
-  (js "sjcl.random.addEntropy(prn, 1024, 'nativeprgn-secure-random');"
-                 `((prn ,(j "r=new byte[128]; java.security.SecureRandom.getInstance(\"NativePRNG\").nextBytes(r);Arrays.toString(r);"))))
   (->string (js "iasylum.crypto.hmac(key, data);" `((key ,(->jstring key))
                                                     (data ,(->jstring data))))))
 
