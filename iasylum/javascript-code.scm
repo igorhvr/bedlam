@@ -40,12 +40,28 @@
         (let ((result (get tl)))
           result))))
 
-(define get-local-javascript-manager)
 (define js)
+
+(define get-local-javascript-v8-runtime)
+(define js-v8)
+
+(define get-local-javascript-manager)
+(define js-rhino)
+
+(define (create-thread-local-javascript-v8-runtime-retriever)
+    (let ((tl
+           (j "mtl=new ThreadLocal() {
+                   protected synchronized Object initialValue() {                       
+                       return com.eclipsesource.v8.V8.createV8Runtime();
+                   }
+               }; mtl;")))
+      (lambda ()
+        (let ((result (get tl)))
+          result))))
 
 (set! get-local-javascript-manager (create-thread-local-javascript-manager-retriever))
 
-(set! js
+(set! js-rhino
   (lambda*
    (code (vars #f) (manager (get-local-javascript-manager)))
    ;(d/n "Will run code: (((((" code "))))) saved to " (save-to-somewhere code))
@@ -86,3 +102,36 @@
     )))
 
 ;; Example: (run-js/s (js-manager) "var f = function (what) { return 'hello, ' + what; }; f('Javascript');")
+
+
+(set! get-local-javascript-v8-runtime (create-thread-local-javascript-v8-runtime-retriever))
+
+(set! js-v8
+  (lambda*
+   (code (vars '()) (runtime (get-local-javascript-v8-runtime)))
+
+   (and-let* ((parameters-v8array (j "res=new com.eclipsesource.v8.V8Array(v8runtime); res;" `((v8runtime ,runtime))))
+              (parameter-names
+               (map
+                (lambda (v)
+                  (match-let ( ( (vname vvalue) v ) )
+                             (begin
+                               (let* ((sname (if (string? vname) vname (symbol->string vname)))
+                                      (name (->jstring sname )))
+                                 (j "v8a.push(jsobjectvalue);"
+                                    `((v8a ,parameters-v8array)
+                                      (jsobjectvalue ,(->jobject vvalue))))
+                                 sname))))
+                vars))
+              (code (string-append "var f=function(" (fold-right string-append "" (add-between-list ", " parameter-names)) ") {" code  "}; f;"))
+              (v8f (j "v8.executeScript(script);" `((v8 ,runtime) (script ,(->jstring code)))))
+              
+              (result (j "v8f.call(null, p);" `((p ,parameters-v8array) (v8f ,v8f)))))
+     result)))
+
+(set! js js-v8)
+
+;; (js-v8 "return 1+2;" `((a ,(->jobject 3)) (b ,(->jobject 2))))
+
+;(define v8f (j "v8.executeScript(script);" `((v8 ,v8runtime) (script ,(->jstring "var f=function(a) {return a+3;}; f;")))))              
+;(js-v8 "return a+b;" `((a ,(->jobject 50)) (b ,(->jobject 0))))
