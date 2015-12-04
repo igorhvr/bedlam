@@ -521,6 +521,9 @@
 (add-lib "aws-java-sdk-1.9.19/spring-3.0/spring-context-3.0.7.jar")
 (add-lib "aws-java-sdk-1.9.19/spring-3.0/spring-core-3.0.7.jar")
 
+(require-extension (lib iasylum/compression))
+(add-lib "u/lzstring4j.jar")
+
 (set! load original-load)
 
 (define bedlam-loaded-and-ready-to-use #t)
