@@ -8,11 +8,11 @@ if (!iasylum || !LZString) {
 }
 
 var iasylum_compression = {
-    'lzw-compress': function (data) {
+    'lzw_compress': function (data) {
         return LZString.compress(data);
     },
 
-    'lzw-uncompress': function (data) {
+    'lzw_uncompress': function (data) {
         return LZString.decompress(data);
     }
 
