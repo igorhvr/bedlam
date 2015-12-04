@@ -1,3 +1,4 @@
+;;nodejs - remote
 (define (nodejs-global code)
   (log-trace "About to execute js code" code)
   (let ((result (http-call-post-string/string "http://js:27429/" code)))
@@ -24,6 +25,7 @@
                                                          values))))))
     (node-js-global code)))
 
+;; rhino
 (define (js-manager)  (j "new javax.script.ScriptEngineManager().getEngineByName(\"rhino\");"))
 
 (define-generic-java-method get |get|)
@@ -40,25 +42,28 @@
         (let ((result (get tl)))
           result))))
 
-(define js)
-
-(define get-local-javascript-v8-runtime)
-(define js-v8)
-
 (define get-local-javascript-manager)
 (define js-rhino)
 
+;; v8
+(define js)
+(define get-local-javascript-v8-runtime)
+(define js-v8)
+
+
+
 (define (create-thread-local-javascript-v8-runtime-retriever)
     (let ((tl
-           (j "mtl=new ThreadLocal() {
+           (j "mtlv8=new ThreadLocal() {
                    protected synchronized Object initialValue() {                       
                        return com.eclipsesource.v8.V8.createV8Runtime();
                    }
-               }; mtl;")))
+               }; mtlv8;")))
       (lambda ()
         (let ((result (get tl)))
           result))))
 
+;; rhino
 (set! get-local-javascript-manager (create-thread-local-javascript-manager-retriever))
 
 (set! js-rhino
@@ -110,7 +115,7 @@
   (lambda*
    (code (vars '()) (runtime (get-local-javascript-v8-runtime)))
 
-   (and-let* ((parameters-v8array (j "res=new com.eclipsesource.v8.V8Array(v8runtime); res;" `((v8runtime ,runtime))))
+   (and-let* ((parameters-v8array (j "tres=new com.eclipsesource.v8.V8Array(v8runtime); tres;" `((v8runtime ,runtime))))
               (parameter-names
                (map
                 (lambda (v)
