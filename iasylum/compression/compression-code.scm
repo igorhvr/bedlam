@@ -1,15 +1,11 @@
 (define (lzw-compress value)
-  (d/n "About to compress " value)
-;  (let ((result (->string (j "com.diogoduailibe.lzstring4j.LZString.compressToBase64(v);" `((v ,(->jstring value)))))))
   (let ((result (->string (j "com.diogoduailibe.lzstring4j.LZString.compressToUTF16(v);" `((v ,(->jstring value)))))))
-    (d/n "Success. Result: " result)
+    (d/n "Success in compression. Result: " (string-length result) "/" (string-length value))
     result))
 
 (define (lzw-decompress value)
-  (d/n "About to decompress " value)
-;  (let ((result (->string (j "com.diogoduailibe.lzstring4j.LZString.decompressFromBase64(v);" `((v ,(->jstring value)))))))
    (let ((result (->string (j "com.diogoduailibe.lzstring4j.LZString.decompressFromUTF16(v);" `((v ,(->jstring value)))))))
-    (d/n "Success. Result: " result)
+        (d/n "Success in decompression. Result: " (string-length value) "/" (string-length result))
     result))
 
 
