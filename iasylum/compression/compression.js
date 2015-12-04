@@ -12,7 +12,7 @@ var iasylum_compression = {
         return LZString.compress(data);
     },
 
-    'lzw_uncompress': function (data) {
+    'lzw_decompress': function (data) {
         return LZString.decompress(data);
     }
 

@@ -2,6 +2,6 @@
 
 (module iasylum/compression
   (lzw-compress
-   lzw-uncompress)
+   lzw-decompress)
 
   (include "compression/compression-code.scm"))
