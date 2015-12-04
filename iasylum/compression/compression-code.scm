@@ -1,8 +1,8 @@
 (define (lzw-compress value)
-  (->string (j "com.diogoduailibe.lzstring4j.LZString.compressToUTF16(v);" `((v ,(->jstring value))))))
+  (->string (j "com.diogoduailibe.lzstring4j.LZString.compressToBase64(v);" `((v ,(->jstring value))))))
 
 (define (lzw-decompress value)
-  (->string (j "com.diogoduailibe.lzstring4j.LZString.decompressFromUTF16(v);" `((v ,(->jstring value))))))
+  (->string (j "com.diogoduailibe.lzstring4j.LZString.decompressFromBase64(v);" `((v ,(->jstring value))))))
 
 
 ;; Sample roundtrip working:
