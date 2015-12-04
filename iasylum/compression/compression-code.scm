@@ -4,8 +4,8 @@
     result))
 
 (define (lzw-decompress value)
-   (let ((result (->string (j "com.diogoduailibe.lzstring4j.LZString.decompressFromUTF16(v);" `((v ,(->jstring value)))))))
-        (d/n "Success in decompression. Result: " (string-length value) "/" (string-length result))
+  (let ((result (->string (j "com.diogoduailibe.lzstring4j.LZString.decompressFromUTF16(v);" `((v ,(->jstring value)))))))
+    (d/n "Success in decompression. Result: " (string-length value) "/" (string-length result))
     result))
 
 
