@@ -1,3 +1,5 @@
+var iasylum;
+
 if (!iasylum) {
     var dependence = 'crypto.js depends on iasylum.js';
     console.error(dependence);
