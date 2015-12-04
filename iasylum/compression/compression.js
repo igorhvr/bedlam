@@ -9,11 +9,17 @@ if (!iasylum || !LZString) {
 
 var iasylum_compression = {
     'lzw_compress': function (data) {
-        return LZString.compressToBase64(data);
+        console.debug("About to compress:", data);
+        result=LZString.compressToBase64(data);
+        console.debug("Sucess. Result is: ",result);
+	return result;
     },
 
     'lzw_decompress': function (data) {
-        return LZString.decompressFromBase64(data);
+        console.debug("About to decompress:", data);
+        result=LZString.decompressFromBase64(data);
+        console.debug("Sucess. Result is: ",result);
+	return result;
     }
 
 };
