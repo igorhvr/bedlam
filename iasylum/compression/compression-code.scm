@@ -1,15 +1,13 @@
 (define (lzw-compress value)
-  (d/n "COMPL: lzw-compress for " value)
   (let ((result (->string (j "com.diogoduailibe.lzstring4j.LZString.compressToUTF16(v);" `((v ,(->jstring value)))))))
-    (d/n "COMPL: Success in compression. Result: " (string-length result) "/" (string-length value))
-    (d/n "COMPL: lzw-compress returning " result " for " value)
+    (log-trace 'lzw-compress (format "Compressing ratio: ~0,2F%" (* 100 (/ (string-length result)
+                                                                           (string-length value)))))
     result))
 
 (define (lzw-decompress value)
-  (d/n "COMPL: lzw-decompress for " value)
   (let ((result (->string (j "com.diogoduailibe.lzstring4j.LZString.decompressFromUTF16(v);" `((v ,(->jstring value)))))))
-    (d/n "COMPL: Success in decompression. Result: " (string-length value) "/" (string-length result))
-    (d/n "COMPL: lzw-decompress returning " result " for " value)
+    (log-trace 'lzw-decompress (format "Decompressing ratio: ~0,2F%" (* 100 (/ (string-length result)
+                                                                               (string-length value)))))
     result))
 
 
