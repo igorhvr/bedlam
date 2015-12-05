@@ -149,7 +149,8 @@
                     (when reduced-redundancy (j "omd.setHeader(\"x-amz-storage-class\", \"REDUCED_REDUNDANCY\");" `((omd ,omd))))
                     
                     (j "s3.putObject(new com.amazonaws.services.s3.model.PutObjectRequest(bucket, objname, fl, omd).withCannedAcl(aclv));"
-                       `((bucket ,(->jstring bucket)) (objname ,(->jstring object))
+                       `((bucket ,(->jstring bucket))
+                         (objname ,(->jstring object))
                          (omd ,omd)
                          (fl ,(string->java.io.InputStream string)) (s3 ,s3-client) (aclv ,aclv)))))))
    
