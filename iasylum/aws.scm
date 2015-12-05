@@ -26,6 +26,8 @@
    aws/s3-create-bucket
    aws/s3-set-bucket-website-configuration
    aws/s3-add-bucket-autoerasing-rule
+   aws/s3-make-storage-class
+   aws/s3-change-object-storage-class
    )
    
    (define (aws/make-credentials access-key secret-key) (j "new com.amazonaws.auth.BasicAWSCredentials(accesskey, secretkey);" `((accesskey ,(->jstring access-key)) (secretkey ,(->jstring secret-key)))))
@@ -139,13 +141,17 @@
                 result)))
 
    (define aws/s3-put-string
-     (lambda* (s3-client bucket object string (public-read: public-read #f))
+     (lambda* (s3-client bucket object string (public-read: public-read #f) (reduced-redundancy: reduced-redundancy #f))
               (let ((aclv (if public-read
                               (j "com.amazonaws.services.s3.model.CannedAccessControlList.PublicRead")
                               (j "com.amazonaws.services.s3.model.CannedAccessControlList.Private"))))
-                (j "omd = new com.amazonaws.services.s3.model.ObjectMetadata();                   
-                    s3.putObject(new com.amazonaws.services.s3.model.PutObjectRequest(bucket, objname, fl, omd).withCannedAcl(aclv));"
-                   `((bucket ,(->jstring bucket)) (objname ,(->jstring object)) (fl ,(string->java.io.InputStream string)) (s3 ,s3-client) (aclv ,aclv))))))
+                (le ((omd "new com.amazonaws.services.s3.model.ObjectMetadata();"))
+                    (when reduced-redundancy (j "omd.setHeader(\"x-amz-storage-class\", \"REDUCED_REDUNDANCY\");"))
+                    
+                    (j "s3.putObject(new com.amazonaws.services.s3.model.PutObjectRequest(bucket, objname, fl, omd).withCannedAcl(aclv));"
+                       `((bucket ,(->jstring bucket)) (objname ,(->jstring object))
+                         (omd ,omd)
+                         (fl ,(string->java.io.InputStream string)) (s3 ,s3-client) (aclv ,aclv)))))))
    
    (define (aws/s3-make-allow-GET-from-anywhere-CORS-rules)
      (j "rule1 = new com.amazonaws.services.s3.model.CORSRule()
@@ -194,5 +200,18 @@
           (days ,(->jobject days))
           (bucketname ,(->jstring bucket-name))
           (s3client ,s3-client))))
+
+   ;; Valid storage classes (as of 2015-12-05) 
+   ;; Glacier / ReducedRedundancy / Standard / StandardInfrequentAccess
+   (define (aws/s3-make-storage-class storage-class)
+     (j "com.amazonaws.services.s3.model.StorageClass(v);" `((v ,(->jstring storage-class)))))
+   
+   (define (aws/s3-change-object-storage-class s3-client bucket-name key-name storage-class)
+     (j 
+      "client.changeObjectStorageClass(bucketname, keyname, storageclass);"
+      `((client ,s3-client)
+        (bucketname ,(->jstring bucket-name))
+        (keyname ,(->jstring key-name))
+        (storageclass ,storage-class))))
    
 )
