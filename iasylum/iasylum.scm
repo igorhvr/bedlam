@@ -95,6 +95,7 @@
    atomic-execution
    select-sublist
    time->millis
+   make-future
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -1113,6 +1114,14 @@
   (define (time->millis t)
     (+ (* 1000 (time-second t))
        (/ (time-nanosecond t) 1000000)))
+
+  (define* (make-future l)
+    (let* ((define-future-result (make-parameter* #f))
+           (thread-handle (watched-thread/spawn (lambda () (let ((result (l))) (define-future-result result))))))
+      (lambda* ((timeout-milliseconds: timeout #f))
+        (if timeout
+            (if (thread/join thread-handle timeout) (define-future-result) #f)
+            (and (thread/join thread-handle) (define-future-result))))))
 
   (create-shortcuts (avg -> average))
 
