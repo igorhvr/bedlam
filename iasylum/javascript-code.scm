@@ -112,23 +112,23 @@
   (lambda*
    (code (vars '()) (runtime (get-local-javascript-manager)))
 
-   (and-let* ((parameters-v8array (j "tres=new com.eclipsesource.v8.V8Array(v8runtime); tres;" `((v8runtime ,runtime))))
-              (parameter-names
-               (map
-                (lambda (v)
-                  (match-let ( ( (vname vvalue) v ) )
-                             (begin
-                               (let* ((sname (if (string? vname) vname (symbol->string vname)))
-                                      (name (->jstring sname )))
-                                 (j "v8a.push(jsobjectvalue);"
-                                    `((v8a ,parameters-v8array)
-                                      (jsobjectvalue ,(->jobject vvalue))))
-                                 sname))))
-                vars))
-              (code (string-append "var f=function(" (fold-right string-append "" (add-between-list ", " parameter-names)) ") {" code  "}; f;"))
-              (v8f (j "v8.executeScript(script);" `((v8 ,runtime) (script ,(->jstring code)))))
-              
-              (result (j "v8f.call(null, p);" `((p ,parameters-v8array) (v8f ,v8f)))))
-     result)))
+   (each-for
+    vars
+    (lambda (v)
+      (match-let ( ( (vname vvalue) v ) )
+                 (begin
+                   (let* ((sname (if (string? vname) vname (symbol->string vname)))
+                          (name (->jstring sname ))
+                          (code (string-append* "var " sname " = null; var fdefdeff = function(p) { " sname " = p; }; fdefdeff;"))
+                          (v8f (j "v8.executeScript(script);" `((v8 ,runtime) (script ,(->jstring code)))))
+                          (parameters-v8array (j "tres=new com.eclipsesource.v8.V8Array(v8runtime); tres;" `((v8runtime ,runtime)))))
+                     
+                     (j "v8a.push(jsobjectvalue);"
+                        `((v8a ,parameters-v8array)
+                          (jsobjectvalue ,(->jobject vvalue))))
+                     (j "v8f.call(null, p);" `((p ,parameters-v8array) (v8f ,v8f))))))))
+
+   (j "v8.executeScript(script);" `((v8 ,runtime) (script ,(->jstring code))))))
 
 (set! js js-v8)
+
