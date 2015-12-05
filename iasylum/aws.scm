@@ -145,7 +145,7 @@
               (let ((aclv (if public-read
                               (j "com.amazonaws.services.s3.model.CannedAccessControlList.PublicRead")
                               (j "com.amazonaws.services.s3.model.CannedAccessControlList.Private"))))
-                (le ((omd (j "new com.amazonaws.services.s3.model.ObjectMetadata();")))
+                (let ((omd (j "new com.amazonaws.services.s3.model.ObjectMetadata();")))
                     (when reduced-redundancy (j "omd.setHeader(\"x-amz-storage-class\", \"REDUCED_REDUNDANCY\");" `((omd ,omd))))
                     
                     (j "s3.putObject(new com.amazonaws.services.s3.model.PutObjectRequest(bucket, objname, fl, omd).withCannedAcl(aclv));"
