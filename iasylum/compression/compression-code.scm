@@ -1,12 +1,12 @@
 (define (lzw-compress value)
   (let ((result (->string (j "com.diogoduailibe.lzstring4j.LZString.compressToUTF16(v);" `((v ,(->jstring value)))))))
-    (log-trace 'lzw-compress (format "Compressing ratio: ~0,2F%" (* 100 (/ (string-length result)
+    (log-trace 'lzw-compress (format "Compression ratio: ~0,2F%" (* 100 (/ (string-length result)
                                                                            (string-length value)))))
     result))
 
 (define (lzw-decompress value)
   (let ((result (->string (j "com.diogoduailibe.lzstring4j.LZString.decompressFromUTF16(v);" `((v ,(->jstring value)))))))
-    (log-trace 'lzw-decompress (format "Decompressing ratio: ~0,2F%" (* 100 (/ (string-length result)
+    (log-trace 'lzw-decompress (format "Decompression ratio: ~0,2F%" (* 100 (/ (string-length result)
                                                                                (string-length value)))))
     result))
 
