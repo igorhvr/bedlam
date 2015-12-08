@@ -276,38 +276,66 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 ;;
 ;; used in datomic/fill-entity
 ;;
-(define (datomic/query-result->alist database input follow-references)
-  (let ((result '())
-        (make-pair (lambda (key value type)
+(define (datomic/query-result->alist database input follow-references max-hops hops)
+  (when (and follow-references (> max-hops hops)) (throw (make-error "Max Hops reached.")))
+  
+  (let* ((make-pair (lambda (key value type)
                      (cons key (if (or (not follow-references)
                                        (not (equal? 'ref (clj-keyword->symbol type))))
                                    value
                                    (datomic/get-filled-entity database
                                                               value
-                                                              'follow-references: follow-references))))))
-    (for-each (lambda (element)
-                (let ((key (clj-keyword->symbol (first element)))
-                      (value (second element))
-                      (type (third element))
-                      (many (equal? (clj-keyword->symbol (fourth element))
-                                    'many)))
-                  (if (not many)
-                      (set! result (cons (make-pair key value type) result))                      
-                      (let ((current-list (get key result '()))
-                            (keypair (make-pair key value type)))
-                        (set! current-list (cons (cdr keypair) current-list))
-                        (let ((assoc-pair (assoc key result)))
-                          (if assoc-pair
-                              (set-cdr! assoc-pair current-list)
-                              (set! result (cons (cons key current-list) result))))))))
-              input)
+                                                              'follow-references: follow-references
+                                                              max-hops
+                                                              (+ hops 1))))))
+         (result-data
+          (map-parallel
+           (lambda (element)
+             (let ((key (clj-keyword->symbol (first element)))
+                   (value (second element))
+                   (type (third element))
+                   (many (equal? (clj-keyword->symbol (fourth element))
+                                 'many)))
+               (list key value type many (make-pair key value type))))
+           input))
+
+         (result '()))
+
+
+    (d/n "Sample input for future work in datomic/query-result->alist: " (iasylum-write-string result-data))
+    (for-each (match-lambda* ([(key value type many make-pair-execution-result)]
+                              (if (not many)
+                                  (set! result (cons make-pair-execution-result result))
+                                  (let ((current-list (get key result '()))
+                                        (keypair make-pair-execution-result))
+                                    (set! current-list (cons (cdr keypair) current-list))
+                                    (let ((assoc-pair (assoc key result)))
+                                      (if assoc-pair
+                                          (set-cdr! assoc-pair current-list)
+                                          (set! result (cons (cons key current-list) result))))))))
+              result-data)
+    (d/n "Sample output for future work in datomic/query-result->alist: " (iasylum-write-string result))
     result))
+                      
+                      ; old
+                      ;(let ((current-list (get key result '()))
+                      ;      (keypair (make-pair key value type)))
+                      ;  (set! current-list (cons (cdr keypair) current-list))
+                      ;  (let ((assoc-pair (assoc key result)))
+                      ;    (if assoc-pair
+                      ;        (set-cdr! assoc-pair current-list)
+                      ;        (set! result (cons (cons key current-list) result)))))
+
+
+
 
 ;;
 ;; Return an alist of attribute name and value.
 ;;
 (define* (datomic/get-filled-entity database entity-id
-                                    (follow-references: follow-references #f))
+                                    (follow-references: follow-references #f)
+                                    (max-hops: max-hops 16)
+                                    (hops: hops 0))
   (assert (integer? entity-id))
   (datomic/query-result->alist database
                                (datomic/smart-query-multiple
@@ -319,7 +347,9 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
                                          [?att :db/cardinality ?card]
                                          [?card :db/ident ?cardinality]
                                          [?att :db/ident ?attname]]" database entity-id)
-                               follow-references))
+                               follow-references
+                               max-hops
+                               hops))
 
 ;;
 ;; Return a list of datomic tx ids of an specific entity sorted
