@@ -289,8 +289,8 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
                                      (datomic/get-filled-entity database
                                                                 value
                                                                 'follow-references: follow-references
-                                                                max-hops
-                                                                (+ hops 1)))))))
+                                                                'max-hops: max-hops
+                                                                'hops: (+ hops 1)))))))
          (result-data
           (map-parallel
            (lambda (element)
