@@ -305,7 +305,7 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
          (result '()))
 
 
-    (d/n "Sample input for future work in datomic/query-result->alist: " (iasylum-write-string result-data))
+    ;; XXX - redo this properly (functionally).
     (for-each (match-lambda* ([(key value type many make-pair-execution-result)]
                               (if (not many)
                                   (set! result (cons make-pair-execution-result result))
@@ -317,21 +317,7 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
                                           (set-cdr! assoc-pair current-list)
                                           (set! result (cons (cons key current-list) result))))))))
               result-data)
-    (d/n "Sample output for future work in datomic/query-result->alist: " (iasylum-write-string result))
     result))
-                      
-                      ; old
-                      ;(let ((current-list (get key result '()))
-                      ;      (keypair (make-pair key value type)))
-                      ;  (set! current-list (cons (cdr keypair) current-list))
-                      ;  (let ((assoc-pair (assoc key result)))
-                      ;    (if assoc-pair
-                      ;        (set-cdr! assoc-pair current-list)
-                      ;        (set! result (cons (cons key current-list) result)))))
-
-
-
-
 ;;
 ;; Return an alist of attribute name and value.
 ;;
