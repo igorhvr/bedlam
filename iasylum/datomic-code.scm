@@ -276,18 +276,21 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 ;;
 ;; used in datomic/fill-entity
 ;;
-(define (datomic/query-result->alist database input follow-references max-hops hops)
-  (when (and follow-references (> max-hops hops)) (throw (make-error "Max Hops reached.")))
-  
+(define (datomic/query-result->alist database input follow-references max-hops hops)  
   (let* ((make-pair (lambda (key value type)
                      (cons key (if (or (not follow-references)
                                        (not (equal? 'ref (clj-keyword->symbol type))))
                                    value
-                                   (datomic/get-filled-entity database
-                                                              value
-                                                              'follow-references: follow-references
-                                                              max-hops
-                                                              (+ hops 1))))))
+                                   (begin
+                                     (assert (and (or (not follow-references)
+                                                      (< hops max-ops))
+                                                  database input follow-references max-hops hops
+                                                  key value type))
+                                     (datomic/get-filled-entity database
+                                                                value
+                                                                'follow-references: follow-references
+                                                                max-hops
+                                                                (+ hops 1)))))))
          (result-data
           (map-parallel
            (lambda (element)
