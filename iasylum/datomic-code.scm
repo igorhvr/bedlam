@@ -283,7 +283,7 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
                                    value
                                    (begin
                                      (assert (and (or (not follow-references)
-                                                      (< hops max-ops))
+                                                      (< hops max-hops))
                                                   database input follow-references max-hops hops
                                                   key value type))
                                      (datomic/get-filled-entity database
