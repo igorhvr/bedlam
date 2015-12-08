@@ -149,12 +149,12 @@
                                            `((finalcommand ,(->jstring final-command)))))
 
                            ; clear memory
-                           ;(for-each (lambda (key-value-pair)
-                           ;            (j "iu.M.d.remove(k);" `((k ,(->jstring (string-append*
-                           ;                                                    (car key-value-pair)
-                           ;                                                     random-string-to-avoid-thread-conflict))))))
-                           ;          vars
-                           )
+                           (for-each (lambda (key-value-pair)
+                                       (j "iu.M.d.remove(k);" `((k ,(->jstring (string-append*
+                                                                                (car key-value-pair)
+                                                                                random-string-to-avoid-thread-conflict))))))
+                                     vars))
+
                          ])
 
                  result)))
