@@ -77,6 +77,10 @@
                                (new-function 'peek 'empty)]
                               [('inner-queue)
                                inner-queue]
+                              [('put-scm-lambda)
+                               (lambda (scm-object)
+                                 (put inner-queue (java-wrap v)))
+                               ]
                               )))
         new-function))))
 

@@ -26,9 +26,7 @@
 
   (define o-work-queue (make-queue))
   
-  (define (log-o m)
-    (o-work-queue 'put m)
-    (void))
+  (define log-o)
 
   (define-generic-java-field-accessors |out|)
   (define-java-class |java.lang.System|)
@@ -173,6 +171,13 @@
 
   (set-default-global-logger!)
 
+  
+  (set! log-o
+        (let ((p-fn (o-work-queue 'put-scm-lambda)))
+          (lambda (m)
+           (p-fn m)
+           (void))))
+  
   (start-worker o-worker o-work-queue 'continue-forever: #t 'log-trace-execution: (make-parameter* #f))
 
   (start-worker (lambda (m) (apply log-trace m))  put-log-trace 'continue-forever: #t 'log-trace-execution: (make-parameter* #f))
