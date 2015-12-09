@@ -175,6 +175,6 @@
 
   (start-worker o-worker o-work-queue 'continue-forever: #t 'log-trace-execution: (make-parameter* #f))
 
-  (start-worker o-worker put-log-trace 'continue-forever: #t 'log-trace-execution: (make-parameter* #f))
+  (start-worker (lambda (m) (apply log-trace m))  put-log-trace 'continue-forever: #t 'log-trace-execution: (make-parameter* #f))
  )
   
