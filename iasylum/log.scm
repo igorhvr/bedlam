@@ -1,6 +1,7 @@
 ;;; Code by Igor Hjelmstrom Vinhas Ribeiro - this is licensed under GNU GPL v2.
 
 (require-extension (lib iasylum/iasylum))
+(require-extension (lib iasylum/work-queue))
 
 (module iasylum/log
   (
@@ -22,18 +23,48 @@
    log-warn
    log-error
    log-fatal)
+
+  (define o-work-queue (make-queue))
   
   (define (log-o m)
-    (j "System.out.println(m); System.out.flush();" `((m ,(->jstring m))))
+    (o-work-queue 'put m)
     (void))
+
+  (define-generic-java-field-accessors |out|)
+  (define-java-class |java.lang.System|)
+  (define-generic-java-method |println|)
   
+  (define (o-worker m)
+    ;spec: (j "System.out.println(m); System.out.flush();" `((m ,(->jstring m))))
+    (|println| (|out| (java-null |java.lang.System|)) (->jstring m))
+    (void))
+
+  (define-java-class |java.text.SimpleDateFormat|)
+  (define-java-class |java.util.Date|)
+  (define-generic-java-method |format|)
+  
+  (define *ts-format* (->jstring "yyyy-MM-dd HH:mm:ss,SSS")  )
   (define (get-timestamp)
-    (->string (j "new java.text.SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss,SSS\").format(new java.util.Date());")))
+    (->string
+     
+     ; spec: ;(j "new java.text.SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss,SSS\").format(new java.util.Date());")
+     (|format| (java-new |java.text.SimpleDateFormat| *ts-format* ) (java-new |java.util.Date|))
+     
+     ))
   
   (define make-mark-logger (lambda (mark) (lambda m (timestamped-log mark m))))
 
+  (define-generic-java-method |getName|)
+  (define-generic-java-method |currentThread|)
+  (define-java-class |java.lang.Thread|)
+  
   (define (get-thread-info)
-    (->string (j "Thread.currentThread().getName();")))
+    (->string
+     
+     ;spec: (j "Thread.currentThread().getName();")
+     (|getName| (|currentThread| (java-null |java.lang.Thread|)))
+     
+     ))
   
   (define (timestamped-log mark m)
     (log-o (iasylum-write-string (list mark (get-thread-info) (get-timestamp) m))))
@@ -142,4 +173,8 @@
 
   (set-default-global-logger!)
 
-  )
+  (start-worker o-worker o-work-queue 'continue-forever: #t 'log-trace-execution: (make-parameter* #f))
+
+  (start-worker o-worker put-log-trace 'continue-forever: #t 'log-trace-execution: (make-parameter* #f))
+ )
+  
