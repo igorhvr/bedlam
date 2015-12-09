@@ -79,7 +79,7 @@
                                inner-queue]
                               [('put-scm-lambda)
                                (lambda (scm-object)
-                                 (put inner-queue (java-wrap v)))
+                                 (put inner-queue (java-wrap scm-object)))
                                ]
                               )))
         new-function))))
