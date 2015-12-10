@@ -318,8 +318,11 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
                                           (set! result (cons (cons key current-list) result))))))))
               result-data)
     result))
+
 ;;
 ;; Return an alist of attribute name and value.
+;;
+;; It is deprecated, see datomic/get-entity
 ;;
 (define* (datomic/get-filled-entity database entity-id
                                     (follow-references: follow-references #f)
@@ -339,6 +342,16 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
                                follow-references
                                max-hops
                                hops))
+
+;;
+;; Return a datomic.query.EntityMap object.
+;; See http://docs.datomic.com/entities.html to see how to use that.
+;; See also: http://docs.datomic.com/javadoc/datomic/Entity.html
+;;
+(define (datomic/get-entity database entity-id)
+  (j "db.entity(eid);"
+     `((db ,database)
+       (eid ,(->jobject entity-id)))))
 
 ;;
 ;; Return a list of datomic tx ids of an specific entity sorted

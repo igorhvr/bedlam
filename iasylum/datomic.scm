@@ -20,7 +20,8 @@
    datomic/make-empty-transaction-set
    datomic/push-transaction!
    datomic/extract-transaction-and-parameters-pair
-   datomic/get-filled-entity
+   datomic/get-filled-entity ; deprecated
+   datomic/get-entity
    datomic/db-history
    datomic/as-of
    datomic/since
