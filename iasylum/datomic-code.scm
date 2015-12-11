@@ -372,8 +372,7 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 (define* (datomic/travel-machine connection-retriever
                                  entity-history
                                  entity-id
-                                 depth
-                                 (follow-references: follow-references #f))
+                                 depth)
   (let ((entity-history-length (length entity-history)))
     (cond [(< depth 0)
            (throw (make-error 'datomic/time-machine "depth should be greater than zero: ~a" depth))]
@@ -381,10 +380,10 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
           [(>= depth entity-history-length)
            (throw (make-error 'datomic/time-machine "depth should be less than ~a: ~a" entity-history-length depth))]
 
-          [else (datomic/get-filled-entity
+          [else (datomic/get-entity
                  (datomic/as-of (datomic/db (connection-retriever))
                                 (datomic/tx->t (list-ref entity-history depth)))
-                 entity-id 'follow-references: follow-references)])))
+                 entity-id)])))
 
 (create-shortcuts (datomic/query -> d/q)
                   (datomic/smart-query -> d/sq) ; <-- deprecated!
