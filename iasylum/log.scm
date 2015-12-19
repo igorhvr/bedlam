@@ -130,7 +130,7 @@
                                             (warn  . ,log-warn)
                                             (error . ,log-error)
                                             (fatal . ,log-fatal)))))
-         (lambda (thread-info timestamp level message)
+         (lambda (thread-info timestamp level . message)
            (apply (cut (hashtable/get log-hash level log-error)
                        thread-info
                        timestamp
