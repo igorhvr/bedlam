@@ -50,7 +50,7 @@
      
      ))
   
-  (define make-mark-logger (lambda (mark) (lambda m (timestamped-log mark m))))
+  (define make-mark-logger (lambda (mark) (lambda (thread-info timestamp m) (timestamped-log mark thread-info timestamp m))))
 
   (define-generic-java-method |getName|)
   (define-generic-java-method |currentThread|)
@@ -64,15 +64,21 @@
      
      ))
   
-  (define (timestamped-log mark m)
-    (log-o (iasylum-write-string (list mark (get-thread-info) (get-timestamp) m))))
+  (define (timestamped-log mark thread-info timestamp m)
+    (log-o (iasylum-write-string (list mark thread-info timestamp m))))
 
   (let-syntax ((define-log-fn (syntax-rules ()
                                 [(_ name level-symbol)
                                  (define name
-                                   (lambda params
-                                     (apply (get-global-logger-to-this-thread)
-                                            (append (list level-symbol) params))))])))
+                                   (and-let* ((work-queue (make-queue))
+                                              (p-fn (work-queue 'put-scm-lambda))
+                                              (worker (match-lambda* ([(thread-info timestamp params)]
+                                                        (apply (get-global-logger-to-this-thread)
+                                                               `(,thread-info ,timestamp ,level-symbol ,params)))))
+                                              ((start-worker worker work-queue 'continue-forever: #t 'log-trace-execution: (make-parameter* #f))))
+                                     (lambda params
+                                       (p-fn (list (get-thread-info) (get-timestamp) params)))))])))
+    
     (begin
       (define-log-fn log-trace 'trace)
       (define-log-fn log-debug 'debug)
@@ -124,8 +130,10 @@
                                             (warn  . ,log-warn)
                                             (error . ,log-error)
                                             (fatal . ,log-fatal)))))
-         (lambda (level . message)
+         (lambda (thread-info timestamp level message)
            (apply (cut (hashtable/get log-hash level log-error)
+                       thread-info
+                       timestamp
                        <custom-info> ... <...>) message))))))
 
   (define-syntax make-human-logger
