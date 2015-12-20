@@ -77,7 +77,9 @@
                                                                `(,thread-info ,timestamp ,level-symbol ,params)))))
                                               ((start-worker worker work-queue 'continue-forever: #t 'log-trace-execution: (make-parameter* #f))))
                                      (lambda params
-                                       (p-fn (list (get-thread-info) (get-timestamp) params)))))])))
+                                       (p-fn (list (get-thread-info) (get-timestamp) params))
+                                       (void)
+                                       )))])))
     
     (begin
       (define-log-fn log-trace 'trace)
