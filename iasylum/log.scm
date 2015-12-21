@@ -190,9 +190,9 @@
 
   
   (set! log-o
-        (let ((p-fn (o-work-queue 'put-scm-lambda)))
+        (let ((put-fn (o-work-queue 'put-scm-lambda)))
           (lambda (m)
-           (p-fn m)
+           (put-fn m)
            (void))))
   
   (start-worker o-worker o-work-queue 'continue-forever: #t 'log-trace-execution: (make-parameter* #f))
