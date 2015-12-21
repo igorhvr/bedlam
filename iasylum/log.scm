@@ -73,13 +73,18 @@
                                 [(_ name level-symbol)
                                  (define name
                                    (and-let* ((work-queue (make-queue))
-                                              (p-fn (work-queue 'put-scm-lambda))
-                                              (worker (match-lambda* ([(thread-info timestamp params)]
-                                                        (apply (get-global-logger-to-this-thread)
+                                              (put-fn (work-queue 'put-scm-lambda))
+                                              (worker (match-lambda* ([(thread-info logger timestamp params)]
+                                                        (apply logger
                                                                `(,thread-info ,timestamp ,level-symbol ,params)))))
-                                              ((start-worker worker work-queue 'continue-forever: #t 'log-trace-execution: (make-parameter* #f))))
+                                              ((start-worker worker work-queue
+                                                             'continue-forever: #t
+                                                             'log-trace-execution: (make-parameter* #f))))
                                      (lambda params
-                                       (p-fn (list (get-thread-info) (get-timestamp) params))
+                                       (put-fn (list (get-thread-info)
+                                                     (get-global-logger-to-this-thread)
+                                                     (get-timestamp)                                                     
+                                                     params))
                                        (void)
                                        )))])))
     
