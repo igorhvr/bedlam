@@ -50,9 +50,9 @@
      
      ))
   
-  (define make-mark-logger (lambda (mark)
-                             (lambda (thread-info timestamp m)
-                               (timestamped-log mark thread-info timestamp m))))
+  (define (make-mark-logger mark)
+    (lambda (thread-info timestamp . m)
+      (timestamped-log mark thread-info timestamp m)))
 
   (define-generic-java-method |getName|)
   (define-generic-java-method |currentThread|)
@@ -76,7 +76,7 @@
                                               (put-fn (work-queue 'put-scm-lambda))
                                               (worker (match-lambda* ([(thread-info logger timestamp params)]
                                                         (apply logger
-                                                               `(,thread-info ,timestamp ,level-symbol ,params)))))
+                                                               `(,thread-info ,timestamp ,level-symbol ,@params)))))
                                               ((start-worker worker work-queue
                                                              'continue-forever: #t
                                                              'log-trace-execution: (make-parameter* #f))))
@@ -154,14 +154,14 @@
                                              (warn  . 3)
                                              (error . 4)
                                              (fatal . 5)))))
-         (lambda (level . message)
+         (lambda (thread-info timestamp level . message)
            (if (>= (hashtable/get level-hash level 0)
                    (hashtable/get level-hash min-level 0))
                (apply d (add-between-elements "\n" (append (list (string-append* "______ "
                                                                                  (string-upcase (symbol->string level))
                                                                                  " ________________________"
-                                                                                 " (" (get-thread-info) ") "
-                                                                                 (get-timestamp)
+                                                                                 " (" thread-info ") "
+                                                                                 timestamp
                                                                                  "\n"))
                                                            message (list "\n"))))))))))
 
