@@ -96,8 +96,8 @@
           (begin
             (set-default-global-logger!)
             (get-global-logger-to-this-thread))
-          (->scm-object (j "globall.get();"
-                           `((globall ,global-logger)))))))
+          (->scm-object (j "globalthread.get();"
+                           `((globalthread ,global-logger)))))))
 
   (define (set-global-logger-to-this-thread! logger)
     (j "iu.M.d.get(\"logger-global_48729\").set(newlogger);"
