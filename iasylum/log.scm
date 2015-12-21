@@ -50,7 +50,9 @@
      
      ))
   
-  (define make-mark-logger (lambda (mark) (lambda (thread-info timestamp m) (timestamped-log mark thread-info timestamp m))))
+  (define make-mark-logger (lambda (mark)
+                             (lambda (thread-info timestamp m)
+                               (timestamped-log mark thread-info timestamp m))))
 
   (define-generic-java-method |getName|)
   (define-generic-java-method |currentThread|)
