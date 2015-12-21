@@ -98,7 +98,7 @@
 
   (define (get-global-logger-to-this-thread)
     (let ((global-logger (j "iu.M.d.get(\"logger-global_48729\");")))
-      (if (equal? (j "null")
+      (if (equal? (java-null)
                   global-logger)
           (begin
             (set-default-global-logger!)
