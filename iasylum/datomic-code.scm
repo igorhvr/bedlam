@@ -346,6 +346,19 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
                                hops))
 
 ;;
+;; Get a value from a lazy entity.
+;;
+;; TODO XXX: optimize this call replacing "j" to native call.
+;;
+;; - lazy-entity - To get a lazy entity see datomic/get-entity
+;; - field-name - It is a string like ":common/has-uuid"
+;;
+(define (datomic/get-value lazy-entity field-name)
+  (->scm-object (j "lazyen.get(field);"
+                   `((lazyen ,lazy-entity)
+                     (field ,(->jstring field-name))))))
+
+;;
 ;; Return a datomic.query.EntityMap object.
 ;; See http://docs.datomic.com/entities.html to see how to use that.
 ;; See also: http://docs.datomic.com/javadoc/datomic/Entity.html

@@ -22,6 +22,7 @@
    datomic/extract-transaction-and-parameters-pair
    datomic/get-filled-entity ; deprecated
    datomic/get-entity
+   datomic/get-value
    datomic/db-history
    datomic/as-of
    datomic/since
