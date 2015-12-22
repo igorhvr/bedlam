@@ -276,6 +276,8 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 ;;
 ;; used in datomic/fill-entity
 ;;
+;; DEPRECATED: see datomic/get-entity
+;;
 (define (datomic/query-result->alist database input follow-references max-hops hops)  
   (let* ((make-pair (lambda (key value type)
                      (cons key (if (or (not follow-references)
@@ -322,7 +324,7 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 ;;
 ;; Return an alist of attribute name and value.
 ;;
-;; It is deprecated, see datomic/get-entity
+;; DEPRECATED: see datomic/get-entity
 ;;
 (define* (datomic/get-filled-entity database entity-id
                                     (follow-references: follow-references #f)
