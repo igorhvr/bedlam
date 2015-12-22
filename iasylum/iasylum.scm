@@ -96,6 +96,7 @@
    select-sublist
    time->millis
    make-future
+   only
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -1125,6 +1126,14 @@
         (if timeout
             (if (thread/join thread-handle timeout) (define-future-result) #f)
             (and (thread/join thread-handle) (define-future-result))))))
+
+  ;;
+  ;; "only" is like "first" but ensure that the list has one element
+  ;; and rises an error otherwise.
+  ;;
+  (define (only lst)
+    (assert (and (= (length lst) 1)
+                 (first lst))))
 
   (create-shortcuts (avg -> average))
 
