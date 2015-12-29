@@ -11,6 +11,7 @@
    get-global-logger-to-this-thread
    set-global-logger-to-this-thread!
    with-logger
+   log-and-return
 
    get-thread-info
    log-o
@@ -186,6 +187,13 @@
         iu.M.d.putIfAbsent(\"logger-global_48729\", globalLogger);"
        `((defaultlogger ,(->jobject (make-logger))))))
 
+  (define-syntax log-and-return
+    (syntax-rules ()
+      ((_ log-fn description body ...)
+       (let ((result (begin body ...)))
+         (log-fn description result)
+         result))))
+
   (set-default-global-logger!)
 
   
@@ -198,5 +206,6 @@
   (start-worker o-worker o-work-queue 'continue-forever: #t 'log-trace-execution: (make-parameter* #f))
 
   (start-worker (lambda (m) (apply log-trace m))  put-log-trace 'continue-forever: #t 'log-trace-execution: (make-parameter* #f))
- )
+
+)
   
