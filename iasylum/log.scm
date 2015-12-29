@@ -18,6 +18,8 @@
    get-timestamp
    make-mark-logger
    timestamped-log
+   measure-time-interval-nano
+   log-time
    log-trace
    log-debug
    log-info
@@ -41,11 +43,12 @@
   (define-java-class |java.text.SimpleDateFormat|)
   (define-java-class |java.util.Date|)
   (define-generic-java-method |format|)
-  
+  (define-generic-java-method |nanoTime|)
+
   (define *ts-format* (->jstring "yyyy-MM-dd HH:mm:ss,SSS")  )
   (define (get-timestamp)
     (->string
-     
+
      ; spec: ;(j "new java.text.SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss,SSS\").format(new java.util.Date());")
      (|format| (java-new |java.text.SimpleDateFormat| *ts-format* ) (java-new |java.util.Date|))
      
@@ -193,6 +196,36 @@
        (let ((result (begin body ...)))
          (log-fn description result)
          result))))
+
+  ;;
+  ;; Return a pair with the result and the time elapsed.
+  ;;  
+  (define (measure-time-interval-nano thunk)
+    (let ((start-time (->number (|nanoTime| (java-null |java.lang.System|)))))
+      (let ((result (thunk)))
+        (let ((time-elapsed-nano (- (->number (|nanoTime| (java-null |java.lang.System|))) start-time)))
+          (cons result time-elapsed-nano)))))
+
+  ;;
+  ;; Use like this:
+  ;; (log-time ("debug info" log-debug) body ...)
+  ;;
+  ;; or:
+  ;; (log-time ("debug info" log-debug log-warn 1 ms) body ...)
+  ;;
+  (define-syntax log-time
+    (syntax-rules (ms)
+      ((_ (debug-info log-fn log-slow-fn slow-ms ms) body ...)
+       (let* ((result (measure-time-interval-nano (lambda () body ...)))
+              (ms-elapsed (/ (cdr result) 1000000))
+              (slow (> ms-elapsed slow-ms)))
+         ((if (not slow)
+              log-fn
+              log-slow-fn)
+          (|@srfi-28::format| "[~a]~aTook ~0,3F ms" debug-info (if slow " [TOO SLOW!] " "") ms-elapsed))
+         (car result)))
+      ((_ (debug-info log-fn) body ...)
+       (log-time (debug-info log-fn log-warn 1000 ms) body ...))))
 
   (set-default-global-logger!)
 
