@@ -3,17 +3,18 @@
 ;; and output to scm-object.
 ;;
 (define (datomic/query qry-input . sources)
-  (->scm-object
-   (let ((sources (jlist->jarray (->jobject sources)))
-         (qry (if (string? qry-input)
-                  (->jstring qry-input)
-                  qry-input)))
-     (log-trace "Will execute query: " (->string qry)
-                "with sources:" (jarray->string sources))
-     (let ((result (j "datomic.Peer.q(qry, sources);" `((sources ,sources)
-                                                        (qry ,qry)))))
-       (log-trace "=> Query result: " (iasylum-write-string result))
-       result))))
+  (log-time ("Query execution" log-trace log-warn 300 ms)
+    (->scm-object
+     (let ((sources (jlist->jarray (->jobject sources)))
+           (qry (if (string? qry-input)
+                    (->jstring qry-input)
+                    qry-input)))
+       (log-trace "Will execute query: " (->string qry)
+                  "with sources:" (jarray->string sources))
+       (let ((result (j "datomic.Peer.q(qry, sources);" `((sources ,sources)
+                                                          (qry ,qry)))))
+         (log-trace "=> Query result: " (iasylum-write-string result))
+         result)))))
 
 ;;
 ;; DEPRECATED: This is deprecated because it's TOO DANGEROUS when the caller is expecting
@@ -161,19 +162,36 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
              <...> ; other params
              ))))
 
+(define (cut-log message)
+  (let ((length (string-length message)))
+    (if (> length 1024)
+        (format "~a [...] (+total ~a chars)"
+                (substring message 0 1024)
+                length)
+        message)))
+
 ;;
 ;; Differently of smart-query, this DOES NOT convert input (params) to jobject
 ;; and output to scm-object. You have to send java objects in params.
 ;;
-(define* (datomic/smart-transact conn tx (param-alist '()))
-  (let ((final-param-alist (append param-alist `((conn ,conn)))))
-    (log-trace "Will execute transact" tx
-               "with params:" (iasylum-write-string param-alist))
-    (let ((result (clj (string-append "(use '[datomic.api :only [q db] :as d])
+(define* (datomic/smart-transact conn tx
+                                 (param-alist '())
+                                 (allow-cut-log: allow-cut-log #f))
+  (log-time ("Transaction execution" log-trace log-warn 500 ms)
+      (let ((final-param-alist (append param-alist `((conn ,conn)))))
+        (log-trace "Will execute transact" (if allow-cut-log
+                                               (cut-log tx)
+                                               tx)
+                   "with params:" (if allow-cut-log
+                                      (cut-log (iasylum-write-string param-alist))
+                                      (iasylum-write-string param-alist))
+        (let ((result (clj (string-append "(use '[datomic.api :only [q db] :as d])
                                        @(d/transact conn " tx ")")
-                       final-param-alist)))
-      (log-trace "=> Transaction result " (iasylum-write-string result))
-      result)))
+                           final-param-alist)))
+          (log-trace "=> Transaction result " (if allow-cut-log
+                                                  (cut-log (iasylum-write-string result))
+                                                  (iasylum-write-string result)))
+          result)))))
 
 (define (datomic/make-transact-function-with-one-connection-included connection-retriever)
   (cut datomic/smart-transact
