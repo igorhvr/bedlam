@@ -222,7 +222,7 @@
          ((if (not slow)
               log-fn
               log-slow-fn)
-          (|@srfi-28::format| "[~a]~aTook ~0,3F ms" debug-info (if slow " [TOO SLOW!] " "") ms-elapsed))
+          (|@srfi-28::format| "[~a]~aTook ~0,3F ms" debug-info (if slow " [TOO SLOW!] " " ") ms-elapsed))
          (car result)))
       ((_ (debug-info log-fn) body ...)
        (log-time (debug-info log-fn log-warn 1000 ms) body ...))))
