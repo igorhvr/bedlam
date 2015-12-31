@@ -113,21 +113,20 @@
 
 (define start-worker
   (lambda* (processor work-queue (continue-forever: continue-forever #t) (inner-queue-forced: inner-queue-forced #f) (log-trace-execution: log-trace-execution (make-parameter* #t)) )
-      (watched-thread/spawn       
+      (watched-thread/spawn
        (lambda ()
          (let ((n (get-next-worker-n)))
-           (log-time ((format "Worker ~a execution" n) log-trace)
-             (when (log-trace-execution) (put-log-trace 'put (list 'work-queue "Starting worker" n)))
-             ((if inner-queue-forced process-all-work-forced process-all-work)
-              (lambda (v)
-                (when (log-trace-execution) (put-log-trace 'put (list 'work-queue n "Starting  work unit" v)))
-                (let ((result (processor v)))
-                  (when (log-trace-execution) (log-trace 'work-queue n "Completed work unit. Params:" v))
-                  #t
-                  ))
-              work-queue
-              continue-forever)
-             (when (log-trace-execution) (put-log-trace 'put (list "\nStopping worker [w" n "] - nothing else to do.\n")))
-             ))))))
+           (when (log-trace-execution) (put-log-trace 'put (list 'work-queue "Starting worker" n)))
+           ((if inner-queue-forced process-all-work-forced process-all-work)
+            (lambda (v)
+              (when (log-trace-execution) (put-log-trace 'put (list 'work-queue n "Starting  work unit" v)))
+              (let ((timings (time (processor v))))
+                (when (log-trace-execution) (log-trace 'work-queue n "Completed work unit" v " in " (cdr timings)))
+                #t
+                ))       
+            work-queue
+            continue-forever)
+           (when (log-trace-execution) (put-log-trace 'put (list "\nStopping worker [w" n "] - nothing else to do.\n")))
+           )))))
 
 
