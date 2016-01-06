@@ -502,6 +502,8 @@
 
 (require-extension (lib iasylum/aws))
 
+(add-lib "joda/joda-time-2.9.jar")
+
 (add-lib "aws-java-sdk-1.9.19/aspectj-1.6/aspectjrt.jar")
 (add-lib "aws-java-sdk-1.9.19/aspectj-1.6/aspectjweaver.jar")
 (add-lib "aws-java-sdk-1.9.19/aws-java-sdk-1.9.19-javadoc.jar")
@@ -510,7 +512,6 @@
 (add-lib "aws-java-sdk-1.9.19/aws-java-sdk-flow-build-tools-1.9.19.jar")
 (add-lib "aws-java-sdk-1.9.19/freemarker-2.3.18/freemarker-2.3.18.jar")
 (add-lib "aws-java-sdk-1.9.19/javax-mail-1.4.6/javax.mail-api-1.4.6.jar")
-(add-lib "joda/joda-time-2.9.jar")
 (add-lib "aws-java-sdk-1.9.19/spring-3.0/spring-beans-3.0.7.jar")
 (add-lib "aws-java-sdk-1.9.19/spring-3.0/spring-context-3.0.7.jar")
 (add-lib "aws-java-sdk-1.9.19/spring-3.0/spring-core-3.0.7.jar")
