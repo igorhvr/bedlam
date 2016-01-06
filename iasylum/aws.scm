@@ -140,6 +140,8 @@
                 (when region (j "s3client.setRegion(region);" `((s3client ,result) (region ,region))))
                 result)))
 
+   ;; TODO: Use http://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/ClientConfiguration.html#setMaxErrorRetry(int)
+   ;; somehow to be able to configure retry behavior when uploading data to s3. See if we can expand this to other stuff.
    (define aws/s3-put-string
      (lambda* (s3-client bucket object string (public-read: public-read #f) (reduced-redundancy: reduced-redundancy #f))
               (let ((aclv (if public-read
