@@ -479,10 +479,10 @@
 
 (add-lib "net/commons-codec-1.6.jar")
 (add-lib "net/fluent-hc-4.3.4.jar")
-(add-lib "net/httpclient-cache-4.3.4.jar")
+(add-lib "net/httpclient-cache-4.3.6.jar")
 (add-lib "net/httpmime-4.3.4.jar")
-(add-lib "net/httpcore-4.3.2.jar")
-(add-lib "net/httpclient-4.3.4.jar")
+(add-lib "net/httpcore-4.3.3.jar")
+(add-lib "net/httpclient-4.3.6.jar")
 
 (add-lib "jars/jackson/jackson-jr-all-2.6.4.jar")
 
@@ -509,8 +509,6 @@
 (add-lib "aws-java-sdk-1.9.19/aws-java-sdk-1.9.19.jar")
 (add-lib "aws-java-sdk-1.9.19/aws-java-sdk-flow-build-tools-1.9.19.jar")
 (add-lib "aws-java-sdk-1.9.19/freemarker-2.3.18/freemarker-2.3.18.jar")
-(add-lib "aws-java-sdk-1.9.19/httpcomponents-client-4.3/httpclient-4.3.jar")
-(add-lib "aws-java-sdk-1.9.19/httpcomponents-client-4.3/httpcore-4.3.jar")
 (add-lib "aws-java-sdk-1.9.19/javax-mail-1.4.6/javax.mail-api-1.4.6.jar")
 (add-lib "joda/joda-time-2.9.jar")
 (add-lib "aws-java-sdk-1.9.19/spring-3.0/spring-beans-3.0.7.jar")
