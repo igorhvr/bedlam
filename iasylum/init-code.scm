@@ -484,7 +484,11 @@
 (add-lib "net/httpcore-4.3.3.jar")
 (add-lib "net/httpclient-4.3.6.jar")
 
-(add-lib "jars/jackson/jackson-jr-all-2.6.4.jar")
+(add-lib "jackson/jackson-databind-2.4.0.jar")
+(add-lib "jackson/jackson-datatype-joda-2.2.2.jar")
+(add-lib "jackson/jackson-core-2.4.0.jar")
+(add-lib "jackson/jackson-annotations-2.4.0.jar")
+(add-lib "jackson/jackson-core-asl-1.9.13.ja")
 
 ;; Incanter is a R-like environment for clojure that allows stuff similar to:
 ;; (clj "(use '(incanter core charts pdf)) (save-pdf (function-plot sin -4 4) \"./pdf-chart.pdf\")")
