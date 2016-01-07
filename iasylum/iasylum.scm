@@ -97,6 +97,7 @@
    time->millis
    make-future
    only
+   sum-alist
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -1134,6 +1135,23 @@
   (define (only lst)
     (assert (and (= (length lst) 1)
                  (first lst))))
+
+  ;;
+  ;; (sum-alist '(("a" . 5) ("a" . 10) ("b" . 23) ("b" . 20) ("a" . 30)))
+  ;; => (("a" . 45) ("b" . 43))
+  ;;
+  (define (sum-alist alist)
+    (let ((sum-ordered-list
+           (match-lambda
+            [() '()]
+            [(single) (list single)]
+            [((key . value1) (key . value2) . rest)
+             (sum-ordered-list (cons (cons key (+ value1 value2)) rest))]
+            [((key . value) . rest)
+             (cons (cons key value) (sum-ordered-list rest))])))
+      (sum-ordered-list (sort (lambda (a b)
+                                (string<? (car a) (car b)))
+                              alist))))
 
   (create-shortcuts (avg -> average))
 
