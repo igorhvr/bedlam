@@ -1141,17 +1141,14 @@
   ;; => (("a" . 45) ("b" . 43))
   ;;
   (define (sum-alist alist)
-    (let ((sum-ordered-list
-           (match-lambda
-            [() '()]
-            [(single) (list single)]
-            [((key . value1) (key . value2) . rest)
-             (sum-ordered-list (cons (cons key (+ value1 value2)) rest))]
-            [((key . value) . rest)
-             (cons (cons key value) (sum-ordered-list rest))])))
-      (sum-ordered-list (sort (lambda (a b)
-                                (string<? (car a) (car b)))
-                              alist))))
+    (fold (match-lambda* (((key . value) acc)
+                          (or (and-let* ((v (get key acc))
+                                         (new-acc (alist-delete key acc))
+                                         (new-sum (+ v value))
+                                         (result (cons `(,key . ,new-sum) new-acc)))
+                                        result)
+                              (cons `(,key . ,value) acc))))
+          (list) alist))
 
   (create-shortcuts (avg -> average))
 
