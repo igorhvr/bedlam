@@ -1140,11 +1140,11 @@
   ;; (sum-alist '(("a" . 5) ("a" . 10) ("b" . 23) ("b" . 20) ("a" . 30)))
   ;; => (("a" . 45) ("b" . 43))
   ;;
-  (define (sum-alist alist)
+  (define* (sum-alist alist (sum-fn: sum-fn +))
     (fold (match-lambda* (((key . value) acc)
                           (or (and-let* ((v (get key acc))
                                          (new-acc (alist-delete key acc))
-                                         (new-sum (+ v value))
+                                         (new-sum (sum-fn v value))
                                          (result (cons `(,key . ,new-sum) new-acc)))
                                         result)
                               (cons `(,key . ,value) acc))))
