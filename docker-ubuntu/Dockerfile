@@ -17,6 +17,9 @@ RUN apt-get -y install telnet
 RUN apt-get -y install w3m
 RUN apt-get -y install openssh-server
 RUN apt-get -y install rsync
+RUN apt-get -y install zip
+RUN apt-get -y install unzip
+RUN apt-get -y install psmisc
 RUN apt-get -y install less
 RUN apt-get -y install ntpdate
 
