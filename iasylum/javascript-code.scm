@@ -1,3 +1,7 @@
+(define-generic-java-method get |get|)
+(define-generic-java-method set |set|)
+
+;;nodejs - remote
 (define (nodejs-global code)
   (log-trace "About to execute js code" code)
   (let ((result (http-call-post-string/string "http://js:27429/" code)))
@@ -24,12 +28,9 @@
                                                          values))))))
     (node-js-global code)))
 
-(define (js-manager)  (j "new javax.script.ScriptEngineManager().getEngineByName(\"rhino\");"))
 
-(define-generic-java-method get |get|)
-(define-generic-java-method set |set|)
-
-(define (create-thread-local-javascript-manager-retriever)
+;; rhino
+(define (rhino-create-thread-local-javascript-manager-retriever)
     (let ((tl
            (j "mtl=new ThreadLocal() {
                    protected synchronized Object initialValue() {                       
@@ -40,14 +41,34 @@
         (let ((result (get tl)))
           result))))
 
-(define get-local-javascript-manager)
+(define rhino-get-local-javascript-manager)
+(define js-rhino)
+(define (rhino-js-manager)  (j "new javax.script.ScriptEngineManager().getEngineByName(\"rhino\");"))
+
+
+;; v8
 (define js)
+(define get-local-javascript-manager)
+(define js-v8)
+(define (create-thread-local-javascript-manager-retriever)
+    (let ((tl
+           (j "mtlv8=new ThreadLocal() {
+                   protected synchronized Object initialValue() {                       
+                       return com.eclipsesource.v8.V8.createV8Runtime();
+                   }
+               }; mtlv8;")))
+      (lambda ()
+        (let ((result (get tl)))
+          result))))
 
-(set! get-local-javascript-manager (create-thread-local-javascript-manager-retriever))
+(define (js-manager)  (j "return com.eclipsesource.v8.V8.createV8Runtime();"))
 
-(set! js
+
+;; rhino
+(set! rhino-get-local-javascript-manager (rhino-create-thread-local-javascript-manager-retriever))
+(set! js-rhino
   (lambda*
-   (code (vars #f) (manager (get-local-javascript-manager)))
+   (code (vars #f) (manager (rhino-get-local-javascript-manager)))
    ;(d/n "Will run code: (((((" code "))))) saved to " (save-to-somewhere code))
    ;(d/n "vars: " vars)
    (j                       
@@ -85,4 +106,30 @@
     final-result
     )))
 
-;; Example: (run-js/s (js-manager) "var f = function (what) { return 'hello, ' + what; }; f('Javascript');")
+(set! get-local-javascript-manager (create-thread-local-javascript-manager-retriever))
+
+(set! js-v8
+  (lambda*
+   (code (vars #f) (runtime (get-local-javascript-manager)))
+
+   (let ((vars (or vars '())))
+     (each-for
+      vars
+      (lambda (v)
+        (match-let ( ( (vname vvalue) v ) )
+                   (begin
+                     (let* ((sname (if (string? vname) vname (symbol->string vname)))
+                            (name (->jstring sname ))
+                            (code (string-append* "var " sname " = null; var fdefdeff = function(p) { " sname " = p; }; fdefdeff;"))
+                            (v8f (j "v8.executeScript(script);" `((v8 ,runtime) (script ,(->jstring code)))))
+                            (parameters-v8array (j "tres=new com.eclipsesource.v8.V8Array(v8runtime); tres;" `((v8runtime ,runtime)))))
+                       
+                       (j "v8a.push(jsobjectvalue);"
+                          `((v8a ,parameters-v8array)
+                            (jsobjectvalue ,(->jobject vvalue))))
+                       (j "v8f.call(null, p);" `((p ,parameters-v8array) (v8f ,v8f))))))))
+     
+     (j "v8.executeScript(script);" `((v8 ,runtime) (script ,(->jstring code)))))))
+
+(set! js js-v8)
+
