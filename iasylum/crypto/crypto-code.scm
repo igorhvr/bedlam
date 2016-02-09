@@ -4,6 +4,11 @@
 (define iasylum.js (memoize (lambda () (file->string "/base/bedlam/iasylum/iasylum.js"))))
 (define crypto.js (memoize (lambda () (file->string "/base/bedlam/iasylum/crypto/crypto.js"))))
 
+(define (load-safe-sjcl-and-add-entropy)
+  (js (sjcl.js))
+  (js "sjcl.random.addEntropy(prn, 1024, 'nativeprgn-secure-random');"
+      `((prn ,(j "r=new byte[128]; java.security.SecureRandom.getInstance(\"NativePRNG\").nextBytes(r);Arrays.toString(r);")))))
+
 (define (get-seed-from str-p)
   (let* ( (str (sha256 str-p))
           (magic-str-tied-number           
@@ -19,7 +24,7 @@
            (assert (eqv? type 'sjcl_el_gammal_ecc_c256_key))
 
            (if (not string-to-generate-deterministically-from)
-               (js (sjcl.js))
+               (load-safe-sjcl-and-add-entropy)
                (js (sjcl.js-unsafe)))
 
            (js (iasylum.js)) (js (crypto.js))
@@ -27,7 +32,7 @@
            (unless string-to-generate-deterministically-from
              (js "sjcl.random.addEntropy(prn, 1024, 'nativeprgn-secure-random');"
                  `((prn ,(j "r=new byte[128]; java.security.SecureRandom.getInstance(\"NativePRNG\").nextBytes(r);Arrays.toString(r);")))))
-           
+
            (when string-to-generate-deterministically-from
              (and-let* (
                         (seed (get-seed-from string-to-generate-deterministically-from))
@@ -38,30 +43,32 @@
                    `((prn ,(string-append* pseudo-random-number string-to-generate-deterministically-from))))))
            ;; TODO - allow non-unsafe generation of keys from strings using something similar to:
            ;;(js "sjcl.ecc.elGamal.generateKeys(sjcl.ecc.curves['c256'], 10, 0xa0a0bc893f1681c0eb5fad86bac1d784ccdb2cebe68a13362b4c0c8495ee9cd0 ).sec.get;")
-           
+
            (match
-            (json->scheme (->string (js "iasylum.crypto.generate_sjcl_el_gammal_ecc_c256_keypair();")))
+            (json->scheme (->string (if (not string-to-generate-deterministically-from)
+                                        (js "iasylum.crypto.generate_sjcl_el_gammal_ecc_c256_keypair();")
+                                        (js "iasylum.crypto.generate_unsafe_sjcl_el_gammal_ecc_c256_keypair();"))))
             (#( ( "publicKey" . the-public-key )
                 ( "secretKey" . the-secret-key ) ) `(,(scheme->json the-public-key) ,(scheme->json the-secret-key))))))
 
 (define (asymmetric-encrypt key data)
-  (js (sjcl.js)) (js (iasylum.js)) (js (crypto.js))
+  (load-safe-sjcl-and-add-entropy) (js (iasylum.js)) (js (crypto.js))
   (->string (js "iasylum.crypto.asymmetric_encrypt(key, data);" `((key ,(->jstring key)) (data ,(->jstring data))))))
 
 (define (asymmetric-decrypt key data)
-  (js (sjcl.js)) (js (iasylum.js)) (js (crypto.js))
+  (load-safe-sjcl-and-add-entropy) (js (iasylum.js)) (js (crypto.js))
   (->string (js "iasylum.crypto.asymmetric_decrypt(key, data);" `((key ,(->jstring key)) (data ,(->jstring data))))))
 
 (define (symmetric-encrypt key data)
-  (js (sjcl.js)) (js (iasylum.js)) (js (crypto.js))
+  (load-safe-sjcl-and-add-entropy) (js (iasylum.js)) (js (crypto.js))
   (->string (js "iasylum.crypto.symmetric_encrypt(key, data);" `((key ,(->jstring key)) (data ,(->jstring data))))))
 
 (define (symmetric-decrypt key data)
-  (js (sjcl.js)) (js (iasylum.js)) (js (crypto.js))
+  (load-safe-sjcl-and-add-entropy) (js (iasylum.js)) (js (crypto.js))
   (->string (js "iasylum.crypto.symmetric_decrypt(key, data);" `((key ,(->jstring key)) (data ,(->jstring data))))))
 
 (define (hmac key data)
-  (js (sjcl.js))
+  (load-safe-sjcl-and-add-entropy)
   (js (iasylum.js))
   (js (crypto.js))
   (->string (js "iasylum.crypto.hmac(key, data);" `((key ,(->jstring key))
