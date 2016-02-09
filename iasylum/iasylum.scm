@@ -95,6 +95,9 @@
    atomic-execution
    select-sublist
    time->millis
+   make-future
+   only
+   sum-alist
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -1116,6 +1119,36 @@
   (define (time->millis t)
     (+ (* 1000 (time-second t))
        (/ (time-nanosecond t) 1000000)))
+
+  (define* (make-future l)
+    (let* ((define-future-result (make-parameter* #f))
+           (thread-handle (watched-thread/spawn (lambda () (let ((result (l))) (define-future-result result))))))
+      (lambda* ((timeout-milliseconds: timeout #f))
+        (if timeout
+            (if (thread/join thread-handle timeout) (define-future-result) #f)
+            (and (thread/join thread-handle) (define-future-result))))))
+
+  ;;
+  ;; "only" is like "first" but ensure that the list has one element
+  ;; and rises an error otherwise.
+  ;;
+  (define (only lst)
+    (assert (and (= (length lst) 1)
+                 (first lst))))
+
+  ;;
+  ;; (sum-alist '(("a" . 5) ("a" . 10) ("b" . 23) ("b" . 20) ("a" . 30)))
+  ;; => (("a" . 45) ("b" . 43))
+  ;;
+  (define* (sum-alist alist (sum-fn: sum-fn +))
+    (fold (match-lambda* (((key . value) acc)
+                          (or (and-let* ((v (get key acc))
+                                         (new-acc (alist-delete key acc))
+                                         (new-sum (sum-fn v value))
+                                         (result (cons `(,key . ,new-sum) new-acc)))
+                                        result)
+                              (cons `(,key . ,value) acc))))
+          (list) alist))
 
   (create-shortcuts (avg -> average))
 
