@@ -26,6 +26,7 @@
     (lambda* ((smtp-server: mailserver "localhost")
          (to: to #f)
          (cc: cc #f)
+         (bcc: bcc #f)
          (sender-email: senderemail) (sender-name: sendername senderemail)
          (authentication-login: authentication-login "") (authentication-password: authentication-password "") (use-ssl: use-ssl #t)
          (subject: subject "") (message-text: messagetext "="))
@@ -55,6 +56,14 @@
                                  (j "email.addCc(lccemail, lccname);" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vemail)))))
                                 )
                   cc))
+
+      (when bcc
+        (for-each (match-lambda ((vemail vname)
+                                 (j "email.addBcc(lccemail, lccname);" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vname)))))
+                                (vemail
+                                 (j "email.addBcc(lccemail, lccname);" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vemail)))))
+                                )
+                  bcc))
       
       (j "
        if(!\"\".equals(authenticationlogin)) {
