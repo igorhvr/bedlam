@@ -307,8 +307,12 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 ;;
 (define (datomic/get-entity database entity-id)
   (define-generic-java-method |entity|)
-  ;spec: (j "db.entity(eid);" `((db ,database) (eid ,(->jobject entity-id))))
-  (entity database (->jobject entity-id)))
+  (define-generic-java-method |valueOf|)
+  (define-java-class |java.lang.Long|)
+
+  (or (and (number? entity-id)
+           (entity database (|valueOf| (java-null |java.lang.Long|) (->jlong entity-id))))
+      (j "db.entity(eid);" `((db ,database) (eid ,(->jobject entity-id))))))
 
 ;;
 ;; Return a list of datomic tx ids of an specific entity sorted
