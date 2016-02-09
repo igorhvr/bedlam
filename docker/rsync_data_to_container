@@ -7,7 +7,7 @@
   (d/n "Will start rsync from data/ to inside container /data. Ignored parameters: " p)  
 
   (let* ((bedlam-ssh-port (irregex-match-substring (irregex-search '(seq ipv4-address ":" (submatch-named bedlam-ssh-port (+ digit)) "->22/tcp")
-                                                                   (r/s "sudo docker ps|grep datomic")) 'bedlam-ssh-port))
+                                                                   (r/s "sudo docker ps|grep bedlam")) 'bedlam-ssh-port))
          (command (string-append* "rsync -e 'ssh -p " bedlam-ssh-port " -oUserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no -oBatchMode=yes -oVerifyHostKeyDNS=no -i /base/bedlam/docker/id_rsa' -avz --delete -P /base/bedlam/docker/data/ root@localhost:/data/")))
     (d/n "Will run command: " command)
     (r/d command)
