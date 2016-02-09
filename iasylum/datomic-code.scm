@@ -3,17 +3,18 @@
 ;; and output to scm-object.
 ;;
 (define (datomic/query qry-input . sources)
-  (->scm-object
-   (let ((sources (jlist->jarray (->jobject sources)))
-         (qry (if (string? qry-input)
-                  (->jstring qry-input)
-                  qry-input)))
-     (log-trace "Will execute query: " (->string qry)
-                "with sources:" (jarray->string sources))
-     (let ((result (j "datomic.Peer.q(qry, sources);" `((sources ,sources)
-                                                        (qry ,qry)))))
-       (log-trace "=> Query result: " (iasylum-write-string result))
-       result))))
+  (log-time ("Query execution" log-trace log-warn 300 ms)
+    (->scm-object
+     (let ((sources (jlist->jarray (->jobject sources)))
+           (qry (if (string? qry-input)
+                    (->jstring qry-input)
+                    qry-input)))
+       (log-trace "Will execute query: " (->string qry)
+                  "with sources:" (jarray->string sources))
+       (let ((result (j "datomic.Peer.q(qry, sources);" `((sources ,sources)
+                                                          (qry ,qry)))))
+         (log-trace "=> Query result: " (iasylum-write-string result))
+         result)))))
 
 ;;
 ;; DEPRECATED: This is deprecated because it's TOO DANGEROUS when the caller is expecting
@@ -161,19 +162,36 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
              <...> ; other params
              ))))
 
+(define (cut-log message)
+  (let ((length (string-length message)))
+    (if (> length 1024)
+        (format "~a [...] (+total ~a chars)"
+                (substring message 0 1024)
+                length)
+        message)))
+
 ;;
 ;; Differently of smart-query, this DOES NOT convert input (params) to jobject
 ;; and output to scm-object. You have to send java objects in params.
 ;;
-(define* (datomic/smart-transact conn tx (param-alist '()))
-  (let ((final-param-alist (append param-alist `((conn ,conn)))))
-    (log-trace "Will execute transact" tx
-               "with params:" (iasylum-write-string param-alist))
-    (let ((result (clj (string-append "(use '[datomic.api :only [q db] :as d])
+(define* (datomic/smart-transact conn tx
+                                 (param-alist '())
+                                 (allow-cut-log: allow-cut-log #f))
+  (log-time ("Transaction execution" log-trace log-warn 500 ms)
+      (let ((final-param-alist (append param-alist `((conn ,conn)))))
+        (log-trace "Will execute transact" (if allow-cut-log
+                                               (cut-log tx)
+                                               tx)
+                   "with params:" (if allow-cut-log
+                                      (cut-log (iasylum-write-string param-alist))
+                                      (iasylum-write-string param-alist))
+        (let ((result (clj (string-append "(use '[datomic.api :only [q db] :as d])
                                        @(d/transact conn " tx ")")
-                       final-param-alist)))
-      (log-trace "=> Transaction result " (iasylum-write-string result))
-      result)))
+                           final-param-alist)))
+          (log-trace "=> Transaction result " (if allow-cut-log
+                                                  (cut-log (iasylum-write-string result))
+                                                  (iasylum-write-string result)))
+          result)))))
 
 (define (datomic/make-transact-function-with-one-connection-included connection-retriever)
   (cut datomic/smart-transact
@@ -271,55 +289,27 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
     ,(transaction-set-parameters transaction-set)))
 
 ;;
-;; The input must be a list with lists of two elements being the first one
-;; a clojure keyword and the second one the value.
+;; Get a value from a lazy entity.
 ;;
-;; used in datomic/fill-entity
+;; TODO XXX: optimize this call replacing "j" to native call.
 ;;
-(define (datomic/query-result->alist database input follow-references)
-  (let ((result '())
-        (make-pair (lambda (key value type)
-                     (cons key (if (or (not follow-references)
-                                       (not (equal? 'ref (clj-keyword->symbol type))))
-                                   value
-                                   (datomic/get-filled-entity database
-                                                              value
-                                                              'follow-references: follow-references))))))
-    (for-each (lambda (element)
-                (let ((key (clj-keyword->symbol (first element)))
-                      (value (second element))
-                      (type (third element))
-                      (many (equal? (clj-keyword->symbol (fourth element))
-                                    'many)))
-                  (if (not many)
-                      (set! result (cons (make-pair key value type) result))                      
-                      (let ((current-list (get key result '()))
-                            (keypair (make-pair key value type)))
-                        (set! current-list (cons (cdr keypair) current-list))
-                        (let ((assoc-pair (assoc key result)))
-                          (if assoc-pair
-                              (set-cdr! assoc-pair current-list)
-                              (set! result (cons (cons key current-list) result))))))))
-              input)
-    result))
+;; - lazy-entity - To get a lazy entity see datomic/get-entity
+;; - field-name - It is a string like ":common/has-uuid"
+;;
+(define (datomic/get-value lazy-entity field-name)
+  (->scm-object (j "lazyen.get(field);"
+                   `((lazyen ,lazy-entity)
+                     (field ,(->jstring field-name))))))
 
 ;;
-;; Return an alist of attribute name and value.
+;; Return a datomic.query.EntityMap object.
+;; See http://docs.datomic.com/entities.html to see how to use that.
+;; See also: http://docs.datomic.com/javadoc/datomic/Entity.html
 ;;
-(define* (datomic/get-filled-entity database entity-id
-                                    (follow-references: follow-references #f))
-  (assert (integer? entity-id))
-  (datomic/query-result->alist database
-                               (datomic/smart-query-multiple
-                                "[:find ?attname ?value ?type-name ?cardinality
-                                  :in $ ?e
-                                  :where [?e ?att ?value]
-                                         [?att :db/valueType ?type]
-                                         [?type :fressian/tag ?type-name]
-                                         [?att :db/cardinality ?card]
-                                         [?card :db/ident ?cardinality]
-                                         [?att :db/ident ?attname]]" database entity-id)
-                               follow-references))
+(define (datomic/get-entity database entity-id)
+  (j "db.entity(eid);"
+     `((db ,database)
+       (eid ,(->jobject entity-id)))))
 
 ;;
 ;; Return a list of datomic tx ids of an specific entity sorted
@@ -340,8 +330,7 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 (define* (datomic/travel-machine connection-retriever
                                  entity-history
                                  entity-id
-                                 depth
-                                 (follow-references: follow-references #f))
+                                 depth)
   (let ((entity-history-length (length entity-history)))
     (cond [(< depth 0)
            (throw (make-error 'datomic/time-machine "depth should be greater than zero: ~a" depth))]
@@ -349,10 +338,10 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
           [(>= depth entity-history-length)
            (throw (make-error 'datomic/time-machine "depth should be less than ~a: ~a" entity-history-length depth))]
 
-          [else (datomic/get-filled-entity
+          [else (datomic/get-entity
                  (datomic/as-of (datomic/db (connection-retriever))
                                 (datomic/tx->t (list-ref entity-history depth)))
-                 entity-id 'follow-references: follow-references)])))
+                 entity-id)])))
 
 (create-shortcuts (datomic/query -> d/q)
                   (datomic/smart-query -> d/sq) ; <-- deprecated!
