@@ -2,14 +2,14 @@
 
 (require-extension (lib iasylum/match))
 (require-extension (lib iasylum/jcode))
-(require-extension (lib iasylum/log))
 (require-extension (lib iasylum/iasylum))
 
 (module iasylum/work-queue
   (make-queue
    process-all-work
    get-next-worker-n
-   start-worker)
+   start-worker
+   put-log-trace)
   (import s2j)
   (include "work-queue-code.scm"))
 
