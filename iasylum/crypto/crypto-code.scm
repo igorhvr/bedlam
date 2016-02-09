@@ -4,10 +4,12 @@
 (define iasylum.js (memoize (lambda () (file->string "/base/bedlam/iasylum/iasylum.js"))))
 (define crypto.js (memoize (lambda () (file->string "/base/bedlam/iasylum/crypto/crypto.js"))))
 
-(define (load-safe-sjcl-and-add-entropy)
-  (js (sjcl.js))
-  (js "sjcl.random.addEntropy(prn, 1024, 'nativeprgn-secure-random');"
-      `((prn ,(j "r=new byte[128]; java.security.SecureRandom.getInstance(\"NativePRNG\").nextBytes(r);Arrays.toString(r);")))))
+(define load-safe-sjcl-and-add-entropy
+  (lambda* ((js-manager: js-manager (get-local-javascript-manager)))
+           (js (sjcl.js) #f js-manager)
+           (js "sjcl.random.addEntropy(prn, 1024, 'nativeprgn-secure-random');"
+               `((prn ,(j "r=new byte[128]; java.security.SecureRandom.getInstance(\"NativePRNG\").nextBytes(r);Arrays.toString(r);")))
+               js-manager)))
 
 (define (get-seed-from str-p)
   (let* ( (str (sha256 str-p))
