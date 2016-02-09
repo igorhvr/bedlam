@@ -132,7 +132,7 @@
    ;; AP_NORTHEAST_1 / AP_SOUTHEAST_1 / AP_SOUTHEAST_2 / CN_NORTH_1 / EU_CENTRAL_1
    ;; EU_WEST_1 / GovCloud / SA_EAST_1 / US_EAST_1 / US_WEST_1 / US_WEST_2 
    (define (aws/make-region region-name)
-     (j "com.amazonaws.regions.Regions.valueOf(regionname);" `((regionname ,(->jstring region-name)))))
+     (j "com.amazonaws.regions.Region.getRegion(com.amazonaws.regions.Regions.valueOf(regionname));" `((regionname ,(->jstring region-name)))))
 
    (define aws/make-s3-client
      (lambda* (credentials (region: region #f))
