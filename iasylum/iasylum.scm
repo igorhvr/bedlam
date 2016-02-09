@@ -321,12 +321,12 @@
 
   (define debug-standard-thread-error-handler
     (lambda (error error-continuation)
-      (map syserr-log `("Error - will stop thread - details saved at " ,(save-to-somewhere (list error error-continuation)) " - " ,error ,error-continuation "\n"))
+      (map syserr-log `("Error - will stop thread - " ,(->string (j "Thread.currentThread().getName();")) " - details saved at " ,(save-to-somewhere (list error error-continuation)) " - " ,error ,error-continuation "\n"))
       (print-stack-trace error-continuation)))
 
   (define standard-thread-error-handler
     (lambda (error error-continuation)
-      (map syserr-log `("Error - will stop thread: " ,error ,error-continuation "\n"))
+      (map syserr-log `("Error - will stop thread "  ,(->string (j "Thread.currentThread().getName();")) ": " ,error ,error-continuation "\n"))
       (print-stack-trace error-continuation)))
   
   (define watched-parallel
