@@ -21,7 +21,7 @@
    aws/make-s3-client
    aws/s3-put-string
 
-   aws/s3-make-allow-GET-from-anywhere-CORS-rules
+   aws/s3-make-allow-GET-POST-from-anywhere-CORS-rules
    aws/s3-set-CORS
    aws/s3-create-bucket
    aws/s3-set-bucket-website-configuration
@@ -156,11 +156,11 @@
                          (omd ,omd)
                          (fl ,(string->java.io.InputStream string)) (s3 ,s3-client) (aclv ,aclv)))))))
    
-   (define (aws/s3-make-allow-GET-from-anywhere-CORS-rules)
+   (define (aws/s3-make-allow-GET-POST-from-anywhere-CORS-rules)
      (j "rule1 = new com.amazonaws.services.s3.model.CORSRule()
         .withId(\"CORSRule1\")
         .withAllowedMethods(Arrays.asList(new com.amazonaws.services.s3.model.CORSRule.AllowedMethods[] { 
-            com.amazonaws.services.s3.model.CORSRule.AllowedMethods.GET}))
+            com.amazonaws.services.s3.model.CORSRule.AllowedMethods.GET, com.amazonaws.services.s3.model.CORSRule.AllowedMethods.POST}))
         .withAllowedOrigins(Arrays.asList(new String[] {\"*\"}));
          Arrays.asList(new com.amazonaws.services.s3.model.CORSRule[] {rule1});"))
      
