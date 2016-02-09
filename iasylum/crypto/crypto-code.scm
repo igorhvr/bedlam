@@ -11,6 +11,12 @@
                `((prn ,(j "r=new byte[128]; java.security.SecureRandom.getInstance(\"NativePRNG\").nextBytes(r);Arrays.toString(r);")))
                js-manager)))
 
+(define crypto/prepare-javascript-manager
+  (lambda* ((js-manager: js-manager (get-local-javascript-manager)))
+           (load-safe-sjcl-and-add-entropy 'js-manager: js-manager)
+           (js (iasylum.js) #f js-manager)
+           (js (crypto.js) #f js-manager)))
+
 (define (get-seed-from str-p)
   (let* ( (str (sha256 str-p))
           (magic-str-tied-number           
@@ -26,10 +32,9 @@
            (assert (eqv? type 'sjcl_el_gammal_ecc_c256_key))
 
            (if (not string-to-generate-deterministically-from)
-               (load-safe-sjcl-and-add-entropy)
-               (js (sjcl.js-unsafe)))
-
-           (js (iasylum.js)) (js (crypto.js))
+               (crypto/prepare-javascript-manager)
+               (begin 
+                 (js (sjcl.js-unsafe))(js (iasylum.js))(js (crypto.js))))
 
            (unless string-to-generate-deterministically-from
              (js "sjcl.random.addEntropy(prn, 1024, 'nativeprgn-secure-random');"
@@ -54,25 +59,23 @@
                 ( "secretKey" . the-secret-key ) ) `(,(scheme->json the-public-key) ,(scheme->json the-secret-key))))))
 
 (define (asymmetric-encrypt key data)
-  (load-safe-sjcl-and-add-entropy) (js (iasylum.js)) (js (crypto.js))
+  (crypto/prepare-javascript-manager)  
   (->string (js "iasylum.crypto.asymmetric_encrypt(key, data);" `((key ,(->jstring key)) (data ,(->jstring data))))))
 
 (define (asymmetric-decrypt key data)
-  (load-safe-sjcl-and-add-entropy) (js (iasylum.js)) (js (crypto.js))
+  (crypto/prepare-javascript-manager)  
   (->string (js "iasylum.crypto.asymmetric_decrypt(key, data);" `((key ,(->jstring key)) (data ,(->jstring data))))))
 
 (define (symmetric-encrypt key data)
-  (load-safe-sjcl-and-add-entropy) (js (iasylum.js)) (js (crypto.js))
+  (crypto/prepare-javascript-manager)  
   (->string (js "iasylum.crypto.symmetric_encrypt(key, data);" `((key ,(->jstring key)) (data ,(->jstring data))))))
 
 (define (symmetric-decrypt key data)
-  (load-safe-sjcl-and-add-entropy) (js (iasylum.js)) (js (crypto.js))
+  (crypto/prepare-javascript-manager)  
   (->string (js "iasylum.crypto.symmetric_decrypt(key, data);" `((key ,(->jstring key)) (data ,(->jstring data))))))
 
 (define (hmac key data)
-  (load-safe-sjcl-and-add-entropy)
-  (js (iasylum.js))
-  (js (crypto.js))
+  (crypto/prepare-javascript-manager)  
   (->string (js "iasylum.crypto.hmac(key, data);" `((key ,(->jstring key))
                                                     (data ,(->jstring data))))))
 

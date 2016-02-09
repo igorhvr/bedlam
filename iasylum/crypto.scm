@@ -6,6 +6,7 @@
    get-seed-from
    asymmetric-encrypt asymmetric-decrypt
    symmetric-encrypt symmetric-decrypt
+   crypto/prepare-javascript-manager
    hmac)
 
   (include "crypto/crypto-code.scm"))
