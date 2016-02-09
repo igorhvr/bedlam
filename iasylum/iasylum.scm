@@ -48,7 +48,7 @@
    get-streams-in-zipfile
    get-streams-in-rarfile
    for-each-row-in-a-spreadsheet-in-a-zipfile
-   concurrent-semaphore
+   make-semaphore
    uuid-string
    uuid?
    get-all-jstreams
@@ -626,12 +626,15 @@
                 (else (error "Bug."))))
    (list (list path+filename (j "new java.io.FileInputStream(fname);" `((fname ,(->jstring path+filename))))))))
 
-  (define concurrent-semaphore
+  (define make-semaphore
     (lambda* ((initialPermits 0))
         (let ((inner-semaphore (j "new java.util.concurrent.Semaphore(ip);" `((ip ,(->jint initialPermits))))))
-          (match-lambda*                              
-           [('inc)
+          (match-lambda*
+           [('release)
             (release inner-semaphore)
+            (void)]
+           [('acquire)
+            (acquire inner-semaphore)
             (void)]
            [('inner-semaphore)
             inner-semaphore]
@@ -1117,6 +1120,7 @@
   (create-shortcuts (avg -> average))
 
   (define-generic-java-method release)
+  (define-generic-java-method acquire)
   (define-generic-java-method available-permits)
   
   (reset-d)
