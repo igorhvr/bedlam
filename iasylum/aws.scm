@@ -25,6 +25,7 @@
    aws/s3-set-CORS
    aws/s3-create-bucket
    aws/s3-set-bucket-website-configuration
+   aws/s3-set-bucket-versioning-configuration
    aws/s3-add-bucket-autoerasing-rule
    aws/s3-make-storage-class
    aws/s3-change-object-storage-class
@@ -180,6 +181,13 @@
    (define (aws/s3-set-bucket-website-configuration s3-client bucket-name index-doc error-doc)
      (j "s3client.setBucketWebsiteConfiguration(bucketname, new com.amazonaws.services.s3.model.BucketWebsiteConfiguration(indexdoc, errordoc));"
         `((indexdoc ,(->jstring index-doc)) (errordoc ,(->jstring error-doc)) (bucketname ,(->jstring bucket-name))
+          (s3client ,s3-client))))
+
+   (define (aws/s3-set-bucket-versioning-configuration s3-client bucket-name enable?)
+     (assert enable?) ; Disabling not yet implemented.
+     (j "bvc = new com.amazonaws.services.s3.model.BucketVersioningConfiguration().withStatus(\"Enabled\");
+         s3client.setBucketVersioningConfiguration(new com.amazonaws.services.s3.model.SetBucketVersioningConfigurationRequest(bucketname, bvc));"
+        `((bucketname ,(->jstring bucket-name))
           (s3client ,s3-client))))
    
    (define (aws/s3-add-bucket-autoerasing-rule s3-client bucket-name id days prefix)
