@@ -70,6 +70,6 @@ else
         D=";" ;;
     esac
       
-    $JAVA $JAVAOPT -XX:+UseCompressedOops -Xms256m -Xmx1G -DmaxStackTraceDepth=16 -classpath $SISC_HOME/sisc-opt.jar${D}$SISC_HOME/sisc.jar${D}$SISC_HOME/sisc-lib.jar${D}$CLASSPATH -Dsisc.home=$SISC_HOME sisc.REPL -h $SISC_HOME/sisc.shp $PROPERTIES $EXTENSIONS "$@"
+    $JAVA $JAVAOPT -XX:+UseCompressedOops -Xms256m -Xmx1G -XX:-UseGCOverheadLimit -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSClassUnloadingEnabled -XX:+OptimizeStringConcat -DmaxStackTraceDepth=16 -classpath $SISC_HOME/sisc-opt.jar${D}$SISC_HOME/sisc.jar${D}$SISC_HOME/sisc-lib.jar${D}$CLASSPATH -Dsisc.home=$SISC_HOME sisc.REPL -h $SISC_HOME/sisc.shp $PROPERTIES $EXTENSIONS "$@"
 fi
 
