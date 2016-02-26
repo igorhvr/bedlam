@@ -69,7 +69,12 @@ else
       CYGWIN* )
         D=";" ;;
     esac
-      
-    $JAVA $JAVAOPT -XX:+UseCompressedOops -Xms256m -Xmx1G -DmaxStackTraceDepth=16 -classpath $SISC_HOME/sisc-opt.jar${D}$SISC_HOME/sisc.jar${D}$SISC_HOME/sisc-lib.jar${D}$CLASSPATH -Dsisc.home=$SISC_HOME sisc.REPL -h $SISC_HOME/sisc.shp $PROPERTIES $EXTENSIONS "$@"
+
+    export MALLOC_ARENA_MAX=1
+
+    export LD_PRELOAD=/usr/local/lib/libjemalloc.so
+    export MALLOC_CONF=prof:true,lg_prof_interval:30,lg_prof_sample:17
+
+    $JAVA $JAVAOPT -agentpath:/home/felipelalli/app/yjp-2015-build-15088/bin/linux-x86-64/libyjpagent.so -XX:+HeapDumpOnOutOfMemoryError -XX:+UseCompressedOops -Xms256m -Xmx512m -XX:MaxDirectMemorySize=256m -DmaxStackTraceDepth=16 -classpath $SISC_HOME/sisc-opt.jar${D}$SISC_HOME/sisc.jar${D}$SISC_HOME/sisc-lib.jar${D}$CLASSPATH -Dsisc.home=$SISC_HOME sisc.REPL -h $SISC_HOME/sisc.shp $PROPERTIES $EXTENSIONS "$@"
 fi
 
