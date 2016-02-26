@@ -7,6 +7,7 @@
   (
    make-logger
    make-human-logger
+   make-display-logger
    make-empty-logger
    get-global-logger-to-this-thread
    set-global-logger-to-this-thread!
@@ -171,6 +172,10 @@
 
   (define (make-empty-logger)
     (lambda (level . message) #t))
+
+  (define (make-display-logger)
+    (lambda (level . message)
+      (apply d/n message)))
 
   (define-syntax with-logger
     (syntax-rules ()
