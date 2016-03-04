@@ -79,6 +79,18 @@
   (->string (js "iasylum.crypto.hmac(key, data);" `((key ,(->jstring key))
                                                     (data ,(->jstring data))))))
 
+;;
+;; - simple-date is today in format YYYYMMDD
+;; - service is "s3" e.g.
+;;
+(define (aws-signature what secret simple-date region service)
+  (crypto/prepare-javascript-manager)  
+  (->string (js "iasylum.crypto.aws_signature(a, b, c, d, e);"
+                `((a ,(->jstring what))
+                  (b ,(->jstring secret))
+                  (c ,(->jstring simple-date))
+                  (d ,(->jstring region))
+                  (e ,(->jstring service))))))
 
 ;; Sample usage:
 ;; (load "/base/bedlam/iasylum/crypto/crypto-code.scm") (define keypair (generate-keypair 'sjcl_el_gammal_ecc_c256_key))(define keypair-pub (match keypair ((public secret) public)))(define keypair-sec (match keypair ((public secret) secret))) (asymmetric-decrypt keypair-sec (asymmetric-encrypt keypair-pub "1234567"))

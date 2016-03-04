@@ -7,6 +7,7 @@
    asymmetric-encrypt asymmetric-decrypt
    symmetric-encrypt symmetric-decrypt
    crypto/prepare-javascript-manager
-   hmac)
+   hmac
+   aws-signature)
 
   (include "crypto/crypto-code.scm"))

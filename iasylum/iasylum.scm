@@ -98,6 +98,7 @@
    make-future
    only
    sum-alist
+   base64-encode
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -1149,6 +1150,11 @@
                                         result)
                               (cons `(,key . ,value) acc))))
           (list) alist))
+
+  (define (base64-encode o)
+    (->scm-object
+     (j "javax.xml.bind.DatatypeConverter.printBase64Binary(data.toString().getBytes());"
+        `((data ,(->jobject o))))))
 
   (create-shortcuts (avg -> average))
 

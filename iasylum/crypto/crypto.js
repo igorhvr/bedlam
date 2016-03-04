@@ -83,6 +83,18 @@ var iasylum_crypto = {
         var out = (new sjcl.misc.hmac(key, sjcl.hash.sha256)).mac(data);
         var hmac = sjcl.codec.hex.fromBits(out);
         return hmac;
+    },
+
+    'aws_signature' : function(policyBase64, secretKey, simpleDate, region, service) {
+	var DateKey = (new sjcl.misc.hmac(sjcl.codec.utf8String.toBits('AWS4' + secretKey),
+					  sjcl.hash.sha256)).mac(sjcl.codec.utf8String.toBits(simpleDate));
+
+	var DateRegionKey = (new sjcl.misc.hmac(DateKey, sjcl.hash.sha256)).mac(sjcl.codec.utf8String.toBits(region));
+	var DateRegionServiceKey = (new sjcl.misc.hmac(DateRegionKey, sjcl.hash.sha256)).mac(sjcl.codec.utf8String.toBits(service));
+	var SigningKey = (new sjcl.misc.hmac(DateRegionServiceKey, sjcl.hash.sha256)).mac(sjcl.codec.utf8String.toBits('aws4_request'));
+
+	return sjcl.codec.hex.fromBits((new sjcl.misc.hmac(SigningKey, sjcl.hash.sha256)).mac(
+            sjcl.codec.utf8String.toBits(policyBase64)));
     }
 
 };
