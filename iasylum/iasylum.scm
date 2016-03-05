@@ -337,9 +337,10 @@
   (define debug-watched-parallel
     (lambda fn-set
       (apply parallel (pam fn-set (lambda (fn) (delay (with/fc debug-standard-thread-error-handler fn)))))))
-  
+
   (define watched-thread/spawn
     (lambda* (p (error-handler: error-handler standard-thread-error-handler))
+        (assert (procedure? p))
         (thread/spawn
          (lambda ()
            (with/fc
@@ -348,12 +349,13 @@
 
   (define debug-watched-thread/spawn
     (lambda* (p (error-handler: error-handler debug-standard-thread-error-handler))
-             (thread/spawn
-              (lambda ()
-                (with/fc
-                 error-handler
-                 p)))))
-  
+        (assert (procedure? p))
+        (thread/spawn
+         (lambda ()
+           (with/fc
+            error-handler
+            p)))))
+
   (define r
     (lambda* (cmd-string (get-return-code #f))
         (define process-return-code)
