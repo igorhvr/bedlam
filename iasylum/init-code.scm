@@ -525,6 +525,8 @@
 
 (add-lib "javascript/j2v8_linux_x86_64-3.0.2.jar")
 
+(require-extension (lib iasylum/date))
+
 (set! load original-load)
 
 (define bedlam-loaded-and-ready-to-use #t)
