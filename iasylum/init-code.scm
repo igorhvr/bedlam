@@ -493,7 +493,9 @@
 ;; Incanter is a R-like environment for clojure that allows stuff similar to:
 ;; (clj "(use '(incanter core charts pdf)) (save-pdf (function-plot sin -4 4) \"./pdf-chart.pdf\")")
 ;; to be performed.
-(add-lib "u/incanter-1.5.6-SNAPSHOT-standalone.jar")
+;; Split in two archives to stay below 100 mb.
+(add-lib "u/incanter-1.5.6-SNAPSHOT-standalone-1_of_2.jar")
+(add-lib "u/incanter-1.5.6-SNAPSHOT-standalone-2_of_2.jar")
 
 (add-lib "u/clj-pdf-1.11.21-standalone.jar")
 
@@ -513,11 +515,11 @@
 (add-lib "aws-java-sdk/spring-3.0/spring-test-3.0.7.RELEASE.jar")
 (add-lib "aws-java-sdk/spring-3.0/spring-core-3.0.7.jar")
 (add-lib "aws-java-sdk/spring-3.0/spring-context-3.0.7.jar")
-(add-lib "aws-java-sdk/aws-java-sdk-1.10.44-sources.jar")
 (add-lib "aws-java-sdk/aspectjrt-1.8.2.jar")
 (add-lib "aws-java-sdk/aws-java-sdk-flow-build-tools-1.10.44.jar")
 (add-lib "aws-java-sdk/aspectjweaver.jar")
-(add-lib "aws-java-sdk/aws-java-sdk-1.10.44.jar")
+(add-lib "aws-java-sdk/aws-java-sdk-1.10.44-1_of_2.jar")
+(add-lib "aws-java-sdk/aws-java-sdk-1.10.44-2_of_2.jar")
 (add-lib "aws-java-sdk/freemarker-2.3.9.jar")
 
 (require-extension (lib iasylum/compression))
