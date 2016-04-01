@@ -99,6 +99,7 @@
    only
    sum-alist
    base64-encode
+   group-by-key-and-apply
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -1157,6 +1158,31 @@
     (->scm-object
      (j "javax.xml.bind.DatatypeConverter.printBase64Binary(data.toString().getBytes());"
         `((data ,(->jobject o))))))
+
+  ;;
+  ;; Apply the binary-fn to each element on the list from left to right,
+  ;; grouping by the key of the alist. The original order of elements is not kept.
+  ;;
+  ;; Example:
+  ;;
+  ;; (group-by-key-and-apply + 0 '(("a" . 3) ("b" . 4) ("d" . 8) ("b" . 6)))
+  ;; => (("b" . 10) ("d" . 8) ("a" . 3))
+  ;;
+  ;; (group-by-key-and-apply * 1 '(("a" . 3) ("b" . 4) ("d" . 8) ("b" . 6)))
+  ;; => (("b" . 24) ("d" . 8) ("a" . 3))
+  ;;
+  ;; (group-by-key-and-apply append '() '(("a" . (1 2 3)) ("b" . (4 5 6)) ("d" . (7 8 9)) ("b" . (10 11 12))))
+  ;; => (("b" 4 5 6 10 11 12) ("d" 7 8 9) ("a" 1 2 3))
+  ;;
+  (define (group-by-key-and-apply binary-fn neutral-value alist)
+    (fold (lambda (current acc)
+            (let* ((key (car current))
+                   (value (cdr current))
+                   (total (get key acc neutral-value)))
+              (cons (cons key (binary-fn total value))
+                    (remove (lambda (e) (equal? key (car e))) acc))))
+          '()
+          alist))
 
   (create-shortcuts (avg -> average))
 
