@@ -29,6 +29,10 @@
    aws/s3-add-bucket-autoerasing-rule
    aws/s3-make-storage-class
    aws/s3-change-object-storage-class
+
+   aws/iam-client
+   aws/iam-create-role
+   aws/iam-attach-role-policy
    )
    
    (define (aws/make-credentials access-key secret-key) (j "new com.amazonaws.auth.BasicAWSCredentials(accesskey, secretkey);" `((accesskey ,(->jstring access-key)) (secretkey ,(->jstring secret-key)))))
@@ -224,5 +228,39 @@
         (bucketname ,(->jstring bucket-name))
         (keyname ,(->jstring key-name))
         (storageclass ,storage-class))))
-   
+
+
+   (define (aws/iam-client credentials) (j "new com.amazonaws.services.identitymanagement.AmazonIdentityManagementClient(credentials);" `((credentials ,credentials))))
+
+   (define aws/iam-create-role
+     (lambda* (iam-client (assume-role-policy-document: assume-role-policy-document) (path: path "/") (role-name: role-name))
+              (let ((result (j "iamclient.createRole(
+                                                   new com.amazonaws.services.identitymanagement.model.CreateRoleRequest().
+                                                     withAssumeRolePolicyDocument(apd).
+                                                     withPath(pt).
+                                                     withRoleName(rn)).getRole();" `((iamclient ,iam-client)
+                                                                                                (apd ,(->jstring assume-role-policy-document))
+                                                                                                (pt ,(->jstring path))
+                                                                                                (rn ,(->jstring role-name))))))
+                `((path . ,(->scm-object (j "r.getPath();" `((r ,result)))))
+                  (role-name . ,(->scm-object (j "r.getRoleName();" `((r ,result)))))
+                  (role-id . ,(->scm-object (j "r.getRoleId();" `((r ,result)))))
+                  (arn . ,(->scm-object (j "r.getArn();" `((r ,result)))))
+                  (create-date . ,(->scm-object (j "r.getCreateDate();" `((r ,result)))))
+                  (assume-role-policy-document . ,(->scm-object (j "r.getAssumeRolePolicyDocument();" `((r ,result)))))))))
+
+   (define aws/iam-attach-role-policy
+     (lambda* (iam-client (role-name: role-name) (policy-arn: policy-arn))
+              (j "iamclient.attachRolePolicy(new com.amazonaws.services.identitymanagement.model.AttachRolePolicyRequest().withPolicyArn(pa).withRoleName(rn));"
+                 `((iamclient ,iam-client)
+                   (pa ,(->jstring policy-arn))
+                   (rn ,(->jstring role-name))))))
+ 
+
+   (define (aws/lambda-client credentials) (j "new com.amazonaws.services.lambda.AWSLambdaClient(credentials);" `((credentials ,credentials))))
+
+   ;;(define aws/lambda-create-function
+   ;;  (lambda* (lambda-client .... to be continued.
+
+                   
 )
