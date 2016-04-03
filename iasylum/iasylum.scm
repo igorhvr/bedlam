@@ -60,7 +60,6 @@
    function fn function* fn*
    times multiple-values->list
    sleep-milliseconds sleep-seconds sleep-minutes sleep-hours
-   current-date-utc current-date-utc-less-one-hour
    list-of-type?
    list-of
    alist?
@@ -91,10 +90,8 @@
    not-buggy-exact->inexact
    apply*
    let-parallel map-parallel
-   get-day-index get-day-index-utc
    atomic-execution
    select-sublist
-   time->millis
    make-future
    only
    sum-alist
@@ -120,13 +117,6 @@
   (define sleep-seconds (lambda (t) (sleep-milliseconds (* 1000 t))))
   (define sleep-minutes (lambda (t) (sleep-seconds (* 60 t))))
   (define sleep-hours (lambda (t) (sleep-minutes (* 60 t))))
-
-  (define (current-date-utc)
-    (current-date 0))
-
-  (define (current-date-utc-less-one-hour)
-    (time-utc->date (subtract-duration (date->time-utc (current-date-utc)) (make-time 'time-duration 0 (* 60 60)))
-                    0))
 
   (import hashtable)
   (import file-manipulation)  ;; rglob uses this.
@@ -1072,25 +1062,6 @@
                                                              element)))]))
 
   ;;
-  ;; Example of use: (get-day-index (current-date 0))
-  ;; If you want to get the current day index in UTC, use (get-day-index-utc)
-  ;;
-  (define* (get-day-index date (offset-seconds: offset-seconds 0))
-    (let ((date (if (= offset-seconds 0)
-                    date
-                    (time-utc->date (add-duration (date->time-utc date)
-                                                  (make-time time-duration 0 offset-seconds))))))
-      (sha256+ (date-year-day date)
-               (date-year date))))
-
-  ;;
-  ;; Return a string representing today.
-  ;; It changes every day after 00:00 UTC.
-  ;;
-  (define (get-day-index-utc)
-    (get-day-index (current-date 0)))
-
-  ;;
   ;; Use like this:
   ;;
   ;; (atomic-exection "lock name" body ...)
@@ -1120,13 +1091,6 @@
                (initial-index (min (max 0 initial-index) size)))
           (drop-right (drop lst initial-index)
                       (- last-index end-index)))))
-
-  ;;
-  ;; It returns an exact number. Use (floor ...) to make it an integer.
-  ;;
-  (define (time->millis t)
-    (+ (* 1000 (time-second t))
-       (/ (time-nanosecond t) 1000000)))
 
   (define* (make-future l)
     (let* ((define-future-result (make-parameter* #f))
