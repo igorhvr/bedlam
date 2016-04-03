@@ -1075,9 +1075,13 @@
   ;; Example of use: (get-day-index (current-date 0))
   ;; If you want to get the current day index in UTC, use (get-day-index-utc)
   ;;
-  (define (get-day-index date)
-    (sha256+ (date-year-day date)
-             (date-year date)))
+  (define* (get-day-index date (offset-seconds: offset-seconds 0))
+    (let ((date (if (= offset-seconds 0)
+                    date
+                    (time-utc->date (add-duration (date->time-utc date)
+                                                  (make-time time-duration 0 offset-seconds))))))
+      (sha256+ (date-year-day date)
+               (date-year date))))
 
   ;;
   ;; Return a string representing today.
