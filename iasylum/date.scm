@@ -30,7 +30,7 @@
     (let ((date (if (= offset-seconds 0)
                     date
                     (time-utc->date (add-duration (date->time-utc date)
-                                                  (make-time time-duration 0 offset-seconds))))))
+                                                  (make-time time-duration 0 offset-seconds)) 0))))
       (sha256+ (date-year-day date)
                (date-year date))))
 
