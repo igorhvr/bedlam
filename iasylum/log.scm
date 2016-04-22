@@ -5,26 +5,24 @@
 
 (module iasylum/log
   (
+   ; logger flavors
    make-slf4j-logger
-   
    make-human-logger
    make-display-logger
    make-empty-logger
 
+   ; under the hood
    get-global-logger-to-this-thread
    set-global-logger-to-this-thread!
 
+   ; high level:
    with-logger
    log-and-return
-   timestamped-log
 
-   ; remove?
-   get-thread-info
-   log-o
-   get-timestamp
-   make-mark-logger
+   ; extra:
    measure-time-interval-nano
 
+   ; facilities:
    log-time
    log-trace
    log-debug
@@ -33,71 +31,19 @@
    log-error
    log-fatal)
 
-  (define o-work-queue (make-queue))
-  
-  (define log-o)
-
-  (define-generic-java-field-accessors |out|)
+  ;(define-generic-java-field-accessors |out|)
   (define-java-class |java.lang.System|)
-  (define-generic-java-method |println|)
-  
-  (define (o-worker m)
-    ;spec: (j "System.out.println(m); System.out.flush();" `((m ,(->jstring m))))
-    (|println| (|out| (java-null |java.lang.System|)) (->jstring m))
-    (void))
-
-  (define-java-class |java.text.SimpleDateFormat|)
-  (define-java-class |java.util.Date|)
-  (define-generic-java-method |format|)
+  ;(define-generic-java-method |println|)
+  ;(define-java-class |java.text.SimpleDateFormat|)
+  ;(define-java-class |java.util.Date|)
+  ;(define-generic-java-method |format|)
   (define-generic-java-method |nanoTime|)
-
-  (define *ts-format* (->jstring "yyyy-MM-dd HH:mm:ss,SSS")  )
-  (define (get-timestamp)
-    (->string
-
-     ; spec: ;(j "new java.text.SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss,SSS\").format(new java.util.Date());")
-     (|format| (java-new |java.text.SimpleDateFormat| *ts-format* ) (java-new |java.util.Date|))
-     
-     ))
-  
-  (define (make-mark-logger mark)
-    (lambda (thread-info timestamp . m)
-      (timestamped-log mark thread-info timestamp m)))
-
-  (define-generic-java-method |getName|)
-  (define-generic-java-method |currentThread|)
-  (define-java-class |java.lang.Thread|)
-  
-  (define (get-thread-info)
-    (->string
-     
-     ;spec: (j "Thread.currentThread().getName();")
-     (|getName| (|currentThread| (java-null |java.lang.Thread|)))
-     
-     ))
-  
-  (define (timestamped-log mark thread-info timestamp m)
-    (log-o (iasylum-write-string (list mark thread-info timestamp m))))
 
   (let-syntax ((define-log-fn (syntax-rules ()
                                 [(_ name level-symbol)
                                  (define name
-                                   (and-let* ((work-queue (make-queue))
-                                              (put-fn (work-queue 'put-scm-lambda))
-                                              (worker (match-lambda* ([(thread-info logger timestamp params)]
-                                                        (apply logger
-                                                               `(,thread-info ,timestamp ,level-symbol ,@params)))))
-                                              ((start-worker worker work-queue
-                                                             'continue-forever: #t
-                                                             'log-trace-execution: (make-parameter* #f))))
-                                     (lambda params
-                                       (put-fn (list (get-thread-info)
-                                                     (get-global-logger-to-this-thread)
-                                                     (get-timestamp)                                                     
-                                                     params))
-                                       (void)
-                                       )))])))
-    
+                                   (lambda messages
+                                     (apply (get-global-logger-to-this-thread) (cons level-symbol messages))))])))
     (begin
       (define-log-fn log-trace 'trace)
       (define-log-fn log-debug 'debug)
@@ -108,11 +54,8 @@
 
   (define (get-global-logger-to-this-thread)
     (let ((global-logger (j "iu.M.d.get(\"logger-global_48729\");")))
-      (if (equal? (java-null)
-                  global-logger)
-          (begin
-            (set-default-global-logger!)
-            (get-global-logger-to-this-thread))
+      (if (equal? (java-null) global-logger)
+          (make-display-logger)
           (->scm-object (j "globalthread.get();"
                            `((globalthread ,global-logger)))))))
 
@@ -172,16 +115,6 @@
                        (lambda () body ...)
                        (lambda () (set-global-logger-to-this-thread! old-logger)))))))
 
-  (define (set-default-global-logger!)
-    (j "globalLogger = new ThreadLocal() {
-            protected Object initialValue() {
-                return defaultlogger;
-            }
-        };
-
-        iu.M.d.putIfAbsent(\"logger-global_48729\", globalLogger);"
-       `((defaultlogger ,(->jobject (make-slf4j-logger))))))
-
   (define-syntax log-and-return
     (syntax-rules ()
       ((_ log-fn description body ...)
@@ -219,18 +152,13 @@
       ((_ (debug-info log-fn) body ...)
        (log-time (debug-info log-fn log-warn 1000 ms) body ...))))
 
-  (set-default-global-logger!)
+  (j "globalLogger = new ThreadLocal() {
+            protected Object initialValue() {
+                return defaultlogger;
+            }
+        };
 
-  
-  (set! log-o
-        (let ((put-fn (o-work-queue 'put-scm-lambda)))
-          (lambda (m)
-           (put-fn m)
-           (void))))
-  
-  (start-worker o-worker o-work-queue 'continue-forever: #t 'log-trace-execution: (make-parameter* #f))
-
-  (start-worker (lambda (m) (apply log-trace m))  put-log-trace 'continue-forever: #t 'log-trace-execution: (make-parameter* #f))
-
+        iu.M.d.putIfAbsent(\"logger-global_48729\", globalLogger);"
+     `((defaultlogger ,(->jobject (make-slf4j-logger)))))
 )
   
