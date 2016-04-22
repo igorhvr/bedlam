@@ -1,54 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration> <!-- add status="trace" to enable debug mode -->
+<Configuration>
   <Properties>
-    <Property name="pattern">(&quot;%p&quot; &quot;%thread&quot; &quot;%d{ISO8601}&quot; (&quot;%enc{%m}&quot; &quot;%C(%M)&quot;)%n</Property>
+    <Property name="pattern1">(&quot;%p&quot; &quot;%thread&quot; &quot;%d{ISO8601}&quot; (&quot;%enc{%m}&quot; &quot;%C(%M)&quot;)%n</Property>
+    <Property name="pattern2">(&quot;%p&quot; &quot;%thread&quot; &quot;%d{ISO8601}&quot; (&quot;%enc{%m}&quot;)%n</Property>
   </Properties>
   <Appenders>
     <Console name="STDOUT" target="SYSTEM_OUT">
-      <PatternLayout pattern="${pattern}"/>
+      <PatternLayout pattern="${pattern2}"/>
     </Console>
-    <RollingFile name="FILE" fileName="/base/walltime/logs/wt.log"
-                 filePattern="/base/walltime/logs/$${date:yyyy-MM}/wt-%d{yyyy-MM-dd}-%i.log.gz">
-      <PatternLayout pattern="${pattern}"/>
+
+    <RollingFile name="EVERYTHING" fileName="/base/logs/everything/all.log"
+                 filePattern="/base/logs/everything/$${date:yyyy-MM}/app-%d{yyyy-MM-dd}-%i.log.gz">
+      <PatternLayout pattern="${pattern1}"/>
       <Policies>
         <TimeBasedTriggeringPolicy /><!-- Rotated everyday -->
         <SizeBasedTriggeringPolicy size="100 MB"/> <!-- Or every 100 MB -->
       </Policies>
     </RollingFile>
+
+    <RollingFile name="APPTRACE" fileName="/base/logs/app/app-trace.log"
+                 filePattern="/base/logs/app/$${date:yyyy-MM}/app-trace-%d{yyyy-MM-dd}-%i.log.gz">
+      <PatternLayout pattern="${pattern2}"/>
+      <Policies>
+        <TimeBasedTriggeringPolicy /><!-- Rotated everyday -->
+        <SizeBasedTriggeringPolicy size="100 MB"/> <!-- Or every 100 MB -->
+      </Policies>
+    </RollingFile>
+
+    <RollingFile name="APPDEBUG" fileName="/base/logs/app/app-debug.log"
+                 filePattern="/base/logs/app/$${date:yyyy-MM}/app-debug-%d{yyyy-MM-dd}-%i.log.gz">
+      <PatternLayout pattern="${pattern2}"/>
+      <Policies>
+        <TimeBasedTriggeringPolicy /><!-- Rotated everyday -->
+        <SizeBasedTriggeringPolicy size="100 MB"/> <!-- Or every 100 MB -->
+      </Policies>
+    </RollingFile>
+
+    <RollingFile name="APPINFO" fileName="/base/logs/app/app-info.log"
+                 filePattern="/base/logs/app/$${date:yyyy-MM}/app-info-%d{yyyy-MM-dd}-%i.log.gz">
+      <PatternLayout pattern="${pattern2}"/>
+      <Policies>
+        <TimeBasedTriggeringPolicy /><!-- Rotated everyday -->
+        <SizeBasedTriggeringPolicy size="100 MB"/> <!-- Or every 100 MB -->
+      </Policies>
+    </RollingFile>
+    
   </Appenders>
 
   <Loggers>
-    <Logger name="org.apache.log4j.xml" level="info" additivity="false">
-      <AppenderRef ref="FILE"/>
+    <Logger name="app" level="all">
+      <AppenderRef level="trace" ref="APPTRACE"/>
+      <AppenderRef level="debug" ref="APPDEBUG"/>
+      <AppenderRef level="info" ref="APPINFO"/>
     </Logger>
 
-    <Logger name="datomic" level="info" additivity="false">
-      <AppenderRef ref="FILE"/>
-    </Logger>
-    
-    <Logger name="org.hornetq" level="warn" additivity="false">
-      <AppenderRef ref="FILE"/>
-    </Logger>
-    
-    <Logger name="org.jboss.logging" level="warn" additivity="false">
-      <AppenderRef ref="FILE"/>
-    </Logger>
-    
-    <Logger name="org.quartz" level="info" additivity="false">
-      <AppenderRef ref="FILE"/>
-    </Logger>
-    
-    <Logger name="closureJobLogger" level="warn" additivity="false">
-      <AppenderRef ref="FILE"/>
-    </Logger>
-    
-    <Logger name="com.healthmarketscience.jackcess.PageChannel" level="warn" additivity="false">
-      <AppenderRef ref="FILE"/>
-    </Logger>
-
-    <Root level="warn">
-      <AppenderRef ref="FILE"/>
-      <AppenderRef ref="STDOUT"/>
+    <Root level="all">
+      <AppenderRef ref="EVERYTHING"/>
+      <AppenderRef level="info" ref="STDOUT"/>
     </Root>
 
   </Loggers>
