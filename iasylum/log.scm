@@ -10,17 +10,21 @@
    make-human-logger
    make-display-logger
    make-empty-logger
+
    get-global-logger-to-this-thread
    set-global-logger-to-this-thread!
+
    with-logger
    log-and-return
+   timestamped-log
 
+   ; remove?
    get-thread-info
    log-o
    get-timestamp
    make-mark-logger
-   timestamped-log
    measure-time-interval-nano
+
    log-time
    log-trace
    log-debug
