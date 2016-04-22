@@ -5,7 +5,8 @@
 
 (module iasylum/log
   (
-   make-logger
+   make-slf4j-logger
+   
    make-human-logger
    make-display-logger
    make-empty-logger
@@ -115,41 +116,6 @@
     (j "iu.M.d.get(\"logger-global_48729\").set(newlogger);"
        `((newlogger ,(->jobject logger)))))
 
-  ;;
-  ;; It is useful when you will use the same information several times,
-  ;; e.g. transaction-id.
-  ;;
-  ;; Example:
-  ;; (make-logger <module-name> <transaction-id> <ip> <any-important-information> ...)
-  ;; => logger
-  ;;
-  ;; using logger:
-  ;; (logger 'trace "message1" "message2")
-  ;; => ("TRACE" "[thread=9]" "2014-05-20 05:11:06.506"
-  ;;             (<module-name> <transaction-id> <ip>
-  ;;              <any-important-information> ... "message1" "message2"))
-  ;;
-  (define-syntax make-logger
-    (syntax-rules ()
-      ((_ <custom-info> ...)
-       (let* ((log-trace (make-mark-logger "TRACE"))
-              (log-debug (make-mark-logger "DEBUG"))
-              (log-info  (make-mark-logger "INFO"))
-              (log-warn  (make-mark-logger "WARN"))
-              (log-error (make-mark-logger "ERROR"))
-              (log-fatal (make-mark-logger "FATAL"))
-              (log-hash (alist->hashtable `((trace . ,log-trace)
-                                            (debug . ,log-debug)
-                                            (info  . ,log-info)
-                                            (warn  . ,log-warn)
-                                            (error . ,log-error)
-                                            (fatal . ,log-fatal)))))
-         (lambda (thread-info timestamp level . message)
-           (apply (cut (hashtable/get log-hash level log-error)
-                       thread-info
-                       timestamp
-                       <custom-info> ... <...>) message))))))
-
   (define-syntax make-human-logger
     (syntax-rules ()
       ((_ min-level)
@@ -169,6 +135,23 @@
                                                                                  timestamp
                                                                                  "\n"))
                                                            message (list "\n"))))))))))
+
+  (define make-slf4j-logger
+    (lambda extra-params
+      ;(let ((jlogger (j "org.apache.log4j.Logger.getLogger(\"app\");")))
+      (let ((jlogger (j "org.apache.logging.log4j.LogManager.getLogger(\"app\");")))
+        (lambda (level . messages)
+          (assert (or (eq? level 'trace)
+                      (eq? level 'debug)
+                      (eq? level 'info)
+                      (eq? level 'warn)
+                      (eq? level 'error)
+                      (eq? level 'fatal)))
+          (j (string-append* "logger." level "(message);")
+             `((logger ,jlogger)
+               (message ,(->jstring (apply add-between (append (list " ")
+                                                               extra-params
+                                                               messages))))))))))
 
   (define (make-empty-logger)
     (lambda (level . message) #t))
@@ -193,7 +176,7 @@
         };
 
         iu.M.d.putIfAbsent(\"logger-global_48729\", globalLogger);"
-       `((defaultlogger ,(->jobject (make-logger))))))
+       `((defaultlogger ,(->jobject (make-slf4j-logger))))))
 
   (define-syntax log-and-return
     (syntax-rules ()
