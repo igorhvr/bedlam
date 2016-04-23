@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
   <Properties>
-    <Property name="pattern1">(&quot;%p&quot; &quot;%thread&quot; &quot;%d{ISO8601}&quot; (&quot;%enc{%m}&quot; &quot;%C(%M)&quot;)%n</Property>
-    <Property name="pattern2">(&quot;%p&quot; &quot;%thread&quot; &quot;%d{ISO8601}&quot; (&quot;%enc{%m}&quot;)%n</Property>
+    <Property name="pattern1">(&quot;%p&quot; &quot;%thread&quot; &quot;%d{ISO8601}&quot; (&quot;%m&quot; &quot;%C(%M)&quot;)%n</Property>
+    <Property name="pattern2">(&quot;%p&quot; &quot;%thread&quot; &quot;%d{ISO8601}&quot; (&quot;%m&quot;)%n</Property>
   </Properties>
   <Appenders>
     <Console name="STDOUT" target="SYSTEM_OUT">
