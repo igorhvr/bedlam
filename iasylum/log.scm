@@ -6,9 +6,7 @@
 (module iasylum/log
   (
    ; logger flavors
-   make-slf4j-logger
-   make-human-logger
-   make-display-logger
+   make-logger
    make-empty-logger
 
    ; under the hood
@@ -24,6 +22,7 @@
 
    ; facilities:
    log-time
+   
    log-trace
    log-debug
    log-info
@@ -31,12 +30,8 @@
    log-error
    log-fatal)
 
-  ;(define-generic-java-field-accessors |out|)
   (define-java-class |java.lang.System|)
-  ;(define-generic-java-method |println|)
-  ;(define-java-class |java.text.SimpleDateFormat|)
-  ;(define-java-class |java.util.Date|)
-  ;(define-generic-java-method |format|)
+
   (define-generic-java-method |nanoTime|)
 
   (let-syntax ((define-log-fn (syntax-rules ()
@@ -63,29 +58,8 @@
     (j "iu.M.d.get(\"logger-global_48729\").set(newlogger);"
        `((newlogger ,(->jobject logger)))))
 
-  (define-syntax make-human-logger
-    (syntax-rules ()
-      ((_ min-level)
-       (let ((level-hash (alist->hashtable `((trace . 0)
-                                             (debug . 1)
-                                             (info  . 2)
-                                             (warn  . 3)
-                                             (error . 4)
-                                             (fatal . 5)))))
-         (lambda (thread-info timestamp level . message)
-           (if (>= (hashtable/get level-hash level 0)
-                   (hashtable/get level-hash min-level 0))
-               (apply d (add-between-elements "\n" (append (list (string-append* "______ "
-                                                                                 (string-upcase (symbol->string level))
-                                                                                 " ________________________"
-                                                                                 " (" thread-info ") "
-                                                                                 timestamp
-                                                                                 "\n"))
-                                                           message (list "\n"))))))))))
-
-  (define make-slf4j-logger
+  (define make-logger
     (lambda extra-params
-      ;(let ((jlogger (j "org.apache.log4j.Logger.getLogger(\"app\");")))
       (let ((jlogger (j "org.apache.logging.log4j.LogManager.getLogger(\"app\");")))
         (lambda (level . messages)
           (assert (or (eq? level 'trace)
@@ -102,10 +76,6 @@
 
   (define (make-empty-logger)
     (lambda (level . message) #t))
-
-  (define (make-display-logger)
-    (lambda (level . message)
-      (apply d/n message)))
 
   (define-syntax with-logger
     (syntax-rules ()
@@ -159,6 +129,6 @@
         };
 
         iu.M.d.putIfAbsent(\"logger-global_48729\", globalLogger);"
-     `((defaultlogger ,(->jobject (make-slf4j-logger)))))
+     `((defaultlogger ,(->jobject (make-logger)))))
 )
   
