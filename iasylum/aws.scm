@@ -24,6 +24,11 @@
    aws/s3-make-allow-GET-POST-from-anywhere-CORS-rules
    aws/s3-set-CORS
    aws/s3-create-bucket
+   aws/s3-delete-bucket
+   aws/s3-delete-bucket-recursively
+   aws/s3-blow-up-s3-and-regret-tears-of-blood-I-am-oficially-insane
+   aws/s3-list-buckets
+   aws/s3-list-buckets-names
    aws/s3-set-bucket-website-configuration
    aws/s3-set-bucket-versioning-configuration
    aws/s3-add-bucket-autoerasing-rule
@@ -181,6 +186,45 @@
    
    (define (aws/s3-create-bucket s3-client name)
      (j "s3client.createBucket(new com.amazonaws.services.s3.model.CreateBucketRequest(bucketname));" `((bucketname ,(->jstring name)) (s3client ,s3-client))))
+
+   (define (aws/s3-delete-bucket s3-client name)
+     (j "s3client.deleteBucket(new com.amazonaws.services.s3.model.DeleteBucketRequest(bucketname));" `((bucketname ,(->jstring name)) (s3client ,s3-client))))
+   
+   (define (aws/s3-delete-bucket-recursively s3-client name)
+     (j "while(true) {
+            objs=s3client.listObjects(new com.amazonaws.services.s3.model.ListObjectsRequest().withMaxKeys(maxkeys).withBucketName(bucketname)).getObjectSummaries();
+            fres=new java.util.ArrayList();
+            it=objs.iterator();
+            if(!it.hasNext()) break; // Finally empty.
+            while(it.hasNext()) {
+              nv=it.next();
+              fres.add(new com.amazonaws.services.s3.model.DeleteObjectsRequest.KeyVersion(nv.getKey()));
+            }
+            s3client.deleteObjects(new com.amazonaws.services.s3.model.DeleteObjectsRequest(bucketname).withKeys(fres));
+         }"
+        `((maxkeys ,(->jint 512))
+          (bucketname ,(->jstring name))
+          (s3client ,s3-client)))
+     
+     (aws/s3-delete-bucket s3-client name))
+
+   (define aws/s3-blow-up-s3-and-regret-tears-of-blood-I-am-oficially-insane
+     (lambda* (s3-client (i-understand-that-this-will-OBLITERATE-every-s3-bucket-accessible-by-this-s3-client: go-ahead #f))
+              (if go-ahead
+                  (begin
+                    (d/n "I hope you know what you are doing. Waiting 10 seconds before starting...")
+                    (sleep-seconds 13)
+                    (map (lambda (element) (aws/s3-delete-bucket-recursively
+                                            s3-client
+                                            element))
+                         (aws/s3-list-buckets-names s3-client )))
+                  (d/n "If you really want to do this pass the 'i-understand-that-this-will-OBLITERATE-every-s3-bucket-accessible-by-this-s3-client: parameter as #t."))))
+
+   (define (aws/s3-list-buckets s3-client)
+     (j "s3client.listBuckets(new com.amazonaws.services.s3.model.ListBucketsRequest());" `((s3client ,s3-client))))
+
+   (define (aws/s3-list-buckets-names s3-client)
+     (map (lambda (v) (->string (j "v.getName();" `((v ,v))))) (iterable->list (aws/s3-list-buckets s3-client ))))
    
    (define (aws/s3-set-bucket-website-configuration s3-client bucket-name index-doc error-doc)
      (j "s3client.setBucketWebsiteConfiguration(bucketname, new com.amazonaws.services.s3.model.BucketWebsiteConfiguration(indexdoc, errordoc));"
