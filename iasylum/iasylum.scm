@@ -823,12 +823,14 @@
   ;;
   (define* (retry-blocking-until-succeed (retry-n-times: retry-n-times)
                                          (sleep-between-retry-ms: sleep-between-retry-ms 1000)
+                                         (on-error: on-error-thunk (lambda a a))
                                          thunk)
     (let retry ((retry-counter 0))
       (if (>= retry-counter retry-n-times)
           (thunk) ; last attempt
           (or (try-and-if-it-fails-object (#f) (thunk))
-              (begin (sleep sleep-between-retry-ms)
+              (begin (on-error-thunk)
+                     (sleep sleep-between-retry-ms)
                      (retry (+ retry-counter 1)))))))
 
   ;; (dynamic-define "abc" 123)
