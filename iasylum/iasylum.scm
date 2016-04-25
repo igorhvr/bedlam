@@ -67,6 +67,7 @@
    try-and-if-it-fails-object
    try-and-if-it-fails-or-empty-or-java-null-return-object
    try-and-if-it-throws-object
+   retry-blocking-until-succeed
    dynamic-define
    create-shortcuts
    to-csv-line
@@ -810,7 +811,26 @@
   (define-custom-try-and-if-it-fails-return-object
     try-and-if-it-throws-object
     (lambda (result) #f))
-  
+
+  ;;
+  ;; Block until the thunk execution succeed. The default is sleep 1 sec
+  ;; between each retry.
+  ;;
+  ;; Example usage: (retry-blocking-until-succeed 'retry-n-times: 10
+  ;;                                              (lambda ()
+  ;;                                                (display "retrying...")
+  ;;                                                (/ 2 0)))
+  ;;
+  (define* (retry-blocking-until-succeed (retry-n-times: retry-n-times)
+                                         (sleep-between-retry-ms: sleep-between-retry-ms 1000)
+                                         thunk)
+    (let retry ((retry-counter 0))
+      (if (>= retry-counter retry-n-times)
+          (thunk) ; last attempt
+          (or (try-and-if-it-fails-object (#f) (thunk))
+              (begin (sleep sleep-between-retry-ms)
+                     (retry (+ retry-counter 1)))))))
+
   ;; (dynamic-define "abc" 123)
   ;; $ abc => 123
   (define-syntax dynamic-define
