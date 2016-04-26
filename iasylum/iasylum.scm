@@ -828,7 +828,7 @@
     (let retry ((retry-counter 0))
       (if (>= retry-counter retry-n-times)
           (thunk) ; last attempt
-          (or (try-and-if-it-fails-object (#f) (thunk))
+          (or (try-and-if-it-throws-object (#f) (thunk))
               (begin (on-error-thunk)
                      (sleep sleep-between-retry-ms)
                      (retry (+ retry-counter 1)))))))
