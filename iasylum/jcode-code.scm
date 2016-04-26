@@ -217,6 +217,20 @@
       jstreamtofile_result;"
      `((inputstream ,stream))))
 
+(define (java.io.InputStream->java.nio.ByteBuffer is)
+  (j "java.nio.ByteBuffer.wrap(org.apache.commons.io.IOUtils.toByteArray(is));" `((is ,is))))
+
+(define (java.io.File->java.nio.ByteBuffer file)
+  (j "fIn = new java.io.FileInputStream(fl);
+      fChan = fIn.getChannel();
+      fSize = fChan.size();
+      mBuf = java.nio.ByteBuffer.allocate((int) fSize);
+      fChan.read(mBuf);
+      mBuf.rewind();
+      fChan.close(); 
+      fIn.close();
+      mBuf;" `((fl ,(->jstring file)))))
+
 (define (string->java.io.InputStream s)
   (let* ((input-port (open-input-string s))
          (jreader (->jreader input-port))

@@ -154,6 +154,8 @@
      string->jbigdecimal
      string->jbigint
      jstream->tmp-file
+     java.io.InputStream->java.nio.ByteBuffer
+     java.io.File->java.nio.ByteBuffer
      string->java.io.InputStream
      string->java.io.File
      java-equals?
