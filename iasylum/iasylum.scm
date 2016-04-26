@@ -1114,7 +1114,7 @@
 
   (define* (make-future l)
     (let* ((define-future-result (make-parameter* #f))
-           (thread-handle (watched-thread/spawn (lambda () (let ((result (l))) (define-future-result result))))))
+           (thread-handle (watched-thread/spawn (lambda () (let ((result (try-and-if-it-fails-or-empty-or-java-null-return-object () (l)))) (define-future-result result))))))
       (lambda* ((timeout-milliseconds: timeout #f))
         (if timeout
             (if (thread/join thread-handle timeout) (define-future-result) #f)
