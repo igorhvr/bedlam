@@ -38,6 +38,8 @@
    aws/iam-client
    aws/iam-create-role
    aws/iam-attach-role-policy
+
+   aws/make-lambda-client
    )
    
    (define (aws/make-credentials access-key secret-key) (j "new com.amazonaws.auth.BasicAWSCredentials(accesskey, secretkey);" `((accesskey ,(->jstring access-key)) (secretkey ,(->jstring secret-key)))))
@@ -301,10 +303,40 @@
                    (rn ,(->jstring role-name))))))
  
 
-   (define (aws/lambda-client credentials) (j "new com.amazonaws.services.lambda.AWSLambdaClient(credentials);" `((credentials ,credentials))))
+   (define (aws/make-lambda-client credentials) (j "new com.amazonaws.services.lambda.AWSLambdaClient(credentials);" `((credentials ,credentials))))
 
-   ;;(define aws/lambda-create-function
-   ;;  (lambda* (lambda-client .... to be continued.
-
-                   
+   (define aws/lambda-create-function
+     (lambda* (lambda-client
+               (function-zip-file: function-zip-file) ; The code for the Lambda function.
+               (function-name: function-name) ; The name you want to assign to the function you are uploading.
+               (function-description: function-description function-name) ; A short, user-defined function description.
+               (handler: handler #f) ; The function within your code that Lambda calls to begin execution.
+               (memory-size: memory-size #f) ; The amount of memory, in MB, your Lambda function is given.
+               (publish: publish #t) ; This boolean parameter can be used to request AWS Lambda to create the Lambda function and publish a version as an atomic operation.
+               (IAM-role-ARN: role) ; The Amazon Resource Name (ARN) of the IAM role that Lambda assumes when it executes your function to access any other Amazon Web Services (AWS) resources.
+               (runtime: runtime) ; The runtime environment for the Lambda function you are uploading. Allowed values: nodejs, nodejs4.3, java8, python2.7
+               (timeout-seconds: timeout 3) ; The function execution time at which Lambda should terminate the function. 
+               (vpc-config: vpc-config #f) ; If your Lambda function accesses resources in a VPC, you provide this parameter identifying the list of security group IDs and subnet IDs. These must belong to the same VPC. You must provide at least one security group and one subnet ID.
+               )
+              (and-let* ((bytebuffer-thunk (make-future (lambda () (java.io.File->java.nio.ByteBuffer function-zip-file))))
+                         (function-code-thunk (make-future (lambda () (j "new com.amazonaws.services.lambda.model.FunctionCode().withZipFile(bytebufferp);" `((bytebufferp ,(bytebuffer-thunk)))))))
+                         (create-function-request (j "new com.amazonaws.services.lambda.model.CreateFunctionRequest();"))
+                         ((begin
+                            (j "cfr.setFunctionName(functionname);" `((functionname ,(->jstring function-name)) (cfr ,create-function-request)))
+                            (j "cfr.setDescription(desc);" `((desc ,(->jstring function-description)) (cfr ,create-function-request)))
+                            (when handler ((j "cfr.setHandler(handl);" `((handl ,(->jstring handler)) (cfr ,create-function-request)))))
+                            (when memory-size ((j "cfr.setMemorySize(mem);" `((mem ,(->jint memory-size)) (cfr ,create-function-request)))))
+                            (j "cfr.setPublish(pub);" `((pub ,(->jboolean publish)) (cfr ,create-function-request)))
+                            (j "cfr.setRole(role);" `((role ,(->jstring role)) (cfr ,create-function-request)))
+                            (j "cfr.setRuntime(role);" `((runtime ,(->jstring runtime)) (cfr ,create-function-request)))
+                            (j "cfr.setTimeout(tmt);" `((tmt ,(->jint timeout)) (cfr ,create-function-request)))
+                            (when vpc-config (j "cfr.setVpcConfig(vpcconfig);" `((vpccofig ,vpc-config) (cfr ,create-function-request))))
+                            #t)))
+                (d/n "THIS IS WORK IN PROGRESS.")
+                (j "lambdaclient.createFunction(cfr.withCode(functioncode));" `((cfr ,create-function-request)
+                                                                                (functioncode ,(function-code-thunk))
+                                                                                (lambdaclient ,lambda-client))))))
 )
+)
+
+              
