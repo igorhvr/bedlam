@@ -1,6 +1,10 @@
 FROM relateiq/oracle-java8
 MAINTAINER Igor Hjelmstrom Vinhas Ribeiro <igorhvr@iasylum.net>
 # Erase apt-get caches, then run update operation.
+
+ENV TERM xterm
+ENV DEBIAN_FRONTEND noninteractive
+
 RUN echo "2015-02-26" > /last_apt-get_update
 RUN cd /var/lib/apt ; rm -rf * 
 RUN apt-get -y update --fix-missing
