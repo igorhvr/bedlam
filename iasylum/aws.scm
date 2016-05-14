@@ -155,13 +155,23 @@
    ;; TODO: Use http://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/ClientConfiguration.html#setMaxErrorRetry(int)
    ;; somehow to be able to configure retry behavior when uploading data to s3. See if we can expand this to other stuff.
    (define aws/s3-put-string
-     (lambda* (s3-client bucket object string (public-read: public-read #f) (reduced-redundancy: reduced-redundancy #f))
+     (lambda* (s3-client bucket object string
+                         (mime-type: mime-type #f)
+                         (char-encoding: char-encoding "utf-8")
+                         (max-age: max-age 300)
+                         (public-read: public-read #f)
+                         (reduced-redundancy: reduced-redundancy #f))
               (let ((aclv (if public-read
                               (j "com.amazonaws.services.s3.model.CannedAccessControlList.PublicRead")
                               (j "com.amazonaws.services.s3.model.CannedAccessControlList.Private"))))
                 (let ((omd (j "new com.amazonaws.services.s3.model.ObjectMetadata();")))
                     (when reduced-redundancy (j "omd.setHeader(\"x-amz-storage-class\", \"REDUCED_REDUNDANCY\");" `((omd ,omd))))
-                    
+                    (when char-encoding (j "omd.setContentEncoding(enc);" `((omd ,omd)
+                                                                            (enc ,(->jstring char-encoding)))))
+                    (when mime-type (j "omd.setContentType(ctype);" `((omd ,omd)
+                                                                      (ctype ,(->jstring mime-type)))))
+                    (when max-age (j "omd.setCacheControl(mage);" `((omd ,omd)
+                                                                    (mage ,(->jstring (format "max-age=~a" max-age))))))
                     (j "s3.putObject(new com.amazonaws.services.s3.model.PutObjectRequest(bucket, objname, fl, omd).withCannedAcl(aclv));"
                        `((bucket ,(->jstring bucket))
                          (objname ,(->jstring object))
@@ -170,12 +180,15 @@
    
    (define (aws/s3-make-allow-GET-POST-from-anywhere-CORS-rules)
      (j "rule1 = new com.amazonaws.services.s3.model.CORSRule()
-        .withId(\"CORSRule1\")
+        .withId(corid)
+        .withAllowedHeaders(Arrays.asList(new String[] { \"*\" }))
+        .withMaxAgeSeconds(3000)
         .withAllowedMethods(Arrays.asList(new com.amazonaws.services.s3.model.CORSRule.AllowedMethods[] { 
             com.amazonaws.services.s3.model.CORSRule.AllowedMethods.GET, com.amazonaws.services.s3.model.CORSRule.AllowedMethods.POST}))
-        .withAllowedOrigins(Arrays.asList(new String[] {\"*\"}));
-         Arrays.asList(new com.amazonaws.services.s3.model.CORSRule[] {rule1});"))
-     
+        .withAllowedOrigins(Arrays.asList(new String[] { \"*\" }));
+         Arrays.asList(new com.amazonaws.services.s3.model.CORSRule[] {rule1});"
+        `((corid ,(->jstring (uuid-string))))))
+
 
    (define (aws/s3-set-CORS s3-client bucket-name rules)
      (j 
