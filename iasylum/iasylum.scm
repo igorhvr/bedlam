@@ -98,6 +98,7 @@
    sum-alist
    base64-encode
    group-by-key-and-apply
+   get-env
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -1173,6 +1174,14 @@
                     (remove (lambda (e) (equal? key (car e))) acc))))
           '()
           alist))
+
+  ;;
+  ;; Get environment variable.
+  ;;
+  ;; (get-env "PATH") => /usr/local/sbin:/usr/local/bin
+  ;;
+  (define (get-env var-name)
+    (r/s (format "echo -n $~a" var-name)))
 
   (create-shortcuts (avg -> average))
 
