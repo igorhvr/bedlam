@@ -171,8 +171,6 @@
                      (bytearray (j "org.apache.commons.io.IOUtils.toByteArray(is);" `((is ,byte-array-input-stream))))
                      (length (->scm-object (j "ba.length" `((ba ,bytearray))))))
                 (when reduced-redundancy (j "omd.setHeader(\"x-amz-storage-class\", \"REDUCED_REDUNDANCY\");" `((omd ,omd))))
-                (when char-encoding (j "omd.setContentEncoding(enc);" `((omd ,omd)
-                                                                        (enc ,(->jstring char-encoding)))))
                 (when mime-type (j "omd.setContentType(ctype);" `((omd ,omd)
                                                                   (ctype ,(->jstring mime-type)))))
                 (when max-age (j "omd.setCacheControl(mage);" `((omd ,omd)
