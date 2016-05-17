@@ -28,7 +28,8 @@
     (lambda* (destinationUrl contents (headers: headers #f))
              (let ((httppost (j "httpclient = org.apache.http.impl.client.HttpClients.createDefault();
                                  httppost = new org.apache.http.client.methods.HttpPost(destinationurl);
-                                 httppost;")))
+                                 httppost;"
+                                `((destinationurl ,(->jstring destinationUrl))))))
                
                (map (lambda (v)  (match-let ( ( (vname vvalue) v ) )
                                             (j "httppost.addHeader(hn, hv);"`((hn ,(->jstring vname)) (hv ,(->jstring vvalue)) (httppost ,httppost)))
@@ -48,8 +49,7 @@
                   }
           
                   result;"
-                  `((destinationurl ,(->jstring destinationUrl))
-                    (contents ,(->jstring contents))
+                  `((contents ,(->jstring contents))
                     (httppost ,httppost)))))))
 
 )
