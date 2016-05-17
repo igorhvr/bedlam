@@ -19,7 +19,10 @@
 
    aws/make-region
    aws/make-s3-client
+
+   aws/s3-put-binary
    aws/s3-put-string
+   aws/s3-put-file
 
    aws/s3-make-allow-GET-POST-from-anywhere-CORS-rules
    aws/s3-set-CORS
@@ -154,21 +157,18 @@
 
    ;; TODO: Use http://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/ClientConfiguration.html#setMaxErrorRetry(int)
    ;; somehow to be able to configure retry behavior when uploading data to s3. See if we can expand this to other stuff.
-   (define aws/s3-put-string
-     (lambda* (s3-client bucket object string
-                         (mime-type: mime-type #f)
-                         (char-encoding: char-encoding "utf-8")
-                         (max-age: max-age 300)
-                         (public-read: public-read #f)
-                         (reduced-redundancy: reduced-redundancy #f))
+   (define aws/s3-put-binary
+     (lambda* (s3-client bucket object byte-array-input-stream
+               (mime-type: mime-type #f)
+               (char-encoding: char-encoding "utf-8")
+               (max-age: max-age 300)
+               (public-read: public-read #f)
+               (reduced-redundancy: reduced-redundancy #f))
               (let* ((aclv (if public-read
                                (j "com.amazonaws.services.s3.model.CannedAccessControlList.PublicRead")
                                (j "com.amazonaws.services.s3.model.CannedAccessControlList.Private")))
-                     (omd (j "new com.amazonaws.services.s3.model.ObjectMetadata();"))
-                     (is (j "new java.io.ByteArrayInputStream(str.getBytes(encoding))" `((encoding ,(->jstring
-                                                                                                     (string-upcase char-encoding)))
-                                                                                         (str ,(->jstring string)))))
-                     (bytearray (j "org.apache.commons.io.IOUtils.toByteArray(is);" `((is ,is))))
+                     (omd (j "new com.amazonaws.services.s3.model.ObjectMetadata();"))                    
+                     (bytearray (j "org.apache.commons.io.IOUtils.toByteArray(is);" `((is ,byte-array-input-stream))))
                      (length (->scm-object (j "ba.length" `((ba ,bytearray))))))
                 (when reduced-redundancy (j "omd.setHeader(\"x-amz-storage-class\", \"REDUCED_REDUNDANCY\");" `((omd ,omd))))
                 (when char-encoding (j "omd.setContentEncoding(enc);" `((omd ,omd)
@@ -178,15 +178,47 @@
                 (when max-age (j "omd.setCacheControl(mage);" `((omd ,omd)
                                                                 (mage ,(->jstring (format "max-age=~a" max-age))))))
                 (j "omd.setContentLength(lgt);" `((lgt ,(->jlong length))))
-                (j "is.reset();" `((is ,is)))
+                (j "is.reset();" `((is ,byte-array-input-stream)))
                 (j "s3.putObject(new com.amazonaws.services.s3.model.PutObjectRequest(bucket, objname, fl, omd).withCannedAcl(aclv));"
                    `((bucket ,(->jstring bucket))
                      (objname ,(->jstring object))
                      (omd ,omd)
-                     (fl ,is)
+                     (fl ,byte-array-input-stream)
                      (s3 ,s3-client)
                      (aclv ,aclv))))))
-   
+
+   (define aws/s3-put-file
+     (lambda* (s3-client bucket object file-full-path
+               (mime-type: mime-type #f)
+               (char-encoding: char-encoding "utf-8")
+               (max-age: max-age 300)
+               (public-read: public-read #f)
+               (reduced-redundancy: reduced-redundancy #f))
+              (aws/s3-put-binary s3-client bucket object
+                                 (j "new java.io.ByteArrayInputStream(org.apache.commons.io.FileUtils.readFileToByteArray(new java.io.File(filename)));"
+                                    `((filename ,(->jstring file-full-path))))
+                                 'mime-type: mime-type
+                                 'max-age: max-age
+                                 'public-read: public-read
+                                 'reduced-redundancy: reduced-redundancy)))
+
+   (define aws/s3-put-string
+     (lambda* (s3-client bucket object string
+               (mime-type: mime-type #f)
+               (char-encoding: char-encoding "utf-8")
+               (max-age: max-age 300)
+               (public-read: public-read #f)
+               (reduced-redundancy: reduced-redundancy #f))
+              (aws/s3-put-binary s3-client bucket object
+                                 (j "new java.io.ByteArrayInputStream(str.getBytes(encoding))"
+                                    `((encoding ,(->jstring
+                                                  (string-upcase char-encoding)))
+                                      (str ,(->jstring string))))
+                                 'mime-type: mime-type
+                                 'max-age: max-age
+                                 'public-read: public-read
+                                 'reduced-redundancy: reduced-redundancy)))
+
    (define (aws/s3-make-allow-GET-POST-from-anywhere-CORS-rules)
      (j "rule1 = new com.amazonaws.services.s3.model.CORSRule()
         .withId(corid)
