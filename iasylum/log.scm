@@ -5,85 +5,67 @@
 
 (module iasylum/log
   (
-   ; logger flavors
-   make-logger
-   make-empty-logger
-
-   ; under the hood
-   get-global-logger-to-this-thread
-   set-global-logger-to-this-thread!
-
-   ; high level:
-   with-logger
-   log-and-return
-
-   ; extra:
-   measure-time-interval-nano
-
-   ; facilities:
-   log-time
-   
+   ; standard logs:
    log-trace
    log-debug
    log-info
    log-warn
    log-error
-   log-fatal)
+   log-fatal
+
+   ; extra:
+   log-and-return
+   measure-time-interval-nano
+   log-time
+   append-to-loggers
+   )
 
   (define-java-class |java.lang.System|)
-
   (define-generic-java-method |nanoTime|)
+  (define-generic-java-method |trace|)
+  (define-generic-java-method |debug|)
+  (define-generic-java-method |info|)
+  (define-generic-java-method |warn|)
+  (define-generic-java-method |error|)
+  (define-generic-java-method |fatal|)
 
-  (let-syntax ((define-log-fn (syntax-rules ()
-                                [(_ name level-symbol)
-                                 (define name
-                                   (lambda messages
-                                     (apply (get-global-logger-to-this-thread) (cons level-symbol messages))))])))
-    (begin
-      (define-log-fn log-trace 'trace)
-      (define-log-fn log-debug 'debug)
-      (define-log-fn log-info 'info)
-      (define-log-fn log-warn 'warn)
-      (define-log-fn log-error 'error)
-      (define-log-fn log-fatal 'fatal)))
+  (define generic-log
+    (let ((jlogger (j "org.apache.logging.log4j.LogManager.getLogger(\"app\");")))
+      (lambda (level . messages)
+        (let ((method (cond [(eq? level 'trace) |trace|]
+                            [(eq? level 'debug) |debug|]
+                            [(eq? level 'info)  |info|]
+                            [(eq? level 'warn)  |warn|]
+                            [(eq? level 'error) |error|]
+                            [(eq? level 'fatal) |fatal|]
+                            [else (throw (make-error "Invalid level: ~a" level))])))
+          (method jlogger (->jstring (apply add-between (append (list " ")
+                                                                messages))))))))
 
-  (define (get-global-logger-to-this-thread)
-    (let ((global-logger (j "iu.M.d.get(\"logger-global_48729\");")))
-      (if (equal? (java-null) global-logger)
-          (make-display-logger)
-          (->scm-object (j "globalthread.get();"
-                           `((globalthread ,global-logger)))))))
+  (define log-trace (cut generic-log 'trace <...>))
+  (define log-debug (cut generic-log 'debug <...>))
+  (define log-info (cut generic-log 'info <...>))
+  (define log-warn (cut generic-log 'warn <...>))
+  (define log-error (cut generic-log 'error <...>))
+  (define log-fatal (cut generic-log 'fatal <...>))
 
-  (define (set-global-logger-to-this-thread! logger)
-    (j "iu.M.d.get(\"logger-global_48729\").set(newlogger);"
-       `((newlogger ,(->jobject logger)))))
-
-  (define make-logger
-    (lambda extra-params
-      (let ((jlogger (j "org.apache.logging.log4j.LogManager.getLogger(\"app\");")))
-        (lambda (level . messages)
-          (assert (or (eq? level 'trace)
-                      (eq? level 'debug)
-                      (eq? level 'info)
-                      (eq? level 'warn)
-                      (eq? level 'error)
-                      (eq? level 'fatal)))
-          (j (string-append* "logger." level "(message);")
-             `((logger ,jlogger)
-               (message ,(->jstring (apply add-between (append (list " ")
-                                                               extra-params
-                                                               messages))))))))))
-
-  (define (make-empty-logger)
-    (lambda (level . message) #t))
-
-  (define-syntax with-logger
+  ;;
+  ;; Use like this: (append-to-loggers (log-trace log-debug log-info log-warn log-error log-fatal)
+  ;;                                   ("attachment1" "attachment2" ...)
+  ;;                                   body)
+  ;;
+  (define-syntax append-to-loggers
     (syntax-rules ()
-      ((_ logger body ...)
-       (let ((old-logger (get-global-logger-to-this-thread)))
-         (dynamic-wind (lambda () (set-global-logger-to-this-thread! logger))
-                       (lambda () body ...)
-                       (lambda () (set-global-logger-to-this-thread! old-logger)))))))
+      ((_ (log-trace log-debug log-info log-warn log-error log-fatal)
+          (attachments ...)
+          body ...)
+       (let ((log-trace (cut log-trace attachments ... <...>))
+             (log-debug (cut log-debug attachments ... <...>))
+             (log-info (cut log-info attachments ... <...>))
+             (log-warn (cut log-warn attachments ... <...>))
+             (log-error (cut log-error attachments ... <...>))
+             (log-fatal (cut log-fatal attachments ... <...>)))
+         body ...))))
 
   (define-syntax log-and-return
     (syntax-rules ()
@@ -121,14 +103,5 @@
          (car result)))
       ((_ (debug-info log-fn) body ...)
        (log-time (debug-info log-fn log-warn 1000 ms) body ...))))
-
-  (j "globalLogger = new ThreadLocal() {
-            protected Object initialValue() {
-                return defaultlogger;
-            }
-        };
-
-        iu.M.d.putIfAbsent(\"logger-global_48729\", globalLogger);"
-     `((defaultlogger ,(->jobject (make-logger)))))
 )
   
