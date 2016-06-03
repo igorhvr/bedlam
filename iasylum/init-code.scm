@@ -195,6 +195,7 @@
 (import s2j)
 (require-extension (srfi 16)) ; case-lambda
 (require-extension (srfi 13))
+(require-extension (srfi 14))
 (require-extension (srfi 42)) ; Eager comprehensions.
 (import siscweb/context)
 (import siscweb/html)

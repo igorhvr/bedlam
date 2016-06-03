@@ -99,6 +99,7 @@
    base64-encode
    group-by-key-and-apply
    get-env
+   validate-cpf
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -1174,6 +1175,34 @@
                     (remove (lambda (e) (equal? key (car e))) acc))))
           '()
           alist))
+
+  ;;
+  ;; (validate-cpf "18767017495") => #t
+  ;; (validate-cpf "170.010.386-52") => #t
+  ;; (validate-cpf "170.010.386-53") => #f
+  ;;
+  (define (validate-cpf cpf)
+    (let ((cpf (string-filter (string->char-set "0123456789") (string-trim-both cpf))))
+      (and (not (string=? cpf "00000000000"))
+           (not (string=? cpf "11111111111"))
+           (not (string=? cpf "22222222222"))
+           (not (string=? cpf "33333333333"))
+           (not (string=? cpf "44444444444"))
+           (not (string=? cpf "55555555555"))
+           (not (string=? cpf "66666666666"))
+           (not (string=? cpf "77777777777"))
+           (not (string=? cpf "88888888888"))
+           (not (string=? cpf "99999999999"))
+           (let ((validate (lambda (base)
+                             (let* ((rest (mod (* 10 (reduce + 0 (list-ec (: i 1 (+ base 10))
+                                                                          (* (string->number (substring/shared cpf (- i 1) i))
+                                                                             (- (+ base 11) i)))))
+                                               11))
+                                    (rest (if (or (= rest 10) (= rest 11))
+                                              0 rest)))
+                               (= rest (string->number (substring/shared cpf (+ base 9) (+ base 10))))))))
+             (and (validate 0)
+                  (validate 1))))))
 
   ;;
   ;; Get environment variable.
