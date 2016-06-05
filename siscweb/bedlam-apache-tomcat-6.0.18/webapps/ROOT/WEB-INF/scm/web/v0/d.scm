@@ -130,4 +130,38 @@
               (body
                (h3 "END.")))))))
 
+ (define web/d/n
+   (lambda p
+     (let ((result (string-append* (map display-string (flatten (list "\n" p "\n\n"))))))
+       (send-html/forward
+        (lambda (k-url)
+          `(html (head (title ,"web-d/n"))
+                 (body
+                  (h3 ,result)
+                  
+                  (form (@ (action ,k-url))
+                        (input (@ (type "submit") (value "Next.")))))))))))
+
+ (define web/read-line
+   (lambda ()
+     (extract-single-binding "datainput" (get-bindings 
+                                          (send-html/forward
+                                           (lambda (k-url)
+                                             `(html (head (title ,"web-readline"))
+                                                    (body
+                                                     (form (@ (action ,k-url))
+                                                           (input (@ (type "text") (name "datainput")))
+                                                           (input (@ (type "submit") (value "Next."))))))))))))
+
+(publish
+ "/web/d/n-test"
+   (lambda (request)
+     (web/d/n "first")
+     (web/d/n "now lets grab a value")
+     (let ((xp (web/read-line)))
+       (web/d/n "lets see")
+       (web/d/n xp)
+       (web/d/n "end."))))
+ 
+
 (log-info 'd-startup-finished)

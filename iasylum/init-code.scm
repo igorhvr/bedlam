@@ -533,6 +533,8 @@
 
 (require-extension (lib iasylum/date))
 
+(require-extension (lib iasylum/siscweb))
+
 (set! load original-load)
 
 (define bedlam-loaded-and-ready-to-use #t)
