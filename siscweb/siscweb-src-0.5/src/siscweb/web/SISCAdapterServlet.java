@@ -177,8 +177,8 @@ public class SISCAdapterServlet extends HttpServlet
         }
         catch(final SchemeException e) {
             throw new ServletException(
-                this.contextName + ": sisclet call failed in servlet " + servletName + ".",
-                sisc.modules.s2j.Util.javaException(e));
+				       this.contextName + ": sisclet call failed in servlet " + servletName + ": " + e.getMessage(),
+				       sisc.modules.s2j.Util.javaException(e));
         }
         finally {
             RequestScope.setRequest(null);
