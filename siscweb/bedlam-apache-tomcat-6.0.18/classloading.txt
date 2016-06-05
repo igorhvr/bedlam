@@ -1,0 +1,101 @@
+https://tomcat.apache.org/tomcat-6.0-doc/class-loader-howto.html
+
+Apache Tomcat 6.0
+Class Loader HOW-TO
+Table of Contents
+
+        Overview
+        Class Loader Definitions
+        XML Parsers and Java
+        Running under a security manager
+
+Overview
+
+    Like many server applications, Tomcat installs a variety of class loaders (that is, classes that implement java.lang.ClassLoader) to allow different portions of the container, and the web applications running on the container, to have access to different repositories of available classes and resources. This mechanism is used to provide the functionality defined in the Servlet Specification, version 2.4 — in particular, Sections 9.4 and 9.6.
+
+    In a Java environment, class loaders are arranged in a parent-child tree. Normally, when a class loader is asked to load a particular class or resource, it delegates the request to a parent class loader first, and then looks in its own repositories only if the parent class loader(s) cannot find the requested class or resource. Note, that the model for web application class loaders differs slightly from this, as discussed below, but the main principles are the same.
+
+    When Tomcat is started, it creates a set of class loaders that are organized into the following parent-child relationships, where the parent class loader is above the child class loader:
+    		
+    	
+
+          Bootstrap
+              |
+           System
+              |
+           Common
+           /     \
+      Webapp1   Webapp2 ... 
+
+    	
+    		
+
+    The characteristics of each of these class loaders, including the source of classes and resources that they make visible, are discussed in detail in the following section.
+
+Class Loader Definitions
+
+    As indicated in the diagram above, Tomcat 6 creates the following class loaders as it is initialized:
+
+        Bootstrap — This class loader contains the basic runtime classes provided by the Java Virtual Machine, plus any classes from JAR files present in the System Extensions directory ($JAVA_HOME/jre/lib/ext). Note: some JVMs may implement this as more than one class loader, or it may not be visible (as a class loader) at all.
+
+        System — This class loader is normally initialized from the contents of the CLASSPATH environment variable. All such classes are visible to both Tomcat internal classes, and to web applications. However, the standard Tomcat startup scripts ($CATALINA_HOME/bin/catalina.sh or %CATALINA_HOME%\bin\catalina.bat) totally ignore the contents of the CLASSPATH environment variable itself, and instead build the System class loader from the following repositories:
+
+            $CATALINA_HOME/bin/bootstrap.jar — Contains the main() method that is used to initialize the Tomcat server, and the class loader implementation classes it depends on.
+
+            $CATALINA_BASE/bin/tomcat-juli.jar and $CATALINA_HOME/bin/tomcat-juli.jar — Logging implementation classes. These include enhancement classes to java.util.logging API, known as Tomcat JULI, and a package-renamed copy of Apache Commons Logging library used internally by Tomcat. See logging documentation for more details.
+
+            $CATALINA_HOME/bin/commons-daemon.jar — The classes from Apache Commons Daemon project.
+
+        The tomcat-juli.jar and commons-daemon.jar JARs in $CATALINA_HOME/bin are not present in the CLASSPATH built by catalina.bat|.sh scripts, but are referenced from the manifest file of bootstrap.jar.
+
+        If $CATALINA_BASE and $CATALINA_HOME do differ and $CATALINA_BASE/bin/tomcat-juli.jar does exist, the startup scripts will add it to CLASSPATH before bootstrap.jar, so that Java will look into $CATALINA_BASE/bin/tomcat-juli.jar for classes before it will look into $CATALINA_HOME/bin/tomcat-juli.jar referenced by bootstrap.jar. It should work in most cases but, if you are using such configuration, it might be recommended to remove tomcat-juli.jar from $CATALINA_HOME/bin so that only one copy of the file is present on the classpath. The next version of Tomcat, Tomcat 7, takes different approach here.
+
+        Common — This class loader contains additional classes that are made visible to both Tomcat internal classes and to all web applications.
+
+        Normally, application classes should NOT be placed here. The locations searched by this class loader are defined by the common.loader property in $CATALINA_BASE/conf/catalina.properties. The default setting will search the following locations in the order they are listed:
+            unpacked classes and resources in $CATALINA_BASE/lib
+            JAR files in $CATALINA_BASE/lib
+            unpacked classes and resources in $CATALINA_HOME/lib
+            JAR files in $CATALINA_HOME/lib
+
+        By default, this includes the following:
+            annotations-api.jar — JavaEE annotations classes.
+            catalina.jar — Implementation of the Catalina servlet container portion of Tomcat.
+            catalina-ant.jar — Tomcat Catalina Ant tasks.
+            catalina-ha.jar — High availability package.
+            catalina-tribes.jar — Group communication package.
+            ecj-*.jar — Eclipse JDT Java compiler.
+            el-api.jar — EL 2.1 API.
+            jasper.jar — Tomcat Jasper JSP Compiler and Runtime.
+            jasper-el.jar — Tomcat Jasper EL implementation.
+            jsp-api.jar — JSP 2.1 API.
+            servlet-api.jar — Servlet 2.5 API.
+            tomcat-coyote.jar — Tomcat connectors and utility classes.
+            tomcat-dbcp.jar — Database connection pool implementation based on package-renamed copy of Apache Commons Pool and Apache Commons DBCP.
+            tomcat-i18n-**.jar — Optional JARs containing resource bundles for other languages. As default bundles are also included in each individual JAR, they can be safely removed if no internationalization of messages is needed.
+
+        WebappX — A class loader is created for each web application that is deployed in a single Tomcat instance. All unpacked classes and resources in the /WEB-INF/classes directory of your web application, plus classes and resources in JAR files under the /WEB-INF/lib directory of your web application, are made visible to this web application, but not to other ones.
+
+    As mentioned above, the web application class loader diverges from the default Java 2 delegation model (in accordance with the recommendations in the Servlet Specification, version 2.4, section 9.7.2 Web Application Classloader). When a request to load a class from the web application's WebappX class loader is processed, this class loader will look in the local repositories first, instead of delegating before looking. There are exceptions. Classes which are part of the JRE base classes cannot be overriden. For some classes (such as the XML parser components in J2SE 1.4+), the J2SE 1.4 endorsed feature can be used. Last, any JAR file that contains Servlet API classes will be explicitly ignored by the classloader — Do not include such JARs in your web application. All other class loaders in Tomcat 6 follow the usual delegation pattern.
+
+    Therefore, from the perspective of a web application, class or resource loading looks in the following repositories, in this order:
+
+        Bootstrap classes of your JVM
+        System class loader classes (described above)
+        /WEB-INF/classes of your web application
+        /WEB-INF/lib/*.jar of your web application
+        Common class loader classes (described above)
+
+XML Parsers and Java
+
+    Starting with Java 1.4 a copy of JAXP APIs and an XML parser are packed inside the JRE. This has impacts on applications that wish to use their own XML parser.
+
+    In old versions of Tomcat, you could simply replace the XML parser in the Tomcat libraries directory to change the parser used by all web applications. However, this technique will not be effective when you are running modern versions of Java, because the usual class loader delegation process will always choose the implementation inside the JDK in preference to this one.
+
+    Java supports a mechanism called the "Endorsed Standards Override Mechanism" to allow replacement of APIs created outside of the JCP (i.e. DOM and SAX from W3C). It can also be used to update the XML parser implementation. For more information, see: http://docs.oracle.com/javase/1.5.0/docs/guide/standards/index.html.
+
+    Tomcat utilizes this mechanism by including the system property setting -Djava.endorsed.dirs=$JAVA_ENDORSED_DIRS in the command line that starts the container. The default value of this option is $CATALINA_HOME/endorsed. This endorsed directory is not created by default.
+
+Running under a security manager
+
+    When running under a security manager the locations from which classes are permitted to be loaded will also depend on the contents of your policy file. See Security Manager HOW-TO for further information.
