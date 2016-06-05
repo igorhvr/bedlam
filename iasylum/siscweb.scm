@@ -21,11 +21,11 @@ import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AllowSymLinkAliasChecker;
 import org.eclipse.jetty.webapp.WebAppContext;
-// Create a basic jetty server object that will listen on port 8080.
+// Create a basic jetty server object that will listen on port 9191.
 // Note that if you set this to port 0 then a randomly available port
 // will be assigned that you can either look in the logs for the port,
 // or programmatically obtain it for use in test cases.
-Server server = new Server(8080);
+Server server = new Server(9191);
 
  // Setup JMX
 MBeanContainer mbContainer = new MBeanContainer(
