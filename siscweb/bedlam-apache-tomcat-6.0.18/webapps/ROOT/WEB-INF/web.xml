@@ -17,10 +17,10 @@
     </init-param>
   </filter>
 
-  <filter-mapping>
+  <!--<filter-mapping>
     <filter-name>RewriteResponseHeader</filter-name>
     <url-pattern>/*</url-pattern>
-  </filter-mapping>
+  </filter-mapping>-->
 
 
   <!-- *** APPLICATION NAME *** -->
@@ -39,7 +39,7 @@
     <param-name>siscweb.on-init-sexp</param-name>
     <param-value>
       <![CDATA[
-        (class-path-extension-append! '("WEB-INF/scm/"))
+	(class-path-extension-append! '("scm/" "WEB-INF/scm/" "/base/bedlam/siscweb/bedlam-apache-tomcat-6.0.18/webapps/ROOT/WEB-INF/"))
 
         ;; configuration
         (require-extension (lib siscweb/config))
@@ -51,7 +51,9 @@
         (config/set-sxml-formatted-output! #t)
 
         ;; error handling
-        (require-extension (lib error/fc-handler))
+        (define base-dir "/base/bedlam/")         
+	(load (string-append "file://" base-dir "siscweb/bedlam-apache-tomcat-6.0.18/webapps/ROOT/WEB-INF/scm/error/fc-handler.scm"))
+        (import error/fc-handler)
         (config/set-fc-hook! fc-handler)
 
         ;; MANDATORY: install sisclet handler
@@ -107,11 +109,10 @@
           (define base-dir "/base/bedlam/")
 
           (begin (define iasylum-bedlam-location base-dir) (load (string-append "file://" iasylum-bedlam-location "iasylum/init.scm")))
-
           (log-debug "Ok - bedlam loaded.")
-          (class-path-extension-append! '("scm/" "WEB-INF/scm/"))
+          (class-path-extension-append! '("scm/" "WEB-INF/scm/" "/base/bedlam/siscweb/bedlam-apache-tomcat-6.0.18/webapps/ROOT/WEB-INF/"))
 
-	  (load (string-append "file://" base-dir "siscweb/bedlam-apache-tomcat-6.0.18/webapps/ROOT/WEB-INF/scm/web/v0/d.scm"))
+	  (load (string-append "file://" base-dir "siscweb/bedlam-apache-tomcat-6.0.18/webapps/ROOT/WEB-INF/scm/web/v0/d.scm"))	  
 
           (log-info "...Bedlam webservice module is now up and running!")
         ]]>

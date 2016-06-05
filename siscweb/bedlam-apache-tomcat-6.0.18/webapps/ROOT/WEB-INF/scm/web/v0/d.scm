@@ -58,6 +58,20 @@
       (head (title "Hello, world! in two languages"))
       (body (p ,(get-message "hello" "pt")) (p ,(get-message "hello" "en")))))))
 
+(publish/wildcard
+  "/nothing/*"
+  (lambda (request)
+    (log 'HERE)
+    (send-html/back
+    `(html
+      (head (title "Hello, world! in two languages"))
+      (body (p ,(get-message "hello" "pt")) (p ,(get-message "hello" "en")))))))
+
+(publish/wildcard
+  "/fail/*"
+  (lambda (request)
+    (fksflsakfja-FAIL-fsdlkfjdsalkf)))
+
 
  (define (hello-world request)
     (let loop ()
