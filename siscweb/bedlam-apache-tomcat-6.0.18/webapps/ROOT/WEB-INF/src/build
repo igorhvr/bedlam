@@ -1,2 +1,0 @@
-#!/bin/sh
-javac -cp '/base/apache-tomcat-6.0.18/lib/*:/base/bedlam/jars/*:/base/bedlam/jars/u/*:/base/bedlam/jars/tomcat/*' web/*.java

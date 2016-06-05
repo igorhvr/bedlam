@@ -1,0 +1,2 @@
+#!/bin/sh
+javac -cp '/base/bedlam/siscweb/jetty-distribution-9.3.9.v20160517/lib/*:/base/bedlam/jars/*:/base/bedlam/jars/u/*' web/*.java

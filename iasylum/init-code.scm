@@ -102,7 +102,7 @@
 (add-lib "u/m.jar")
 (add-lib "u/mail.jar")
 (add-lib "u/ssax-sxml.jar")
-
+(add-lib "u/serlet-api-3.1.jar")
 (add-lib "tomcat/jasper-el.jar")
 (add-lib "tomcat/tomcat-i18n-es.jar")
 (add-lib "tomcat/tomcat-i18n-fr.jar")
