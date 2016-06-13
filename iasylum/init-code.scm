@@ -182,6 +182,7 @@
 (require-extension (lib iasylum/log))
 (require-extension (lib iasylum/email))
 (require-extension (lib iasylum/work-queue))
+(require-extension (lib iasylum/bot))
 (require-extension (lib iasylum/excel))
 (require-extension (lib iasylum/i18n))
 (import networking)
@@ -215,7 +216,7 @@
 
 (begin
 ;; Jackcess and required libraries.
-(add-lib "microsoft_access/commons-lang-2.5.jar")
+(add-lib "u/commons-lang3-3.4.jar")
 (add-lib "microsoft_access/jackcess-1.2.12.jar")
 )
 
