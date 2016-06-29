@@ -75,7 +75,11 @@
     <Logger name="com.healthmarketscience.jackcess.PageChannel" level="warn" additivity="false">
       <AppenderRef ref="EVERYTHING"/>
     </Logger>
-    
+
+    <Logger name="org.pircbotx" level="info" additivity="false">
+      <AppenderRef ref="EVERYTHING"/>
+    </Logger>
+
     <Logger name="app" level="all">
       <AppenderRef level="trace" ref="APPTRACE"/>
       <AppenderRef level="debug" ref="APPDEBUG"/>
