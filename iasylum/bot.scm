@@ -8,12 +8,11 @@
     (lambda* ((in-work-queue: in-work-queue) (out-work-queue: out-work-queue) (name: name) (server-hostname: server-hostname) (server-port: server-port) (server-password: server-password) (channel: channel) )
              (let* ((inner-queue-out-work-queue (out-work-queue 'inner-queue))
                     (bot
-                     (j "new org.pircbotx.PircBotX(new org.pircbotx.Configuration.Builder().setName(pmtname).setSocketFactory(javax.net.ssl.SSLSocketFactory.getDefault()).setCapEnabled(true).addCapHandler(new org.pircbotx.cap.TLSCapHandler(new org.pircbotx.UtilSSLSocketFactory().trustAllCertificates(), true)).addListener(new org.pircbotx.hooks.ListenerAdapter(){public void onMessage(org.pircbotx.hooks.events.MessageEvent event) {if(mchannel.equals(event.getChannel().getName())) pmtoutqueue.put(new sisc.data.ImmutableString(event.getMessage()));}}).setServerHostname(pmtserverhostname).setServerPort(pmtserverport).setServerPassword(pmtserverpassword).buildConfiguration());"
+                     (j "new org.pircbotx.PircBotX(new org.pircbotx.Configuration.Builder().setName(pmtname).setSocketFactory(javax.net.ssl.SSLSocketFactory.getDefault()).setCapEnabled(true).addCapHandler(new org.pircbotx.cap.TLSCapHandler(new org.pircbotx.UtilSSLSocketFactory().trustAllCertificates(), true)).addListener(new org.pircbotx.hooks.ListenerAdapter(){public void onGenericMessage(org.pircbotx.hooks.types.GenericMessageEvent event) {pmtoutqueue.put(new sisc.data.ImmutableString(event.getMessage()));}}).setServerHostname(pmtserverhostname).setServerPort(pmtserverport).setServerPassword(pmtserverpassword).buildConfiguration());"
                         `((pmtname ,(->jstring name))
                           (pmtoutqueue ,inner-queue-out-work-queue)
                           (pmtserverhostname ,(->jstring server-hostname))
                           (pmtserverport ,(->jint server-port))
-                          (mchannel ,(->jstring (string-append "#" channel)))
                           (pmtserverpassword ,(->jstring server-password))))))
                (watched-thread/spawn (lambda() (j "pmtbot.startBot();"
                                                   `((pmtbot ,bot)))))
