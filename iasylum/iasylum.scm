@@ -81,7 +81,6 @@
    make-parameter*
    subtract-dates
    start-async-json-engine-with-status-retriever
-   add-between-elements
    complete-with-zeroes
    add-between
    add-between-list
@@ -967,12 +966,6 @@
    (( (? date? later) (? date? earlier))
     (time-difference (date->time-utc later)  (date->time-utc earlier)))))
   
-  (define (add-between-elements what list-of-elements)
-    (if (<= (length list-of-elements) 1)
-        list-of-elements
-        (append (list (car list-of-elements) what)
-                (add-between-elements what (cdr list-of-elements)))))
-
   ;;
   ;; (complete-with-zeroes "56" 7)
   ;; => "0000056"
