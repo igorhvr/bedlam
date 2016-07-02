@@ -154,7 +154,8 @@
        ((date? v) (date->jdate v))
        ((time? v) (time->jdate v))
        ((list? v)
-        (if (alist? v)
+        (if (and (alist? v)
+                 (not (null? v)))
             (->jmap v)
             (let ((resulting-list (j "new java.util.concurrent.ConcurrentLinkedQueue();")))
               (map           
