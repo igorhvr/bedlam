@@ -95,7 +95,7 @@
    make-future
    only
    sum-alist
-   base64-encode
+   base64-encode base64-decode
    group-by-key-and-apply
    get-env
    validate-cpf
@@ -1143,6 +1143,11 @@
     (->scm-object
      (j "javax.xml.bind.DatatypeConverter.printBase64Binary(data.toString().getBytes());"
         `((data ,(->jobject o))))))
+
+  (define (base64-decode s)
+    (->scm-object
+     (j "new String(javax.xml.bind.DatatypeConverter.parseBase64Binary(data.toString()));"
+        `((data ,(->jobject s))))))
 
   ;;
   ;; Apply the binary-fn to each element on the list from left to right,
