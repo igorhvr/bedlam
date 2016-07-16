@@ -73,6 +73,7 @@
    to-csv-line
    sha256
    sha256+
+   sha512
    hex->decimal
    decimal->hex
    decimal->maxradix
@@ -878,11 +879,19 @@
       (sha256 (apply add-between (cons ":" elements)))))
 
   (define (sha256 string)
-    (->string (j              
+    (->string (j
                "md = java.security.MessageDigest.getInstance(\"SHA-256\");
                 md.update(input.getBytes(\"UTF-8\"));
                 digest = md.digest();
                 return String.format(\"%064x\", new java.math.BigInteger(1, digest));"
+                 `((input ,(->jstring string))))))
+
+  (define (sha512 string)
+    (->string (j
+               "md = java.security.MessageDigest.getInstance(\"SHA-512\");
+                md.update(input.getBytes(\"UTF-8\"));
+                digest = md.digest();
+                return String.format(\"%0128x\", new java.math.BigInteger(1, digest));"
                  `((input ,(->jstring string))))))
 
   (define (hex->decimal hex)
