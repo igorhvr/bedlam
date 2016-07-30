@@ -70,8 +70,13 @@
 	 ((vector? x) (write-ht x p))
 	 ((list? x) (write-array x p))
 	 ((symbol? x) (write (symbol->string x) p)) ;; for convenience
-	 ((or (string? x)
-	      (number? x)) (write x p))
+	 ((string? x) (write x p))
+         ((number? x)
+          (let ((to-write
+                 (if (and (exact? x) (= 1 (denominator x)))
+                     x
+                     (exact->inexact x))))
+            (write to-write p)))
 	 ((boolean? x) (display (if x "true" "false") p))
 	 ((eq? x (void)) (display "null" p))
 	 (else (error "Invalid JSON object in json-write" x))))
@@ -152,9 +157,10 @@
 			  (define (jnumber-body starting-results)
 			    (let loop ((acc '()) (results starting-results))
 			      (let ((ch (parse-results-token-value results)))
-				(if (memv ch '(#\- #\+ #\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9 #\. #\e #\E))
+				(if (memv ch '(#\- #\+ #\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9 #\. #\e #\E #\/))
 				    (loop (cons ch acc) (parse-results-next results))
-				    (let ((n (string->number (list->string (reverse acc)))))
+				    (let ((n (string->number (decimal-to-fractions-inside-string
+                                                              (list->string (reverse acc))))))
 				      (if n
 					  (make-result n results)
 					  (make-expected-result (parse-results-position starting-results) 'number)))))))
@@ -197,3 +203,34 @@
 
       (lambda maybe-port
 	(read-any (if (pair? maybe-port) (car maybe-port) (current-input-port))))))
+
+(define (scheme->json structure)
+  (call-with-output-string
+   (lambda (output-port)
+     (json-write
+      structure
+      output-port))))
+  
+(define (json->scheme string)
+  (call-with-input-string
+   string
+   (lambda (input-port)
+     (json-read input-port))))
+
+(define (beautify-json st) (->string (j "com.cedarsoftware.util.io.JsonWriter.formatJson(jsonst);" `((jsonst ,(->jstring st))))))
+
+(define (json->sxml e)
+  (let ((structure (json->scheme e)))
+    `(*TOP*
+      ,@(json->sxml-block structure))))
+
+(define (json->sxml-block structure)
+  (match structure
+         ( #( ( (? string? a) . b ) ...) (=> fail)
+           (map (lambda (a b) (cond ( (or (string? b) (number? b) (boolean? b))  `(,(string->symbol a)  ,b))
+                               ( (void? b)                                  `(,(string->symbol a)    ))
+                               ( (vector? b)                                `(,(string->symbol a) . ,(json->sxml-block b)))
+                               (else (fail))))
+                a b))
+         
+         ( whatever (throw (make-error (string-append* "Support not yet implemented in json->sxml-block for structure: ===" whatever "=== ."))))))

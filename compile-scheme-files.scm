@@ -1,3 +1,4 @@
+(define iasylum-bedlam-location (make-parameter "/base/bedlam/"))
 ;;(compile-file"/home/igorhvr/idm/bedlam/iasylum/irregex.scm" "/home/igorhvr/idm/bedlam/iasylum/irregex.scc")
 (smart-compile "/home/igorhvr/idm/bedlam/iasylum/irregex.scm")
 (smart-compile "/home/igorhvr/idm/bedlam/iasylum/irregex/irregex-0.9.2/irregex-utils.scm")
@@ -10,6 +11,7 @@
 (smart-compile "/home/igorhvr/idm/bedlam/iasylum/json.scm")
 (smart-compile "/home/igorhvr/idm/bedlam/iasylum/work-queue.scm")
 (smart-compile "/home/igorhvr/idm/bedlam/iasylum/match.scm")
+(smart-compile "/home/igorhvr/idm/bedlam/iasylum/match/other/matchable/matchable_adapted.scm")
 (smart-compile "/home/igorhvr/idm/bedlam/iasylum/packrat.scm")
 (smart-compile "/home/igorhvr/idm/bedlam/iasylum/packrat/packrat-code.scm")
 (smart-compile "/home/igorhvr/idm/bedlam/iasylum/excel.scm")

@@ -276,8 +276,8 @@
 ; Using a static buffer _dramatically_ reduces the amount of produced garbage
 ; (e.g., during XML parsing).
 (define input-parse:init-buffer
-  (let ((buffer (make-string 512)))
-    (lambda () buffer)))
+;;  (let ((buffer (make-string 512))) (lambda () buffer)))
+  (lambda () (make-string 32)))
 
 (define-opt (next-token prefix-skipped-chars break-chars
 			(optional (comment "") (port (current-input-port))) )

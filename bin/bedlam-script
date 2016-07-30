@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# For an example of how to use this see docker/find_sisc_repl_port inside bedlam.
+
+SCHEMEENV=`basename $0`
+SOURCEFILE=$1
+
+/base/bedlam/sisc/sisc-1.16.6/sisc -x -e "(begin (define iasylum-bedlam-location \"/base/bedlam/\") (load (string-append iasylum-bedlam-location \"iasylum/init.scm\")))(srfi-22-prepare '$SCHEMEENV \"$SOURCEFILE\")" -c main-hook -- "$@"
+

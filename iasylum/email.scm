@@ -7,82 +7,63 @@
 ;;    activation-1.1.jar  commons-email-1.2.jar  mail.jar
 ;;    iasylum/jcode
 (module iasylum/email
-  (send-email send-email-k)
-  
-  ;;Test: (send-email "localhost" "igorhvr@iasylum.net" "igorhvr@iasylum.net" "igorhvr@iasylum.net" "igorhvr@iasylum.net" "assunto" "teste" )
+  (send-email)
 
-  ;; (require-extension (lib iasylum/jcode))
+
+  ;;(send-email
+  ;;  'smtp-server:  "smtp.test.net"
+  ;;  'to:  '(("j@t.net" ""))
+  ;;  'sender-email:  "s@s.net"
+  ;;  'sender-name:  "s"
+  ;;  'cc:  '(("w@w.net" "w"))
+  ;;  'subject:  "bla"
+  ;;  'use-ssl:  #t
+  ;;  'authentication-login:  "s@s.net"
+  ;;  'authentication-password:  "fk*fjlanP"
+  ;;  'message-text:  "Uamsg"
+  ;; )
   (define send-email
-    (lambda (mailserver recipientemail recipientname senderemail sendername subject messagetext)
-      (log-debug 'send-email mailserver recipientemail recipientname 
-                 senderemail sendername subject messagetext)
-      (j  
-       "
-       import org.apache.commons.mail.SimpleEmail;
-       SimpleEmail email = new SimpleEmail();
-       email.setHostName(mailserver);
-       email.addTo(recipientemail, recipientname);
-       email.setFrom(senderemail, sendername);
-       email.setSubject(subject);
-       email.setMsg(messagetext);
-       email.send();"
-       `((mailserver ,(->jstring mailserver))
-         (recipientemail ,(->jstring recipientemail))
-         (recipientname ,(->jstring recipientname))
-         (senderemail ,(->jstring senderemail))
-         (sendername ,(->jstring sendername))
-         (subject ,(->jstring subject))
-         (messagetext ,(->jstring messagetext))))))
-
- 
-  
-  ;;Test: (send-email "localhost" "igorhvr@iasylum.net" "igorhvr@iasylum.net" "igorhvr@iasylum.net" "igorhvr@iasylum.net" "assunto" "teste" )
-
-
-                 
-  
-  (define send-email-k
     (lambda* ((smtp-server: mailserver "localhost")
-         (recipient-email: recipientemail) (recipient-name: recipientname recipientemail)
-         (cc-email: ccemail recipientemail) (cc-name: ccname ccemail)
-         (to-kv: tokv #f)
-         (cc-kv: cckv #f)
-         (sender-email: senderemail recipientemail) (sender-name: sendername senderemail)
-         (authentication-login: authentication-login "") (authentication-password: authentication-password #f) (use-ssl: use-ssl #f)
+         (to: to #f)
+         (cc: cc #f)
+         (bcc: bcc #f)
+         (sender-email: senderemail) (sender-name: sendername senderemail)
+         (authentication-login: authentication-login "") (authentication-password: authentication-password "") (use-ssl: use-ssl #t)
          (subject: subject "") (message-text: messagetext "="))
-      (log-debug 'send-email mailserver recipientemail recipientname senderemail sendername subject messagetext)
-
-      
+      (assert (or (not to) (list? to))) (assert (or (not cc) (list? cc)))
       
       (j 
        "import org.apache.commons.mail.SimpleEmail;
        email = new SimpleEmail();
-       email.setHostName(mailserver);
-       email.addTo(recipientemail, recipientname);
-       email.addCc(ccemail, ccname);"
+       email.setCharset(\"utf-8\");
+       email.setHostName(mailserver);"
        `((mailserver ,(->jstring mailserver))
-         (recipientemail ,(->jstring recipientemail))
-         (recipientname ,(->jstring recipientname))
-         (ccemail ,(->jstring ccemail))
-         (ccname ,(->jstring ccname))
-         (senderemail ,(->jstring senderemail))
-         (sendername ,(->jstring sendername))
-         (subject ,(->jstring subject))
-         (messagetext ,(->jstring messagetext))
          (usessl ,(->jboolean use-ssl))
-         (authenticationlogin ,(->jstring authentication-login))
-         (authenticationpassword ,(->jstring authentication-password))
          ))
 
-      (when tokv
+      (when to
         (for-each (match-lambda ((vemail vname)
-                            (j "email.addTo(lccemail, lccname);" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vname))))))
-                  tokv))
+                                 (j "email.addTo(lccemail, lccname);" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vname)))))
+                                (vemail
+                                 (j "email.addTo(lccemail, lccname);" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vemail)))))
+                                )
+                  to))
       
-      (when cckv
+      (when cc
         (for-each (match-lambda ((vemail vname)
-                            (j "email.addCc(lccemail, lccname);" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vname))))))
-                  cckv))
+                                 (j "email.addCc(lccemail, lccname);" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vname)))))
+                                (vemail
+                                 (j "email.addCc(lccemail, lccname);" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vemail)))))
+                                )
+                  cc))
+
+      (when bcc
+        (for-each (match-lambda ((vemail vname)
+                                 (j "email.addBcc(lccemail, lccname);" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vname)))))
+                                (vemail
+                                 (j "email.addBcc(lccemail, lccname);" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vemail)))))
+                                )
+                  bcc))
       
       (j "
        if(!\"\".equals(authenticationlogin)) {
@@ -94,19 +75,14 @@
        email.setMsg(messagetext);
        email.send();"
        `((mailserver ,(->jstring mailserver))
-         (recipientemail ,(->jstring recipientemail))
-         (recipientname ,(->jstring recipientname))
-         (ccemail ,(->jstring ccemail))
-         (ccname ,(->jstring ccname))
-         (senderemail ,(->jstring senderemail))
-         (sendername ,(->jstring sendername))
          (subject ,(->jstring subject))
          (messagetext ,(->jstring messagetext))
          (usessl ,(->jboolean use-ssl))
          (authenticationlogin ,(->jstring authentication-login))
          (authenticationpassword ,(->jstring authentication-password))
+         (senderemail ,(->jstring senderemail))
+         (sendername ,(->jstring sendername))
          ))))
-    ;; Test (send-email-k 'recipientemail: "igorhvr@iasylum.net")
 
   ; WIP.
   ; Returns a list containing, for each element for which both fn and raw-fn did not return #f, 3-element-lists where the head is the message id and the next two elements are the results of fn and raw-fn

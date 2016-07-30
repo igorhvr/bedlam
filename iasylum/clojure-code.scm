@@ -1,6 +1,7 @@
 ;;; Code by Igor Hjelmstrom Vinhas Ribeiro - this is licensed under GNU GPL v2.
 
 (define (clojure/run code)
+  (log-trace "Will run clojure code:" code)
   (j "clojure.lang.Compiler.load(new StringReader(s));" `((s ,(->jstring code)))))
 
 (define clojure/repl-start
@@ -13,7 +14,56 @@
         "(start-server :transport-fn t/tty :port " (number->string tty-port)  ")"
         ))))
 
+;;
+;; clj-map is something like (clj "{:key1 1 :key2 2}") and key is a string or symbol without the ":"
+;; example: (->scm-object (clojure/find-value-by-key (clj "{:key1 1 :key2 2}") 'key2))
+;; will return 2
+;;
+(define (clojure/find-value-by-key clj-map key)
+  (clj "(val (find cljmap (keyword k)))" `((cljmap ,clj-map) (k ,(->jstring key)))))
 
+(define (symbol->clj-keyword symbol)
+  (clj "(keyword symbol)" `((symbol ,(->jstring symbol)))))
+
+;;
+;; BE CAREFUL HERE: a keyword is composed by namespace and name (see clojure spec).
+;; This function simply drop the keyword namespace (and also the :),
+;; so (clj-keyword->symbol (symbol->clj-keyword 'namespace/name))
+;; is only 'name.
+;;
+;; Note: If you want the string representation of a keyword (usually something like :namespace/name)
+;; use clj-keyword->string
+;;
+(define (clj-keyword->symbol keyword)
+  (->symbol (clj "(name keyword)" `((keyword ,keyword)))))
+
+;;
+;; Different of clj-keyword->symbol it will keep the namespace AND the : in front of string.
+;;
+(define (clj-keyword->string keyword)
+  (->string keyword))
+
+;;
+;; another way to convert clojure.lang.Ratio into scheme exact number:
+;; (/ (->scm-object (j "n.numerator" `((n ,clojure-ratio)))) (->scm-object (j "n.denominator" `((n ,clojure-ratio))))))
+(define (clj-number->number clojure-number)
+  (string->number (->string clojure-number)))
+
+;;
+;; to extract numerator and denominator of ANY type of clojure number (the result of this function)
+;; use like this: (clj "(numerator (clojure.lang.Numbers/toRatio (rationalize a)))" `((a ,(number->clj-number 3323/123))))
+;;                (clj "(denominator (clojure.lang.Numbers/toRatio (rationalize a)))" `((a ,(number->clj-number 3323/123))))
+;;
+;; results in 3323 and 123. See why this is necessary:
+;; https://stackoverflow.com/questions/25194809/how-to-convert-a-number-to-a-clojure-lang-ratio-type-in-clojure
+;;
+(define (number->clj-number scm-number)
+  (let ((scm-number (inexact->exact scm-number)))
+    (clj "(/ a b)" `((a ,(integer->jbigint (numerator scm-number)))
+                     (b ,(integer->jbigint (denominator scm-number)))))))
+
+(define (list->persistent-vector scheme-list)
+  (j "clojure.lang.PersistentVector.create(lst);" `((lst ,(jlist->jarray (->jobject scheme-list))))))
 
 (define (create-runner)
   (j
@@ -70,30 +120,41 @@
                            (error "\nFetching full environment not yet supported.\n")) )
                        (  (eqv? vars #f)
                           (begin
-                            (set! result (j "ClojureScriptRunner.runClosureScript(new java.util.concurrent.ConcurrentHashMap(), str);" `((str ,(->jstring str)))))) )
-                       ( (list? vars)
-                         (begin
-                           (let ((parameters-map (j "params=new java.util.concurrent.ConcurrentHashMap();")))
-                             (for-each
-                              (lambda (v)
-                                (match-let ( ( (vname vvalue) v ) )
-                                           (begin
-                                             (let* ((sname (if (string? vname) vname (symbol->string vname)))
-                                                    (name (->jstring sname )))
-                                               (j "params.put(vname, vvalue);"
-                                                  `((vname ,name)
-                                                    (vvalue ,vvalue)))
-                                               (j "iu.M.d.put(vname, vvalue);"
-                                                  `((vname ,name)
-                                                    (vvalue ,vvalue)))
-                                               (let ((clj-cmd (string-append " (def " sname " (.get iu.M/d \"" sname "\")) ")))
-                                                 (clj clj-cmd))))))
+                            (set! result (j "ClojureScriptRunner.runClosureScript(new java.util.concurrent.ConcurrentHashMap(), str);"
+                                            `((str ,(->jstring str)))))) )
+                       [ (list? vars)
 
-                              
-                              vars)
-                             
-                             ;;(set! result (j "ClojureScriptRunner.runClosureScript(params, str);" `((str ,(->jstring str)) (params ,parameters-map))))
-                             (set! result (j "ClojureScriptRunner.runClosureScript(new java.util.concurrent.ConcurrentHashMap(), str);"
-                                             `((str ,(->jstring str))))))) ))
+                         (let* ((random-string-to-avoid-thread-conflict (string-append* (random) (random) (random)))
+
+                                (clj-let-declaration (reduce string-append* ""
+                                                             (map (lambda (key-value-pair)
+                                                                    (let ((java-map-key (->jstring (string-append*
+                                                                                                    (car key-value-pair)
+                                                                                                    random-string-to-avoid-thread-conflict))))
+                                                                      (j "iu.M.d.put(k, v);"
+                                                                         `((k ,java-map-key)
+                                                                           (v ,(cadr key-value-pair))))
+
+                                                                      (string-append* " "
+                                                                                      (car key-value-pair)
+                                                                                      " "
+                                                                                      "(.get iu.M/d \"" (->string java-map-key) "\")")))
+                                                                  vars)))
+
+                                (final-command (string-append* "(let ["
+                                                               clj-let-declaration
+                                                               "] " str ")")))
+
+                           (set! result (j "ClojureScriptRunner.runClosureScript(new java.util.concurrent.ConcurrentHashMap(), finalcommand);"
+                                           `((finalcommand ,(->jstring final-command)))))
+
+                           ; clear memory
+                           (for-each (lambda (key-value-pair)
+                                       (j "iu.M.d.remove(k);" `((k ,(->jstring (string-append*
+                                                                                (car key-value-pair)
+                                                                                random-string-to-avoid-thread-conflict))))))
+                                     vars))
+
+                         ])
 
                  result)))

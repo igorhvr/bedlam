@@ -1,3 +1,5 @@
+; Scratchpad / random examples, complete mess.
+
 ; Naive version.
 ;(define (flatten l)
 ;  (cond ((null? l) '())
@@ -87,8 +89,56 @@
       (d/n "bytes: " tbytes)
       (->scm-object (j "new String(tbytes);" `((tbytes ,tbytes)))))))
 
+(define (base64-encode o) (j "javax.xml.bind.DatatypeConverter.printBase64Binary(data.toString().getBytes());" `((data ,(->jobject o)))))
+
+(define (base64-decode o) (j "new String(javax.xml.bind.DatatypeConverter.parseBase64Binary(data.toString()));" `((data ,(->jobject o)))))
+
+(define (url-encode o) (->scm-object (j "java.net.URLEncoder.encode(data.toString(),\"UTF-8\");" `((data ,(->jobject o))))))
+
+(define (url-decode o) (->scm-object (j "java.net.URLDecoder.decode(data.toString(),\"UTF-8\");" `((data ,(->jobject o))))))
+
 ;; Example - how to get an sc-expanded version of the code in a given file.
 ;; (sc-expand (call-with-input-string (file->string "/tmp/example.scm") (lambda (input) (read input)) ))
 
 ;; match-let sample
 ;;  (match-let ((#(("param1" . pu)("param2" . pd))data-to-be-matched))  (d/n "pu " pu " pd: " pd))
+
+;; Interesting call-with-values example.
+(call-with-values (lambda () (parallel (lambda () (+ 3 4)) (lambda ()  (+ 5 7)))) string-append*)
+
+(loop lp ((n <- in-range 1 5 1)) (d/n n) (lp))
+
+;(apply parallel (map (lambda (fn) (lambda () (try-and-if-it-fails-object (#f) (smart-compile fn)))) (find-scm-in-directory "/base/bedlam/iasylum")))
+
+;(map (lambda (fn) (try-and-if-it-fails-object (#f) (smart-compile fn))) (find-scm-in-directory "/base/bedlam/iasylum"))
+
+; Fun match sample.
+((lambda (p) (letrec ((fn (match-lambda ((lonely-element-in-a-list) lonely-element-in-a-list) ((first . rest) (string-append* first "," (fn rest)))))) (fn p))) '(1 2 3 4))
+
+(letrec ((fn (match-lambda ((lonely-element-in-a-list)
+                       lonely-element-in-a-list)
+                      ((first . rest) (string-append* first "," (fn rest))))))
+  (fn p))
+
+(define (force-integer-to-digits number digits)
+  (fmt #f (pad-char #\0  (pad/left digits (num number)))))
+
+;(ssax:xml->sxml (open-input-string "<?xml?><cat a=\"b\"></cat>") '()) ===> (*top* (*pi* xml "") (cat (|@| (a "b"))))
+
+(define sample-text "{ \"father\": { \"second-father\": { \"third-father\": \"someValueHere\"} } }")
+(match ((sxpath "/father/second-father/third-father") (json->sxml sample-text)) (((_ d)) d))
+
+;; I just *had* to have a y-combinator example here. ;-)
+;; You should probably use (fold (cute string-append <> "," <>) "" list) instead...
+(define email-list->destination-string 
+  (y-combinator
+   (lambda (recur)
+     (match-lambda
+      (() "")
+      ((e . ()) e)
+      ((e . rest) (string-append e " , " (recur rest)))
+      (anything (error "Invalid parameter:" anything))))))
+
+;Generates lines to compile each scheme file....
+
+(each-for (filter (lambda (v) (irregex-search "scm$" v)) (rglob "/home/igorhvr/idm/bedlam/iasylum")) (lambda (v) (d/n (string-append* "/base/bedlam/sisc/sisc-1.16.6/sisc -e '(define iasylum-bedlam-location \"/base/bedlam/\") (load (string-append iasylum-bedlam-location \"iasylum/init.scm\")) (d/n \"Will compile\" \"" v "\")(with/fc (lambda p (display p) (j \"System.exit(0);\")) (lambda () (smart-compile \"" v "\")))(j \"System.exit(0);\")'"))))

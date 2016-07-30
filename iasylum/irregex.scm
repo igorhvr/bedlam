@@ -4,8 +4,8 @@
 (require-extension (srfi 43)) ; vector-copy!
 
 ;; irregex
-(load (string-append (iasylum-bedlam-location) "iasylum/irregex/irregex-0.9.2/irregex.scc"))
-(load (string-append (iasylum-bedlam-location) "iasylum/irregex/irregex-0.9.2/irregex-utils.scc"))
+(require-library 'iasylum/irregex/irregex-0.9.2/irregex)
+(require-library 'iasylum/irregex/irregex-0.9.2/irregex-utils)
 
 ;; A chunker that works on scheme ports. It can be used as:
 ;; ---> (irregex-fold/chunked sre kons '() (port-chunker) (list port #f #f))

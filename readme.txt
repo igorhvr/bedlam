@@ -1,12 +1,14 @@
 Bedlam is a set of Scheme libraries for SISC conveniently packaged together.
 
-To use this code you should simply do (replace the directory entry below by the place where you uncompressed bedlam):
+To use this code you should simply do (replace the directory entry below by the place where you decompressed bedlam):
 
-   (begin (define iasylum-bedlam-location "/home/igorhvr/idm/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")))
+   (begin (define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")))
 
-under SISC 1.16.6 or later.
+under SISC 1.16.6 or later (there is a version of it bundled in bedlam itself).
 
 Another option is simply including jars/bedlam-bundle.jar and the other .jar files in lib in your project and using the BedlamBundleInit java class.
+
+Finally, docker images are provided. See docker/ and docker-ubuntu/.
 
 Why?
 

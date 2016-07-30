@@ -1,4 +1,5 @@
 (require-extension (lib iasylum/jcode))
+(require-extension (lib iasylum/json))
 (require-extension (srfi 19)) ; date & time
 (require-extension (lib sql/query))
 (require-extension (lib sql/jdbc))
@@ -6,12 +7,15 @@
 (module iasylum/jdbc
   (jdbc/load-drivers jdbc/map-result-set jdbc/get-connection jdbc/for-each-result-set
                      result-set->iterator
-                     execute-jdbc-query
-                     get-data
+                     execute-jdbc-query execute-jdbc-update execute-jdbc-something
+                     get-data get-data-with-headers-at-each-line data-with-headers-at-each-line->json
                      for-each-data
                      map-each-data
                      jdbc/for-each-triple
                      create-thread-local-jdbc/get-connection-function
+                     pool-datasource
+                     datasource/get-connection-function
+                     jdbc-connection-close
                      )
 
   
@@ -56,6 +60,34 @@
           (when (java-null? result) (set tl (jdbc/get-connection url username password)))
           (let ((to-return (get tl)))            
             to-return)))))
+
+  ;; Sample usage: (pool-datasource "jdbc:postgresql://somehostsomewhere:5432/databasename" "username" "password")
+  ;; Use http://docs.oracle.com/javase/7/docs/api/javax/sql/DataSource.html#getConnection%28%29 later to retrieve a connection
+  ;; from this pool. And close it to return it to the pool.
+  (define pool-datasource
+    (lambda* (jdbc-url user password (maximumPoolSize: maximumPoolSize 10))
+             (j "config = new com.zaxxer.hikari.HikariConfig();
+                 config.setJdbcUrl(jdbcurl);
+                 config.setUsername(tuser);
+                 config.setPassword(tpassword);
+                 config.setMaximumPoolSize(mps);
+                 config.addDataSourceProperty(\"cachePrepStmts\", \"true\");
+                 config.addDataSourceProperty(\"prepStmtCacheSize\", \"250\");
+                 config.addDataSourceProperty(\"prepStmtCacheSqlLimit\", \"2048\");
+                 config.addDataSourceProperty(\"useServerPrepStmts\", \"true\");
+         
+                 new com.zaxxer.hikari.HikariDataSource(config);"
+                `((jdbcurl ,(->jstring jdbc-url)) (tuser ,(->jstring user)) (tpassword ,(->jstring password))
+                  (mps ,(->jobject maximumPoolSize))))))
+
+  (define (datasource/get-connection-function ds)
+    (lambda ()
+      (j "ds.getConnection();" `((ds ,ds)))))
+  
+  (define-generic-java-method close)
+
+  (define (jdbc-connection-close conn)
+    (close conn))
 
   (define-generic-java-method gmd |getMetaData|)
   
@@ -111,6 +143,14 @@
   (define new-statement
     (lambda (connection)
       (create-statement connection)))
+
+  (define-generic-java-method prepare-statement)
+  (define-java-class <java.sql.result-set>)  
+  (define-generic-java-field-accessor :TYPE_FORWARD_ONLY |TYPE_FORWARD_ONLY|)
+  (define-generic-java-field-accessor :CONCUR_READ_ONLY |CONCUR_READ_ONLY|)
+  (define new-prepared-statement
+    (lambda (connection sql)
+      (prepare-statement connection sql (:TYPE_FORWARD_ONLY (java-null <java.sql.result-set>)) (:CONCUR_READ_ONLY (java-null <java.sql.result-set>)))))
   
 
 
@@ -168,28 +208,98 @@
 
 
   (define-generic-java-method execute-query)
+  (define-generic-java-method execute-update)
   (define-generic-java-method set-fetch-size)
-  
-  (define execute-jdbc-query
-    (lambda* (connection query (fetch-size #f))
-        (let ((stmt (new-statement connection)))
-          (when fetch-size (set-fetch-size stmt (->jint fetch-size)))
-          (execute-query  stmt (->jstring query)))))
-  
-  (define (get-data connection query)
-    (define (read-metadata p)
-      (let l ((i 1) (m (->number (get-column-count p))))
-        (if (> i m) '()
-            (cons
-             (cons (->scm-object (get-column-name p (->jint i)))
-                   (->scm-object (get-column-type-name p (->jint i))))
-             (l (+ i 1) m)))))
-    (let ((rs (execute-jdbc-query connection query) ))
-      (let ((rs-md (read-metadata (get-meta-data rs)))
-            (data (iterable->list (result-set->iterator rs) (lambda (v) (->scm-object v)))))
-            (cons rs-md data))))
 
-  (define (for-each-data connection query proc)
+  (define execute-jdbc-query
+    (lambda* (connection query (vars #f) (fetch-size #f))
+             (execute-jdbc-something execute-query connection query vars fetch-size)))
+
+  ;; execute-jdbc-update is a draft. You should still probably use sql/execute-update instead.
+  (define execute-jdbc-update
+    (lambda* (connection query (vars #f) (fetch-size #f))
+             (execute-jdbc-something execute-update connection query vars fetch-size)))
+
+  (define-java-classes
+    (<sql-date> |java.sql.Date|)
+    (<jobject> |java.lang.Object|)
+    (<sql-timestamp> |java.sql.Timestamp|))
+  
+  (define (jdbc/->jobject value)
+    (cond 
+     ((date? value)
+      (let ((t (date->time-utc value)))
+        ;(java-new <sql-date> (->jlong (* 1000 (time-second t))))
+        (java-new <sql-timestamp> (->jlong (* 1000 (time-second t))))
+        ))
+     ((time? value)
+      (java-new <sql-timestamp> (->jlong (* 1000 (time-second value)))))
+     ((null? value)
+      (java-null <jobject>))
+     (else (->jobject value))))
+  
+  (define execute-jdbc-something
+    (lambda* (something connection query (vars #f) (fetch-size #f))
+             (let ((stmt (if vars
+                             (new-prepared-statement connection (->jstring query))
+                             (new-statement connection))))
+               (when fetch-size (set-fetch-size stmt (->jint fetch-size)))
+               
+               (if vars
+                   (begin
+                     (for-each
+                      (lambda (v)
+                        (match-let ( ( (tindex tvalue) v ) )
+                                   (begin
+                                     (let ((objectindex (->jobject tindex))
+                                           (objectvalue (jdbc/->jobject tvalue)))
+                                       (j "stmt.setObject(objectindex, objectvalue);"
+                                          `((stmt ,stmt)
+                                            (objectindex ,objectindex)
+                                            (objectvalue ,objectvalue)))))))
+                      vars)
+                     (something stmt))
+                   (something stmt (->jstring query))))))
+
+  (define get-data
+    (lambda* (connection query (vars #f))
+             (define (read-metadata p)
+               (let l ((i 1) (m (->number (get-column-count p))))
+                 (if (> i m) '()
+                     (cons
+                      (cons (->scm-object (get-column-name p (->jint i)))
+                            (->scm-object (get-column-type-name p (->jint i))))
+                      (l (+ i 1) m)))))
+             (let ((rs (execute-jdbc-query connection query vars) ))
+               (let ((rs-md (read-metadata (get-meta-data rs)))
+                     (data (iterable->list (result-set->iterator rs) (lambda (v) (->scm-object v)))))
+                 (cons rs-md data)))))
+
+  (define get-data-with-headers-at-each-line
+    (lambda* (connection query (vars #f))
+             (let* ((data (get-data connection query vars))
+                    (headers (car data))
+                    (the-data (cdr data)))
+               (pam the-data
+                    (lambda (v)
+                      (zip headers v))))))
+
+  (define (data-with-headers-at-each-line->json sd)
+    (scheme->json
+     `#((result . ,(pam sd (lambda (v)
+                             (list->vector
+                              (pam v
+                                   (match-lambda
+                                    (((fieldname . fieldtype) fieldvalue)
+                                     (cons fieldname
+                                           (cond ((date? fieldvalue)
+                                                  (date->string fieldvalue "~4"))
+                                                 ((null? fieldvalue)
+                                                  (void))                                                 
+                                                 (else fieldvalue)))))))))))))
+      
+
+  (define (for-each-data connection query vars proc)
     (define (read-metadata p)
       (let l ((i 1) (m (->number (get-column-count p))))
         (if (> i m) '()
@@ -197,15 +307,15 @@
              (cons (->scm-object (get-column-name p (->jint i)))
                    (->scm-object (get-column-type-name p (->jint i))))
              (l (+ i 1) m)))))
-    (let ((rs (execute-jdbc-query connection query) ))
+    (let ((rs (execute-jdbc-query connection query vars) ))
       (let ((rs-md (read-metadata (get-meta-data rs))))
             (for-each-iterable (result-set->iterator rs) (lambda (v) (proc (list rs-md (->scm-object v))))))))
 
-  (define (map-each-data connection query proc)
+  (define (map-each-data connection query vars proc)
     (define result (list))
     (define (proc v)
       (set! result (cons v result)))
-    (for-each-data connection query proc)
+    (for-each-data connection query vars proc)
     result)
 
   ;;; Triples with column name, column type and unwrapped column value.

@@ -576,7 +576,7 @@
   (case c ((#\() #\)) ((#\[) #\]) ((#\{) #\}) ((#\<) #\>) (else c)))
 
 (define default-digits
-  (list->vector (string->list "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")))
+  (list->vector (string->list "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")))
 
 ;; kanji (10 included for base 11 ;)
 ;; (vector "０" "一" "二" "三" "四" "五" "六" "七" "八" "九" "十")
@@ -906,7 +906,7 @@
 
         (let ((imag (imag-part n)))
           (cond
-           ((and base (not (and (integer? base) (<= 2 base 36))))
+           ((and base (not (and (integer? base) (<= 2 base 62))))
             (error "invalid base for numeric formatting" base))
            ((zero? imag)
             (cond

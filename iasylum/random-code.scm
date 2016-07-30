@@ -1,6 +1,9 @@
 (define generate-error-message (lambda () (/ 1 0))) ; TODO Cleanup.
 
-(define random)
+(define random (lambda* ((max-number 1000000000000))
+                        (->number (j "java.util.concurrent.ThreadLocalRandom.current().nextLong(n);" `((n ,(->jlong max-number)))))))
+
+(define scheme-random)
 (define sample-random)
 (define random-maker)
 
@@ -115,7 +118,7 @@
 
 
 
-(set! random
+(set! scheme-random
      (let ((number-from-time
             (->number (j "new java.util.Date().getTime();"))
             ))
@@ -124,3 +127,4 @@
            (random-function (+ max-number 0))))))
 
 ;;; End  - RANDOM UTILITIES ;;;
+

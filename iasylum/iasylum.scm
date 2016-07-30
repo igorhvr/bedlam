@@ -2,11 +2,14 @@
 
 (require-extension (lib iasylum/srfi-89))
 (require-extension (lib iasylum/match))
+(require-extension (lib iasylum/jcode))
+(require-extension (lib iasylum/assert))
 
 ;; TODO - Merge all pumps
 
 (module iasylum/iasylum
   (
+   y-combinator
    hashtable/values
    nyi
    vunless
@@ -21,27 +24,35 @@
    d/n
    beanshell-server
    first-n-or-less
-   assert
    alist->http-parameters-string
    run-remote-request
    pump-binary
-   pump_binary-input-port->character-output-port   
-   r r-split r/s r/d r-base
+   pump_binary-input-port->character-output-port
+   input-port->string
+   watched-parallel
+   debug-watched-parallel
+   watched-thread/spawn
+   r r-split r/s r/d r-base ; it is dangerous, see safe-bash-run
+   safe-bash-run
    dp
    smart-compile
    flatten
    rglob
    file->string
+   iasylum-sort
    sort
+   avector-lexicographic-sort
+   alist-lexicographic-sort
    /*
    find-zipfiles
    get-streams-in-zipfile
    get-streams-in-rarfile
    for-each-row-in-a-spreadsheet-in-a-zipfile
-   concurrent-semaphore
+   make-semaphore
    uuid-string
+   uuid?
    get-all-jstreams
-   jstream->tmp-file
+   create-temporary-directory
    string-drop-both
    xor
    ensure-zipped-copy
@@ -49,6 +60,47 @@
    function fn function* fn*
    list-of-type?
    alist?
+   times multiple-values->list
+   sleep-milliseconds sleep-seconds sleep-minutes sleep-hours
+   current-date-utc current-date-utc-less-one-hour
+   list-of-type?
+   list-of
+   alist?
+   pure-alist?
+   try-and-if-it-fails-object
+   try-and-if-it-fails-or-empty-or-java-null-return-object
+   try-and-if-it-throws-object
+   dynamic-define
+   create-shortcuts
+   to-csv-line
+   sha256
+   sha256+
+   hex->decimal
+   decimal->hex
+   decimal->maxradix
+   vector->list_deeply
+   alist-to-url-query-string
+   make-parameter*
+   subtract-dates
+   start-async-json-engine-with-status-retriever
+   add-between-elements
+   complete-with-zeroes
+   add-between
+   add-between-list
+   add-spaces-between
+   get
+   avg average
+   not-buggy-exact->inexact
+   apply*
+   let-parallel map-parallel
+   get-day-index get-day-index-utc
+   atomic-execution
+   select-sublist
+   time->millis
+   make-future
+   only
+   sum-alist
+>>>>>>> upstream/master
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -56,6 +108,26 @@
   (define-syntax function* (identifier-syntax lambda*))
   (define-syntax fn (identifier-syntax lambda))
   (define-syntax fn* (identifier-syntax lambda*))
+
+  ;; Saving some typing...
+  (define-syntax def (identifier-syntax define))
+
+  (define y-combinator
+    (lambda (h)
+      ((lambda (x) (h (lambda (a) ((x x) a))))
+       (lambda (x) (h (lambda (a) ((x x) a)))))))
+
+  (define sleep-milliseconds sleep)
+  (define sleep-seconds (lambda (t) (sleep-milliseconds (* 1000 t))))
+  (define sleep-minutes (lambda (t) (sleep-seconds (* 60 t))))
+  (define sleep-hours (lambda (t) (sleep-minutes (* 60 t))))
+
+  (define (current-date-utc)
+    (current-date 0))
+
+  (define (current-date-utc-less-one-hour)
+    (time-utc->date (subtract-duration (date->time-utc (current-date-utc)) (make-time 'time-duration 0 (* 60 60)))
+                    0))
 
   (import hashtable)
   (import file-manipulation)  ;; rglob uses this.
@@ -76,52 +148,62 @@
     (->string
      (j "in = new FileReader(filename);
       org.apache.bsf.util.IOUtils.getStringFromReader(in);" `((filename ,(->jstring fname))))))
-  
-  ;; Sorting routine.
-  (define (binarysort cmp-func L)
-    (if (null? L) '()
-        (traverse (btree L cmp-func))))
-  
-  (define sort binarysort)
-  
-  (define (btree L cmp-func)
-    (if (= (length L) 1) (leaf (car L))
-        (binsert (btree (cdr L) cmp-func) (car L) cmp-func)))
-  
-  (define (binsert T A cmp-func)     ; insert A into the tree
-    (cond  ( (null? T) (leaf A) )        ; insert here
-           ( (cmp-func (car T) A) (list (car T) 
-                                        (binsert (car (cdr T)) A cmp-func)
-                                        (car (cdr (cdr T)))))  ; left subtree 
-           ( else (list (car T)
-                        (car (cdr T)) 
-                        (binsert (car (cdr (cdr T))) A cmp-func))))); right subtree
-  
-                                        ; add a leaf to the tree (A ()())
-  (define (leaf A) (list A '() '()))
-  
-                                        ; output sorted list by traversing the tree 
-  (define (traverse L)   
-    (cond ( (null? L) L)
-          ( else
-            (append (traverse (car (cdr L)))
-                    (cons (car L)(traverse (car (cdr (cdr L)))))))))
-  
-  (define (length L)
-    (if (null? L) 0
-        (+ 1 (length (cdr L)))))
-  
+
+  (define (input-port->string input)
+    (define i (if (binary-input-port? input)
+                  (open-character-input-port input)
+                  input))
+    (define o (open-output-string))      
+    (define mbuffer (make-string 65000))
+    (define (loop)
+      (let ((a (read-string mbuffer 0 (string-length mbuffer) i)))
+        (if (eof-object? a) 'done 
+            (begin
+              (write-string mbuffer 0 a o)
+              (loop)))))
+    (loop)
+    (get-output-string o))
+
+  (include "mergesort.scm")
+
+  (define iasylum-sort merge-sort)
+  (define sort merge-sort)
+
+  ;; an "avector" is a set of key-values relationships
+  ;; (created using (cons key value)), and very similar
+  ;; to an alist, except that the enclosing structure
+  ;; is a vector.
+  (define (avector-lexicographic-sort v)
+    (list->vector
+     (sort (lambda (e1 e2)
+             (string< (display-string (car e1)) (display-string (car e2))))
+           (vector->list v))))
+
+  (define (alist-lexicographic-sort v)
+    (sort (lambda (e1 e2) (string< (display-string (car e1)) (display-string (car e2)))) v))
+          
   (define (smart-compile fname)
-    (for-each display (list "\n\n(smart-compile \"" fname "\")..."))
+    (for-each display (list "\n(smart-compile \"" fname "\") ..."))
     (let ((data-match (irregex-search
                   '(seq (submatch-named file-name (+ any)) ".scm") fname)))
       (let ((fn-prefix (irregex-match-substring data-match 'file-name)))
-        (compile-file fname (string-append fn-prefix ".scc")))))
+        (let ((destination-fn (string-append fn-prefix ".scc")))
+          (with/fc (lambda (error-record error-k)
+                     (file-delete! destination-fn)
+                     (throw error-record error-k))
+                   (lambda () 
+                     (compile-file fname destination-fn)))))))
+
   
   (define hashtable/values
     (lambda (ht)
       (hashtable/map (lambda (k v) v) ht)))
 
+  ;;
+  ;; Example: (nyi function-not-implemented [value])
+  ;; it will define "function-not-implemented" as a lambda that will
+  ;; return the value "value" (optional) or #t if the value is not defined.
+  ;;
   (define-syntax nyi
     (lambda (x)    
       (syntax-case x ()
@@ -173,9 +255,6 @@
     (if (or (eqv? '() l) (= n 0)) '()
         (cons (car l) (first-n-or-less (cdr l) (- n 1)))))
   
-  (define (assert v m)
-    (unless v (error m)) v)
-
   (define alist->http-parameters-string
     (lambda (alist)   
       (define me
@@ -241,6 +320,42 @@
               (loop)))))
     (loop))
 
+  (define (syserr-log p) (j "System.err.print(m); System.err.flush();" `((m ,(->jobject p)))))
+
+  (define debug-standard-thread-error-handler
+    (lambda (error error-continuation)
+      (map syserr-log `("Error - will stop thread - " ,(->string (j "Thread.currentThread().getName();")) " - details saved at " ,(save-to-somewhere (list error error-continuation)) " - " ,error ,error-continuation "\n"))
+      (print-stack-trace error-continuation)))
+
+  (define standard-thread-error-handler
+    (lambda (error error-continuation)
+      (map syserr-log `("Error - will stop thread "  ,(->string (j "Thread.currentThread().getName();")) ": " ,error ,error-continuation "\n"))
+      (print-stack-trace error-continuation)))
+  
+  (define watched-parallel
+    (lambda fn-set
+      (apply parallel (pam fn-set (lambda (fn) (delay (with/fc standard-thread-error-handler fn)))))))
+  
+  (define debug-watched-parallel
+    (lambda fn-set
+      (apply parallel (pam fn-set (lambda (fn) (delay (with/fc debug-standard-thread-error-handler fn)))))))
+  
+  (define watched-thread/spawn
+    (lambda* (p (error-handler: error-handler standard-thread-error-handler))
+        (thread/spawn
+         (lambda ()
+           (with/fc
+            error-handler
+            p)))))
+
+  (define debug-watched-thread/spawn
+    (lambda* (p (error-handler: error-handler debug-standard-thread-error-handler))
+             (thread/spawn
+              (lambda ()
+                (with/fc
+                 error-handler
+                 p)))))
+  
   (define r
     (lambda* (cmd-string (get-return-code #f))
         (define process-return-code)
@@ -305,6 +420,41 @@
 
   (define r/s (lambda p (r (apply string-append p))))
 
+  ;;
+  ;; This is safer than r-base and derived like r/s and r/d. This fn filters a lot
+  ;; of code injections possibilities.
+  ;;
+  ;; If any command (first argument) can be from an user input, it still necessary to filter the user
+  ;; input. If you can avoid to use this, like calling a directly library in Java, please do it.
+  ;;
+  ;; Use like this: (safe-bash-run "ls" "-lath")
+  ;;
+  ;; (safe-bash-run <command> <arg1> <arg2> ...)
+  ;;
+  (define safe-bash-run
+    (lambda command-and-args
+      (->string
+       (j "args = java.util.Arrays.copyOf(cmdparams, cmdparams.length, String[].class);
+           // System.out.println(java.util.Arrays.deepToString(args));
+           pb = new ProcessBuilder(args);
+           pb.redirectErrorStream(true);
+           p = pb.start();
+           int errCode = p.waitFor();
+           reader = new java.io.BufferedReader(
+                   new java.io.InputStreamReader(p.getInputStream()));
+
+           builder = new StringBuilder();
+           line = null;
+           while ( (line = reader.readLine()) != null) {
+               builder.append(line);
+               builder.append(System.lineSeparator());
+           }
+           result = builder.toString();
+           return result;"
+          `((cmdparams ,(jlist->jarray (->jobject (map (lambda (value)
+                                                         (->jstring value))
+                                                       command-and-args)))))))))
+  
    ;; Defines a parameter.
   (define-syntax dp
     (lambda (x)    
@@ -482,35 +632,23 @@
                 (else (error "Bug."))))
    (list (list path+filename (j "new java.io.FileInputStream(fname);" `((fname ,(->jstring path+filename))))))))
 
-  (define concurrent-semaphore
+  (define make-semaphore
     (lambda* ((initialPermits 0))
         (let ((inner-semaphore (j "new java.util.concurrent.Semaphore(ip);" `((ip ,(->jint initialPermits))))))
-          (match-lambda*                              
-           [('inc)
+          (match-lambda*
+           [('release)
             (release inner-semaphore)
+            (void)]
+           [('acquire)
+            (acquire inner-semaphore)
             (void)]
            [('inner-semaphore)
             inner-semaphore]
            [()
             (->number (available-permits inner-semaphore)])))))
 
-  (define (jstream->tmp-file stream)
-  (j "jstreamtofile_result=java.io.File.createTempFile(\"jstream-to-file\",\"tmp\");
-      { 
-	jstreamtofile_out = new java.io.FileOutputStream(jstreamtofile_result);
- 
-	jstreamtofile_read = 0;
-	jstreamtofile_bytes = new byte[1024];
- 
-	while ((jstreamtofile_read = inputstream.read(jstreamtofile_bytes)) != -1) {
-		jstreamtofile_out.write(jstreamtofile_bytes, 0, jstreamtofile_read);
-	}
- 	
-	jstreamtofile_out.flush();
-	jstreamtofile_out.close();
-      }
-      jstreamtofile_result;"
-     `((inputstream ,stream))))
+  (define (create-temporary-directory)
+    (->string (j "java.nio.file.Files.createTempDirectory(\"bedlamTempDirectory\").toAbsolutePath().toString();")))
 
   (define (string-drop-both s left-n right-n)
     (string-drop (string-drop-right s right-n) left-n))
@@ -556,6 +694,21 @@
                       ((precedes? mid-value sought)
                        (loop (+ midpoint 1) stop))
                       (else #t))))))))
+
+  ;;
+  ;; (times 2 (random))
+  ;; => (754466479064 851410907158)
+  ;;
+  (define-syntax times
+    (syntax-rules ()
+      ((_ n <code> ...)
+       (let ((lambda-set (list-ec (: i n) (lambda () (list ((lambda () <code> ...)))))))
+         (apply append (multiple-values->list (apply watched-parallel lambda-set)))))))
+
+  (define-syntax multiple-values->list
+    (syntax-rules ()
+      ((_ <code> ...)
+       (call-with-values (lambda () <code> ...) list))))
   
   (define d)
   (define w)
@@ -570,6 +723,8 @@
 
   (define (uuid-string) (->string (j "new com.eaio.uuid.UUID().toString();")))
 
+  (define (uuid? uuid) (try-and-if-it-fails-object (#f) (string->juuid uuid)))
+  
   ;; Imported from MIT Scheme runtime/list.scm
   (define (list-of-type? object predicate)
     (let loop ((l1 object) (l2 object))
@@ -586,8 +741,424 @@
   ;; Imported from MIT Scheme runtime/list.scm
   (define (alist? object)
     (list-of-type? object pair?))
+
+  ;; Imported from MIT Scheme runtime/list.scm
+  ;; and adapted to check if the elements are pair and not list
+  ;; at the same time; this confusion is because a list fits pair? predicate.
+  (define (pure-alist? object)
+    (list-of-type? object (lambda (o)
+                            (and (pair? o) (not (list? o))))))
+
+  ;; Example: (define list-of-string? (list-of string?))
+  ;;          (list-of-string? '("bla" "ble")) => #t
+  (define-syntax list-of
+    (syntax-rules ()
+      ((_ predicate)
+       (lambda (object)
+         (list-of-type? object predicate)))))
+
+  ;;
+  ;; This macro attempts to execute the given piece of code, and if it fails
+  ;; throwing some kind of error/exception or the "predicate-fail-condition?"
+  ;; (a lambda with a single parameter) is true, returns the provided <object>
+  ;; (the error itself is dropped).
+  ;;
+  ;; E.g.: (try-and-if-it-fails-object ('whatever) (/ 5 x)) will
+  ;; return 5/x or 'whatever if x is zero.
+  ;;
+  ;; If you don't put <obj>, e.g.: (try-and-if-it-fails-object () (/ 5 x))
+  ;; the result is the error object itself.
+  ;;
+  (define-syntax define-custom-try-and-if-it-fails-return-object
+    (syntax-rules ()
+      ((_ macro-name predicate-fail-condition?)
+       (begin
+         (define-syntax macro-name
+           (syntax-rules ()
+             ((_ () <code> (... ...))
+              (macro-name ('the-error-object) <code> (... ...)))
+             ((_ (<obj>) <code> (... ...))
+              (begin
+                (call-with-current-continuation
+                 (lambda (restart-continuation)
+                   (let* ((o (delay ((lambda () <obj>))))
+                          (force-result (lambda (error error-continuation)
+                                          (let ((obj (force o)))
+                                            (if (equal? obj 'the-error-object)
+                                                (make-exception
+                                                 error
+                                                 (or error-continuation restart-continuation))
+                                                obj)))))
+                     (with-failure-continuation
+                      (lambda (error error-continuation)
+                        (log-warn "Maybe this error is being purposely ignored:" error)
+                        (print-stack-trace error-continuation)
+                        (force-result error error-continuation))
+                      (lambda ()
+                        (let ((result ((lambda () <code> (... ...)))))
+                          (let ((final-result
+                                 (cond [(predicate-fail-condition? result) (force-result result #f)]
+                                       [else result])))
+                            final-result)))))))))))))))
+
+  ;; Check error, exception, java null, empty list and #f
+  (define-custom-try-and-if-it-fails-return-object
+    try-and-if-it-fails-or-empty-or-java-null-return-object
+    (lambda (result)
+      (or (java-null? result)
+          (null? result)
+          (eqv? #f result))))
+
+  ;; Check error, exception, java null and #f
+  (define-custom-try-and-if-it-fails-return-object
+    try-and-if-it-fails-object
+    (lambda (result)
+      (or (java-null? result)
+          (eqv? #f result))))
+
+  ;; Check only for error or exception
+  (define-custom-try-and-if-it-fails-return-object
+    try-and-if-it-throws-object
+    (lambda (result) #f))
   
+  ;; (dynamic-define "abc" 123)
+  ;; $ abc => 123
+  (define-syntax dynamic-define
+    (syntax-rules ()
+      ((_ non-evaluated-what <body>)
+       (let ((what non-evaluated-what))
+         (cond ((string? what) (eval `(define ,(string->symbol string) <body>)))
+               ((symbol? what) (eval `(define ,what <body>)))
+               (else
+                (throw
+                 (make-error
+                  (string-append
+                   "Failure to define using handle " (iasylum-wring-string what) " - not a symbol nor a string.")))))))))
+
+  ;; use like this:
+  ;; (create-shortcuts (+ -> plus) (- -> minus))
+  (define-syntax create-shortcuts
+    (syntax-rules (->)
+      ((_ (function -> copy) ...)
+       (begin
+         (define copy function) ...))))
+
+  (define (vector->list_deeply obj)
+    (cond [(list? obj) (map (lambda (element)
+                              (vector->list_deeply element))
+                            obj)]
+          [(vector? obj) (vector->list_deeply (vector->list obj))]
+          [(pair? obj) (cons (vector->list_deeply (car obj)) (vector->list_deeply (cdr obj)))]
+          [else obj]))
+
+  (define (escape-double-quotes str)
+    (irregex-replace/all "\"" str "\\\""))
+
+  (define to-csv-line 
+    (match-lambda*
+     ((single-element) (string-append* "\"" (escape-double-quotes (display-string single-element)) "\""))
+     ((first-element . rest) (string-append (to-csv-line  first-element) " , " (apply to-csv-line  rest)))
+     (anything (error "Invalid parameter to to-csv-line " anything))))
+
+  (define sha256+
+    (lambda elements
+      (sha256 (apply add-between (cons ":" elements)))))
+
+  (define (sha256 string)
+    (->string (j              
+               "md = java.security.MessageDigest.getInstance(\"SHA-256\");
+                md.update(input.getBytes(\"UTF-8\"));
+                digest = md.digest();
+                return String.format(\"%064x\", new java.math.BigInteger(1, digest));"
+                 `((input ,(->jstring string))))))
+
+  (define (hex->decimal hex)
+    (string->number (->string (j "new java.math.BigInteger(hex, 16).toString();" `((hex ,(->jstring hex)))))))
+  
+  (define (decimal->hex decimal)
+    (->string (j "new java.math.BigInteger(input).toString(16);"
+                 `((input ,(->jstring (number->string decimal)))))))
+
+  (define (decimal->maxradix decimal)
+    (->string (j "new java.math.BigInteger(input).toString(java.lang.Character.MAX_RADIX);"
+                 `((input ,(->jstring (number->string decimal)))))))
+
+  (define (alist-to-url-query-string raw-alist)
+    (define join-parameters
+      (match-lambda
+       ((element) element)
+       ((first-element . rest) (string-append* first-element "&" (join-parameters rest)))))
+    
+    (let* ((alist (pam raw-alist (lambda (v) (match-let (((key . value) v)) `(,(-to_ key) . ,(->string (j "java.net.URLEncoder.encode(v, \"ISO-8859-1\");" `((v ,(->jstring value))))))))))         
+           (individual-parameters (map (lambda (v) 
+                                         (match-let (((key . value) v)) (string-append* key "=" value))) alist)))
+      (join-parameters individual-parameters)))
+
+
+  ; Generates parameters that work and are safe across threads.
+  (define (make-parameter* init)
+    (let ((storage (j "new java.util.concurrent.ConcurrentHashMap();")))
+      (j "tmap.put(\"SINGLEKEY\", value);" `((value ,(java-wrap init)) (tmap ,storage)))
+      ((lambda ()
+         (define calculate-result
+           (lambda (value)
+             (if (not value)
+                 (safe-java-unwrap (j "tmap.get(\"SINGLEKEY\");" `((tmap ,storage))))
+                 (let ((result (calculate-result #f)))
+                   (j "tmap.put(\"SINGLEKEY\", value);" `((value ,(java-wrap value)) (tmap ,storage)))
+                   result))))
+         (case-lambda
+           (() (calculate-result #f))
+           ((init) (calculate-result init)))))))
+  
+  (define (start-async-json-engine-with-status-retriever engine-thunk should-stop?-thunk seconds-between-executions)
+    (define last-execution-result (make-parameter* '#((status . "NEVER_EXECUTED"))))
+    (define last-execution-when (make-parameter* #f))
+    
+    (thread/spawn
+     (lambda ()     
+       (let loop ()
+         (if (should-stop?-thunk)
+             'stopped
+             (begin
+               (last-execution-result
+                (let ((rv (try-and-if-it-throws-object () (engine-thunk))))
+                  (if (exception? rv)
+                      `#((status . ,(string-append "Error: "
+                                                   (or (error-message (exception-error rv)) "UnspecifiedError"))))
+                      rv)))
+               (last-execution-when (current-time time-utc))
+               (sleep (* 1000 seconds-between-executions))
+               (loop))))))
+    
+    (lambda ()
+      (let* ((when (last-execution-when))
+             (result (last-execution-result))
+             (time-elapsed
+              (or (and when (time-second (time-difference (current-time time-utc) when))) -1)))
+        
+        (list->vector
+         (append
+          (vector->list result)
+          `(
+            (time-elapsed-since-last-updated-seconds . ,time-elapsed)
+            (last-updated . ,(if when (date->string (time-utc->date when 0) "~4") "NEVER"))))))))
+
+(define subtract-dates
+  (match-lambda*
+   (()
+    (string-append* "Sample usage: " (iasylum-write-string `(subtract-dates "2014-11-05T10:21:00Z" "2014-11-04T15:15:00Z"))))
+   (( (? string? later) (? string? earlier))
+    (time-difference (date->time-utc (string->date later "~Y-~m-~dT~k:~M:~S~z"))  (date->time-utc (string->date earlier "~Y-~m-~dT~k:~M:~S~z"))))
+   (( (? date? later) (? date? earlier))
+    (time-difference (date->time-utc later)  (date->time-utc earlier)))))
+>>>>>>> upstream/master
+  
+  (define (add-between-elements what list-of-elements)
+    (if (<= (length list-of-elements) 1)
+        list-of-elements
+        (append (list (car list-of-elements) what)
+                (add-between-elements what (cdr list-of-elements)))))
+
+  ;;
+  ;; (complete-with-zeroes "56" 7)
+  ;; => "0000056"
+  ;;
+  (define (complete-with-zeroes string zeroes)
+    (string-pad string zeroes #\0))
+
+  ;;
+  ;; (add-between "," 1 2 3) => "1,2,3"
+  ;;  
+  (define add-between
+    (match-lambda*
+     ((what) "")
+     ((what single-element) (string-append* single-element))
+     ((what first-element . rest) (string-append* first-element what (apply add-between (cons what rest))))
+     (anything (error "Invalid parameter to add-between " anything))))
+
+  (define (add-between-list what l)
+    (assert (list? l))
+    (letrec ((workhorse  (match-lambda
+                      (() ())
+                      ((single-element) (list single-element))
+                      ((first-element . rest) (cons first-element (cons what (workhorse rest))))
+                      (anything (throw (make-error (string-append* "Invalid parameter" anything)))))))
+      (workhorse l)))
+
+  ;;
+  ;; (add-spaces-between 1 2 3) => "1 2 3"
+  ;;
+  (define add-spaces-between
+    (lambda params
+      (apply add-between (append (list " ") params))))
+
+  ;;
+  ;; (define alist '((a . 1) (b . 3)))
+  ;; (get 'b alist) => 3
+  ;; (get 'c alist) => #f
+  ;; (get 'c alist 123) => 123
+  ;;
+  (define* (get property alist (default-value #f))
+    (or (let ((pair (assoc property alist)))
+          (and pair (cdr pair)))
+        default-value))
+
+  (define (avg . numbers)  
+    (/ (apply + numbers) (length numbers)))
+
+  ;;
+  ;; There is a bug on SISC that when you try to format numbers like
+  ;; 282457054241909808547136319475365783206389579211833163126981837752475980274261722819705041556589987183902148854677474937212682452658934957606996941102010807245608033464985202685067640880869257553850446454726752603027573191148813419329621578462766074442169646855371987045338851099884530056618741223228936994941553896821661753734605673855194130883776944673309108647011130597/1001509038269881690964475821585963181094481778952714378880702564640950073238802107511786471142177771710461016835321271186203812012260492331963455165457486865903556624479070974292666405020019403147541868610286679558199714122163490068271002294617295514046193024960538970649724427145698755641672350937606977382278465505350339120293706504726356045515482771243984000000000000000
+  ;; the format fn throws Error in round: <java.lang.NumberFormatException>: Infinite or NaN
+  ;; because this huge number converted to inexact number is nan.0 (using exact->inexact).
+  ;;
+  ;; Now, if you want to format huge numbers like this, use (format "~0,8F" (not-buggy-exact->inexact <huge-number>))
+  ;; instead (format "~0,8F" <huge-number>) directly.
+  ;;
+  (define (not-buggy-exact->inexact number)
+    (string->number (->string (number->jbigdecimal number))))
+
+  ;;
+  ;; (define a +)
+  ;; (apply a '(1 1)) => 2
+  ;; (apply* a '(1 1)) => 2
+  ;; (apply* "a" '(1 1)) => 2
+  ;; (apply* 'a '(1 1)) => 2
+  ;;
+  (define (apply* fn-name param-list)
+    (if (procedure? fn-name)
+        (apply fn-name param-list)
+        (let ((fn (getprop (string->symbol (string-append* fn-name)) (interaction-environment))))
+          (if (not fn)
+              (throw (make-error (format "Function \"~a\" not found!" fn-name)))
+              (apply fn param-list)))))
+
+  ;;
+  ;; A let-like utility that runs the code to define each binding in parallel.
+  ;;
+  ;; Example:
+  ;; (time (let-parallel [(a (begin (sleep 1000) (+ 1 1))) (b (begin (sleep 500) (+ 2 2)))] (+ a b)))
+  ;; => (6 (1001 ms))
+  ;;
+  ;; (time (let [(a (begin (sleep 1000) (+ 1 1))) (b (begin (sleep 500) (+ 2 2)))] (+ a b)))
+  ;; => (6 (1500 ms))
+  ;;
+  (define-syntax let-parallel
+    (syntax-rules ()
+      ((_ [(var-name value) ...] body ...)
+       (call-with-values
+           (lambda ()
+             (watched-parallel (lambda ()
+                         value) ...))
+           (lambda (var-name ...)
+             body ...)))))
+
+  ;;
+  ;; A version of map that runs the code in parallel.
+  ;;
+  ;; Example:
+  ;; (time (map-parallel (lambda (a)
+  ;;          (begin
+  ;;            (sleep 1000)
+  ;;            (+ 1 a)))
+  ;;       '(1 2 3 4 5)))
+  ;; => ((2 3 4 5 6) (1000 ms))
+  ;;
+  (define map-parallel (match-lambda* [((? procedure? fn)
+                                        (element ___))
+                                       (multiple-values->list
+                                        (apply watched-parallel (map (lambda (i)
+                                                               (delay (fn i)))
+                                                             element)))]))
+
+  ;;
+  ;; Example of use: (get-day-index (current-date 0))
+  ;; If you want to get the current day index in UTC, use (get-day-index-utc)
+  ;;
+  (define (get-day-index date)
+    (sha256+ (date-year-day date)
+             (date-year date)))
+
+  ;;
+  ;; Return a string representing today.
+  ;; It changes every day after 00:00 UTC.
+  ;;
+  (define (get-day-index-utc)
+    (get-day-index (current-date 0)))
+
+  ;;
+  ;; Use like this:
+  ;;
+  ;; (atomic-exection "lock name" body ...)
+  ;;
+  (define-syntax atomic-execution
+    (syntax-rules ()
+      ((_ lock-name body ...)
+       (dynamic-wind (lambda ()
+                       (mutex/lock! (mutex-of lock-name)))
+                     (lambda ()
+                       body ...)
+                     (lambda ()
+                       (mutex/unlock! (mutex-of lock-name)))))))
+
+  ;;
+  ;; (select-sublist '(a b c d e) 1 3) => (b c d)
+  ;; (select-sublist '(a b c d e) 1 10) => (b c d e)
+  ;; (select-sublist '(a b c d e) 10 1) => ()
+  ;;
+  (define (select-sublist lst initial-index end-index)
+    (or (and (or (> initial-index end-index)
+                 (null? lst))
+             '())
+        (let* ((size (length lst))
+               (last-index (- size 1))
+               (end-index (max 0 (min end-index last-index)))
+               (initial-index (min (max 0 initial-index) size)))
+          (drop-right (drop lst initial-index)
+                      (- last-index end-index)))))
+
+  ;;
+  ;; It returns an exact number. Use (floor ...) to make it an integer.
+  ;;
+  (define (time->millis t)
+    (+ (* 1000 (time-second t))
+       (/ (time-nanosecond t) 1000000)))
+
+  (define* (make-future l)
+    (let* ((define-future-result (make-parameter* #f))
+           (thread-handle (watched-thread/spawn (lambda () (let ((result (l))) (define-future-result result))))))
+      (lambda* ((timeout-milliseconds: timeout #f))
+        (if timeout
+            (if (thread/join thread-handle timeout) (define-future-result) #f)
+            (and (thread/join thread-handle) (define-future-result))))))
+
+  ;;
+  ;; "only" is like "first" but ensure that the list has one element
+  ;; and rises an error otherwise.
+  ;;
+  (define (only lst)
+    (assert (and (= (length lst) 1)
+                 (first lst))))
+
+  ;;
+  ;; (sum-alist '(("a" . 5) ("a" . 10) ("b" . 23) ("b" . 20) ("a" . 30)))
+  ;; => (("a" . 45) ("b" . 43))
+  ;;
+  (define* (sum-alist alist (sum-fn: sum-fn +))
+    (fold (match-lambda* (((key . value) acc)
+                          (or (and-let* ((v (get key acc))
+                                         (new-acc (alist-delete key acc))
+                                         (new-sum (sum-fn v value))
+                                         (result (cons `(,key . ,new-sum) new-acc)))
+                                        result)
+                              (cons `(,key . ,value) acc))))
+          (list) alist))
+
+  (create-shortcuts (avg -> average))
+
   (define-generic-java-method release)
+  (define-generic-java-method acquire)
   (define-generic-java-method available-permits)
   
   (reset-d)

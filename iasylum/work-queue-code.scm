@@ -2,7 +2,7 @@
 
 (define-java-classes <java.util.concurrent.linked-blocking-queue> <java.util.concurrent.array-blocking-queue>)
 
-(define-generic-java-methods put take)
+(define-generic-java-methods put take size peek)
 
  ;; Specification:
  ;; (if capacity (j "new java.util.concurrent.ArrayBlockingQueue(capacity);" `((capacity ,(->jint capacity)))) (j "new java.util.concurrent.LinkedBlockingQueue();"))
@@ -66,23 +66,36 @@
                                (set! paused #t) (void)]
                               [('resume)
                                (set! paused #f) (void)]
+                              [('size)
+                                (->number (size inner-queue))]
+                              [('peek return-when-empty)
+                               (if (not paused)
+                                   (let ((result (peek inner-queue)))
+                                     (if (java-null? result) return-when-empty (java-unwrap result)))
+                                   return-when-empty)]
+                              [('peek)
+                               (new-function 'peek 'empty)]
                               [('inner-queue)
                                inner-queue]
+                              [('put-scm-lambda)
+                               (lambda (scm-object)
+                                 (put inner-queue (java-wrap scm-object)))
+                               ]
                               )))
         new-function))))
 
 (define (process-all-work proc queue continue-forever)
-  (if (continue-forever)
+  (if continue-forever
       (let r ()
-        (proc (queue 'take 'paused))
+        (proc (queue 'take))
         (r))
       (let ((v (queue 'poll)))
-        (if (not (eqv? v 'empty)) (begin (proc v) (process-all-work proc queue))))))
+        (if (not (eqv? v 'empty)) (begin (proc v) (process-all-work proc queue continue-forever))))))
 
 (define (process-all-work-forced proc queue ignored)
   (let ((q (queue 'inner-queue)))
     (let r ()
-      (proc (java-unwrap (take q)))
+      (proc (take q))
       (r))))
 
 (define get-next-worker-n
@@ -95,26 +108,25 @@
         (mutex/unlock! m)
         result))))
 
-(define (now) (->string (j "new java.util.Date().toString();")))
+
+(define put-log-trace (make-queue))
 
 (define start-worker
-  (lambda* (processor work-queue (continue-forever #f) (forced #f))
-      (thread/spawn
+  (lambda* (processor work-queue (continue-forever: continue-forever #t) (inner-queue-forced: inner-queue-forced #f) (log-trace-execution: log-trace-execution (make-parameter* #t)) )
+      (watched-thread/spawn
        (lambda ()
-         (with-failure-continuation
-          (lambda (err cont)
-            (d "\nError " err " at " cont "\n"))
-          (lambda ()
-            (let ((n (get-next-worker-n)))
-              (d "\nStarting worker [w" n "]...\n")
-              ((if forced process-all-work-forced process-all-work)
-               (lambda (v)
-                 (define (now) (->string (j "new java.util.Date().toString();")))
-                 ;;(d "\n   [w" n "] starting  work unit: " v " (now: " (now) ")\n")
-                 (let ((timings (time (processor v))))
-                   ;;(d "\n   [w" n "] completed work unit: " v " in " (cdr timings) "\n")
-                   #t
-                   ))       
-               work-queue
-               continue-forever)
-              (d "\nStopping worker [w" n "] - nothing else to do.\n"))))))))
+         (let ((n (get-next-worker-n)))
+           (when (log-trace-execution) (put-log-trace 'put (list 'work-queue "Starting worker" n)))
+           ((if inner-queue-forced process-all-work-forced process-all-work)
+            (lambda (v)
+              (when (log-trace-execution) (put-log-trace 'put (list 'work-queue n "Starting  work unit" v)))
+              (let ((timings (time (processor v))))
+                (when (log-trace-execution) (log-trace 'work-queue n "Completed work unit" v " in " (cdr timings)))
+                #t
+                ))       
+            work-queue
+            continue-forever)
+           (when (log-trace-execution) (put-log-trace 'put (list "\nStopping worker [w" n "] - nothing else to do.\n")))
+           )))))
+
+

@@ -1,0 +1,15 @@
+#! /usr/bin/env /bedlam/sisc/sisc-1.16.6/scheme-src/srfi-22/srfi-22.sh
+;; -*- mode: scheme; -*-
+
+(begin (define iasylum-bedlam-location "/base/bedlam/") (load (string-append iasylum-bedlam-location "iasylum/init.scm")))
+
+(define (main p)
+  (d/n "Will start rsync from container /data to data. Ignored parameters: " p)  
+
+  (let* ((bedlam-ssh-port (irregex-match-substring (irregex-search '(seq ipv4-address ":" (submatch-named bedlam-ssh-port (+ digit)) "->22/tcp")
+                                                                   (r/s "sudo docker ps|grep bedlam")) 'bedlam-ssh-port))
+         (command (string-append* "rsync -e 'ssh -p " bedlam-ssh-port " -oUserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no -oBatchMode=yes -oVerifyHostKeyDNS=no -i /base/bedlam/docker-ubuntu/id_rsa' -avz --delete -P root@localhost:/data/ /base/bedlam/docker-ubuntu/data/")))
+    (d/n "Will run command: " command)
+    (r/d command)
+    (d/n "rsync finished.")))
+

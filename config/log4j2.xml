@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration> <!-- add status="trace" to enable debug mode -->
+  <Appenders>
+    <Console name="STDOUT" target="SYSTEM_OUT">
+      <PatternLayout pattern="(&quot;%p&quot; &quot;%thread&quot; &quot;%d{ISO8601}&quot; (&quot;%enc{%m}&quot; &quot;%C(%M)&quot;)%n"/>
+    </Console>
+  </Appenders>
+  <Loggers>  
+    <Root level="info">
+      <AppenderRef ref="STDOUT"/>
+    </Root>
+
+    <Logger name="org.apache.log4j.xml" level="info"/>
+    <Logger name="datomic" level="info"/>
+    <Logger name="org.hornetq" level="warn"/>
+    <Logger name="org.jboss.logging" level="warn"/>
+    <Logger name="org.quartz" level="info"/>
+    <Logger name="closureJobLogger" level="warn"/>
+    <Logger name="com.healthmarketscience.jackcess.PageChannel" level="warn"/>
+
+  </Loggers>
+</Configuration>
+    
