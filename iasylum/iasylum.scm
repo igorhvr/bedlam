@@ -58,6 +58,8 @@
    ensure-zipped-copy
    vector-binary-search
    function fn function* fn*
+   list-of-type?
+   alist?
    times multiple-values->list
    sleep-milliseconds sleep-seconds sleep-minutes sleep-hours
    current-date-utc current-date-utc-less-one-hour
@@ -98,6 +100,7 @@
    make-future
    only
    sum-alist
+>>>>>>> upstream/master
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -719,6 +722,7 @@
     (set! w (let ((m (mutex/new))) (lambda p (mutex/lock! m) (for-each write p) (mutex/unlock! m) (void)))))
 
   (define (uuid-string) (->string (j "new com.eaio.uuid.UUID().toString();")))
+
   (define (uuid? uuid) (try-and-if-it-fails-object (#f) (string->juuid uuid)))
   
   ;; Imported from MIT Scheme runtime/list.scm
@@ -948,6 +952,7 @@
     (time-difference (date->time-utc (string->date later "~Y-~m-~dT~k:~M:~S~z"))  (date->time-utc (string->date earlier "~Y-~m-~dT~k:~M:~S~z"))))
    (( (? date? later) (? date? earlier))
     (time-difference (date->time-utc later)  (date->time-utc earlier)))))
+>>>>>>> upstream/master
   
   (define (add-between-elements what list-of-elements)
     (if (<= (length list-of-elements) 1)
