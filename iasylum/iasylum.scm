@@ -100,6 +100,7 @@
    group-by-key-and-apply
    get-env
    validate-cpf
+   get-relative-time
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -1218,6 +1219,13 @@
   ;;
   (define (get-env var-name)
     (r/s (format "echo -n $~a" var-name)))
+
+  ;;
+  ;; It can receive a time, date or jdate.
+  ;;
+  (define (get-relative-time date-or-time)
+    (->string (j "new org.ocpsoft.prettytime.PrettyTime().format(dot);"
+                 `((dot ,(->jobject date-or-time))))))
 
   (create-shortcuts (avg -> average))
 
