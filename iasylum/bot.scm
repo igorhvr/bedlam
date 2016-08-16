@@ -25,6 +25,7 @@
                                                    (j "pmtbot.sendRawLineToServer(ln);"
                                                       `((pmtbot ,bot)
                                                         (ln ,(->jstring nmsg))))
+                                                   (sleep 250)
                                                    (loop)))))
                bot)))
 
