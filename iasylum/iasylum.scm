@@ -101,6 +101,7 @@
    get-env
    validate-cpf
    get-relative-time
+   pretty-print-to-string
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -1226,6 +1227,11 @@
   (define (get-relative-time date-or-time)
     (->string (j "new org.ocpsoft.prettytime.PrettyTime().format(dot);"
                  `((dot ,(->jobject date-or-time))))))
+
+  (define (pretty-print-to-string obj)
+    (let ((stro (open-output-string)))
+      (pretty-print obj stro)
+      (get-output-string stro)))
 
   (create-shortcuts (avg -> average))
 
