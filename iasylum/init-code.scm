@@ -227,7 +227,7 @@
 (add-lib "clojure/tools.nrepl-0.2.10.jar")
 
 (add-lib "clojure/clj-slack-0.5.4-standalone.jar")
-(add-lib "u/pircbotx-2.0.1-everything.jar")
+(add-lib "u/pircbotx-2.1.jar")
 
 (define (extend-classpath i)
   (class-path-extension-append! (cons i (class-path-extension))))

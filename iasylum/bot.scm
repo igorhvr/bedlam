@@ -10,7 +10,7 @@
              (let* ((inner-queue-out-work-queue (out-work-queue 'inner-queue))
                     (pmtoutqueuevarname (random-var))
                     (bot
-                     (j (string-append "new org.pircbotx.PircBotX(new org.pircbotx.Configuration.Builder().setName(pmtname).setSocketFactory(javax.net.ssl.SSLSocketFactory.getDefault()).setCapEnabled(true).addCapHandler(new org.pircbotx.cap.TLSCapHandler(new org.pircbotx.UtilSSLSocketFactory().trustAllCertificates(), true)).addListener(new org.pircbotx.hooks.ListenerAdapter(){public void onMessage(org.pircbotx.hooks.events.MessageEvent event) {if(mchannel.equals(event.getChannel().getName())) " pmtoutqueuevarname ".put(new sisc.data.ImmutableString(event.getMessage()));}}).setServerHostname(pmtserverhostname).setServerPort(pmtserverport).setServerPassword(pmtserverpassword).buildConfiguration());")
+                     (j (string-append "new org.pircbotx.PircBotX(new org.pircbotx.Configuration.Builder().setName(pmtname).setAutoReconnect(true).	setAutoReconnectAttempts(999999).setAutoReconnectDelay(5000).setSocketFactory(javax.net.ssl.SSLSocketFactory.getDefault()).setCapEnabled(true).addCapHandler(new org.pircbotx.cap.TLSCapHandler(new org.pircbotx.UtilSSLSocketFactory().trustAllCertificates(), true)).addListener(new org.pircbotx.hooks.ListenerAdapter(){public void onMessage(org.pircbotx.hooks.events.MessageEvent event) {if(mchannel.equals(event.getChannel().getName())) " pmtoutqueuevarname ".put(new sisc.data.ImmutableString(event.getMessage()));}}).setServerHostname(pmtserverhostname).setServerPort(pmtserverport).setServerPassword(pmtserverpassword).buildConfiguration());")
                         `((pmtname ,(->jstring name))
                           (,(string->symbol pmtoutqueuevarname) ,inner-queue-out-work-queue)
                           (pmtserverhostname ,(->jstring server-hostname))
@@ -25,7 +25,7 @@
                                                    (j "pmtbot.sendRawLineToServer(ln);"
                                                       `((pmtbot ,bot)
                                                         (ln ,(->jstring nmsg))))
-                                                   (sleep 250)
+                                                   (sleep 550)
                                                    (loop)))))
                bot)))
 
