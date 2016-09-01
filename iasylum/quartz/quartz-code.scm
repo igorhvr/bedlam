@@ -1,3 +1,20 @@
+;;
+;; Use like:
+;;
+;; (schedule-job-easier (lambda () (d/n "Hello world!")) "0 * * * * ?")
+;;
+;; See also http://www.quartz-scheduler.org/api/previous_versions/1.8.5/org/quartz/CronExpression.html
+;;
+(define (schedule-job-easier thunk cron-expression)
+  (let* ((job-group (uuid-string))
+         (job-name (uuid-string))
+         (trigger-group (uuid-string))
+         (trigger-name (uuid-string))
+         (scheduler (create-scheduler))
+         (job (create-quartz-job-from-closure job-group job-name thunk))
+         (trigger (create-quartz-cron-trigger trigger-group trigger-name cron-expression)))
+    (schedule-job scheduler job trigger)))
+
 (define (create-scheduler)
   (j
    (quote-convert
