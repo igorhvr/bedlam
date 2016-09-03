@@ -18,17 +18,22 @@
 (define (create-scheduler)
   (j
    (quote-convert
+      (apply format
+             (cons 
       "
-       Properties p = new Properties();
-       p.setProperty('org.quartz.scheduler.instanceName', 'MyScheduler');
-       p.setProperty('org.quartz.scheduler.instanceId', '1');
-       p.setProperty('org.quartz.scheduler.rmi.export', 'false');
-       p.setProperty('org.quartz.scheduler.rmi.proxy', 'false');       
-       p.setProperty('org.quartz.threadPool.class', 'org.quartz.simpl.SimpleThreadPool');
-       p.setProperty('org.quartz.threadPool.threadCount', '10');
-       p.setProperty('org.quartz.jobStore.class', 'org.quartz.simpl.RAMJobStore');
-       org.quartz.Scheduler scheduler = new org.quartz.impl.StdSchedulerFactory(p).getDefaultScheduler();
-       scheduler.start(); scheduler;")))
+       ~a = new Properties();
+       ~a.setProperty('org.quartz.scheduler.instanceName', 'MyScheduler');
+       ~a.setProperty('org.quartz.scheduler.instanceId', '1');
+       ~a.setProperty('org.quartz.scheduler.rmi.export', 'false');
+       ~a.setProperty('org.quartz.scheduler.rmi.proxy', 'false');       
+       ~a.setProperty('org.quartz.threadPool.class', 'org.quartz.simpl.SimpleThreadPool');
+       ~a.setProperty('org.quartz.threadPool.threadCount', '10');
+       ~a.setProperty('org.quartz.jobStore.class', 'org.quartz.simpl.RAMJobStore');
+       org.quartz.Scheduler scheduler = new org.quartz.impl.StdSchedulerFactory(~a).getDefaultScheduler();
+       scheduler.start();
+       ~a = null;
+       scheduler;"
+      (make-list 10 (random-var)))))))
 
 (define (create-quartz-job-from-closure job-group job-name  cl)
   (j
