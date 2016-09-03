@@ -15,25 +15,27 @@
          (trigger (create-quartz-cron-trigger trigger-group trigger-name cron-expression)))
     (schedule-job scheduler job trigger)))
 
-(define (create-scheduler)
+(define current-scheduler-id (make-atomic-long 1))
+
+(define create-scheduler
+  (lambda* ((thread-count: thread-count 10))
   (j
    (quote-convert
-      (apply format
-             (cons 
+      (let ((vname (random-var)))
+        (string-append* 
       "
-       ~a = new Properties();
-       ~a.setProperty('org.quartz.scheduler.instanceName', 'MyScheduler');
-       ~a.setProperty('org.quartz.scheduler.instanceId', '1');
-       ~a.setProperty('org.quartz.scheduler.rmi.export', 'false');
-       ~a.setProperty('org.quartz.scheduler.rmi.proxy', 'false');       
-       ~a.setProperty('org.quartz.threadPool.class', 'org.quartz.simpl.SimpleThreadPool');
-       ~a.setProperty('org.quartz.threadPool.threadCount', '10');
-       ~a.setProperty('org.quartz.jobStore.class', 'org.quartz.simpl.RAMJobStore');
-       org.quartz.Scheduler scheduler = new org.quartz.impl.StdSchedulerFactory(~a).getDefaultScheduler();
+       " vname " = new Properties();
+       " vname ".setProperty('org.quartz.scheduler.instanceName', '" vname "');
+       " vname ".setProperty('org.quartz.scheduler.instanceId', '" (get-and-inc-atomic-long! current-scheduler-id) "');
+       " vname ".setProperty('org.quartz.scheduler.rmi.export', 'false');
+       " vname ".setProperty('org.quartz.scheduler.rmi.proxy', 'false');       
+       " vname ".setProperty('org.quartz.threadPool.class', 'org.quartz.simpl.SimpleThreadPool');
+       " vname ".setProperty('org.quartz.threadPool.threadCount', '" thread-count "');
+       " vname ".setProperty('org.quartz.jobStore.class', 'org.quartz.simpl.RAMJobStore');
+       org.quartz.Scheduler scheduler = new org.quartz.impl.StdSchedulerFactory(" vname ").getDefaultScheduler();
        scheduler.start();
-       ~a = null;
-       scheduler;"
-      (make-list 10 (random-var)))))))
+       " vname " = null;
+       scheduler;"))))))
 
 (define (create-quartz-job-from-closure job-group job-name  cl)
   (j
