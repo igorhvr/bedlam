@@ -121,7 +121,9 @@
                      (let* ((sname (if (string? vname) vname (symbol->string vname)))
                             (name (->jstring sname ))
                             (code-return (random-var))
-                            (code (string-append* "var " sname " = null; var fdefdeff" code-return " = function(p) { " sname " = p; }; fdefdeff" code-return ";"))
+                            (f-p (random-var))
+                            (code (string-append*
+                                   "var " sname " = null; var fdefdeff" code-return " = function(" f-p ") { " sname " = " f-p "; }; fdefdeff" code-return ";"))
                             (v8f (j "v8.executeScript(script);" `((v8 ,runtime) (script ,(->jstring code)))))
                             (v8array-return (random-var))
                             (parameters-v8array (j (string-append
