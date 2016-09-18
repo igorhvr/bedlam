@@ -28,7 +28,8 @@
          (cc: cc #f)
          (bcc: bcc #f)
          (sender-email: senderemail) (sender-name: sendername senderemail)
-         (authentication-login: authentication-login "") (authentication-password: authentication-password "") (use-ssl: use-ssl #t)
+         (authentication-login: authentication-login "") (authentication-password: authentication-password "")
+         (use-ssl: use-ssl #t) (use-starttls: use-starttls #f)         
          (smtp-port: smtp-port 25)
          (ssl-smtp-port: ssl-smtp-port 465)
          (subject: subject "") (message-text: messagetext "="))
@@ -75,7 +76,8 @@
        if(!\"\".equals(authenticationlogin)) {
            email.setAuthentication(authenticationlogin, authenticationpassword);
        }
-       email.setSSL(usessl); 
+       email.setSSL(usessl);
+       email.setStartTLSEnabled(usestarttls);
        email.setFrom(senderemail, sendername);
        email.setSubject(subject);
        email.setMsg(messagetext);
@@ -84,6 +86,7 @@
          (subject ,(->jstring subject))
          (messagetext ,(->jstring messagetext))
          (usessl ,(->jboolean use-ssl))
+         (usestarttls ,(->jboolean use-starttls))
          (authenticationlogin ,(->jstring authentication-login))
          (authenticationpassword ,(->jstring authentication-password))
          (senderemail ,(->jstring senderemail))
