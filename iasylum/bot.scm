@@ -9,21 +9,31 @@
     (lambda* ((in-work-queue: in-work-queue) (out-work-queue: out-work-queue) (name: name) (server-hostname: server-hostname) (server-port: server-port) (server-password: server-password) (channel: channel) )
              (let* ((inner-queue-out-work-queue (out-work-queue 'inner-queue))
                     (pmtoutqueuevarname (random-var))
+                    (channelvar (random-var))
+                    (pmtnamevar (random-var))
+                    (botvar (random-var))
                     (bot
-                     (j (string-append "new org.pircbotx.PircBotX(new org.pircbotx.Configuration.Builder().setName(pmtname).setAutoReconnect(true).	setAutoReconnectAttempts(999999).setAutoReconnectDelay(5000).setSocketFactory(javax.net.ssl.SSLSocketFactory.getDefault()).setCapEnabled(true).addCapHandler(new org.pircbotx.cap.TLSCapHandler(new org.pircbotx.UtilSSLSocketFactory().trustAllCertificates(), true)).addListener(new org.pircbotx.hooks.ListenerAdapter(){public void onMessage(org.pircbotx.hooks.events.MessageEvent event) {if(mchannel.equals(event.getChannel().getName())) " pmtoutqueuevarname ".put(new sisc.data.ImmutableString(event.getMessage()));}}).setServerHostname(pmtserverhostname).setServerPort(pmtserverport).setServerPassword(pmtserverpassword).buildConfiguration());")
-                        `((pmtname ,(->jstring name))
-                          (,(string->symbol pmtoutqueuevarname) ,inner-queue-out-work-queue)
+                     (j (format "new org.pircbotx.PircBotX(new org.pircbotx.Configuration.Builder().setName(~a).setAutoReconnect(true).	setAutoReconnectAttempts(999999).setAutoReconnectDelay(5000).setSocketFactory(javax.net.ssl.SSLSocketFactory.getDefault()).setCapEnabled(true).addCapHandler(new org.pircbotx.cap.TLSCapHandler(new org.pircbotx.UtilSSLSocketFactory().trustAllCertificates(), true)).addListener(new org.pircbotx.hooks.ListenerAdapter(){
+    public void onMessage(org.pircbotx.hooks.events.MessageEvent event) {
+        if (~a.equals(event.getChannel().getName())) {
+           ~a.put(new sisc.data.ImmutableString(event.getMessage()));
+        }
+      }
+    }).setServerHostname(pmtserverhostname).setServerPort(pmtserverport).setServerPassword(pmtserverpassword).buildConfiguration());"
+                                pmtnamevar channelvar pmtoutqueuevarname)
+                        `((,pmtnamevar ,(->jstring name))
+                          (,pmtoutqueuevarname ,inner-queue-out-work-queue)
                           (pmtserverhostname ,(->jstring server-hostname))
                           (pmtserverport ,(->jint server-port))
-                          (mchannel ,(->jstring (string-append "#" channel)))
+                          (,channelvar ,(->jstring (string-append "#" channel)))
                           (pmtserverpassword ,(->jstring server-password))))))
-               (watched-thread/spawn (lambda() (j "pmtbot.startBot();"
-                                                  `((pmtbot ,bot)))))
-               
+               (watched-thread/spawn (lambda() (j (format "~a.startBot();" botvar)
+                                                  `((,botvar ,bot)))))
+
                (watched-thread/spawn (lambda() (let loop ()
                                                  (let ((nmsg (string-append "PRIVMSG #" channel " :" (in-work-queue 'take))))
-                                                   (j "pmtbot.sendRawLineToServer(ln);"
-                                                      `((pmtbot ,bot)
+                                                   (j (format "~a.sendRawLineToServer(ln);" botvar)
+                                                      `((,botvar ,bot)
                                                         (ln ,(->jstring nmsg))))
                                                    (sleep 550)
                                                    (loop)))))
