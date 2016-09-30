@@ -4,7 +4,7 @@
 
 ;; Sends an email according to parameters.
 ;; Depends on:
-;;    activation-1.1.jar  commons-email-1.4.jar  mail.jar
+;;    activation-1.1.jar  commons-email-1.2.jar  mail.jar
 ;;    iasylum/jcode
 (module iasylum/email
   (send-email)
@@ -28,10 +28,7 @@
          (cc: cc #f)
          (bcc: bcc #f)
          (sender-email: senderemail) (sender-name: sendername senderemail)
-         (authentication-login: authentication-login "") (authentication-password: authentication-password "")
-         (use-ssl: use-ssl #t) (use-starttls: use-starttls #f)         
-         (smtp-port: smtp-port 25)
-         (ssl-smtp-port: ssl-smtp-port 465)
+         (authentication-login: authentication-login "") (authentication-password: authentication-password "") (use-ssl: use-ssl #t)
          (subject: subject "") (message-text: messagetext "="))
       (assert (or (not to) (list? to))) (assert (or (not cc) (list? cc)))
       
@@ -39,36 +36,32 @@
        "import org.apache.commons.mail.SimpleEmail;
        email = new SimpleEmail();
        email.setCharset(\"utf-8\");
-       email.setSmtpPort(smtpport);
-       email.setSslSmtpPort(sslsmtpport);
        email.setHostName(mailserver);"
        `((mailserver ,(->jstring mailserver))
          (usessl ,(->jboolean use-ssl))
-         (smtpport ,(->jint smtp-port))
-         (sslsmtpport ,(->jstring (number->string ssl-smtp-port)))
          ))
 
       (when to
         (for-each (match-lambda ((vemail vname)
-                                 (j "email.addTo(lccemail, lccname, \"UTF-8\");" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vname)))))
+                                 (j "email.addTo(lccemail, lccname);" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vname)))))
                                 (vemail
-                                 (j "email.addTo(lccemail, lccname, \"UTF-8\");" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vemail)))))
+                                 (j "email.addTo(lccemail, lccname);" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vemail)))))
                                 )
                   to))
-
+      
       (when cc
         (for-each (match-lambda ((vemail vname)
-                                 (j "email.addCc(lccemail, lccname, \"UTF-8\");" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vname)))))
+                                 (j "email.addCc(lccemail, lccname);" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vname)))))
                                 (vemail
-                                 (j "email.addCc(lccemail, lccname, \"UTF-8\");" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vemail)))))
+                                 (j "email.addCc(lccemail, lccname);" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vemail)))))
                                 )
                   cc))
 
       (when bcc
         (for-each (match-lambda ((vemail vname)
-                                 (j "email.addBcc(lccemail, lccname, \"UTF-8\");" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vname)))))
+                                 (j "email.addBcc(lccemail, lccname);" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vname)))))
                                 (vemail
-                                 (j "email.addBcc(lccemail, lccname, \"UTF-8\");" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vemail)))))
+                                 (j "email.addBcc(lccemail, lccname);" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vemail)))))
                                 )
                   bcc))
       
@@ -76,8 +69,7 @@
        if(!\"\".equals(authenticationlogin)) {
            email.setAuthentication(authenticationlogin, authenticationpassword);
        }
-       email.setSSL(usessl);
-       email.setStartTLSEnabled(usestarttls);
+       email.setSSL(usessl); 
        email.setFrom(senderemail, sendername);
        email.setSubject(subject);
        email.setMsg(messagetext);
@@ -86,7 +78,6 @@
          (subject ,(->jstring subject))
          (messagetext ,(->jstring messagetext))
          (usessl ,(->jboolean use-ssl))
-         (usestarttls ,(->jboolean use-starttls))
          (authenticationlogin ,(->jstring authentication-login))
          (authenticationpassword ,(->jstring authentication-password))
          (senderemail ,(->jstring senderemail))

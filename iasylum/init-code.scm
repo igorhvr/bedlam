@@ -93,7 +93,7 @@
 (add-lib "siscweb/siscweb-sxml.jar")
 (add-lib "siscweb/siscweb.jar")
 (add-lib "u/activation-1.1.jar")
-(add-lib "u/commons-email-1.4.jar")
+(add-lib "u/commons-email-1.2.jar")
 (add-lib "u/commons-fileupload-1.2.1.jar")
 (add-lib "u/commons-io-2.0.1.jar")
 (add-lib "u/commons-logging-1.1.3.jar")
