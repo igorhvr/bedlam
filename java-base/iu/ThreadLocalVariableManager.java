@@ -4,7 +4,7 @@ public class ThreadLocalVariableManager {
  
      private static ThreadLocal bshInterpreter = new ThreadLocal() {
          protected synchronized Object initialValue() {
-             return null;
+             return new bsh.Interpreter();
          }
      };
  

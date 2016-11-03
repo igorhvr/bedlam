@@ -3,5 +3,12 @@
 (require-extension (lib iasylum/jcode))
 
 (module iasylum/quartz
-  (create-scheduler create-quartz-job-from-closure create-quartz-cron-trigger schedule-job)
+  (; high level:
+   schedule-job-easier
+
+   ; lower level:
+   create-scheduler
+   create-quartz-job-from-closure
+   create-quartz-cron-trigger
+   schedule-job)
   (include "quartz/quartz-code.scm"))

@@ -1,22 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration> <!-- add status="trace" to enable debug mode -->
+<Configuration>
+  <Properties>
+    <Property name="pattern1">(&quot;%p&quot; &quot;%thread&quot; &quot;%d{ISO8601}&quot; (&quot;%m&quot; &quot;%C(%M)&quot;) )%n</Property>
+    <Property name="pattern2">(&quot;%p&quot; &quot;%thread&quot; &quot;%d{ISO8601}&quot; (&quot;%m&quot;) )%n</Property>
+  </Properties>
   <Appenders>
     <Console name="STDOUT" target="SYSTEM_OUT">
-      <PatternLayout pattern="(&quot;%p&quot; &quot;%thread&quot; &quot;%d{ISO8601}&quot; (&quot;%enc{%m}&quot; &quot;%C(%M)&quot;)%n"/>
+      <PatternLayout pattern="${pattern2}"/>
     </Console>
-  </Appenders>
-  <Loggers>  
-    <Root level="info">
-      <AppenderRef ref="STDOUT"/>
-    </Root>
 
-    <Logger name="org.apache.log4j.xml" level="info"/>
-    <Logger name="datomic" level="info"/>
-    <Logger name="org.hornetq" level="warn"/>
-    <Logger name="org.jboss.logging" level="warn"/>
-    <Logger name="org.quartz" level="info"/>
-    <Logger name="closureJobLogger" level="warn"/>
-    <Logger name="com.healthmarketscience.jackcess.PageChannel" level="warn"/>
+    <RollingFile name="EVERYTHING" fileName="/base/logs/everything/all.log"
+                 filePattern="/base/logs/everything/$${date:yyyy-MM}/app-%d{yyyy-MM-dd}-%i.log.gz">
+      <PatternLayout pattern="${pattern1}"/>
+      <Policies>
+        <TimeBasedTriggeringPolicy /><!-- Rotated everyday -->
+        <SizeBasedTriggeringPolicy size="100 MB"/> <!-- Or every 100 MB -->
+      </Policies>
+    </RollingFile>
+
+    <RollingFile name="APPTRACE" fileName="/base/logs/app/app-trace.log"
+                 filePattern="/base/logs/app/$${date:yyyy-MM}/app-trace-%d{yyyy-MM-dd}-%i.log.gz">
+      <PatternLayout pattern="${pattern2}"/>
+      <Policies>
+        <TimeBasedTriggeringPolicy /><!-- Rotated everyday -->
+        <SizeBasedTriggeringPolicy size="100 MB"/> <!-- Or every 100 MB -->
+      </Policies>
+    </RollingFile>
+
+    <RollingFile name="APPDEBUG" fileName="/base/logs/app/app-debug.log"
+                 filePattern="/base/logs/app/$${date:yyyy-MM}/app-debug-%d{yyyy-MM-dd}-%i.log.gz">
+      <PatternLayout pattern="${pattern2}"/>
+      <Policies>
+        <TimeBasedTriggeringPolicy /><!-- Rotated everyday -->
+        <SizeBasedTriggeringPolicy size="100 MB"/> <!-- Or every 100 MB -->
+      </Policies>
+    </RollingFile>
+
+    <RollingFile name="APPINFO" fileName="/base/logs/app/app-info.log"
+                 filePattern="/base/logs/app/$${date:yyyy-MM}/app-info-%d{yyyy-MM-dd}-%i.log.gz">
+      <PatternLayout pattern="${pattern2}"/>
+      <Policies>
+        <TimeBasedTriggeringPolicy /><!-- Rotated everyday -->
+        <SizeBasedTriggeringPolicy size="100 MB"/> <!-- Or every 100 MB -->
+      </Policies>
+    </RollingFile>
+    
+  </Appenders>
+ 
+  <Loggers>
+    <Logger name="org.apache.log4j.xml" level="info" additivity="false">
+      <AppenderRef ref="EVERYTHING"/>
+    </Logger>
+
+    <Logger name="datomic" level="info" additivity="false">
+      <AppenderRef ref="EVERYTHING"/>
+    </Logger>
+    
+    <Logger name="org.hornetq" level="warn" additivity="false">
+      <AppenderRef ref="EVERYTHING"/>
+    </Logger>
+    
+    <Logger name="org.jboss.logging" level="warn" additivity="false">
+      <AppenderRef ref="EVERYTHING"/>
+    </Logger>
+    
+    <Logger name="org.quartz" level="info" additivity="false">
+      <AppenderRef ref="EVERYTHING"/>
+    </Logger>
+    
+    <Logger name="closureJobLogger" level="warn" additivity="false">
+      <AppenderRef ref="EVERYTHING"/>
+    </Logger>
+    
+    <Logger name="com.healthmarketscience.jackcess.PageChannel" level="warn" additivity="false">
+      <AppenderRef ref="EVERYTHING"/>
+    </Logger>
+
+    <Logger name="org.pircbotx" level="info" additivity="false">
+      <AppenderRef ref="EVERYTHING"/>
+    </Logger>
+
+    <Logger name="app" level="all">
+      <AppenderRef level="trace" ref="APPTRACE"/>
+      <AppenderRef level="debug" ref="APPDEBUG"/>
+      <AppenderRef level="info" ref="APPINFO"/>
+    </Logger>
+
+    <Root level="all">
+      <AppenderRef ref="EVERYTHING"/>
+      <AppenderRef level="info" ref="STDOUT"/>
+    </Root>
 
   </Loggers>
 </Configuration>

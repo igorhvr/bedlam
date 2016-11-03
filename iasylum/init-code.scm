@@ -69,9 +69,13 @@
 (add-lib "u/js.jar")
 (add-lib "u/js-engine.jar")
 (add-lib "u/jdbc-postgresql.jar")
-(add-lib "jdbc/log4jdbc4-1.2.jar")
-(add-lib "jdbc/slf4j-api-1.7.9.jar")
-(add-lib "jdbc/slf4j-log4j12-1.7.9.jar")
+(add-lib "log/slf4j-api-1.7.5.jar")
+(add-lib "log/logback-core-1.0.13.jar")
+(add-lib "log/log4j-core-2.0-rc2.jar")
+(add-lib "log/log4j-api-2.0-rc2.jar")
+(add-lib "log/log4j-1.2-api-2.0-rc2.jar")
+(add-lib "log/jul-to-slf4j-1.7.5.jar")
+(add-lib "log/log4j-slf4j-impl-2.0-rc2.jar")
 (add-lib "javassist/javassist-rel_3_19_0_ga/javassist.jar")
 (add-lib "jdbc/pool/HikariCP-2.3.2.jar")
 (add-lib "jdbc/mysql-connector-java-5.1.24-bin_and_src.jar")
@@ -89,38 +93,17 @@
 (add-lib "siscweb/siscweb-sxml.jar")
 (add-lib "siscweb/siscweb.jar")
 (add-lib "u/activation-1.1.jar")
-(add-lib "u/commons-email-1.2.jar")
+(add-lib "u/commons-email-1.4.jar")
 (add-lib "u/commons-fileupload-1.2.1.jar")
 (add-lib "u/commons-io-2.0.1.jar")
 (add-lib "u/commons-logging-1.1.3.jar")
 (add-lib "u/junit-3.8.1.jar")
-(add-lib "jdbc/log4j-1.2.17.jar")
 (add-lib "bsh/bsh-2.2.0.jar")
 (add-lib "u/m.jar")
 (add-lib "u/mail.jar")
 (add-lib "u/ssax-sxml.jar")
-
-(add-lib "tomcat/jasper-el.jar")
-(add-lib "tomcat/tomcat-i18n-es.jar")
-(add-lib "tomcat/tomcat-i18n-fr.jar")
-(add-lib "tomcat/servlet-api.jar")
-(add-lib "tomcat/bootstrap.jar")
-(add-lib "tomcat/commons-daemon.jar")
-(add-lib "tomcat/catalina-tribes.jar")
-(add-lib "tomcat/catalina-ant.jar")
-(add-lib "tomcat/tomcat-coyote.jar")
-(add-lib "tomcat/jasper-jdt.jar")
-(add-lib "tomcat/jstl.jar")
-(add-lib "tomcat/tomcat-dbcp.jar")
-(add-lib "tomcat/catalina-ha.jar")
-(add-lib "tomcat/jasper.jar")
-(add-lib "tomcat/tomcat-i18n-ja.jar")
-(add-lib "tomcat/tomcat-juli.jar")
-(add-lib "tomcat/jsp-api.jar")
-(add-lib "tomcat/el-api.jar")
-(add-lib "tomcat/catalina.jar")
-(add-lib "tomcat/annotations-api.jar")
-(add-lib "tomcat/standard.jar")
+(add-lib "u/servlet-api-3.1.jar")
+(add-lib "u/prettytime-4.0.1.Final.jar")
 
 (add-lib "u/quartz-all-1.7.3.jar")
 (add-lib "u/cron4j-2.2.5.jar")
@@ -192,6 +175,7 @@
 (import s2j)
 (require-extension (srfi 16)) ; case-lambda
 (require-extension (srfi 13))
+(require-extension (srfi 14))
 (require-extension (srfi 42)) ; Eager comprehensions.
 (import siscweb/context)
 (import siscweb/html)
@@ -199,6 +183,7 @@
 (require-extension (lib iasylum/log))
 (require-extension (lib iasylum/email))
 (require-extension (lib iasylum/work-queue))
+(require-extension (lib iasylum/bot))
 (require-extension (lib iasylum/excel))
 (require-extension (lib iasylum/i18n))
 (import networking)
@@ -232,7 +217,7 @@
 
 (begin
 ;; Jackcess and required libraries.
-(add-lib "microsoft_access/commons-lang-2.5.jar")
+(add-lib "u/commons-lang3-3.4.jar")
 (add-lib "microsoft_access/jackcess-1.2.12.jar")
 )
 
@@ -240,6 +225,9 @@
 
 (add-lib "clojure/clojure-1.5.1.jar")
 (add-lib "clojure/tools.nrepl-0.2.10.jar")
+
+(add-lib "clojure/clj-slack-0.5.4-standalone.jar")
+(add-lib "u/pircbotx-2.1.jar")
 
 (define (extend-classpath i)
   (class-path-extension-append! (cons i (class-path-extension))))
@@ -493,7 +481,9 @@
 ;; Incanter is a R-like environment for clojure that allows stuff similar to:
 ;; (clj "(use '(incanter core charts pdf)) (save-pdf (function-plot sin -4 4) \"./pdf-chart.pdf\")")
 ;; to be performed.
-(add-lib "u/incanter-1.5.6-SNAPSHOT-standalone.jar")
+;; Split in two archives to stay below 100 mb.
+(add-lib "u/incanter-1.5.6-SNAPSHOT-standalone-1_of_2.jar")
+(add-lib "u/incanter-1.5.6-SNAPSHOT-standalone-2_of_2.jar")
 
 (add-lib "u/clj-pdf-1.11.21-standalone.jar")
 
@@ -513,17 +503,21 @@
 (add-lib "aws-java-sdk/spring-3.0/spring-test-3.0.7.RELEASE.jar")
 (add-lib "aws-java-sdk/spring-3.0/spring-core-3.0.7.jar")
 (add-lib "aws-java-sdk/spring-3.0/spring-context-3.0.7.jar")
-(add-lib "aws-java-sdk/aws-java-sdk-1.10.44-sources.jar")
 (add-lib "aws-java-sdk/aspectjrt-1.8.2.jar")
 (add-lib "aws-java-sdk/aws-java-sdk-flow-build-tools-1.10.44.jar")
 (add-lib "aws-java-sdk/aspectjweaver.jar")
-(add-lib "aws-java-sdk/aws-java-sdk-1.10.44.jar")
+(add-lib "aws-java-sdk/aws-java-sdk-1.10.44-1_of_2.jar")
+(add-lib "aws-java-sdk/aws-java-sdk-1.10.44-2_of_2.jar")
 (add-lib "aws-java-sdk/freemarker-2.3.9.jar")
 
 (require-extension (lib iasylum/compression))
 (add-lib "u/lzstring4j.jar")
 
 (add-lib "javascript/j2v8_linux_x86_64-3.0.2.jar")
+
+(require-extension (lib iasylum/date))
+
+(require-extension (lib iasylum/siscweb))
 
 (set! load original-load)
 

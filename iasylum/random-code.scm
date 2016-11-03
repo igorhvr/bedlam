@@ -7,6 +7,42 @@
 (define sample-random)
 (define random-maker)
 
+
+(define (secure-random-byte)
+  (string->number
+   (list-ref (r-split "od -An -N1 -i /dev/random") 1)))
+
+(define (sort-of-secure-random-byte)
+  (string->number
+   (list-ref (r-split "od -An -N1 -i /dev/urandom") 1)))
+
+(define (random->integer n-bytes)
+  (assert (integer? n-bytes))
+  (hex->decimal
+   (string-trim-both
+    (list-ref (r-split (format "openssl rand -hex ~a" n-bytes)) 1))))
+
+(define* (random-string (bytes 32))
+  (string-trim-both
+   (list-ref (r-split (format "openssl rand -base64 ~a" bytes)) 1)))
+
+;; suitable for variable names
+(define* (random-var (size 20))
+  (assert (and (>= size 1)
+               (<= size 64)))
+  (string-append* "v" (substring (sha256 (gensym)) 0 size)))
+
+(define (pseudo-random-uuid)
+  (->string (j "java.util.UUID.randomUUID();")))
+
+(define (base58-bitcoin-like-random-code size)
+  (let ((chars "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"))
+    (apply string-append* (times size (string-ref chars (mod (random->integer 1) 58))))))
+
+(define (base26-random-code-upper size)
+  (let ((chars "234689ABCEFGHJKLMNPQRUVWXY"))
+    (apply string-append* (times size (string-ref chars (mod (random->integer 1) 26))))))
+
 ;;; Start - RANDOM UTILITIES ;;;
 
 ; A call to the random-maker procedure presented here yields a
@@ -115,8 +151,6 @@
 ; created July 10, 1995 last revised June 21, 1996
 ;
 ; John David Stone (stone@math.grin.edu)
-
-
 
 (set! scheme-random
      (let ((number-from-time

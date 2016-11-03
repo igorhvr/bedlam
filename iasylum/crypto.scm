@@ -6,6 +6,8 @@
    get-seed-from
    asymmetric-encrypt asymmetric-decrypt
    symmetric-encrypt symmetric-decrypt
-   hmac)
+   crypto/prepare-javascript-manager
+   hmac
+   aws-signature)
 
   (include "crypto/crypto-code.scm"))

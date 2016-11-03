@@ -60,7 +60,6 @@
    function fn function* fn*
    times multiple-values->list
    sleep-milliseconds sleep-seconds sleep-minutes sleep-hours
-   current-date-utc current-date-utc-less-one-hour
    list-of-type?
    list-of
    alist?
@@ -68,11 +67,13 @@
    try-and-if-it-fails-object
    try-and-if-it-fails-or-empty-or-java-null-return-object
    try-and-if-it-throws-object
+   retry-blocking-until-succeed
    dynamic-define
    create-shortcuts
    to-csv-line
    sha256
    sha256+
+   sha512
    hex->decimal
    decimal->hex
    decimal->maxradix
@@ -81,7 +82,6 @@
    make-parameter*
    subtract-dates
    start-async-json-engine-with-status-retriever
-   add-between-elements
    complete-with-zeroes
    add-between
    add-between-list
@@ -91,13 +91,17 @@
    not-buggy-exact->inexact
    apply*
    let-parallel map-parallel
-   get-day-index get-day-index-utc
    atomic-execution
    select-sublist
-   time->millis
    make-future
    only
    sum-alist
+   base64-encode base64-decode
+   group-by-key-and-apply
+   get-env
+   validate-cpf
+   get-relative-time
+   pretty-print-to-string
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -118,13 +122,6 @@
   (define sleep-seconds (lambda (t) (sleep-milliseconds (* 1000 t))))
   (define sleep-minutes (lambda (t) (sleep-seconds (* 60 t))))
   (define sleep-hours (lambda (t) (sleep-minutes (* 60 t))))
-
-  (define (current-date-utc)
-    (current-date 0))
-
-  (define (current-date-utc-less-one-hour)
-    (time-utc->date (subtract-duration (date->time-utc (current-date-utc)) (make-time 'time-duration 0 (* 60 60)))
-                    0))
 
   (import hashtable)
   (import file-manipulation)  ;; rglob uses this.
@@ -336,9 +333,10 @@
   (define debug-watched-parallel
     (lambda fn-set
       (apply parallel (pam fn-set (lambda (fn) (delay (with/fc debug-standard-thread-error-handler fn)))))))
-  
+
   (define watched-thread/spawn
     (lambda* (p (error-handler: error-handler standard-thread-error-handler))
+        (assert (procedure? p))
         (thread/spawn
          (lambda ()
            (with/fc
@@ -347,12 +345,13 @@
 
   (define debug-watched-thread/spawn
     (lambda* (p (error-handler: error-handler debug-standard-thread-error-handler))
-             (thread/spawn
-              (lambda ()
-                (with/fc
-                 error-handler
-                 p)))))
-  
+        (assert (procedure? p))
+        (thread/spawn
+         (lambda ()
+           (with/fc
+            error-handler
+            p)))))
+
   (define r
     (lambda* (cmd-string (get-return-code #f))
         (define process-return-code)
@@ -787,7 +786,7 @@
                                                 obj)))))
                      (with-failure-continuation
                       (lambda (error error-continuation)
-                        (log-warn "Maybe this error is being purposely ignored:" error)
+                        (log-info "Probably this error is being purposely ignored:" error)
                         (print-stack-trace error-continuation)
                         (force-result error error-continuation))
                       (lambda ()
@@ -816,7 +815,28 @@
   (define-custom-try-and-if-it-fails-return-object
     try-and-if-it-throws-object
     (lambda (result) #f))
-  
+
+  ;;
+  ;; Block until the thunk execution succeed. The default is sleep 1 sec
+  ;; between each retry.
+  ;;
+  ;; Example usage: (retry-blocking-until-succeed 'retry-n-times: 10
+  ;;                                              (lambda ()
+  ;;                                                (display "retrying...")
+  ;;                                                (/ 2 0)))
+  ;;
+  (define* (retry-blocking-until-succeed (retry-n-times: retry-n-times)
+                                         (sleep-between-retry-ms: sleep-between-retry-ms 1000)
+                                         (on-error: on-error-thunk (lambda a a))
+                                         thunk)
+    (let retry ((retry-counter 0))
+      (if (>= retry-counter retry-n-times)
+          (thunk) ; last attempt
+          (or (try-and-if-it-throws-object (#f) (thunk))
+              (begin (on-error-thunk)
+                     (sleep sleep-between-retry-ms)
+                     (retry (+ retry-counter 1)))))))
+
   ;; (dynamic-define "abc" 123)
   ;; $ abc => 123
   (define-syntax dynamic-define
@@ -861,11 +881,19 @@
       (sha256 (apply add-between (cons ":" elements)))))
 
   (define (sha256 string)
-    (->string (j              
+    (->string (j
                "md = java.security.MessageDigest.getInstance(\"SHA-256\");
                 md.update(input.getBytes(\"UTF-8\"));
                 digest = md.digest();
                 return String.format(\"%064x\", new java.math.BigInteger(1, digest));"
+                 `((input ,(->jstring string))))))
+
+  (define (sha512 string)
+    (->string (j
+               "md = java.security.MessageDigest.getInstance(\"SHA-512\");
+                md.update(input.getBytes(\"UTF-8\"));
+                digest = md.digest();
+                return String.format(\"%0128x\", new java.math.BigInteger(1, digest));"
                  `((input ,(->jstring string))))))
 
   (define (hex->decimal hex)
@@ -943,18 +971,12 @@
 (define subtract-dates
   (match-lambda*
    (()
-    (string-append* "Sample usage: " (iasylum-write-string `(subtract-dates "2014-11-05T10:21:00Z" "2014-11-04T15:15:00Z"))))
+    (d/n (string-append* "Sample usage: " (iasylum-write-string `(subtract-dates "2016-03-05T10:21:00Z" "2016-04-05T15:15:00Z")))))
    (( (? string? later) (? string? earlier))
     (time-difference (date->time-utc (string->date later "~Y-~m-~dT~k:~M:~S~z"))  (date->time-utc (string->date earlier "~Y-~m-~dT~k:~M:~S~z"))))
    (( (? date? later) (? date? earlier))
     (time-difference (date->time-utc later)  (date->time-utc earlier)))))
   
-  (define (add-between-elements what list-of-elements)
-    (if (<= (length list-of-elements) 1)
-        list-of-elements
-        (append (list (car list-of-elements) what)
-                (add-between-elements what (cdr list-of-elements)))))
-
   ;;
   ;; (complete-with-zeroes "56" 7)
   ;; => "0000056"
@@ -1068,21 +1090,6 @@
                                                              element)))]))
 
   ;;
-  ;; Example of use: (get-day-index (current-date 0))
-  ;; If you want to get the current day index in UTC, use (get-day-index-utc)
-  ;;
-  (define (get-day-index date)
-    (sha256+ (date-year-day date)
-             (date-year date)))
-
-  ;;
-  ;; Return a string representing today.
-  ;; It changes every day after 00:00 UTC.
-  ;;
-  (define (get-day-index-utc)
-    (get-day-index (current-date 0)))
-
-  ;;
   ;; Use like this:
   ;;
   ;; (atomic-exection "lock name" body ...)
@@ -1113,16 +1120,9 @@
           (drop-right (drop lst initial-index)
                       (- last-index end-index)))))
 
-  ;;
-  ;; It returns an exact number. Use (floor ...) to make it an integer.
-  ;;
-  (define (time->millis t)
-    (+ (* 1000 (time-second t))
-       (/ (time-nanosecond t) 1000000)))
-
   (define* (make-future l)
     (let* ((define-future-result (make-parameter* #f))
-           (thread-handle (watched-thread/spawn (lambda () (let ((result (l))) (define-future-result result))))))
+           (thread-handle (watched-thread/spawn (lambda () (let ((result (try-and-if-it-fails-or-empty-or-java-null-return-object () (l)))) (define-future-result result))))))
       (lambda* ((timeout-milliseconds: timeout #f))
         (if timeout
             (if (thread/join thread-handle timeout) (define-future-result) #f)
@@ -1149,6 +1149,89 @@
                                         result)
                               (cons `(,key . ,value) acc))))
           (list) alist))
+
+  (define (base64-encode o)
+    (->scm-object
+     (j "javax.xml.bind.DatatypeConverter.printBase64Binary(data.toString().getBytes());"
+        `((data ,(->jobject o))))))
+
+  (define (base64-decode s)
+    (->scm-object
+     (j "new String(javax.xml.bind.DatatypeConverter.parseBase64Binary(data.toString()));"
+        `((data ,(->jobject s))))))
+
+  ;;
+  ;; Apply the binary-fn to each element on the list from left to right,
+  ;; grouping by the key of the alist. The original order of elements is not kept.
+  ;;
+  ;; Example:
+  ;;
+  ;; (group-by-key-and-apply + 0 '(("a" . 3) ("b" . 4) ("d" . 8) ("b" . 6)))
+  ;; => (("b" . 10) ("d" . 8) ("a" . 3))
+  ;;
+  ;; (group-by-key-and-apply * 1 '(("a" . 3) ("b" . 4) ("d" . 8) ("b" . 6)))
+  ;; => (("b" . 24) ("d" . 8) ("a" . 3))
+  ;;
+  ;; (group-by-key-and-apply append '() '(("a" . (1 2 3)) ("b" . (4 5 6)) ("d" . (7 8 9)) ("b" . (10 11 12))))
+  ;; => (("b" 4 5 6 10 11 12) ("d" 7 8 9) ("a" 1 2 3))
+  ;;
+  (define (group-by-key-and-apply binary-fn neutral-value alist)
+    (fold (lambda (current acc)
+            (let* ((key (car current))
+                   (value (cdr current))
+                   (total (get key acc neutral-value)))
+              (cons (cons key (binary-fn total value))
+                    (remove (lambda (e) (equal? key (car e))) acc))))
+          '()
+          alist))
+
+  ;;
+  ;; (validate-cpf "18767017495") => #t
+  ;; (validate-cpf "170.010.386-52") => #t
+  ;; (validate-cpf "170.010.386-53") => #f
+  ;;
+  (define (validate-cpf cpf)
+    (let ((cpf (string-filter (string->char-set "0123456789") (string-trim-both cpf))))
+      (and (not (string=? cpf "00000000000"))
+           (not (string=? cpf "11111111111"))
+           (not (string=? cpf "22222222222"))
+           (not (string=? cpf "33333333333"))
+           (not (string=? cpf "44444444444"))
+           (not (string=? cpf "55555555555"))
+           (not (string=? cpf "66666666666"))
+           (not (string=? cpf "77777777777"))
+           (not (string=? cpf "88888888888"))
+           (not (string=? cpf "99999999999"))
+           (let ((validate (lambda (base)
+                             (let* ((rest (mod (* 10 (reduce + 0 (list-ec (: i 1 (+ base 10))
+                                                                          (* (string->number (substring/shared cpf (- i 1) i))
+                                                                             (- (+ base 11) i)))))
+                                               11))
+                                    (rest (if (or (= rest 10) (= rest 11))
+                                              0 rest)))
+                               (= rest (string->number (substring/shared cpf (+ base 9) (+ base 10))))))))
+             (and (validate 0)
+                  (validate 1))))))
+
+  ;;
+  ;; Get environment variable.
+  ;;
+  ;; (get-env "PATH") => /usr/local/sbin:/usr/local/bin
+  ;;
+  (define (get-env var-name)
+    (r/s (format "echo -n $~a" var-name)))
+
+  ;;
+  ;; It can receive a time, date or jdate.
+  ;;
+  (define (get-relative-time date-or-time)
+    (->string (j "new org.ocpsoft.prettytime.PrettyTime().format(dot);"
+                 `((dot ,(->jobject date-or-time))))))
+
+  (define (pretty-print-to-string obj)
+    (let ((stro (open-output-string)))
+      (pretty-print obj stro)
+      (get-output-string stro)))
 
   (create-shortcuts (avg -> average))
 

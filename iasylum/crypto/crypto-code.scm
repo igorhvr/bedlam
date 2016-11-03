@@ -4,10 +4,18 @@
 (define iasylum.js (memoize (lambda () (file->string "/base/bedlam/iasylum/iasylum.js"))))
 (define crypto.js (memoize (lambda () (file->string "/base/bedlam/iasylum/crypto/crypto.js"))))
 
-(define (load-safe-sjcl-and-add-entropy)
-  (js (sjcl.js))
-  (js "sjcl.random.addEntropy(prn, 1024, 'nativeprgn-secure-random');"
-      `((prn ,(j "r=new byte[128]; java.security.SecureRandom.getInstance(\"NativePRNG\").nextBytes(r);Arrays.toString(r);")))))
+(define load-safe-sjcl-and-add-entropy
+  (lambda* ((js-manager: js-manager (get-local-javascript-manager)))
+           (js (sjcl.js) #f js-manager)
+           (js "sjcl.random.addEntropy(prn, 1024, 'nativeprgn-secure-random');"
+               `((prn ,(j "r=new byte[128]; java.security.SecureRandom.getInstance(\"NativePRNG\").nextBytes(r);Arrays.toString(r);")))
+               js-manager)))
+
+(define crypto/prepare-javascript-manager
+  (lambda* ((js-manager: js-manager (get-local-javascript-manager)))
+           (load-safe-sjcl-and-add-entropy 'js-manager: js-manager)
+           (js (iasylum.js) #f js-manager)
+           (js (crypto.js) #f js-manager)))
 
 (define (get-seed-from str-p)
   (let* ( (str (sha256 str-p))
@@ -24,10 +32,9 @@
            (assert (eqv? type 'sjcl_el_gammal_ecc_c256_key))
 
            (if (not string-to-generate-deterministically-from)
-               (load-safe-sjcl-and-add-entropy)
-               (js (sjcl.js-unsafe)))
-
-           (js (iasylum.js)) (js (crypto.js))
+               (crypto/prepare-javascript-manager)
+               (begin 
+                 (js (sjcl.js-unsafe))(js (iasylum.js))(js (crypto.js))))
 
            (unless string-to-generate-deterministically-from
              (js "sjcl.random.addEntropy(prn, 1024, 'nativeprgn-secure-random');"
@@ -52,28 +59,38 @@
                 ( "secretKey" . the-secret-key ) ) `(,(scheme->json the-public-key) ,(scheme->json the-secret-key))))))
 
 (define (asymmetric-encrypt key data)
-  (load-safe-sjcl-and-add-entropy) (js (iasylum.js)) (js (crypto.js))
+  (crypto/prepare-javascript-manager)  
   (->string (js "iasylum.crypto.asymmetric_encrypt(key, data);" `((key ,(->jstring key)) (data ,(->jstring data))))))
 
 (define (asymmetric-decrypt key data)
-  (load-safe-sjcl-and-add-entropy) (js (iasylum.js)) (js (crypto.js))
+  (crypto/prepare-javascript-manager)  
   (->string (js "iasylum.crypto.asymmetric_decrypt(key, data);" `((key ,(->jstring key)) (data ,(->jstring data))))))
 
 (define (symmetric-encrypt key data)
-  (load-safe-sjcl-and-add-entropy) (js (iasylum.js)) (js (crypto.js))
+  (crypto/prepare-javascript-manager)  
   (->string (js "iasylum.crypto.symmetric_encrypt(key, data);" `((key ,(->jstring key)) (data ,(->jstring data))))))
 
 (define (symmetric-decrypt key data)
-  (load-safe-sjcl-and-add-entropy) (js (iasylum.js)) (js (crypto.js))
+  (crypto/prepare-javascript-manager)  
   (->string (js "iasylum.crypto.symmetric_decrypt(key, data);" `((key ,(->jstring key)) (data ,(->jstring data))))))
 
 (define (hmac key data)
-  (load-safe-sjcl-and-add-entropy)
-  (js (iasylum.js))
-  (js (crypto.js))
+  (crypto/prepare-javascript-manager)  
   (->string (js "iasylum.crypto.hmac(key, data);" `((key ,(->jstring key))
                                                     (data ,(->jstring data))))))
 
+;;
+;; - simple-date is today in format YYYYMMDD
+;; - service is "s3" e.g.
+;;
+(define (aws-signature what secret simple-date region service)
+  (crypto/prepare-javascript-manager)  
+  (->string (js "iasylum.crypto.aws_signature(a, b, c, d, e);"
+                `((a ,(->jstring what))
+                  (b ,(->jstring secret))
+                  (c ,(->jstring simple-date))
+                  (d ,(->jstring region))
+                  (e ,(->jstring service))))))
 
 ;; Sample usage:
 ;; (load "/base/bedlam/iasylum/crypto/crypto-code.scm") (define keypair (generate-keypair 'sjcl_el_gammal_ecc_c256_key))(define keypair-pub (match keypair ((public secret) public)))(define keypair-sec (match keypair ((public secret) secret))) (asymmetric-decrypt keypair-sec (asymmetric-encrypt keypair-pub "1234567"))

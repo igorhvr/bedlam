@@ -1,4 +1,4 @@
-(define-generic-java-method get |get|)
+ (define-generic-java-method get |get|)
 (define-generic-java-method set |set|)
 
 ;;nodejs - remote
@@ -120,16 +120,36 @@
                    (begin
                      (let* ((sname (if (string? vname) vname (symbol->string vname)))
                             (name (->jstring sname ))
-                            (code (string-append* "var " sname " = null; var fdefdeff = function(p) { " sname " = p; }; fdefdeff;"))
+                            (code-return (random-var))
+                            (f-p (random-var))
+                            (code (string-append*
+                                   "var " sname " = null; var fdefdeff" code-return " = function(" f-p ") { " sname " = " f-p "; }; fdefdeff" code-return ";"))
                             (v8f (j "v8.executeScript(script);" `((v8 ,runtime) (script ,(->jstring code)))))
-                            (parameters-v8array (j "tres=new com.eclipsesource.v8.V8Array(v8runtime); tres;" `((v8runtime ,runtime)))))
+                            (v8array-return (random-var))
+                            (parameters-v8array (j (string-append
+                                                    "tres" v8array-return  "=new com.eclipsesource.v8.V8Array(v8runtime); tres" v8array-return ";")
+                                                   `((v8runtime ,runtime)))))
                        
                        (j "v8a.push(jsobjectvalue);"
                           `((v8a ,parameters-v8array)
                             (jsobjectvalue ,(->jobject vvalue))))
-                       (j "v8f.call(null, p);" `((p ,parameters-v8array) (v8f ,v8f))))))))
-     
-     (j "v8.executeScript(script);" `((v8 ,runtime) (script ,(->jstring code)))))))
+                       (j "v8f.call(null, p);" `((p ,parameters-v8array) (v8f ,v8f)))
+                       (j (string-append "fdefdeff" code-return " = null;"))
+                       (j (string-append "tres" v8array-return " = null;"))
+                       )))))
+
+     (let ((final-result 
+            (j "v8.executeScript(script);" `((v8 ,runtime) (script ,(->jstring code))))))
+
+       (each-for
+        vars
+        (lambda (v)
+          (match-let ( ( (vname vvalue) v ) )
+                     (let* ((sname (if (string? vname) vname (symbol->string vname)))
+                            (name (->jstring sname )))
+                       (js (string-append sname " = null;"))))))
+       
+       final-result))))
 
 (set! js js-v8)
 
