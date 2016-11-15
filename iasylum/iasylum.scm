@@ -38,7 +38,7 @@
    smart-compile
    flatten
    rglob
-   file->string
+   file->string string->file
    iasylum-sort
    sort
    avector-lexicographic-sort
@@ -142,6 +142,10 @@
     (->string
      (j "in = new FileReader(filename);
       org.apache.bsf.util.IOUtils.getStringFromReader(in);" `((filename ,(->jstring fname))))))
+
+  (define (string->file str)
+    (let ((java-io-file (string->java.io.File str)))
+      (->string (j "sff.getAbsolutePath();" `((sff ,java-io-file))))))
 
   (define (input-port->string input)
     (define i (if (binary-input-port? input)
