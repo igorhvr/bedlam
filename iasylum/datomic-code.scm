@@ -138,29 +138,61 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 ;;              :where [$ ?e :item/id ?id]
 ;;                     [$since ?e :item/count ?count]]
 ;;
+;; if you use the option "include-history" so use $history to refer the history database like:
+;;
+;;             [:find ?count
+;;              :in $ $history ?id
+;;              :where [$ ?e :item/id ?id]
+;;                     [$history ?e :item/count ?count]]
+;;
+;; or (if since is also used):
+;;
+;;             [:find ?count
+;;              :in $ $since $history ?id
+;;              :where [$ ?e :item/id ?id]
+;;                     [$history ?e :item/id ?id]
+;;                     [$since ?e :item/count ?count]]
+;;
 (define* (datomic/make-query-function-with-one-connection-included smart-query-lambda
                                                                    connection-retriever
                                                                    (since: since #f)
-                                                                   (until: until #f))
+                                                                   (until: until #f)
+                                                                   (include-history: include-history #f))
   (let* ((current-db-retriever (datomic/make-latest-db-retriever connection-retriever))
          (last-db-retriever (if (not until)
                                 current-db-retriever
                                 (lambda ()
                                   (datomic/as-of (current-db-retriever)
                                                  until)))))
-    (if (not since)
-        (cut smart-query-lambda
-             <> ; Query.
-             (last-db-retriever)
-             <...> ; Whatever other insanity and/or fixed parameters one may pass.
-             )
-        (cut smart-query-lambda
-             <> ; Query.
-             (last-db-retriever)
-             (datomic/since (last-db-retriever)
-                            since)
-             <...> ; other params
-             ))))
+    (if (not include-history)
+        (if (not since)
+            (cut smart-query-lambda
+                 <> ; Query.
+                 (last-db-retriever)
+                 <...> ; Whatever other insanity and/or fixed parameters one may pass.
+                 )
+            (cut smart-query-lambda
+                 <> ; Query.
+                 (last-db-retriever)
+                 (datomic/since (last-db-retriever)
+                                since)
+                 <...> ; other params
+                 ))
+        (if (not since)
+            (cut smart-query-lambda
+                 <> ; Query.
+                 (last-db-retriever)
+                 (datomic/db-history (last-db-retriever))
+                 <...> ; Whatever other insanity and/or fixed parameters one may pass.
+                 )
+            (cut smart-query-lambda
+                 <> ; Query.
+                 (last-db-retriever)
+                 (datomic/since (last-db-retriever)
+                                since)
+                 (datomic/db-history (last-db-retriever))
+                 <...> ; other params
+                 )))))
 
 (define (cut-log message)
   (let ((length (string-length message)))
