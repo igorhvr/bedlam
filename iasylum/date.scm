@@ -9,6 +9,8 @@
    get-day-index-utc
    time->millis
    millis->time
+   date->millis
+   millis->date
    )
 
   (define (add-days date ndays)
@@ -42,16 +44,19 @@
   (define (get-day-index-utc)
     (get-day-index (current-date 0)))
 
-  ;;
-  ;; It returns an exact number. Use (floor ...) to make it an integer.
-  ;;
   (define (time->millis t)
-    (+ (* 1000 (time-second t))
-       (/ (time-nanosecond t) 1000000)))
+    (floor (+ (* 1000 (time-second t))
+              (/ (time-nanosecond t) 1000000))))
 
   (define (millis->time m)
     (let* ((exact-seconds (/ m 1000))
            (seconds (floor exact-seconds)))
       (make-time time-utc (floor (* (- exact-seconds seconds) 1000000000)) seconds)))
 
+  (define (date->millis date)
+    (time->millis (date->time-utc date)))
+
+  (define (millis->date time-millis)
+    (time-utc->date (millis->time time-millis)))
+  
   )
