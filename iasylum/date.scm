@@ -11,6 +11,9 @@
    millis->time
    date->millis
    millis->date
+   next-month
+   month-before
+   get-last-day-of-month
    )
 
   (define (add-days date ndays)
@@ -58,5 +61,25 @@
 
   (define (millis->date time-millis)
     (time-utc->date (millis->time time-millis)))
-  
+
+  (define (next-month month-year-pair)
+    (and month-year-pair
+         (let ((month-year-pair (cons (+ (car month-year-pair) 1)
+                                      (cdr month-year-pair))))
+           (if (> (car month-year-pair) 12)
+               (cons 1 (+ (cdr month-year-pair) 1))
+               month-year-pair))))
+
+  (define (month-before month-year-pair)
+    (and month-year-pair
+         (let ((month-year-pair (cons (- (car month-year-pair) 1)
+                                      (cdr month-year-pair))))
+           (if (< (car month-year-pair) 1)
+               (cons 12 (- (cdr month-year-pair) 1))
+               month-year-pair))))
+
+  (define (get-last-day-of-month month year)
+    (->scm-object (j "java.time.LocalDate.of(year, month, 1).with(java.time.temporal.TemporalAdjusters.lastDayOfMonth()).getDayOfMonth();"
+                     `((year ,(->jint year)) (month ,(->jint month))))))
+
   )
