@@ -8,6 +8,7 @@
    get-day-index
    get-day-index-utc
    time->millis
+   millis->time
    )
 
   (define (add-days date ndays)
@@ -48,5 +49,9 @@
     (+ (* 1000 (time-second t))
        (/ (time-nanosecond t) 1000000)))
 
+  (define (millis->time m)
+    (let* ((exact-seconds (/ m 1000))
+           (seconds (floor exact-seconds)))
+      (make-time time-utc (floor (* (- exact-seconds seconds) 1000000000)) seconds)))
 
   )
