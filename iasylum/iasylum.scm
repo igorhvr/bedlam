@@ -102,6 +102,9 @@
    validate-cpf
    get-relative-time
    pretty-print-to-string
+   split-string-comma
+   split-string
+   format-message
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -1236,6 +1239,22 @@
     (let ((stro (open-output-string)))
       (pretty-print obj stro)
       (get-output-string stro)))
+
+  (define (split-string-comma str)
+    (let ((split-regex (irregex '(+ ","))))
+      (irregex-split split-regex str)))
+
+  (define (split-string token str)
+    (let ((split-regex (irregex `(+ ,token))))
+      (irregex-split split-regex str)))
+
+  (define (format-message msg params)
+    (->scm-object
+     (j "java.text.MessageFormat.format(msg, params);"
+        `((msg ,(->jstring msg))
+          (params ,(jlist->jarray (->jobject (map (lambda (param)
+                                                    (->jobject param))
+                                                  params))))))))
 
   (create-shortcuts (avg -> average))
 
