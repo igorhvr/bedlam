@@ -23,7 +23,33 @@
 
         result;"
         `((destinationurl ,(->jstring destinationUrl))))))
-;; TODO file upload - http://stackoverflow.com/questions/1067655/how-to-upload-a-file-using-java-httpclient-library-working-with-php
+
+
+  ;; Implements headers to GET requests
+  (define http-call-get-headers/string 
+    (lambda* (destinationUrl (headers: headers #f))
+             (let ((httpget (j "httpclient = org.apache.http.impl.client.HttpClients.createDefault();
+      httpget = new org.apache.http.client.methods.HttpGet(destinationurl);" `((destinationurl ,(->jstring destinationUrl))))))
+
+               (map (lambda (v)  (match-let ( ( (vname vvalue) v ) )
+                                   (j "httpget.addHeader(hn, hv);"`((hn ,(->jstring vname)) (hv ,(->jstring vvalue)) (httpget ,httpget)))
+                                   )) headers)
+               
+               (j "response = httpclient.execute(httpget);
+      result=\"\";
+      try {
+        tent=response.getEntity();
+        result=org.apache.http.util.EntityUtils.toString(tent);
+      } catch(Exception e) {
+        throw new RuntimeException(e);
+      } finally {
+        response.close();
+      }
+
+      result;"
+                  `((httpget ,httpget))))))
+  
+  ;; TODO file upload - http://stackoverflow.com/questions/1067655/how-to-upload-a-file-using-java-httpclient-library-working-with-php
   (define http-call-post-string/string
     (lambda* (destinationUrl contents (headers: headers #f))
              (let ((httppost (j "httpclient = org.apache.http.impl.client.HttpClients.createDefault();
