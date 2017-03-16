@@ -113,19 +113,18 @@
 
 (set! clj
       (lambda* (str (vars #f))
-               (create-runner)
+               (mutex/synchronize (mutex-of create-runner) (lambda () (create-runner)))
                (let ((result #f))
                  (cond ( (eqv? vars #t) ; This is not a mistake. It could be a list too - and we should not enter this code.
                          (begin
                            (error "\nFetching full environment not yet supported.\n")) )
                        (  (eqv? vars #f)
-                          (begin
-                            (set! result (j "ClojureScriptRunner.runClosureScript(new java.util.concurrent.ConcurrentHashMap(), str);"
-                                            `((str ,(->jstring str)))))) )
+                          (let ((strvar (random-var)))
+                            (set! result (j (format "ClojureScriptRunner.runClosureScript(new java.util.concurrent.ConcurrentHashMap(), ~a);" strvar)
+                                            `((,strvar ,(->jstring str)))))) )
                        [ (list? vars)
 
-                         (let* ((random-string-to-avoid-thread-conflict (string-append* (random) (random) (random)))
-
+                         (let* ((random-string-to-avoid-thread-conflict (number->string (random)))
                                 (clj-let-declaration (reduce string-append* ""
                                                              (map (lambda (key-value-pair)
                                                                     (let ((java-map-key (->jstring (string-append*
@@ -145,8 +144,9 @@
                                                                clj-let-declaration
                                                                "] " str ")")))
 
-                           (set! result (j "ClojureScriptRunner.runClosureScript(new java.util.concurrent.ConcurrentHashMap(), finalcommand);"
-                                           `((finalcommand ,(->jstring final-command)))))
+                           (let ((finalcommand-var (random-var)))
+                             (set! result (j (format "ClojureScriptRunner.runClosureScript(new java.util.concurrent.ConcurrentHashMap(), ~a);" finalcommand-var)
+                                             `((,finalcommand-var ,(->jstring final-command))))))
 
                            ; clear memory
                            (for-each (lambda (key-value-pair)
