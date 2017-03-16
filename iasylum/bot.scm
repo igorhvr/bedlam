@@ -31,7 +31,7 @@
                (watched-thread/spawn (lambda() (j (format "~a.startBot();" botvar)
                                                   `((,botvar ,bot)))))
                (watched-thread/spawn (lambda()
-                                       (clj "(require 'clj-slack.chat)")
+                                       (mutex/synchronize (mutex-of clj) (lambda () (clj "(require 'clj-slack.chat)")))
                                        (let loop ()
                                                  (let* ((msg (in-work-queue 'take))
                                                         (nmsg (string-append "PRIVMSG #" channel " :" msg)))
@@ -39,22 +39,24 @@
                                                    ;;   `((,botvar ,bot)
                                                    ;;     (ln ,(->jstring nmsg))))
                                                    ;;(sleep 550)
-                                                   (clj "(require 'clj-slack.chat)
-                                                         (clj-slack.chat/post-message
-                                                            {:api-url \"https://slack.com/api\" :token strtoken}
-                                                            strchannel  strmsg {:username strusername})"
-                                                        `((strchannel ,(->jstring channel))
+                                                   (mutex/synchronize (mutex-of clj) (lambda ()
+                                                     (clj "(require 'clj-slack.chat)
+                                                           (clj-slack.chat/post-message
+                                                              {:api-url \"https://slack.com/api\" :token strtoken}
+                                                              strchannel  strmsg {:username strusername})"
+                                                          `((strchannel ,(->jstring channel))
 
-                                                          ;; TODO: This should not be hard-coded. This token can be used
-                                                          ;; by an attacker. After a proper place is setup for This
-                                                          ;; the token should be discared/replaced using
-                                                          ;; https://api.slack.com/custom-integrations/legacy-tokens
-                                                          (strtoken ,(->jstring "xoxp-4694451278-4694451298-154872724965-d530eaa62dfa7fd4b770e203a0f9640e"))
+                                                            ;; TODO: This should not be hard-coded. This token can be used
+                                                            ;; by an attacker. After a proper place is setup for This
+                                                            ;; the token should be discared/replaced using
+                                                            ;; https://api.slack.com/custom-integrations/legacy-tokens
+                                                            (strtoken ,(->jstring "xoxp-4694451278-4694451298-154872724965-d530eaa62dfa7fd4b770e203a0f9640e"))
                                                           
-                                                          (strusername ,(->jstring name))
-                                                          (strmsg ,(->jstring msg))
+                                                            (strusername ,(->jstring name))
+                                                            (strmsg ,(->jstring msg))
+                                                            )
                                                           )
-                                                        )
+                                                     ))
                                                    (loop)))))
                bot)))
 
