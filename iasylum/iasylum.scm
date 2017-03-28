@@ -105,6 +105,7 @@
    split-string-comma
    split-string
    format-message
+   clear-string
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -1255,6 +1256,9 @@
           (params ,(jlist->jarray (->jobject (map (lambda (param)
                                                     (->jobject param))
                                                   params))))))))
+
+  (define (clear-string str)
+    (irregex-replace/all "\\W" str ""))
 
   (create-shortcuts (avg -> average))
 
