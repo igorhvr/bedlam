@@ -7,7 +7,7 @@
   (work-queue-bot)
   
   (define work-queue-bot
-    (lambda* ((in-work-queue: in-work-queue) (out-work-queue: out-work-queue) (name: name) (server-hostname: server-hostname) (server-port: server-port) (server-password: server-password) (channel: channel) )             
+    (lambda* ((in-work-queue: in-work-queue) (out-work-queue: out-work-queue) (name: name) (server-hostname: server-hostname) (server-port: server-port) (server-password: server-password) (channel: channel) (token: token #f))
              (let* ((inner-queue-out-work-queue (out-work-queue 'inner-queue))
                     (pmtoutqueuevarname (random-var))
                     (channelvar (random-var))
@@ -35,28 +35,34 @@
                                        (let loop ()
                                                  (let* ((msg (in-work-queue 'take))
                                                         (nmsg (string-append "PRIVMSG #" channel " :" msg)))
-                                                   ;;(j (format "~a.sendRawLineToServer(ln);" botvar)
-                                                   ;;   `((,botvar ,bot)
-                                                   ;;     (ln ,(->jstring nmsg))))
-                                                   ;;(sleep 550)
-                                                   (mutex/synchronize (mutex-of clj) (lambda ()
-                                                     (clj "(require 'clj-slack.chat)
-                                                           (clj-slack.chat/post-message
-                                                              {:api-url \"https://slack.com/api\" :token strtoken}
-                                                              strchannel  strmsg {:username strusername})"
-                                                          `((strchannel ,(->jstring channel))
 
-                                                            ;; TODO: This should not be hard-coded. This token can be used
-                                                            ;; by an attacker. After a proper place is setup for This
-                                                            ;; the token should be discared/replaced using
-                                                            ;; https://api.slack.com/custom-integrations/legacy-tokens
-                                                            (strtoken ,(->jstring "xoxp-4694451278-4694451298-154872724965-d530eaa62dfa7fd4b770e203a0f9640e"))
+                                                   (if token
+                                                       (mutex/synchronize (mutex-of clj)
+                                                                          (lambda ()
+                                                                            (clj "(require 'clj-slack.chat)
+                                                                                  (clj-slack.chat/post-message
+                                                                                  {:api-url \"https://slack.com/api\" :token strtoken}
+                                                                                  strchannel  strmsg {:username strusername})"
+                                                                                 `((strchannel ,(->jstring channel))
+
+                                                                            ;; TODO: This should not be hard-coded. This token can be used
+                                                                            ;; by an attacker. After a proper place is setup for This
+                                                                            ;; the token should be discared/replaced using
+                                                                            ;; https://api.slack.com/custom-integrations/legacy-tokens
+                                                                                   (strtoken ,(->jstring token))
                                                           
-                                                            (strusername ,(->jstring name))
-                                                            (strmsg ,(->jstring msg))
-                                                            )
-                                                          )
-                                                     ))
+                                                                                   (strusername ,(->jstring name))
+                                                                                   (strmsg ,(->jstring msg))
+                                                                                   )
+                                                                                 )
+                                                                            ))
+                                                       (begin
+                                                         (j (format "~a.sendRawLineToServer(ln);" botvar)
+                                                            `((,botvar ,bot)
+                                                              (ln ,(->jstring nmsg))))
+                                                         ;; To avoid getting disconnected 
+                                                         (sleep 2000)))
+
                                                    (loop)))))
                bot)))
 
