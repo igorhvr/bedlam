@@ -77,6 +77,7 @@
    hex->decimal
    decimal->hex
    decimal->maxradix
+   deep-map
    vector->list_deeply
    alist-to-url-query-string
    make-parameter*
@@ -867,6 +868,14 @@
        (begin
          (define copy function) ...))))
 
+  (define (deep-map f l)
+    (define (deep x)
+      (cond ((null? x) x)
+            ((vector? x) (list->vector (deep-map f (vector->list x))))
+            ((pair? x) (map deep x))
+            (else (f x))))
+    (map deep l))
+  
   (define (vector->list_deeply obj)
     (cond [(list? obj) (map (lambda (element)
                               (vector->list_deeply element))
