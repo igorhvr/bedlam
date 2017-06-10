@@ -32,12 +32,13 @@
          (use-ssl: use-ssl #t) (use-starttls: use-starttls #f)         
          (smtp-port: smtp-port 25)
          (ssl-smtp-port: ssl-smtp-port 465)
-         (subject: subject "") (message-text: messagetext "="))
+         (subject: subject "") (message-text: messagetext "=")
+         (attachments-file-path: attachments-file-path #f))
       (assert (or (not to) (list? to))) (assert (or (not cc) (list? cc)))
 
       (j 
-       "import org.apache.commons.mail.SimpleEmail;
-       email = new SimpleEmail();
+       "import org.apache.commons.mail.MultiPartEmail;
+       email = new MultiPartEmail();
        email.setCharset(\"utf-8\");
        email.setSmtpPort(smtpport);
        email.setSslSmtpPort(sslsmtpport);
@@ -47,6 +48,13 @@
          (smtpport ,(->jint smtp-port))
          (sslsmtpport ,(->jstring (number->string ssl-smtp-port)))
          ))
+
+      (when attachments-file-path
+        (for-each
+         (lambda (filepath)
+           (j "email.attach(new java.io.File(filepath));"
+              `((filepath ,(->jstring filepath)))))
+         attachments-file-path))
 
       (when to
         (for-each (match-lambda ((vemail vname)
