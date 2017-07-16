@@ -1,3 +1,3 @@
 #!/bin/sh
 . /base/bedlam/schejure/dtclasspath
-echo "(begin (define iasylum-bedlam-location \"/base/bedlam/\") (load (string-append iasylum-bedlam-location \"iasylum/init.scm\"))) (nrepls) (let v () (j \"Thread.sleep(1000000);\") (v))" | java -Xmx4G clojure.main -e "(sisc.REPL/main (into-array [\"\"]))"
+echo "(begin (define iasylum-bedlam-location \"/base/bedlam/\") (load (string-append iasylum-bedlam-location \"iasylum/init.scm\"))) (nrepls) (let v () (j \"Thread.sleep(1000000);\") (v))" | java -Xmx4G clojure.main -e "(sisc.REPL/main (into-array String []))"
