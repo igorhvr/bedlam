@@ -519,6 +519,8 @@
 
 (require-extension (lib iasylum/siscweb))
 
+(require-extension (lib iasylum/csv))
+
 (set! load original-load)
 
 (define bedlam-loaded-and-ready-to-use #t)
