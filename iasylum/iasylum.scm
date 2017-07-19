@@ -107,6 +107,7 @@
    split-string
    format-message
    clear-string
+   adjust-date-timezone
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -1268,6 +1269,12 @@
 
   (define (clear-string str)
     (irregex-replace/all "\\W" str ""))
+
+  (define* (adjust-date-timezone dt (timezone: timezone "Brazil/East"))
+    (time-utc->date (date->time-utc dt)
+                    (->number
+                     (j "java.util.TimeZone.getTimeZone(timezone).getRawOffset() / 1000;"
+                        `((timezone ,(->jstring timezone)))))))
 
   (create-shortcuts (avg -> average))
 
