@@ -80,8 +80,8 @@ public class M {
 				     "(define-generic-java-method java-get |get|)"+
 				     "(define-generic-java-method java-put |put|)"+
 				     "(define (ensure-jobject v) (if (java-object? v) v (->jstring v) ))"+
-				     "(define (get v) (java-get data (ensure-jobject v)))"+
-				     "(define (put k v) (java-put data (ensure-jobject k) (ensure-jobject v)))"
+				     "(define (d/get v) (java-get data (ensure-jobject v)))"+
+				     "(define (d/put k v) (java-put data (ensure-jobject k) (ensure-jobject v)))"
 				     );		
 		sisc.interpreter.Context.exit();
 
