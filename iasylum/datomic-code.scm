@@ -285,7 +285,7 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
   (make-transaction-set "" '()))
 
 ;;
-;; Adds a trasanction (in string format) and a list of parameters into a transaction-set.
+;; Adds a transaction (in string format) and a list of parameters into a transaction-set.
 ;; The transaction-string would be a clojure map or list like "{:key value :key2 value2}"
 ;; or "[:fn p1 p2 ...]".
 ;;
