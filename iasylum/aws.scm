@@ -11,6 +11,7 @@
    aws/make-dynamodb-client
    aws/make-dynamodb-attribute aws/ensure-dynamodb-attribute aws/ensure-dynamodb-jmap
    aws/make-dynamodb-put-item-request aws/make-dynamodb-get-item-request aws/make-dynamodb-delete-item-request
+   aws/make-dynamodb-unique-put-item
    aws/dynamodb-get-item aws/dynamodb-put-item aws/dynamodb-delete-item
 
    aws/make-dynamodb-simple-eq-key-condition
@@ -106,6 +107,24 @@
    
    (define (aws/make-dynamodb-put-item-request table-name string-to-attribute-value-map) (j "new com.amazonaws.services.dynamodbv2.model.PutItemRequest(tablename, stringtoattributevaluemap, \"ALL_OLD\");" `((tablename ,(->jstring table-name)) (stringtoattributevaluemap ,(aws/ensure-dynamodb-jmap string-to-attribute-value-map)))))
 
+   (define (aws/make-dynamodb-unique-put-item dynamodb-client table-name key)
+     (let* ((value-var (string-append* "v" (substring (sha256 (gensym)) 0 20)))
+            (value-var2 (string-append* "v" (substring (sha256 (gensym)) 0 20)))
+            (themap-var1 (string-append* "v" (substring (sha256 (gensym)) 0 20)))
+            (themap-var2 (string-append* "v" (substring (sha256 (gensym)) 0 20)))
+            (thekey (string-append* "v" (substring (sha256 (gensym)) 0 20)))
+            (att-value (j (format "new com.amazonaws.services.dynamodbv2.model.AttributeValue(~a);" thekey)
+                          `((,thekey ,(->jstring key)))))
+            (att-value2 (j "new com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue(false);")))
+       (let ((request
+              (j (format "new com.amazonaws.services.dynamodbv2.model.PutItemRequest().withTableName(tablename).withItem(~a).withExpected(~a);" themap-var1 themap-var2)
+                 `((tablename ,(->jstring table-name))
+                   (,themap-var1 ,(j "java.util.Collections.singletonMap(\"nonce\", v);" `((v ,att-value))))
+                   (,themap-var2 ,(j "java.util.Collections.singletonMap(\"nonce\", v2);" `((v2 ,att-value2))))))))
+         (->scm-object (j "dyn.putItem(req).getAttributes();"
+                          `((dyn ,dynamodb-client)
+                            (req ,request)))))))
+     
    (define aws/make-dynamodb-get-item-request (lambda* (table-name string-to-attribute-value-map (strongly-consistent-read: strongly-consistent-read #t)) (j "new com.amazonaws.services.dynamodbv2.model.GetItemRequest(tablename, stringtoattributevaluemap, cons);" `((tablename ,(->jstring table-name)) (stringtoattributevaluemap ,(aws/ensure-dynamodb-jmap string-to-attribute-value-map)) (cons ,(->jobject strongly-consistent-read))))))
 
    (define aws/make-dynamodb-delete-item-request
