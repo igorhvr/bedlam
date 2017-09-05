@@ -403,11 +403,34 @@
                                     ))) )
                        ( (list? vars)
                          (begin
-                           (map (lambda (v)
-                                   (match-let ( ( (vname vvalue) v ) )
-                                              (|set| tint (->jstring (if (string? vname) vname (symbol->string vname))) vvalue)))
+                           (for-each (lambda (v)
+
+                                       (match v
+                                              ( (vname vvalue) 
+                                                (|set| tint (->jstring (if (string? vname) vname (symbol->string vname))) vvalue)
+                                                )
+                                              ( (vname)
+                                                #t
+                                                )
+                                              )
+
+                                       )
                                 vars))))                                           
-                 (|eval| tint (->jstring str)))))
+                 (let ((result (|eval| tint (->jstring str))))
+                   ;; Clear memory.
+                   (when (list? vars)
+                     (map (lambda (v)
+                            (match v
+                                        ( (vname vvalue) 
+                                          (|set| tint (->jstring (if (string? vname) vname (symbol->string vname))) jnull)
+                                          )
+                                        ( (vname)
+                                          (|set| tint (->jstring (if (string? vname) vname (symbol->string vname))) jnull)
+                                          )
+                                  )
+                             ) vars))
+                   result)
+                 )))
 
 ; TODO: Understand why (integer? 32833333333333333333333.222222233) = #t
 

@@ -10,8 +10,9 @@
   (define* (list->spreadsheet-file l fn (sheet-name "data"))
     (let ((file-stream
            (j "import java.io.*;
-               FileOutputStream fileOut = new FileOutputStream(filename);
-           fileOut;" `((filename ,(->jstring fn))))))
+               //FileOutputStream
+               listspreadsheetfile_fileOut = new FileOutputStream(filename);
+               listspreadsheetfile_fileOut;" `((filename ,(->jstring fn))))))
       (list->spreadsheet l file-stream sheet-name)
       (j "fileOut.close();" `((fileOut ,file-stream)))))
 
@@ -30,23 +31,32 @@
        l)
       (save-wb wb stream)))
   
-  (define (make-workbook) (j "import org.apache.poi.hssf.usermodel.*; HSSFWorkbook wb = new HSSFWorkbook(); wb;"))
+  (define (make-workbook) (j "import org.apache.poi.hssf.usermodel.*;
+                              //HSSFWorkbook
+                              makeworkbook_wb = new HSSFWorkbook();
+                              makeworkbook_wb;"))
   
   (define* (make-sheet wb (sheet-name "data"))
-    (j "import org.apache.poi.hssf.usermodel.*; HSSFSheet sheet = wb.createSheet(sheetname); sheet" `((wb ,wb) (sheetname ,(->jstring sheet-name)))))
+    (j "import org.apache.poi.hssf.usermodel.*;
+        //HSSFSheet
+        makesheet_sheet = wb.createSheet(sheetname);
+        makesheet_sheet" `((wb ,wb) (sheetname ,(->jstring sheet-name)))))
   
   (define (add-row sheet)
     (j
      "import org.apache.poi.hssf.usermodel.*;
                   newPosition = (sheet.getLastRowNum()==0) ? ( (sheet.getPhysicalNumberOfRows()==0) ? 0 : 1 )  : (sheet.getLastRowNum()+1);
-                  HSSFRow row = sheet.createRow((short)newPosition);
-                  row;
+                  //HSSFRow
+                  addrow_row = sheet.createRow((short)newPosition);
+                  addrow_row;
                   " `((sheet ,sheet))))
+  
   (define (add-cell row)
     (j
      "import org.apache.poi.hssf.usermodel.*;
                   newPosition = (row.getLastCellNum()==-1) ? 0  : row.getLastCellNum();
-                  row.createCell((short)newPosition)                  
+                  addcellresult=row.createCell((short)newPosition);
+                  addcellresult;
                   " `((row ,row))))
   
   (define (set-cell-value cell value)
@@ -55,8 +65,9 @@
   (define (save-wb-file wb filename)
     (let ((file-stream
            (j "import java.io.*;
-               FileOutputStream fileOut = new FileOutputStream(filename);
-           fileOut;" `((filename ,(->jstring filename))))))
+               //FileOutputStream
+               savewbfile_fileOut = new FileOutputStream(filename);
+               savewbfile_fileOut;" `((filename ,(->jstring filename))))))
       (save-wb wb file-stream)
       (j "fileOut.close();" `((fileOut ,file-stream)))))
 
@@ -120,10 +131,14 @@
      "import org.apache.poi.poifs.filesystem.POIFSFileSystem;
        import org.apache.poi.hssf.usermodel.HSSFWorkbook;
        import org.apache.poi.hssf.usermodel.HSSFSheet;
-       POIFSFileSystem fs = new POIFSFileSystem(inputstream);
-       HSSFWorkbook wb = new HSSFWorkbook(fs);
-       wb;"
-     `((inputstream ,input-stream))))
+       //POIFSFileSystem
+       getexcelworkbook_fs = new POIFSFileSystem(inputstream);
+       //HSSFWorkbook
+       getexcelworkbook_wb = new HSSFWorkbook(getexcelworkbook_fs);
+       getexcelworkbook_wb;"
+     `((inputstream ,input-stream)
+       (getexcelworkbook_fs)
+       (getexcelworkbook_wb))))
 
   
   (define (get-workbook-number-of-sheets workbook)
@@ -138,17 +153,19 @@
     (j.
      " import org.apache.poi.hssf.usermodel.HSSFWorkbook;
        import org.apache.poi.hssf.usermodel.HSSFSheet;
-       HSSFSheet sheet = wb.getSheet(sheetname);
-       sheet;"
-     `((wb ,workbook) (sheetname ,(->jstring sheetname)))))
+       //HSSFSheet
+       getexcelsheetbyname_sheet = wb.getSheet(sheetname);
+       getexcelsheetbyname_sheet;"
+     `((wb ,workbook) (sheetname ,(->jstring sheetname)) (getexcelsheetbyname_sheet))))
 
   (define (get-excel-sheet-by-index workbook index)
     (j
      " import org.apache.poi.hssf.usermodel.HSSFWorkbook;
        import org.apache.poi.hssf.usermodel.HSSFSheet;
-       HSSFSheet sheet = wb.getSheetAt(index);
-       sheet;"
-     `((wb ,workbook) (index ,(->jint index)))))
+       //HSSFSheet
+       getexcelsheetbyindex_sheet = wb.getSheetAt(index);
+       getexcelsheetbyindex_sheet;"
+     `((wb ,workbook) (index ,(->jint index)) (getexcelsheetbyindex_sheet))))
 
 ;;       (load-excel-sheet-data (get-excel-sheet-by-index (get-excel-workbook (j "new java.io.FileInputStream(fname);" `((fname ,(->jstring fname))))
 
