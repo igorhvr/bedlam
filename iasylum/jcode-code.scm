@@ -405,16 +405,7 @@
                          (begin
                            (map (lambda (v)
                                    (match-let ( ( (vname vvalue) v ) )
-                                              (|set| tint (->jstring (if (string? vname) vname (symbol->string vname)))
-;                                                     TODO: The below is too magical. I need to find a better way.                                                     
-;                                                     (cond
-;                                                      ((boolean? vvalue) (->jboolean vvalue))
-;                                                      ((char? vvalue) (->jchar vvalue))
-;                                                      ((string? vvalue) (->jstring vvalue))
-;                                                      (else  vvalue))
-                                                     vvalue
-                                                     )))
-
+                                              (|set| tint (->jstring (if (string? vname) vname (symbol->string vname))) vvalue)))
                                 vars))))                                           
                  (|eval| tint (->jstring str)))))
 
