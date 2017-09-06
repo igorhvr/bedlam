@@ -13,6 +13,9 @@
    aws/make-dynamodb-put-item-request aws/make-dynamodb-get-item-request aws/make-dynamodb-delete-item-request
    aws/make-dynamodb-unique-put-item
    aws/dynamodb-get-item aws/dynamodb-put-item aws/dynamodb-delete-item
+   aws/dynamodb-simple-put-item
+   aws/dynamodb-simple-get-item
+   aws/dynamodb-simple-delete-item
 
    aws/make-dynamodb-simple-eq-key-condition
    aws/make-dynamodb-simple-eq-key-query-request
@@ -161,6 +164,31 @@
            (j "dyn.query(req).getItems();" `((dyn ,dynamodb-client)
                                              (req ,(aws/make-dynamodb-simple-eq-key-query-request table-name attribute-name attribute-value
                                                                                                   'strongly-consistent-read: #t)))))))
+
+   ;;
+   ;; Return #f if there was no value in the key before, or the old value.
+   ;;
+   (define (aws/dynamodb-simple-put-item dynamodb-client table key-name key value)
+     (let ((result (aws/dynamodb-put-item dynamodb-client table
+                                          `((,key-name ,key) ("body" ,value)))))
+       (and (not (null? result))
+            (->scm-object (j "jakiatuca2.getS();" `((jakiatuca2 ,(get "body" result))))))))
+
+   ;;
+   ;; Return #f if there is no value in the key.
+   ;;
+   (define (aws/dynamodb-simple-get-item dynamodb-client table key-name key)
+     (let ((result (aws/dynamodb-get-item dynamodb-client table `((,key-name ,key)))))
+       (and (not (null? result))
+            (->scm-object (j "jakiatuca.getS();" `((jakiatuca ,(get "body" result))))))))
+
+   ;;
+   ;; Return #f if there was no value in the key before, or the old value.
+   ;;
+   (define (aws/dynamodb-simple-delete-item dynamodb-client table key-name key)
+     (let ((result (aws/dynamodb-delete-item dynamodb-client table `((,key-name ,(aws/make-dynamodb-attribute key))))))
+       (and (not (null? result))
+            (->scm-object (j "jakiatuca3.getS();" `((jakiatuca3 ,(get "body" result))))))))
 
    ;; Valid regions (as of 2015-12-01) 
    ;; AP_NORTHEAST_1 / AP_SOUTHEAST_1 / AP_SOUTHEAST_2 / CN_NORTH_1 / EU_CENTRAL_1
