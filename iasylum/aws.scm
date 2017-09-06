@@ -194,7 +194,8 @@
                                                                   (ctype ,(->jstring mime-type)))))
                 (when max-age (j "omd.setCacheControl(mage);" `((omd ,omd)
                                                                 (mage ,(->jstring (format "max-age=~a" max-age))))))
-                (j "omd.setContentLength(lgt);" `((lgt ,(->jlong length))))
+                (j "omd.setContentLength(lgt);" `((omd ,omd)
+                                                  (lgt ,(->jlong length))))
                 (j "is.reset();" `((is ,byte-array-input-stream)))
                 (j "s3.putObject(new com.amazonaws.services.s3.model.PutObjectRequest(bucket, objname, fl, omd).withCannedAcl(aclv));"
                    `((bucket ,(->jstring bucket))
