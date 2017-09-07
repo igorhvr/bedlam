@@ -147,7 +147,7 @@
   (define (file->string fname)
     (->string
      (j "in = new FileReader(filename);
-      org.apache.bsf.util.IOUtils.getStringFromReader(in);" `((filename ,(->jstring fname))))))
+      org.apache.bsf.util.IOUtils.getStringFromReader(in);" `((filename ,(->jstring fname))(in)))))
 
   (define (string->file str)
     (let ((java-io-file (string->java.io.File str)))
@@ -250,10 +250,10 @@
   (define iasylum-write-string (lambda (o) (to-string write o)))
 
   (define (beanshell-server port)
-   (j "bsh.Interpreter i = new bsh.Interpreter();                
+   (j "i = new bsh.Interpreter();                
        i.set(\"portnum\", port ); i.eval(\"setAccessibility(true)\"); i.eval(\"show()\");
        i.eval(\"server(portnum)\");"
-    `((port ,(->jint port)))))
+    `((port ,(->jint port))(i))))
   
   (define (first-n-or-less l n)
     (if (or (eqv? '() l) (= n 0)) '()
@@ -445,7 +445,7 @@
            pb = new ProcessBuilder(args);
            pb.redirectErrorStream(true);
            p = pb.start();
-           int errCode = p.waitFor();
+           errcode = p.waitFor();
            reader = new java.io.BufferedReader(
                    new java.io.InputStreamReader(p.getInputStream()));
 
@@ -457,7 +457,8 @@
            }
            result = builder.toString();
            return result;"
-          `((cmdparams ,(jlist->jarray (->jobject (map (lambda (value)
+          `((args)(pb)(p)(errcode)(reader)(builder)(line)(result)
+            (cmdparams ,(jlist->jarray (->jobject (map (lambda (value)
                                                          (->jstring value))
                                                        command-and-args)))))))))
   

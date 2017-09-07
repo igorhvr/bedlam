@@ -57,7 +57,7 @@
 
    (define (aws/sqs-send-message sqs-client message) (j "sqs.sendMessage(message);" `((sqs ,sqs-client) (message ,message))))
 
-   (define aws/sqs-receive-message (lambda* (sqs-client queue-url (wait-time-seconds: wait-time-seconds 0)) (->scm-object (j "receiverequest=new com.amazonaws.services.sqs.model.ReceiveMessageRequest(queueurl);if(waittimeseconds!=0)receiverequest.setWaitTimeSeconds(waittimeseconds);result=sqs.receiveMessage(receiverequest.withMaxNumberOfMessages(1)).getMessages();finalresult=null; if (result != null && result.size() > 0) { result=result.get(0); finalresult=result.getBody(); receipt=result.getReceiptHandle(); sqs.deleteMessage(new com.amazonaws.services.sqs.model.DeleteMessageRequest(queueurl, receipt));  } ; finalresult; " `((queueurl ,(->jstring queue-url)) (sqs ,sqs-client) (waittimeseconds ,(->jobject wait-time-seconds)))))))
+   (define aws/sqs-receive-message (lambda* (sqs-client queue-url (wait-time-seconds: wait-time-seconds 0)) (->scm-object (j "receiverequest=new com.amazonaws.services.sqs.model.ReceiveMessageRequest(queueurl);if(waittimeseconds!=0)receiverequest.setWaitTimeSeconds(waittimeseconds);result=sqs.receiveMessage(receiverequest.withMaxNumberOfMessages(1)).getMessages();finalresult=null; if (result != null && result.size() > 0) { result=result.get(0); finalresult=result.getBody(); receipt=result.getReceiptHandle(); sqs.deleteMessage(new com.amazonaws.services.sqs.model.DeleteMessageRequest(queueurl, receipt));  } ; finalresult; " `((queueurl ,(->jstring queue-url)) (sqs ,sqs-client) (waittimeseconds ,(->jobject wait-time-seconds)) (receiverequest) (result) (finalresult))))))
 
    ;; DelaySeconds - The time in seconds that the delivery of all messages in the queue will be delayed. An integer from 0 to 900 (15 minutes). The default for this attribute is 0 (zero).
 ;; MaximumMessageSize - The limit of how many bytes a message can contain before Amazon SQS rejects it. An integer from 1024 bytes (1 KiB) up to 262144 bytes (256 KiB). The default for this attribute is 262144 (256 KiB).
@@ -83,7 +83,9 @@
                      url;"
                     `((sqsclient ,sqs-client)
                       (queuename ,(->jstring queue-name))
-                      (attr ,parameters-map)))))))
+                      (attr ,parameters-map)
+                      (url)
+                      ))))))
    
    (define (aws/make-dynamodb-client credentials) (j "new com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient(credentials);" `((credentials ,credentials))))
 
@@ -198,7 +200,7 @@
 
    (define aws/make-s3-client
      (lambda* (credentials (region: region #f))
-              (let ((result (j "ns3c=new com.amazonaws.services.s3.AmazonS3Client(cred);" `((cred ,credentials)))))
+              (let ((result (j "new com.amazonaws.services.s3.AmazonS3Client(cred);" `((cred ,credentials)))))
                 (when region (j "s3client.setRegion(region);" `((s3client ,result) (region ,region))))
                 result)))
 
@@ -274,7 +276,7 @@
             com.amazonaws.services.s3.model.CORSRule.AllowedMethods.GET, com.amazonaws.services.s3.model.CORSRule.AllowedMethods.POST}))
         .withAllowedOrigins(Arrays.asList(new String[] { \"*\" }));
          Arrays.asList(new com.amazonaws.services.s3.model.CORSRule[] {rule1});"
-        `((corid ,(->jstring (uuid-string))))))
+        `((corid ,(->jstring (uuid-string))) (rule1))))
 
 
    (define (aws/s3-set-CORS s3-client bucket-name rules)
@@ -282,7 +284,8 @@
       "configuration = new com.amazonaws.services.s3.model.BucketCrossOriginConfiguration();
        configuration.setRules(rules);
        client.setBucketCrossOriginConfiguration(bucketname, configuration);"
-      `((client ,s3-client)
+      `((configuration)
+        (client ,s3-client)
         (bucketname ,(->jstring bucket-name))
         (rules ,rules))))
    
@@ -338,7 +341,8 @@
      (j "bvc = new com.amazonaws.services.s3.model.BucketVersioningConfiguration().withStatus(\"Enabled\");
          s3client.setBucketVersioningConfiguration(new com.amazonaws.services.s3.model.SetBucketVersioningConfigurationRequest(bucketname, bvc));"
         `((bucketname ,(->jstring bucket-name))
-          (s3client ,s3-client))))
+          (s3client ,s3-client)
+          (bvc))))
    
    (define (aws/s3-add-bucket-autoerasing-rule s3-client bucket-name id days prefix)
      (j "configuration=s3client.getBucketLifecycleConfiguration(bucketname);
@@ -360,7 +364,9 @@
           (id ,(->jstring id))
           (days ,(->jobject days))
           (bucketname ,(->jstring bucket-name))
-          (s3client ,s3-client))))
+          (s3client ,s3-client)
+          (newrule)
+          (configuration))))
 
    ;; Valid storage classes (as of 2015-12-05) 
    ;; Glacier / ReducedRedundancy / Standard / StandardInfrequentAccess

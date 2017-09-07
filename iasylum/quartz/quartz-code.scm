@@ -133,10 +133,11 @@
       (cl ,(java-wrap cl)))))
 
 (define (create-quartz-cron-trigger trigger-group trigger-name cron-expression)
-  (j "org.quartz.Trigger trigger = new org.quartz.CronTrigger(triggername, triggergroup, cronexpression); trigger;"
+  (j "trigger = new org.quartz.CronTrigger(triggername, triggergroup, cronexpression); trigger;"
      `((triggername ,(->jstring trigger-name)) (triggergroup ,(->jstring trigger-group))
-       (cronexpression ,(->jstring cron-expression)))))
+       (cronexpression ,(->jstring cron-expression))
+       (trigger))))
 
 (define (schedule-job scheduler job trigger)
-  (j "Object r = scheduler.scheduleJob(job, trigger); scheduler.start();r;"
-     `((scheduler ,scheduler) (job ,job) (trigger ,trigger))))
+  (j "r = scheduler.scheduleJob(job, trigger); scheduler.start();r;"
+     `((r)(scheduler ,scheduler) (job ,job) (trigger ,trigger))))

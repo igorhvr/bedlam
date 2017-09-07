@@ -8,7 +8,7 @@
   (lambda* ((js-manager: js-manager (get-local-javascript-manager)))
            (js (sjcl.js) #f js-manager)
            (js "sjcl.random.addEntropy(prn, 1024, 'nativeprgn-secure-random');"
-               `((prn ,(j "r=new byte[128]; java.security.SecureRandom.getInstance(\"NativePRNG\").nextBytes(r);Arrays.toString(r);")))
+               `((prn ,(j "r=new byte[128]; java.security.SecureRandom.getInstance(\"NativePRNG\").nextBytes(r);Arrays.toString(r);" '((r)))))
                js-manager)))
 
 (define crypto/prepare-javascript-manager
@@ -38,7 +38,7 @@
 
            (unless string-to-generate-deterministically-from
              (js "sjcl.random.addEntropy(prn, 1024, 'nativeprgn-secure-random');"
-                 `((prn ,(j "r=new byte[128]; java.security.SecureRandom.getInstance(\"NativePRNG\").nextBytes(r);Arrays.toString(r);")))))
+                 `((prn ,(j "r=new byte[128]; java.security.SecureRandom.getInstance(\"NativePRNG\").nextBytes(r);Arrays.toString(r);" '((r)))))))
 
            (when string-to-generate-deterministically-from
              (and-let* (

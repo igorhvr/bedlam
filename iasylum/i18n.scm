@@ -15,9 +15,11 @@
   
   (define (get-messages-bundle language country bundle)
     (j "
-            Locale currentLocale = new Locale(language, country);
-            ResourceBundle messages = ResourceBundle.getBundle(bundle, currentLocale);
+            currentlocale = new Locale(language, country);
+            messages = ResourceBundle.getBundle(bundle, currentlocale);
             messages;"
        `((language ,(->jstring language))
          (country ,(->jstring country))
-         (bundle ,(->jstring bundle))))))
+         (bundle ,(->jstring bundle))
+         (currentlocale)
+         (messages)))))

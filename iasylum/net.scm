@@ -22,14 +22,18 @@
         }
 
         result;"
-        `((destinationurl ,(->jstring destinationUrl))))))
+        `((httpclient)(httpget)(response)(result)
+          (destinationurl ,(->jstring destinationUrl))))))
 
 
   ;; Implements headers to GET requests
   (define http-call-get-headers/string 
     (lambda* (destinationUrl (headers: headers #f))
              (let ((httpget (j "httpclient = org.apache.http.impl.client.HttpClients.createDefault();
-      httpget = new org.apache.http.client.methods.HttpGet(destinationurl);" `((destinationurl ,(->jstring destinationUrl))))))
+      httpget = new org.apache.http.client.methods.HttpGet(destinationurl);"
+                               `((httpclient)
+                                 (httpget)
+                                 (destinationurl ,(->jstring destinationUrl))))))
 
                (map (lambda (v)  (match-let ( ( (vname vvalue) v ) )
                                    (j "httpget.addHeader(hn, hv);"`((hn ,(->jstring vname)) (hv ,(->jstring vvalue)) (httpget ,httpget)))
@@ -47,7 +51,7 @@
       }
 
       result;"
-                  `((httpget ,httpget))))))
+                  `((response)(result)(tent)(httpget ,httpget))))))
   
   ;; TODO file upload - http://stackoverflow.com/questions/1067655/how-to-upload-a-file-using-java-httpclient-library-working-with-php
   (define http-call-post-string/string
@@ -55,7 +59,7 @@
              (let ((httppost (j "httpclient = org.apache.http.impl.client.HttpClients.createDefault();
                                  httppost = new org.apache.http.client.methods.HttpPost(destinationurl);
                                  httppost;"
-                                `((destinationurl ,(->jstring destinationUrl))))))
+                                `((httpclient)(httppost)(destinationurl ,(->jstring destinationUrl))))))
                
                (map (lambda (v)  (match-let ( ( (vname vvalue) v ) )
                                             (j "httppost.addHeader(hn, hv);"`((hn ,(->jstring vname)) (hv ,(->jstring vvalue)) (httppost ,httppost)))
@@ -75,7 +79,8 @@
                   }
           
                   result;"
-                  `((contents ,(->jstring contents))
+                  `((response)(result)(tent)
+                    (contents ,(->jstring contents))
                     (httppost ,httppost)))))))
 
 )

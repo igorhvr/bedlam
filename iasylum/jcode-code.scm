@@ -122,13 +122,13 @@
 
 (define (jdate->date jd)
   (let ((vls (j "import java.util.Calendar;
-                 TimeZone tz = TimeZone.getTimeZone(\"UTC\");
+                 tz = TimeZone.getTimeZone(\"UTC\");
                  cal=new java.util.GregorianCalendar(tz,java.util.Locale.getDefault());
                  cal.setTime(jd);
                  new Object[]{
                  cal.get(Calendar.MILLISECOND),
                  cal.get(Calendar.SECOND),cal.get(Calendar.MINUTE),cal.get(Calendar.HOUR_OF_DAY),
-                 cal.get(Calendar.DAY_OF_MONTH),cal.get(Calendar.MONTH),cal.get(Calendar.YEAR)};" `((jd ,jd)))))
+                 cal.get(Calendar.DAY_OF_MONTH),cal.get(Calendar.MONTH),cal.get(Calendar.YEAR)};" `((jd ,jd) (cal) (tz)))))
     (let ((milliseconds (->number (java-array-ref vls 0)))
           (seconds (->number (java-array-ref vls 1)))
           (minutes (->number (java-array-ref vls 2)))
@@ -188,7 +188,7 @@
 
 (define (list->jset list)
   (j "newhs = new HashSet(); newhs.addAll(input); return newhs;"
-     `((input ,(->jobject list)))))
+     `((input ,(->jobject list)) (newhs))))
 
 (define (string->jbigdecimal string)
   (j "new java.math.BigDecimal(number);" `((number ,(->jstring string)))))
@@ -216,21 +216,21 @@
 	jstreamtofile_out.close();
       }
       jstreamtofile_result;"
-     `((inputstream ,stream))))
+     `((inputstream ,stream)(jstreamtofile_result))))
 
 (define (java.io.InputStream->java.nio.ByteBuffer is)
   (j "java.nio.ByteBuffer.wrap(org.apache.commons.io.IOUtils.toByteArray(is));" `((is ,is))))
 
 (define (java.io.File->java.nio.ByteBuffer file)
-  (j "fIn = new java.io.FileInputStream(fl);
-      fChan = fIn.getChannel();
-      fSize = fChan.size();
-      mBuf = java.nio.ByteBuffer.allocate((int) fSize);
-      fChan.read(mBuf);
-      mBuf.rewind();
-      fChan.close(); 
-      fIn.close();
-      mBuf;" `((fl ,(->jstring file)))))
+  (j "fin = new java.io.FileInputStream(fl);
+      fchan = fin.getChannel();
+      fsize = fchan.size();
+      mbuf = java.nio.ByteBuffer.allocate((int) fsize);
+      fchan.read(mbuf);
+      mbuf.rewind();
+      fchan.close(); 
+      fin.close();
+      mbuf;" `((fl ,(->jstring file))(fin)(fchan)(fsize))))
 
 (define (string->java.io.InputStream s)
   (let* ((input-port (open-input-string s))
