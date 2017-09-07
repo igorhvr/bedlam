@@ -10,18 +10,20 @@
     (lambda* ((in-work-queue: in-work-queue) (out-work-queue: out-work-queue) (name: name) (server-hostname: server-hostname) (server-port: server-port) (server-password: server-password) (channel: channel) (token: token #f))
              (let* ((inner-queue-out-work-queue (out-work-queue 'inner-queue))
                     (pmtoutqueuevarname (random-var))
+                    (fixedpmtoutqueuevarname (random-var))
                     (channelvar (random-var))
+                    (fixedchannelvar (random-var))
                     (pmtnamevar (random-var))
                     (botvar (random-var))
                     (bot
-                     (j (format "new org.pircbotx.PircBotX(new org.pircbotx.Configuration.Builder().setName(~a).setAutoReconnect(true).setAutoReconnectAttempts(9999).setAutoReconnectDelay(5000).setSocketFactory(javax.net.ssl.SSLSocketFactory.getDefault()).setCapEnabled(true).addCapHandler(new org.pircbotx.cap.TLSCapHandler(new org.pircbotx.UtilSSLSocketFactory().trustAllCertificates(), true)).addListener(new org.pircbotx.hooks.ListenerAdapter(){
+                     (j (string-append fixedchannelvar "=" channelvar "; " fixedpmtoutqueuevarname "=" pmtoutqueuevarname "; " "new org.pircbotx.PircBotX(new org.pircbotx.Configuration.Builder().setName(" pmtnamevar ").setAutoReconnect(true).setAutoReconnectAttempts(9999).setAutoReconnectDelay(5000).setSocketFactory(javax.net.ssl.SSLSocketFactory.getDefault()).setCapEnabled(true).addCapHandler(new org.pircbotx.cap.TLSCapHandler(new org.pircbotx.UtilSSLSocketFactory().trustAllCertificates(), true)).addListener(new org.pircbotx.hooks.ListenerAdapter(){
     public void onMessage(org.pircbotx.hooks.events.MessageEvent event) {
-        if (~a.equals(event.getChannel().getName())) {
-           ~a.put(new sisc.data.ImmutableString(event.getMessage()));
+        if (" fixedchannelvar ".equals(event.getChannel().getName())) {
+           " fixedpmtoutqueuevarname ".put(new sisc.data.ImmutableString(event.getMessage()));
         }
       }
     }).setServerHostname(pmtserverhostname).setServerPort(pmtserverport).setServerPassword(pmtserverpassword).buildConfiguration());"
-                                pmtnamevar channelvar pmtoutqueuevarname)
+           )
                         `((,pmtnamevar ,(->jstring name))
                           (,pmtoutqueuevarname ,inner-queue-out-work-queue)
                           (pmtserverhostname ,(->jstring server-hostname))
