@@ -419,7 +419,8 @@
                  (let ((result (|eval| tint (->jstring str))))
                    ;; Clear memory.
                    (when (list? vars)
-                     (map (lambda (v)
+                     (for-each
+                      (lambda (v)
                             (match v
                                         ( (vname vvalue) 
                                           (|set| tint (->jstring (if (string? vname) vname (symbol->string vname))) jnull)
