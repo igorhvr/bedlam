@@ -36,70 +36,78 @@
          (attachments-file-path: attachments-file-path #f))
       (assert (or (not to) (list? to))) (assert (or (not cc) (list? cc)))
 
-      (j 
-       "import org.apache.commons.mail.MultiPartEmail;
-       email = new MultiPartEmail();
-       email.setCharset(\"utf-8\");
-       email.setSmtpPort(smtpport);
-       email.setSslSmtpPort(sslsmtpport);
-       email.setHostName(mailserver);"
-       `((mailserver ,(->jstring mailserver))
-         (usessl ,(->jboolean use-ssl))
-         (smtpport ,(->jint smtp-port))
-         (sslsmtpport ,(->jstring (number->string ssl-smtp-port)))
-         ))
+      (let ((email
+             (j 
+               "import org.apache.commons.mail.MultiPartEmail;
+                email = new MultiPartEmail();
+                email.setCharset(\"utf-8\");
+                email.setSmtpPort(smtpport);
+                email.setSslSmtpPort(sslsmtpport);
+                email.setHostName(mailserver);"
+               `((mailserver ,(->jstring mailserver))
+                 (usessl ,(->jboolean use-ssl))
+                 (smtpport ,(->jint smtp-port))
+                 (sslsmtpport ,(->jstring (number->string ssl-smtp-port)))
+                 ))))
 
-      (when attachments-file-path
-        (for-each
-         (lambda (filepath)
-           (j "email.attach(new java.io.File(filepath));"
-              `((filepath ,(->jstring filepath)))))
-         attachments-file-path))
+        (when attachments-file-path
+          (for-each
+           (lambda (filepath)
+             (j "email.attach(new java.io.File(filepath));"
+                `((email ,email)(filepath ,(->jstring filepath)))))
+           attachments-file-path))
+        
+        (when to
+          (for-each (match-lambda ((vemail vname)
+                              (j "email.getToAddresses().add(new javax.mail.internet.InternetAddress(lccemail, lccname, \"UTF-8\"));"
+                                 `((email ,email) (lccemail ,(->jstring vemail)) (lccname ,(->jstring vname)))))
+                             (vemail
+                              (j "email.getToAddresses().add(new javax.mail.internet.InternetAddress(lccemail, true));"
+                                 `((email ,email) (lccemail ,(->jstring vemail))  )))
+                             )
+                    to))
+        
+        (when cc
+          (for-each (match-lambda ((vemail vname)
+                              (j "email.getCcAddresses().add(new javax.mail.internet.InternetAddress(lccemail, lccname, \"UTF-8\"));"
+                                 `((email ,email) (lccemail ,(->jstring vemail)) (lccname ,(->jstring vname)))))
+                             (vemail
+                              (j "email.getCcAddresses().add(new javax.mail.internet.InternetAddress(lccemail, true));"
+                                 `((email ,email) (lccemail ,(->jstring vemail))  )))
+                             )
+                    cc))
 
-      (when to
-        (for-each (match-lambda ((vemail vname)
-                                 (j "email.getToAddresses().add(new javax.mail.internet.InternetAddress(lccemail, lccname, \"UTF-8\"));" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vname)))))
-                                (vemail
-                                 (j "email.getToAddresses().add(new javax.mail.internet.InternetAddress(lccemail, true));" `((lccemail ,(->jstring vemail))  )))
-                                )
-                  to))
-
-      (when cc
-        (for-each (match-lambda ((vemail vname)
-                                 (j "email.getCcAddresses().add(new javax.mail.internet.InternetAddress(lccemail, lccname, \"UTF-8\"));" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vname)))))
-                                (vemail
-                                 (j "email.getCcAddresses().add(new javax.mail.internet.InternetAddress(lccemail, true));" `((lccemail ,(->jstring vemail))  )))
-                                )
-                  cc))
-
-      (when bcc
-        (for-each (match-lambda ((vemail vname)
-                                 (j "email.getBccAddresses().add(new javax.mail.internet.InternetAddress(lccemail, lccname, \"UTF-8\"));" `((lccemail ,(->jstring vemail)) (lccname ,(->jstring vname)))))
-                                (vemail
-                                 (j "email.getBccAddresses().add(new javax.mail.internet.InternetAddress(lccemail, true));" `((lccemail ,(->jstring vemail)) )))
-                                )
-                  bcc))
+        (when bcc
+          (for-each (match-lambda ((vemail vname)
+                              (j "email.getBccAddresses().add(new javax.mail.internet.InternetAddress(lccemail, lccname, \"UTF-8\"));"
+                                 `((email ,email) (lccemail ,(->jstring vemail)) (lccname ,(->jstring vname)))))
+                             (vemail
+                              (j "email.getBccAddresses().add(new javax.mail.internet.InternetAddress(lccemail, true));"
+                                 `((email ,email) (lccemail ,(->jstring vemail)) )))
+                             )
+                    bcc))
       
-      (j "
-       if(!\"\".equals(authenticationlogin)) {
-           email.setAuthentication(authenticationlogin, authenticationpassword);
-       }
-       email.setSSL(usessl);
-       email.setStartTLSEnabled(usestarttls);
-       email.setFrom(senderemail, sendername);
-       email.setSubject(subject);
-       email.setMsg(messagetext);
-       email.send();"
-       `((mailserver ,(->jstring mailserver))
-         (subject ,(->jstring subject))
-         (messagetext ,(->jstring messagetext))
-         (usessl ,(->jboolean use-ssl))
-         (usestarttls ,(->jboolean use-starttls))
-         (authenticationlogin ,(->jstring authentication-login))
-         (authenticationpassword ,(->jstring authentication-password))
-         (senderemail ,(->jstring senderemail))
-         (sendername ,(->jstring sendername))
-         ))))
+        (j "
+            if(!\"\".equals(authenticationlogin)) {
+                email.setAuthentication(authenticationlogin, authenticationpassword);
+            }
+            email.setSSL(usessl);
+            email.setStartTLSEnabled(usestarttls);
+            email.setFrom(senderemail, sendername);
+            email.setSubject(subject);
+            email.setMsg(messagetext);
+            email.send();"
+           `((email ,email)
+             (mailserver ,(->jstring mailserver))
+             (subject ,(->jstring subject))
+             (messagetext ,(->jstring messagetext))
+             (usessl ,(->jboolean use-ssl))
+             (usestarttls ,(->jboolean use-starttls))
+             (authenticationlogin ,(->jstring authentication-login))
+             (authenticationpassword ,(->jstring authentication-password))
+             (senderemail ,(->jstring senderemail))
+             (sendername ,(->jstring sendername))
+             )))))
 
   ; WIP.
   ; Returns a list containing, for each element for which both fn and raw-fn did not return #f, 3-element-lists where the head is the message id and the next two elements are the results of fn and raw-fn
