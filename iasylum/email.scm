@@ -43,7 +43,8 @@
                 email.setCharset(\"utf-8\");
                 email.setSmtpPort(smtpport);
                 email.setSslSmtpPort(sslsmtpport);
-                email.setHostName(mailserver);"
+                email.setHostName(mailserver);
+                email;"
                `((mailserver ,(->jstring mailserver))
                  (usessl ,(->jboolean use-ssl))
                  (smtpport ,(->jint smtp-port))
