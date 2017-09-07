@@ -302,12 +302,13 @@
           (error "nrepls: using any ports other than the default is not yet supported."))))
 
 (define (start-bsh-service portnum)
-  (j "		bsh.Interpreter i = new bsh.Interpreter();
+  (j "		i = new bsh.Interpreter();
 		i.set( \"data\", iu.M.d );
 		i.set( \"portnum\", portnum );  
 		i.eval(\"setAccessibility(true)\");
 		i.eval(\"show()\");
-		i.eval(\"server(portnum)\");" `((portnum ,(->jint portnum)))))
+		i.eval(\"server(portnum)\");"
+     `((i)(portnum ,(->jint portnum)))))
 
 	     
 ;; FIXME - this is not working currently.
