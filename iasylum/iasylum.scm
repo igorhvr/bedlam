@@ -94,6 +94,7 @@
    let-parallel map-parallel
    atomic-execution
    select-sublist
+   shuffle
    make-future
    only
    sum-alist
@@ -1138,6 +1139,14 @@
                (initial-index (min (max 0 initial-index) size)))
           (drop-right (drop lst initial-index)
                       (- last-index end-index)))))
+
+  ;; Shuffles a list to a random order.
+  (define (shuffle x)
+    (do ((v (list->vector x)) (n (length x) (- n 1)))
+        ((zero? n) (vector->list v))
+      (let* ((r (random n)) (t (vector-ref v r)))
+        (vector-set! v r (vector-ref v (- n 1)))
+        (vector-set! v (- n 1) t))))
 
   (define* (make-future l)
     (let* ((define-future-result (make-parameter* #f))
