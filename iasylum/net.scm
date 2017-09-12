@@ -2,6 +2,7 @@
 
 (module iasylum/net
   (http-call-get/string
+   http-call-get-headers/string 
    http-call-post-string/string
    )
 
@@ -29,10 +30,11 @@
   ;; Implements headers to GET requests
   (define http-call-get-headers/string 
     (lambda* (destinationUrl (headers: headers #f))
-             (let ((httpget (j "httpclient = org.apache.http.impl.client.HttpClients.createDefault();
-      httpget = new org.apache.http.client.methods.HttpGet(destinationurl);"
-                               `((httpclient)
-                                 (httpget)
+             (let ((httpclient (j "httpclient = org.apache.http.impl.client.HttpClients.createDefault();"
+                               `((httpclient))))
+                   (httpget (j "httpget = new org.apache.http.client.methods.HttpGet(destinationurl);
+                                httpget;"
+                               `((httpget)
                                  (destinationurl ,(->jstring destinationUrl))))))
 
                (map (lambda (v)  (match-let ( ( (vname vvalue) v ) )
@@ -51,15 +53,15 @@
       }
 
       result;"
-                  `((response)(result)(tent)(httpget ,httpget))))))
+                  `((response)(result)(tent)(httpget ,httpget)(httpclient ,httpclient))))))
   
   ;; TODO file upload - http://stackoverflow.com/questions/1067655/how-to-upload-a-file-using-java-httpclient-library-working-with-php
   (define http-call-post-string/string
     (lambda* (destinationUrl contents (headers: headers #f))
-             (let ((httppost (j "httpclient = org.apache.http.impl.client.HttpClients.createDefault();
-                                 httppost = new org.apache.http.client.methods.HttpPost(destinationurl);
+             (let ((httpclient (j "httpclient = org.apache.http.impl.client.HttpClients.createDefault();" `((httpclient))))
+                   (httppost (j "httppost = new org.apache.http.client.methods.HttpPost(destinationurl);
                                  httppost;"
-                                `((httpclient)(httppost)(destinationurl ,(->jstring destinationUrl))))))
+                                `((httppost)(destinationurl ,(->jstring destinationUrl))))))
                
                (map (lambda (v)  (match-let ( ( (vname vvalue) v ) )
                                             (j "httppost.addHeader(hn, hv);"`((hn ,(->jstring vname)) (hv ,(->jstring vvalue)) (httppost ,httppost)))
@@ -81,6 +83,7 @@
                   result;"
                   `((response)(result)(tent)
                     (contents ,(->jstring contents))
-                    (httppost ,httppost)))))))
+                    (httppost ,httppost)
+                    (httpclient ,httpclient)))))))
 
 )
