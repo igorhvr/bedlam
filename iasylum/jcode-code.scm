@@ -353,6 +353,14 @@
 (define (inc-and-get-atomic-long! atomic-long-java-object)
   (->scm-object (j "obj.incrementAndGet();" `((obj ,atomic-long-java-object)))))
 
+(define (add-and-get-atomic-long! atomic-long-java-object v)
+  (->scm-object (j "obj.addAndGet(value);" `((obj ,atomic-long-java-object)
+                                             (value ,(->jlong v))))))
+
+(define (get-and-add-atomic-long! atomic-long-java-object v)
+  (->scm-object (j "obj.getAndAdd(value);" `((obj ,atomic-long-java-object)
+                                             (value ,(->jlong v))))))
+
 (define (get-and-inc-atomic-long! atomic-long-java-object)
   (->scm-object (j "obj.getAndIncrement();" `((obj ,atomic-long-java-object)))))
 
