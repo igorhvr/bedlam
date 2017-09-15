@@ -66,6 +66,8 @@
 
 (add-lib "u/bsf.jar")
 (add-lib "u/guava-15.0.jar")
+(add-lib "u/google-api-client-1.22.0.jar")
+(add-lib "u/google-http-client-1.22.0.jar")
 (add-lib "u/js.jar")
 (add-lib "u/js-engine.jar")
 (add-lib "u/jdbc-postgresql.jar")
