@@ -226,7 +226,7 @@
 
 (add-lib "u/junrar-0.7-SNAPSHOT.jar")
 
-(add-lib "clojure-1.9.0-alpha15.jar")
+(add-lib "clojure/clojure-1.9.0-alpha15.jar")
 
 (add-lib "clojure/tools.nrepl-0.2.10.jar")
 
