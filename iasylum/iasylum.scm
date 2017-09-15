@@ -109,6 +109,7 @@
    format-message
    clear-string
    adjust-date-timezone
+   simulate-error
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -1285,6 +1286,10 @@
                     (->number
                      (j "java.util.TimeZone.getTimeZone(timezone).getRawOffset() / 1000;"
                         `((timezone ,(->jstring timezone)))))))
+
+  (define (simulate-error chance-porc)
+    (if (< (random 100) chance-porc)
+        (throw (make-error "Simulating an error!"))))
 
   (create-shortcuts (avg -> average))
 
