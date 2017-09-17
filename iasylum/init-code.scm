@@ -511,8 +511,8 @@
 (add-lib "aws-java-sdk/aspectjrt-1.8.2.jar")
 (add-lib "aws-java-sdk/aws-java-sdk-flow-build-tools-1.10.44.jar")
 (add-lib "aws-java-sdk/aspectjweaver.jar")
-(add-lib "aws-java-sdk/aws-java-sdk-1.10.44-1_of_2.jar")
-(add-lib "aws-java-sdk/aws-java-sdk-1.10.44-2_of_2.jar")
+(add-lib "aws-java-sdk/aws-java-sdk-1.11.82.jar")
+
 (add-lib "aws-java-sdk/freemarker-2.3.9.jar")
 
 (require-extension (lib iasylum/compression))
