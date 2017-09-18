@@ -511,7 +511,14 @@
 (add-lib "aws-java-sdk/aspectjrt-1.8.2.jar")
 (add-lib "aws-java-sdk/aws-java-sdk-flow-build-tools-1.10.44.jar")
 (add-lib "aws-java-sdk/aspectjweaver.jar")
-(add-lib "aws-java-sdk/aws-java-sdk-1.11.82.jar")
+
+(add-lib "aws-java-sdk/aws-java-sdk-1.11.197_1.jar")
+(add-lib "aws-java-sdk/aws-java-sdk-1.11.197_2.jar")
+(add-lib "aws-java-sdk/aws-java-sdk-1.11.197_3.jar")
+(add-lib "aws-java-sdk/aws-java-sdk-1.11.197_4.jar")
+(add-lib "aws-java-sdk/aws-java-sdk-1.11.197_5.jar")
+(add-lib "aws-java-sdk/aws-java-sdk-1.11.197_6.jar")
+
 
 (add-lib "aws-java-sdk/freemarker-2.3.9.jar")
 
