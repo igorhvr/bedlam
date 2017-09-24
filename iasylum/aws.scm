@@ -88,7 +88,7 @@
                       (url)
                       ))))))
    
-   (define (aws/make-dynamodb-client credentials) (j "new com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient(credentials,new com.amazonaws.ClientConfiguration().withMaxConnections(185).withConnectionTimeout(50000));" `((credentials ,credentials))))
+   (define (aws/make-dynamodb-client credentials) (j "new com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient(credentials,new com.amazonaws.ClientConfiguration().withMaxConnections(512).withConnectionTimeout(50000));" `((credentials ,credentials))))
 
    (define aws/make-dynamodb-attribute (lambda (v) (j "new com.amazonaws.services.dynamodbv2.model.AttributeValue(v);" `((v ,(->jstring v))))))
    
@@ -201,7 +201,7 @@
 
    (define aws/make-s3-client
      (lambda* (credentials (region: region #f))
-              (let ((result (j "new com.amazonaws.services.s3.AmazonS3Client(cred,new com.amazonaws.ClientConfiguration().withMaxConnections(185).withConnectionTimeout(50000));" `((cred ,credentials)))))
+              (let ((result (j "new com.amazonaws.services.s3.AmazonS3Client(cred,new com.amazonaws.ClientConfiguration().withMaxConnections(512).withConnectionTimeout(50000));" `((cred ,credentials)))))
                 (when region (j "s3client.setRegion(region);" `((s3client ,result) (region ,region))))
                 result)))
 
@@ -406,7 +406,7 @@
         (storageclass ,storage-class))))
 
 
-   (define (aws/iam-client credentials) (j "new com.amazonaws.services.identitymanagement.AmazonIdentityManagementClient(credentials,new com.amazonaws.ClientConfiguration().withMaxConnections(185).withConnectionTimeout(50000));" `((credentials ,credentials))))
+   (define (aws/iam-client credentials) (j "new com.amazonaws.services.identitymanagement.AmazonIdentityManagementClient(credentials,new com.amazonaws.ClientConfiguration().withMaxConnections(512).withConnectionTimeout(50000));" `((credentials ,credentials))))
 
    (define aws/iam-create-role
      (lambda* (iam-client (assume-role-policy-document: assume-role-policy-document) (path: path "/") (role-name: role-name))
@@ -433,7 +433,7 @@
                    (rn ,(->jstring role-name))))))
  
 
-   (define (aws/make-lambda-client credentials) (j "new com.amazonaws.services.lambda.AWSLambdaClient(credentials,new com.amazonaws.ClientConfiguration().withMaxConnections(185).withConnectionTimeout(50000));" `((credentials ,credentials))))
+   (define (aws/make-lambda-client credentials) (j "new com.amazonaws.services.lambda.AWSLambdaClient(credentials,new com.amazonaws.ClientConfiguration().withMaxConnections(512).withConnectionTimeout(50000));" `((credentials ,credentials))))
 
    (define aws/lambda-create-function
      (lambda* (lambda-client
