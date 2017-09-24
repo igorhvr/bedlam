@@ -36,6 +36,7 @@
    aws/s3-blow-up-s3-and-regret-tears-of-blood-I-am-oficially-insane
    aws/s3-list-buckets
    aws/s3-list-buckets-names
+   aws/s3-set-object-acl-public-read
    aws/s3-set-bucket-website-configuration
    aws/s3-set-bucket-versioning-configuration
    aws/s3-add-bucket-autoerasing-rule
@@ -346,6 +347,13 @@
 
    (define (aws/s3-list-buckets-names s3-client)
      (map (lambda (v) (->string (j "v.getName();" `((v ,v))))) (iterable->list (aws/s3-list-buckets s3-client ))))
+
+
+   (define (aws/s3-set-object-acl-public-read s3-client bucket-name key)
+     (j "s3client.setObjectAcl(bucketname, key, com.amazonaws.services.s3.model.CannedAccessControlList.PublicRead);"
+        `((bucketname ,(->jstring bucket-name))
+          (key ,(->jstring key))
+          (s3client ,s3-client))))
    
    (define (aws/s3-set-bucket-website-configuration s3-client bucket-name index-doc error-doc)
      (j "s3client.setBucketWebsiteConfiguration(bucketname, new com.amazonaws.services.s3.model.BucketWebsiteConfiguration(indexdoc, errordoc));"
