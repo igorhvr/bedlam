@@ -53,3 +53,5 @@
         (cdr tdata)))))
   )
 
+;; (begin (clj "(save-pdf plot \"/tmp/plot.pdf\")"
+;; `((plot ,(plot-numbers '((1  10) (2 19) (3 18) (9 22)))))) (r/s "convert /tmp/plot.pdf /tmp/plot.png ; /usr/bin/xdg-open /tmp/plot.png"))
