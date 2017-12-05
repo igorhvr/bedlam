@@ -91,6 +91,12 @@
    (define (aws/make-dynamodb-client credentials) (j "new com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient(credentials,new com.amazonaws.ClientConfiguration().withMaxConnections(2048).withConnectionTimeout(50000));" `((credentials ,credentials))))
 
    (define aws/make-dynamodb-attribute (lambda (v) (j "new com.amazonaws.services.dynamodbv2.model.AttributeValue(v);" `((v ,(->jstring v))))))
+
+   (define (aws/create-dynamodb-attribute-number n)
+     (let ((att (j "new com.amazonaws.services.dynamodbv2.model.AttributeValue();")))
+       (j "att.setN(v);" `((att ,att)
+                           (v ,(->jstring (number->string n)))))
+       att))
    
    (define (aws/ensure-dynamodb-attribute v)
      (cond
@@ -170,17 +176,23 @@
 
    ;;
    ;; Return #f if there was no value in the key before, or the old value.
+   ;; ttl att is in epoch (seconds) format.
    ;;
-   (define (aws/dynamodb-simple-put-item dynamodb-client table key-name key value)
+   (define* (aws/dynamodb-simple-put-item dynamodb-client table key-name key value (ttl: ttl #f))
      (let ((result (aws/dynamodb-put-item dynamodb-client table
-                                          `((,key-name ,key) ("body" ,value)))))
+                                          (filter (lambda (a) a)
+                                                  `((,key-name ,key)
+                                                    ("body" ,value)
+                                                    ,(and ttl
+                                                          (list "ttl" (aws/create-dynamodb-attribute-number ttl)))))
+                                            )))
        (and (not (null? result))
             (->scm-object (j "jakiatuca2.getS();" `((jakiatuca2 ,(get "body" result))))))))
 
    ;;
    ;; Return #f if there is no value in the key.
    ;;
-   (define (aws/dynamodb-simple-get-item dynamodb-client table key-name key)
+   (define* (aws/dynamodb-simple-get-item dynamodb-client table key-name key)
      (let ((result (aws/dynamodb-get-item dynamodb-client table `((,key-name ,key)))))
        (and (not (null? result))
             (->scm-object (j "jakiatuca.getS();" `((jakiatuca ,(get "body" result))))))))
@@ -188,7 +200,7 @@
    ;;
    ;; Return #f if there was no value in the key before, or the old value.
    ;;
-   (define (aws/dynamodb-simple-delete-item dynamodb-client table key-name key)
+   (define* (aws/dynamodb-simple-delete-item dynamodb-client table key-name key)
      (let ((result (aws/dynamodb-delete-item dynamodb-client table `((,key-name ,(aws/make-dynamodb-attribute key))))))
        (and (not (null? result))
             (->scm-object (j "jakiatuca3.getS();" `((jakiatuca3 ,(get "body" result))))))))
