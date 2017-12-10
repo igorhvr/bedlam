@@ -14,4 +14,4 @@
   (let ((result (j "cache.getIfPresent(key);" `((cache ,cache)
                                                 (key ,(->jstring key))))))
     (and (not (java-null? result))
-         result)))
+         (java-unwrap result))))
