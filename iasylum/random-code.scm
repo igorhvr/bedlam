@@ -1,3 +1,34 @@
+(define-java-classes <java.util.concurrent.linked-blocking-queue> <java.util.concurrent.array-blocking-queue>)
+(define-generic-java-methods put take size peek)
+(define random-string-queue)
+(define random-var-queue)
+(define started)
+
+(define (random/init)
+  (set! random-string-queue (java-new <java.util.concurrent.array-blocking-queue> (->jint 16384))) ; TODO HARDCODED
+  (set! random-var-queue (java-new <java.util.concurrent.array-blocking-queue> (->jint 16384))) ; TODO HARDCODED
+  (set! started (make-atomic-boolean #f))
+  )
+
+(define (random/start)
+  (watched-thread/spawn (lambda ()
+                          (let loop ()
+                            (with-failure-continuation
+                             (lambda (error context)
+                               (d/n "[RANDOM QUEUE] Ignoring..." error context))
+                             (lambda ()
+                               (put random-string-queue (java-wrap (random-string 32 'ignore-queue: #t)))))
+                            (loop))))
+  
+  (watched-thread/spawn (lambda ()
+                          (let loop ()
+                            (with-failure-continuation
+                             (lambda (error context)
+                               (d/n "[RANDOM QUEUE] Ignoring..." error context))
+                             (lambda ()
+                               (put random-var-queue (java-wrap (random-var 20 'ignore-queue: #t)))))
+                            (loop)))))
+
 (define generate-error-message (lambda () (/ 1 0))) ; TODO Cleanup.
 
 (define random (lambda* ((max-number 1000000000000))
@@ -22,15 +53,28 @@
    (string-trim-both
     (list-ref (r-split (format "openssl rand -hex ~a" n-bytes)) 1))))
 
-(define* (random-string (bytes 32))
-  (string-trim-both
-   (list-ref (r-split (format "openssl rand -base64 ~a" bytes)) 1)))
+(define* (random-string (bytes 32) (ignore-queue: ignore-queue #f))
+  (if (or ignore-queue
+          (not (= 32 bytes)))
+      (string-trim-both
+       (list-ref (r-split (format "openssl rand -base64 ~a" bytes)) 1))
+      (begin
+        (if (compare-and-set-atomic-boolean! started #f #t)
+            (random/start))
+        (java-unwrap (take random-string-queue)))))
 
 ;; suitable for variable names
-(define* (random-var (size 20))
-  (assert (and (>= size 1)
-               (<= size 64)))
-  (string-append* "v" (substring (sha256 (gensym)) 0 size)))
+(define* (random-var (size 20) (ignore-queue: ignore-queue #f))
+  (if (or ignore-queue
+          (not (= 20 size)))
+      (begin
+        (assert (and (>= size 1)
+                     (<= size 64)))
+        (string-append* "v" (substring (sha256 (gensym)) 0 size)))
+      (begin
+        (if (compare-and-set-atomic-boolean! started #f #t)
+            (random/start))
+        (java-unwrap (take random-var-queue)))))
 
 (define (pseudo-random-uuid)
   (->string (j "java.util.UUID.randomUUID();")))
@@ -42,6 +86,10 @@
 (define (base26-random-code-upper size)
   (let ((chars "234689ABCEFGHJKLMNPQRUVWXY"))
     (apply string-append* (times size (string-ref chars (mod (random->integer 1) 26))))))
+
+(define (random-gaussian mean standard-deviation)
+  (+ mean (* (inexact->exact (random:normal)) standard-deviation)))
+
 
 ;;; Start - RANDOM UTILITIES ;;;
 

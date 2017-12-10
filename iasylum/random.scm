@@ -13,7 +13,10 @@
           random-var
           random->integer
           base58-bitcoin-like-random-code
-          base26-random-code-upper)
+          base26-random-code-upper
+          random-gaussian)
   (import s2j)
   (include "random-code.scm")
+
+  (random/init)
   )
