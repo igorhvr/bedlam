@@ -107,6 +107,7 @@
 (add-lib "u/ssax-sxml.jar")
 (add-lib "u/servlet-api-3.1.jar")
 (add-lib "u/prettytime-4.0.1.Final.jar")
+(add-lib "u/zip4j-1.3.2.jar")
 
 (add-lib "u/quartz-all-1.7.3.jar")
 (add-lib "u/cron4j-2.2.5.jar")

@@ -200,8 +200,8 @@
 (define (string->jbigint string)
   (j "new java.math.BigInteger(number);" `((number ,(->jstring string)))))
 
-(define (jstream->tmp-file stream)
-  (j "jstreamtofile_result=java.io.File.createTempFile(\"jstream-to-file_\",\".tmp\");
+(define* (jstream->tmp-file stream (prefix: prefix "jstream-to-file") (suffix: suffix ".tmp"))
+  (j "jstreamtofile_result=java.io.File.createTempFile(prefix + \"_\",suffix);
       { 
 	jstreamtofile_out = new java.io.FileOutputStream(jstreamtofile_result);
  
@@ -216,7 +216,10 @@
 	jstreamtofile_out.close();
       }
       jstreamtofile_result;"
-     `((inputstream ,stream)(jstreamtofile_result))))
+     `((inputstream ,stream)
+       (jstreamtofile_result)
+       (prefix ,(->jstring prefix))
+       (suffix ,(->jstring suffix)))))
 
 (define (java.io.InputStream->java.nio.ByteBuffer is)
   (j "java.nio.ByteBuffer.wrap(org.apache.commons.io.IOUtils.toByteArray(is));" `((is ,is))))
@@ -238,8 +241,8 @@
          (jstream (j "new org.apache.commons.io.input.ReaderInputStream(reader);" `((reader ,jreader)))))
     jstream))
 
-(define (string->java.io.File s)
-  (jstream->tmp-file (string->java.io.InputStream s)))
+(define* (string->java.io.File s (prefix: prefix "jstream-to-file") (suffix: suffix ".tmp"))
+  (jstream->tmp-file (string->java.io.InputStream s) 'prefix: prefix 'suffix: suffix))
 
 (define (number->jbigdecimal number)
   (let ((exact-number (inexact->exact number)))

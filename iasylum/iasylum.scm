@@ -110,6 +110,7 @@
    clear-string
    adjust-date-timezone
    simulate-error
+   zip-with-password
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -151,8 +152,8 @@
      (j "in = new FileReader(filename);
       org.apache.bsf.util.IOUtils.getStringFromReader(in);" `((filename ,(->jstring fname))(in)))))
 
-  (define (string->file str)
-    (let ((java-io-file (string->java.io.File str)))
+  (define* (string->file str (prefix: prefix "jstream-to-file") (suffix: suffix ".tmp"))
+    (let ((java-io-file (string->java.io.File str 'prefix: prefix 'suffix: suffix)))
       (->string (j "sff.getAbsolutePath();" `((sff ,java-io-file))))))
 
   (define (input-port->string input)
@@ -1290,6 +1291,21 @@
   (define (simulate-error chance-porc)
     (if (< (random 100) chance-porc)
         (throw (make-error "Simulating an error!"))))
+
+  (define (zip-with-password password source-file-path destination-file-path)
+    (j "
+    net.lingala.zip4j.model.ZipParameters zipParameters = new net.lingala.zip4j.model.ZipParameters();
+    zipParameters.setCompressionMethod(net.lingala.zip4j.util.Zip4jConstants.COMP_DEFLATE);
+    zipParameters.setCompressionLevel(net.lingala.zip4j.util.Zip4jConstants.DEFLATE_LEVEL_ULTRA);
+    zipParameters.setEncryptFiles(true);
+    zipParameters.setEncryptionMethod(net.lingala.zip4j.util.Zip4jConstants.ENC_METHOD_STANDARD);
+    zipParameters.setPassword(password);
+    net.lingala.zip4j.core.ZipFile zipFile = new net.lingala.zip4j.core.ZipFile(destinationzipfilepath);
+    zipFile.addFile(new File(filepath), zipParameters);"
+       `((password ,(->jstring password))
+         (destinationzipfilepath ,(->jstring destination-file-path))
+         (filepath ,(->jstring source-file-path))))
+    destination-file-path)
 
   (create-shortcuts (avg -> average))
 
