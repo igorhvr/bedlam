@@ -8,7 +8,6 @@
    
    datomic/connection
    datomic/temp-id d/id
-   datomic/temp-id-native
    datomic/transact d/t
    datomic/transact-async
    datomic/db d/db

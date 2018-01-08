@@ -70,13 +70,16 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
           (list did-I-create-it? connection-result)
           connection-result))))
 
-(define (datomic/temp-id-native)
+(define* (datomic/temp-id (partition-symbol 'db.part/user) (id #f))
   (define-java-classes (<datomic.peer> |datomic.Peer|))
   (define-generic-java-method tempid)
   
   (let ((<datomic.peer>-java-null (java-null <datomic.peer>)))
     ;; spec: (j "temp_id = datomic.Peer.tempid(\":db.part/user\");")
-    (tempid <datomic.peer>-java-null partition)))
+    (if (not id)
+        (tempid <datomic.peer>-java-null (->jstring (clj-keyword->string (symbol->clj-keyword partition-symbol))))
+        (tempid <datomic.peer>-java-null (->jstring (clj-keyword->string (symbol->clj-keyword partition-symbol)))
+                (->jlong id)))))
 
 (define (datomic/transact conn tx)
   (define-generic-java-method transact)
@@ -265,7 +268,7 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 ;;
 ;; note: #db/id[<partition> [<id>]] macro also creates a tempid, it was used before (see history).
 ;;
-(define* (datomic/temp-id (partition-symbol 'db.part/user) (id #f))
+(define* (datomic/temp-id-slow (partition-symbol 'db.part/user) (id #f))
   (if (equal? partition-symbol 'db.part/user)
       (log-error "*** Please use it ONLY FOR TESTS! Define a partition explicitly. db.part/user is only for TESTS purposes."))
   (let ((params `((partition ,(symbol->clj-keyword partition-symbol)))))
