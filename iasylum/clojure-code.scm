@@ -23,7 +23,7 @@
   (clj "(val (find cljmap (keyword k)))" `((cljmap ,clj-map) (k ,(->jstring key)))))
 
 (define (symbol->clj-keyword symbol)
-  (clj "(keyword symbol)" `((symbol ,(->jstring symbol)))))
+  (j "clojure.lang.Keyword.intern(symbol)" `((symbol ,(->jstring symbol)))))
 
 ;;
 ;; BE CAREFUL HERE: a keyword is composed by namespace and name (see clojure spec).
@@ -35,7 +35,7 @@
 ;; use clj-keyword->string
 ;;
 (define (clj-keyword->symbol keyword)
-  (->symbol (clj "(name keyword)" `((keyword ,keyword)))))
+  (->symbol (j "keyword.getName()" `((keyword ,keyword)))))
 
 ;;
 ;; Different of clj-keyword->symbol it will keep the namespace AND the : in front of string.
