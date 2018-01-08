@@ -9,11 +9,11 @@
            (qry (if (string? qry-input)
                     (->jstring qry-input)
                     qry-input)))
-       (log-trace "Will execute query: " (->string qry)
-                  "with sources:" (jarray->string sources))
+       (log-trace "Will execute query: " (cut-log (->string qry))
+                  "with sources:" (cut-log (jarray->string sources)))
        (let ((result (j "datomic.Peer.q(qry, sources);" `((sources ,sources)
                                                           (qry ,qry)))))
-         (log-trace "=> Query result: " (iasylum-write-string result))
+         (log-trace "=> Query result: " (cut-log (iasylum-write-string result)))
          result)))))
 
 ;;
@@ -208,7 +208,7 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 ;;
 (define* (datomic/smart-transact conn tx
                                  (param-alist '())
-                                 (allow-cut-log: allow-cut-log #f))
+                                 (allow-cut-log: allow-cut-log #t))
   (log-time ("Transaction execution" log-trace log-warn 500 ms)
       (let ((final-param-alist (append param-alist `((conn ,conn)))))
         (log-trace "Will execute transact" (if allow-cut-log
@@ -216,14 +216,15 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
                                                tx)
                    "with params:" (if allow-cut-log
                                       (cut-log (iasylum-write-string param-alist))
-                                      (iasylum-write-string param-alist))
+                                      (iasylum-write-string param-alist)))
         (let ((result (clj (string-append "(use '[datomic.api :only [q db] :as d])
                                        @(d/transact conn " tx ")")
                            final-param-alist)))
           (log-trace "=> Transaction result " (if allow-cut-log
                                                   (cut-log (iasylum-write-string result))
                                                   (iasylum-write-string result)))
-          result)))))
+          result)))
+  )
 
 (define (datomic/make-transact-function-with-one-connection-included connection-retriever)
   (cut datomic/smart-transact
