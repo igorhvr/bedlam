@@ -68,6 +68,12 @@
 (define (list->persistent-vector scheme-list)
   (j "clojure.lang.PersistentVector.create(lst);" `((lst ,(jlist->jarray (->jobject scheme-list))))))
 
+;;
+;; This alist is like `((a "b") (c "d"))
+;;
+(define (alist->persistent-map scheme-alist)
+  (j "clojure.lang.PersistentArrayMap.create(themap);" `((themap ,(->jmap scheme-alist)))))
+
 (define (create-runner)
   (j
  "

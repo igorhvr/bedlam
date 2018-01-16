@@ -19,6 +19,7 @@
    clj-number->number
    number->clj-number
    list->persistent-vector
+   alist->persistent-map
    )
   
   (include "clojure-code.scm"))
