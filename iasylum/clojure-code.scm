@@ -25,6 +25,9 @@
 (define (symbol->clj-keyword symbol)
   (j "clojure.lang.Keyword.intern(symbol)" `((symbol ,(->jstring symbol)))))
 
+(define (symbol->clj-symbol symbol)
+  (j "clojure.lang.Symbol.create(symbol)" `((symbol ,(->jstring symbol)))))
+
 ;;
 ;; BE CAREFUL HERE: a keyword is composed by namespace and name (see clojure spec).
 ;; This function simply drop the keyword namespace (and also the :),

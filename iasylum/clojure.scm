@@ -14,6 +14,7 @@
    clojure/find-value-by-key
    symbol->clj-keyword
    clj-keyword->symbol
+   symbol->clj-symbol
    clj-keyword->string
    clj-number->number
    number->clj-number
