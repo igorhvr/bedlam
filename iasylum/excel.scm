@@ -14,7 +14,7 @@
                listspreadsheetfile_fileOut = new FileOutputStream(filename);
                listspreadsheetfile_fileOut;" `((filename ,(->jstring fn))))))
       (list->spreadsheet l file-stream sheet-name)
-      (j "fileOut.close();" `((fileOut ,file-stream)))))
+      (j "listspreadsheetfile_fileOut.close();" `((fileOut ,file-stream)))))
 
   
   (define* (list->spreadsheet l stream (sheet-name "data"))
