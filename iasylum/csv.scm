@@ -2,7 +2,7 @@
 (require-extension (lib iasylum/javascript))
 
 (module iasylum/csv
-  (csv->vector csv->list vector->csv)
+  (csv->vector csv->list vector->csv list->csv)
 
   (define paparse.js (memoize (lambda () (file->string "/base/bedlam/external-tools/libraries/PapaParse-4.3.2/papaparse.min.js"))))
   
@@ -40,6 +40,10 @@
   (define (vector->csv vec)
     (js-v8 (paparse.js))
     (->string (js-v8 "Papa.unparse(arr);" `((arr ,(vector->com.eclipsesource.v8.V8Array vec))))))
+
+
+  (define (list->csv lst)
+    (vector->csv (list->vector_deeply lst)))
 
   )
 

@@ -888,6 +888,14 @@
           [(vector? obj) (vector->list_deeply (vector->list obj))]
           [(pair? obj) (cons (vector->list_deeply (car obj)) (vector->list_deeply (cdr obj)))]
           [else obj]))
+  
+  (define (list->vector_deeply obj)
+    (cond [(vector? obj) (list->vector (map (lambda (element)
+                                              (list->vector_deeply element))
+                                            (vector->list obj)))]
+          [(list? obj) (list->vector_deeply (list->vector obj))]
+          [(pair? obj) (list->vector_deeply (list (car obj) (cdr obj)))]
+          [else obj]))
 
   (define (escape-double-quotes str)
     (irregex-replace/all "\"" str "\\\""))
