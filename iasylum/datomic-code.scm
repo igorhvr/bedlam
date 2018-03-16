@@ -61,7 +61,7 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 (define (datomic/smart-query-multiple qry . sources)
   (apply datomic/query (flatten (list qry sources))))
 
-(define* (datomic/connection uri (should-create? #t) (want-to-know-if-created? #f))
+(define* (datomic/connection uri (should-create? #f) (want-to-know-if-created? #f))
   (let ((did-I-create-it? (if should-create?
                               (->boolean (j "datomic.Peer.createDatabase(uri);" `((uri ,(->jstring uri)))))
                               #f)))
