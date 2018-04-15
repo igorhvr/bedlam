@@ -32,4 +32,3 @@ app.post('/', function(req, res) {
 app.listen(27429, '0.0.0.0');
 
 console.log('Server running at http://js:27429/');
-"js.executor.js";

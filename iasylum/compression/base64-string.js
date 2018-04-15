@@ -283,4 +283,3 @@ var Base64String = {
     
   }
 }
-"base64-strings.js";

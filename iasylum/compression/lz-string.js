@@ -499,4 +499,3 @@ if (typeof define === 'function' && define.amd) {
 } else if( typeof module !== 'undefined' && module != null ) {
   module.exports = LZString
 }
-"lz-string.js";
