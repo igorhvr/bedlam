@@ -9,19 +9,13 @@
            (js (sjcl.js) #f js-manager)
            (js "sjcl.random.addEntropy(prn, 1024, 'nativeprgn-secure-random');"
                `((prn ,(j "r=new byte[128]; java.security.SecureRandom.getInstance(\"NativePRNG\").nextBytes(r);Arrays.toString(r);" '((r)))))
-               js-manager)
-           ;; For side effects only.
-           (void)
-           ))
+               js-manager)))
 
 (define crypto/prepare-javascript-manager
   (lambda* ((js-manager: js-manager (get-local-javascript-manager)))
            (load-safe-sjcl-and-add-entropy 'js-manager: js-manager)
            (js (iasylum.js) #f js-manager)
-           (js (crypto.js) #f js-manager)
-           ;; For side-effects only.
-           (void)
-           ))
+           (js (crypto.js) #f js-manager)))
 
 (define (get-seed-from str-p)
   (let* ( (str (sha256 str-p))

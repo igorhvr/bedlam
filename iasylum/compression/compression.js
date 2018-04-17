@@ -21,4 +21,3 @@ var iasylum_compression = {
 };
 
 iasylum.compression = iasylum_compression;
-"compression.js";
