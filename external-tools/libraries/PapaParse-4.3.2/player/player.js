@@ -176,3 +176,4 @@ function completeFn()
 	console.log("Finished input (async). Time:", end-start, arguments);
 	console.log("Rows:", rows, "Stepped:", stepped, "Chunks:", chunks);
 }
+"player.js";
