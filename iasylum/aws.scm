@@ -178,16 +178,20 @@
    ;; Return #f if there was no value in the key before, or the old value.
    ;; ttl att is in epoch (seconds) format.
    ;;
-   (define* (aws/dynamodb-simple-put-item dynamodb-client table key-name key value (ttl: ttl #f))
-     (let ((result (aws/dynamodb-put-item dynamodb-client table
-                                          (filter (lambda (a) a)
-                                                  `((,key-name ,key)
-                                                    ("body" ,value)
-                                                    ,(and ttl
-                                                          (list "ttl" (aws/create-dynamodb-attribute-number ttl)))))
+   (define* (aws/dynamodb-simple-put-item dynamodb-client table key-name key value
+                                          (ttl: ttl #f)
+                                          (item-duration-from-now-in-seconds: item-duration-from-now-in-seconds #f)
+                                          )
+     (let ((ttl (or ttl (and item-duration-from-now-in-seconds (+ item-duration-from-now-in-seconds (time-second (current-time)))))))
+       (let ((result (aws/dynamodb-put-item dynamodb-client table
+                                            (filter (lambda (a) a)
+                                                    `((,key-name ,key)
+                                                      ("body" ,value)
+                                                      ,(and ttl
+                                                            (list "ttl" (aws/create-dynamodb-attribute-number ttl)))))
                                             )))
-       (and (not (null? result))
-            (->scm-object (j "jakiatuca2.getS();" `((jakiatuca2 ,(get "body" result))))))))
+         (and (not (null? result))
+              (->scm-object (j "jakiatuca2.getS();" `((jakiatuca2 ,(get "body" result)))))))))
 
    ;;
    ;; Return #f if there is no value in the key.
