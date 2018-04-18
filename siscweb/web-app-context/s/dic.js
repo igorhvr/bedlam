@@ -14,4 +14,3 @@ dic = {
         'hellop': 'hello world! - {0]'
     }
 };
-"dics.js";

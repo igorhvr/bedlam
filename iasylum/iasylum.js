@@ -1,3 +1,2 @@
 var iasylum = {
 };
-"iasylum.js";
