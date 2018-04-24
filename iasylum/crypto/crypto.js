@@ -100,3 +100,5 @@ var iasylum_crypto = {
 };
 
 iasylum.crypto = iasylum_crypto;
+
+"iasylum.crypto";

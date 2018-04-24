@@ -528,7 +528,7 @@
 
 (add-lib "u/smtp-1.6.0.jar")
 
-(add-lib "javascript/j2v8_linux_x86_64-3.0.2.jar")
+(add-lib "javascript/j2v8_linux_x86_64-4.8.0.jar")
 
 (require-extension (lib iasylum/date))
 
