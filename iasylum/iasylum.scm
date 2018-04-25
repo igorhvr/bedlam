@@ -1001,11 +1001,22 @@
 (define subtract-dates
   (match-lambda*
    (()
-    (d/n (string-append* "Sample usage: " (iasylum-write-string `(subtract-dates "2016-03-05T10:21:00Z" "2016-04-05T15:15:00Z")))))
+    (d/n (string-append*
+          "Sample usage - 1: " (iasylum-write-string
+                            `(subtract-dates (date->time-utc (string->date "2016-03-05T10:21:00Z" "~Y-~m-~dT~k:~M:~S~z"))
+                                             "2016-04-05T15:15:00Z"))
+          "\n"
+          "Sample usage - 2: " (iasylum-write-string
+                                `(inexact->exact (ceiling (/ (time-second (subtract-dates (current-date-utc)
+                                                                                          "2016-04-05T15:15:00Z")) 60.0)))))))
    (( (? string? later) (? string? earlier))
     (time-difference (date->time-utc (string->date later "~Y-~m-~dT~k:~M:~S~z"))  (date->time-utc (string->date earlier "~Y-~m-~dT~k:~M:~S~z"))))
    (( (? date? later) (? date? earlier))
-    (time-difference (date->time-utc later)  (date->time-utc earlier)))))
+    (time-difference (date->time-utc later)  (date->time-utc earlier)))
+   (( (? string? later) (? date? earlier))
+    (time-difference (date->time-utc (string->date later "~Y-~m-~dT~k:~M:~S~z"))  (date->time-utc earlier)))
+   (( (? date? later) (? string? earlier))
+    (time-difference (date->time-utc later)  (date->time-utc (string->date earlier "~Y-~m-~dT~k:~M:~S~z"))))))
   
   ;;
   ;; (complete-with-zeroes "56" 7)
