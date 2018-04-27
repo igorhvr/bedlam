@@ -57,7 +57,7 @@
   
   ;; TODO file upload - http://stackoverflow.com/questions/1067655/how-to-upload-a-file-using-java-httpclient-library-working-with-php
   (define http-call-post-string/string
-    (lambda* (destinationUrl contents (headers: headers #f))
+    (lambda* (destinationUrl contents (headers: headers '()))
              (let ((httpclient (j "httpclient = org.apache.http.impl.client.HttpClients.createDefault();" `((httpclient))))
                    (httppost (j "httppost = new org.apache.http.client.methods.HttpPost(destinationurl);
                                  httppost;"
