@@ -533,6 +533,9 @@
 
 (add-lib "javascript/j2v8_linux_x86_64-4.8.0.jar")
 
+(add-lib "u/bitcoinj-core-0.15-SNAPSHOT-bundled.jar")
+(require-extension (lib iasylum/bitcoin))
+
 (require-extension (lib iasylum/date))
 
 (require-extension (lib iasylum/siscweb))
