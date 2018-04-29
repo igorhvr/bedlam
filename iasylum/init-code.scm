@@ -15,7 +15,8 @@
 
 ;; This is to allow classpath-based loading (with the help of a custom URL Handler) -  E.g.: (load "classpath:iasylum/jdbc.scm")
 (define original-load load)
-(set! load
+
+(define bedlam-load
       (lambda (name)
         (with-failure-continuation 
          (lambda (e p)
@@ -35,6 +36,8 @@
               (original-load (string-append (iasylum-bedlam-location) "/" name)))
             (lambda ()
               (original-load name)))))))
+
+(set! load bedlam-load)
 
 (require-extension (srfi 39)) ; make-parameter
 
