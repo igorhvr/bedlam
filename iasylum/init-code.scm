@@ -234,8 +234,10 @@
 
 (add-lib "clojure/tools.nrepl-0.2.10.jar")
 
-(add-lib "clojure/clj-slack-0.5.4-standalone.jar")
 (add-lib "u/pircbotx-2.1.jar")
+(add-lib "clojure/core.async-0.1.0-SNAPSHOT.jar")
+(add-lib "clojure/slack-rtm-0.1.7-standalone.jar") ;; It includes clj-slack 0.5.5
+
 
 (define (extend-classpath i)
   (class-path-extension-append! (cons i (class-path-extension))))
