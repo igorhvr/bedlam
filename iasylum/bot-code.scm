@@ -40,33 +40,35 @@
              (let* ((channelsvar (random-var))
 		    (tokenvar (random-var)))
                (watched-thread/spawn (lambda ()
-				       (mutex/synchronize (mutex-of clj) (lambda () (clj "(require '[slack-rtm.core :as rtm]) (require '[clj-slack.groups :as groups])")))
+				       (mutex/synchronize (mutex-of clj) (lambda () (clj "(require '[slack-rtm.core :as rtm]) (require '[clj-slack.groups :as groups]) (require '[clojure.tools.logging :as log])")))
 				       (clj
 					(format
-					 "(require '[slack-rtm.core :as rtm])
+                                         "(require '[slack-rtm.core :as rtm])
                                           (require '[clj-slack.groups :as groups])
+                                          (require '[clojure.tools.logging :as log])
+                                          (def conn (atom nil))
 
-                          		  (def rtm-conn (rtm/rtm-connect ~a))
+                                          (def channels-id (into {} (map
+                                                                     (fn [group]
+                                                                         {(get group :id) (get group :name)})
+                                                                         (get (groups/list {:api-url \"https://slack.com/api\" :token ~a}) :groups))))
 
-        		     		  (def events-publication (:events-publication rtm-conn))
-
-					  (def channels-id (into {} (map
-					  				  (fn [group]
-					  				      {(get group :id) (get group :name)})
-									  (get (groups/list {:api-url \"https://slack.com/api\" :token ~a}) :groups))))
-
-              	               		  (rtm/sub-to-event events-publication :pong)
-     		          		  (def dispatcher (:dispatcher rtm-conn))
-		               		  (rtm/send-event dispatcher {:type \"ping\"}) ;; To avoid constant disconnects
-
-		               		  (defn message-receiver [e]
+                                          (defn message-receiver [e]
                                                 (when (and (contains? ~a (get channels-id (get e :channel)))
                                                            (not (get e :subtype false))
                                                            (not (get e :edited false))
                                                            (not (get e :thread_ts false)))
                                                       (doto (get ~a (get channels-id (get e :channel))) (.put (new sisc.data.ImmutableString (get e :text))))))
-		               		  (rtm/sub-to-event events-publication :message message-receiver)"
-					 tokenvar tokenvar channelsvar channelsvar)
+
+                                          (defn connect-to-slack [conn token]
+                                                (reset! conn (rtm/rtm-connect token
+                                                                              :on-close (fn [{:keys [status reason]}]
+                                                                                            (log/error reason \"Previous connection with Slack was closed, retrying in 3 seconds...\")
+                                                                                            (Thread/sleep 3000) ;; Waiting 3s before trying again
+                                                                                            (connect-to-slack conn token))))
+                                                (rtm/sub-to-event (:events-publication @conn) :message message-receiver))
+                                          (connect-to-slack conn ~a)"
+					 tokenvar channelsvar channelsvar tokenvar)
 					`((,tokenvar ,(->jstring token))
 					  (,channelsvar ,(->jobject channels))))))
                #t)))
