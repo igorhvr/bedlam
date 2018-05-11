@@ -114,6 +114,8 @@
 
 (add-lib "u/quartz-all-1.7.3.jar")
 (add-lib "u/cron4j-2.2.5.jar")
+(add-lib "u/json-20171018.jar")
+(add-lib "u/commons-text-1.2.jar")
 
 (add-lib "hornetq/2.4.0_Final/hornetq-core-client.jar")
 (add-lib "hornetq/2.4.0_Final/hornetq-jms-client.jar")
