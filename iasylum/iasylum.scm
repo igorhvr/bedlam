@@ -79,6 +79,7 @@
    decimal->maxradix
    deep-map
    vector->list_deeply
+   list->vector_deeply
    alist-to-url-query-string
    make-parameter*
    subtract-dates
