@@ -8,14 +8,14 @@
 
   ; (http-call-get/string "http://news.ycombinator.com") retrieves those page contents as a string.
   (define (http-call-get/string destinationUrl)
-    (->string
+    (let ((java-result
      (j "httpclient = org.apache.http.impl.client.HttpClients.createDefault();
         httpget = new org.apache.http.client.methods.HttpGet(destinationurl);
         response = httpclient.execute(httpget);
         result=\"\";
         try {
           tent=response.getEntity();
-          result=org.apache.http.util.EntityUtils.toString(tent);
+          result=(tent!=null)?org.apache.http.util.EntityUtils.toString(tent):null;
         } catch(Exception e) {
           throw new RuntimeException(e);
         } finally {
@@ -25,6 +25,8 @@
         result;"
         `((httpclient)(httpget)(response)(result)
           (destinationurl ,(->jstring destinationUrl))))))
+      (if (java-null? java-result) #f (->string java-result))))
+      
 
 
   ;; Implements headers to GET requests
@@ -41,19 +43,21 @@
                                    (j "httpget.addHeader(hn, hv);"`((hn ,(->jstring vname)) (hv ,(->jstring vvalue)) (httpget ,httpget)))
                                    )) headers)
                
-               (j "response = httpclient.execute(httpget);
-      result=\"\";
-      try {
-        tent=response.getEntity();
-        result=org.apache.http.util.EntityUtils.toString(tent);
-      } catch(Exception e) {
-        throw new RuntimeException(e);
-      } finally {
-        response.close();
-      }
-
-      result;"
-                  `((response)(result)(tent)(httpget ,httpget)(httpclient ,httpclient))))))
+               (let ((java-result (j "response = httpclient.execute(httpget);
+                                      result=\"\";
+                                      try {
+                                        tent=response.getEntity();
+                                        result=(tent!=null)?org.apache.http.util.EntityUtils.toString(tent):null;
+                                      } catch(Exception e) {
+                                        throw new RuntimeException(e);
+                                      } finally {
+                                        response.close();
+                                      }
+                                
+                                      result;"
+                                     `((response)(result)(tent)(httpget ,httpget)(httpclient ,httpclient)))))
+                 (if (java-null? java-result) #f (->string java-result)))
+               )))
   
   ;; TODO file upload - http://stackoverflow.com/questions/1067655/how-to-upload-a-file-using-java-httpclient-library-working-with-php
   (define http-call-post-string/string
@@ -67,13 +71,13 @@
                                             (j "httppost.addHeader(hn, hv);"`((hn ,(->jstring vname)) (hv ,(->jstring vvalue)) (httppost ,httppost)))
                                             )) headers)
                                               
-             (->string
+             (let ((java-result
                (j "httppost.setEntity(new org.apache.http.entity.StringEntity(contents));
                   response = httpclient.execute(httppost);
                   result=\"\";
                   try {
                     tent=response.getEntity();
-                    result=org.apache.http.util.EntityUtils.toString(tent);
+                    result=(tent!=null)?org.apache.http.util.EntityUtils.toString(tent):null;
                   } catch(Exception e) {
                     throw new RuntimeException(e);
                   } finally {
@@ -84,6 +88,7 @@
                   `((response)(result)(tent)
                     (contents ,(->jstring contents))
                     (httppost ,httppost)
-                    (httpclient ,httpclient)))))))
+                    (httpclient ,httpclient)))))
+               (if (java-null? java-result) #f (->string java-result))))))
 
 )
