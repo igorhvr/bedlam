@@ -238,7 +238,7 @@
 (define* (sort-json-object-by-keys json-object (return-parsed-object: return-parsed-object #f))
   (let ((params-scheme (if (string? json-object) (json->scheme json-object) json-object)))
     (match params-scheme
-           [#((json-parameter . parameter) ...)
+           [#(((? string? json-parameter) . parameter) ...)
             (let* ((list-result (sort (lambda (e1 e2) (string< (car e1) (car e2))) (map cons json-parameter parameter)))
                    (vector-result (list->vector list-result)))
               (if return-parsed-object vector-result (scheme->json vector-result)))]
