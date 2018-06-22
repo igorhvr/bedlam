@@ -3,7 +3,7 @@
 
   ;;; FIXXXME Will fail badly in many cases. Handling if namespaces is irresponsible to say the least, but it is still useful in some cases.
   (define code->macroexpanded-code
-    (lambda* (code (warn-me-that-this-is-really-unsafe #t))
+    (lambda* (code (warn-me-that-this-is-really-unsafe: warn-me-that-this-is-really-unsafe #t) (kill-namespaces: kill-namespaces #f))
              (when warn-me-that-this-is-really-unsafe
                (log-warn "code->macroexpanded-code called. It will fail badly (and silently, conceivably) in many cases. Handling of namespaces is irresponsible to say the least, but it is still useful in limited scenarios. Consider yourself warned, and here be dragons!"))
              
@@ -12,7 +12,10 @@
                           (bar-code (irregex-replace/all "#%" dirty-code ""))
                           (namespaced-code (irregex-replace/all '(seq "|")  bar-code ""))
                           (result-with-invalid-empty-list
-                           (irregex-replace/all '(seq "@" (+ (- any ":")) "::")  namespaced-code ""))
+                           (if kill-namespaces
+                               (irregex-replace/all '(seq "@" (+ (- any ":")) "::")  namespaced-code "")
+                               namespaced-code)
+                           )
                           
                           (step-1  (irregex-replace/all
                                     '(seq "(lambda ()")
