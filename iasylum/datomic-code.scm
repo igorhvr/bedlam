@@ -384,6 +384,40 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
                                 (datomic/tx->t (list-ref entity-history depth)))
                  entity-id)])))
 
+;;
+;; Valid examples of input:
+;;
+;;  `((db/id . ,(datomic/temp-id 'army))
+;;    (test . ,(random-string)))
+;;
+;;  => [{:db/id #db/id[:army]
+;;       :test/test random-code}]
+;;
+;;  `((db/add ,(datomic/temp-id 'army) test (random-string)))
+;;
+;;  => [[:db/add #db/id[:army] :test/test random-code]]
+;;
+(define (scheme->datomic tx)
+  (let continue ((tx tx))
+    (cond [(null? tx) (list->persistent-vector '())]
+          [(symbol? tx) (symbol->clj-keyword tx)]
+          [(integer? tx)
+           (j "new java.lang.Long(a);" `((a ,(->jobject tx))))]
+          [(number? tx)
+           (j "new java.lang.Double(a);" `((a ,(->jobject tx))))]
+          [(string? tx) (->jstring tx)]
+          [(boolean? tx)
+           (j "new java.lang.Boolean(a);" `((a ,(->jobject tx))))]
+          [(java-object? tx) tx]
+          [(pure-alist? tx) (alist->persistent-map (map (lambda (x)
+                                                          (list (continue (car x))
+                                                                (continue (cdr x))))
+                                                        tx))]
+          [(list? tx) (list->persistent-vector (map (lambda (x)
+                                                      (continue x))
+                                                    tx))]
+          [else (->jobject tx)])))
+
 (create-shortcuts (datomic/query -> d/q)
                   (datomic/smart-query -> d/sq) ; <-- deprecated!
                   (datomic/smart-query-single -> d/sq1)

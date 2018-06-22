@@ -27,6 +27,7 @@
    datomic/get-history
    datomic/travel-machine
    datomic/tx->t
+   scheme->datomic
 
    ; deprecated:
    datomic/smart-query d/sq
