@@ -213,15 +213,17 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
                                  (param-alist '())
                                  (allow-cut-log: allow-cut-log #t))
   (log-time ("Transaction execution" log-trace log-warn 500 ms)
-      (let ((final-param-alist (append param-alist `((conn ,conn)))))
-        (log-trace "Will execute transact" (if allow-cut-log
+      (let ((final-param-alist (append param-alist `((conn ,conn)
+                                                     (tx ,(if (string? tx) (clj tx param-alist) tx))))))
+        (log-trace "Will execute transact" (if (and allow-cut-log
+                                                    (string? tx))
                                                (cut-log tx)
                                                tx)
                    "with params:" (if allow-cut-log
                                       (cut-log (iasylum-write-string param-alist))
                                       (iasylum-write-string param-alist)))
-        (let ((result (clj (string-append "(use '[datomic.api :only [q db] :as d])
-                                       @(d/transact conn " tx ")")
+        (let ((result (clj "(use '[datomic.api :only [q db] :as d])
+                            @(d/transact conn tx)"
                            final-param-alist)))
           (log-trace "=> Transaction result " (if allow-cut-log
                                                   (cut-log (iasylum-write-string result))
