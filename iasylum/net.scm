@@ -4,6 +4,7 @@
   (http-call-get/string
    http-call-get-headers/string 
    http-call-post-string/string
+   http-call-get-status-code/string
    )
 
   ; (http-call-get/string "http://news.ycombinator.com") retrieves those page contents as a string.
@@ -28,6 +29,25 @@
       (if (java-null? java-result) #f (->string java-result))))
       
 
+  ;;Returns the status code from a get request
+  (define (http-call-get-status-code/string destinationUrl)
+    (->string
+     (j "httpclient = org.apache.http.impl.client.HttpClients.createDefault();
+        httpget = new org.apache.http.client.methods.HttpGet(destinationurl);
+        response = httpclient.execute(httpget);
+        status=\"\";
+        try {
+          tent=response.getStatusLine();
+          status=tent.getStatusCode();
+        } catch(Exception e) {
+          throw new RuntimeException(e);
+        } finally {
+          response.close();
+        }
+
+        status;"
+        `((httpclient)(httpget)(response)(result)
+          (destinationurl ,(->jstring destinationUrl))))))
 
   ;; Implements headers to GET requests
   (define http-call-get-headers/string 
