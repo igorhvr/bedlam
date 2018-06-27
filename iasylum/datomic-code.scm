@@ -401,7 +401,7 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
   (let continue ((tx tx))
     (cond [(null? tx) (list->persistent-vector '())]
           [(symbol? tx) (symbol->clj-keyword tx)]
-          [(integer? tx)
+          [(and (integer? tx) (exact? tx))
            (j "new java.lang.Long(a);" `((a ,(->jobject tx))))]
           [(number? tx)
            (j "new java.lang.Double(a);" `((a ,(->jobject tx))))]
