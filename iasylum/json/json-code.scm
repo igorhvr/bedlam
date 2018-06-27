@@ -245,3 +245,27 @@
            [else
             (throw (make-error "sort-json-object-by-keys received something which is not a json object with string keys to sort."))]
            )))
+
+(define* (add-missing-properties-to-json-object
+          json-object additional-properties
+          (return-parsed-object: return-parsed-object #f) (sort-result: sort-result #t))
+  (let* ((compare-param-keys (lambda (e1 e2) (string=? (car e1) (car e2))))
+         (params-scheme (if (string? json-object) (json->scheme json-object) json-object)))
+    (let ((list-result 
+           (apply lset-adjoin (append (list compare-param-keys (vector->list params-scheme))
+                                      (vector->list (if (string? additional-properties)
+                                                        (json->scheme additional-properties)
+                                                        additional-properties))))))
+      (let ((unsorted-vector-result (list->vector list-result)))
+        (let ((as-requested-vector-result
+               (if sort-result
+                   (sort-json-object-by-keys unsorted-vector-result 'return-parsed-object: #t)
+                   unsorted-vector-result)))
+          (if return-parsed-object
+              as-requested-vector-result
+              (scheme->json as-requested-vector-result)))))))
+
+(define (test-add-missing-properties-to-json-object)
+  (d/n 
+   (add-missing-properties-to-json-object (json->scheme "{\"xyz\" : false, \"deposit_info\": \"{\\\"address\\\": \\\"6401691a-2106-4486-b723-9a3c598c37c5\\\", \\\"currency\\\": \\\"brl\\\", \\\"receipt\\\": \\\"CANCELAR_DEPOSITO_TESTE\\\", \\\"sourceBankId\\\": \\\"001\\\", \\\"destinationBankId\\\": \\\"001\\\"}\", \"declared_value\": \"99/100\"}") (json->scheme "{\"xy\" : 13, \"deposit_info\": \"{\\\"address\\\": \\\"6401691a-2106-4486-b723-9a3c598c37c5\\\", \\\"currency\\\": \\\"brl\\\", \\\"receipt\\\": \\\"CANCELAR_DEPOSITO_TESTE\\\", \\\"sourceBankId\\\": \\\"001\\\", \\\"destinationBankId\\\": \\\"001\\\"}\", \"declared_value\": \"99/100\"}") 'return-parsed-object: #t 'sort-result: #t))
+  (throw (make-error "TODO: Add assertion. For now verify manually above.")))
