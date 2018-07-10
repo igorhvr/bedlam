@@ -1,6 +1,17 @@
 (module iasylum/bitcoin
-  (bitcoin/valid-signature? test-bitcoin/valid-signature?)
+  (bitcoin/sign test-bitcon/sign bitcoin/valid-signature? test-bitcoin/valid-signature?)
 
+  ;; Please provide a private Key in WIF Compressed format. 52 characters base58, starts with a 'K' or 'L'.
+  ;; Example: KwYB32QP2fhPzUNL1FTRWQMoxFYzHcCXaKXfhsJD4jZmWYH1yYtX
+  (define (bitcoin/sign wif-compressed-private-key message)
+    (->string (j "org.bitcoinj.core.DumpedPrivateKey.fromBase58(null,wifpk).getKey().signMessage(message);" `((wifpk ,(->jstring wif-compressed-private-key)) (message ,(->jstring message))))))
+
+  (define (test-bitcoin/sign)
+    (assert 
+     (bitcoin/valid-signature? "1H3HW3h8se5X7D8o2D926ETDiW7Mfaor8r" (bitcoin/sign "KwYB32QP2fhPzUNL1FTRWQMoxFYzHcCXaKXfhsJD4jZmWYH1yYtX" "I am happy that this finally works.") "I am happy that this finally works."))
+    (assert
+     (not (bitcoin/valid-signature? "1H3HW3h8se5X7D8o2D926ETDiW7Mfaor8r" (bitcoin/sign "KwYB32QP2fhPzUNL1FTRWQMoxFYzHcCXaKXfhsJD4jZmWYH1yYtX" "I am happy that this finally works NO!!!!") "I am happy that this finally works."))))
+  
   (define (bitcoin/valid-signature? bitcoin-address signature message)
     (->boolean
      (j "try{
