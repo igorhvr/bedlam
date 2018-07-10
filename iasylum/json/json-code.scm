@@ -235,11 +235,23 @@
          
          ( whatever (throw (make-error (string-append* "Support not yet implemented in json->sxml-block for structure: ===" whatever "=== ."))))))
 
-(define* (sort-json-object-by-keys json-object (return-parsed-object: return-parsed-object #f))
+(define* (sort-json-object-by-keys json-object (return-parsed-object: return-parsed-object #f) (deeply: deeply #f))
   (let ((params-scheme (if (string? json-object) (json->scheme json-object) json-object)))
     (match params-scheme
            [#(((? string? json-parameter) . parameter) ...)
-            (let* ((list-result (sort (lambda (e1 e2) (string< (car e1) (car e2))) (map cons json-parameter parameter)))
+            (let* ((list-result (sort (lambda (e1 e2)
+                                        (string< (car e1) (car e2)))
+                                      (let ((possibly-recursively-sorted-parameter
+                                             (map (lambda (v)
+                                                  (if (and deeply (vector? v))
+                                                      (sort-json-object-by-keys v
+                                                                                'return-parsed-object: #t
+                                                                                'deeply: deeply)
+                                                      v))
+                                                parameter)))
+                                      (map cons
+                                           json-parameter
+                                           possibly-recursively-sorted-parameter))))
                    (vector-result (list->vector list-result)))
               (if return-parsed-object vector-result (scheme->json vector-result)))]
            [else
