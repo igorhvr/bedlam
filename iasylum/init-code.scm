@@ -540,6 +540,7 @@
 (add-lib "u/bitcoinj-core-0.15-SNAPSHOT-bundled.jar")
 (require-extension (lib iasylum/bitcoin))
 
+(add-lib "u/prettytime-4.0.1.Final.jar")
 (require-extension (lib iasylum/date))
 
 (require-extension (lib iasylum/siscweb))
