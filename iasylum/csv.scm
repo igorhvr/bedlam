@@ -18,6 +18,8 @@
                  (let* ((element (vector-ref va i))
                         (element-to-push (cond [(string? element) (->jstring element)]
                                                [(integer? element) (->jlong element)]
+                                               ;; TODO FIXME XXX - Generate proper dates.
+                                               [(date? element) (->jstring (date->string element "~4"))]
                                                [(vector? element) (vector->com.eclipsesource.v8.V8Array element)]
                                                [else (throw (make-error "Type not suppported yet."))])))
                    (j "v8array.push(element);" `((v8array ,v8array)
