@@ -1,5 +1,6 @@
 (require-extension (lib iasylum/jcode))
 (require-extension (lib iasylum/javascript))
+(require-extension (srfi 19))
 
 (module iasylum/csv
   (csv->vector csv->list vector->csv list->csv)
