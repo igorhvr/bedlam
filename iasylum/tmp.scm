@@ -145,3 +145,21 @@
 
 (define (jvm-max-memory)
  ->number (j "Runtime.getRuntime().maxMemory();"))
+
+(define try-with-exponential-backoff-until-success-or-15-minutes-max-elapsed-time-is-reached
+  (lambda* ((action: action) (action-description: action-description (iasylum-write-string action)))
+      (let ((auto-retry (j "new com.google.api.client.util.ExponentialBackOff();")))
+        (let try-again ()
+          (with-failure-continuation
+           (lambda (error error-continuation)
+             (let ((ms-to-wait (->scm-object (j "backoff.getCurrentIntervalMillis();" `((backoff ,auto-retry)))))
+                   (ms-elapsed (->scm-object (j "backoff.getElapsedTimeMillis();" `((backoff ,auto-retry)))))
+                   (ms-max (->scm-object (j "backoff.getMaxElapsedTimeMillis();" `((backoff ,auto-retry))))))
+               (log-error (format "Error when trying to perform the following action: ~a . I'll try again after ~a ms. Elapsed: ~a ms, Max: ~a ms."
+                                  action-description ms-to-wait ms-elapsed ms-max) error)
+               (sleep ms-to-wait)
+               (j "backoff.nextBackOffMillis();" `((backoff ,auto-retry)))
+               (log-debug "Will try again...")
+               (try-again)))
+           (lambda ()
+             (action)))))))
