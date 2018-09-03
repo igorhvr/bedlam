@@ -68,6 +68,7 @@
    try-and-if-it-fails-or-empty-or-java-null-return-object
    try-and-if-it-throws-object
    retry-blocking-until-succeed
+   try-with-exponential-backoff
    dynamic-define
    create-shortcuts
    to-csv-line
@@ -851,6 +852,43 @@
               (begin (on-error-thunk)
                      (sleep sleep-between-retry-ms)
                      (retry (+ retry-counter 1)))))))
+
+  (define try-with-exponential-backoff
+    (lambda* ((action: action #f) (action-description: action-description (iasylum-write-string action))
+         (initial-interval-millis: initial-interval-millis 50)
+         (max-elapsed-time-millis: max-elapsed-time-millis 2147483647) ;; Aprox 24 days
+         (max-interval-millis: max-interval-millis 30000)
+         (log-error: log-error log-error))
+        (when (not action)
+          (d/n "Mandatory parameter action not provided. Sample usage: " "(try-with-exponential-backoff 'action: (lambda () (/ 2 3) (/ 2 0)) 'action-description: \"Let's try to divide by zero.\" 'initial-interval-millis: 50 'max-interval-millis: 200 'max-elapsed-time-millis: 1000 'log-error: d/n)")
+          (error "No action provided for trying with exponential backoff."))
+        (let ((auto-retry (j "new com.google.api.client.util.ExponentialBackOff.Builder().
+                            setInitialIntervalMillis(iim).setMaxElapsedTimeMillis(metm).
+                            setMaxIntervalMillis(mim).setMultiplier(1.5).setRandomizationFactor(0.5).build();"
+                             `((iim ,(->jint initial-interval-millis))
+                               (metm ,(->jint max-elapsed-time-millis))
+                               (mim ,(->jint max-interval-millis))))))
+          (let try-again ()
+            (with-failure-continuation
+             (lambda (error error-continuation)
+               (let ((ms-to-wait (->scm-object (j "backoff.getCurrentIntervalMillis();" `((backoff ,auto-retry)))))
+                     (ms-elapsed (->scm-object (j "backoff.getElapsedTimeMillis();" `((backoff ,auto-retry)))))
+                     (ms-max (->scm-object (j "backoff.getMaxElapsedTimeMillis();" `((backoff ,auto-retry))))))
+                 (log-error
+                  (format
+                   "Error when trying to perform the following action: ~a . I'll try again after ~a ms. Elapsed: ~a ms, Max: ~a ms."
+                   action-description ms-to-wait ms-elapsed ms-max) error)
+                 (sleep ms-to-wait)
+                 (let ((next-backoff (->number (j "backoff.nextBackOffMillis();" `((backoff ,auto-retry))))))
+                   (if (= -1 next-backoff)
+                       (throw
+                        (make-nested-error
+                         (make-error
+                          "max-elapsed-time-millis reached while performing retries with exponential backoff strategy. Giving up.")
+                         error error-continuation))
+                       (try-again)))))
+             (lambda ()
+               (action)))))))
 
   ;; (dynamic-define "abc" 123)
   ;; $ abc => 123
