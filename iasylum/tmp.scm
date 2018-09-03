@@ -146,9 +146,18 @@
 (define (jvm-max-memory)
  ->number (j "Runtime.getRuntime().maxMemory();"))
 
-(define try-with-exponential-backoff-until-success-or-15-minutes-max-elapsed-time-is-reached
-  (lambda* ((action: action) (action-description: action-description (iasylum-write-string action)))
-      (let ((auto-retry (j "new com.google.api.client.util.ExponentialBackOff();")))
+(define try-with-exponential-backoff
+  (lambda* ((action: action) (action-description: action-description (iasylum-write-string action))
+       (initial-interval-millis: initial-interval-millis 50)
+       (max-elapsed-time-millis: max-elapsed-time-millis 2147483647) ;; Aprox 24 days
+       (max-interval-millis: max-interval-millis 30000)
+       (log-error: log-error log-error))
+      (let ((auto-retry (j "new com.google.api.client.util.ExponentialBackOff.Builder().
+                            setInitialIntervalMillis(iim).setMaxElapsedTimeMillis(metm).
+                            setMaxIntervalMillis(mim).setMultiplier(1.5).setRandomizationFactor(0.5).build();"
+                           `((iim ,(->jint initial-interval-millis))
+                             (metm ,(->jint max-elapsed-time-millis))
+                             (mim ,(->jint max-interval-millis))))))
         (let try-again ()
           (with-failure-continuation
            (lambda (error error-continuation)
@@ -158,8 +167,13 @@
                (log-error (format "Error when trying to perform the following action: ~a . I'll try again after ~a ms. Elapsed: ~a ms, Max: ~a ms."
                                   action-description ms-to-wait ms-elapsed ms-max) error)
                (sleep ms-to-wait)
-               (j "backoff.nextBackOffMillis();" `((backoff ,auto-retry)))
-               (log-debug "Will try again...")
-               (try-again)))
+               (let ((next-backoff (->number (j "backoff.nextBackOffMillis();" `((backoff ,auto-retry))))))
+                 (if (= -1 next-backoff)
+                     (throw
+                      (make-nested-error
+                       (make-error
+                        "max-elapsed-time-millis reached while performing retries with exponential backoff strategy. Giving up.")
+                       error error-continuation))
+                     (try-again)))))
            (lambda ()
              (action)))))))
