@@ -147,11 +147,14 @@
  ->number (j "Runtime.getRuntime().maxMemory();"))
 
 (define try-with-exponential-backoff
-  (lambda* ((action: action) (action-description: action-description (iasylum-write-string action))
+  (lambda* ((action: action #f) (action-description: action-description (iasylum-write-string action))
        (initial-interval-millis: initial-interval-millis 50)
        (max-elapsed-time-millis: max-elapsed-time-millis 2147483647) ;; Aprox 24 days
        (max-interval-millis: max-interval-millis 30000)
        (log-error: log-error log-error))
+      (when (not action)
+          (d/n "Mandatory parameter action not provided. Sample usage: " "(try-with-exponential-backoff 'action: (lambda () (/ 2 3) (/ 2 0)) 'action-description: \"Let's try to divide by zero.\" 'initial-interval-millis: 50 'max-interval-millis: 200 'max-elapsed-time-millis: 1000 'log-error: d/n)")
+          (error "No action provided for trying with exponential backoff."))
       (let ((auto-retry (j "new com.google.api.client.util.ExponentialBackOff.Builder().
                             setInitialIntervalMillis(iim).setMaxElapsedTimeMillis(metm).
                             setMaxIntervalMillis(mim).setMultiplier(1.5).setRandomizationFactor(0.5).build();"
