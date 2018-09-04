@@ -83,6 +83,7 @@
    list->vector_deeply
    alist-to-url-query-string
    make-parameter*
+   make-expiring-parameter*
    subtract-dates
    start-async-json-engine-with-status-retriever
    complete-with-zeroes
@@ -991,18 +992,35 @@
   ; Generates parameters that work and are safe across threads.
   (define (make-parameter* init)
     (let ((storage (j "new java.util.concurrent.ConcurrentHashMap();")))
-      (j "tmap.put(\"SINGLEKEY\", value);" `((value ,(java-wrap init)) (tmap ,storage)))
-      ((lambda ()
-         (define calculate-result
-           (lambda (value)
-             (if (not value)
-                 (safe-java-unwrap (j "tmap.get(\"SINGLEKEY\");" `((tmap ,storage))))
-                 (let ((result (calculate-result #f)))
-                   (j "tmap.put(\"SINGLEKEY\", value);" `((value ,(java-wrap value)) (tmap ,storage)))
-                   result))))
-         (case-lambda
-           (() (calculate-result #f))
-           ((init) (calculate-result init)))))))
+      (make-parameter-with-storage* init storage)))
+
+  ; Generates expiring parameters that work and are safe across threads.
+  (define* (make-expiring-parameter* (expiration-seconds: expiration-seconds 60) (initial-value: initial-value #f))
+    (let ((storage  (j "com.google.common.cache.CacheBuilder.newBuilder()
+                     .maximumSize(1)
+                     .expireAfterWrite(es, java.util.concurrent.TimeUnit.SECONDS)
+                     .build()
+                     .asMap();"
+                       `((es ,(->jlong expiration-seconds))))))
+      (make-parameter-with-storage* initial-value storage)))
+
+    ; Generates parameters that work and are safe across threads.
+  (define (make-parameter-with-storage* init storage)
+    (define (false-if-java-null o) (if (java-null? o) #f (java-unwrap o)))
+    
+    (j "tmap.put(\"SINGLEKEY\", value);" `((value ,(java-wrap init)) (tmap ,storage)))
+    ((lambda ()
+       (define calculate-result
+         (lambda (value)
+           (if (not value)
+               (false-if-java-null (j "tmap.get(\"SINGLEKEY\");" `((tmap ,storage))))
+               (let ((result (calculate-result #f)))
+                 (j "tmap.put(\"SINGLEKEY\", value);" `((value ,(java-wrap value)) (tmap ,storage)))
+                 result))))
+       (case-lambda
+         (() (calculate-result #f))
+         ((init) (calculate-result init))))))
+
   
   (define (start-async-json-engine-with-status-retriever engine-thunk should-stop?-thunk seconds-between-executions)
     (define last-execution-result (make-parameter* '#((status . "NEVER_EXECUTED"))))
