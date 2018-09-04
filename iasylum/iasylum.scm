@@ -859,7 +859,10 @@
          (initial-interval-millis: initial-interval-millis 50)
          (max-elapsed-time-millis: max-elapsed-time-millis 2147483647) ;; Aprox 24 days
          (max-interval-millis: max-interval-millis 30000)
-         (log-error: log-error log-error))
+         (log-error: log-error log-error)
+         ;; See https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
+         (add-jitter: add-jitter #t)
+         )
         (when (not action)
           (d/n "Mandatory parameter action not provided. Sample usage: " "(try-with-exponential-backoff 'action: (lambda () (/ 2 3) (/ 2 0)) 'action-description: \"Let's try to divide by zero.\" 'initial-interval-millis: 50 'max-interval-millis: 200 'max-elapsed-time-millis: 1000 'log-error: d/n)")
           (error "No action provided for trying with exponential backoff."))
@@ -872,9 +875,10 @@
           (let try-again ()
             (with-failure-continuation
              (lambda (error error-continuation)
-               (let ((ms-to-wait (->scm-object (j "backoff.getCurrentIntervalMillis();" `((backoff ,auto-retry)))))
-                     (ms-elapsed (->scm-object (j "backoff.getElapsedTimeMillis();" `((backoff ,auto-retry)))))
-                     (ms-max (->scm-object (j "backoff.getMaxElapsedTimeMillis();" `((backoff ,auto-retry))))))
+               (let* ((ms-to-wait-orig (->scm-object (j "backoff.getCurrentIntervalMillis();" `((backoff ,auto-retry)))))
+                      (ms-to-wait (if add-jitter (random ms-to-wait-orig) ms-to-wait-orig))
+                      (ms-elapsed (->scm-object (j "backoff.getElapsedTimeMillis();" `((backoff ,auto-retry)))))
+                      (ms-max (->scm-object (j "backoff.getMaxElapsedTimeMillis();" `((backoff ,auto-retry))))))
                  (log-error
                   (format
                    "Error when trying to perform the following action: ~a . I'll try again after ~a ms. Elapsed: ~a ms, Max: ~a ms."
