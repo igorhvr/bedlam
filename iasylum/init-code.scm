@@ -547,6 +547,8 @@
 
 (require-extension (lib iasylum/csv))
 
+(require-extension (lib iasylum/guava))
+
 (set! load original-load)
 
 (define bedlam-loaded-and-ready-to-use #t)
