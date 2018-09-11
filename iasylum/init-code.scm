@@ -148,6 +148,13 @@
 (require-extension (lib iasylum/assert))
 
 (require-extension (lib iasylum/jcode))
+
+(define (set-jvm-system-property property-name property-value)
+  (j "System.getProperties().setProperty(sjsppropsname, sjsppropsvalue);"
+     `((sjsppropsname ,(->jstring property-name)) (sjsppropsvalue ,(->jstring property-value)))))
+
+(set-jvm-system-property "user.timezone" "UTC")
+
 ;(suppressed-stack-trace-source-kinds '())
 
 ;; If this is called (j "new URL(\"classpath:iasylum/jdbc.scm\");") and similar things will work.
