@@ -78,6 +78,8 @@
                      (exact->inexact x))))
             (write to-write p)))
 	 ((boolean? x) (display (if x "true" "false") p))
+         ((date? x) (write (date->string x "~4") p))
+         ((time? x) (write (date->string (time-utc->date x) "~4") p))
 	 ((eq? x (void)) (display "null" p))
 	 (else (error "Invalid JSON object in json-write" x))))
 
