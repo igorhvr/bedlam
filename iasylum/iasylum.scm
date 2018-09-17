@@ -58,6 +58,7 @@
    ensure-zipped-copy
    vector-binary-search
    function fn function* fn*
+   def
    times multiple-values->list
    sleep-milliseconds sleep-seconds sleep-minutes sleep-hours
    list-of-type?
