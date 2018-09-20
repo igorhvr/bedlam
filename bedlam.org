@@ -1,0 +1,1 @@
+* Perhaps add support for this (along with pdf in general) in the future - https://pdfbox.apache.org/1.8/cookbook/encryption.html
