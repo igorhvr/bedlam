@@ -95,6 +95,7 @@
    avg average
    not-buggy-exact->inexact
    apply*
+   append-lists-when
    let-parallel map-parallel
    atomic-execution
    select-sublist
@@ -1153,6 +1154,22 @@
           (if (not fn)
               (throw (make-error (format "Function \"~a\" not found!" fn-name)))
               (apply fn param-list)))))
+
+  ;; This appends the provided lists ignoring any possible #f arguments.
+  (define (append-lists-when . p)
+    (apply
+     append
+     (map (lambda (p)
+            (let ((is-list (list? p)))
+              (if is-list
+                  p
+                  (begin
+                    (assert (boolean? p) (not p)
+                            "WARNING/EXPLANATION OF WHY THIS FAILED"
+                            "append-lists-when assumes all arguments are either lists or #f which is interpreted as an empty list."
+                            "a non-#f value which is not a list is an invalid argument")
+                    '()))))
+          p)))
 
   ;;
   ;; A let-like utility that runs the code to define each binding in parallel.
