@@ -1,4 +1,4 @@
-FROM relateiq/oracle-java8
+FROM ubuntu:18.04
 MAINTAINER Igor Hjelmstrom Vinhas Ribeiro <igorhvr@iasylum.net>
 # Erase apt-get caches, then run update operation.
 
@@ -26,6 +26,8 @@ RUN apt-get -y install unzip
 RUN apt-get -y install psmisc
 RUN apt-get -y install less
 RUN apt-get -y install ntpdate
+
+RUN apt-get -y install openjdk-11-jdk
 
 RUN echo 'root:root' | chpasswd
 RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
