@@ -1,4 +1,4 @@
-FROM java:openjdk-11
+FROM java:openjdk-8
 MAINTAINER Igor Hjelmstrom Vinhas Ribeiro <igorhvr@iasylum.net>
 # Erase apt-get caches, then run update operation.
 
