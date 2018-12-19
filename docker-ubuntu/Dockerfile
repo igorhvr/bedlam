@@ -40,7 +40,7 @@ RUN echo '#!/bin/sh\n/etc/init.d/ssh start\n/base/bedlam/schejure/sj\nsleep infi
 RUN echo '#!/bin/sh\n/base/bedlam/sisc/sisc-1.16.6/sisc $*' > /sisc ; chmod 755 /sisc
 ADD data/ /data
 
-RUN echo "2015-02-26_02h13mUTC" > /last_git_pull
+RUN echo "2018-12-19" > /last_git_pull
 RUN cd /base/bedlam ; git reset --hard HEAD ; git pull
 
 ENV LANG C.UTF-8
