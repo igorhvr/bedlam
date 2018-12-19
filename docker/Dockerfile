@@ -27,7 +27,23 @@ RUN apt-get -y install psmisc
 RUN apt-get -y install less
 RUN apt-get -y install ntpdate
 
-RUN apt-get -y install openjdk-11-jdk
+WORKDIR /opt
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+    && curl \
+        -L \
+        -o openjdk.tar.gz \
+        https://download.java.net/java/GA/jdk11/13/GPL/openjdk-11.0.1_linux-x64_bin.tar.gz \
+    && mkdir jdk \
+    && tar zxf openjdk.tar.gz -C jdk --strip-components=1 \
+    && rm -rf openjdk.tar.gz \
+    && ln -sf /opt/jdk/bin/* /usr/local/bin/ \
+    && java  --version \
+    && javac --version \
+&& jlink --version
+WORKDIR /
 
 RUN echo 'root:root' | chpasswd
 RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
