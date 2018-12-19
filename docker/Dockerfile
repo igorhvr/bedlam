@@ -12,6 +12,7 @@ RUN apt-get install -y apt-utils
 RUN apt-get install -y git
 RUN cd / ; mkdir base ; cd base ; git clone https://github.com/igorhvr/bedlam.git ; chmod -R 755 /base
 RUN apt-get install -y zsh
+RUN apt-get install -y curl
 RUN curl -L https://github.com/igorhvr/oh-my-zsh/raw/master/tools/install.sh | /bin/bash
 RUN apt-get -y install screen
 ADD .screenrc /root/.screenrc
