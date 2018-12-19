@@ -8,6 +8,7 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN echo "2018-12-19" > /last_apt-get_update
 RUN cd /var/lib/apt ; rm -rf * 
 RUN apt-get -y update --fix-missing
+RUN apt-get install -y apt-utils
 RUN apt-get install -y git
 RUN cd / ; mkdir base ; cd base ; git clone https://github.com/igorhvr/bedlam.git ; chmod -R 755 /base
 RUN apt-get install -y zsh
