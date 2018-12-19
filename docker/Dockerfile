@@ -1,11 +1,11 @@
-FROM java:openjdk-8
+FROM debian:latest
 MAINTAINER Igor Hjelmstrom Vinhas Ribeiro <igorhvr@iasylum.net>
 # Erase apt-get caches, then run update operation.
 
 ENV TERM xterm
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN echo "2015-02-26" > /last_apt-get_update
+RUN echo "2018-12-19" > /last_apt-get_update
 RUN cd /var/lib/apt ; rm -rf * 
 RUN apt-get -y update --fix-missing
 RUN apt-get install -y git
@@ -26,6 +26,8 @@ RUN apt-get -y install unzip
 RUN apt-get -y install psmisc
 RUN apt-get -y install less
 RUN apt-get -y install ntpdate
+
+RUN apt-get -y install openjdk-11-jdk
 
 RUN echo 'root:root' | chpasswd
 RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
