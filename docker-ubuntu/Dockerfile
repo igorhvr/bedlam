@@ -5,29 +5,29 @@ MAINTAINER Igor Hjelmstrom Vinhas Ribeiro <igorhvr@iasylum.net>
 ENV TERM xterm
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN echo "2018-12-18 21h37m" > /last_apt-get_update
+RUN echo "2018-12-21" > /last_apt-get_update
 RUN cd /var/lib/apt ; rm -rf * 
 RUN apt-get -y update --fix-missing
-RUN apt-get install -y apt-utils
+RUN apt-get install -y apt-utils software-properties-common dialog
 RUN apt-get install -y git
 RUN cd / ; mkdir base ; cd base ; git clone https://github.com/igorhvr/bedlam.git ; chmod -R 755 /base
 RUN apt-get install -y zsh
-RUN apt-get install -y curl
+RUN apt-get install -y curl wget
 RUN curl -L https://github.com/igorhvr/oh-my-zsh/raw/master/tools/install.sh | /bin/bash
 RUN apt-get -y install screen
 ADD .screenrc /root/.screenrc
 RUN apt-get -y install mosh
 RUN apt-get -y install htop
-RUN apt-get -y install emacs
+RUN apt-get -y install emacs nano vim w3m
 RUN apt-get -y install telnet
 RUN apt-get -y install w3m
-RUN apt-get -y install openssh-server
+RUN apt-get -y install openssh-server sudo gnupg
 RUN apt-get -y install rsync
 RUN apt-get -y install zip
-RUN apt-get -y install unzip
+RUN apt-get -y install unzip dtrx
 RUN apt-get -y install psmisc
 RUN apt-get -y install less
-RUN apt-get -y install ntpdate
+RUN apt-get -y install ntpdate ntp
 
 RUN apt-get -y install openjdk-11-jdk
 
