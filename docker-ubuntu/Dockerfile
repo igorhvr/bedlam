@@ -10,7 +10,7 @@ RUN cd /var/lib/apt ; rm -rf *
 RUN apt-get -y update --fix-missing
 RUN apt-get install -y apt-utils software-properties-common dialog
 RUN apt-get install -y git
-RUN cd / ; mkdir base ; cd base ; git clone https://github.com/igorhvr/bedlam.git ; chmod -R 755 /base
+RUN cd / ; mkdir base ; cd base ; git clone --depth 32 https://github.com/igorhvr/bedlam.git ; chmod -R 755 /base
 RUN apt-get install -y zsh
 RUN apt-get install -y curl wget
 RUN curl -L https://github.com/igorhvr/oh-my-zsh/raw/master/tools/install.sh | /bin/bash
@@ -29,7 +29,7 @@ RUN apt-get -y install psmisc ncdu
 RUN apt-get -y install less
 RUN apt-get -y install ntpdate ntp
 
-RUN apt-get -y install openjdk-11-jdk
+RUN apt-get -y install openjdk-8-jdk
 
 RUN echo 'root:root' | chpasswd
 RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
