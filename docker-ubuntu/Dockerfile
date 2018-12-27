@@ -5,7 +5,7 @@ MAINTAINER Igor Hjelmstrom Vinhas Ribeiro <igorhvr@iasylum.net>
 ENV TERM xterm
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN echo "2018-12-21" > /last_apt-get_update
+RUN echo "2018-12-27" > /last_bedlam_base_image_update
 RUN cd /var/lib/apt ; rm -rf * 
 RUN apt-get -y update --fix-missing
 RUN apt-get install -y apt-utils software-properties-common dialog
@@ -25,7 +25,7 @@ RUN apt-get -y install openssh-server sudo gnupg
 RUN apt-get -y install rsync
 RUN apt-get -y install zip
 RUN apt-get -y install unzip dtrx
-RUN apt-get -y install psmisc
+RUN apt-get -y install psmisc ncdu
 RUN apt-get -y install less
 RUN apt-get -y install ntpdate ntp
 
@@ -40,9 +40,6 @@ RUN chmod -R 700 /root/.ssh/
 RUN echo '#!/bin/sh\n/etc/init.d/ssh start\n/base/bedlam/schejure/sj\nsleep infinity' > /start-network-services ; chmod 755 /start-network-services
 RUN echo '#!/bin/sh\n/base/bedlam/sisc/sisc-1.16.6/sisc $*' > /sisc ; chmod 755 /sisc
 ADD data/ /data
-
-RUN echo "2018-12-19" > /last_git_pull
-RUN cd /base/bedlam ; git reset --hard HEAD ; git pull
 
 ENV LANG C.UTF-8
 
