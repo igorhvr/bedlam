@@ -47,6 +47,10 @@ RUN apt-get update \
 && jlink --version
 WORKDIR /
 
+ENV JAVA_HOME /opt/jdk
+
+RUN cd /tmp ; wget https://github.com/ajermakovics/jvm-mon/releases/download/0.3/jvm-mon-0.3.tar.gz ; tar -zxvf jvm-mon-0.3.tar.gz ; cd jvm-mon-0.3 ; rsync -avz -P ./ /usr/local/ ; cd /
+
 RUN echo 'root:root' | chpasswd
 RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
