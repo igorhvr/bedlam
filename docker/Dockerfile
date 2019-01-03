@@ -28,6 +28,7 @@ RUN apt-get -y install unzip dtrx
 RUN apt-get -y install psmisc ncdu
 RUN apt-get -y install less
 RUN apt-get -y install ntpdate ntp
+RUN apt-get -y install sysstat
 
 WORKDIR /opt
 RUN apt-get update \
