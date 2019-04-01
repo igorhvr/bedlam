@@ -5,7 +5,7 @@ MAINTAINER Igor Hjelmstrom Vinhas Ribeiro <igorhvr@iasylum.net>
 ENV TERM xterm
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN echo "2018-12-27" > /last_bedlam_base_image_update
+RUN echo "2019-04-01" > /last_bedlam_base_image_update
 RUN cd /var/lib/apt ; rm -rf * 
 RUN apt-get -y update --fix-missing
 RUN apt-get install -y apt-utils software-properties-common dialog
@@ -29,6 +29,7 @@ RUN apt-get -y install psmisc ncdu
 RUN apt-get -y install less
 RUN apt-get -y install ntpdate ntp
 RUN apt-get -y install sysstat
+RUN apt-get -y install tor netcat-openbsd
 
 RUN apt-get -y install openjdk-8-jdk
 
