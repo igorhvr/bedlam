@@ -119,6 +119,10 @@
    adjust-date-timezone
    simulate-error
    zip-with-password
+   select
+   url?
+   url->tmp-file
+   html-encode
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -1433,6 +1437,60 @@
          (destinationzipfilepath ,(->jstring destination-file-path))
          (filepath ,(->jstring source-file-path))))
     destination-file-path)
+
+  ;;
+  ;; Usage:
+  ;;
+  ;; (select <json> field1 -> field2 -> ...)
+  ;;
+  ;; json can be in string format or "alist" format, like the
+  ;; result of fn (vector->list_deeply (json->scheme <json>)).
+  ;;
+  (define-syntax select
+    (syntax-rules (->)
+      ((_ alist-tree-or-json p1)
+       (get p1 (if (string? alist-tree-or-json)
+                   (vector->list_deeply (json->scheme alist-tree-or-json))
+                   alist-tree-or-json)))
+      ((_ alist-tree p1 -> p2)
+       (select (select alist-tree p1) p2))
+      ((_ alist-tree body ... -> p-last)
+       (select (select alist-tree body ...) p-last))))
+
+  (define (url? obj)
+    (and (string? obj)
+         (try-and-if-it-throws-object (#f)
+           (j "new java.net.URL(theurl).toURI();"
+              `((theurl ,(->jstring obj)))))
+         #t))
+
+  (define (url->tmp-file url prefix suffix tmp-dir-path)
+    (let ((tmp-file (j "java.io.File.createTempFile(theprefix, thesuffix, new java.io.File(thetmpdir));"
+                       `((thetmpdir ,(->jstring tmp-dir-path))
+                         (theprefix ,(->jstring prefix))
+                         (thesuffix ,(->jstring suffix))))))
+      (j "org.apache.commons.io.FileUtils.copyURLToFile(new java.net.URL(theurl), tmpfile);"
+         `((theurl ,(->jstring url))
+           (tmpfile ,tmp-file)))
+      (->string (j "tmpfile.getPath();" `((tmpfile ,tmp-file))))))
+
+  ;;
+  ;; HTML encode anything: string, lists, vectors, json schemes etc.
+  ;;
+  ;; Use this to avoid XSS attacks.
+  ;;
+  (define (html-encode obj)
+    (cond [(vector? obj)
+           (list->vector
+            (map (lambda (e)
+                   (html-encode e))
+                 (vector->list obj)))]
+          [(pair? obj)
+           (cons (html-encode (car obj))
+                 (html-encode (cdr obj)))]
+          [(string? obj)
+           (->scm-object (j "org.owasp.encoder.Encode.forHtml(a);" `((a ,(->jstring obj)))))]
+          [else obj]))
 
   (create-shortcuts (avg -> average))
 
