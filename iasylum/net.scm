@@ -80,6 +80,10 @@
                )))
   
   ;; TODO file upload - http://stackoverflow.com/questions/1067655/how-to-upload-a-file-using-java-httpclient-library-working-with-php
+  ;; TODO Use code similar to
+  ;; HttpClient httpClient = HttpClients.custom().setDefaultRequestConfig(
+  ;; RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD).build()).build();
+  ;; to deal with Invalid cookie header errors.
   (define http-call-post-string/string
     (lambda* (destinationUrl contents (headers: headers '()))
              (let ((httpclient (j "httpclient = org.apache.http.impl.client.HttpClients.createDefault();" `((httpclient))))
