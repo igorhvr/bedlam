@@ -13,13 +13,7 @@
                                                                                   {:api-url \"https://slack.com/api\" :token strtoken}
                                                                                   strchannel  strmsg {:username strusername})"
 								     `((strchannel ,(->jstring channel))
-
-								       ;; TODO: This should not be hard-coded. This token can be used
-								       ;; by an attacker. After a proper place is setup for This
-								       ;; the token should be discared/replaced using
-								       ;; https://api.slack.com/custom-integrations/legacy-tokens
 								       (strtoken ,(->jstring token))
-								       
 								       (strusername ,(->jstring name))
 								       (strmsg ,(->jstring msg))
 								       )
