@@ -830,7 +830,7 @@
                                                 obj)))))
                      (with-failure-continuation
                       (lambda (error error-continuation)
-                        (log-info "Probably this error is being purposely ignored:" error)
+                        (log-debug "Probably this error is being purposely ignored:" error)
                         (print-stack-trace error-continuation)
                         (force-result error error-continuation))
                       (lambda ()
