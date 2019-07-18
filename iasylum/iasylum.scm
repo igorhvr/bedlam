@@ -1376,6 +1376,7 @@
 
   ;;
   ;; It can receive a time, date or jdate.
+  ;; E.g.: 5 minutes ago.
   ;;
   (define (get-relative-time date-or-time)
     (->string (j "new org.ocpsoft.prettytime.PrettyTime().format(dot);"
