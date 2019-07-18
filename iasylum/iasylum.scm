@@ -226,6 +226,7 @@
   (define-syntax nyi
     (lambda (x)    
       (syntax-case x ()
+        ((_) (syntax (throw (make-error "Not yet implemented and no dummy value provided."))))
         ((_ fname) (syntax (_ fname #t)))
         ((_ fname dummy-value)
          (let* ((symbolic-name (syntax-object->datum (syntax fname)))
