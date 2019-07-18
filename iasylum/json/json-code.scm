@@ -283,3 +283,39 @@
   (d/n 
    (add-missing-properties-to-json-object (json->scheme "{\"xyz\" : false, \"deposit_info\": \"{\\\"address\\\": \\\"6401691a-2106-4486-b723-9a3c598c37c5\\\", \\\"currency\\\": \\\"brl\\\", \\\"receipt\\\": \\\"CANCELAR_DEPOSITO_TESTE\\\", \\\"sourceBankId\\\": \\\"001\\\", \\\"destinationBankId\\\": \\\"001\\\"}\", \"declared_value\": \"99/100\"}") (json->scheme "{\"xy\" : 13, \"deposit_info\": \"{\\\"address\\\": \\\"6401691a-2106-4486-b723-9a3c598c37c5\\\", \\\"currency\\\": \\\"brl\\\", \\\"receipt\\\": \\\"CANCELAR_DEPOSITO_TESTE\\\", \\\"sourceBankId\\\": \\\"001\\\", \\\"destinationBankId\\\": \\\"001\\\"}\", \"declared_value\": \"99/100\"}") 'return-parsed-object: #t 'sort-result: #t))
   (throw (make-error "TODO: Add assertion. For now verify manually above.")))
+
+;; This allows us to transform a list with a single header line into a JSON object.
+;;
+;; Sample usage:
+;; (let* ((ss (excel-spreadsheet->list "/tmp/spreadsheet.xls"))(sheet (car ss)))(d/n (header-and-data-list->json sheet 'value-to-consider-blank: 'blank)))
+(define* (header-and-data-list->json p
+                                     (value-to-consider-blank: value-to-consider-blank #f)
+                                     (fill-blanks: fill-blanks #f)
+                                     (fill-blanks-with: blank-value #f)
+                                     (should-beautify-json: should-beautify-json #t)
+                                     (return-object: return-object #f))
+  (when (not fill-blanks) (assert (not blank-value)))
+
+  (let ((result-object
+         (let* ((column-names (list->vector (car p)))
+                (data (cdr p))
+                (data-vector (list->vector data)))
+           (list-ec (: data-index 0 (vector-length data-vector))
+                    (let ((current-row (list-ref data data-index)))
+                      (list->vector (filter
+                                     (match-lambda
+                                      ((key . value)
+                                       (if (not fill-blanks) value #t )))
+                                     (map
+                                      (lambda (label-position value)
+                                        (cons (vector-ref column-names label-position)
+                                              (or (and (not (eqv? value-to-consider-blank value)) value) blank-value)))
+                                      (list-ec (: i 0 (vector-length column-names)) i)
+                                      (append current-row (map (lambda (ignored)
+                                                                 value-to-consider-blank)
+                                                               (iota (- (vector-length column-names) (length current-row)))))))))))))
+    (if return-object result-object
+        (let ((string-result (scheme->json result-object)))
+          (if should-beautify-json
+              (beautify-json string-result)
+              string-result)))))

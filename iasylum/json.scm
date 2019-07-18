@@ -6,7 +6,7 @@
 (require-extension (srfi 19))
 
 (module iasylum/json
-  (json-read json-write scheme->json json->scheme beautify-json json->sxml json->sxml-block sort-json-object-by-keys add-missing-properties-to-json-object)
+  (json-read json-write scheme->json json->scheme beautify-json json->sxml json->sxml-block sort-json-object-by-keys add-missing-properties-to-json-object header-and-data-list->json)
   
   (include "json/json-code.scm")  
 
