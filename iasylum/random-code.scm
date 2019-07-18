@@ -65,16 +65,15 @@
 
 ;; suitable for variable names
 (define* (random-var (size 20) (ignore-queue: ignore-queue #f))
+  (assert (and (>= size 1) (<= size 64)))
   (if (or ignore-queue
-          (not (= 20 size)))
+          (> size 20))
       (begin
-        (assert (and (>= size 1)
-                     (<= size 64)))
         (string-append* "v" (substring (sha256 (gensym)) 0 size)))
       (begin
         (if (compare-and-set-atomic-boolean! started #f #t)
             (random/start))
-        (java-unwrap (take random-var-queue)))))
+        (substring (java-unwrap (take random-var-queue)) 0 (+ 1 size)))))
 
 (define (pseudo-random-uuid)
   (->string (j "java.util.UUID.randomUUID();")))
