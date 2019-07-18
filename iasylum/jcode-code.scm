@@ -373,6 +373,8 @@
 
 (define (safe-java-unwrap o) (if (java-null? o) '() (java-unwrap o)))
 
+(define (get-class-full-name obj) (j "ob.getClass().toString();" `((ob ,obj))))
+
 (define j)
 
 (define (startup-interpreter tint)
