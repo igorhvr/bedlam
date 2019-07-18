@@ -32,8 +32,9 @@
    watched-parallel
    debug-watched-parallel
    watched-thread/spawn
-   r r-split r/s r/d r-base ; it is dangerous, see safe-bash-run
-   safe-bash-run
+   r r-split r/s r/d r-base ; it is dangerous, improper handling of string arguments creates security liabilities. see safe-bash-run
+   safe-bash-run ; also dangerous - will deadlock with large stdout outputs!
+   safe-run ; child of r and safe-bash-run -> Use this one! Hopefully the last.
    dp
    smart-compile
    flatten
@@ -378,7 +379,7 @@
         (define result (open-output-string))  
         (define output-lock (mutex/new))
 
-        (set! process-return-code (r-base cmd-string result output-lock result output-lock))
+        (set! process-return-code (r-base 'cmd-string: cmd-string result output-lock result output-lock))
         
         (let ((final-result (get-output-string result)))
           (if get-return-code
@@ -393,7 +394,7 @@
       (define result-err (open-output-string))      
       (define err-lock (mutex/new))
 
-      (set! process-return-code (r-base cmd-string result-out out-lock result-err err-lock))
+      (set! process-return-code (r-base 'cmd-string: cmd-string result-out out-lock result-err err-lock))
         
         (let ((final-result-out (get-output-string result-out))
               (final-result-err (get-output-string result-err)))          
@@ -402,13 +403,17 @@
   (define r/d
     (lambda (cmd-string)
       (define l (mutex/new))
-      (r-base cmd-string (current-output-port) l (current-output-port) l)
+      (r-base 'cmd-string: cmd-string (current-output-port) l (current-output-port) l)
       (void)))
   
   (define r-base
-    (lambda* (cmd-string stdout stdout-output-lock stderr stderr-output-lock)
+    (lambda* ((cmd-string: cmd-string #f) (cmd-list: cmd-list #f)
+              stdout stdout-output-lock stderr stderr-output-lock)
+             (assert (or cmd-string cmd-list))
              ((lambda ()
-               (define process (spawn-process "bash" (list "-c" cmd-string)))
+               (define process (or (and cmd-string (spawn-process "bash" (list "-c" cmd-string)))
+                                   (and cmd-list (spawn-process (car cmd-list) (cdr cmd-list)))))
+
                (define process-lock (mutex/new))
                (define process-return-code)
                (define stdout-thread)
@@ -435,6 +440,17 @@
 
 
   (define r/s (lambda p (r (apply string-append p))))
+
+  (define safe-run
+    (lambda command-and-args
+      (define process-return-code)
+      (define result (open-output-string))
+      (define output-lock (mutex/new))
+
+      (set! process-return-code (r-base 'cmd-list: command-and-args result output-lock result output-lock))
+
+      (let ((final-result (get-output-string result)))
+        final-result)))
 
   ;;
   ;; This is safer than r-base and derived like r/s and r/d. This fn filters a lot
