@@ -109,6 +109,7 @@
    get-env
    validate-cpf
    get-relative-time
+   get-relative-duration
    pretty-print-to-string
    split-string-comma
    split-string
@@ -1358,6 +1359,15 @@
   (define (get-relative-time date-or-time)
     (->string (j "new org.ocpsoft.prettytime.PrettyTime().format(dot);"
                  `((dot ,(->jobject date-or-time))))))
+
+  ;;
+  ;; It can receive a time, date or jdate.
+  ;; E.g.: 5 minutes.
+  ;;
+  (define (get-relative-duration start-date-or-time end-date-or-time)
+    (->string (j "new org.ocpsoft.prettytime.PrettyTime(obj1).format(obj2);"
+                 `((obj1 ,(->jobject start-date-or-time))
+                   (obj2 ,(->jobject end-date-or-time))))))
 
   (define (pretty-print-to-string obj)
     (let ((stro (open-output-string)))
