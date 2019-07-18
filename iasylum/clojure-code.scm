@@ -23,7 +23,9 @@
   (clj "(val (find cljmap (keyword k)))" `((cljmap ,clj-map) (k ,(->jstring key)))))
 
 (define (symbol->clj-keyword symbol)
-  (j "clojure.lang.Keyword.intern(symbol)" `((symbol ,(->jstring symbol)))))
+  ((generic-java-method 'intern)
+   (java-null
+    (java-class '|clojure.lang.Keyword|)) (->jstring symbol)))
 
 (define (symbol->clj-symbol symbol)
   (j "clojure.lang.Symbol.create(symbol)" `((symbol ,(->jstring symbol)))))
@@ -73,6 +75,49 @@
 ;;
 (define (alist->persistent-map scheme-alist)
   (j "clojure.lang.PersistentArrayMap.create(themap);" `((themap ,(->jmap scheme-alist)))))
+
+(define (persistent-vector-size pv)
+  (->number (j "pv.count();" `((pv ,pv)))))
+
+(define (get-iterator-from-persistent-hash-set phs)
+  ((generic-java-method '|iterator|) phs))
+
+(define (persistent-hash-set->jarray phs)
+  ((generic-java-method '|toArray|) phs))
+
+(define* (map-persistent-vector fn pv
+                                (start: start 0)
+                                (end: end #f))
+  (let* ((size (persistent-vector-size pv))
+         (start (max (min start (- size 1)) 0))
+         (end (min (or end size) size)))
+    (list-ec (: i start end)
+             (fn (j "pv.nth(iii);" `((pv ,pv)
+                                     (iii ,(->jint i))))))))
+
+(define (only-persistent-vector pv)
+  (assert (= 1 (persistent-vector-size pv)))
+  ((generic-java-method '|nth|) pv (->jint 0)))
+
+(define (get-persistent-vector pv index)
+  ((generic-java-method '|nth|) pv (->jint index)))
+
+(define (get-keys-persistent-hash-map phm)
+  (->scm-object (j "phm.keySet();" `((phm ,phm)))))
+
+(define* (get-value-persistent-hash-map phm key
+					(default-value: default-value #f)
+                                        (convert-result: convert-result #t))
+  (let* ((key (if (symbol? key)
+                  (symbol->clj-keyword key)
+                key))
+	 (default (->jstring "80414c52-346f-47e3-b775-f2a5d5556422"))
+	 (result ((generic-java-method '|valAt|) phm key default)))
+    (if (->boolean ((generic-java-method '|equals|) default result))
+	default-value
+        (if convert-result
+            (->scm-object result)
+            result))))
 
 (define (create-runner)
   (j

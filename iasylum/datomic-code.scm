@@ -2,19 +2,28 @@
 ;; Automatically convert input (sources) to jobject
 ;; and output to scm-object.
 ;;
-(define (datomic/query qry-input . sources)
+;; raw is much faster.
+;;
+(define* (datomic/query (raw: raw #f) qry-input . sources)
   (log-time ("Query execution" log-trace log-warn 300 ms)
-    (->scm-object
-     (let ((sources (jlist->jarray (->jobject sources)))
-           (qry (if (string? qry-input)
-                    (->jstring qry-input)
-                    qry-input)))
-       (log-trace "Will execute query: " (cut-log (->string qry))
-                  "with sources:" (cut-log (jarray->string sources)))
-       (let ((result (j "datomic.Peer.q(qry, sources);" `((sources ,sources)
-                                                          (qry ,qry)))))
-         (log-trace "=> Query result: " (cut-log (iasylum-write-string result)))
-         result)))))
+    (let ((raw-result
+           (let ((sources (jlist->jarray (->jobject sources)))
+                 (qry (if (string? qry-input)
+                          (->jstring qry-input)
+                          qry-input)))
+             (log-trace "Will execute query: " (cut-log (->string qry))
+                        "with sources:" (cut-log (jarray->string sources)))
+             (let ((result (j "datomic.Peer.q(qry, sources);" `((sources ,sources)
+                                                                (qry ,qry)))))
+               (if (not raw)
+                   (log-trace "=> Query result: " (cut-log (iasylum-write-string result)))
+                   (log-trace "=> Query raw result: " (->number
+                                                       (j "(theresult instanceof java.util.HashSet) ? theresult.size() : theresult.count()"
+                                                          `((theresult ,result))))))
+               result))))
+      (if raw
+          raw-result
+          (->scm-object raw-result)))))
 
 ;;
 ;; DEPRECATED: This is deprecated because it's TOO DANGEROUS when the caller is expecting
@@ -28,9 +37,9 @@
 ;; (map (lambda (e) (display e)) (datomic/smart-query ...)) would fail miserably
 ;; (and probably silently and late) when the result has only one or no element.
 ;;
-(define (datomic/smart-query qry . sources)
+(define* (datomic/smart-query (raw: raw #f) qry . sources)
   (log-warn "datomic/smart-query **IS DEPRECATED!** Please use datomic/smart-query-single or datomic/smart-query-multiple instead!")
-  (let ((result (apply datomic/query (flatten (list qry sources)))))
+  (let ((result (apply datomic/query (flatten (list 'raw: raw qry sources)))))
     (match result
       [((tresult)) tresult]
       [() #f]
@@ -46,8 +55,8 @@
 ;; Example: (datomic/smart-query-single "[:find ?v :where ?e :att ?v]" db) will return ?v and
 ;;          (datomic/smart-query-single "[:find ?e ?v :where ?e :att ?v]" db) will return (list ?e ?v)
 ;;
-(define (datomic/smart-query-single qry . sources)
-  (let ((result (apply datomic/query (flatten (list qry sources)))))
+(define* (datomic/smart-query-single (raw: raw #f) qry . sources)
+  (let ((result (apply datomic/query (flatten (list 'raw: raw qry sources)))))
     (match result
       [((single-result-only-att)) single-result-only-att]
       [(tuple) tuple]
@@ -58,8 +67,8 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 ;;
 ;; Always will return a list of results. Use this when the result can be a set of elements.
 ;;
-(define (datomic/smart-query-multiple qry . sources)
-  (apply datomic/query (flatten (list qry sources))))
+(define* (datomic/smart-query-multiple (raw: raw #f) qry . sources)
+  (apply datomic/query (flatten (list 'raw: raw qry sources))))
 
 (define* (datomic/connection uri (should-create? #f) (want-to-know-if-created? #f))
   (let ((did-I-create-it? (if should-create?
@@ -115,9 +124,9 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 ;; This is deprecated: see datomic/smart-query to more information.
 ;; Use datomic/make-query-function-with-one-connection-included instead.
 ;;
-(define (datomic/make-with-one-connection-included-query-function connection-retriever)
+(define* (datomic/make-with-one-connection-included-query-function (raw: raw #f) connection-retriever)
   (log-warn "datomic/make-with-one-connection-included-query-function **IS DEPRECATED!** Please read the doc for more info. Use datomic/make-query-function-with-one-connection-included instead.")
-  (datomic/make-query-function-with-one-connection-included datomic/smart-query connection-retriever))
+  (datomic/make-query-function-with-one-connection-included datomic/smart-query connection-retriever 'raw: raw))
 
 ;;
 ;; - smart-query-lambda can be datomic/smart-query-multiple or datomic/smart-query-single depending on
@@ -158,6 +167,7 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 ;;
 (define* (datomic/make-query-function-with-one-connection-included smart-query-lambda
                                                                    connection-retriever
+                                                                   (raw: raw #f)
                                                                    (since: since #f)
                                                                    (until: until #f)
                                                                    (include-history: include-history #f))
@@ -170,11 +180,13 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
     (if (not include-history)
         (if (not since)
             (cut smart-query-lambda
+                 'raw: raw
                  <> ; Query.
                  (last-db-retriever)
                  <...> ; Whatever other insanity and/or fixed parameters one may pass.
                  )
             (cut smart-query-lambda
+                 'raw: raw
                  <> ; Query.
                  (last-db-retriever)
                  (datomic/since (last-db-retriever)
@@ -183,12 +195,14 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
                  ))
         (if (not since)
             (cut smart-query-lambda
+                 'raw: raw
                  <> ; Query.
                  (last-db-retriever)
                  (datomic/db-history (last-db-retriever))
                  <...> ; Whatever other insanity and/or fixed parameters one may pass.
                  )
             (cut smart-query-lambda
+                 'raw: raw
                  <> ; Query.
                  (last-db-retriever)
                  (datomic/since (last-db-retriever)
@@ -356,8 +370,9 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 ;; Return a list of datomic tx ids of an specific entity sorted
 ;; by the most recent to the oldest one.
 ;;
-(define (datomic/get-history connection-retriever entity-id)
+(define* (datomic/get-history (raw: raw #f) connection-retriever entity-id)
   (sort < (flatten (datomic/smart-query-multiple
+                    'raw: raw
                     "[:find ?tx
                       :in $ ?e
                       :where [?e _ _ ?tx]]"
@@ -426,4 +441,3 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
                   (datomic/transact -> d/t)
                   (datomic/db -> d/db)
                   (datomic/smart-transact -> d/st))
-

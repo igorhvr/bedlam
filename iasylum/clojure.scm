@@ -20,6 +20,14 @@
    number->clj-number
    list->persistent-vector
    alist->persistent-map
+   persistent-vector-size
+   map-persistent-vector
+   only-persistent-vector
+   get-keys-persistent-hash-map
+   get-value-persistent-hash-map
+   get-iterator-from-persistent-hash-set
+   persistent-hash-set->jarray
+   get-persistent-vector
    )
   
   (include "clojure-code.scm"))
