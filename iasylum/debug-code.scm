@@ -33,6 +33,16 @@
         (lambda (block-k)
           (with-failure-continuation  (lambda (error-record error-k) (debug error-record error-k block-k))
                                       (lambda () (begin expressions ...))))))))
+
+  (define-syntax vb-mode
+    (syntax-rules ()
+      ((_ expressions ...)
+       (call/cc
+        (lambda (block-k)
+          (with-failure-continuation  (lambda (error-record error-k)
+                                        (d/n "VB Mode on. Will ignore: " error-record)
+                                        (error-k #t))
+                                      (lambda () (begin expressions ...))))))))
   (define (save-to-somewhere data)
     (let ((where-to-save (gensym)))
       (putprop where-to-save data)
