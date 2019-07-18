@@ -1,11 +1,14 @@
 ;(require-extension (lib iasylum/irregex)) ; XXX Dependency exists, but proper require-extension fails currently.
 
 (module iasylum/math
-  (fact log* mod exact-floor decimal-to-fractions-inside-string)
+  (fact log* mod exact-floor exact-ceiling decimal-to-fractions-inside-string)
 
   (define (exact-floor n)
     (let ((n (inexact->exact n)))
       (let ((up (numerator n)) (down (denominator n))) (/ (- up (mod up down)) down))))
+
+  (define (exact-ceiling n)
+    (* -1 (exact-floor (* -1 (inexact->exact n)))))
   
   (define mod modulo)
   (define (fact n) (if (or (= 0 n) (= 1 n)) 1 (* n (fact (- n 1)))))
@@ -26,4 +29,4 @@
                               (* (if (string=? "-" sign) -1 1)
                                  (+ (if (string=? "" beforedot) 0 (string->number beforedot))
                                     (/ (string->number afterdot) (expt 10 (string-length afterdot))))))))))
-)  
+)
