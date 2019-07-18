@@ -61,6 +61,7 @@
    def
    times multiple-values->list
    sleep-milliseconds sleep-seconds sleep-minutes sleep-hours
+   has-no-duplicates?
    list-of-type?
    list-of
    alist?
@@ -738,7 +739,9 @@
 
   (define (uuid-string) (->string (j "new com.eaio.uuid.UUID().toString();")))
   (define (uuid? uuid) (try-and-if-it-fails-object (#f) (string->juuid uuid)))
-  
+
+  (define* (has-no-duplicates? l (comparison-proc equal?)) (and (= (length l) (length (delete-duplicates l comparison-proc))) l))
+
   ;; Imported from MIT Scheme runtime/list.scm
   (define (list-of-type? object predicate)
     (let loop ((l1 object) (l2 object))
