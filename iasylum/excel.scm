@@ -77,21 +77,26 @@
 
   (define excel-row->scheme
     (lambda (row)
-      (iterable->list
-       row
-       (lambda (hssfcell)
-         (let ((cell-type (->number (j "h.getCellType()" `((h ,hssfcell))))))
-           (cond ((= 0 cell-type) ;;CELL_TYPE_NUMERIC
-                  (->number (j "h.getNumericCellValue()" `((h ,hssfcell))))) 
-                 ((= 1 cell-type) ;;CELL_TYPE_STRING
-                  (->string (j "h.toString()" `((h ,hssfcell))))) 
-                 ((= 2 cell-type) ;; CELL_TYPE_FORMULA
-                  (cons 'formula (->string (j "h.getCellFormula()" `((h ,hssfcell)))))) 
-                 ((= 3 cell-type) '()) ;; CELL_TYPE_BLANK
-                 ((= 4 cell-type) ;; CELL_TYPE_BOOLEAN
-                  (->boolean (j "h.getBooleanCellValue()" `((h ,hssfcell))))) 
-                 (else ;;CELL_TYPE_ERROR (5) or anything else
-                  (error "Unexpected cell type."))))))))
+      (let ((p
+             (iterable->list
+              row
+              (lambda (hssfcell)
+                (let* ((cell-type (->number (j "h.getCellType()" `((h ,hssfcell)))))
+                       (cell-position (->number (j "h.getColumnIndex()" `((h ,hssfcell))))))
+                  (cons cell-position
+                        (cond ((= 0 cell-type) ;;CELL_TYPE_NUMERIC
+                               (->number (j "h.getNumericCellValue()" `((h ,hssfcell))))) 
+                              ((= 1 cell-type) ;;CELL_TYPE_STRING
+                               (->string (j "h.toString()" `((h ,hssfcell))))) 
+                              ((= 2 cell-type) ;; CELL_TYPE_FORMULA
+                               (cons 'formula (->string (j "h.getCellFormula()" `((h ,hssfcell))))))
+                              ((= 3 cell-type)
+                               'blank) ;; CELL_TYPE_BLANK
+                              ((= 4 cell-type) ;; CELL_TYPE_BOOLEAN
+                               (->boolean (j "h.getBooleanCellValue()" `((h ,hssfcell))))) 
+                              (else ;;CELL_TYPE_ERROR (5) or anything else
+                               (error "Unexpected cell type.")))))))))
+        (map cdr (sort (lambda (p1 p2) (< (car p1) (car p2))) (apply lset-adjoin (lambda (p1 p2) (= (car p1) (car p2)))  (cons p (list-ec (: i 0 (car (last p))) `(,i . blank)))))))))
   
   (define load-excel-sheet-data
     (lambda (sheet)
