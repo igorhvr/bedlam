@@ -560,6 +560,8 @@
 (add-lib "libphonenumber/libphonenumber-8.9.9.jar")
 (require-extension (lib iasylum/phone))
 
+(add-lib "u/opendmk.jar")
+
 (set! load original-load)
 
 (define bedlam-loaded-and-ready-to-use #t)

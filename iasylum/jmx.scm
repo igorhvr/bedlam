@@ -7,7 +7,31 @@
    build-jmx-thunk-bean add-thunk-to-jmx
    build-jmx-one-string-parameter-function-bean
    add-one-string-parameter-function-to-jmx
+   expose-jmx-as-http-service
    )
+
+  (define expose-jmx-as-http-service
+    (lambda* ((port: port 12000)
+              (username: username #f) (password: password #f)
+              (object-name: object-name "jmxhtmladapter"))
+             (assert (xnor username password))
+
+             (j
+              "Object adapter = new com.sun.jdmk.comm.HtmlAdaptorServer();
+               Object adapterName = new javax.management.ObjectName(\"SimpleAgent:name=\"+jmxnameparameter+\",port=\"+portparameter);
+               adapter.setPort(portparameter);
+               if (usernameparameter != null && passwordparameter != null) {
+                   adapter.addUserAuthenticationInfo(new com.sun.jdmk.comm.AuthInfo(usernameparameter,passwordparameter));
+               }
+               java.lang.management.ManagementFactory.getPlatformMBeanServer().registerMBean(adapter, adapterName);
+               adapter.start();
+               Runtime.getRuntime().addShutdownHook(new Thread(){public void run(){adapter.stop();}});"
+              `((portparameter ,(->jint port))
+                (jmxnameparameter ,(->jstring object-name))
+                (usernameparameter ,(or (and username (->jstring username))
+                                        jnull))
+                (passwordparameter ,(or (and password (->jstring password))
+                                                  jnull))))))
 
   (define (jmx-identifier category name) (j "new javax.management.ObjectName(category, \"type\", name);" `((category ,(->jstring category)) (name ,(->jstring name)))))
 
@@ -40,4 +64,3 @@
     (add-one-string-parameter-function-to-jmx test-function "CatBla" "TestingNowOneStringParameterFunction"))
   )
 
-  
