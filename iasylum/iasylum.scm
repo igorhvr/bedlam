@@ -56,6 +56,7 @@
    create-temporary-directory
    string-drop-both
    xor
+   xnor
    ensure-zipped-copy
    vector-binary-search
    function fn function* fn*
@@ -696,7 +697,11 @@
       (cond
        (a (if (not b) a #f))
        (else b))))
-  
+
+  (define xnor
+    (lambda (a b)
+      (not (xor a b))))
+
   ;; Ensures there is a .zip version of each file in a given directory.
   (define (ensure-zipped-copy dir)
     (let* ((file-list (sort (rglob dir) string<))
