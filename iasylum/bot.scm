@@ -17,4 +17,4 @@
 ;;			          (cons "wheel-riadvargas2" (riad2 'inner-queue))))
 
 ;; Sample code:
-;;(define inq (make-queue))(define outq (make-queue))(define mybot (work-queue-bot 'in-work-queue: inq 'out-work-queue: outq 'name: "igorhvr" 'server-hostname: "localhost-ia" 'server-port: 16667 'server-password: "igorhvr/ia:igorhvr" 'channel: "ia"))
+;;(define inq (make-queue))(define outq (make-queue))(define mybot (work-queue-bot 'in-work-queue: inq 'out-work-queue: outq 'name: "igorhvr" 'channel: "smoke" 'token: "xoxp-1111111111-111111111111-111111111111-11111111111111111111111111111111"))
