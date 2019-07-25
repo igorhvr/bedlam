@@ -488,10 +488,10 @@
 
 (add-lib "net/commons-codec-1.6.jar")
 (add-lib "net/fluent-hc-4.3.4.jar")
-(add-lib "net/httpclient-cache-4.3.6.jar")
+(add-lib "net/httpclient-4.5.2.jar")
+(add-lib "net/httpclient-cache-4.5.2.jar")
 (add-lib "net/httpmime-4.3.4.jar")
 (add-lib "net/httpcore-4.3.3.jar")
-(add-lib "net/httpclient-4.3.6.jar")
 
 (add-lib "jackson/jackson-databind-2.6.6.jar")
 (add-lib "jackson/jackson-datatype-joda-2.6.6.jar")
