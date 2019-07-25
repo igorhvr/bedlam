@@ -1,0 +1,26 @@
+#! /usr/bin/env /base/bedlam/bin/bedlam-script
+;; -*- mode: scheme; -*-
+
+(define (eval-string s)
+  (eval (read (open-input-string s))))
+
+(define (eval-string/s s)
+  (iasylum-write-string (eval-string s)))
+
+(define (jobject-function-to-scm-string-fn f)
+  (lambda (p)
+          (iasylum-write-string (->scm-object (f p)))))
+
+(define (main p)
+  (let* ((str (irregex-match-substring (irregex-search '(seq (submatch-named nm (+ digit)) ) (cadr p) ) 'nm))
+         (port (string->number str)))
+    (expose-jmx-as-http-service 'port: port 'username: #f 'password: #f 'object-name: "jmxmehtmladapter")
+    (add-one-string-parameter-function-to-jmx eval-string/s "jmxme" "eval")
+    (add-one-string-parameter-function-to-jmx r/s "jmxme" "run-bash")
+    (add-one-string-parameter-function-to-jmx (jobject-function-to-scm-string-fn j) "jmxme" "run-java")
+    (add-one-string-parameter-function-to-jmx (jobject-function-to-scm-string-fn clj) "jmxme" "run-clojure")
+    (add-one-string-parameter-function-to-jmx (jobject-function-to-scm-string-fn js) "jmxme" "run-javascript")
+    (d/n "Listening @ " port  ". Type enter to stop.")
+    (read-line)
+    (void)))
+
