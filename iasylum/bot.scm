@@ -4,10 +4,12 @@
 (require-extension (lib iasylum/clojure))
 
 (module iasylum/bot
-  ((work-queue-bot)
-   (create-reader-bot))
+  (irc/work-queue-bot irc/create-bot-on-channel
+   slack/work-queue-bot slack/create-bot-on-channel
 
-  (include "bot-code.scm") 
+   bot/add-global-help-and-exit-commands bot/add-global-commands  bot-on-channel-command-processor)
+
+  (include "bot-code.scm")
 )
 
 ;; (define riad1 (make-queue)) (define riad2 (make-queue))
