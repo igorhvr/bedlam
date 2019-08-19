@@ -62,7 +62,7 @@
    function fn function* fn*
    def
    times multiple-values->list
-   sleep-milliseconds sleep-seconds sleep-minutes sleep-hours
+   sleep-milliseconds sleep-seconds sleep-minutes sleep-hours sleep-forever
    has-no-duplicates?
    list-of-type?
    list-of
@@ -144,6 +144,7 @@
   (define sleep-seconds (lambda (t) (sleep-milliseconds (* 1000 t))))
   (define sleep-minutes (lambda (t) (sleep-seconds (* 60 t))))
   (define sleep-hours (lambda (t) (sleep-minutes (* 60 t))))
+  (define sleep-forever (lambda ignored (let v () (sleep-hours 1000000) (v))))
 
   (import hashtable)
   (import file-manipulation)  ;; rglob uses this.
