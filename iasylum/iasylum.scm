@@ -123,6 +123,7 @@
    select
    url?
    url->tmp-file
+   tmp-file
    html-encode
    )
 
@@ -1480,6 +1481,18 @@
       (j "org.apache.commons.io.FileUtils.copyURLToFile(new java.net.URL(theurl), tmpfile);"
          `((theurl ,(->jstring url))
            (tmpfile ,tmp-file)))
+      (->string (j "tmpfile.getPath();" `((tmpfile ,tmp-file))))))
+
+(define* (tmp-file (prefix: prefix "bedlam_temporary_file") (suffix: suffix ".tmp") (tmp-dir-path: tmp-dir-path #f) )
+    (let ((tmp-file
+           (if tmp-dir-path
+               (j "java.io.File.createTempFile(theprefix+\"_\", thesuffix, new java.io.File(thetmpdir));"
+                  `((thetmpdir ,(->jstring tmp-dir-path))
+                    (theprefix ,(->jstring prefix))
+                    (thesuffix ,(->jstring suffix))))
+               (j "java.io.File.createTempFile(theprefix+\"_\", thesuffix);"
+                  `((theprefix ,(->jstring prefix))
+                    (thesuffix ,(->jstring suffix)))))))
       (->string (j "tmpfile.getPath();" `((tmpfile ,tmp-file))))))
 
   ;;
