@@ -100,3 +100,30 @@
 
 ;; Sample usage:
 ;; (load "/base/bedlam/iasylum/crypto/crypto-code.scm") (define keypair (generate-keypair 'sjcl_el_gammal_ecc_c256_key))(define keypair-pub (match keypair ((public secret) public)))(define keypair-sec (match keypair ((public secret) secret))) (asymmetric-decrypt keypair-sec (asymmetric-encrypt keypair-pub "1234567"))
+
+(define* (openssl-rsautl/encrypt (pkcs8-key-string: pkcs8-key-string) (data: data))
+    (let* ((pkcs8-key-file (string->file pkcs8-key-string))
+          (data-file (string->file data))
+          (command (string-append "cd /tmp/t ; openssl rsautl -encrypt -oaep -pubin -inkey "
+                      pkcs8-key-file " -in " data-file  " -out - | base64")))
+      (r/s command)))
+
+(define* (openssl-rsautl/decrypt (rsa-key-string: rsa-key-string) (data: data))
+    (let* ((rsa-key-file (string->file rsa-key-string))
+           (data-file (string->file data))
+           (command (string-append "base64 -d " data-file  " | openssl rsautl -decrypt -oaep -inkey " rsa-key-file  " -in - -out -")))
+      (r/s command)))
+
+;; We will use this to get the format needed for encryption from a provided public key.
+(define (openssl-rsautl/chef-pub-or-sec-key-to-pub-pkcs8-format key)
+  (let ((key-file (string->file key)))
+    (r/s "chmod 600 " key-file)
+    (let ((result (r/s "ssh-keygen -e -f " key-file " -m PKCS8")))
+      (secure-file-delete! key-file)
+      result)))
+
+(define (openssl-rsautl/test-encryption-roundtrip)
+  (assert (string=? "round-trip-data"
+                    (openssl-rsautl/decrypt 'rsa-key-string: "-----BEGIN RSA PRIVATE KEY-----\nMIIEogIBAAKCAQEAu5u3Y/mlEu6HvheSJTnvOx1vrMGQJBNK8N+B5QhaLORDZ56r\n6pD245xwpeAnvjbk9WyWpsufhZJY16vTN+kQKy411h5aqyLT8MpZc4pjEBgeivHJ\n0HlnKoa+3k6f/L+lzBJUYR8JuBi+g69Q6/WDSAdfSeIVbwo8ZQ8HYr7mHDBoHw9C\n0VzIuXVaaKvgdiUloMGlDECyJSJCsFLtVP4UOyCP1khP0IUR6MwB3bNEPwCUqGiF\nf7Nw11a+AEbD/JBbMZ3xynoxy9U2tZZjjkJhF4qtj7zLCqovfNvBtvzYftod3Aoc\nM85bcvY3RmFCrSAf6pIfHNgQ5B+VlWqprfmMzQIDAQABAoIBACJQefukRsgurs9b\nGlUKwrIKUUnE4atnh/aEuwp8O5ooahfC0ukFeNLq40PDuyE0gy5MnUWGyvewa+WO\nvQRl8ZokSp6OUMEqjp9lM3VJo5LnBncdgG9MNU129eRNdz/Qge/QjnRxK+LrS7Vk\nVKXD8y4ygwBNhOQZeDB3zj8GcapH9CgZirt5kVcbM24wCXD7+zrU865cf1goiIaW\njtaew1OB7yfwbrswy0u9b/VVupm+Ek1jrgPfhFbwztvbLwwceO77patBqEkIJPFp\nb0ycghq009f97XCDOl+mBidHre3W/AwQi5TyfAaqT0JNn0CKZy49E9CQukgDb+QG\nmePDOCECgYEA28KykfaTH7esQQQo9qosca+A4+m9yrFA+P3qfDX4y/VcqEyi8JLj\n32Q2vsRjFzangx82eGuG1yoXzg6vRyH8+yUKsGMi+J7OQoN6PHFgX+76NxYuS+0W\nNpeYQE4fg5G0RVCQ9vSYaNApyzoK9phdRys0V/8JYHdqE1vTztkJnTUCgYEA2oux\nx1I/2dA/ksu9EynuUa9trW/9Iis/0YAGuhepQiimnE0x0bgu6JIFn/un3fCFZ1Ck\n2tYqPx2T5ckDd9QoW2I5PtJUZIlBr0mzZ8zzHfwv4IjwK/ycWK6VJ9AQBwyxdJ3p\nncA+v0qyJ7yzjI2EmTg9CYV1yRNWlMuSVDxM3DkCgYBLAUixSNcuHCJOjnzss2g3\n5Q64uy5r39OtJ/zAKCuicTwOtRlnwrrDpBCLS7wGUEEcH6sXrpt3FIbLbXelb5RI\no3vid/OXp5v+V6GAv7GFDKuZ4Zgrkd/jAhqU2BUpcrF0dusDXrgmDeY11rmnMJml\nkLlszz8EDb3GnbDNCIafgQKBgBeiCZyDUXJNacKHE7Ax1ZqxvMuHk7kRMjqGfLO9\nAUmtOa8nTd7e6vutZrxRK2r9qn9sohckF7dxjF/J5/0aTS7spUIc3pFsolTBRIxS\nBmxUrBy80jP/giy43FpMzp7kiYAR34R2mJJ5EmDnsAbf+tnS0g7ohr8yvyciCHXh\ne3JJAoGAJGWFV4ReA8IlvrJBTJY2nzFoplEw5RqvtWhukXlCsHpjICwe9AQqo3mu\ncwMyQpY307WQx8bJ4tC8Wu5MQz4HVK+J5LgbieRG/k5eD6zaF1hGWk7cutr+fekD\nPZKFFe1BjBqapasV4nBNgrZqoqf3l317uHBjprkCHykRO2ZSHiQ=\n-----END RSA PRIVATE KEY-----\n"
+                             'data: (openssl-rsautl/encrypt 'data: "round-trip-data"
+                                             'pkcs8-key-string: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu5u3Y/mlEu6HvheSJTnv\nOx1vrMGQJBNK8N+B5QhaLORDZ56r6pD245xwpeAnvjbk9WyWpsufhZJY16vTN+kQ\nKy411h5aqyLT8MpZc4pjEBgeivHJ0HlnKoa+3k6f/L+lzBJUYR8JuBi+g69Q6/WD\nSAdfSeIVbwo8ZQ8HYr7mHDBoHw9C0VzIuXVaaKvgdiUloMGlDECyJSJCsFLtVP4U\nOyCP1khP0IUR6MwB3bNEPwCUqGiFf7Nw11a+AEbD/JBbMZ3xynoxy9U2tZZjjkJh\nF4qtj7zLCqovfNvBtvzYftod3AocM85bcvY3RmFCrSAf6pIfHNgQ5B+VlWqprfmM\nzQIDAQAB\n-----END PUBLIC KEY-----\n")))))

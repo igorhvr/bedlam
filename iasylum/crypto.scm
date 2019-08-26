@@ -8,6 +8,9 @@
    symmetric-encrypt symmetric-decrypt
    crypto/prepare-javascript-manager
    hmac
-   aws-signature)
+   aws-signature
+   openssl-rsautl/encrypt openssl-rsautl/decrypt
+   openssl-rsautl/chef-pub-or-sec-key-to-pub-pkcs8-format
+   openssl-rsautl/test-encryption-roundtrip)
 
   (include "crypto/crypto-code.scm"))
