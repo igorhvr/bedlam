@@ -14,7 +14,7 @@
                      jdbc/for-each-triple
                      create-thread-local-jdbc/get-connection-function
                      pool-datasource
-                     datasource/get-connection-function
+                     datasource/get-connection-function jdbc/retrieve-connection-and-run
                      jdbc-connection-close
                      )
 
@@ -83,6 +83,14 @@
   (define (datasource/get-connection-function ds)
     (lambda ()
       (j "ds.getConnection();" `((ds ,ds)))))
+
+  (define (jdbc/retrieve-connection-and-run connection-retriever function)
+    (assert connection-retriever "A non-null connection-retriever must be provided. It will be used to fetch a connection, execute the provided function, a process after which close will be called on the connection.")
+    (let ((conn (connection-retriever)))
+      (dynamic-wind
+          (lambda () #t)
+          (lambda () (function conn))
+          (lambda () (jdbc-connection-close conn)))))
   
   (define-generic-java-method close)
 
