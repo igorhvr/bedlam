@@ -1378,8 +1378,9 @@
   ;;
   ;; (get-env "PATH") => /usr/local/sbin:/usr/local/bin
   ;;
-  (define (get-env var-name)
-    (r/s (format "echo -n $~a" var-name)))
+  (define (get-env name)
+    (let ((environment-variable-value (j "System.getenv(definedname);" `((definedname ,(->jstring name))))))
+      (and (not (java-null? environment-variable-value)) (->string environment-variable-value))))
 
   ;;
   ;; It can receive a time, date or jdate.
