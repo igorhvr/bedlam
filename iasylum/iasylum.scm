@@ -35,6 +35,7 @@
    r r-split r/s r/d r-base ; it is dangerous, improper handling of string arguments creates security liabilities. see safe-bash-run
    safe-bash-run ; also dangerous - will deadlock with large stdout outputs!
    safe-run ; child of r and safe-bash-run -> Use this one! Hopefully the last.
+   secure-file-delete!
    dp
    smart-compile
    flatten
@@ -459,6 +460,17 @@
 
       (let ((final-result (get-output-string result)))
         final-result)))
+
+  (define (secure-file-delete! fn)
+    (let ((return-value-from-secure-erase
+           (try-and-if-it-throws-object (#f)
+                                        (r-base 'cmd-list: `(,"srm" ,fn) (open-output-string) (mutex/new)
+                                                                         (open-output-string) (mutex/new)))))
+      (if (and return-value-from-secure-erase (= 0 return-value-from-secure-erase))
+          #t
+          (begin
+            (log-warn "Secure erase of file using srm from the secure_deletion toolkit failed." "Reverting to unsafe/regular erasing. Affected file: " fn)
+            (file-delete! fn)))))
 
   ;;
   ;; This is safer than r-base and derived like r/s and r/d. This fn filters a lot
