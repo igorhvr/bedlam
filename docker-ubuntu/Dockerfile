@@ -32,9 +32,9 @@ RUN apt-get -y install sysstat
 RUN apt-get -y install tor netcat-openbsd
 RUN apt-get -y install secure-delete
 
-RUN apt-get -y install openjdk-8-jdk
+RUN apt-get -y install openjdk-11-jdk
 
-ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
+ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
 
 RUN cd /tmp ; wget https://github.com/ajermakovics/jvm-mon/releases/download/0.3/jvm-mon-0.3.tar.gz ; tar -zxvf jvm-mon-0.3.tar.gz ; cd jvm-mon-0.3 ; rsync -avz -P ./ /usr/local/ ; cd /
 
