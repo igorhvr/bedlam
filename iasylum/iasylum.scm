@@ -126,6 +126,7 @@
    url->tmp-file
    tmp-file
    html-encode
+   shutdown panic
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -1525,6 +1526,25 @@
           [(string? obj)
            (->scm-object (j "org.owasp.encoder.Encode.forHtml(a);" `((a ,(->jstring obj)))))]
           [else obj]))
+
+  ;; Orderly shutdown.
+  (define* (shutdown (return-code 0))
+    (define-java-class |java.lang.System|)
+    (define-generic-java-method exit)
+
+    (exit (java-null |java.lang.System|) (->jint return-code)))
+
+  ;; Immediate shutdown by any means necessary.
+  (define (panic)
+    (define-java-class |java.lang.System|)
+    (define-generic-java-method exit)
+    (watched-thread/spawn
+     (lambda ()
+       (exit (java-null |java.lang.System|) (->jint -1))))
+    (watched-thread/spawn
+     (lambda ()
+       (r/s (string-append*  "kill -9 " (->scm-object (j "java.lang.ProcessHandle.current().pid();"))))))
+    (exit (java-null |java.lang.System|) (->jint -1)))
 
   (create-shortcuts (avg -> average))
 
