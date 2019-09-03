@@ -104,7 +104,7 @@
 (define* (openssl-rsautl/encrypt (pkcs8-key-string: pkcs8-key-string) (data: data))
     (let* ((pkcs8-key-file (string->file pkcs8-key-string))
           (data-file (string->file data))
-          (command (string-append "cd /tmp/t ; openssl rsautl -encrypt -oaep -pubin -inkey "
+          (command (string-append "openssl rsautl -encrypt -oaep -pubin -inkey "
                       pkcs8-key-file " -in " data-file  " -out - | base64")))
       (r/s command)))
 
