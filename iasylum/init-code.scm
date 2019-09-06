@@ -562,6 +562,9 @@
 
 (add-lib "u/opendmk.jar")
 
+(add-lib "u/jaxb-ri-2.3.2_jaxb-runtime.jar")
+(add-lib "u/jaxb-ri-2.3.2_jakarta.xml.bind-api.jar")
+
 (set! load original-load)
 
 (define bedlam-loaded-and-ready-to-use #t)
