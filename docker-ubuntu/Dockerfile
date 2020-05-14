@@ -33,10 +33,9 @@ RUN apt-get -y install tor netcat-openbsd
 RUN apt-get -y install secure-delete
 RUN apt-get -y install strace
 
-RUN mkdir -p /usr/lib/jvm && cd /usr/lib/jvm && wget https://download.java.net/java/GA/jdk14.0.1/664493ef4a6946b186ff29eb326336a2/7/GPL/openjdk-14.0.1_linux-x64_bin.tar.gz && tar -zxvf openjdk-14.0.1_linux-x64_bin.tar.gz && rm openjdk-14.0.1_linux-x64_bin.tar.gz
+RUN apt-get -y install openjdk-11-jdk
 
-ENV JAVA_HOME /usr/lib/jvm/jdk-14.0.1/
-ENV PATH="/usr/lib/jvm/jdk-14.0.1/bin:${PATH}"
+ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
 
 RUN cd /tmp ; wget https://github.com/ajermakovics/jvm-mon/releases/download/0.3/jvm-mon-0.3.tar.gz ; tar -zxvf jvm-mon-0.3.tar.gz ; cd jvm-mon-0.3 ; rsync -avz -P ./ /usr/local/ ; cd /
 
