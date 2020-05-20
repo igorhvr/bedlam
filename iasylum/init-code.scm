@@ -234,7 +234,7 @@
 
 (begin
 ;; Jackcess and required libraries.
-(add-lib "u/commons-lang3-3.4.jar")
+(add-lib "u/commons-lang3-3.10.jar")
 (add-lib "microsoft_access/jackcess-1.2.12.jar")
 )
 
