@@ -128,6 +128,7 @@
    tmp-file
    html-encode
    shutdown panic
+   create-counter
    ->
    ->>
    )
@@ -1552,6 +1553,22 @@
      (lambda ()
        (r/s (string-append*  "kill -9 " (->scm-object (j "java.lang.ProcessHandle.current().pid();"))))))
     (exit (java-null |java.lang.System|) (->jint -1)))
+
+  ;;
+  ;; Thread safe counter.
+  ;;
+  ;; (define a (create-counter))
+  ;; (a) => 0
+  ;; (a) => 1 ...
+  ;;
+  ;; (define a (create-counter 1))
+  ;; (a) => 1
+  ;; (a) => 2 ...
+  ;;
+  (define* (create-counter (initial-value 0))
+    (let ((c (make-atomic-long initial-value)))
+      (lambda ()
+        (get-and-inc-atomic-long! c))))
 
   ;;
   ;; See https://clojuredocs.org/clojure.core/-%3E
