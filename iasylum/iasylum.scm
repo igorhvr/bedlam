@@ -1186,7 +1186,9 @@
   ;; instead (format "~0,8F" <huge-number>) directly.
   ;;
   (define (not-buggy-exact->inexact number)
-    (string->number (->string (number->jbigdecimal number))))
+    (let ((r (exact->inexact number)))
+      (or (and (not (nan? r)) r)
+          (string->number (->string (number->jbigdecimal number))))))
 
   ;;
   ;; (define a +)
