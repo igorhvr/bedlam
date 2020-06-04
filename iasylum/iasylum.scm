@@ -131,6 +131,12 @@
    create-counter
    ->
    ->>
+   ellipsis...
+   week-number-iso8601
+   week-based-year-iso8601
+   week-iso8601-string-representation
+   get-last-week-iso8601
+   get-date-interval-of-week
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -152,7 +158,7 @@
   (define sleep-minutes (lambda (t) (sleep-seconds (* 60 t))))
   (define sleep-hours (lambda (t) (sleep-minutes (* 60 t))))
   (define sleep-forever (lambda ignored (let v () (sleep-hours 1000000) (v))))
-
+  
   (import hashtable)
   (import file-manipulation)  ;; rglob uses this.
 
@@ -1608,6 +1614,87 @@
       ((_ a b) (b a))
       ((_ a b c) (->> (->> a b) c))
       ((_ a b ... c) (->> (->> a b ...) c))))
+
+  (define* (ellipsis... str (max-length 64))
+    (cond [(<= (string-length str) max-length)
+           str]
+          [(< max-length 4) (string-take str max-length)]
+          [else (format "~a..." (string-take str (- max-length 3)))]))
+
+  ;;
+  ;; Get the week number according to ISO 8601 (see https://en.wikipedia.org/wiki/ISO_week_date )
+  ;; The SRFI 19 doesn't work because a fix was made AFTER this SISC
+  ;; bedlam version (see https://srfi.schemers.org/srfi-19/srfi-19.html for
+  ;; more info).
+  ;;
+  ;; See https://stackoverflow.com/a/34987052/450148 for a better explanation of this
+  ;; solution in Java.
+  ;;
+  ;; If delta-week is set then we add (subtract if negative) the number of weeks in the result.
+  ;;
+  (define* (week-number-iso8601 (delta-week 0))
+    (->number (j "java.time.LocalDate.now().plusWeeks(weeks).get(java.time.temporal.IsoFields.WEEK_OF_WEEK_BASED_YEAR);"
+                 `((weeks ,(->jlong delta-week))))))
+
+  ;;
+  ;; Get the last week of an year.
+  ;;
+  ;; From: https://stackoverflow.com/a/59936177/450148
+  ;;
+  (define (get-last-week-iso8601 year)
+    (->number (j "(java.time.LocalDate.of(year, 1, 1).getDayOfWeek() == java.time.DayOfWeek.THURSDAY ||
+        java.time.LocalDate.of(year, 12, 31).getDayOfWeek() == java.time.DayOfWeek.THURSDAY) ? 53 : 52"
+                 `((year ,(->jint year))))))
+
+  ;;
+  ;; Returns the current year week based. If you call this fn
+  ;; in 30 Dec 2019 e.g. the result is 2020. For more info, see
+  ;; java.time.temporal.IsoFields.WEEK_BASED_YEAR documentation.
+  ;;
+  ;; If delta-week is set then we add (subtract if negative) the number of weeks in the result.
+  ;;
+  (define* (week-based-year-iso8601 (delta-week 0))
+    (->number (j "java.time.LocalDate.now().plusWeeks(weeks).get(java.time.temporal.IsoFields.WEEK_BASED_YEAR);"
+                 `((weeks ,(->jlong delta-week))))))
+
+  (define* (week-iso8601-string-representation (week-number #f) (year #f))
+    (format "~a-W~a"
+            (or year (week-based-year-iso8601))
+            (irregex-replace/all
+             " "
+             (format "~2F"
+                     (or week-number (week-number-iso8601))) "0")))
+
+  ;;
+  ;; Returns a pair with the interval of the dates in the specified week,
+  ;; or of the current week if not specified.
+  ;;
+  ;; If you want to get the previous week interval, e.g., you make:
+  ;;
+  ;; (get-date-interval-of-week
+  ;;       (week-number-iso8601 -1)
+  ;;       (week-based-year-iso8601 -1))
+  ;;
+  (define* (get-date-interval-of-week (week-number #f) (year #f))
+    (let* ((week-number (or week-number (week-number-iso8601)))
+           (year-local-date (j "java.time.LocalDate.now();"))
+           (year-local-date (if year
+                                (j "yld.with(java.time.temporal.IsoFields.WEEK_BASED_YEAR, year);"
+                                   `((year ,(->jint year))
+                                     (yld ,year-local-date)))
+                                year-local-date)))
+      (cons (jdate->date (j "java.util.Date.from(yld
+                               .with(java.time.temporal.IsoFields.WEEK_OF_WEEK_BASED_YEAR, week)
+                               .with(java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY))
+                               .atStartOfDay(java.time.ZoneId.systemDefault()).toInstant());"
+                            `((week ,(->jint week-number))
+                              (yld ,year-local-date))))
+            (jdate->date (j "java.util.Date.from(yld
+                               .with(java.time.temporal.IsoFields.WEEK_OF_WEEK_BASED_YEAR, week)
+                               .with(java.time.temporal.TemporalAdjusters.nextOrSame(java.time.DayOfWeek.MONDAY))
+                               .atStartOfDay(java.time.ZoneId.systemDefault()).toInstant());"
+                            `((week ,(->jint week-number))
+                              (yld ,year-local-date)))))))
 
   (create-shortcuts (avg -> average))
 
