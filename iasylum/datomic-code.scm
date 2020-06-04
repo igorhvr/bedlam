@@ -165,12 +165,31 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
 ;;                     [$history ?e :item/id ?id]
 ;;                     [$since ?e :item/count ?count]]
 ;;
+;; The `$-is-whole-db` param tells if `$` when `since` is #t must be the whole db (ignoring
+;; `since` and `until` or if it should take into account the `until` parameter.
+;;
+;; The `current-db-as-first-param-if-until-is-set-but-since-is-unset` param works only
+;; if `until` is set but `since` and `include-history` is not. If set, you can use `until`
+;; in the same style you use `since`, i.e., you can still access the current db:
+;;
+;;             [:find ?count
+;;              :in $ $until ?id
+;;              :where [$ ?e :item/id ?id]
+;;                     [$since ?e :item/count ?count]]
+;;
 (define* (datomic/make-query-function-with-one-connection-included smart-query-lambda
                                                                    connection-retriever
                                                                    (raw: raw #f)
                                                                    (since: since #f)
                                                                    (until: until #f)
-                                                                   (include-history: include-history #f))
+                                                                   (include-history: include-history #f)
+                                                                   ($-is-whole-db: $-is-whole-db #f)
+                                                                   (current-db-as-first-param-if-until-is-set-but-since-is-unset:
+                                                                       cdafpiuisbsiu #f))
+  (assert (or (not cdafpiuisbsiu)
+              (and until
+                   (not since)
+                   (not include-history))))
   (let* ((current-db-retriever (datomic/make-latest-db-retriever connection-retriever))
          (last-db-retriever (if (not until)
                                 current-db-retriever
@@ -179,16 +198,26 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
                                                  until)))))
     (if (not include-history)
         (if (not since)
+            (if (not cdafpiuisbsiu)
+                (cut smart-query-lambda
+                     'raw: raw
+                     <> ; Query.
+                     (last-db-retriever)
+                     <...> ; Whatever other insanity and/or fixed parameters one may pass.
+                     )
+                (cut smart-query-lambda
+                     'raw: raw
+                     <> ; Query.
+                     (current-db-retriever)
+                     (last-db-retriever)
+                     <...> ; Whatever other insanity and/or fixed parameters one may pass.
+                     ))
             (cut smart-query-lambda
                  'raw: raw
                  <> ; Query.
-                 (last-db-retriever)
-                 <...> ; Whatever other insanity and/or fixed parameters one may pass.
-                 )
-            (cut smart-query-lambda
-                 'raw: raw
-                 <> ; Query.
-                 (last-db-retriever)
+                 (if $-is-whole-db
+                     (current-db-retriever)
+                     (last-db-retriever))
                  (datomic/since (last-db-retriever)
                                 since)
                  <...> ; other params
@@ -197,14 +226,18 @@ Please use datomic/smart-query-multiple instead if multiple results are expected
             (cut smart-query-lambda
                  'raw: raw
                  <> ; Query.
-                 (last-db-retriever)
+                 (if $-is-whole-db
+                     (current-db-retriever)
+                     (last-db-retriever))
                  (datomic/db-history (last-db-retriever))
                  <...> ; Whatever other insanity and/or fixed parameters one may pass.
                  )
             (cut smart-query-lambda
                  'raw: raw
                  <> ; Query.
-                 (last-db-retriever)
+                 (if $-is-whole-db
+                     (current-db-retriever)
+                     (last-db-retriever))
                  (datomic/since (last-db-retriever)
                                 since)
                  (datomic/db-history (last-db-retriever))
