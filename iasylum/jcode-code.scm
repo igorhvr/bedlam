@@ -246,9 +246,12 @@
 
 (define (number->jbigdecimal number)
   (let ((exact-number (inexact->exact number)))
-    (j "new java.math.BigDecimal(numerator).divide(new java.math.BigDecimal(denominator), java.math.MathContext.DECIMAL128);"
-       `((numerator ,(->jstring (number->string (numerator exact-number))))
-         (denominator ,(->jstring (number->string (denominator exact-number))))))))
+    ((generic-java-method '|divide|)
+     (java-new (java-class '|java.math.BigDecimal|)
+               (->jstring (number->string (numerator exact-number))))
+     (java-new (java-class '|java.math.BigDecimal|)
+               (->jstring (number->string (denominator exact-number))))
+     ((generic-java-field-accessor '|DECIMAL128|) (java-null (java-class '|java.math.MathContext|))))))
 
 (define (integer->jbigint number)
   (if (not (integer? number))
@@ -386,8 +389,33 @@
                                               sisc.interpreter.Context.exit();
                                               return result;
                                           } "))))
-        
-      
+
+;;
+;; Create a Proxy (see more info in http://sisc-scheme.org/manual/html/ch08.html#JavaProxies
+;; archived: http://archive.is/zTsZY ) that implements java.util.Comparator.
+;;
+;; fn is a lambda that receives two params, obj1 and obj2. It should return #t if obj1 < obj2, #f otherwise.
+;; This function can return in "java boolean" format and it will convert to scheme boolean automatically.
+;;
+;; The most common use is: (create-jcomparator <) or (create-jcomparator >).
+;;
+;; (create-jcomparator <) => #<java java.util.Comparator proxy>
+;;
+(define-java-proxy (create-jcomparator fn)
+  ((java-class '|java.util.Comparator|))
+  (define (.compare this obj1 obj2)
+    (let* ((obj1<obj2 (fn obj1 obj2))
+           (obj1>obj2 (fn obj2 obj1))
+           (obj1<obj2 (if (boolean? obj1<obj2)
+                          obj1<obj2
+                          (->boolean obj1<obj2)))
+           (obj1>obj2 (if (boolean? obj1>obj2)
+                          obj1>obj2
+                          (->boolean obj1>obj2))))
+      (->jint (cond [obj1<obj2 -1]
+                    [obj1>obj2 +1]
+                    [else 0])))))
+
 (set! j
       (lambda* (str (vars #f))
                (let ((tint (get-local-interpreter)))

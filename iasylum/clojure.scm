@@ -28,6 +28,11 @@
    get-iterator-from-persistent-hash-set
    persistent-hash-set->jarray
    get-persistent-vector
+   clojure-read
+   get-native-clojure-fn-as-lambda
+   call-native-clojure-fn
+   load-clojure-namespace
+   clojure-sort-persistent-vector
    )
   
   (include "clojure-code.scm"))

@@ -96,8 +96,9 @@
                                      (iii ,(->jint i))))))))
 
 (define (only-persistent-vector pv)
-  (assert (= 1 (persistent-vector-size pv)))
-  ((generic-java-method '|nth|) pv (->jint 0)))
+  (let ((size (persistent-vector-size pv)))
+    (assert (= 1 size))
+    ((generic-java-method '|nth|) pv (->jint 0))))
 
 (define (get-persistent-vector pv index)
   ((generic-java-method '|nth|) pv (->jint index)))
@@ -118,6 +119,63 @@
         (if convert-result
             (->scm-object result)
             result))))
+
+;;
+;; (clojure-read "1") => #<java java.lang.Long 1>
+;; (clojure-read "[1 2]") => #<java clojure.lang.PersistentVector [1 2]>
+;; 
+(define (clojure-read str)
+  ((generic-java-method '|read|)
+   (java-null (java-class '|clojure.java.api.Clojure|))
+   (->jstring str)))
+
+;;
+;; full-qualified-name example:
+;; clojure.core/sort
+;; clojure.core/+
+;;
+;; ((get-native-clojure-fn-as-lambda "clojure.core/+") (clojure-read "1") (clojure-read "1"))
+;; => #<java java.lang.Long 2>
+;;
+(define (get-native-clojure-fn-as-lambda full-qualified-name)
+  (let ((clojure-native-fn ((generic-java-method '|var|)
+                              (java-null (java-class '|clojure.java.api.Clojure|))
+                              (->jstring full-qualified-name))))
+    (lambda list-of-params
+      (apply (generic-java-method '|invoke|) (cons clojure-native-fn list-of-params)))))
+
+;;
+;; (call-native-clojure-fn "clojure.core/+" (clojure-read "1") (clojure-read "1"))
+;; => #<java java.lang.Long 2>
+;;
+(define call-native-clojure-fn
+  (lambda (full-qualified-name . params)
+    (apply (get-native-clojure-fn-as-lambda full-qualified-name) params)))
+
+;;
+;; (load-clojure-namespace "clojure.set")
+;; (call-native-clojure-fn "clojure.set/subset?" (clojure-read "#{2 3}") (clojure-read "#{1 2 3 4}"))
+;; => #<java java.lang.Boolean true>
+;;
+(define (load-clojure-namespace namespace)
+  (call-native-clojure-fn "clojure.core/require" (clojure-read namespace)))
+
+;;
+;; (clojure-sort-persistent-vector (list->persistent-vector '(4 2 1)))
+;; => #<java clojure.lang.PersistentVector [1 2 4]>
+;;
+;; (clojure-sort-persistent-vector (list->persistent-vector '(0 4 2 1))
+;;     (create-jcomparator (get-native-clojure-fn-as-lambda "clojure.core/>")))
+;; => #<java clojure.lang.PersistentVector [4 2 1 0]>
+;;
+(define clojure-sort-persistent-vector
+  (lambda (pv . comp)
+    (let ((sort-fn (get-native-clojure-fn-as-lambda "clojure.core/sort"))
+          (into-fn (get-native-clojure-fn-as-lambda "clojure.core/into"))
+          (empty-vector (clojure-read "[]")))
+      (if (null? comp)
+          (into-fn empty-vector (sort-fn pv))
+          (into-fn empty-vector (sort-fn (only comp) pv))))))
 
 (define (create-runner)
   (j

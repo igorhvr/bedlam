@@ -98,6 +98,7 @@
      java-proxy-class
      java-proxy-dispatcher
      define-java-proxy
+     create-jcomparator
      ;;misc
      s2j/clear-reflection-cache!
      java-synchronized
