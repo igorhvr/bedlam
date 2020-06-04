@@ -128,6 +128,8 @@
    tmp-file
    html-encode
    shutdown panic
+   ->
+   ->>
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -1550,6 +1552,45 @@
      (lambda ()
        (r/s (string-append*  "kill -9 " (->scm-object (j "java.lang.ProcessHandle.current().pid();"))))))
     (exit (java-null |java.lang.System|) (->jint -1)))
+
+  ;;
+  ;; See https://clojuredocs.org/clojure.core/-%3E
+  ;; for more info.
+  ;;
+  ;; (string-append (string-titlecase "abracada bra") "a" "x")
+  ;; (-> "abracada bra" string-titlecase (string-append "a" "x"))
+  ;;
+  ;; (string-reverse (string-titlecase "xpto"))
+  ;; (-> "xpto" string-titlecase string-reverse)
+  ;;
+  ;; (string-titlecase (string-reverse (string-titlecase "xpto")))
+  ;; (-> "xpto" string-titlecase string-reverse string-titlecase)
+  ;;
+  (define-syntax ->
+    (syntax-rules ()
+      ((_ a) a)
+      ((_ a (b c ...)) (b a c ...))
+      ((_ a b) (b a))
+      ((_ a b c) (-> (-> a b) c))
+      ((_ a b ... c) (-> (-> a b ...) c))))
+
+  ;;
+  ;; See https://clojuredocs.org/clojure.core/-%3E%3E
+  ;; for more info.
+  ;;
+  ;; (reduce + 0 (take '(1 2 3 4 5) 2))
+  ;; (->> 2 (take '(1 2 3 4 5)) (reduce + 0))
+  ;;
+  ;; (reduce / 1 (take '(4 3 2 1) 3))
+  ;; (->> 3 (take '(4 3 2 1)) (reduce / 1))
+  ;;
+  (define-syntax ->>
+    (syntax-rules ()
+      ((_ a) a)
+      ((_ a (b c ...)) (b c ... a))
+      ((_ a b) (b a))
+      ((_ a b c) (->> (->> a b) c))
+      ((_ a b ... c) (->> (->> a b ...) c))))
 
   (create-shortcuts (avg -> average))
 
