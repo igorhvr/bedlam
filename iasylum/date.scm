@@ -15,6 +15,7 @@
    month-before
    get-last-day-of-month
    milliseconds-duration->approximate-time-duration-human-string
+   iso-8601-timestamp
    )
 
   (define (add-days date ndays)
@@ -87,5 +88,7 @@
     (if (< n 60000)
         (string-append* n " milliseconds")
         (->string (j "mooopp = new org.ocpsoft.prettytime.PrettyTime(new java.util.Date(0)); mooopp.formatDuration(mooopp.approximateDuration(new java.util.Date(millip)));" `((millip ,(->jlong n)))))))
+
+  (define* (iso-8601-timestamp (ts (current-date-utc))) (date->string ts "~4"))
 
   )
