@@ -31,6 +31,7 @@
    input-port->string
    watched-parallel
    debug-watched-parallel
+   current-thread-name current-thread-id
    watched-thread/spawn
    r r-split r/s r/d r-base ; it is dangerous, improper handling of string arguments creates security liabilities. see safe-bash-run
    safe-bash-run ; also dangerous - will deadlock with large stdout outputs!
@@ -357,14 +358,17 @@
 
   (define (syserr-log p) (j "System.err.print(m); System.err.flush();" `((m ,(->jobject p)))))
 
+  (define (current-thread-name) (->string (j "Thread.currentThread().getName();")))
+  (define (current-thread-id) (->string (j "Thread.currentThread().getId();")))
+
   (define debug-standard-thread-error-handler
     (lambda (error error-continuation)
-      (map syserr-log `("Error - will stop thread - " ,(->string (j "Thread.currentThread().getName();")) " - details saved at " ,(save-to-somewhere (list error error-continuation)) " - " ,error ,error-continuation "\n"))
+      (map syserr-log `("Error - will stop thread - " ,(current-thread-name) " - details saved at " ,(save-to-somewhere (list error error-continuation)) " - " ,error ,error-continuation "\n"))
       (print-stack-trace error-continuation)))
 
   (define standard-thread-error-handler
     (lambda (error error-continuation)
-      (map syserr-log `("Error - will stop thread "  ,(->string (j "Thread.currentThread().getName();")) ": " ,error ,error-continuation "\n"))
+      (map syserr-log `("Error - will stop thread "  ,(current-thread-name) ": " ,error ,error-continuation "\n"))
       (print-stack-trace error-continuation)))
   
   (define watched-parallel
