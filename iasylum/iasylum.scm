@@ -703,10 +703,18 @@
 
   (define make-semaphore
     (lambda* ((initialPermits 0))
-        (let ((inner-semaphore (j "new java.util.concurrent.Semaphore(ip);" `((ip ,(->jint initialPermits))))))
+        (let ((inner-semaphore (j "new java.util.concurrent.Semaphore(ip,true);" `((ip ,(->jint initialPermits))))))
           (match-lambda*
            [('release)
             (release inner-semaphore)
+            (void)]
+           [('release-all-blocked)
+            (let loop ()
+              ;; FIXXXME May leave one more permit than it should if
+              ;; a thread is blocked because of hasQueuedThreads behavior.
+              (when (->boolean (has-queued-threads inner-semaphore))
+                (release inner-semaphore)
+                (loop)))
             (void)]
            [('acquire)
             (acquire inner-semaphore)
@@ -1715,6 +1723,7 @@
   (define-generic-java-method release)
   (define-generic-java-method acquire)
   (define-generic-java-method available-permits)
+  (define-generic-java-method has-queued-threads)
   
   (reset-d)
   (reset-w)  
