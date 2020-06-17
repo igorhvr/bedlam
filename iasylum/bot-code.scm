@@ -11,7 +11,9 @@
                   (get (get result-var :response_metadata) :next_cursor)))")
              `((,token-var ,(->jstring token))
                (,cursor-var ,(->jstring cursor)))))
-           (next-cursor (->string (clj "(nth nl 1)" `((nl ,nl)))))
+           (next-cursor (->string (let ((jstr (clj "(nth nl 1)" `((nl ,nl)))))
+                         (if (java-null? jstr) (throw (make-error "Unable to retrieve full channel list in slack."))
+                             jstr))))
            (the-fetched-clojure-list (clj "(nth nl 0)" `((nl ,nl)))))
       (clj "(into {} (concat the-fetched-clojure-list next-or-empty))"
            `((the-fetched-clojure-list ,the-fetched-clojure-list)
@@ -32,7 +34,9 @@
                   (get (get result-var :response_metadata) :next_cursor)))")
              `((,token-var ,(->jstring token))
                (,cursor-var ,(->jstring cursor)))))
-           (next-cursor (->string (clj "(nth nl 1)" `((nl ,nl)))))
+           (next-cursor (->string (let ((jstr (clj "(nth nl 1)" `((nl ,nl)))))
+                         (if (java-null? jstr) (throw (make-error "Unable to retrieve full group list in slack."))
+                             jstr))))
            (the-fetched-clojure-list (clj "(nth nl 0)" `((nl ,nl)))))
       (clj "(into {} (concat the-fetched-clojure-list next-or-empty))"
            `((the-fetched-clojure-list ,the-fetched-clojure-list)
