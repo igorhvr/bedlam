@@ -90,6 +90,7 @@
    alist-to-url-query-string
    make-parameter*
    make-expiring-parameter*
+   make-thunk-unpacking-parameter*
    subtract-dates
    start-async-json-engine-with-status-retriever
    complete-with-zeroes
@@ -1068,6 +1069,15 @@
                      .asMap();"
                        `((es ,(->jlong expiration-seconds))))))
       (make-parameter-with-storage* initial-value storage)))
+
+  ;; Parameter-like construction that receives either a value or a thunk.
+  ;; When called returns the value of executing the thunk or the provided value.
+  ;; Good for mixing parameters & futures, among other things.
+  (define* (make-thunk-unpacking-parameter* (init #f))
+    (let ((inner-parameter (make-parameter* (if (procedure? init) init (lambda () init)))))
+      (case-lambda    (() (and-let* ((inner-result (inner-parameter))) (inner-result)))
+                 ((new) (let ((thunk (if (procedure? new) new (lambda () new))))
+                          (and-let* ((inner-result (inner-parameter thunk))) (inner-result)))))))
 
     ; Generates parameters that work and are safe across threads.
   (define (make-parameter-with-storage* init storage)
