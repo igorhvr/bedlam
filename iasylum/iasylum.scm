@@ -91,6 +91,7 @@
    make-parameter*
    make-expiring-parameter*
    make-thunk-unpacking-parameter*
+   make-blocking-parameter*
    subtract-dates
    start-async-json-engine-with-status-retriever
    complete-with-zeroes
@@ -1086,6 +1087,20 @@
       (case-lambda    (() (and-let* ((inner-result (inner-parameter))) (inner-result)))
                  ((new) (let ((thunk (if (procedure? new) new (lambda () new))))
                           (and-let* ((inner-result (inner-parameter thunk))) (inner-result)))))))
+
+  ;; A parameter that will block callers until a value is available, if unset.
+  (define* (make-blocking-parameter* (init #f))
+    (let ((inner-parameter (make-parameter* init))
+          (inner-semaphore (make-semaphore)))
+      (case-lambda    (() (let loop () (let ((result (inner-parameter)))
+                                    (if result result
+                                        (begin
+                                          (inner-semaphore 'acquire)
+                                          (loop))))))
+                 ((new) (let ((previous-data (inner-parameter new)))
+                          (when new (inner-semaphore 'release-all-blocked))
+                          previous-data)))))
+
 
     ; Generates parameters that work and are safe across threads.
   (define (make-parameter-with-storage* init storage)
