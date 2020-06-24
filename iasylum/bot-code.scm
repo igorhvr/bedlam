@@ -1,41 +1,19 @@
-(define (slack/retrieve-full-channel-list token)
+(define (slack/retrieve-full-conversation-list token)
   (let loop ((cursor ""))
-    (mutex/synchronize (mutex-of clj) (lambda () (clj "(require '[slack-rtm.core :as rtm]) (require '[clj-slack.channels :as channels]) (require '[clojure.tools.logging :as log])")))
+    (mutex/synchronize (mutex-of clj) (lambda () (clj "(require '[slack-rtm.core :as rtm]) (require '[clj-slack.conversations :as conversations]) (require '[clojure.tools.logging :as log])")))
     (let* ((token-var (random-var)) (cursor-var (random-var)) (result-var (random-var))
            (nl
             (clj
              (string-append "
-              (let [result-var (channels/list {:api-url \"https://slack.com/api\" :token " token-var "}
+              (let [ result-var (conversations/list {:api-url \"https://slack.com/api\" :token " token-var "}
                                   {:exclude_members \"true\" :cursor " cursor-var " :limit \"300\"})]
                 (list (map (fn [channel] {(get channel :id) (get channel :name)}) (get result-var :channels))
                   (get (get result-var :response_metadata) :next_cursor)))")
              `((,token-var ,(->jstring token))
                (,cursor-var ,(->jstring cursor)))))
            (next-cursor (->string (let ((jstr (clj "(nth nl 1)" `((nl ,nl)))))
-                         (if (java-null? jstr) (throw (make-error "Unable to retrieve full channel list in slack."))
-                             jstr))))
-           (the-fetched-clojure-list (clj "(nth nl 0)" `((nl ,nl)))))
-      (clj "(into {} (concat the-fetched-clojure-list next-or-empty))"
-           `((the-fetched-clojure-list ,the-fetched-clojure-list)
-             (next-or-empty
-              ,(if (string=? next-cursor "") (clj "[]")
-                   (loop next-cursor))))))))
-
-(define (slack/retrieve-full-group-list token)
-  (let loop ((cursor ""))
-    (mutex/synchronize (mutex-of clj) (lambda () (clj "(require '[slack-rtm.core :as rtm]) (require '[clj-slack.groups :as groups]) (require '[clojure.tools.logging :as log])")))
-    (let* ((token-var (random-var)) (cursor-var (random-var)) (result-var (random-var))
-           (nl
-            (clj
-             (string-append "
-              (let [result-var (groups/list {:api-url \"https://slack.com/api\" :token " token-var "}
-                                  {:exclude_members \"true\" :cursor " cursor-var " :limit \"300\"})]
-                (list (map (fn [group] {(get group :id) (get group :name)}) (get result-var :groups))
-                  (get (get result-var :response_metadata) :next_cursor)))")
-             `((,token-var ,(->jstring token))
-               (,cursor-var ,(->jstring cursor)))))
-           (next-cursor (->string (let ((jstr (clj "(nth nl 1)" `((nl ,nl)))))
-                         (if (java-null? jstr) (throw (make-error "Unable to retrieve full group list in slack."))
+                         (if (java-null? jstr)
+                             (throw (make-error (string-append* "Unable to retrieve full conversation list in slack.")))
                              jstr))))
            (the-fetched-clojure-list (clj "(nth nl 0)" `((nl ,nl)))))
       (clj "(into {} (concat the-fetched-clojure-list next-or-empty))"
@@ -51,9 +29,7 @@
                     (channels-id-var (random-var))
                     (message-receiver-var (random-var))
                     (conn-var (random-var))
-                    (channels-id (clj "(into {} (concat groups channels))"
-                                      `((groups ,(slack/retrieve-full-group-list token))
-                                        (channels ,(slack/retrieve-full-channel-list token))))))
+                    (channels-id (clj "(into {} (concat conversations))" `((conversations ,(slack/retrieve-full-conversation-list token))))))
                (watched-thread/spawn (lambda ()
 				       (mutex/synchronize (mutex-of clj) (lambda () (clj "(require '[slack-rtm.core :as rtm]) (require '[clj-slack.channels :as channels]) (require '[clj-slack.groups :as groups]) (require '[clojure.tools.logging :as log])")))
 				       (clj
