@@ -70,6 +70,7 @@
    list-of
    alist?
    pure-alist?
+   string-stack-trace
    try-and-if-it-fails-object
    try-and-if-it-fails-or-empty-or-java-null-return-object
    try-and-if-it-throws-object
@@ -839,6 +840,9 @@
       ((_ predicate)
        (lambda (object)
          (list-of-type? object predicate)))))
+
+  (define* (string-stack-trace (continuation #f))
+    (with-output-to-string (lambda () (print-stack-trace (or continuation (call-with-current-continuation (lambda (k) k)))))))
 
   ;;
   ;; This macro attempts to execute the given piece of code, and if it fails
