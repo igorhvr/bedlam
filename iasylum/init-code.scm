@@ -246,7 +246,7 @@
 
 (add-lib "u/pircbotx-2.1.jar")
 (add-lib "clojure/core.async-0.1.0-SNAPSHOT.jar")
-(add-lib "clojure/slack-rtm-0.1.7-standalone.jar") ;; It includes clj-slack 0.5.5
+(add-lib "clojure/slack-rtm-0.1.7-standalone.jar") ;; It includes clj-slack 0.6.2
 
 
 (define (extend-classpath i)
