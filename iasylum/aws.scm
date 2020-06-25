@@ -2,6 +2,7 @@
 
 (module iasylum/aws
   (aws/make-credentials
+   aws/fetch-environment-credentials-from-instance-profile
 
    aws/make-sqs-client
    aws/make-sqs-send-message-request
@@ -32,6 +33,7 @@
    aws/s3-set-CORS
    aws/s3-create-bucket
    aws/s3-delete-bucket
+   aws/s3-delete-object
    aws/s3-delete-bucket-recursively
    aws/s3-blow-up-s3-and-regret-tears-of-blood-I-am-oficially-insane
    aws/s3-list-buckets
@@ -51,6 +53,16 @@
    )
    
    (define (aws/make-credentials access-key secret-key) (j "new com.amazonaws.auth.BasicAWSCredentials(accesskey, secretkey);" `((accesskey ,(->jstring access-key)) (secretkey ,(->jstring secret-key)))))
+
+
+   (define async-refreshing-credentials-provider (make-parameter* #f))
+
+   (define-generic-java-method get-credentials)
+
+   (define (aws/fetch-environment-credentials-from-instance-profile)
+     (unless (async-refreshing-credentials-provider)
+       (async-refreshing-credentials-provider  (j "com.amazonaws.auth.InstanceProfileCredentialsProvider.createAsyncRefreshingProvider(true);")))
+     (get-credentials (async-refreshing-credentials-provider)))
 
    (define (aws/make-sqs-client credentials) (j "new com.amazonaws.services.sqs.AmazonSQSClient(credentials, new com.amazonaws.ClientConfiguration().withMaxConnections(150).withConnectionTimeout(50000));" `((credentials ,credentials))))
 
@@ -327,7 +339,13 @@
 
    (define (aws/s3-delete-bucket s3-client name)
      (j "s3client.deleteBucket(new com.amazonaws.services.s3.model.DeleteBucketRequest(bucketname));" `((bucketname ,(->jstring name)) (s3client ,s3-client))))
-   
+
+   (define (aws/s3-delete-object s3-client name key)
+     (j "s3client.deleteObject(new com.amazonaws.services.s3.model.DeleteObjectRequest(bucketname,bucketkey));"
+        `((bucketname ,(->jstring name))
+          (bucketkey ,(->jstring key))
+          (s3client ,s3-client))))
+
    (define (aws/s3-delete-bucket-recursively s3-client name)
      (j "while(true) {
             objs=s3client.listObjects(new com.amazonaws.services.s3.model.ListObjectsRequest().withMaxKeys(maxkeys).withBucketName(bucketname)).getObjectSummaries();
