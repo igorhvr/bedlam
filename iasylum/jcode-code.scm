@@ -201,6 +201,9 @@
   (j "new java.math.BigInteger(number);" `((number ,(->jstring string)))))
 
 (define* (jstream->tmp-file stream (prefix: prefix "jstream-to-file") (suffix: suffix ".tmp"))
+  (->string (j "mstrfile.getAbsolutePath();" `((mstrfile ,(jstream->tmp-java.io.File stream 'prefix: prefix 'suffix: suffix))))))
+
+(define* (jstream->tmp-java.io.File stream (prefix: prefix "jstream-to-file") (suffix: suffix ".tmp"))
   (j "jstreamtofile_result=java.io.File.createTempFile(prefix + \"_\",suffix);
       { 
 	jstreamtofile_out = new java.io.FileOutputStream(jstreamtofile_result);
@@ -211,7 +214,8 @@
 	while ((jstreamtofile_read = inputstream.read(jstreamtofile_bytes)) != -1) {
 		jstreamtofile_out.write(jstreamtofile_bytes, 0, jstreamtofile_read);
 	}
- 	
+
+        inputstream.close();
 	jstreamtofile_out.flush();
 	jstreamtofile_out.close();
       }
@@ -242,7 +246,7 @@
     jstream))
 
 (define* (string->java.io.File s (prefix: prefix "jstream-to-file") (suffix: suffix ".tmp"))
-  (jstream->tmp-file (string->java.io.InputStream s) 'prefix: prefix 'suffix: suffix))
+  (jstream->tmp-java.io.File (string->java.io.InputStream s) 'prefix: prefix 'suffix: suffix))
 
 (define (number->jbigdecimal number)
   (let ((exact-number (inexact->exact number)))

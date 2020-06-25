@@ -36,6 +36,7 @@
    aws/s3-delete-object
    aws/s3-delete-bucket-recursively
    aws/s3-blow-up-s3-and-regret-tears-of-blood-I-am-oficially-insane
+   aws/s3-get-object
    aws/s3-list-buckets
    aws/s3-list-buckets-names
    aws/s3-set-object-acl-public-read
@@ -375,6 +376,15 @@
                                             element))
                          (aws/s3-list-buckets-names s3-client )))
                   (d/n "If you really want to do this pass the 'i-understand-that-this-will-OBLITERATE-every-s3-bucket-accessible-by-this-s3-client: parameter as #t."))))
+
+
+   (define (aws/s3-get-object s3-client name key)
+     (file->string
+      (jstream->tmp-file
+       (j "s3client.getObject(new com.amazonaws.services.s3.model.GetObjectRequest(bucketname,bucketkey)).getObjectContent();"
+          `((bucketname ,(->jstring name))
+            (bucketkey ,(->jstring key))
+            (s3client ,s3-client))))))
 
    (define (aws/s3-list-buckets s3-client)
      (j "s3client.listBuckets(new com.amazonaws.services.s3.model.ListBucketsRequest());" `((s3client ,s3-client))))
