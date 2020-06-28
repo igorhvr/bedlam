@@ -330,25 +330,9 @@
 		i.eval(\"server(portnum)\");"
      `((i)(portnum ,(->jint portnum)))))
 
-	     
-;; FIXME - this is not working currently.
-(define (start-sisc-service portnum)
-  (let* ((addr (j "java.net.InetAddress.getByName(\"localhost\");"))
-          (server-socket (j "new ServerSocket(port, 50, addr);" `((addr ,addr) (port ,(->jint portnum))))))
-    (j "new Thread() {
-                  public void run() {
-                      try {
-                          appcontext = new sisc.interpreter.AppContext()
-                          appcontext.addDefaultHeap();
-                          dynenv = new sisc.env.DynamicEnvironment(appcontext, System.in, System.out);
-                          interpreter = new sisc.interpreter.Interpreter(new sisc.interpreter.ThreadContext(), dynenv);
-                          dynenv.bind();
-                          sisc.REPL.listen(interpreter.getCtx(), serversocket);
-                      } catch (Exception e) {
-                          throw new RuntimeException(e);
-                      }
-                  }
-              }.start();" `((serversocket ,server-socket)))))
+(define* (start-sisc-service (portnum 3000))
+  (j "iu.M.i(sssvcportnum, -1);" `((sssvcportnum ,(->jint portnum))))
+  (void))
 
 ;; Irresistibly horrible.
 ;; Source: http://okmij.org/ftp/Scheme/setf.txt
