@@ -23,7 +23,7 @@
                    (loop next-cursor))))))))
 
 (define slack/create-reader-bot
-    (lambda* ((name: name) (channels: channels) (token: token))
+    (lambda* ((name: name) (channels: channels) (token: token) (fetch-bots-messages: fetch-bots-messages))
              (let* ((channelsvar (random-var))
 		    (tokenvar (random-var))
                     (channels-id-var (random-var))
@@ -38,7 +38,7 @@
 
                                           (defn ~a [e]
                                                 (when (and (contains? ~a (get ~a (get e :channel)))
-                                                           (not (get e :subtype false))
+                                                           ~a
                                                            (not (get e :edited false))
                                                            (not (get e :thread_ts false)))
                                                       (doto (get ~a (get ~a (get e :channel))) (.put (new sisc.data.ImmutableString (get e :text))))))
@@ -53,7 +53,10 @@
                                           (connect-to-slack ~a ~a)"
 					 conn-var
                                          message-receiver-var
-                                         channelsvar channels-id-var channelsvar channels-id-var
+                                         channelsvar
+                                         channels-id-var
+                                         (if (not fetch-bots-messages) "(not (get e :subtype false))" " ")
+                                         channelsvar channels-id-var
                                          conn-var
                                          message-receiver-var
                                          conn-var
@@ -91,6 +94,7 @@
              (slack/create-reader-bot
               'name: name
               'token: token
+              'fetch-bots-messages: #t
               'channels:  (list (cons channel (out-work-queue 'inner-queue)))))
 	   #t))
 
