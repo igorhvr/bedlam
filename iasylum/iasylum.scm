@@ -32,6 +32,8 @@
    watched-parallel
    debug-watched-parallel
    current-thread-name current-thread-id
+   set-current-thread-name!
+   thread/spawn*
    watched-thread/spawn
    r r-split r/s r/d r-base ; it is dangerous, improper handling of string arguments creates security liabilities. see safe-bash-run
    safe-bash-run ; also dangerous - will deadlock with large stdout outputs!
@@ -362,6 +364,9 @@
   (define (syserr-log p) (j "System.err.print(m); System.err.flush();" `((m ,(->jobject p)))))
 
   (define (current-thread-name) (->string (j "Thread.currentThread().getName();")))
+  (define (set-current-thread-name! new-thread-name)
+    (j "Thread.currentThread().setName(ctsnname);" `((ctsnname ,(->jstring new-thread-name))))
+    new-thread-name)
   (define (current-thread-id) (->string (j "Thread.currentThread().getId();")))
 
   (define debug-standard-thread-error-handler
@@ -382,20 +387,29 @@
     (lambda fn-set
       (apply parallel (pam fn-set (lambda (fn) (delay (with/fc debug-standard-thread-error-handler fn)))))))
 
+  (define thread/spawn*
+    (lambda* ((error-handler: error-handler standard-thread-error-handler) (thread-name: thread-name #f) thunk)
+             (watched-thread/spawn
+              thunk
+              'error-handler: error-handler
+              'thread-name: thread-name)))
+
   (define watched-thread/spawn
-    (lambda* (p (error-handler: error-handler standard-thread-error-handler))
-        (assert (procedure? p))
+    (lambda* (p (error-handler: error-handler standard-thread-error-handler) (thread-name: thread-name #f))
+        (assert (procedure? p) (or (not thread-name) (string? thread-name)))
         (thread/spawn
          (lambda ()
+           (when thread-name (set-current-thread-name! thread-name))
            (with/fc
             error-handler
             p)))))
 
   (define debug-watched-thread/spawn
-    (lambda* (p (error-handler: error-handler debug-standard-thread-error-handler))
-        (assert (procedure? p))
+    (lambda* (p (error-handler: error-handler debug-standard-thread-error-handler) (thread-name: thread-name #f))
+        (assert (procedure? p) (or (not thread-name) (string? thread-name)))
         (thread/spawn
          (lambda ()
+           (when thread-name (set-current-thread-name! thread-name))
            (with/fc
             error-handler
             p)))))
