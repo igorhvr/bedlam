@@ -114,6 +114,10 @@
 (add-lib "u/encoder-1.2.2.jar")
 
 (add-lib "u/quartz-all-1.7.3.jar")
+
+;; Avoids ClassNotFoundException: org.omg.CORBA.portable.IDLEntity when using quartz with JDK11+.
+(add-lib "jacorb/jacorb-omgapi-3.9.jar")
+
 (add-lib "u/cron4j-2.2.5.jar")
 (add-lib "u/json-20171018.jar")
 (add-lib "u/commons-text-1.2.jar")

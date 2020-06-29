@@ -156,7 +156,7 @@
                                   (string-trim-both (irregex-match-substring m 1))
                                   (loop)))))]
           [('outq) outq]
-          [('inq) outq]))
+          [('inq) inq]))
 
 (define slack/create-bot-on-channel
    (lambda* ((channel-name: channel-name) (bot-name: bot-name) (token: token) (command-prefix-list: command-prefix-list))
