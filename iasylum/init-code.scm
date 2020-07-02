@@ -296,7 +296,7 @@
     (require-library 'iasylum/fmt/fmt-0.8.1/fmt-unicode))         ; javascript utilities.
 
 ;; FIXXXME Hack that will be used until I debug the naked left-hand reference issues above.
-(force-fmt-load)
+;(force-fmt-load)
 
 
 (add-lib "jdbc/jtds-1.2.5.jar")
@@ -552,6 +552,8 @@
 
 (add-lib "u/jaxb-ri-2.3.2_jaxb-runtime.jar")
 (add-lib "u/jaxb-ri-2.3.2_jakarta.xml.bind-api.jar")
+
+(force-fmt-load)
 
 (set! load original-load)
 
