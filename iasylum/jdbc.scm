@@ -9,6 +9,7 @@
                      result-set->iterator
                      execute-jdbc-query execute-jdbc-update execute-jdbc-something
                      get-data get-data-with-headers-at-each-line data-with-headers-at-each-line->json
+                     get-data/table get-data-result->table
                      for-each-data
                      map-each-data
                      jdbc/for-each-triple
@@ -282,6 +283,48 @@
                (let ((rs-md (read-metadata (get-meta-data rs)))
                      (data (iterable->list (result-set->iterator rs) (lambda (v) (->scm-object v)))))
                  (cons rs-md data)))))
+
+  (define get-data/table
+    (lambda* (connection query (vars #f))
+             (let* ((data (get-data connection query vars)))
+               (get-data-result->table data))))
+
+  ;; This generates a string with a table built in a format similar
+  ;; to the example below. Useful for debugging, mostly.
+  ;;
+  ;; (d/n (get-data-result->table '((("key" . "varchar") ("value" . "varchar"))
+  ;;  ("SOME RANDOM EXAMPLE" "YES")
+  ;;  ("SECOND LINE" "NO"))))
+  ;;
+  ;;  | ---                 | ---       |
+  ;;  | key                 | value     |
+  ;;  | (varchar)           | (varchar) |
+  ;;  | ---                 | ---       |
+  ;;  | SOME RANDOM EXAMPLE | YES       |
+  ;;  | SECOND LINE         | NO        |
+  ;;  | ---                 | ---       |
+  (define (get-data-result->table get-data-result)
+    (and-let* ((metadata-row (car get-data-result))
+               (column-indexes (list-ec (: i 0 (length metadata-row)) i))
+               (data-rows (cdr get-data-result))
+               ;; 2 lines for title + 3 horizontal spacer + lines for content.
+               (separator-column (apply string-append (add-between-list "\n" (list-ec (: i 0 (+ 5 (length data-rows))) " | "))))
+               (data-columns
+                (match metadata-row
+                     [((field-name . field-type) ...)
+                      (pam (zip field-name field-type column-indexes)
+                           (match-lambda [(field-name field-type column-number)
+                                     (string-append* "---\n"
+                                                     field-name "\n"
+                                                     "(" field-type ")" "\n"
+                                                     "---\n"
+                                                     (apply string-append
+                                                            (add-between-list "\n" (map (cute list-ref <> column-number) data-rows)))
+                                                     "\n---"))])]
+                     [else (throw (make-error "unexpected metadata format"))])))
+  (fmt #f (apply tabular (append (list (dsp separator-column))
+                                 (map dsp (add-between-list separator-column data-columns))
+                                 (list (dsp separator-column)))))))
 
   (define get-data-with-headers-at-each-line
     (lambda* (connection query (vars #f))
