@@ -291,19 +291,19 @@
 
   ;; This generates a string with a table built in a format similar
   ;; to the example below. Useful for debugging, mostly.
+
+  ;;  (d/n (get-data-result->table '((("key" . "varchar") ("value" . "varchar")) ("SOME RANDOM \nEXAMPLE" "YES") ("SECOND LINE" "NO"))))
   ;;
-  ;; (d/n (get-data-result->table '((("key" . "varchar") ("value" . "varchar"))
-  ;;  ("SOME RANDOM EXAMPLE" "YES")
-  ;;  ("SECOND LINE" "NO"))))
-  ;;
-  ;;  | ---                 | ---       |
-  ;;  | key                 | value     |
-  ;;  | (varchar)           | (varchar) |
-  ;;  | ---                 | ---       |
-  ;;  | SOME RANDOM EXAMPLE | YES       |
-  ;;  | SECOND LINE         | NO        |
-  ;;  | ---                 | ---       |
-  (define (get-data-result->table get-data-result)
+  ;; | ---                   | ---       |
+  ;; | key                   | value     |
+  ;; | (varchar)             | (varchar) |
+  ;; | ---                   | ---       |
+  ;; | SOME RANDOM \nEXAMPLE | YES       |
+  ;; | SECOND LINE           | NO        |
+  ;; | ---                   | ---       |
+  (define* (get-data-result->table
+            (escape-newlines: escape-newlines (lambda (str) (irregex-replace/all (irregex 'newline) str "\\n")))
+            get-data-result)
     (and-let* ((metadata-row (car get-data-result))
                (column-indexes (list-ec (: i 0 (length metadata-row)) i))
                (data-rows (cdr get-data-result))
@@ -315,11 +315,13 @@
                       (pam (zip field-name field-type column-indexes)
                            (match-lambda [(field-name field-type column-number)
                                      (string-append* "---\n"
-                                                     field-name "\n"
-                                                     "(" field-type ")" "\n"
+                                                     (escape-newlines field-name) "\n"
+                                                     "(" (escape-newlines field-type) ")" "\n"
                                                      "---\n"
                                                      (apply string-append
-                                                            (add-between-list "\n" (map (cute list-ref <> column-number) data-rows)))
+                                                            (add-between-list "\n"
+                                                                              (map escape-newlines
+                                                                                   (map (cute list-ref <> column-number) data-rows))))
                                                      "\n---"))])]
                      [else (throw (make-error "unexpected metadata format"))])))
   (fmt #f (apply tabular (append (list (dsp separator-column))
