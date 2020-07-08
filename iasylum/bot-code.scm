@@ -88,7 +88,8 @@
                                                                      (strmsg ,(->jstring msg))
                                                                      )
                                                                    )
-                                                              ))
+                                                              ;; https://api.slack.com/docs/rate-limits#rtm
+                                                              (sleep-milliseconds 1100)))
                                          (loop))))))
            (when out-work-queue
              (slack/create-reader-bot
