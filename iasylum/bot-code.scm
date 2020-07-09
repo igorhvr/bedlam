@@ -40,8 +40,9 @@
                                                 (when (and (contains? ~a (get ~a (get e :channel)))
                                                            ~a
                                                            (not (get e :edited false))
+                                                           (get e :text false)
                                                            (not (get e :thread_ts false)))
-                                                      (doto (get ~a (get ~a (get e :channel))) (.put (new sisc.data.ImmutableString (get e :text))))))
+                                                      (doto (get ~a (get ~a (get e :channel))) (.put (new sisc.data.ImmutableString (get e :text \"\"))))))
 
                                           (defn connect-to-slack [conn token]
                                                 (reset! ~a (rtm/rtm-connect token
