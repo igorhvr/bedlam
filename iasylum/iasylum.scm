@@ -390,12 +390,12 @@
   (define thread/spawn*
     (lambda* ((error-handler: error-handler standard-thread-error-handler) (thread-name: thread-name #f) thunk)
              (watched-thread/spawn
-              thunk
               'error-handler: error-handler
-              'thread-name: thread-name)))
+              'thread-name: thread-name
+              thunk)))
 
   (define watched-thread/spawn
-    (lambda* (p (error-handler: error-handler standard-thread-error-handler) (thread-name: thread-name #f))
+    (lambda* ((error-handler: error-handler standard-thread-error-handler) (thread-name: thread-name #f) p)
         (assert (procedure? p) (or (not thread-name) (string? thread-name)))
         (thread/spawn
          (lambda ()
@@ -405,7 +405,7 @@
             p)))))
 
   (define debug-watched-thread/spawn
-    (lambda* (p (error-handler: error-handler debug-standard-thread-error-handler) (thread-name: thread-name #f))
+    (lambda* ((error-handler: error-handler debug-standard-thread-error-handler) (thread-name: thread-name #f) p)
         (assert (procedure? p) (or (not thread-name) (string? thread-name)))
         (thread/spawn
          (lambda ()
