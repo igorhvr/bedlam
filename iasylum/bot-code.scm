@@ -52,7 +52,7 @@
                                                                                             (Thread/sleep 3000) ;; Waiting 3s before trying again.
                                                                                             (~a conn token))))
                                                 (rtm/sub-to-event (:events-publication @conn) :message ~a))
-                                          (connect-to-slack ~a ~a)"
+                                          (~a ~a ~a)"
 					 conn-var
                                          message-receiver-var
                                          channelsvar
@@ -63,6 +63,7 @@
                                          conn-var
                                          connect-to-slack-var
                                          message-receiver-var
+                                         connect-to-slack-var
                                          conn-var
                                          tokenvar)
 					`((,tokenvar ,(->jstring token))
