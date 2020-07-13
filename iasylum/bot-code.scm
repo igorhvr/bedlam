@@ -81,7 +81,18 @@
                                      (mutex/synchronize (mutex-of clj) (lambda () (clj "(require 'clj-slack.chat)")))
                                      (let loop ()
                                        (let* ((msg (in-work-queue 'take)))
-                                         (mutex/synchronize (mutex-of clj)
+                                         ;; This allows us to recover from serious but possibly temporary conditions.
+                                         ;; Real-life example:
+                                         ;;  java.net.UnknownHostException: slack.com: Temporary failure in name resolution
+                                         (try-with-exponential-backoff
+                                          'action-description: "Attempt to post message to Slack..."
+                                          'initial-interval-millis: 2000
+                                          'max-interval-millis: 16000
+                                          'add-jitter: #t
+                                          'log-error: log-error
+                                          'action:
+                                                   (lambda ()
+                                                     (mutex/synchronize (mutex-of clj)
                                                             (lambda ()
                                                               (clj "(require 'clj-slack.chat)
                                                                                   (clj-slack.chat/post-message
@@ -94,7 +105,7 @@
                                                                      )
                                                                    )
                                                               ;; https://api.slack.com/docs/rate-limits#rtm
-                                                              (sleep-milliseconds 1100)))
+                                                              (sleep-milliseconds 1100)))))
                                          (loop))))))
            (when out-work-queue
              (slack/create-reader-bot
