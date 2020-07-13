@@ -965,7 +965,12 @@
             (with-failure-continuation
              (lambda (error error-continuation)
                (let* ((ms-to-wait-orig (->scm-object (j "backoff.getCurrentIntervalMillis();" `((backoff ,auto-retry)))))
-                      (ms-to-wait (if add-jitter (random ms-to-wait-orig) ms-to-wait-orig))
+                      (ms-to-wait (if add-jitter
+                                      ;; When jitter is enabled the time to wait
+                                      ;; will be between 50% below and 50% above the ms value.
+                                      (let ((circle-around-value ms-to-wait-orig))
+                                        (exact-ceiling (+ (/ circle-around-value 2) (random circle-around-value))))
+                                      ms-to-wait-orig))
                       (ms-elapsed (->scm-object (j "backoff.getElapsedTimeMillis();" `((backoff ,auto-retry)))))
                       (ms-max (->scm-object (j "backoff.getMaxElapsedTimeMillis();" `((backoff ,auto-retry))))))
                  (log-error
