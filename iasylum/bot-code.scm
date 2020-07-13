@@ -26,11 +26,12 @@
     (lambda* ((name: name) (channels: channels) (token: token) (fetch-bots-messages: fetch-bots-messages))
              (let* ((channelsvar (random-var))
 		    (tokenvar (random-var))
+                    (connect-to-slack-var (random-var))
                     (channels-id-var (random-var))
                     (message-receiver-var (random-var))
                     (conn-var (random-var))
                     (channels-id (clj "(into {} (concat conversations))" `((conversations ,(slack/retrieve-full-conversation-list token))))))
-               (watched-thread/spawn (lambda ()
+               (watched-thread/spawn 'thread-name: "slack/create-reader-bot" (lambda ()
 				       (mutex/synchronize (mutex-of clj) (lambda () (clj "(require '[slack-rtm.core :as rtm]) (require '[clj-slack.channels :as channels]) (require '[clj-slack.groups :as groups]) (require '[clojure.tools.logging :as log])")))
 				       (clj
 					(format "
@@ -44,12 +45,12 @@
                                                            (not (get e :thread_ts false)))
                                                       (doto (get ~a (get ~a (get e :channel))) (.put (new sisc.data.ImmutableString (get e :text \"\"))))))
 
-                                          (defn connect-to-slack [conn token]
+                                          (defn ~a [conn token]
                                                 (reset! ~a (rtm/rtm-connect token
                                                                               :on-close (fn [{:keys [status reason]}]
                                                                                             (log/error reason \"Previous connection with Slack was closed, retrying in 3 seconds...\")
                                                                                             (Thread/sleep 3000) ;; Waiting 3s before trying again.
-                                                                                            (connect-to-slack conn token))))
+                                                                                            (~a conn token))))
                                                 (rtm/sub-to-event (:events-publication @conn) :message ~a))
                                           (connect-to-slack ~a ~a)"
 					 conn-var
@@ -58,7 +59,9 @@
                                          channels-id-var
                                          (if (not fetch-bots-messages) "(not (get e :subtype false))" " ")
                                          channelsvar channels-id-var
+                                         connect-to-slack-var
                                          conn-var
+                                         connect-to-slack-var
                                          message-receiver-var
                                          conn-var
                                          tokenvar)
@@ -73,7 +76,7 @@
            ;; Nothing to do if we don't have at least one of those set.
            (assert (or in-work-queue out-work-queue))
            (when in-work-queue
-             (watched-thread/spawn (lambda()
+             (watched-thread/spawn 'thread-name: "slack/message-posting-thread" (lambda()
                                      (mutex/synchronize (mutex-of clj) (lambda () (clj "(require 'clj-slack.chat)")))
                                      (let loop ()
                                        (let* ((msg (in-work-queue 'take)))
