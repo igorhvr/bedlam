@@ -1129,18 +1129,18 @@
   (define (make-parameter-with-storage* init storage)
     (define (false-if-java-null o) (if (java-null? o) #f (java-unwrap o)))
     
-    (j "tmap.put(\"SINGLEKEY\", value);" `((value ,(java-wrap init)) (tmap ,storage)))
+    (j "tmap .put(\"SINGLEKEY\", value);" `((value ,(java-wrap init)) (tmap ,storage)))
     ((lambda ()
        (define calculate-result
-         (lambda (value)
-           (if (not value)
+         (lambda (parameter-provided value)
+           (if (not parameter-provided)
                (false-if-java-null (j "tmap.get(\"SINGLEKEY\");" `((tmap ,storage))))
-               (let ((result (calculate-result #f)))
+               (let ((result (calculate-result #f 'ignored)))
                  (j "tmap.put(\"SINGLEKEY\", value);" `((value ,(java-wrap value)) (tmap ,storage)))
                  result))))
        (case-lambda
-         (() (calculate-result #f))
-         ((init) (calculate-result init))))))
+         (() (calculate-result #f 'ignored))
+         ((init) (calculate-result #t init))))))
 
   
   (define (start-async-json-engine-with-status-retriever engine-thunk should-stop?-thunk seconds-between-executions)
