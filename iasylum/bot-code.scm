@@ -218,6 +218,18 @@
                               (let ((params (cdr (split-string " " what-was-read))))
                                 (log-trace "bot:" bot "params:" params)
                                 (fn 'id: id bot))))
+                         ([command ':one-param: fn]
+                          (log-trace "command:" command "what-was-read:" what-was-read)
+                          (if (string-prefix? command what-was-read)
+                              (let ((param (string-drop what-was-read (string-length command))))
+                                (log-trace "bot:" bot "param:" param)
+                                (fn bot param))))
+                         (['id: id command ':one-param: fn]
+                          (log-trace "command:" command "what-was-read:" what-was-read)
+                          (if (string-prefix? command what-was-read)
+                              (let ((param (string-drop  what-was-read (string-length command))))
+                                (log-trace "bot:" bot "param:" param)
+                                (fn 'id: id bot param))))
                           )
                 commands)
       what-was-read)]
