@@ -6,7 +6,9 @@
             (clj
              (string-append "
               (let [ result-var (conversations/list {:api-url \"https://slack.com/api\" :token " token-var "}
-                                  {:exclude_members \"true\" :cursor " cursor-var " :limit \"300\"})]
+                                  {:exclude_members \"true\" :cursor " cursor-var " :limit \"300\"
+                                                 :types \"public_channel,private_channel,mpim,im\"
+                                  }) ]
                 (list (map (fn [channel] {(get channel :id) (get channel :name)}) (get result-var :channels))
                   (get (get result-var :response_metadata) :next_cursor)))")
              `((,token-var ,(->jstring token))
@@ -192,12 +194,31 @@
   (match-lambda*
    [('read-line)
     (let ((what-was-read (bot 'read-line)))
-      (for-each (match-lambda* ([(command fn)]
-                                (log-trace "command:" command "what-was-read:" what-was-read)
-                                (if (string-prefix? command what-was-read)
-                                    (let ((params (cdr (split-string " " what-was-read))))
-                                      (log-trace "bot:" bot "params:" params)
-                                      (fn bot params)))))
+      (for-each (match-lambda ([command fn]
+                          (log-trace "command:" command "what-was-read:" what-was-read)
+                          (if (string-prefix? command what-was-read)
+                              (let ((params (cdr (split-string " " what-was-read))))
+                                (log-trace "bot:" bot "params:" params)
+                                (fn bot params))))
+                         (['id: id command fn]
+                          (log-trace "command:" command "what-was-read:" what-was-read)
+                          (if (string-prefix? command what-was-read)
+                              (let ((params (cdr (split-string " " what-was-read))))
+                                (log-trace "bot:" bot "params:" params)
+                                (fn 'id: id bot params))))
+                         ([command ':no-params: fn]
+                          (log-trace "command:" command "what-was-read:" what-was-read)
+                          (if (string-prefix? command what-was-read)
+                              (let ((params (cdr (split-string " " what-was-read))))
+                                (log-trace "bot:" bot "params:" params)
+                                (fn bot))))
+                         (['id: id command ':no-params: fn]
+                          (log-trace "command:" command "what-was-read:" what-was-read)
+                          (if (string-prefix? command what-was-read)
+                              (let ((params (cdr (split-string " " what-was-read))))
+                                (log-trace "bot:" bot "params:" params)
+                                (fn 'id: id bot))))
+                          )
                 commands)
       what-was-read)]
    [(anything-else . params) (apply bot (cons anything-else params))]))

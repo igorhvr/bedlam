@@ -6,7 +6,7 @@
 (module iasylum/bot
   (irc/work-queue-bot irc/create-bot-on-channel
    slack/work-queue-bot slack/create-bot-on-channel
-
+   slack/create-reader-bot
    bot/add-global-help-and-exit-commands bot/add-global-commands  bot-on-channel-command-processor)
 
   (include "bot-code.scm")
