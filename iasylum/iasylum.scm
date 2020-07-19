@@ -143,6 +143,7 @@
    week-iso8601-string-representation
    get-last-week-iso8601
    get-date-interval-of-week
+   eval-string eval/string
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -1755,6 +1756,33 @@
                                .atStartOfDay(java.time.ZoneId.systemDefault()).toInstant());"
                             `((week ,(->jint week-number))
                               (yld ,year-local-date)))))))
+
+   (define (eval-string str)
+     (with-input-from-string str
+       (lambda ()
+         (let loop ((previous-result (void))
+                    (form (read)))
+        (if (eof-object? form)
+            previous-result
+            (loop (eval form) (read)))))))
+
+   ;; Evals and normally returns a string with whatever was
+   ;; displayed and also the result of the last form.
+   ;; Exception: if nothing got displayed and the last form
+   ;; returns void, #f will be returned.
+   (define (eval/string str)
+     (let* ((had-non-void-result (make-parameter* #f))
+            (result-string
+             (with-output-to-string
+               (lambda ()
+                 (let ((result (eval-string str)))
+                   (unless (void? result)
+                     (begin
+                       (had-non-void-result #t)
+                       (display result))))))))
+       (if (not (string=? ""result-string))
+           result-string
+           (if (had-non-void-result) result-string #f))))
 
   (create-shortcuts (avg -> average))
 
