@@ -180,6 +180,24 @@
           [('outq) outq]
           [('inq) inq]))
 
+;;
+;; Example of usage:
+;;
+;; (define bot
+;;  (slack/create-bot-on-channel
+;;   'channel-name: <SLACK-CHANNEL-NAME>
+;;   'bot-name: <ANYTHING>
+;;   'token: <SLACK-TOKEN>
+;;   'command-prefix-list: '("c:" "C:" "command:")
+;;   'output-prefix: ""))
+;;
+;; (bot 'd/n "hello world")
+;; => "hello world" (in the slack channel)
+;;
+;; (bot 'read-line)
+;; => "any string typed after "c:", "C:" or "command:" in the slack channel"
+;; e.g. if you type "c: hello" in the channel, the result of this fn would be "hello".
+;;
 (define slack/create-bot-on-channel
    (lambda* ((channel-name: channel-name)
              (bot-name: bot-name)
