@@ -1,3 +1,5 @@
+(define *DEFAULT-OUTPUT-PREFIX* " : ")
+
 (define (slack/retrieve-full-conversation-list token)
   (let loop ((cursor ""))
     (mutex/synchronize (mutex-of clj) (lambda () (clj "(require '[slack-rtm.core :as rtm]) (require '[clj-slack.conversations :as conversations]) (require '[clojure.tools.logging :as log])")))
@@ -155,14 +157,15 @@
   ;;(define inq (make-queue))(define outq (make-queue))(define mybot (irc/work-queue-bot 'in-work-queue: inq 'out-work-queue: outq 'name: "igorhvr" 'server-hostname: "localhost-ia" 'server-port: 16667 'server-password: "igorhvr/ia:igorhvr" 'channel: "ia"))
 
 (define* (bot-on-channel-command-processor
-          (inq: inq) (outq: outq) (command-prefix-list: command-prefix-list))
+          (inq: inq) (outq: outq) (command-prefix-list: command-prefix-list)
+          (output-prefix: output-prefix *DEFAULT-OUTPUT-PREFIX*))
   (define bot-on-channel-display-fn
     (lambda params
       (inq 'put (irregex-replace/all
                  "\n"
                  (apply string-append*
                         (map display-string params))
-                 (string-append* "\n" " : ")))))
+                 (string-append* "\n" output-prefix)))))
          (match-lambda*
           [('d . params) (apply bot-on-channel-display-fn params)]
           [('d/n . params) (apply bot-on-channel-display-fn (flatten (list "\n" params "\n")))]
@@ -178,7 +181,11 @@
           [('inq) inq]))
 
 (define slack/create-bot-on-channel
-   (lambda* ((channel-name: channel-name) (bot-name: bot-name) (token: token) (command-prefix-list: command-prefix-list))
+   (lambda* ((channel-name: channel-name)
+             (bot-name: bot-name)
+             (token: token)
+             (command-prefix-list: command-prefix-list)
+             (output-prefix: output-prefix *DEFAULT-OUTPUT-PREFIX*))
      (let* ((inq (make-queue))
             (outq (make-queue)))
        (slack/work-queue-bot 'in-work-queue: inq
@@ -186,7 +193,10 @@
                        'name: bot-name
                        'channel: channel-name
                        'token: token)
-       (bot-on-channel-command-processor 'inq: inq 'outq: outq 'command-prefix-list: command-prefix-list))))
+       (bot-on-channel-command-processor 'inq: inq
+                                         'outq: outq
+                                         'command-prefix-list: command-prefix-list
+                                         'output-prefix: output-prefix))))
 
 (define irc/create-bot-on-channel (lambda p (nyi)))
 
