@@ -316,7 +316,7 @@
                            (match-lambda [(field-name field-type column-number)
                                      (string-append* "---\n"
                                                      (escape-newlines field-name) "\n"
-                                                     "(" (escape-newlines field-type) ")" "\n"
+                                                     (if field-type (string-append "(" (escape-newlines field-type) ")" "\n") "")
                                                      "---\n"
                                                      (apply string-append
                                                             (add-between-list "\n"
