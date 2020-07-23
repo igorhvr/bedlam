@@ -14,7 +14,7 @@
    nyi
    vunless
    each-for
-   pam
+   pam filter-pam
    to-string
    display-string
    iasylum-write-string
@@ -273,6 +273,8 @@
   (define (each-for arguments fn) (for-each fn arguments))
   
   (define (pam arguments fn) (map fn arguments))
+
+  (define (filter-pam arguments fn) (filter-map fn arguments))
   
   (define to-string (lambda (f o) (with-output-to-string (lambda () (f o)))))
   
