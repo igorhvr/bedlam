@@ -1018,7 +1018,8 @@
     (define (deep x)
       (cond ((null? x) x)
             ((vector? x) (list->vector (deep-map f (vector->list x))))
-            ((pair? x) (map deep x))
+            ((list? x) (map deep x))
+            ((pair? x) (cons (deep (car x)) (deep (cdr x))))
             (else (f x))))
     (map deep l))
   
