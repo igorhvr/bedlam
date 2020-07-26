@@ -112,8 +112,8 @@
 (define put-log-trace (make-queue))
 
 (define start-worker
-  (lambda* (processor work-queue (continue-forever: continue-forever #t) (inner-queue-forced: inner-queue-forced #f) (log-trace-execution: log-trace-execution (make-parameter* #t)) )
-      (watched-thread/spawn
+  (lambda* (processor work-queue (continue-forever: continue-forever #t) (inner-queue-forced: inner-queue-forced #f) (log-trace-execution: log-trace-execution (make-parameter* #t)) (thread-name: thread-name "work-queue/worker") )
+      (watched-thread/spawn 'thread-name: thread-name
        (lambda ()
          (let ((n (get-next-worker-n)))
            (when (log-trace-execution) (put-log-trace 'put (list 'work-queue "Starting worker" n)))
