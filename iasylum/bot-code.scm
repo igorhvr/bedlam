@@ -157,7 +157,9 @@
   ;;(define inq (make-queue))(define outq (make-queue))(define mybot (irc/work-queue-bot 'in-work-queue: inq 'out-work-queue: outq 'name: "igorhvr" 'server-hostname: "localhost-ia" 'server-port: 16667 'server-password: "igorhvr/ia:igorhvr" 'channel: "ia"))
 
 (define* (bot-on-channel-command-processor
-          (inq: inq) (outq: outq) (command-prefix-list: command-prefix-list)
+          (inq: inq)
+          (outq: outq)
+          (command-prefix-list: command-prefix-list)
           (output-prefix: output-prefix *DEFAULT-OUTPUT-PREFIX*))
   (define bot-on-channel-display-fn
     (lambda params
