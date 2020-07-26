@@ -12,6 +12,7 @@
 
    ; aux:
    clojure/find-value-by-key
+   clj-keyword?
    symbol->clj-keyword
    clj-keyword->symbol
    symbol->clj-symbol
