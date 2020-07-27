@@ -264,10 +264,12 @@
 
 (define irc/create-bot-on-channel (lambda p (nyi)))
 
-(define (bot/add-global-commands bot commands)
+(define* (bot/add-global-commands (token: token #f) bot commands)
   (match-lambda*
    [('read-line)
-    (let ((what-was-read (bot 'read-line)))
+    (let* ((m (bot 'read-attributed-line-struct))
+           (what-was-read (attributed-message-message m))
+           (sender (attributed-message-sender m)))
       (for-each (match-lambda ([command fn]
                           (log-trace "command:" command "what-was-read:" what-was-read)
                           (if (string-prefix? command what-was-read)
@@ -280,6 +282,22 @@
                               (let ((params (cdr (split-string " " what-was-read))))
                                 (log-trace "bot:" bot "params:" params)
                                 (fn 'id: id bot params))))
+                         (['id: id command fn ':attributed:]
+                          (log-trace "command:" command "what-was-read:" what-was-read)
+                          (if (string-prefix? command what-was-read)
+                              (let ((params (cdr (split-string " " what-was-read))))
+                                (log-trace "bot:" bot "params:" params)
+                                (fn 'id: id 'sender: sender bot params))))
+                         (['id: id command fn ':attributed-email:]
+                          (log-trace "command:" command "what-was-read:" what-was-read)
+                          (if (string-prefix? command what-was-read)
+                              (let ((params (cdr (split-string " " what-was-read))))
+                                (log-trace "bot:" bot "params:" params)
+                                (let ((sender-email (and sender token
+                                                         (slack-user-info/fetch-email
+                                                          (slack/fetch-user-info 'user-id: sender 'token: token
+                                                                                 'timeout-milliseconds: 600000)))))
+                                  (fn 'id: id 'sender-email: sender-email bot params)))))
                          ([command ':no-params: fn]
                           (log-trace "command:" command "what-was-read:" what-was-read)
                           (if (string-prefix? command what-was-read)
