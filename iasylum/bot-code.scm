@@ -266,10 +266,10 @@
 
 (define* (bot/add-global-commands (token: token #f) bot commands)
   (match-lambda*
-   [('read-line)
-    (let* ((m (bot 'read-attributed-line-struct))
-           (what-was-read (attributed-message-message m))
-           (sender (attributed-message-sender m)))
+   [('read-attributed-line-struct)
+    (let* ((m-struct (bot 'read-attributed-line-struct))
+           (what-was-read (attributed-message-message m-struct))
+           (sender (attributed-message-sender m-struct)))
       (for-each (match-lambda ([command fn]
                           (log-trace "command:" command "what-was-read:" what-was-read)
                           (if (string-prefix? command what-was-read)
@@ -324,7 +324,7 @@
                                 (fn 'id: id bot param))))
                           )
                 commands)
-      what-was-read)]
+      m-struct)]
    [(anything-else . params) (apply bot (cons anything-else params))]))
 
 (define* (bot/add-global-help-and-exit-commands bot help-text (exit-thunk: exit-thunk (lambda () (j "System.exit(0);"))))
