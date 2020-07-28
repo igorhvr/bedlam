@@ -1,3 +1,5 @@
+(define *DEFAULT-OUTPUT-PREFIX* " : ")
+
 (define (slack/retrieve-full-conversation-list token)
   (let loop ((cursor ""))
     (mutex/synchronize (mutex-of clj) (lambda () (clj "(require '[slack-rtm.core :as rtm]) (require '[clj-slack.conversations :as conversations]) (require '[clojure.tools.logging :as log])")))
@@ -201,15 +203,18 @@
   ;;(define inq (make-queue))(define outq (make-queue))(define mybot (irc/work-queue-bot 'in-work-queue: inq 'out-work-queue: outq 'name: "igorhvr" 'server-hostname: "localhost-ia" 'server-port: 16667 'server-password: "igorhvr/ia:igorhvr" 'channel: "ia"))
 
 (define* (bot-on-channel-command-processor
-          (inq: inq) (outq: outq) (token: token #f)
-          (command-prefix-list: command-prefix-list))
+          (inq: inq)
+          (outq: outq)
+          (token: token #f)
+          (command-prefix-list: command-prefix-list)
+          (output-prefix: output-prefix *DEFAULT-OUTPUT-PREFIX*))
   (define bot-on-channel-display-fn
     (lambda params
       (inq 'put (irregex-replace/all
                  "\n"
                  (apply string-append*
                         (map display-string params))
-                 (string-append* "\n" " : ")))))
+                 (string-append* "\n" output-prefix)))))
   (letrec
       ((resulting-fn
          (match-lambda*
@@ -248,9 +253,30 @@
           [('inq) inq])))
     resulting-fn))
 
+;;
+;; Example of usage:
+;;
+;; (define bot
+;;  (slack/create-bot-on-channel
+;;   'channel-name: <SLACK-CHANNEL-NAME>
+;;   'bot-name: <ANYTHING>
+;;   'token: <SLACK-TOKEN>
+;;   'command-prefix-list: '("c:" "C:" "command:")
+;;   'output-prefix: ""))
+;;
+;; (bot 'd/n "hello world")
+;; => "hello world" (in the slack channel)
+;;
+;; (bot 'read-line)
+;; => "any string typed after "c:", "C:" or "command:" in the slack channel"
+;; e.g. if you type "c: hello" in the channel, the result of this fn would be "hello".
+;;
 (define slack/create-bot-on-channel
-   (lambda* ((channel-name: channel-name) (bot-name: bot-name) (token: token)
-             (command-prefix-list: command-prefix-list))
+   (lambda* ((channel-name: channel-name)
+             (bot-name: bot-name)
+             (token: token)
+             (command-prefix-list: command-prefix-list)
+             (output-prefix: output-prefix *DEFAULT-OUTPUT-PREFIX*))
      (let* ((inq (make-queue))
             (outq (make-queue)))
        (slack/work-queue-bot 'in-work-queue: inq
@@ -259,8 +285,11 @@
                        'channel: channel-name
                        'fetch-attributed-messages: #t
                        'token: token)
-       (bot-on-channel-command-processor 'inq: inq 'outq: outq 'token: token
-                                         'command-prefix-list: command-prefix-list))))
+       (bot-on-channel-command-processor 'inq: inq
+                                         'outq: outq
+                                         'token: token
+                                         'command-prefix-list: command-prefix-list
+                                         'output-prefix: output-prefix))))
 
 (define irc/create-bot-on-channel (lambda p (nyi)))
 
