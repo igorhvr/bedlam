@@ -307,8 +307,7 @@
     (and-let* ((metadata-row (car get-data-result))
                (column-indexes (list-ec (: i 0 (length metadata-row)) i))
                (data-rows (cdr get-data-result))
-               ;; 2 lines for title + 3 horizontal spacer + lines for content.
-               (separator-column (apply string-append (add-between-list "\n" (list-ec (: i 0 (+ 5 (length data-rows))) " | "))))
+               
                (data-columns
                 (match metadata-row
                      [((field-name . field-type) ...)
@@ -316,14 +315,19 @@
                            (match-lambda [(field-name field-type column-number)
                                      (string-append* "---\n"
                                                      (escape-newlines field-name) "\n"
-                                                     "(" (escape-newlines field-type) ")" "\n"
+                                                     (if field-type (string-append "(" (escape-newlines field-type) ")" "\n") "")
                                                      "---\n"
                                                      (apply string-append
                                                             (add-between-list "\n"
                                                                               (map escape-newlines
                                                                                    (map (cute list-ref <> column-number) data-rows))))
                                                      "\n---"))])]
-                     [else (throw (make-error "unexpected metadata format"))])))
+                     [else (throw (make-error "unexpected metadata format"))]))
+               ;; 1 or 2 lines for title + 3 horizontal spacer + lines for content.
+               (separator-column
+                (let ((has-field-type (any identity (match metadata-row [((field-name . field-type) ...) field-type]))))
+                  (apply string-append
+                         (add-between-list "\n" (list-ec (: i 0 (+ 1 (if has-field-type 1 0) 3 (length data-rows))) " | "))))))
   (fmt #f (apply tabular (append (list (dsp separator-column))
                                  (map dsp (add-between-list separator-column data-columns))
                                  (list (dsp separator-column)))))))

@@ -14,7 +14,7 @@
    nyi
    vunless
    each-for
-   pam
+   pam filter-pam
    to-string
    display-string
    iasylum-write-string
@@ -273,6 +273,8 @@
   (define (each-for arguments fn) (for-each fn arguments))
   
   (define (pam arguments fn) (map fn arguments))
+
+  (define (filter-pam arguments fn) (filter-map fn arguments))
   
   (define to-string (lambda (f o) (with-output-to-string (lambda () (f o)))))
   
@@ -1016,7 +1018,8 @@
     (define (deep x)
       (cond ((null? x) x)
             ((vector? x) (list->vector (deep-map f (vector->list x))))
-            ((pair? x) (map deep x))
+            ((list? x) (map deep x))
+            ((pair? x) (cons (deep (car x)) (deep (cdr x))))
             (else (f x))))
     (map deep l))
   
@@ -1089,9 +1092,15 @@
 
 
   ; Generates parameters that work and are safe across threads.
-  (define (make-parameter* init)
-    (let ((storage (j "new java.util.concurrent.ConcurrentHashMap();")))
-      (make-parameter-with-storage* init storage)))
+  (define make-parameter*
+    (match-lambda*
+     [(init)
+      (let ((storage (j "new java.util.concurrent.ConcurrentHashMap();")))
+        (make-parameter-with-storage* init storage))]
+     [()
+      (let ((storage (j "new java.util.concurrent.ConcurrentHashMap();")))
+        (make-parameter-with-storage* 'throw-error-upon-void: #t (void) storage))]
+     ))
 
   ; Generates expiring parameters that work and are safe across threads.
   (define* (make-expiring-parameter* (expiration-seconds: expiration-seconds 60) (initial-value: initial-value #f))
@@ -1127,7 +1136,7 @@
 
 
     ; Generates parameters that work and are safe across threads.
-  (define (make-parameter-with-storage* init storage)
+  (define* (make-parameter-with-storage* (throw-error-upon-void: throw-error-upon-void #f) init storage)
     (define (false-if-java-null o) (if (java-null? o) #f (java-unwrap o)))
     
     (j "tmap .put(\"SINGLEKEY\", value);" `((value ,(java-wrap init)) (tmap ,storage)))
@@ -1135,13 +1144,19 @@
        (define calculate-result
          (lambda (parameter-provided value)
            (if (not parameter-provided)
-               (false-if-java-null (j "tmap.get(\"SINGLEKEY\");" `((tmap ,storage))))
+               (let ((result (false-if-java-null (j "tmap.get(\"SINGLEKEY\");" `((tmap ,storage))))))
+                 result)
                (let ((result (calculate-result #f 'ignored)))
                  (j "tmap.put(\"SINGLEKEY\", value);" `((value ,(java-wrap value)) (tmap ,storage)))
                  result))))
        (case-lambda
-         (() (calculate-result #f 'ignored))
-         ((init) (calculate-result #t init))))))
+         (()
+          (let ((result (calculate-result #f 'ignored)))
+            (when (and throw-error-upon-void (void? result))
+              (throw (make-error "Value requested for unset (make-parameter*) object. No-args constructor disallows (void) results.")))
+            result))
+         ((init)
+          (calculate-result #t init))))))
 
   
   (define (start-async-json-engine-with-status-retriever engine-thunk should-stop?-thunk seconds-between-executions)

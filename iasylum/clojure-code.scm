@@ -22,6 +22,9 @@
 (define (clojure/find-value-by-key clj-map key)
   (clj "(val (find cljmap (keyword k)))" `((cljmap ,clj-map) (k ,(->jstring key)))))
 
+(define (clj-keyword? o)
+  (instance-of o "clojure.lang.Keyword"))
+
 (define (symbol->clj-keyword symbol)
   ((generic-java-method 'intern)
    (java-null

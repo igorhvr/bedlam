@@ -47,7 +47,9 @@
                                                            (not (get e :edited false))
                                                            (get e :text false)
                                                            (not (get e :thread_ts false)))
-                                                      (doto (get ~a (get ~a (get e :channel))) (.put (new sisc.data.ImmutableString (get e :text \"\"))))))
+                                                      (doto (get ~a (get ~a (get e :channel)))
+                                                            (.put (new sisc.data.ImmutableString
+                                                                 (str \"<\" (get e :user \"\") \"> \" (get e :text \"\")))))))
 
                                           (defn ~a [conn token]
                                                 (reset! ~a (rtm/rtm-connect token
@@ -74,9 +76,38 @@
 					  (,channelsvar ,(->jobject channels))
                                           (,channels-id-var ,channels-id))))))))
 
+(define* (slack/fetch-user-info (user-id: user-id) (token: token) (timeout-milliseconds: timeout-milliseconds #f))
+  (assert user-id token (string? user-id) (string? token))
+  (apply
+   try-with-exponential-backoff
+   `(
+   action-description: "Attempt to retrieve information for slack user..."
+   initial-interval-millis: 2000 max-interval-millis: 5000 add-jitter: #t
+   log-error: ,log-error
+   ,@(if timeout-milliseconds `(max-elapsed-time-millis: ,timeout-milliseconds) '())
+   action:
+   ,(lambda ()
+     (let ((clj-result
+            (mutex/synchronize (mutex-of clj)
+                               (lambda ()
+                                 (clj "(require 'clj-slack.users)")
+                                 (clj "(clj-slack.users/info
+                                  {:api-url \"https://slack.com/api\" :token strtoken}
+                                  struserid)"
+                                      `((strtoken ,(->jstring token))
+                                        (struserid ,(->jstring user-id))))))))
+           (deep-map (lambda (o) (if (clj-keyword? o) (clj-keyword->string o) o)) (jmap->alist clj-result)))))))
+
+(define (slack-user-info/fetch-email user-info)
+  (with/fc (lambda p #f)
+           (lambda ()
+             (->  user-info ((cute assoc ":user" <>)) cdr ((cute assoc ":profile" <>)) cadr ((cute assoc ":email" <>)) cadr))))
+
+(define-nongenerative-struct attributed-message iasylum/bot/attributed-message (sender message))
 (define slack/work-queue-bot
   (lambda* ((in-work-queue: in-work-queue #f)
             (out-work-queue: out-work-queue #f)
+            (fetch-attributed-messages: fetch-attributed-messages #f)
             (name: name) (channel: channel) (token: token))
            ;; Nothing to do if we don't have at least one of those set.
            (assert (or in-work-queue out-work-queue))
@@ -111,13 +142,28 @@
                                                               ;; https://api.slack.com/docs/rate-limits#rtm
                                                               (sleep-milliseconds 1100)))))
                                          (loop))))))
+
            (when out-work-queue
-             (slack/create-reader-bot
-              'name: name
-              'token: token
-              'fetch-bots-messages: #t
-              'channels:  (list (cons channel (out-work-queue 'inner-queue)))))
-	   #t))
+             (let ((the-inner-queue
+                    (if (not fetch-attributed-messages)
+                        (out-work-queue 'inner-queue)
+                        (let ((email-retrieving-queue (make-queue)))
+                          (start-worker (lambda (p)
+                                          (let* ((expression '(: bos "<" (=> userid (*? any )) "> " ))
+                                                 (message-text (match (irregex-split expression p) [(t) t]))
+                                                 (message-author (irregex-match-substring (irregex-search expression p) 'userid))
+                                                 (has-author (and message-author (not (string=? message-author ""))))
+                                                 (result (make-attributed-message (and has-author message-author)
+                                                                                  message-text)))
+                                            (out-work-queue 'put result)))
+                                        email-retrieving-queue 'thread-name: "slack/email-retrieving-worker")
+                          (email-retrieving-queue 'inner-queue)))))
+               (slack/create-reader-bot
+                'name: name
+                'token: token
+                'fetch-bots-messages: #t
+                'channels:  (list (cons channel the-inner-queue)))))
+             #t))
 
   (define irc/work-queue-bot
     (lambda* ((in-work-queue: in-work-queue) (out-work-queue: out-work-queue) (name: name) (server-hostname: server-hostname) (server-port: server-port) (server-password: server-password) (channel: channel) )
@@ -159,6 +205,7 @@
 (define* (bot-on-channel-command-processor
           (inq: inq)
           (outq: outq)
+          (token: token #f)
           (command-prefix-list: command-prefix-list)
           (output-prefix: output-prefix *DEFAULT-OUTPUT-PREFIX*))
   (define bot-on-channel-display-fn
@@ -168,19 +215,43 @@
                  (apply string-append*
                         (map display-string params))
                  (string-append* "\n" output-prefix)))))
+  (letrec
+      ((resulting-fn
          (match-lambda*
           [('d . params) (apply bot-on-channel-display-fn params)]
           [('d/n . params) (apply bot-on-channel-display-fn (flatten (list "\n" params "\n")))]
-          [('read-line) (let loop ()
-                          (let ((v (outq 'take)))
-                            (let ((m (irregex-match `(seq bos (or ,@command-prefix-list)
-                                                          (* (or whitespace ":"))
-                                                          (submatch (* any))) v)))
-                              (if m
-                                  (string-trim-both (irregex-match-substring m 1))
-                                  (loop)))))]
+          [('read-attributed-line-struct)
+                        (let loop ()
+                          (let ((orig (outq 'take)))
+                            (let* ((v (attributed-message-message orig))
+                                   (sender (attributed-message-sender orig)))
+                              (let ((m (irregex-match `(seq bos (or ,@command-prefix-list)
+                                                            (* (or whitespace ":"))
+                                                            (submatch (* any))) v)))
+                                (if m
+                                    (make-attributed-message sender (string-trim-both (irregex-match-substring m 1)))
+                                    (loop))))))]
+          [('read-email-attributed-line-struct)
+           (assert token)
+           (match (resulting-fn 'read-attributed-line)
+                  [(sender . message)
+                   (make-attributed-message
+                    (and sender
+                         (slack-user-info/fetch-email
+                          (slack/fetch-user-info 'user-id: sender 'token: token
+                                                 ;; 10 minutes. Avoids lock-up when/if something is badly broken.
+                                                 'timeout-milliseconds: 600000)))
+                    message)])]
+          [('read-attributed-line)
+           (let ((v (resulting-fn 'read-attributed-line-struct))) (cons (attributed-message-sender v)
+                                                                        (attributed-message-message v)))]
+          [('read-email-attributed-line)
+           (let ((v (resulting-fn 'read-email-attributed-line-struct))) (cons (attributed-message-sender v)
+                                                                              (attributed-message-message v)))]
+          [('read-line) (match (resulting-fn 'read-attributed-line) [(sender . message) message])]
           [('outq) outq]
-          [('inq) inq]))
+          [('inq) inq])))
+    resulting-fn))
 
 ;;
 ;; Example of usage:
@@ -212,18 +283,22 @@
                        'out-work-queue: outq
                        'name: bot-name
                        'channel: channel-name
+                       'fetch-attributed-messages: #t
                        'token: token)
        (bot-on-channel-command-processor 'inq: inq
                                          'outq: outq
+                                         'token: token
                                          'command-prefix-list: command-prefix-list
                                          'output-prefix: output-prefix))))
 
 (define irc/create-bot-on-channel (lambda p (nyi)))
 
-(define (bot/add-global-commands bot commands)
+(define* (bot/add-global-commands (token: token #f) bot commands)
   (match-lambda*
-   [('read-line)
-    (let ((what-was-read (bot 'read-line)))
+   [('read-attributed-line-struct)
+    (let* ((m-struct (bot 'read-attributed-line-struct))
+           (what-was-read (attributed-message-message m-struct))
+           (sender (attributed-message-sender m-struct)))
       (for-each (match-lambda ([command fn]
                           (log-trace "command:" command "what-was-read:" what-was-read)
                           (if (string-prefix? command what-was-read)
@@ -236,6 +311,22 @@
                               (let ((params (cdr (split-string " " what-was-read))))
                                 (log-trace "bot:" bot "params:" params)
                                 (fn 'id: id bot params))))
+                         (['id: id command fn ':attributed:]
+                          (log-trace "command:" command "what-was-read:" what-was-read)
+                          (if (string-prefix? command what-was-read)
+                              (let ((params (cdr (split-string " " what-was-read))))
+                                (log-trace "bot:" bot "params:" params)
+                                (fn 'id: id 'sender: sender bot params))))
+                         (['id: id command fn ':attributed-email:]
+                          (log-trace "command:" command "what-was-read:" what-was-read)
+                          (if (string-prefix? command what-was-read)
+                              (let ((params (cdr (split-string " " what-was-read))))
+                                (log-trace "bot:" bot "params:" params)
+                                (let ((sender-email (and sender token
+                                                         (slack-user-info/fetch-email
+                                                          (slack/fetch-user-info 'user-id: sender 'token: token
+                                                                                 'timeout-milliseconds: 600000)))))
+                                  (fn 'id: id 'sender-email: sender-email bot params)))))
                          ([command ':no-params: fn]
                           (log-trace "command:" command "what-was-read:" what-was-read)
                           (if (string-prefix? command what-was-read)
@@ -262,7 +353,7 @@
                                 (fn 'id: id bot param))))
                           )
                 commands)
-      what-was-read)]
+      m-struct)]
    [(anything-else . params) (apply bot (cons anything-else params))]))
 
 (define* (bot/add-global-help-and-exit-commands bot help-text (exit-thunk: exit-thunk (lambda () (j "System.exit(0);"))))
