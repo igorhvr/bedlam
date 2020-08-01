@@ -31,6 +31,7 @@ RUN apt-get -y install ntpdate ntp
 RUN apt-get -y install sysstat
 RUN apt-get -y install tor netcat-openbsd
 RUN apt-get -y install secure-delete
+RUN apt-get -y install strace
 
 RUN mkdir -p /usr/lib/jvm && cd /usr/lib/jvm && wget https://download.java.net/java/GA/jdk14.0.1/664493ef4a6946b186ff29eb326336a2/7/GPL/openjdk-14.0.1_linux-x64_bin.tar.gz && tar -zxvf openjdk-14.0.1_linux-x64_bin.tar.gz && rm openjdk-14.0.1_linux-x64_bin.tar.gz
 

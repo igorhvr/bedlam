@@ -31,6 +31,7 @@ RUN apt-get -y install ntpdate ntp
 RUN apt-get -y install sysstat
 RUN apt-get -y install tor netcat-openbsd
 RUN apt-get -y install secure-delete
+RUN apt-get -y install strace
 
 WORKDIR /opt
 RUN apt-get update \
