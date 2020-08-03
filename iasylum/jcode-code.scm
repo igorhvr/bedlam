@@ -279,7 +279,12 @@
      (match-lambda ((key value)
                ;; (j "map.put(key, value);" `((map ,result) (key ,(->jstring key)) (value ,(->jobject value))))
                (put result (->jstring key) (->jobject value))
-               ))
+               )
+              ((key . value)
+               ;; (j "map.put(key, value);" `((map ,result) (key ,(->jstring key)) (value ,(->jobject value))))
+               (put result (->jstring key) (->jobject value))
+               )
+              )
      m)
     result))
 
