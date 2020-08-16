@@ -16,7 +16,7 @@
    fmt-properties fmt-set-properties! fmt-width fmt-set-width!
    fmt-writer fmt-set-writer! fmt-port fmt-set-port!
    fmt-decimal-sep fmt-set-decimal-sep!
-   fmt-file fmt-try-fit cat apply-cat nl fl nl-str
+   fmt-file fmt-try-fit cat apply-cat fmt/nl fl nl-str
    fmt-join fmt-join/last fmt-join/dot
    fmt-join/prefix fmt-join/suffix fmt-join/range
    pad pad/right pad/left pad/both trim trim/left trim/both trim/length

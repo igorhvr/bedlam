@@ -250,7 +250,7 @@
                (let* ((col (fmt-col st))
                       (sep (string-append "," (make-nl-space col))))
                  ((cat "{" (fmt-join c-expr (vector->list x) sep)
-                       "}" nl)
+                       "}" fmt/nl)
                   st)))))
            st))
          (else
@@ -433,7 +433,7 @@
 
 (define (cpp-wrap-header name . body)
   (let ((name name)) ; consider auto-mangling
-    (cpp-ifndef name (c-begin (cpp-define name) nl (apply c-begin body) nl))))
+    (cpp-ifndef name (c-begin (cpp-define name) fmt/nl (apply c-begin body) fmt/nl))))
 
 (define (cpp-line num . o)
   (cat fl "#line " num (if (pair? o) (cat " " (car o)) "") fl))
@@ -467,8 +467,8 @@
 
 (define (c-open-brace st)
   (if (fmt-newline-before-brace? st)
-      (cat nl (c-current-indent-string st) "{" nl)
-      (cat " {" nl)))
+      (cat fmt/nl (c-current-indent-string st) "{" fmt/nl)
+      (cat " {" fmt/nl)))
 
 (define (c-close-brace st)
   (dsp "}"))
@@ -477,7 +477,7 @@
   (fmt-if fmt-expression?
           (c-expr x)
           (cat (fmt-if fmt-return? "return " "")
-               (c-in-expr (c-expr x)) ";" nl)))
+               (c-in-expr (c-expr x)) ";" fmt/nl)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; code blocks
@@ -519,7 +519,7 @@
                (fmt-let 'no-wrap? #t (fmt-join c-expr (cons body0 body) ", "))
                (lambda (st)
                  (let ((indent (c-current-indent-string st)))
-                   ((fmt-join c-expr (cons body0 body) (cat "," nl indent)) st))))
+                   ((fmt-join c-expr (cons body0 body) (cat "," fmt/nl indent)) st))))
               st)
              (let ((orig-ret? (fmt-return? st)))
                ((fmt-join/last c-expr
@@ -609,7 +609,7 @@
 (define (c-inline x) (cat "inline " (c-expr x)))
 (define (c-extern x) (cat "extern " (c-expr x)))
 (define (c-extern/C . body)
-  (cat "extern \"C\" {" nl (apply c-begin body) nl "}" nl))
+  (cat "extern \"C\" {" fmt/nl (apply c-begin body) fmt/nl "}" fmt/nl))
 
 (define (c-type type . o)
   (let ((name (and (pair? o) (car o))))
@@ -796,7 +796,7 @@
               (lambda (st)
                    ((fmt-join c-expr
                               ls
-                              (cat nl (make-space (+ 2 (fmt-col st))) str " "))
+                              (cat fmt/nl (make-space (+ 2 (fmt-col st))) str " "))
                     st))))))))))
 
 (define (c-unary-op op x)
