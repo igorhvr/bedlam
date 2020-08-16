@@ -144,6 +144,11 @@
    get-last-week-iso8601
    get-date-interval-of-week
    eval-string eval/string
+   amb
+   amb-fail
+   amb-require
+   amb-safe-context
+   amb-possibility-list
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -1798,6 +1803,120 @@
        (if (not (string=? ""result-string))
            result-string
            (if (had-non-void-result) result-string #f))))
+
+ ;;
+ ;; The global shared var `amb-fail` is called to backtrack when a
+ ;; condition fails.  at the top level, however, there is no
+ ;; more to backtrack, so we signal an error with srfi 23.
+ ;;
+ (define amb-fail
+   (lambda ()
+     (error "amb tree exhausted")))
+
+ ;;
+ ;; ** BE CAREFUL: IT ISN'T THREAD SAFE! USE `amb-safe-context` to make it thread-safe. **
+ ;;
+ ;; Amb was first proposed by John McCarthy, the inventor of LISP, in his 1963 paper
+ ;; A Basis for a Mathematical Theory of Computation (More of McCarthy's work can be found
+ ;; on his homepage). There is also a considerably sized section in SICP on the topic
+ ;; of amb & non-deterministic computation.
+ ;;
+ ;; Implementation from: http://community.schemewiki.org/?amb
+ ;;                      Arc: http://archive.is/6rq6k
+ ;;
+ ;; More implementations and info at:
+ ;; - https://www.shido.info/lisp/scheme_amb_e.html
+ ;;   Arc: http://archive.vn/hUIdX
+ ;; - https://ds26gte.github.io/tyscheme/index-Z-H-16.html#node_chap_14
+ ;;   Arc: http://archive.vn/T3YLD
+ ;;
+ ;; Example of usage:
+ ;; (let ((a (amb 1 2 3 4)))
+ ;;       (if (not (= a 3))
+ ;;           (amb)
+ ;;         a))
+ ;; => 3
+ ;;
+ ;; See also `amb-safe-context` macro.
+ ;;
+ (define-syntax amb
+   (syntax-rules ()
+     ((amb) (amb-fail))                  ; two shortcuts.
+     ((amb expression) expression)
+     ((amb expression ...)
+      (let ((fail-save amb-fail))
+        ((call-with-current-continuation ; capture a continuation to
+           (lambda (k-success)           ;   which we return possibles.
+             (call-with-current-continuation
+               (lambda (k-failure)       ; k-failure will try the next
+                 (set! amb-fail          ;   possible expression.
+                       (lambda () (k-failure #f)))
+                 (k-success              ; note that the expression is
+                  (lambda ()             ;   evaluated in tail position
+                    expression))))       ;   with respect to amb.
+             ...
+             (set! amb-fail fail-save)   ; finally, if this is reached,
+             fail-save)))))))            ;   we restore the saved fail.
+
+ (define (amb-require condition)
+   (if (not condition)
+       (amb-fail)))
+
+ ;;
+ ;; As an auxiliary example, `amb-possibility-list` is a special form
+ ;; that returns a list of all values its input expression may return.
+ ;;
+ ;; it is the same as `bag-of` o Teach Yourself Scheme in Fixnum Days cap 14.
+ ;;
+ (define-syntax amb-possibility-list
+   (syntax-rules ()
+     ((amb-possibility-list expression)
+      (let ((value-list '()))
+        ;; this requires that amb try its sub-forms left-to-right.
+        (amb (let ((value expression))
+               (set! value-list (cons value value-list))
+               (amb-fail))
+             (reverse value-list))))))   ; order it nicely.
+
+ ;;
+ ;; `amb-safe-context` is an auxiliary fn
+ ;; to make `amb` usage thread-safe. Also,
+ ;; any exception/error will call (amb) as default,
+ ;; so instead have to use (amb) or (amb-fail) to
+ ;; sign a failure you can just throw an error.
+ ;;
+ ;; If you use threads, in the same JVM you must
+ ;; call `amb` always inside `amb-safe-context`.
+ ;; Any single call alone can ruin all others "safe contexts"
+ ;; because the global shared var `amb-fail` will be dirty.
+ ;;
+ ;; Notice that the entire block inside `amb-safe-context`
+ ;; will execute atomically / synchronized.
+ ;;
+ ;; Example of usage:
+ ;;
+ ;; (amb-safe-context
+ ;;   (amb (error "error")
+ ;;     (let ((a (amb 1 2 3 4)))
+ ;;       (if (not (= a 3))
+ ;;           (error "wrong number")
+ ;;         a))))
+ ;;
+ ;; => 3
+ ;;
+ ;; See also `amb`.
+ ;;
+ (define-syntax amb-safe-context
+   (syntax-rules ()
+     [(_ body ...)
+      (mutex/synchronize
+       (mutex-of amb-fail)
+       (lambda ()
+         (with-failure-continuation
+          (lambda (err context)
+            (amb))
+          (lambda ()
+            body ...))))]))
 
   (create-shortcuts (avg -> average))
 
