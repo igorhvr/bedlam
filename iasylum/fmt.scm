@@ -26,6 +26,7 @@
    make-string-fmt-transformer
    make-space make-nl-space display-to-string write-to-string
    fmt-columns columnar tabular line-numbers
+   fmt/s
 
    fmt-in-macro? fmt-expression? fmt-return? fmt-default-type
    fmt-newline-before-brace? fmt-braceless-bodies?

@@ -176,6 +176,9 @@
 (define (fmt st . args)
   (fmt-start st new-fmt-state (apply-cat args)))
 
+(define (fmt/s . args)
+  (apply fmt (cons #f args)))
+
 (define (fmt-update str st)
   (let ((len (string-length str))
         (nli (string-index-right str #\newline))
