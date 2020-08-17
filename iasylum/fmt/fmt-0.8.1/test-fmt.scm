@@ -192,7 +192,7 @@
 (test "prefix: defgh" (fmt #f "prefix: " (fit/left 5 "abcdefgh")))
 (test "prefix: cdefg" (fmt #f "prefix: " (fit/both 5 "abcdefgh")))
 
-(test "abc\n123\n" (fmt #f (fmt-join/suffix (cut trim 3 <>) (string-split "abcdef\n123456\n" "\n") fmt/nl)))
+(test "abc\n123\n" (fmt #f (fmt-join/suffix (cut trim 3 <>) (string-split "abcdef\n123456\n" "\n") fmt-nl)))
 
 ;; utilities
 

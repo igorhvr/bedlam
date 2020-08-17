@@ -41,7 +41,7 @@
              (for-each
               (lambda (x) (set! orig-st (((car x) (cdr x)) orig-st)))
               (reverse line-buf))
-             (set! orig-st (fmt/nl orig-st))))
+             (set! orig-st (fmt-nl orig-st))))
            (set! line-buf '())
            (set! line-non-empty? #f)
            (line-init!))
@@ -346,7 +346,7 @@
 
 (define (wrap-lines . ls)
   (define (print-line ls st)
-    (fmt/nl ((fmt-join dsp ls " ") st)))
+    (fmt-nl ((fmt-join dsp ls " ") st)))
   (define buffer '())
   (lambda (st)
     ((fmt-let
@@ -367,7 +367,7 @@
           (buffer '()))
       (define (justify-line ls st)
         (if (null? ls)
-            (fmt/nl st)
+            (fmt-nl st)
             (let* ((sum (fold (lambda (s n) (+ n (string-width s))) 0 ls))
                    (len (length ls))
                    (diff (max 0 (- width sum)))
@@ -392,7 +392,7 @@
                    (newline p)))
                st))))
       (define (justify-last ls st)
-        (fmt/nl ((fmt-join dsp ls " ") st)))
+        (fmt-nl ((fmt-join dsp ls " ") st)))
       ((fmt-let
         'writer
         (lambda (str st) (set! buffer (cons str buffer)) st)
@@ -409,7 +409,7 @@
           (let ((line (read-line p)))
             (if (eof-object? line)
                 st
-                (lp (fmt/nl ((dsp line) st))))))))))
+                (lp (fmt-nl ((dsp line) st))))))))))
 
 (define (line-numbers . o)
   (let ((start (if (pair? o) (car o) 1)))
