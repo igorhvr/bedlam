@@ -291,6 +291,10 @@
 
 (define irc/create-bot-on-channel (lambda p (nyi)))
 
+(define (split-spaces str)
+ ;; Handles unicode nbsp chars as well as regular spaces.
+  (irregex-split (irregex `(+ (or "\u00a0" " "))) str))
+
 (define* (bot/add-global-commands (token: token #f) bot commands)
   (match-lambda*
    [('read-attributed-line-struct)
@@ -300,25 +304,25 @@
       (for-each (match-lambda ([command fn]
                           (log-trace "command:" command "what-was-read:" what-was-read)
                           (if (string-prefix? command what-was-read)
-                              (let ((params (cdr (split-string " " what-was-read))))
+                              (let ((params (cdr (split-spaces what-was-read))))
                                 (log-trace "bot:" bot "params:" params)
                                 (fn bot params))))
                          (['id: id command fn]
                           (log-trace "command:" command "what-was-read:" what-was-read)
                           (if (string-prefix? command what-was-read)
-                              (let ((params (cdr (split-string " " what-was-read))))
+                              (let ((params (cdr (split-spaces what-was-read))))
                                 (log-trace "bot:" bot "params:" params)
                                 (fn 'id: id bot params))))
                          (['id: id command fn ':attributed:]
                           (log-trace "command:" command "what-was-read:" what-was-read)
                           (if (string-prefix? command what-was-read)
-                              (let ((params (cdr (split-string " " what-was-read))))
+                              (let ((params (cdr (split-spaces what-was-read))))
                                 (log-trace "bot:" bot "params:" params)
                                 (fn 'id: id 'sender: sender bot params))))
                          (['id: id command fn ':attributed-email:]
                           (log-trace "command:" command "what-was-read:" what-was-read)
                           (if (string-prefix? command what-was-read)
-                              (let ((params (cdr (split-string " " what-was-read))))
+                              (let ((params (cdr (split-spaces what-was-read))))
                                 (log-trace "bot:" bot "params:" params)
                                 (let ((sender-email (and sender token
                                                          (slack-user-info/fetch-email
@@ -328,13 +332,13 @@
                          ([command ':no-params: fn]
                           (log-trace "command:" command "what-was-read:" what-was-read)
                           (if (string-prefix? command what-was-read)
-                              (let ((params (cdr (split-string " " what-was-read))))
+                              (let ((params (cdr (split-spaces what-was-read))))
                                 (log-trace "bot:" bot "params:" params)
                                 (fn bot))))
                          (['id: id command ':no-params: fn]
                           (log-trace "command:" command "what-was-read:" what-was-read)
                           (if (string-prefix? command what-was-read)
-                              (let ((params (cdr (split-string " " what-was-read))))
+                              (let ((params (cdr (split-spaces what-was-read))))
                                 (log-trace "bot:" bot "params:" params)
                                 (fn 'id: id bot))))
                          ([command ':one-param: fn]
