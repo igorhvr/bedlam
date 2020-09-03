@@ -349,6 +349,22 @@
                               (let ((param (string-drop  what-was-read (string-length command))))
                                 (log-trace "bot:" bot "param:" param)
                                 (fn 'id: id bot param))))
+                         (['id: id command ':one-param: fn ':attributed:]
+                          (log-trace "command:" command "what-was-read:" what-was-read)
+                          (if (string-prefix? command what-was-read)
+                              (let ((param (string-drop  what-was-read (string-length command))))
+                                (log-trace "bot:" bot "param:" param)
+                                (fn 'id: id 'sender: sender bot param))))
+                         (['id: id command ':one-param: fn ':attributed-email:]
+                          (log-trace "command:" command "what-was-read:" what-was-read)
+                          (if (string-prefix? command what-was-read)
+                              (let ((param (string-drop  what-was-read (string-length command))))
+                                (log-trace "bot:" bot "param:" param)
+                                (let ((sender-email (and sender token
+                                                         (slack-user-info/fetch-email
+                                                          (slack/fetch-user-info 'user-id: sender 'token: token
+                                                                                 'timeout-milliseconds: 600000)))))
+                                  (fn 'id: id 'sender-email: sender-email bot param)))))
                           )
                 commands)
       m-struct)]
