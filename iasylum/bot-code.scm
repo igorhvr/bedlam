@@ -8,7 +8,7 @@
             (clj
              (string-append "
               (let [ result-var (conversations/list {:api-url \"https://slack.com/api\" :token " token-var "}
-                                  {:exclude_members \"true\" :cursor " cursor-var " :limit \"300\"
+                                  {:exclude_members \"true\" :cursor " cursor-var " :limit \"800\"
                                                  :types \"public_channel,private_channel,mpim,im\"
                                   }) ]
                 (list (map (fn [channel] {(get channel :id) (get channel :name)}) (get result-var :channels))
@@ -24,7 +24,9 @@
            `((the-fetched-clojure-list ,the-fetched-clojure-list)
              (next-or-empty
               ,(if (string=? next-cursor "") (clj "[]")
-                   (loop next-cursor))))))))
+                   (begin
+                     (sleep-seconds 6)
+                     (loop next-cursor)))))))))
 
 (define slack/create-reader-bot
     (lambda* ((name: name) (channels: channels) (token: token) (fetch-bots-messages: fetch-bots-messages))
