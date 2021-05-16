@@ -376,14 +376,71 @@
       m-struct)]
    [(anything-else . params) (apply bot (cons anything-else params))]))
 
+;;; WATCHDOG support.
+
+(define bot/watch-dog-maximum-allowed-pulseless-period-seconds (make-parameter* 375))
+
+(define bot/watchdog-recent-pulse-happened (make-expiring-parameter* 'expiration-seconds: (bot/watch-dog-maximum-allowed-pulseless-period-seconds)))
+
+(define (bot/watchdog-assuage)
+  (log-trace "bot/watchdog-assuage called.")
+  (bot/watchdog-recent-pulse-happened #t))
+
 (define* (bot/add-global-help-and-exit-commands bot help-text (exit-thunk: exit-thunk (lambda () (j "System.exit(0);"))))
   (let ((new-bot
          (bot/add-global-commands bot `(("/help" ,(lambda (bot params)
                                                 (bot 'd (string-append*
                                                          "\n```"
                                                          (add-between "\n" help-text "```")))))
-                                    ("/exit" ,(lambda (bot params)
-                                                (bot 'd/n "Will exit in 3 seconds.")
-                                                (sleep-seconds 3)
-                                                (exit-thunk)))))))
+                                        ("/bot-pulse" ,(lambda (bot params)
+                                                     (bot/watchdog-assuage)
+                                                     (bot 'd (string-append* "Up @ "
+                                                                             (iso-8601-timestamp)))))
+                                        ("/exit" ,(lambda (bot params)
+                                                    (bot 'd/n "Will exit in 3 seconds.")
+                                                    (sleep-seconds 3)
+                                                    (exit-thunk)))))))
     new-bot))
+
+
+;; WATCHDOG
+
+(define bot/suppress-watchdog? (make-parameter* (get-env "SUPPRESS_WATCHDOG")))
+
+;; Monitor slack-based access health. Guarantees access to channels where this runs. Shutdown if any issues are found.
+(define* (bot/enable-watchdog (failure-callback: failure-callback (lambda ignored #t))
+                              (channel-name: channel-name)
+                              (slack-token: slack-token)
+                              (pulse-command: pulse-command))
+  (define assuager-cycle-seconds (* (bot/watch-dog-maximum-allowed-pulseless-period-seconds) 4/5))
+
+  (bot/watchdog-assuage) ;; Avoids immediate triggering during startup.
+
+  (thread/spawn* 'thread-name: "watchdog"
+                 (lambda () (let loop ()
+                         (sleep-seconds 16)
+                         (when (bot/suppress-watchdog?) (loop))
+                         (if (bot/watchdog-recent-pulse-happened)
+                             (begin
+                               (log-trace "watchdog checked. everything ok.")
+                               (loop))
+                             (begin
+                               (thread/spawn (lambda ()
+                                               (log-error "watchdog triggered. shutting down.")
+                                               (failure-callback "watchdog triggered. shutting down.")))
+                               (sleep-seconds 5)
+                               (panic))))))
+
+  (thread/spawn* 'thread-name: "bot/watchdog-assuager"
+                 (lambda ()
+                   (define pulse-bot-queue (make-queue))
+
+                   (slack/work-queue-bot 'in-work-queue: pulse-bot-queue
+                                         'name: "bot/watchdog-assuager"
+                                         'channel: channel-name
+                                         'token: slack-token)
+                   (sleep-seconds 4)
+                   (let loop ()
+                        (pulse-bot-queue 'put pulse-command)
+                        (sleep-seconds assuager-cycle-seconds)
+                        (loop)))))
