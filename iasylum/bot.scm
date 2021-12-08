@@ -5,7 +5,7 @@
 
 (module iasylum/bot
   (irc/work-queue-bot irc/create-bot-on-channel
-   slack/work-queue-bot slack/create-bot-on-channel slack/create-reader-bot slack/fetch-user-info slack-user-info/fetch-email
+   slack/work-queue-bot slack/create-bot-on-channel slack/create-reader-bot slack/fetch-user-info slack-user-info/fetch-email slack/retrieve-private-file-data
    attributed-message? attributed-message-message attributed-message-sender
    bot/add-global-help-and-exit-commands bot/add-global-commands  bot-on-channel-command-processor
    bot/watch-dog-maximum-allowed-pulseless-period-seconds bot/watchdog-recent-pulse-happened bot/watchdog-assuage bot/suppress-watchdog? bot/enable-watchdog

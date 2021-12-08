@@ -444,3 +444,11 @@
                         (pulse-bot-queue 'put pulse-command)
                         (sleep-seconds assuager-cycle-seconds)
                         (loop)))))
+
+(define* (slack/retrieve-private-file-data (token: token) (max-size-bytes: max-size-bytes (expt 2 18)) (url: url) (allow-non-slack-urls: allow-non-slack-urls #f))
+  (define expression '(: bos "https://files.slack.com/files-pri/" (*? any)))
+  (if (irregex-search expression url)
+      (http-call-get-headers/string url 'max-size-bytes: max-size-bytes 'headers: `(("Authorization" ,(string-append "Bearer " token))))
+      (if allow-non-slack-urls
+                (http-call-get-headers/string url 'max-size-bytes: max-size-bytes)
+                (throw (make-error "To avoid leaking credentials slack/retrieve-private-file can only be used to retrieve URLs beginning with https://files.slack.com/files-pri/")))))
