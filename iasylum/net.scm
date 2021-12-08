@@ -60,9 +60,10 @@
                                `((httpget)
                                  (destinationurl ,(->jstring destinationUrl))))))
 
-               (map (lambda (v)  (match-let ( ( (vname vvalue) v ) )
-                                   (j "httpget.addHeader(hn, hv);"`((hn ,(->jstring vname)) (hv ,(->jstring vvalue)) (httpget ,httpget)))
-                                   )) headers)
+               (when headers
+                 (map (lambda (v)  (match-let ( ( (vname vvalue) v ) )
+                                         (j "httpget.addHeader(hn, hv);"`((hn ,(->jstring vname)) (hv ,(->jstring vvalue)) (httpget ,httpget)))
+                                         )) headers))
                
                (let ((java-result (j "response = httpclient.execute(httpget);
                                       result=\"\";
