@@ -152,7 +152,7 @@
                         (let ((email-retrieving-queue (make-queue)))
                           (start-worker (lambda (p)
                                           (let* ((expression '(: bos "<" (=> userid (*? any )) "> " ))
-                                                 (message-text (match (irregex-split expression p) [(t) t]))
+                                                 (message-text (match (irregex-split expression p) [(t) t] [() ""]))
                                                  (message-author (irregex-match-substring (irregex-search expression p) 'userid))
                                                  (has-author (and message-author (not (string=? message-author ""))))
                                                  (result (make-attributed-message (and has-author message-author)
