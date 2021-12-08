@@ -16,6 +16,7 @@
    get-last-day-of-month
    milliseconds-duration->approximate-time-duration-human-string
    iso-8601-timestamp
+   rfc3339-timestamp
    )
 
   (define (add-days date ndays)
@@ -91,4 +92,5 @@
 
   (define* (iso-8601-timestamp (ts (current-date-utc))) (date->string ts "~4"))
 
+  (create-shortcuts (iso-8601-timestamp -> rfc3339-timestamp))
   )
