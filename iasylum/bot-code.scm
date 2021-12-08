@@ -49,9 +49,19 @@
                                                            (not (get e :edited false))
                                                            (get e :text false)
                                                            (not (get e :thread_ts false)))
+                                                      (when (not (nil? (-> e (.get :files))))
+                                                       (when (= 1 (-> e (.get :files) (.count)))
+                                                        (when (not (nil? (-> e (.get :files) (.get 0))))
+                                                         (when (not (nil? (-> e (.get :files) (.get 0) (.get :url_private_download))))
+                                                          (doto (get ~a (get ~a (get e :channel)))
+                                                            (.put (new sisc.data.ImmutableString
+                                                                 (str \"<\" (get e :user \"\") \"> \" (get e :text \"\")
+                                                                      \" | PRIVATE-SLACK-FILE-URL: \" (-> e (.get :files) (.get 0) (.get :url_private_download)) ))))))))
                                                       (doto (get ~a (get ~a (get e :channel)))
                                                             (.put (new sisc.data.ImmutableString
-                                                                 (str \"<\" (get e :user \"\") \"> \" (get e :text \"\")))))))
+                                                                 (str \"<\" (get e :user \"\") \"> \" (get e :text \"\")))))
+                                                )
+                                          )
 
                                           (defn ~a [conn token]
                                                 (reset! ~a (rtm/rtm-connect token
@@ -66,6 +76,7 @@
                                          channelsvar
                                          channels-id-var
                                          (if (not fetch-bots-messages) "(not (get e :subtype false))" " ")
+                                         channelsvar channels-id-var
                                          channelsvar channels-id-var
                                          connect-to-slack-var
                                          conn-var
