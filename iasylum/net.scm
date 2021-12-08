@@ -50,8 +50,9 @@
           (destinationurl ,(->jstring destinationUrl))))))
 
   ;; Implements headers to GET requests
+
   (define http-call-get-headers/string 
-    (lambda* (destinationUrl (headers: headers #f))
+    (lambda* (destinationUrl (headers: headers #f) (max-size-bytes: max-size-bytes #f))
              (let ((httpclient (j "httpclient = org.apache.http.impl.client.HttpClients.createDefault();"
                                `((httpclient))))
                    (httpget (j "httpget = new org.apache.http.client.methods.HttpGet(destinationurl);
@@ -67,7 +68,11 @@
                                       result=\"\";
                                       try {
                                         tent=response.getEntity();
-                                        result=(tent!=null)?org.apache.http.util.EntityUtils.toString(tent):null;
+                                        if((tent != null) && ( (!hasmaxsize) || ((tent.getContentLength() > -1) && (tent.getContentLength() <= maxsizebytes)))) {
+                                         result=org.apache.http.util.EntityUtils.toString(tent);
+                                        } else {
+                                         result=null;
+                                        }
                                       } catch(Exception e) {
                                         throw new RuntimeException(e);
                                       } finally {
@@ -75,7 +80,9 @@
                                       }
                                 
                                       result;"
-                                     `((response)(result)(tent)(httpget ,httpget)(httpclient ,httpclient)))))
+                                     `((response)(result)(tent)(httpget ,httpget)(httpclient ,httpclient)
+                                       (hasmaxsize ,(->jboolean (if max-size-bytes #t #f))) (maxsizebytes ,(->jlong (or max-size-bytes 0)))
+                                       ))))
                  (if (java-null? java-result) #f (->string java-result)))
                )))
   
