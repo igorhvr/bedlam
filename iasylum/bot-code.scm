@@ -463,3 +463,42 @@
       (if allow-non-slack-urls
                 (http-call-get-headers/string url 'max-size-bytes: max-size-bytes)
                 (throw (make-error "To avoid leaking credentials slack/retrieve-private-file can only be used to retrieve URLs beginning with https://files.slack.com/files-pri/")))))
+
+(define* (slack/upload-file (token: token) (filename: filename (pseudo-random-uuid)) (channels: channels) (contents-filename: contents-filename #f) (contents-string: contents-string #f))
+  (define (process input-file)
+    (assert (xor contents-filename contents-string))
+    (mutex/synchronize (mutex-of clj) (lambda () (clj "(require '[slack-rtm.core :as rtm]) (require '[clj-slack.files :as files]) (require '[clojure.tools.logging :as log])")))
+    (let* ((token-var (random-var))
+         (filename-var (random-var))
+         (channels-var (random-var))
+         (content-var (random-var))
+         (final-result
+          (clj
+           (string-append "
+              (let [ result-var (files/upload {:api-url \"https://slack.com/api\" :token " token-var "}
+                                              " content-var "
+                                              {:filename "filename-var " :filetype \"auto\" :channels " channels-var " } ) ]
+                 (-> result-var (.get :file) (.get :url_private_download)))")
+           `((,token-var ,(->jstring token))
+             (,channels-var ,(->jstring (apply add-between (cons "," channels))))
+             (,content-var ,(cond (contents-string
+                                   (->jstring contents-string))
+                                  (contents-filename
+                                   (->jinput-stream input-file))
+                                  (else (error "Bug."))))
+             (,filename-var ,(->jstring filename))))))
+      (->string final-result)))
+  (if contents-filename
+      (call-with-binary-input-file contents-filename process)
+      (process #f)))
+
+(define (slack/get-text-or-url-link-text string)
+ ;; This receives a string formatted as a link as explained on
+ ;; https://api.slack.com/reference/surfaces/formatting#linking-urls and returns the link text,
+ ;; or simply text which is returned as is.
+  (irregex-match-substring (irregex-search  (irregex '(or (seq "<" (*? any) "|" (submatch-named to-be-extracted (: (*? any))) ">")
+                                                          (seq "<" (submatch-named to-be-extracted (: (*? any))) ">")
+                                                          (submatch-named to-be-extracted (seq (* any))))) string) 'to-be-extracted))
+
+(define (slack/get-private-file-url string)
+  (irregex-match-substring (irregex-search  (irregex '(seq (*? any) "| PRIVATE-SLACK-FILE-URL: " (submatch-named to-be-extracted (: (*? any))) eos))  string) 'to-be-extracted))
