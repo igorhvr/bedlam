@@ -5,7 +5,7 @@
 (module iasylum/csv
   (csv->vector csv->list vector->csv list->csv)
 
-  (define paparse.js (memoize (lambda () (file->string "/base/bedlam/external-tools/libraries/PapaParse-4.3.2/papaparse.min.js"))))
+  (define paparse.js (memoize (lambda () (file->string "/base/bedlam/external-tools/libraries/PapaParse-5.0.2/papaparse.min.js"))))
   
   (define (com.eclipsesource.v8.V8Array->vector va)
     (let ((data-results-length (->scm-object (j "va.length();" `((va ,va))))))
