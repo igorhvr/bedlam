@@ -17,6 +17,7 @@
    milliseconds-duration->approximate-time-duration-human-string
    iso-8601-timestamp
    rfc3339-timestamp
+   add-to-timestamp
    )
 
   (define (add-days date ndays)
@@ -91,6 +92,10 @@
         (->string (j "mooopp = new org.ocpsoft.prettytime.PrettyTime(new java.util.Date(0)); mooopp.formatDuration(mooopp.approximateDuration(new java.util.Date(millip)));" `((millip ,(->jlong n)))))))
 
   (define* (iso-8601-timestamp (ts (current-date-utc))) (date->string ts "~4"))
+
+  (define* (add-to-timestamp (srfi-19-date: dt #f) (seconds: seconds #f))
+    (when (or (not dt) (not seconds)) (throw (make-error "Missing one or both of srfi-19-date or seconds parameter. Usage: (add-to-timestamp 'srfi-19-date: (current-date-utc) 'seconds: 400)")))
+    (time-utc->date (add-duration (date->time-utc dt) (make-time 'time-duration 0 seconds))))
 
   (create-shortcuts (iso-8601-timestamp -> rfc3339-timestamp))
   )
