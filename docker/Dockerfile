@@ -5,10 +5,11 @@ MAINTAINER Igor Hjelmstrom Vinhas Ribeiro <igorhvr@iasylum.net>
 ENV TERM xterm
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN echo "2021-12-13" > /last_bedlam_base_image_update
+RUN echo "2022-04-14" > /last_bedlam_base_image_update
 RUN cd /var/lib/apt ; rm -rf * 
 RUN apt-get -y update --fix-missing
 RUN apt-get install -y apt-utils software-properties-common dialog
+RUN apt-get install -y inetutils-ping
 RUN apt-get install -y git
 RUN cd / ; mkdir base ; cd base ; git clone https://github.com/igorhvr/bedlam.git ; chmod -R 755 /base
 RUN apt-get install -y zsh
