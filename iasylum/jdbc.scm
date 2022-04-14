@@ -9,7 +9,7 @@
                      result-set->iterator
                      execute-jdbc-query execute-jdbc-update execute-jdbc-something
                      get-data get-data-with-headers-at-each-line data-with-headers-at-each-line->json
-                     get-data/table get-data-result->table
+                     get-data/table get-data-result->table get-data-result->tables
                      for-each-data
                      map-each-data
                      jdbc/for-each-triple
@@ -289,6 +289,8 @@
              (let* ((data (get-data connection query vars)))
                (get-data-result->table data))))
 
+  (define get-data-result->table/escape-newlines (lambda (str) (irregex-replace/all (irregex 'newline) str "\\n")))
+
   ;; This generates a string with a table built in a format similar
   ;; to the example below. Useful for debugging, mostly.
 
@@ -302,7 +304,7 @@
   ;; | SECOND LINE           | NO        |
   ;; | ---                   | ---       |
   (define* (get-data-result->table
-            (escape-newlines: escape-newlines (lambda (str) (irregex-replace/all (irregex 'newline) str "\\n")))
+            (escape-newlines: escape-newlines get-data-result->table/escape-newlines)
             get-data-result)
     (and-let* ((metadata-row (car get-data-result))
                (column-indexes (list-ec (: i 0 (length metadata-row)) i))
@@ -331,6 +333,21 @@
   (fmt #f (apply tabular (append (list (dsp separator-column))
                                  (map dsp (add-between-list separator-column data-columns))
                                  (list (dsp separator-column)))))))
+
+; This version splits in multiple tables, each with a header, at a set maximum size.
+;
+; Usage example: (d/n (get-data-result->tables 'rows-per-table: 1
+;                              '((("key" . "varchar") ("value" . "varchar"))
+;                                ("SOME RANDOM \nEXAMPLE" "YES")
+;                                ("SECOND LINE" "NO"))))
+(define* (get-data-result->tables
+          (escape-newlines: escape-newlines get-data-result->table/escape-newlines)
+          (rows-per-table: rows-per-table)
+          get-data-result)
+  (and-let* ((metadata-row (car get-data-result))
+             (list-of-smaller-headerless-results (split-list-in-groups 'group-size: rows-per-table (cdr get-data-result)))
+             (list-of-smaller-get-data-results (map (lambda (p) (cons metadata-row p)) list-of-smaller-headerless-results)))
+    (map (cute get-data-result->table 'escape-newlines: escape-newlines <>) list-of-smaller-get-data-results)))
 
   (define get-data-with-headers-at-each-line
     (lambda* (connection query (vars #f))

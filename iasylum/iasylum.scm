@@ -72,6 +72,7 @@
    list-of
    alist?
    pure-alist?
+   split-list-in-groups
    string-stack-trace
    try-and-if-it-fails-object
    try-and-if-it-fails-or-empty-or-java-null-return-object
@@ -854,6 +855,13 @@
   (define (pure-alist? object)
     (list-of-type? object (lambda (o)
                             (and (pair? o) (not (list? o))))))
+
+  (define* (split-list-in-groups (group-size: group-size) dtn)
+    (let loop ((data dtn))
+      (let* ((size-to-consider (min group-size (length data)))
+             (group (take data size-to-consider))
+             (rest (drop data size-to-consider)))
+        (cons group (if (null? rest) '() (loop rest))))))
 
   ;; Example: (define list-of-string? (list-of string?))
   ;;          (list-of-string? '("bla" "ble")) => #t
