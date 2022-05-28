@@ -390,6 +390,7 @@
 ;;; WATCHDOG support.
 
 (define bot/watch-dog-maximum-allowed-pulseless-period-seconds (make-parameter* 375))
+(define bot/assuager-cycle-seconds (make-parameter* (* (bot/watch-dog-maximum-allowed-pulseless-period-seconds) 4/5)))
 
 (define bot/watchdog-recent-pulse-happened (make-expiring-parameter* 'expiration-seconds: (bot/watch-dog-maximum-allowed-pulseless-period-seconds)))
 
@@ -423,8 +424,6 @@
                               (channel-name: channel-name)
                               (slack-token: slack-token)
                               (pulse-command: pulse-command))
-  (define assuager-cycle-seconds (* (bot/watch-dog-maximum-allowed-pulseless-period-seconds) 4/5))
-
   (bot/watchdog-assuage) ;; Avoids immediate triggering during startup.
 
   (thread/spawn* 'thread-name: "watchdog"
@@ -453,7 +452,7 @@
                    (sleep-seconds 4)
                    (let loop ()
                         (pulse-bot-queue 'put pulse-command)
-                        (sleep-seconds assuager-cycle-seconds)
+                        (sleep-seconds (bot/assuager-cycle-seconds))
                         (loop)))))
 
 (define* (slack/retrieve-private-file-data (token: token) (max-size-bytes: max-size-bytes (expt 2 18)) (url: url) (allow-non-slack-urls: allow-non-slack-urls #f))

@@ -9,7 +9,7 @@
    slack/retrieve-private-file-data slack/upload-file slack/get-text-or-url-link-text slack/get-private-file-url
    attributed-message? attributed-message-message attributed-message-sender
    bot/add-global-help-and-exit-commands bot/add-global-commands  bot-on-channel-command-processor
-   bot/watch-dog-maximum-allowed-pulseless-period-seconds bot/watchdog-recent-pulse-happened bot/watchdog-assuage bot/suppress-watchdog? bot/enable-watchdog
+   bot/watch-dog-maximum-allowed-pulseless-period-seconds bot/assuager-cycle-seconds bot/watchdog-recent-pulse-happened bot/watchdog-assuage bot/suppress-watchdog? bot/enable-watchdog
    )
 
   (include "bot-code.scm")
