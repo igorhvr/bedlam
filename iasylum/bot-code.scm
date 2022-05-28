@@ -392,11 +392,13 @@
 (define bot/watch-dog-maximum-allowed-pulseless-period-seconds (make-parameter* 375))
 (define bot/assuager-cycle-seconds (make-parameter* (* (bot/watch-dog-maximum-allowed-pulseless-period-seconds) 4/5)))
 
-(define bot/watchdog-recent-pulse-happened (make-expiring-parameter* 'expiration-seconds: (bot/watch-dog-maximum-allowed-pulseless-period-seconds)))
+(define bot/watchdog-recent-pulse-happened-retriever (make-parameter*))
+(define (bot/redefine-watchdog-recent-pulse-happened)
+  (bot/watchdog-recent-pulse-happened-retriever (make-expiring-parameter* 'expiration-seconds: (bot/watch-dog-maximum-allowed-pulseless-period-seconds))))
 
 (define (bot/watchdog-assuage)
   (log-trace "bot/watchdog-assuage called.")
-  (bot/watchdog-recent-pulse-happened #t))
+  ((bot/watchdog-recent-pulse-happened-retriever) #t))
 
 (define* (bot/add-global-help-and-exit-commands bot help-text (exit-thunk: exit-thunk (lambda () (j "System.exit(0);"))))
   (let ((new-bot
@@ -424,13 +426,17 @@
                               (channel-name: channel-name)
                               (slack-token: slack-token)
                               (pulse-command: pulse-command))
-  (bot/watchdog-assuage) ;; Avoids immediate triggering during startup.
+  ;; Ensure expiring assuage matches bot/watch-dog-maximum-allowed-pulseless-period-seconds
+  (bot/redefine-watchdog-recent-pulse-happened)
+
+  ;; Avoids immediate triggering during startup.
+  (bot/watchdog-assuage)
 
   (thread/spawn* 'thread-name: "watchdog"
                  (lambda () (let loop ()
                          (sleep-seconds 16)
                          (when (bot/suppress-watchdog?) (loop))
-                         (if (bot/watchdog-recent-pulse-happened)
+                         (if ((bot/watchdog-recent-pulse-happened-retriever))
                              (begin
                                (log-trace "watchdog checked. everything ok.")
                                (loop))
