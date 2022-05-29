@@ -967,9 +967,10 @@
          (log-error: log-error log-error)
          ;; See https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
          (add-jitter: add-jitter #t)
+         (abort-retries-and-throw?: abort-retries-and-throw? (lambda (error error-continuation) #f))
          )
         (when (not action)
-          (d/n "Mandatory parameter action not provided. Sample usage: " "(try-with-exponential-backoff 'action: (lambda () (/ 2 3) (/ 2 0)) 'action-description: \"Let's try to divide by zero.\" 'initial-interval-millis: 50 'max-interval-millis: 200 'max-elapsed-time-millis: 1000 'log-error: d/n)")
+          (d/n "Mandatory parameter action not provided. Sample usage: " "(try-with-exponential-backoff 'action: (lambda () (/ 2 3) (/ 2 0)) 'action-description: \"Let's try to divide by zero.\" 'initial-interval-millis: 50 'max-interval-millis: 200 'max-elapsed-time-millis: 1000 'log-error: d/n 'abort-retries-and-throw?: (lambda (error error-continuation) #f))")
           (error "No action provided for trying with exponential backoff."))
         (let ((auto-retry (j "new com.google.api.client.util.ExponentialBackOff.Builder().
                             setInitialIntervalMillis(iim).setMaxElapsedTimeMillis(metm).
@@ -980,6 +981,14 @@
           (let try-again ()
             (with-failure-continuation
              (lambda (error error-continuation)
+               (let ((abort-retries-and-throw-result (abort-retries-and-throw? error error-continuation)))
+                 (when abort-retries-and-throw-result
+                   (throw (make-nested-error
+                           (make-error
+                            (string-append*
+                             "abort-retries-and-throw? predicate returned "
+                             (iasylum-write-string abort-retries-and-throw-result)))
+                           error error-continuation))))
                (let* ((ms-to-wait-orig (->scm-object (j "backoff.getCurrentIntervalMillis();" `((backoff ,auto-retry)))))
                       (ms-to-wait (if add-jitter
                                       ;; When jitter is enabled the time to wait
