@@ -964,11 +964,11 @@
          (initial-interval-millis: initial-interval-millis 50)
          (max-elapsed-time-millis: max-elapsed-time-millis 2147483647) ;; Aprox 24 days
          (max-interval-millis: max-interval-millis 30000)
-         (log-error: log-error log-error)
-         ;; See https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
-         (add-jitter: add-jitter #t)
+         (log-error: log-error log-error) (log-info: log-info log-info)
+         (add-jitter: add-jitter #t) ;; See https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
          (abort-retries-and-throw?: abort-retries-and-throw? (lambda (error error-continuation) #f))
-         )
+         (success-after-at-least-one-retry-hook: success-after-at-least-one-retry-hook
+                                                 (lambda* ((ellapsed-time-milliseconds: t) (total-retries: n) (action-description: d)) (log-info "RETRY SUCESS. total-retries: " n " ellapsed milliseconds: " t " action: " action-description))))
         (when (not action)
           (d/n "Mandatory parameter action not provided. Sample usage: " "(try-with-exponential-backoff 'action: (lambda () (/ 2 3) (/ 2 0)) 'action-description: \"Let's try to divide by zero.\" 'initial-interval-millis: 50 'max-interval-millis: 200 'max-elapsed-time-millis: 1000 'log-error: d/n 'abort-retries-and-throw?: (lambda (error error-continuation) #f))")
           (error "No action provided for trying with exponential backoff."))
@@ -977,7 +977,8 @@
                             setMaxIntervalMillis(mim).setMultiplier(1.5).setRandomizationFactor(0.5).build();"
                              `((iim ,(->jint initial-interval-millis))
                                (metm ,(->jint max-elapsed-time-millis))
-                               (mim ,(->jint max-interval-millis))))))
+                               (mim ,(->jint max-interval-millis)))))
+              (total-retries (make-parameter* 0)))
           (let try-again ()
             (with-failure-continuation
              (lambda (error error-continuation)
@@ -1010,9 +1011,15 @@
                          (make-error
                           "max-elapsed-time-millis reached while performing retries with exponential backoff strategy. Giving up.")
                          error error-continuation))
-                       (try-again)))))
+                       (begin
+                         (total-retries (+ 1 (total-retries)))
+                         (try-again))))))
              (lambda ()
-               (action)))))))
+               (let ((final-result (action)))
+                 (when (and success-after-at-least-one-retry-hook (> (total-retries) 0))
+                   (success-after-at-least-one-retry-hook 'ellapsed-time-milliseconds: (->scm-object (j "backoff.getElapsedTimeMillis();" `((backoff ,auto-retry))))
+                                                          'total-retries: (total-retries) 'action-description: action-description))
+                 final-result)))))))
 
   ;; (dynamic-define "abc" 123)
   ;; $ abc => 123
