@@ -964,11 +964,15 @@
          (initial-interval-millis: initial-interval-millis 50)
          (max-elapsed-time-millis: max-elapsed-time-millis 2147483647) ;; Aprox 24 days
          (max-interval-millis: max-interval-millis 30000)
-         (log-error: log-error log-error) (log-info: log-info log-info)
+         (log-error: log-error log-error) (log-info: log-info log-info) (log-debug: log-debug log-debug)
          (add-jitter: add-jitter #t) ;; See https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
          (abort-retries-and-throw?: abort-retries-and-throw? (lambda (error error-continuation) #f))
          (success-after-at-least-one-retry-hook: success-after-at-least-one-retry-hook
-                                                 (lambda* ((ellapsed-time-milliseconds: t) (total-retries: n) (action-description: d)) (log-info "RETRY SUCESS. total-retries: " n " ellapsed milliseconds: " t " action: " action-description))))
+                                                 (lambda* ((elapsed-time-milliseconds: t) (total-retries: n) (action-description: d) (return-value: rt))
+                                                          (log-info "RETRY SUCCESS. total-retries: " n " elapsed-time-milliseconds: " t " action-description: " action-description)))
+         (clean-success-hook: clean-success-hook
+                                                 (lambda* ((elapsed-time-milliseconds: t) (total-retries: n) (action-description: d) (return-value: rt))
+                                                          (log-debug "CLEAN SUCCESS. total-retries: " n " elapsed-time-milliseconds: " t " action-description: " action-description))))
         (when (not action)
           (d/n "Mandatory parameter action not provided. Sample usage: " "(try-with-exponential-backoff 'action: (lambda () (/ 2 3) (/ 2 0)) 'action-description: \"Let's try to divide by zero.\" 'initial-interval-millis: 50 'max-interval-millis: 200 'max-elapsed-time-millis: 1000 'log-error: d/n 'abort-retries-and-throw?: (lambda (error error-continuation) #f))")
           (error "No action provided for trying with exponential backoff."))
@@ -1017,8 +1021,19 @@
              (lambda ()
                (let ((final-result (action)))
                  (when (and success-after-at-least-one-retry-hook (> (total-retries) 0))
-                   (success-after-at-least-one-retry-hook 'ellapsed-time-milliseconds: (->scm-object (j "backoff.getElapsedTimeMillis();" `((backoff ,auto-retry))))
-                                                          'total-retries: (total-retries) 'action-description: action-description))
+                   (success-after-at-least-one-retry-hook
+                    'elapsed-time-milliseconds:
+                      (->scm-object (j "backoff.getElapsedTimeMillis();" `((backoff ,auto-retry))))
+                      'total-retries: (total-retries)
+                      'action-description: action-description
+                      'return-value: final-result))
+                 (when (and clean-success-hook (= (total-retries) 0))
+                   (clean-success-hook
+                    'elapsed-time-milliseconds:
+                      (->scm-object (j "backoff.getElapsedTimeMillis();" `((backoff ,auto-retry))))
+                      'total-retries: (total-retries)
+                      'action-description: action-description
+                      'return-value: final-result))
                  final-result)))))))
 
   ;; (dynamic-define "abc" 123)
