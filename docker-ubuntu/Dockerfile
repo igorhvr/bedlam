@@ -25,7 +25,7 @@ RUN apt-get -y install w3m
 RUN apt-get -y install openssh-server sudo gnupg
 RUN apt-get -y install rsync
 RUN apt-get -y install zip
-RUN apt-get -y install unzip dtrx
+RUN apt-get -y install unzip
 RUN apt-get -y install psmisc ncdu
 RUN apt-get -y install less
 RUN apt-get -y install ntpdate ntp
@@ -44,7 +44,7 @@ RUN mkdir -m 0755 /nix && groupadd -r nixbld && chown root /nix && for n in $(se
 ENV USER=root
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN set -o pipefail && curl -L https://nixos.org/nix/install | bash
-RUN . "$HOME/.nix-profile/etc/profile.d/nix.sh" && nix-env -i ledger
+RUN . "$HOME/.nix-profile/etc/profile.d/nix.sh" && nix-env -i dtrx
 
 RUN echo 'root:root' | chpasswd
 RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
