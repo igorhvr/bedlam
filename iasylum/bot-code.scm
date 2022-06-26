@@ -226,11 +226,16 @@
                  (apply string-append*
                         (map display-string params))
                  (string-append* "\n" output-prefix)))))
+    (define bot-on-channel-display-fn/clean
+      (lambda params
+        (inq 'put (apply string-append*
+                         (map display-string params)))))
   (letrec
       ((resulting-fn
          (match-lambda*
           [('d . params) (apply bot-on-channel-display-fn params)]
           [('d/n . params) (apply bot-on-channel-display-fn (flatten (list "\n" params "\n")))]
+          [('d/clean . params) (apply bot-on-channel-display-fn/clean params)]
           [('read-attributed-line-struct)
                         (let loop ()
                           (let ((orig (outq 'take)))
