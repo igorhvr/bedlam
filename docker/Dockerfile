@@ -5,7 +5,7 @@ MAINTAINER Igor Hjelmstrom Vinhas Ribeiro <igorhvr@iasylum.net>
 ENV TERM xterm
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN echo "2022-06-04" > /last_bedlam_base_image_update
+RUN echo "2023-09-20" > /last_bedlam_base_image_update
 RUN cd /var/lib/apt ; rm -rf * 
 RUN apt-get -y update --fix-missing
 RUN apt-get install -y apt-utils software-properties-common dialog
