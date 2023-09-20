@@ -1,37 +1,51 @@
 (define *DEFAULT-OUTPUT-PREFIX* " : ")
 
+(define *CONVERSATIONS-LIST-CACHE* (make-hashtable string=?))
+
+(define (slack/clear-conversations-list-cache) (hashtable/clear! *CONVERSATIONS-LIST-CACHE*))
+
 (define (slack/retrieve-full-conversation-list token)
-  (let loop ((cursor ""))
-    (mutex/synchronize (mutex-of clj) (lambda () (clj "(require '[slack-rtm.core :as rtm]) (require '[clj-slack.conversations :as conversations]) (require '[clojure.tools.logging :as log])")))
-    (let* ((token-var (random-var)) (cursor-var (random-var)) (result-var (random-var))
-           (nl
-            (try-with-exponential-backoff
-             'action-description: "Retrieving conversation list in slack."
-             'initial-interval-millis: 30000
-             'action:
-             (lambda ()
-               (clj
-                (string-append "
-                  (let [ result-var (conversations/list {:api-url \"https://slack.com/api\" :token " token-var "}
-                                      {:exclude_members \"true\" :cursor " cursor-var " :limit \"800\"
-                                                     :types \"public_channel,private_channel,mpim,im\"
-                                      }) ]
-                    (list (map (fn [channel] {(get channel :id) (get channel :name)}) (get result-var :channels))
-                      (get (get result-var :response_metadata) :next_cursor)))")
-             `((,token-var ,(->jstring token))
-               (,cursor-var ,(->jstring cursor)))))))
-           (next-cursor (->string (let ((jstr (clj "(nth nl 1)" `((nl ,nl)))))
-                         (if (java-null? jstr)
-                             (throw (make-error (string-append* "Unable to retrieve full conversation list in slack.")))
-                             jstr))))
-           (the-fetched-clojure-list (clj "(nth nl 0)" `((nl ,nl)))))
-      (clj "(into {} (concat the-fetched-clojure-list next-or-empty))"
-           `((the-fetched-clojure-list ,the-fetched-clojure-list)
-             (next-or-empty
-              ,(if (string=? next-cursor "") (clj "[]")
-                   (begin
-                     (sleep-seconds 6)
-                     (loop next-cursor)))))))))
+  (or
+   (let ((hashtable-entry (hashtable/get *CONVERSATIONS-LIST-CACHE* token)))
+     (if hashtable-entry
+         (begin
+           (log-info "Will wait for conversation for token with sha256 " (sha256 token) "to be available.")
+           (hashtable-entry))
+         #f))
+   (let ((my-result-blocking-parameter (make-blocking-parameter* )))
+     (hashtable/put! *CONVERSATIONS-LIST-CACHE* token my-result-blocking-parameter)
+     (let ((complete-retrieved-list
+            (let loop ((cursor ""))
+              (mutex/synchronize (mutex-of clj) (lambda () (clj "(require '[slack-rtm.core :as rtm]) (require '[clj-slack.conversations :as conversations]) (require '[clojure.tools.logging :as log])")))
+              (let* ((token-var (random-var)) (cursor-var (random-var)) (result-var (random-var))
+                     (nl
+                      (try-with-exponential-backoff
+                       'action-description: "Retrieving conversation list in slack." 'initial-interval-millis: 30000
+                       'action:
+                       (lambda ()
+                         (clj
+                          (string-append "
+                          (let [ result-var (conversations/list {:api-url \"https://slack.com/api\" :token " token-var "}
+                                              {:exclude_members \"true\" :cursor " cursor-var " :limit \"800\"
+                                                             :types \"public_channel,private_channel,mpim,im\"
+                                              }) ]
+                            (list (map (fn [channel] {(get channel :id) (get channel :name)}) (get result-var :channels))
+                              (get (get result-var :response_metadata) :next_cursor)))")
+                          `((,token-var ,(->jstring token))  (,cursor-var ,(->jstring cursor)))))))
+                     (next-cursor (->string (let ((jstr (clj "(nth nl 1)" `((nl ,nl)))))
+                                              (if (java-null? jstr)
+                                                  (throw (make-error (string-append* "Unable to retrieve full conversation list in slack.")))
+                                                  jstr))))
+                     (the-fetched-clojure-list (clj "(nth nl 0)" `((nl ,nl)))))
+                (clj "(into {} (concat the-fetched-clojure-list next-or-empty))"
+                     `((the-fetched-clojure-list ,the-fetched-clojure-list)
+                       (next-or-empty
+                        ,(if (string=? next-cursor "") (clj "[]")
+                             (begin
+                               (sleep-seconds 6)
+                               (loop next-cursor))))))))))
+       (my-result-blocking-parameter complete-retrieved-list)
+       complete-retrieved-list))))
 
 (define slack/create-reader-bot
     (lambda* ((name: name) (channels: channels) (token: token) (fetch-bots-messages: fetch-bots-messages))
