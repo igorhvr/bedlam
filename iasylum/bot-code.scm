@@ -5,16 +5,21 @@
     (mutex/synchronize (mutex-of clj) (lambda () (clj "(require '[slack-rtm.core :as rtm]) (require '[clj-slack.conversations :as conversations]) (require '[clojure.tools.logging :as log])")))
     (let* ((token-var (random-var)) (cursor-var (random-var)) (result-var (random-var))
            (nl
-            (clj
-             (string-append "
-              (let [ result-var (conversations/list {:api-url \"https://slack.com/api\" :token " token-var "}
-                                  {:exclude_members \"true\" :cursor " cursor-var " :limit \"800\"
-                                                 :types \"public_channel,private_channel,mpim,im\"
-                                  }) ]
-                (list (map (fn [channel] {(get channel :id) (get channel :name)}) (get result-var :channels))
-                  (get (get result-var :response_metadata) :next_cursor)))")
+            (try-with-exponential-backoff
+             'action-description: "Retrieving conversation list in slack."
+             'initial-interval-millis: 30000
+             'action:
+             (lambda ()
+               (clj
+                (string-append "
+                  (let [ result-var (conversations/list {:api-url \"https://slack.com/api\" :token " token-var "}
+                                      {:exclude_members \"true\" :cursor " cursor-var " :limit \"800\"
+                                                     :types \"public_channel,private_channel,mpim,im\"
+                                      }) ]
+                    (list (map (fn [channel] {(get channel :id) (get channel :name)}) (get result-var :channels))
+                      (get (get result-var :response_metadata) :next_cursor)))")
              `((,token-var ,(->jstring token))
-               (,cursor-var ,(->jstring cursor)))))
+               (,cursor-var ,(->jstring cursor)))))))
            (next-cursor (->string (let ((jstr (clj "(nth nl 1)" `((nl ,nl)))))
                          (if (java-null? jstr)
                              (throw (make-error (string-append* "Unable to retrieve full conversation list in slack.")))
