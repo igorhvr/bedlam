@@ -21,7 +21,7 @@
               (let* ((token-var (random-var)) (cursor-var (random-var)) (result-var (random-var))
                      (nl
                       (try-with-exponential-backoff
-                       'action-description: "Retrieving conversation list in slack." 'initial-interval-millis: 1024
+                       'action-description: "Retrieving conversation list in slack." 'initial-interval-millis: 4096
                        'action:
                        (lambda ()
                          (clj
