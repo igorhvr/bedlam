@@ -14,13 +14,14 @@
          #f))
    (let ((my-result-blocking-parameter (make-blocking-parameter* )))
      (hashtable/put! *CONVERSATIONS-LIST-CACHE* token my-result-blocking-parameter)
+     (log-info "Will retrieve the conversation list for token with sha256 " (sha256 token) "...")
      (let ((complete-retrieved-list
             (let loop ((cursor ""))
               (mutex/synchronize (mutex-of clj) (lambda () (clj "(require '[slack-rtm.core :as rtm]) (require '[clj-slack.conversations :as conversations]) (require '[clojure.tools.logging :as log])")))
               (let* ((token-var (random-var)) (cursor-var (random-var)) (result-var (random-var))
                      (nl
                       (try-with-exponential-backoff
-                       'action-description: "Retrieving conversation list in slack." 'initial-interval-millis: 30000
+                       'action-description: "Retrieving conversation list in slack." 'initial-interval-millis: 1024
                        'action:
                        (lambda ()
                          (clj
@@ -42,7 +43,7 @@
                        (next-or-empty
                         ,(if (string=? next-cursor "") (clj "[]")
                              (begin
-                               (sleep-seconds 6)
+                               (sleep-seconds 1)
                                (loop next-cursor))))))))))
        (my-result-blocking-parameter complete-retrieved-list)
        complete-retrieved-list))))
