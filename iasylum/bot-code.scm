@@ -5,23 +5,28 @@
 (define (slack/clear-conversations-list-cache) (hashtable/clear! *CONVERSATIONS-LIST-CACHE*))
 
 (define (slack/retrieve-full-conversation-list token)
+  (define hashtable-entry-parameter (make-parameter*))
+  (define my-result-blocking-parameter (make-blocking-parameter*))
+  (define token-sha256 (sha256 token))
+
+  (mutex/synchronize (mutex-of *CONVERSATIONS-LIST-CACHE*)
+   (lambda ()
+     (hashtable-entry-parameter (hashtable/get *CONVERSATIONS-LIST-CACHE* token-sha256))
+     (unless (hashtable-entry-parameter) (hashtable/put! *CONVERSATIONS-LIST-CACHE* token-sha256 my-result-blocking-parameter))))
   (or
-   (let ((hashtable-entry (hashtable/get *CONVERSATIONS-LIST-CACHE* token)))
-     (if hashtable-entry
-         (begin
-           (log-info "Will wait for conversation for token with sha256 " (sha256 token) "to be available.")
-           (hashtable-entry))
-         #f))
-   (let ((my-result-blocking-parameter (make-blocking-parameter* )))
-     (hashtable/put! *CONVERSATIONS-LIST-CACHE* token my-result-blocking-parameter)
-     (log-info "Will retrieve the conversation list for token with sha256 " (sha256 token) "...")
+   (let ((hashtable-entry (hashtable-entry-parameter)))
+     (and hashtable-entry
+          (begin
+            (log-info "Will wait for conversation for token with sha256 " token-sha256 "to be available...")
+            (hashtable-entry))))
+   (begin
+     (log-info "Will retrieve the conversation list for token with sha256 " token-sha256 "...")
      (let ((complete-retrieved-list
             (let loop ((cursor ""))
               (mutex/synchronize (mutex-of clj) (lambda () (clj "(require '[slack-rtm.core :as rtm]) (require '[clj-slack.conversations :as conversations]) (require '[clojure.tools.logging :as log])")))
               (let* ((token-var (random-var)) (cursor-var (random-var)) (result-var (random-var))
                      (nl
-                      (try-with-exponential-backoff
-                       'action-description: "Retrieving conversation list in slack." 'initial-interval-millis: 4096
+                      (try-with-exponential-backoff 'action-description: "Retrieving conversation list in slack." 'initial-interval-millis: 4096
                        'action:
                        (lambda ()
                          (clj
