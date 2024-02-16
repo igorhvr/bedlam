@@ -60,7 +60,7 @@
                   " `((row ,row))))
   
   (define (set-cell-value cell value)
-    (j "cell.setCellValue(value); " `((cell ,cell) (value ,(->jobject value)))))
+    (j "cell.setCellValue(value); " `((cell ,cell) (value ,(->jobject (if (symbol? value) (symbol->string value) value))))))
   
   (define (save-wb-file wb filename)
     (let ((file-stream
