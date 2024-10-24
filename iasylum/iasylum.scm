@@ -366,6 +366,7 @@
             (begin
               (mutex/lock! lock)
               (write-string mbuffer 0 a o)
+              (flush-output-port o)
               (mutex/unlock! lock)
               (loop)))))
     (loop))
