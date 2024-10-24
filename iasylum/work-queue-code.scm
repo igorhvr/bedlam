@@ -15,9 +15,14 @@
 
 (define make-queue
   (lambda* ((capacity #f))
-    (let ((inner-queue
+    (let* ((inner-queue
            (get-native-blocking-queue capacity))
-          (paused #f))
+           (paused #f)
+           (output-port-promise
+            (delay (open-character-output-port
+                                (->binary-output-port
+                                 (j "new iu.QueueOutputStream(mqueue,null,0);"
+                                    `((mqueue ,inner-queue))))))))
       (letrec ((new-function (match-lambda*                              
                               [('put-scm v)
                                ;; Spec (j "q.put(v);"  `((q ,inner-queue) (v ,(java-wrap v))))
@@ -81,6 +86,8 @@
                                (lambda (scm-object)
                                  (put inner-queue (java-wrap scm-object)))
                                ]
+                              [('output-port)
+                               (force output-port-promise)]
                               )))
         new-function))))
 
