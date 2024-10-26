@@ -222,7 +222,7 @@
 (define (beautify-json st) (->string (j "com.cedarsoftware.util.io.JsonWriter.formatJson(jsonst);" `((jsonst ,(->jstring st))))))
 
 (define (json->sxml e)
-  (let ((structure (json->scheme e)))
+  (let ((structure (if (string? e) (json->scheme e) e)))
     `(*TOP*
       ,@(json->sxml-block structure))))
 
