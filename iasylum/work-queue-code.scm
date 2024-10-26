@@ -13,6 +13,35 @@
            (java-new <java.util.concurrent.array-blocking-queue> (->jint capacity))
            (java-new <java.util.concurrent.linked-blocking-queue>)))))
 
+(define (create-queue-with-strings-input-port q)
+  (define stored (make-parameter* ""))
+  (let* ((read (lambda (port)
+                 (if (> (string-length (stored)) 0)
+                     (let ((first-char (string-ref (stored) 0)))
+                       (stored (string-drop (stored) 1))
+                       (char->integer first-char))
+                     (let loop ((data (q 'take)))
+                       (if (eof-object? data) -1
+                           (cond [(= (string-length data) 1)
+                                  (char->integer (string-ref data 0))]
+                                 [(>= (string-length data) 2)
+                                  (stored (string-drop data 1))
+                                  (char->integer (string-ref data 0))]
+                                 [(= (string-length data) 0)
+                                  (loop (q 'take))]))))))
+         (read-string (lambda (port mutable-string offset count)
+                        (let ((my-char (read port)))
+                          (if (= my-char -1)
+                              -1
+                              (begin
+                                (string-set! mutable-string 0 (integer->char my-char))
+                                1)))))
+         (ready? (lambda (port) (or (not (eqv? 'empty (q 'peek)))
+                               (> (length (stored)) 0))))
+         (close (lambda (port) (void))))
+    (make-custom-character-input-port read read-string ready? close)))
+
+
 (define make-queue
   (lambda* ((capacity #f))
     (let* ((inner-queue
@@ -22,7 +51,8 @@
             (delay (open-character-output-port
                                 (->binary-output-port
                                  (j "new iu.QueueOutputStream(mqueue,null,0);"
-                                    `((mqueue ,inner-queue))))))))
+                                    `((mqueue ,inner-queue)))))))
+           (input-port-parameter (make-parameter* #f)))
       (letrec ((new-function (match-lambda*                              
                               [('put-scm v)
                                ;; Spec (j "q.put(v);"  `((q ,inner-queue) (v ,(java-wrap v))))
@@ -88,6 +118,13 @@
                                ]
                               [('output-port)
                                (force output-port-promise)]
+                              [('input-port)
+                               (force output-port-promise)
+                               (if (input-port-parameter)
+                                   (input-port-parameter)
+                                   (let ((new-input-port (create-queue-with-strings-input-port new-function)))
+                                     (input-port-parameter new-input-port)
+                                     new-input-port))]
                               )))
         new-function))))
 
@@ -135,5 +172,3 @@
             continue-forever)
            (when (log-trace-execution) (put-log-trace 'put (list "\nStopping worker [w" n "] - nothing else to do.\n")))
            )))))
-
-
