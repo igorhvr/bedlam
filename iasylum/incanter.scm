@@ -3,6 +3,7 @@
 (require-extension (lib iasylum/jcode))
 (require-extension (lib iasylum/clojure))
 
+;; Useful for plots, like gnuplot. Adding this comment to aid poor souls like myself who might git grep gnuplot here some day.
 (module iasylum/incanter
   (empty-plot
    plot-numbers
