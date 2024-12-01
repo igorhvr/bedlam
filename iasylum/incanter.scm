@@ -17,13 +17,20 @@
           (def sp (xy-plot zero zero :title \"Graph\" :x-label \"X\" :y-label \"Y\" :series-label \"Origin\" :legend true :points true ))
           sp"))
 
-  (define (plot-numbers . lists)
+  (define* (plot-numbers (x-label: x-label #f) (y-label: y-label #f)
+                         (series-label: series-label #f) (title: title #f) . lists)
     (let* ((sp (begin
                  (clj "(use '(incanter core charts pdf stats io datasets))")
                  (clj "(use '(incanter core charts pdf stats io datasets))
                      (def zero '(0))
-                     (def sp (xy-plot zero zero :title \"Graph\" :x-label \"X\" :y-label \"Y\" :series-label \"Origin\" :legend true :points true ))
-                     sp")))
+                     (def sp (xy-plot zero zero :title titlevars :x-label xlabelvar :y-label ylabelvar :series-label serieslabelvar :legend true :points true ))
+                     sp"
+                      `(
+                        (xlabelvar ,(->jstring (or x-label "X")))
+                        (ylabelvar ,(->jstring (or y-label "Y")))
+                        (serieslabelvar ,(->jstring (or series-label "Origin")))
+                        (titlevars ,(->jstring (or title "Graph")))))
+                 ))
            (elements (fold (lambda (l max-len) (max max-len (length l))) 0 lists)))
       (pam lists
            (lambda (l)
@@ -40,8 +47,11 @@
                                (elements ,(->jobject elements)))))))
       sp))
   
-  (define (view-numbers . lists)
-    (let ((plot (apply plot-numbers lists)))
+  (define* (view-numbers (x-label: x-label #f) (y-label: y-label #f)
+                         (series-label: series-label #f) (title: title #f) . lists)
+    (let ((plot (apply plot-numbers
+                       (append (list 'x-label: x-label 'y-label: y-label 'series-label: series-label 'title: title) lists)
+                       )))
       (clj "(view sp)" `((sp ,plot)))
       #t))
   
