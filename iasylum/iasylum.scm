@@ -81,6 +81,7 @@
    try-with-exponential-backoff
    dynamic-define
    create-shortcuts
+   escape-double-quotes
    to-csv-line
    sha256
    sha256+
