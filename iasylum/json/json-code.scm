@@ -408,3 +408,43 @@
           (if should-beautify-json
               (beautify-json string-result)
               string-result)))))
+
+;; Test function for JSON serialization/deserialization round-trip
+(define (ser-deser-test)
+  (let ((test-cases 
+         (list 
+          ;; Simple object
+          "{\"name\":\"John\",\"age\":30,\"active\":true}"
+          ;; Array
+          "[1,2,3,4,5]"
+          ;; Nested object
+          "{\"person\":{\"name\":\"Alice\",\"age\":25}}"
+          ;; Complex structure
+          "{\"people\":[{\"name\":\"Bob\",\"age\":40},{\"name\":\"Carol\",\"age\":35}],\"status\":\"active\"}"
+          ;; Special characters
+          "{\"message\":\"Hello \\\"world\\\"!\",\"path\":\"/home/user\"}"
+          ;; Numbers
+          "{\"integer\":42,\"decimal\":3.14159,\"scientific\":1.23e-4}"
+          ;; Boolean and null
+          "{\"active\":true,\"verified\":false,\"data\":null}"
+          ;; Empty structures
+          "{}"
+          "[]"
+          ;; Dates (testing date handling)
+          "{\"created\":\"2023-01-15T14:30:00Z\"}"
+          ;; Unicode characters
+          "{\"greeting\":\"こんにちは\",\"name\":\"José\"}")))
+    (for-each
+     (lambda (json-str)
+       (let* ((beautified-original (beautify-json json-str))
+              (scheme-data (json->scheme json-str))
+              (round-trip (scheme->json scheme-data))
+              (beautified-round-trip (beautify-json round-trip))
+              (match? (string=? beautified-original beautified-round-trip)))
+         (log-info "Test: " json-str)
+         (log-info "Result: " (if match? "PASS" "FAIL"))
+         (when (not match?)
+           (log-info "Original beautified: " beautified-original)
+           (log-info "Round-trip beautified: " beautified-round-trip))))
+     test-cases)
+    (log-info "Serialization/deserialization tests completed.")))
