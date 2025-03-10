@@ -95,6 +95,14 @@
                                ]
                               [('poll)
                                (new-function 'poll 'empty)]
+                              [('poll-java return-when-empty)
+                               (if (not paused)
+                                   (let ((result (j "q.poll();"  `((q ,inner-queue)))))
+                                     (if (java-null? result) return-when-empty result))
+                                   return-when-empty)
+                               ]
+                              [('poll-java)
+                               (new-function 'poll-java 'empty)]
                               [('clear)
                                (j "q.clear();"  `((q ,inner-queue)))]
                               [('pause)
