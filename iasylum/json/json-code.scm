@@ -250,8 +250,16 @@
 			      (let ((ch (parse-results-token-value results)))
 				(if (memv ch '(#\- #\+ #\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9 #\. #\e #\E #\/))
 				    (loop (cons ch acc) (parse-results-next results))
-				    (let ((n (string->number (decimal-to-fractions-inside-string
-                                                              (list->string (reverse acc))))))
+				    (let* ((num-str (list->string (reverse acc)))
+                                           (has-scientific (or (string-contains num-str "e") (string-contains num-str "E")))
+                                           (n (if has-scientific
+                                                  ;; For scientific notation, convert directly and ensure exact
+                                                  (let ((n-direct (string->number num-str)))
+                                                    (if (and n-direct (inexact? n-direct)) 
+                                                        (inexact->exact n-direct)
+                                                        n-direct))
+                                                  ;; For other numbers, use the existing approach
+                                                  (string->number (decimal-to-fractions-inside-string num-str)))))
 				      (if n
 					  (make-result n results)
 					  (make-expected-result (parse-results-position starting-results) 'number)))))))
