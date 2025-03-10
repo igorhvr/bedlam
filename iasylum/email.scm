@@ -7,7 +7,9 @@
 ;;    activation-1.1.jar  commons-email-1.4.jar  mail.jar
 ;;    iasylum/jcode
 (module iasylum/email
-  (send-email)
+  (send-email
+   pump-imaps-inbox-to-work-queue
+   test-pump-imaps-inbox-to-work-queue)
 
 
   ;;(send-email
@@ -110,62 +112,180 @@
              (sendername ,(->jstring sendername))
              )))))
 
-  ; WIP.
-  ; Returns a list containing, for each element for which both fn and raw-fn did not return #f, 3-element-lists where the head is the message id and the next two elements are the results of fn and raw-fn
-;  (define receive-imaps-all-inbox-email
-;    (lambda* ((imaps-server-hostname: hostname)
-;              (username: username)
-;              (password: password)
-;              
-;              ;; fn will receive an alist with message data for each message.
-;              ;; The keys are 'subject 'body 'to 'from
-;              ;;              'cc 'message-id 'sent-date 'received-date
-;              ;;              'charset 'attachment-base64
-;              ;;              'spf-status 'dkim-status
-;              (fn: fn identity)
-;              
-;              ;; raw-fn if provided will receive instances of javax.mail.Message
-;              (raw-fn: raw-fn #f))
-;              
-;              (j (quote-convert "//J'
-;                 import java.util.*; import javax.mail.*;
-;                 props = new Properties();
-;                 session = Session.getInstance(props, null);
-;                 Store store = session.getStore('imaps');
-;                 store.connect(hostname, username, password);
-;                 Folder inbox = store.getFolder('INBOX');
-;                 inbox.open(Folder.READ_WRITE);
-;                 
-;                 for (int i = 1; i <= inbox.getMessageCount(); i++) {
-;                     Message msg = inbox.getMessage(i);
-;
-;                     Address[] fromAddresses = msg.getFrom();
-;
-;                     String[] fromAddressesString = new String[address.length];                     
-;                     for (int i = 0 ; i < in.length; i++) {
-;                 	fromAddressesString[i] = fromAddresses[i].toString();
-;                     }
-;                 
-;                     subject = msg.getSubject();
-;                     sentDate = msg.getSentDate();
-;                     content = '';
-;                     
-;                     if (msg.getContent() instanceof Multipart) {
-;                        mp = (Multipart) msg.getContent();
-;                        bp = mp.getBodyPart(0);
-;                        content = bp.getContent();
-;                     } else {
-;                        content = msg.getContent();
-;                     }
-;
-;                     System.out.println('Subject: ' + subject);
-;                     System.out.println('Content: ' + content);
-;                 
-;                     msg.setFlag(Flags.Flag.DELETED, true);
-;                 } 
-;                 inbox.close(true);") `((hostname ,(->jstring hostname))
-;                                        (username ,(->jstring username))
-;                                        (password ,(->jstring password))
-;                                        (fn ,fn)
-;                                        (raw-fn)))))
+  ;; Fetches messages from an IMAPS server and puts them into a work queue
+  ;; Returns the number of messages processed
+  ;; Messages are deleted from the server after being put in the queue by default
+  (define pump-imaps-inbox-to-work-queue
+    (lambda* ((imaps-server-hostname: hostname)
+              (username: username)
+              (password: password)
+              (work-queue: queue)
+              (max-messages: max-messages #f)
+              (delete-messages: delete-messages #t))
+      
+      (let* ((messages 
+              (j (quote-convert "//J'
+                 import java.util.*;
+                 import javax.mail.*;
+                 
+                 // Setup properties and connect to the IMAPS server
+                 Properties props = new Properties();
+                 Session session = Session.getInstance(props, null);
+                 Store store = session.getStore(\"imaps\");
+                 store.connect(hostname, username, password);
+                 
+                 // Open INBOX folder
+                 Folder inbox = store.getFolder(\"INBOX\");
+                 inbox.open(Folder.READ_WRITE);
+                 int messageCount = inbox.getMessageCount();
+                 
+                 // Limit messages if max-messages is specified
+                 int maxmessagesValue = maxmessages;
+                 if (maxmessagesValue > 0 && messageCount > maxmessagesValue) {
+                     messageCount = maxmessagesValue;
+                 }
+                 
+                 List messages = new ArrayList();
+                 
+                 // Process all messages
+                 for (int i = 1; i <= messageCount; i++) {
+                     try {
+                         Message msg = inbox.getMessage(i);
+                         
+                         // Create a map to store message details
+                         Map messageData = new HashMap();
+                         
+                         // Extract basic message info
+                         messageData.put(\"subject\", msg.getSubject() != null ? msg.getSubject() : \"\");
+                         messageData.put(\"sent-date\", msg.getSentDate());
+                         messageData.put(\"received-date\", msg.getReceivedDate());
+                         String[] messageIds = msg.getHeader(\"Message-ID\");
+                         messageData.put(\"message-id\", messageIds != null && messageIds.length > 0 ? messageIds[0] : \"\");
+                         
+                         // Handle From addresses
+                         Address[] fromAddresses = msg.getFrom();
+                         List fromList = new ArrayList();
+                         if (fromAddresses != null) {
+                             for (Address address : fromAddresses) {
+                                 fromList.add(address.toString());
+                             }
+                         }
+                         messageData.put(\"from\", fromList);
+                         
+                         // Handle To addresses
+                         Address[] toAddresses = msg.getRecipients(Message.RecipientType.TO);
+                         List toList = new ArrayList();
+                         if (toAddresses != null) {
+                             for (Address address : toAddresses) {
+                                 toList.add(address.toString());
+                             }
+                         }
+                         messageData.put(\"to\", toList);
+                         
+                         // Handle CC addresses
+                         Address[] ccAddresses = msg.getRecipients(Message.RecipientType.CC);
+                         List ccList = new ArrayList();
+                         if (ccAddresses != null) {
+                             for (Address address : ccAddresses) {
+                                 ccList.add(address.toString());
+                             }
+                         }
+                         messageData.put(\"cc\", ccList);
+                         
+                         // Extract content
+                         Object content = null;
+                         try {
+                             content = msg.getContent();
+                         } catch (Exception e) {
+                             content = \"[Error extracting content: \" + e.getMessage() + \"]\";
+                         }
+                         
+                         String messageBody = \"\";
+                         
+                         if (content instanceof Multipart) {
+                             Multipart mp = (Multipart) content;
+                             for (int j = 0; j < mp.getCount(); j++) {
+                                 BodyPart bp = mp.getBodyPart(j);
+                                 if (bp.getContentType().toLowerCase().startsWith(\"text/plain\")) {
+                                     messageBody = bp.getContent().toString();
+                                     break;
+                                 }
+                             }
+                             
+                             // If no text/plain part found, try the first part
+                             if (messageBody.isEmpty() && mp.getCount() > 0) {
+                                 BodyPart bp = mp.getBodyPart(0);
+                                 Object partContent = bp.getContent();
+                                 if (partContent != null) {
+                                     messageBody = partContent.toString();
+                                 }
+                             }
+                         } else if (content != null) {
+                             messageBody = content.toString();
+                         }
+                         messageData.put(\"body\", messageBody);
+                         
+                         // Add the data to our list
+                         messages.add(messageData);
+                         
+                         // Mark message for deletion if required
+                         if (deletemessages) {
+                             msg.setFlag(Flags.Flag.DELETED, true);
+                         }
+                     } catch (Exception e) {
+                         System.err.println(\"Error processing message: \" + e.getMessage());
+                         e.printStackTrace();
+                     }
+                 }
+                 
+                 // Close folder and store (expunge will actually delete marked messages if deletemessages is true)
+                 inbox.close(deletemessages);
+                 store.close();
+                 
+                 return messages;
+                 ") 
+                 `((hostname ,(->jstring hostname))
+                   (username ,(->jstring username))
+                   (password ,(->jstring password))
+                   (maxmessages ,(if max-messages (->jint max-messages) (->jint -1)))
+                   (deletemessages ,(->jboolean delete-messages)))))
+             (message-count (->number (j "messages.size();" `((messages ,messages))))))
+        
+        ;; Process all messages and put them in the queue
+        (let loop ((index 0))
+          (if (< index message-count)
+              (begin
+                (let ((message (j "messages.get(index);" `((messages ,messages) (index ,(->jint index))))))
+                  (queue 'put-java message))
+                (loop (+ index 1)))))
+        
+        ;; Return the number of messages processed
+        message-count)))
+  
+  ;; Test function for pump-imaps-inbox-to-work-queue
+  ;; Creates a queue, fetches one message, and displays it
+  (define test-pump-imaps-inbox-to-work-queue
+    (lambda* ((imaps-server-hostname: hostname)
+              (username: username)
+              (password: password))
+      ;; Create an empty work queue
+      (let ((queue (make-queue)))
+        ;; Pump only one message from the inbox to the queue
+        (let ((message-count (pump-imaps-inbox-to-work-queue
+                              'imaps-server-hostname: hostname
+                              'username: username
+                              'password: password
+                              'work-queue: queue
+                              'max-messages: 1)))
+          
+          (display "Processed ") (display message-count) (display " messages") (newline)
+          
+          ;; Get the message from the queue and display it
+          (let ((message (queue 'poll-java)))
+            (if (not (eqv? message 'empty))
+                (begin
+                  (display "Message found in queue:") (newline)
+                  (d/n (beautify-json (scheme->json (->scm-object message)))))
+                (begin
+                  (display "No messages in inbox") (newline))))))))
 )
