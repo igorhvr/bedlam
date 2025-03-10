@@ -1,6 +1,7 @@
 (require-extension (lib iasylum/packrat))
 (require-extension (lib iasylum/math))
 (require-extension (lib iasylum/srfi-89))
+(require-extension (lib iasylum/irregex))
 (require-extension (srfi 69))
 (require-extension (srfi 23))
 (require-extension (srfi 19))

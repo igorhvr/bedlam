@@ -48,7 +48,8 @@
 	    (cond
 	     ((symbol? k) (write (symbol->string k) p))
 	     ((string? k) (write k p)) ;; for convenience
-	     (else (error "Invalid JSON table key in json-write" k)))
+	     (else (write (call-with-output-string 
+                          (lambda (port) (display k port))) p)))
 	    (display ": " p)
 	    (write-any v p)))
 	(display "}" p))
@@ -64,11 +65,97 @@
 		    a))
 	(display "]" p))
 
+      (define (extract-date-components obj)
+        (let ((str (call-with-output-string (lambda (port) (display obj port)))))
+          ;; Check if it matches the expected pattern for the nested date record
+          (let ((match (irregex-search "\\[([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+)\\]" str)))
+            (if match
+                (let ((zone-offset (string->number (irregex-match-substring match 1)))
+                      (year (string->number (irregex-match-substring match 2)))
+                      (month (string->number (irregex-match-substring match 3)))
+                      (day (string->number (irregex-match-substring match 4)))
+                      (hour (string->number (irregex-match-substring match 5)))
+                      (minute (string->number (irregex-match-substring match 6)))
+                      (second (string->number (irregex-match-substring match 7)))
+                      (nanosecond (string->number (irregex-match-substring match 8))))
+                  (list zone-offset year month day hour minute second nanosecond))
+                #f))))
+              
+      (define (date->rfc3339 date)
+        ;; Try to extract components if it's a record that doesn't respond to date? predicate
+        (let ((components 
+               (if (and (date? date)
+                        (integer? (date-year date))
+                        (integer? (date-month date))
+                        (integer? (date-day date))
+                        (integer? (date-hour date))
+                        (integer? (date-minute date))
+                        (integer? (date-second date))
+                        (integer? (date-zone-offset date)))
+                   ;; For standard SRFI-19 dates
+                   (list (date-zone-offset date)
+                         (date-year date)
+                         (date-month date)
+                         (date-day date)
+                         (date-hour date)
+                         (date-minute date)
+                         (date-second date)
+                         (date-nanosecond date))
+                   ;; Try to extract from record structure
+                   (extract-date-components date))))
+          
+          (if components
+              (let ((zone-offset (car components))
+                    (year (cadr components))
+                    (month (caddr components))
+                    (day (cadddr components))
+                    (hour (cadddr (cdr components)))
+                    (minute (cadddr (cddr components)))
+                    (second (cadddr (cdddr components))))
+                ;; Format the date as RFC3339
+                (string-append
+                 (number->string year) "-"
+                 (if (< month 10) "0" "") (number->string month) "-"
+                 (if (< day 10) "0" "") (number->string day) "T"
+                 (if (< hour 10) "0" "") (number->string hour) ":"
+                 (if (< minute 10) "0" "") (number->string minute) ":"
+                 (if (< second 10) "0" "") (number->string second)
+                 (if (= zone-offset 0)
+                     "Z"
+                     (let* ((abs-offset (abs zone-offset))
+                            (offset-hours (quotient abs-offset 3600))
+                            (offset-minutes (quotient (remainder abs-offset 3600) 60)))
+                       (string-append
+                        (if (> zone-offset 0) "+" "-")
+                        (if (< offset-hours 10) "0" "") (number->string offset-hours) ":"
+                        (if (< offset-minutes 10) "0" "") (number->string offset-minutes))))))
+              ;; Return a simple representation if we can't extract components
+              "#<date>")))
+
+      (define (is-date-record? x)
+        ;; Check if x is a record and specifically looks like a date record 
+        ;; based on its string representation
+        (let ((str (call-with-output-string (lambda (port) (display x port)))))
+          (or (date? x)
+              (string-contains str "[date (zone-offset year month day hour minute second nanosecond)]"))))
+      
+      ;; Helper function to check if all elements in a list are pairs
+      (define (every-pair? lst)
+        (or (null? lst)
+            (and (pair? (car lst))
+                 (every-pair? (cdr lst)))))
+      
       (define (write-any x p)
 	(cond
 	 ((hash-table? x) (write-ht (hashtable->vector x) p))
 	 ((vector? x) (write-ht x p))
+         ;; Handle association lists (lists of pairs)
+         ((and (list? x) (every-pair? x))
+          (write-ht (list->vector x) p))
 	 ((list? x) (write-array x p))
+         ;; Handle a single pair (key . value)
+         ((pair? x) 
+          (write-ht (vector x) p))
 	 ((symbol? x) (write (symbol->string x) p)) ;; for convenience
 	 ((string? x) (write x p))
          ((number? x)
@@ -78,10 +165,12 @@
                      (exact->inexact x))))
             (write to-write p)))
 	 ((boolean? x) (display (if x "true" "false") p))
-         ((date? x) (write (date->string x "~4") p))
-         ((time? x) (write (date->string (time-utc->date x) "~4") p))
+         ((is-date-record? x) (write (date->rfc3339 x) p))
+         ((time? x) (write (date->rfc3339 (time-utc->date x)) p))
 	 ((eq? x (void)) (display "null" p))
-	 (else (error "Invalid JSON object in json-write" x))))
+	 ;; Fallback for any other Scheme object - convert to string
+	 (else 
+          (write (call-with-output-string (lambda (port) (display x port))) p))))
 
       (lambda (x . maybe-port)
 	(write-any x (if (pair? maybe-port) (car maybe-port) (current-output-port))))))
