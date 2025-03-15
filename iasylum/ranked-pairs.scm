@@ -73,17 +73,15 @@
 (define (pair-score pair pairs)
   (cond ((assoc pair pairs) => cdr) (else 0)))
 
-(define inverted-sort (lambda (a b) (sort b a)))
-
 (define (sort-pairs pairs)
-  ;; requires SRFI-98 compatible `sort': (sort ls less?)
-  (inverted-sort pairs
+  (sort
         (lambda (a b)
           (or (> (cdr a) (cdr b))
               (and (= (cdr a) (cdr b))
                    (let ((a^-1 (pair-score (cons (cdar a) (caar a)) pairs))
                          (b^-1 (pair-score (cons (cdar b) (caar b)) pairs)))
-                     (< a^-1 b^-1)))))))
+                     (< a^-1 b^-1)))))
+        pairs))
 
 (define (insert-edge a b graph)
   (let lp ((ls graph) (rev '()))
