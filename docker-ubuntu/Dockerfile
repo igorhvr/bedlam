@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:24.04
 MAINTAINER Igor Hjelmstrom Vinhas Ribeiro <igorhvr@iasylum.net>
 # Erase apt-get caches, then run update operation.
 
