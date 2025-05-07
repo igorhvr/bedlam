@@ -151,6 +151,8 @@
    amb-require
    amb-safe-context
    amb-possibility-list
+   alist-swap
+   -to_
    )
 
   ;; This makes scm scripts easier in the eyes of non-schemers.
@@ -1128,11 +1130,11 @@
   (define (alist-to-url-query-string raw-alist)
     (define join-parameters
       (match-lambda
-       ((element) element)
-       ((first-element . rest) (string-append* first-element "&" (join-parameters rest)))))
-    
-    (let* ((alist (pam raw-alist (lambda (v) (match-let (((key . value) v)) `(,(-to_ key) . ,(->string (j "java.net.URLEncoder.encode(v, \"ISO-8859-1\");" `((v ,(->jstring value))))))))))         
-           (individual-parameters (map (lambda (v) 
+        ((element) element)
+        ((first-element . rest) (string-append* first-element "&" (join-parameters rest)))))
+    (let* ((alist (pam raw-alist (lambda (v) (match-let (((key . value) v))
+                                          `(,(-to_ (display-string key)) . ,(->string (j "java.net.URLEncoder.encode(v, \"ISO-8859-1\");" `((v ,(->jstring (display-string value)))))))))))
+           (individual-parameters (map (lambda (v)
                                          (match-let (((key . value) v)) (string-append* key "=" value))) alist)))
       (join-parameters individual-parameters)))
 
@@ -1298,9 +1300,11 @@
   ;; (get 'c alist 123) => 123
   ;;
   (define* (get property alist (default-value #f))
-    (or (let ((pair (assoc property alist)))
-          (and pair (cdr pair)))
-        default-value))
+    (if (not (vector? alist))
+        (or (let ((pair (assoc property alist)))
+              (and pair (cdr pair)))
+            default-value)
+        (get property (vector->list alist) default-value)))
 
   (define (avg . numbers)  
     (/ (apply + numbers) (length numbers)))
@@ -1958,6 +1962,15 @@
             (amb))
           (lambda ()
             body ...))))]))
+
+
+ (define (alist-swap al)
+   (map (lambda (pair)
+          (cons (cdr pair) (car pair)))
+        al))
+
+ (define (-to_ str)
+   (irregex-replace/all "-" str "_"))
 
   (create-shortcuts (avg -> average))
 
