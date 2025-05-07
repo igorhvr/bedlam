@@ -146,6 +146,7 @@
   (lambda* ((in-work-queue: in-work-queue #f)
             (out-work-queue: out-work-queue #f)
             (fetch-attributed-messages: fetch-attributed-messages #f)
+            (use-web-api: use-web-api #f)
             (name: name) (channel: channel) (token: token))
            ;; Nothing to do if we don't have at least one of those set.
            (assert (or in-work-queue out-work-queue))
@@ -196,11 +197,17 @@
                                             (out-work-queue 'put result)))
                                         email-retrieving-queue 'thread-name: "slack/email-retrieving-worker")
                           (email-retrieving-queue 'inner-queue)))))
-               (slack/create-reader-bot
-                'name: name
-                'token: token
-                'fetch-bots-messages: #t
-                'channels:  (list (cons channel the-inner-queue)))))
+               (if use-web-api
+                   (slack-web-api/create-reader-bot
+                    'name: name
+                    'token: token
+                    'fetch-bots-messages: #t
+                    'channels: (list (cons channel the-inner-queue)))
+                   (slack/create-reader-bot
+                    'name: name
+                    'token: token
+                    'fetch-bots-messages: #t
+                    'channels:  (list (cons channel the-inner-queue))))))
              #t))
 
   (define irc/work-queue-bot
@@ -317,7 +324,8 @@
              (bot-name: bot-name)
              (token: token)
              (command-prefix-list: command-prefix-list)
-             (output-prefix: output-prefix *DEFAULT-OUTPUT-PREFIX*))
+             (output-prefix: output-prefix *DEFAULT-OUTPUT-PREFIX*)
+             (use-web-api: use-web-api #f))
      (let* ((inq (make-queue))
             (outq (make-queue)))
        (slack/work-queue-bot 'in-work-queue: inq
@@ -325,7 +333,8 @@
                        'name: bot-name
                        'channel: channel-name
                        'fetch-attributed-messages: #t
-                       'token: token)
+                       'token: token
+                       'use-web-api: use-web-api)
        (bot-on-channel-command-processor 'inq: inq
                                          'outq: outq
                                          'token: token
@@ -526,6 +535,156 @@
   (if contents-filename
       (call-with-binary-input-file contents-filename process)
       (process #f)))
+
+(define slack-web-api/create-reader-bot
+  (lambda* ((name: name) (channels: channels) (token: token) (fetch-bots-messages: fetch-bots-messages))
+    (let* (;; Retrieve the mapping from channel names to channel IDs.
+           ;; This might need refreshing if channels change while the bot runs.
+           (channel-id-map (alist-swap (jmap->alist (slack/retrieve-full-conversation-list token))))
+           ;; Store the timestamp ('ts') of the last message processed for each channel ID.
+           (last-timestamps (make-hashtable string=?))
+           ;; Get the current time as the initial point for fetching messages.
+           ;; Using exact-floor to get an integer timestamp string initially.
+           (initial-timestamp (number->string (exact-floor (time-second (current-time time-utc))))))
+
+      ;; Initialize the last timestamp for each channel we are monitoring.
+      (for-each
+       (lambda (channel-queue-pair)
+         (let* ((channel-name (car channel-queue-pair))
+                (channel-id (get channel-name channel-id-map)))
+           (if channel-id
+               (hashtable/put! last-timestamps channel-id initial-timestamp)
+               (log-warn "Channel ID not found for name:" channel-name ". Cannot initialize timestamp."))))
+       channels)
+
+      ;; Start a separate polling thread for each channel.
+      (for-each
+       (lambda (channel-queue-pair)
+         (let* ((channel-name (car channel-queue-pair))
+                (output-queue-jobject (cdr channel-queue-pair)) ; Assuming this is the Java queue object
+                (channel-id (get channel-name channel-id-map)))
+
+           ;; If we couldn't find the channel ID, log an error and skip this channel.
+           (unless channel-id
+             (let ((error-msg (string-append* "Could not find channel ID for name:" channel-name ". Crashing.")))
+               (log-error error-msg)
+               (throw (make-error error-msg))))
+
+           ;; Spawn a watched thread for polling this specific channel.
+           (watched-thread/spawn
+            'thread-name: (string-append "slack-web-api-poller-" channel-name)
+            (lambda ()
+              ;; The main polling loop for this channel.
+              (let loop ()
+                (sleep-seconds 10) ; Wait for 10 seconds before the next poll.
+
+                ;; Retrieve the timestamp of the last message we processed for this channel.
+                (let ((current-oldest (hashtable/get last-timestamps channel-id)))
+                  (log-trace "Polling channel" channel-name "(" channel-id ") for messages since" current-oldest)
+
+                  ;; Attempt to fetch conversation history using the Web API.
+                  ;; Use exponential backoff to handle transient errors and rate limits.
+                  (let* ((api-result
+                          (try-with-exponential-backoff
+                           'action-description: (string-append "Polling Slack channel history: " channel-name)
+                           'initial-interval-millis: 1000
+                           'max-interval-millis: 10000 ; Max wait 10s
+                           'max-elapsed-time-millis: 60000 ; Give up after 1 minute of retries
+                           'log-error: log-error ; Log errors during backoff
+                           'action:
+                           (lambda ()
+                             ;; Perform the HTTP POST request to the Slack API.
+                             (log-trace "Perform the HTTP POST request to the Slack API.")
+                             (let ((response-string
+                                    (http-call-post-string/string
+                                     "https://slack.com/api/conversations.history"
+                                     ;; Encode parameters for the POST body.
+                                     (alist-to-url-query-string
+                                      `((token . ,token)
+                                        (channel . ,channel-id)
+                                        ;; Fetch messages strictly newer than the last processed one.
+                                        (oldest . ,current-oldest)
+                                        (limit . 100))) ; Fetch up to 100 messages per poll.
+                                     ;; Set required headers.
+                                     'headers: '(("Content-Type" . "application/x-www-form-urlencoded")))))
+                               (log-trace "Response String: " response-string)
+                               ;; Parse the JSON response if available.
+                               (if response-string
+                                   (json->scheme response-string)
+                                   ;; Throw an error if the response is empty, triggering backoff.
+                                   (throw (make-error "Failed to fetch conversation history, empty response.")))))))
+                         ;; Keep track of the timestamp of the newest message processed in this batch.
+                         (newest-processed-ts current-oldest))
+
+                    ;; Process the API result.
+                    (cond
+                     ;; Handle permanent failure after backoff.
+                     ((not api-result)
+                      (log-error "Polling failed permanently for channel:" channel-name "after multiple retries.")
+                      ;; Stop polling this channel.
+                      (void))
+
+                     ;; Handle specific API errors reported by Slack.
+                     ((not (get "ok" api-result #f))
+                      (log-error "Slack API error polling channel" channel-name "(" channel-id "):" (get "error" api-result "unknown_error"))
+                      ;; Continue the loop; backoff already handled the delay.
+                      (loop))
+
+                     ;; Process successful API response.
+                     (else
+                      (let* ((messages (get "messages" api-result '#()))
+                             ;(messages (if (null? me) '() (if (vector? me) (vector->list me) 
+                             ;; API returns newest first; reverse to process oldest first.
+                             (messages-oldest-first (reverse messages)))
+                        (log-trace "Received" (length messages) "messages for channel" channel-name)
+
+                        ;; Iterate through the fetched messages.
+                        (for-each
+                         (lambda (msg)
+                           (let ((msg-ts (get "ts" msg)))
+                             ;; Ensure the message timestamp is strictly greater than the last processed one.
+                             ;; This prevents reprocessing the 'oldest' message itself.
+                             (when (> (string->number msg-ts) (string->number current-oldest))
+                               (let ((subtype (get "subtype" msg #f))
+                                     (bot-id (get "bot_id" msg #f))
+                                     (user-id (get "user" msg #f))
+                                     (text (get "text" msg ""))
+                                     (files (get "files" msg #f)))
+
+                                 ;; Filter messages based on whether bot messages should be fetched.
+                                 (when (or fetch-bots-messages (not bot-id))
+                                   ;; Apply similar filtering logic as the RTM bot (ignore edits, threads, etc.)
+                                   (when (and user-id text (not (get "edited" msg #f)) (not (get "thread_ts" msg #f)))
+                                     ;; Extract file URL if present.
+                                     (let* ((file-url-part
+                                             (and files (> (vector-length files) 0)
+                                                  (let ((file-info (vector-ref files 0)))
+                                                    (get "url_private_download" file-info #f))))
+                                            ;; Format the message string.
+                                            (formatted-msg
+                                             (string-append* "<" user-id "> " text
+                                                             (if file-url-part (string-append* " | PRIVATE-SLACK-FILE-URL: " file-url-part) ""))))
+                                       (log-trace "Queueing message from" channel-name ":" formatted-msg)
+                                       ;; Put the formatted message into the output queue as an ImmutableString, matching the RTM bot's behavior.
+                                       (j "queue.put(msg);" `((queue ,output-queue-jobject) (msg ,(java-wrap formatted-msg))))
+                                       ;; Update the timestamp of the newest message processed in this batch.
+                                       (set! newest-processed-ts msg-ts)
+                                       )))))))
+                         messages-oldest-first)
+
+                        ;; If we processed any new messages, update the last timestamp for this channel.
+                        (when (> (string->number newest-processed-ts) (string->number current-oldest))
+                          (hashtable/put! last-timestamps channel-id newest-processed-ts))
+
+                        ;; TODO: Implement pagination handling if necessary.
+                        ;; Check api-result for response_metadata.next_cursor and loop API calls within this iteration if present.
+                        ;; For simple polling of recent messages, this might not be needed if 100 messages/10s is sufficient.
+
+                        ;; Continue the loop for the next poll.
+                        (loop)))))))))))
+       channels))
+    ;; Implicitly return #t after setting up the threads, similar to the RTM version.
+    #t))
 
 (define (slack/get-text-or-url-link-text string)
  ;; This receives a string formatted as a link as explained on
