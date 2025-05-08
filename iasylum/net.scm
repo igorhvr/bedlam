@@ -98,10 +98,14 @@
                    (httppost (j "httppost = new org.apache.http.client.methods.HttpPost(destinationurl);
                                  httppost;"
                                 `((httppost)(destinationurl ,(->jstring destinationUrl))))))
-               
-               (map (lambda (v)  (match-let ( ( (vname vvalue) v ) )
+
+               (if (pure-alist? headers)
+                   (map (lambda (v)  (match-let ( ( (vname . vvalue) v ) )
                                             (j "httppost.addHeader(hn, hv);"`((hn ,(->jstring vname)) (hv ,(->jstring vvalue)) (httppost ,httppost)))
                                             )) headers)
+                   (map (lambda (v)  (match-let ( ( (vname vvalue) v ) )
+                                  (j "httppost.addHeader(hn, hv);"`((hn ,(->jstring vname)) (hv ,(->jstring vvalue)) (httppost ,httppost)))
+                                  )) headers))
                                               
              (let ((java-result
                (j "httppost.setEntity(new org.apache.http.entity.StringEntity(contents));
