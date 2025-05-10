@@ -334,7 +334,7 @@
   
     ;; (define (pump-binary i o)
     ;;    (let ((a (read-byte i)))
-    ;;      (if (eof-object? a) 'done 
+    ;;      (if (eof-object? a) 'done
     ;;          (begin (write-byte a o) (pump-binary i o)))))
     (define (pump-binary i o)      
       (define mbuffer (make-buffer 65000))

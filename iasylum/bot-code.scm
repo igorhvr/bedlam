@@ -576,7 +576,7 @@
             (lambda ()
               ;; The main polling loop for this channel.
               (let loop ()
-                (sleep-seconds 10) ; Wait for 10 seconds before the next poll.
+                (sleep-seconds 6) ; Wait for 6 seconds before the next poll.
 
                 ;; Retrieve the timestamp of the last message we processed for this channel.
                 (let ((current-oldest (hashtable/get last-timestamps channel-id)))
@@ -588,8 +588,8 @@
                           (try-with-exponential-backoff
                            'action-description: (string-append "Polling Slack channel history: " channel-name)
                            'initial-interval-millis: 1000
-                           'max-interval-millis: 10000 ; Max wait 10s
-                           'max-elapsed-time-millis: 60000 ; Give up after 1 minute of retries
+                           'max-interval-millis: 600000 ; Max wait 10 minutes
+                           'max-elapsed-time-millis: 864000000 ; 10 days before giving up.
                            'log-error: log-error ; Log errors during backoff
                            'action:
                            (lambda ()
