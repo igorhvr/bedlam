@@ -557,4 +557,6 @@
 
 (set! load original-load)
 
+(require-extension (lib iasylum/function-ports))
+
 (define bedlam-loaded-and-ready-to-use #t)
