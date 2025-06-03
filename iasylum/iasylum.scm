@@ -463,7 +463,7 @@
   (define r-base
     (lambda* ((cmd-string: cmd-string #f) (cmd-list: cmd-list #f)
               stdout stdout-output-lock stderr stderr-output-lock
-              (stdin (open-input-string ""))
+              (stdin #f)
               (stdin-output-lock (mutex/new)))
              (assert (or cmd-string cmd-list))
              ((lambda ()
@@ -486,14 +486,12 @@
                     
                     (pump_binary-input-port->character-output-port processInputStream output-stream stream-lock))))
 
-               (define (send-process-input stream-retriever input-stream stream-lock)
+               (define (send-process-input stream-retriever input-stream stream-lock auto-flush)
                  (thread/spawn
                   (lambda ()
                     (define processInputStream)
                     (mutex/lock! process-lock)
-                    (set! processInputStream (open-character-output-port (stream-retriever process)
-                                                                         #t ;; Enables auto-flush for the port.
-                                                                         ))
+                    (set! processInputStream (open-character-output-port (stream-retriever process) auto-flush))
                     (mutex/unlock! process-lock)
                     (let loop ()
                         (let ((a (read-char input-stream)))
@@ -504,9 +502,9 @@
 
                (set! stdout-thread (grab-results get-process-stdout stdout stdout-output-lock))
                (set! stderr-thread (grab-results get-process-stderr stderr stderr-output-lock))
-               
-               (set! stdin-thread  (send-process-input get-process-stdin stdin stdin-output-lock))
-               
+               (set! stdin-thread  (send-process-input get-process-stdin
+                                                       (or stdin (open-input-string "")) stdin-output-lock (if stdin #t #f)))
+
                (set! process-return-code (wait-for-process process))
                
                (thread/join stdout-thread)
