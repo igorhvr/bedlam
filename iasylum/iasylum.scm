@@ -341,7 +341,7 @@
       (import networking) (import binary-io) (import custom-io)
       (define (loop)
         (let ((a (read-block mbuffer 0 (buffer-length mbuffer) i)))
-          (if (eof-object? a) 'done 
+          (if (eof-object? a) 'done
               (begin (write-block mbuffer 0 a o)  (loop)))))
       (loop))
   
@@ -365,7 +365,7 @@
     (define mbuffer (make-string 65000))
     (define (loop)
       (let ((a (read-string mbuffer 0 (string-length mbuffer) i)))
-        (if (eof-object? a) 'done 
+        (if (eof-object? a) 'done
             (begin
               (mutex/lock! lock)
               (write-string mbuffer 0 a o)
@@ -462,7 +462,9 @@
   
   (define r-base
     (lambda* ((cmd-string: cmd-string #f) (cmd-list: cmd-list #f)
-              stdout stdout-output-lock stderr stderr-output-lock)
+              stdout stdout-output-lock stderr stderr-output-lock
+              (stdin (open-input-string ""))
+              (stdin-output-lock (mutex/new)))
              (assert (or cmd-string cmd-list))
              ((lambda ()
                (define process (or (and cmd-string (spawn-process "bash" (list "-c" cmd-string)))
@@ -472,6 +474,7 @@
                (define process-return-code)
                (define stdout-thread)
                (define stderr-thread)
+               (define stdin-thread)
                
                (define (grab-results stream-retriever output-stream stream-lock)
                  (thread/spawn
@@ -482,9 +485,25 @@
                     (mutex/unlock! process-lock)
                     
                     (pump_binary-input-port->character-output-port processInputStream output-stream stream-lock))))
-               
+
+               (define (send-process-input stream-retriever input-stream stream-lock)
+                 (thread/spawn
+                  (lambda ()
+                    (define processInputStream)
+                    (mutex/lock! process-lock)
+                    (set! processInputStream (open-character-output-port (stream-retriever process)))
+                    (mutex/unlock! process-lock)
+                    (let loop ()
+                        (let ((a (read-char input-stream)))
+                          (unless (eof-object? a)
+                            (display a processInputStream)
+                            (loop))))
+                    (close-output-port processInputStream))))
+
                (set! stdout-thread (grab-results get-process-stdout stdout stdout-output-lock))
                (set! stderr-thread (grab-results get-process-stderr stderr stderr-output-lock))
+               
+               (set! stdin-thread  (send-process-input get-process-stdin stdin stdin-output-lock))
                
                (set! process-return-code (wait-for-process process))
                
