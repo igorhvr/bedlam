@@ -491,7 +491,9 @@
                   (lambda ()
                     (define processInputStream)
                     (mutex/lock! process-lock)
-                    (set! processInputStream (open-character-output-port (stream-retriever process)))
+                    (set! processInputStream (open-character-output-port (stream-retriever process)
+                                                                         #t ;; Enables auto-flush for the port.
+                                                                         ))
                     (mutex/unlock! process-lock)
                     (let loop ()
                         (let ((a (read-char input-stream)))
