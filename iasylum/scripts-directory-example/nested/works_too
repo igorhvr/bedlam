@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# 1. Call details.
+echo "Hello! I am nested! Cool... Me and my parameters: $0 $@"
+
+# 2. Ask the users name.
+echo "What is your last name?"
+
+# 3. Reads the user name.
+read user_name
+
+# 4. Displays the message Nice to meet you, user name.
+echo "Nice to meet you, $user_name."
+
+# 5. Asks the user age.
+echo "How old are you?"
+read user_age
+
+# 6. If the number is bigger than 120 say WOW message otherwise just say cool, user age is a great age.
+if ! [[ "$user_age" =~ ^[0-9]+$ ]]; then
+  echo "Please enter a valid number for your age."
+elif [ "$user_age" -gt 120 ]; then
+  echo "WOW. You must have seen a lot!"
+else
+  echo "cool, $user_age is a great age."
+fi

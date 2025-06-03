@@ -8,7 +8,8 @@
    slack/work-queue-bot slack/create-bot-on-channel slack/create-reader-bot slack/clear-conversations-list-cache slack/fetch-user-info slack-user-info/fetch-email
    slack/retrieve-private-file-data slack/upload-file slack/get-text-or-url-link-text slack/get-private-file-url
    attributed-message? attributed-message-message attributed-message-sender
-   bot/add-global-help-and-exit-commands bot/add-global-commands  bot-on-channel-command-processor
+   bot/add-global-help-and-exit-commands bot/add-scripts-directory-contents-as-commands
+   bot/add-global-commands  bot-on-channel-command-processor
    bot/watch-dog-maximum-allowed-pulseless-period-seconds bot/assuager-cycle-seconds bot/watchdog-recent-pulse-happened-retriever bot/watchdog-assuage bot/suppress-watchdog? bot/enable-watchdog
    )
 

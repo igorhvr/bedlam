@@ -455,6 +455,40 @@
                                                     (exit-thunk)))))))
     new-bot))
 
+;; Terminal interaction->bot translation.
+;;
+;; This will find every file path inside a given directory and create an associated
+;; command. Stdout and stderr from the command will be redirected to bot messages,
+;; and stdin wil be fetched from bot 'read-line as well.
+;; If the chosen directory is /example/ and there is a /example/nested/xpto file it will
+;; become the /nested/xpto command for the bot. To see it in action call this with
+;; /base/bedlam/iasylum/scripts-directory-example and /demo and /nested/works_too
+;; commands will be created.
+(define* (bot/add-scripts-directory-contents-as-commands (token: token #f) bot directory)
+  (define resulting-bot (make-parameter* bot))
+  (let ((script-files (with-current-url (string-append directory "/") (lambda () (rglob "."))))) ;
+    (for-each
+     (lambda (script-file)
+       (log-info "Adding slash command for script. " script-file)
+       (and-let*
+             ((command-str (irregex-replace '(seq bos "./") script-file "/"))
+              (handler (lambda* ((id: id) (sender-email: email) bot param)
+                                (and-let* ((json-param (scheme->json param))
+                                           (my-sink (lambda (p) (bot 'd/n p)))
+                                           (reader-thunk (lambda ()
+                                                           (let ((read-line-result
+                                                                  (string-append (bot 'read-line) "\n")))
+                                                             read-line-result))))
+                                  (r-base 'cmd-list: (list (string-append directory "/" script-file) id email json-param)
+                                          (create-unary-function-based-output-port my-sink)  (mutex/new)
+                                          (create-unary-function-based-output-port my-sink)  (mutex/new)
+                                          (create-thunk-based-input-port reader-thunk) (mutex/new))))))
+        (resulting-bot (bot/add-global-commands 'token: token (resulting-bot)
+                                                (if token
+                                                    `([id: ,(current-thread-name) ,command-str ,handler :attributed-email:])
+                                                    `([id: ,(current-thread-name) ,command-str ,handler :attributed:]))))))
+     script-files))
+  (resulting-bot))
 
 ;; WATCHDOG
 
