@@ -465,6 +465,7 @@
 ;; /base/bedlam/iasylum/scripts-directory-example and /demo and /nested/works_too
 ;; commands will be created.
 (define* (bot/add-scripts-directory-contents-as-commands (token: token #f)
+                                                         (json-parameters: json-parameters #t)
                                                          bot directory)
   (define resulting-bot (make-parameter* bot))
   (let ((script-files (with-current-url (string-append directory "/") (lambda () (rglob "."))))) ;
@@ -474,13 +475,19 @@
        (and-let*
              ((command-str (irregex-replace '(seq bos "./") script-file "/"))
               (handler (lambda* ((id: id) (sender-email: email) bot param)
-                                (and-let* ((json-param (scheme->json param))
+                                (and-let* ((json-param (if json-parameters (scheme->json param) 'ignored))
                                            (my-sink (lambda (p) (bot 'd/n p)))
                                            (reader-thunk (lambda ()
                                                            (let ((read-line-result
                                                                   (string-append (bot 'read-line) "\n")))
-                                                             read-line-result))))
-                                  (r-base 'cmd-list: (list (string-append directory "/" script-file) id email json-param)
+                                                             read-line-result)))
+                                           (cmd-list (if json-parameters
+                                                         (list (string-append directory "/" script-file) id email json-param)
+                                                         (append (list (string-append directory "/" script-file)
+                                                                       (string-append "--trace-thread=" id)
+                                                                       (string-append "--user=" email))
+                                                                 param))))
+                                  (r-base 'cmd-list: cmd-list
                                           (create-unary-function-based-output-port my-sink)  (mutex/new)
                                           (create-unary-function-based-output-port my-sink)  (mutex/new)
                                           (create-thunk-based-input-port reader-thunk) (mutex/new))
