@@ -464,17 +464,29 @@
 ;; become the /nested/xpto command for the bot. To see it in action call this with
 ;; /base/bedlam/iasylum/scripts-directory-example and /demo and /nested/works_too
 ;; commands will be created.
+;;
+;; A command-execution-controller may also be provided - in which case execution responsibility will
+;; be handed of to it. Can be used for pre-or-post-hooks/cleanup, access validation, logging or
+;; whatever else is needed. It should conform to:
+;; (define* (sample-command-execution-controller
+;;           (id: id) (email: email) (sender: sender) (bot: bot) (param: param)
+;;          (command: command) (command-directory: command-directory) (command-file: command-file)
+;;          (command-performer: command-performer))
+;;        (bot 'd (string-append "Will execute " command))
+;;        (command-performer)
+;;        (bot 'd (string-append "Executed " command)))
 (define* (bot/add-scripts-directory-contents-as-commands (token: token #f)
                                                          (json-parameters: json-parameters #t)
+                                                         (command-execution-controller: command-execution-controller #f)
                                                          bot directory)
   (define resulting-bot (make-parameter* bot))
-  (let ((script-files (with-current-url (string-append directory "/") (lambda () (rglob "."))))) ;
+  (let ((script-files (with-current-url (string-append directory "/") (lambda () (rglob ".")))))
     (for-each
      (lambda (script-file)
-       (log-info "Adding slash command for script. " script-file)
+       (log-info "Adding slash command for: " (safe-bash-run "sha256sum" (string-append directory "/" script-file)))
        (and-let*
              ((command-str (irregex-replace '(seq bos "./") script-file "/"))
-              (handler (lambda* ((id: id) (sender-email: email) bot param)
+              (handler (lambda* ((id: id) (sender-email: email #f) (sender: sender #f) bot param)
                                 (and-let* ((json-param (if json-parameters (scheme->json param) 'ignored))
                                            (my-sink (lambda (p) (bot 'd p)))
                                            (reader-thunk (lambda ()
@@ -482,16 +494,31 @@
                                                                   (string-append (bot 'read-line) "\n")))
                                                              read-line-result)))
                                            (cmd-list (if json-parameters
-                                                         (list (string-append directory "/" script-file) id email json-param)
+                                                         (list (string-append directory "/" script-file)
+                                                               id (or email sender) command-str json-param)
                                                          (append (list (string-append directory "/" script-file)
                                                                        (string-append "--trace-thread=" id)
-                                                                       (string-append "--user=" email))
+                                                                       (string-append "--user=" (or email sender))
+                                                                       (string-append "--command=" command-str))
                                                                  param))))
-                                  (r-base 'cmd-list: cmd-list
-                                          (create-unary-function-based-output-port my-sink)  (mutex/new)
-                                          (create-unary-function-based-output-port my-sink)  (mutex/new)
-                                          (create-thunk-based-input-port reader-thunk) (mutex/new))
-                                  ))))
+                                  (let ((command-performer (lambda ()
+                                                             (log-debug "Will run "
+                                                                        (safe-bash-run "sha256sum"
+                                                                                       (string-append directory "/" script-file))
+                                                                        " w/parameters " cmd-list)
+                                                             (r-base 'cmd-list: cmd-list
+                                                                     (create-unary-function-based-output-port my-sink)  (mutex/new)
+                                                                     (create-unary-function-based-output-port my-sink)  (mutex/new)
+                                                                     (create-thunk-based-input-port reader-thunk) (mutex/new)))))
+                                    (if (not command-execution-controller)
+                                        (command-performer)
+                                        (command-execution-controller 'id: id
+                                                                      'email: email 'sender: sender
+                                                                      'bot: bot 'param: param
+                                                                      'command: command-str
+                                                                      'command-directory: directory
+                                                                      'command-file: script-file
+                                                                      'command-performer: command-performer)))))))
          (resulting-bot (bot/add-global-commands 'token: token (resulting-bot)
                                                  (if token
                                                      `([id: ,(current-thread-name) ,command-str ,handler :attributed-email:])
