@@ -476,7 +476,7 @@
              ((command-str (irregex-replace '(seq bos "./") script-file "/"))
               (handler (lambda* ((id: id) (sender-email: email) bot param)
                                 (and-let* ((json-param (if json-parameters (scheme->json param) 'ignored))
-                                           (my-sink (lambda (p) (bot 'd/n p)))
+                                           (my-sink (lambda (p) (bot 'd p)))
                                            (reader-thunk (lambda ()
                                                            (let ((read-line-result
                                                                   (string-append (bot 'read-line) "\n")))
