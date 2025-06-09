@@ -1,13 +1,13 @@
 FROM ubuntu:24.04
 MAINTAINER Igor Hjelmstrom Vinhas Ribeiro <igorhvr@iasylum.net>
-# Erase apt-get caches, then run update operation.
 
 ENV TERM xterm
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN echo "2025-01-30" > /last_bedlam_base_image_update
+RUN echo "2025-06-09" > /last_bedlam_base_image_update
 RUN cd /var/lib/apt ; rm -rf * 
 RUN apt-get -y update --fix-missing
+RUN apt-get -y install man-db
 RUN apt-get install -y apt-utils software-properties-common dialog
 RUN apt-get install -y inetutils-ping net-tools iproute2 iptables
 RUN apt-get install -y git
