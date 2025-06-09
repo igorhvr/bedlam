@@ -26,20 +26,20 @@ RUN apt-get -y install mosh
 RUN apt-get -y install htop
 RUN apt-get -y install emacs nano vim w3m
 RUN apt-get -y install telnet
-RUN apt-get -y install w3m
 RUN apt-get -y install openssh-server sudo gnupg
 RUN apt-get -y install rsync
-RUN apt-get -y install zip
-RUN apt-get -y install unzip
-RUN apt-get -y install psmisc ncdu
+RUN apt-get -y install zip unzip gzip tar
+RUN apt-get -y install psmisc ncdu procps
 RUN apt-get -y install less
 RUN apt-get -y install ntpdate ntp
 RUN apt-get -y install sysstat
-RUN apt-get -y install tor netcat-openbsd
+RUN apt-get -y install tor netcat-openbsd ncat socat tcpdump traceroute dnsutils
 RUN apt-get -y install secure-delete
-RUN apt-get -y install strace
+RUN apt-get -y install strace lsof
 
 RUN apt-get -y install openjdk-11-jdk
+
+RUN apt-get -y install man-db tar gzip ca-certificates tzdata
 
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
 
