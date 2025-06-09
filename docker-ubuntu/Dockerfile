@@ -11,6 +11,11 @@ RUN apt-get -y update --fix-missing
 RUN apt-get install -y apt-utils software-properties-common dialog
 RUN apt-get install -y inetutils-ping net-tools iproute2 iptables
 RUN apt-get install -y git
+
+# Set timezone.
+ENV TZ=Etc/UTC
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 RUN cd / ; mkdir base ; cd base ; git clone --depth 32 https://github.com/igorhvr/bedlam.git ; chmod -R 755 /base
 RUN apt-get install -y zsh
 RUN apt-get install -y curl wget
