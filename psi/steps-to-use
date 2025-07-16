@@ -1,0 +1,30 @@
+Step 1: Decide which party will act as the server and which will act as the client.
+Both parties must know the size of the client's list.
+
+Step 2: Each party prepares their data.
+Server:
+  ./prepare_intersection.py --role server --input server_list.txt \
+      --client-size <client-list-size> --state server_state.json \
+      --out server_setup.txt
+Client:
+  ./prepare_intersection.py --role client --input client_list.txt \
+      --state client_state.json --out client_request.txt
+
+Step 3: Exchange files.
+  - The server sends server_setup.txt to the client.
+  - The client sends client_request.txt to the server.
+
+Step 4: Server processes the request.
+  ./find_intersection.py --role server --state server_state.json \
+      --inblob client_request.txt --out server_response.txt
+  Send server_response.txt back to the client.
+
+Step 5: Client computes the intersection.
+  ./find_intersection.py --role client --state client_state.json \
+      --inblob server_setup.txt --response server_response.txt \
+      --input client_list.txt --out intersection.txt
+  The file intersection.txt will contain the common strings.
+
+These scripts require Python 3.10 because the OpenMined PSI wheel is only
+available for that version. If multiple Python versions are installed, run the
+programs with `python3.10` explicitly, e.g. `python3.10 prepare_intersection.py ...`.
