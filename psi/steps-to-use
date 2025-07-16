@@ -5,7 +5,8 @@ Step 2: Each party prepares their data.
 Server:
   ./prepare_intersection.py --role server --input server_list.txt \
       --client-size <client-list-size> --state server_state.json \
-      --out server_setup.txt
+      --out server_setup.txt [--ds raw]
+  # Use ``--ds raw`` to disable probabilistic matching.
 Client:
   ./prepare_intersection.py --role client --input client_list.txt \
       --state client_state.json --out client_request.txt
