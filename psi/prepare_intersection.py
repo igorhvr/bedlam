@@ -22,6 +22,12 @@ def main() -> None:
     parser.add_argument("--out", required=True, help="Blob to share with the other party")
     parser.add_argument("--client-size", type=int, help="Size of client set (required for server)")
     parser.add_argument("--fpr", type=float, default=1e-6, help="False positive rate for server setup")
+    parser.add_argument(
+        "--ds",
+        choices=["gcs", "raw"],
+        default="gcs",
+        help="Data structure for server setup (default: gcs)",
+    )
 
     args = parser.parse_args()
     items = read_list(args.input)
@@ -38,8 +44,12 @@ def main() -> None:
         if args.client_size is None:
             parser.error("--client-size is required for server role")
         server = psi.server.CreateWithNewKey(reveal_intersection=True)
+        ds = psi.DataStructure.GCS if args.ds == "gcs" else psi.DataStructure.RAW
         setup = server.CreateSetupMessage(
-            args.fpr, args.client_size, items
+            args.fpr,
+            args.client_size,
+            items,
+            ds,
         )
         blob = base64.b64encode(setup.SerializeToString()).decode()
         state = {
@@ -47,6 +57,7 @@ def main() -> None:
             "priv": base64.b64encode(server.GetPrivateKeyBytes()).decode(),
             "client_size": args.client_size,
             "fpr": args.fpr,
+            "ds": args.ds,
         }
 
     with open(args.state, "w", encoding="utf-8") as f:

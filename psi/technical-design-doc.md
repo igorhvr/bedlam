@@ -39,7 +39,7 @@ protocol with reversed roles.
 - **State files** are JSON objects with fields:
   - `role`: `"server"` or `"client"`
   - `priv`: base64 encoded private key bytes
-  - For servers, also `client_size` and `fpr` used to generate the setup message.
+  - For servers, also `client_size`, `fpr` and the chosen data structure (`ds`) used to generate the setup message.
 - **Blob files** contain a single base64 encoded string representing the
   serialized protobuf message (`ServerSetup`, `Request` or `Response`).
 
@@ -48,6 +48,9 @@ protocol with reversed roles.
   delete them after use.
 - The chosen false positive rate (`fpr`) controls the probability of spurious
   matches. A value of `1e-6` is used by default.
+- The data structure can be `gcs` (Golomb Compressed Sets) or `raw`. Using
+  `raw` avoids any possibility of false positives at the cost of larger
+  messages.
 - The protocol assumes semi-honest participants and does not hide the client
   set size.
 
