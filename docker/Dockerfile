@@ -1,17 +1,24 @@
 FROM debian:latest
 MAINTAINER Igor Hjelmstrom Vinhas Ribeiro <igorhvr@iasylum.net>
-# Erase apt-get caches, then run update operation.
 
 ENV TERM xterm
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN echo "2025-01-30" > /last_bedlam_base_image_update
+RUN echo "2025-07-17" > /last_bedlam_base_image_update
 RUN cd /var/lib/apt ; rm -rf * 
+RUN rm -rf /var/lib/apt/lists/*
+RUN apt-get clean
 RUN apt-get -y update --fix-missing
+RUN apt-get -y install man-db
 RUN apt-get install -y apt-utils software-properties-common dialog
 RUN apt-get install -y inetutils-ping net-tools iproute2 iptables
 RUN apt-get install -y git
-RUN cd / ; mkdir base ; cd base ; git clone https://github.com/igorhvr/bedlam.git ; chmod -R 755 /base
+
+# Set timezone.
+ENV TZ=Etc/UTC
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN cd / ; mkdir base ; cd base ; git clone --depth 32 https://github.com/igorhvr/bedlam.git ; chmod -R 755 /base
 RUN apt-get install -y zsh
 RUN apt-get install -y curl wget
 RUN curl -L https://github.com/igorhvr/oh-my-zsh/raw/master/tools/install.sh | /bin/bash
@@ -21,18 +28,18 @@ RUN apt-get -y install mosh
 RUN apt-get -y install htop
 RUN apt-get -y install emacs nano vim w3m
 RUN apt-get -y install telnet
-RUN apt-get -y install w3m
 RUN apt-get -y install openssh-server sudo gnupg
 RUN apt-get -y install rsync
-RUN apt-get -y install zip
-RUN apt-get -y install unzip
-RUN apt-get -y install psmisc ncdu
+RUN apt-get -y install zip unzip gzip tar
+RUN apt-get -y install psmisc ncdu procps
 RUN apt-get -y install less
 RUN apt-get -y install ntpdate ntp
 RUN apt-get -y install sysstat
-RUN apt-get -y install tor netcat-openbsd
+RUN apt-get -y install tor netcat-openbsd ncat socat tcpdump traceroute dnsutils
 RUN apt-get -y install secure-delete
-RUN apt-get -y install strace
+RUN apt-get -y install strace lsof
+
+RUN apt-get -y install man-db tar gzip ca-certificates tzdata
 
 WORKDIR /opt
 RUN apt-get update \
@@ -60,13 +67,21 @@ RUN mkdir -m 0755 /nix && groupadd -r nixbld && chown root /nix && for n in $(se
 ENV USER=root
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN set -o pipefail && curl -L https://nixos.org/nix/install | bash
-RUN . "$HOME/.nix-profile/etc/profile.d/nix.sh" && nix-env -i dtrx
+RUN . "$HOME/.nix-profile/etc/profile.d/nix.sh" && nix-env -i dtrx uv
+RUN echo "" >> /root/.bashrc ; echo 'if [ -e /root/.nix-profile/etc/profile.d/nix.sh ]; then . /root/.nix-profile/etc/profile.d/nix.sh; fi' >> /root/.bashrc
 
 RUN echo 'root:root' | chpasswd
 RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 ADD id_rsa.pub /root/.ssh/authorized_keys
 RUN chmod -R 700 /root/.ssh/
+
+RUN useradd -m toor && \
+    echo "toor:root" | chpasswd && \
+    adduser toor sudo
+ADD id_rsa.pub /home/toor/.ssh/authorized_keys
+RUN chmod -R 700 /home/toor/.ssh/ ; chown -R toor:toor /home/toor/
+RUN echo 'toor ALL=(ALL:ALL) NOPASSWD:ALL' | sudo EDITOR='tee -a' visudo
 
 RUN echo '#!/bin/sh\n/etc/init.d/ssh start\n/base/bedlam/schejure/sj\nsleep infinity' > /start-network-services ; chmod 755 /start-network-services
 RUN echo '#!/bin/sh\n/base/bedlam/sisc/sisc-1.16.6/sisc $*' > /sisc ; chmod 755 /sisc

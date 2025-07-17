@@ -4,7 +4,7 @@ MAINTAINER Igor Hjelmstrom Vinhas Ribeiro <igorhvr@iasylum.net>
 ENV TERM xterm
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN echo "2025-06-09" > /last_bedlam_base_image_update
+RUN echo "2025-07-17" > /last_bedlam_base_image_update
 RUN cd /var/lib/apt ; rm -rf * 
 RUN apt-get -y update --fix-missing
 RUN apt-get -y install man-db
