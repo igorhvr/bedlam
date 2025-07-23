@@ -68,7 +68,7 @@ RUN mkdir -m 0755 /nix && groupadd -r nixbld && chown root /nix && for n in $(se
 ENV USER=root
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN set -o pipefail && curl -L https://nixos.org/nix/install | bash
-RUN . "$HOME/.nix-profile/etc/profile.d/nix.sh" && nix-env -i dtrx uv
+RUN . "$HOME/.nix-profile/etc/profile.d/nix.sh" && nix-env --timeout 60 --connect-timeout 60 -i dtrx uv
 RUN echo "" >> /root/.bashrc ; echo 'if [ -e /root/.nix-profile/etc/profile.d/nix.sh ]; then . /root/.nix-profile/etc/profile.d/nix.sh; fi' >> /root/.bashrc
 
 RUN echo 'root:root' | chpasswd
