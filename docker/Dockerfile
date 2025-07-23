@@ -38,6 +38,7 @@ RUN apt-get -y install sysstat
 RUN apt-get -y install tor netcat-openbsd ncat socat tcpdump traceroute dnsutils
 RUN apt-get -y install secure-delete
 RUN apt-get -y install strace lsof
+RUN apt-get -y install make
 
 RUN apt-get -y install man-db tar gzip ca-certificates tzdata
 
