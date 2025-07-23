@@ -53,6 +53,8 @@ RUN set -o pipefail && curl -L https://nixos.org/nix/install | bash
 RUN . "$HOME/.nix-profile/etc/profile.d/nix.sh" && nix-env --timeout 60 --connect-timeout 60 -i dtrx uv
 RUN echo "" >> /root/.bashrc ; echo 'if [ -e /root/.nix-profile/etc/profile.d/nix.sh ]; then . /root/.nix-profile/etc/profile.d/nix.sh; fi' >> /root/.bashrc
 
+RUN curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash - && apt-get -y nodejs
+
 RUN echo 'root:root' | chpasswd
 RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
