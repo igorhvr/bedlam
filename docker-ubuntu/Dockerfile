@@ -52,6 +52,8 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN set -o pipefail && curl -L https://nixos.org/nix/install | bash
 RUN . "$HOME/.nix-profile/etc/profile.d/nix.sh" && nix-env --timeout 60 --connect-timeout 60 -i dtrx uv
 RUN echo "" >> /root/.bashrc ; echo 'if [ -e /root/.nix-profile/etc/profile.d/nix.sh ]; then . /root/.nix-profile/etc/profile.d/nix.sh; fi' >> /root/.bashrc
+RUN mkdir -p /root/.config/nix ; echo "experimental-features = nix-command flakes" > /root/.config/nix/nix.conf
+RUN . "$HOME/.nix-profile/etc/profile.d/nix.sh" && nix profile add nixpkgs#yggdrasil
 
 RUN curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash - && apt-get install -y nodejs
 
