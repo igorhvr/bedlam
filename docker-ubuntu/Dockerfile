@@ -10,7 +10,7 @@ RUN apt-get -y update --fix-missing
 RUN apt-get -y install man-db
 RUN apt-get install -y apt-utils software-properties-common dialog
 RUN apt-get install -y inetutils-ping net-tools iproute2 iptables
-RUN apt-get install -y git
+RUN apt-get install -y git file
 
 # Set timezone.
 ENV TZ=Etc/UTC
