@@ -1,2 +1,2 @@
 #!/bin/sh
-sudo docker run --privileged -i -t -P igorhvr/bedlam-ubuntu
+sudo docker run --privileged -i -t --device /dev/net/tun:/dev/net/tun --cap-add=NET_ADMIN --cap-add=MKNOD -P igorhvr/bedlam-ubuntu
