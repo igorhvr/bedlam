@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# Run OpenClaw in an interactive Bedlam-style container
+# - privileged + NET_ADMIN + /dev/net/tun: required for network/tunnel features
+# - mount ~/.openclaw to persist config, credentials, and WhatsApp session
+# - expose gateway/dashboard ports explicitly (avoid random -P)
+
+sudo docker run \
+  --name openclaw \
+  --hostname openclaw \
+  --privileged \
+  -it \
+  --device /dev/net/tun:/dev/net/tun \
+  --cap-add=NET_ADMIN \
+  --cap-add=MKNOD \
+  -v "$HOME/.openclaw:/root/.openclaw" \
+  -p 18789:18789 \
+  -p 18793:18793 \
+  igorhvr/openclaw /bin/zsh -i
+
