@@ -69,8 +69,8 @@ ADD id_rsa.pub /home/toor/.ssh/authorized_keys
 RUN chmod -R 700 /home/toor/.ssh/ ; chown -R toor:toor /home/toor/
 RUN echo 'toor ALL=(ALL:ALL) NOPASSWD:ALL' | sudo EDITOR='tee -a' visudo
 
-RUN echo '#!/bin/sh\n/etc/init.d/ssh start\n/base/bedlam/schejure/sj\nsleep infinity' > /start-network-services ; chmod 755 /start-network-services
-RUN echo '#!/bin/sh\n/base/bedlam/sisc/sisc-1.16.6/sisc $*' > /sisc ; chmod 755 /sisc
+RUN printf '#!/bin/sh\n/etc/init.d/ssh start\n/base/bedlam/schejure/sj\nsleep infinity\n' > /start-network-services ; chmod 755 /start-network-services
+RUN printf '#!/bin/sh\n/base/bedlam/sisc/sisc-1.16.6/sisc $*\n' > /sisc ; chmod 755 /sisc
 ADD data/ /data
 
 ENV LANG C.UTF-8
