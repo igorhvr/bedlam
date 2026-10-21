@@ -30,7 +30,7 @@ RUN apt-get -y install rsync
 RUN apt-get -y install zip unzip gzip tar
 RUN apt-get -y install psmisc ncdu procps
 RUN apt-get -y install less
-RUN apt-get -y install ntpdate ntp
+RUN apt-get -y install ntpsec ntpsec-ntpdate
 RUN apt-get -y install sysstat
 RUN apt-get -y install tor netcat-openbsd ncat socat tcpdump traceroute dnsutils
 RUN apt-get -y install secure-delete
