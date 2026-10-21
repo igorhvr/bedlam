@@ -40,6 +40,7 @@ RUN apt-get -y install make
 RUN apt-get -y install openjdk-11-jdk
 
 RUN apt-get -y install man-db tar gzip ca-certificates tzdata
+RUN dpkg --compare-versions "$(dpkg-query -W -f='${Version}' ca-certificates)" ge '20260816ubuntu0.26.04.1'
 
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
 
@@ -54,7 +55,11 @@ RUN echo "" >> /root/.bashrc ; echo 'if [ -e /root/.nix-profile/etc/profile.d/ni
 RUN mkdir -p /root/.config/nix ; echo "experimental-features = nix-command flakes" > /root/.config/nix/nix.conf
 RUN . "$HOME/.nix-profile/etc/profile.d/nix.sh" && nix profile add nixpkgs#yggdrasil
 
-RUN curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash - && apt-get install -y nodejs
+RUN curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash - && \
+    apt-get update && \
+    apt-get install -y nodejs && \
+    dpkg --compare-versions "$(dpkg-query -W -f='${Version}' nodejs)" ge '24.22.1-1nodesource1' && \
+    node -e 'const v = process.versions.node.split(".").map(Number); if (v[0] < 24 || (v[0] === 24 && (v[1] < 22 || (v[1] === 22 && v[2] < 1)))) { console.error(`nodejs ${process.versions.node} is older than 24.22.1`); process.exit(1); }'
 
 RUN echo 'root:root' | chpasswd
 RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
