@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Start a virtual display for browser-based flows
+echo "[+] Starting virtual display on ${DISPLAY:-:99} (1920x1080x24)"
+Xvfb "${DISPLAY:-:99}" -screen 0 1920x1080x24 >/tmp/xvfb.log 2>&1 &
+sleep 1
+
+PORT="${OPENCLAW_GATEWAY_PORT:-18789}"
+
+echo "[+] Starting OpenClaw gateway on port ${PORT}"
+exec openclaw gateway --port "${PORT}" --verbose
