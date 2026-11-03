@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+cd "$(dirname "$0")"
+exec "${CONTAINER_ENGINE:-docker}" build --progress=plain -t "${OPENCLAW_IMAGE:-igorhvr/openclaw}" .

@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+export DISPLAY="${DISPLAY:-:99}"
+echo "[+] Starting virtual display on ${DISPLAY} (1920x1080x24)"
+xvfb_log="${TMPDIR:-/tmp}/openclaw-xvfb.log"
+Xvfb "$DISPLAY" -screen 0 1920x1080x24 >"$xvfb_log" 2>&1 &
+xvfb_pid=$!
+sleep 1
+if ! kill -0 "$xvfb_pid" 2>/dev/null; then
+  echo "[!] Xvfb failed to start; see $xvfb_log" >&2
+  cat "$xvfb_log" >&2
+  exit 1
+fi
+
+port="${OPENCLAW_GATEWAY_PORT:-18789}"
+echo "[+] Starting OpenClaw gateway on port ${port}"
+exec openclaw gateway --port "$port" --verbose
