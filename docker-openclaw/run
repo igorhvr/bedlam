@@ -1,0 +1,20 @@
+#!/bin/sh
+set -eu
+
+state_dir="${OPENCLAW_STATE_DIR:-$HOME/.openclaw}"
+mkdir -p "$state_dir"
+set -- run --rm \
+  --name "${OPENCLAW_CONTAINER_NAME:-openclaw}" \
+  --hostname openclaw \
+  -it \
+  -v "$state_dir:/root/.openclaw" \
+  -p 127.0.0.1:18789:18789 \
+  -p 127.0.0.1:18793:18793
+
+# Tunnel support is optional; ordinary agent and browser use needs no
+# additional host capabilities.
+if [ "${OPENCLAW_ENABLE_TUN:-0}" = 1 ]; then
+  set -- "$@" --device /dev/net/tun:/dev/net/tun --cap-add=NET_ADMIN
+fi
+
+exec "${CONTAINER_ENGINE:-docker}" "$@" "${OPENCLAW_IMAGE:-igorhvr/openclaw}" /bin/zsh -i
